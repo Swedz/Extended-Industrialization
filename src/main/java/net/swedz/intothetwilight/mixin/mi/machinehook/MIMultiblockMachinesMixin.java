@@ -1,14 +1,15 @@
-package net.swedz.intothetwilight.mixin.mi;
+package net.swedz.intothetwilight.mixin.mi.machinehook;
 
-import aztech.modern_industrialization.machines.init.SingleBlockCraftingMachines;
+import aztech.modern_industrialization.machines.init.MultiblockMachines;
 import net.swedz.intothetwilight.mi.machines.MIMachineHook;
+import net.swedz.intothetwilight.mi.machines.MIMachineHookTracker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(SingleBlockCraftingMachines.class)
-public class MISingleBlockCraftingMachinesMixin
+@Mixin(MultiblockMachines.class)
+public class MIMultiblockMachinesMixin
 {
 	@Inject(
 			method = "init",
@@ -16,6 +17,8 @@ public class MISingleBlockCraftingMachinesMixin
 	)
 	private static void init(CallbackInfo callback)
 	{
-		MIMachineHook.singleBlockCraftingMachines();
+		MIMachineHookTracker.open();
+		MIMachineHook.multiblockMachines();
+		MIMachineHookTracker.close();
 	}
 }
