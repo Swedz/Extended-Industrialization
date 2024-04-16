@@ -130,3 +130,9 @@ idea {
 		downloadJavadoc = true
 	}
 }
+
+minecraft {
+	accessTransformers {
+		file("src/main/resources/${mod_id}.accesstransformer.cfg")
+	}
+}

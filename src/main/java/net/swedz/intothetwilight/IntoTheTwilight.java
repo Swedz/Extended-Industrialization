@@ -3,6 +3,7 @@ package net.swedz.intothetwilight;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.swedz.intothetwilight.datagen.DatagenListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,5 +21,6 @@ public final class IntoTheTwilight
 	
 	public IntoTheTwilight(IEventBus modBus)
 	{
+		modBus.register(new DatagenListener());
 	}
 }
