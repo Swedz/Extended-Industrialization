@@ -54,6 +54,9 @@ public final class ITTModernIndustrializationModelProvider extends BaseModelProv
 						})
 						.end());
 			}
+			
+			fieldProps.setAccessible(false);
+			constructor.setAccessible(false);
 		}
 		catch (NoSuchFieldException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException ex)
 		{
