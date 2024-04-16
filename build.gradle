@@ -1,0 +1,132 @@
+plugins {
+	id 'java-library'
+	id 'eclipse'
+	id 'idea'
+	id 'maven-publish'
+	id 'net.neoforged.gradle.userdev' version '7.0.97'
+}
+
+version = mod_version
+group = mod_group_id
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	maven {
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
+	}
+	maven {
+		name = "shedaniel"
+		url "https://maven.shedaniel.me"
+		content {
+			includeGroup "me.shedaniel.cloth"
+		}
+	}
+	maven {
+		name = "TerraformersMC"
+		url = "https://maven.terraformersmc.com/releases/"
+		content {
+			// EMI
+			includeGroup "dev.emi"
+		}
+	}
+}
+
+dependencies {
+	implementation "net.neoforged:neoforge:${neoforge_version}"
+
+	implementation "maven.modrinth:modern-industrialization:${modern_industrialization_version}"
+
+	implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
+
+	implementation "dev.emi:emi-neoforge:${emi_version}+${minecraft_version}"
+
+	implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:${mixinextras_version}"))
+}
+
+base {
+	archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+runs {
+	configureEach {
+		systemProperty 'forge.logging.markers', 'REGISTRIES'
+
+		systemProperty 'forge.logging.console.level', 'debug'
+
+		modSource project.sourceSets.main
+	}
+
+	client {
+		programArguments.addAll '--username', 'Swedz', '--uuid', 'a2dca537-693e-4ded-ac4b-c4006dd4d382'
+
+		systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+
+		programArguments.addAll '-Dmixin.debug=true'
+	}
+
+	server {
+		systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+		programArgument '--nogui'
+	}
+
+	gameTestServer {
+		systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+	}
+
+	data {
+		programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+	}
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+tasks.withType(ProcessResources).configureEach {
+	var replaceProperties = [
+			minecraft_version               : minecraft_version,
+			minecraft_version_range         : minecraft_version_range,
+			neoforge_version                : neoforge_version,
+			neoforge_version_range          : neoforge_version_range,
+			loader_version_range            : loader_version_range,
+			mod_id                          : mod_id,
+			mod_name                        : mod_name,
+			mod_license                     : mod_license,
+			mod_version                     : mod_version,
+			mod_authors                     : mod_authors,
+			mod_description                 : mod_description,
+			modern_industrialization_version: modern_industrialization_version,
+			emi_version                     : emi_version
+	]
+	inputs.properties replaceProperties
+
+	filesMatching(['META-INF/mods.toml']) {
+		expand replaceProperties
+	}
+}
+
+publishing {
+	publications {
+		register('mavenJava', MavenPublication) {
+			from components.java
+		}
+	}
+	repositories {
+		maven {
+			url "file://${project.projectDir}/repo"
+		}
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+}
+
+idea {
+	module {
+		downloadSources = true
+		downloadJavadoc = true
+	}
+}
