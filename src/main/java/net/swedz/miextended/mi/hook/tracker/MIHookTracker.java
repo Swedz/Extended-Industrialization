@@ -1,4 +1,4 @@
-package net.swedz.miextended.mi.machines;
+package net.swedz.miextended.mi.hook.tracker;
 
 import aztech.modern_industrialization.machines.models.MachineCasing;
 import com.google.common.collect.Maps;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public final class MIMachineHookTracker
+public final class MIHookTracker
 {
 	private static boolean OPEN;
 	

@@ -9,7 +9,7 @@ import aztech.modern_industrialization.materials.part.PartTemplate;
 import net.minecraft.data.DataGenerator;
 import net.swedz.miextended.datagen.api.DatagenProvider;
 import net.swedz.miextended.datagen.api.object.DatagenRecipeWrapper;
-import net.swedz.miextended.mi.machines.MIMachineHook;
+import net.swedz.miextended.mi.hook.MIMachineHook;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -17,9 +17,9 @@ import java.util.function.Consumer;
 import static aztech.modern_industrialization.materials.part.MIParts.*;
 import static aztech.modern_industrialization.materials.property.MaterialProperty.*;
 
-public final class MIMachineHookServerDatagenProvider extends DatagenProvider
+public final class MIHookServerDatagenProvider extends DatagenProvider
 {
-	public MIMachineHookServerDatagenProvider(DataGenerator generator)
+	public MIHookServerDatagenProvider(DataGenerator generator)
 	{
 		super(generator, "MI Extended Datagen/Server/MI", MI.ID);
 	}

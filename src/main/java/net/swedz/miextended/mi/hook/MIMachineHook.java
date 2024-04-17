@@ -1,4 +1,4 @@
-package net.swedz.miextended.mi.machines;
+package net.swedz.miextended.mi.hook;
 
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.blockentities.multiblocks.ElectricBlastFurnaceBlockEntity;

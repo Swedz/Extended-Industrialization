@@ -1,9 +1,9 @@
-package net.swedz.miextended.mixin.mi.machinehook.tracker;
+package net.swedz.miextended.mixin.mi.hook.tracker;
 
 import aztech.modern_industrialization.compat.rei.machines.MachineCategoryParams;
 import aztech.modern_industrialization.machines.init.SingleBlockCraftingMachines;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
-import net.swedz.miextended.mi.machines.MIMachineHookTracker;
+import net.swedz.miextended.mi.hook.tracker.MIHookTracker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,7 +21,7 @@ public class MIMachineRecipeTypeRegistrationTrackerMixin
 										 int tiers,
 										 CallbackInfo callback)
 	{
-		if(MIMachineHookTracker.isOpen())
+		if(MIHookTracker.isOpen())
 		{
 			int previousMaxEu = 0;
 			for(int i = 0; i < 3; i++)
@@ -36,7 +36,7 @@ public class MIMachineRecipeTypeRegistrationTrackerMixin
 					String englishPrefix = i == 0 ? "Bronze " : i == 1 ? "Steel " : "Electric ";
 					String fullEnglishName = tiers == SingleBlockCraftingMachines.TIER_ELECTRIC || previousMaxEu == 0 ? englishName : englishPrefix + englishName;
 					
-					MIMachineHookTracker.addMachineRecipeTypeLanguageEntry(itemId, fullEnglishName);
+					MIHookTracker.addMachineRecipeTypeLanguageEntry(itemId, fullEnglishName);
 					
 					previousMaxEu = maxEu;
 				}

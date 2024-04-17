@@ -1,8 +1,8 @@
-package net.swedz.miextended.mixin.mi.machinehook;
+package net.swedz.miextended.mixin.mi.hook;
 
 import aztech.modern_industrialization.machines.blockentities.multiblocks.ElectricBlastFurnaceBlockEntity;
-import net.swedz.miextended.mi.machines.MIMachineHook;
-import net.swedz.miextended.mi.machines.MIMachineHookTracker;
+import net.swedz.miextended.mi.hook.MIMachineHook;
+import net.swedz.miextended.mi.hook.tracker.MIHookTracker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -19,9 +19,9 @@ public class MIBlastFurnaceTierMixin
 	)
 	private static List clinit(List value)
 	{
-		MIMachineHookTracker.open();
+		MIHookTracker.open();
 		value.addAll(MIMachineHook.blastFurnaceTiers());
-		MIMachineHookTracker.close();
+		MIHookTracker.close();
 		return value;
 	}
 }

@@ -1,8 +1,8 @@
-package net.swedz.miextended.mixin.mi.machinehook;
+package net.swedz.miextended.mixin.mi.hook;
 
 import aztech.modern_industrialization.machines.init.MultiblockMachines;
-import net.swedz.miextended.mi.machines.MIMachineHook;
-import net.swedz.miextended.mi.machines.MIMachineHookTracker;
+import net.swedz.miextended.mi.hook.MIMachineHook;
+import net.swedz.miextended.mi.hook.tracker.MIHookTracker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,8 +17,8 @@ public class MIMultiblockMachinesMixin
 	)
 	private static void init(CallbackInfo callback)
 	{
-		MIMachineHookTracker.open();
+		MIHookTracker.open();
 		MIMachineHook.multiblockMachines();
-		MIMachineHookTracker.close();
+		MIHookTracker.close();
 	}
 }
