@@ -10,9 +10,9 @@ import net.swedz.miextended.mi.machines.MIMachineHookTracker;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public final class MIHookClientDatagenProvider extends DatagenProvider
+public final class MIMachineHookClientDatagenProvider extends DatagenProvider
 {
-	public MIHookClientDatagenProvider(DataGenerator generator)
+	public MIMachineHookClientDatagenProvider(DataGenerator generator)
 	{
 		super(generator, "MI Extended Datagen/Client/MI", MI.ID);
 	}

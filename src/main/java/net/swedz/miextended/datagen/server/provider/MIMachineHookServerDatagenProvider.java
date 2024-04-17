@@ -17,9 +17,9 @@ import java.util.function.Consumer;
 import static aztech.modern_industrialization.materials.part.MIParts.*;
 import static aztech.modern_industrialization.materials.property.MaterialProperty.*;
 
-public final class MIHookServerDatagenProvider extends DatagenProvider
+public final class MIMachineHookServerDatagenProvider extends DatagenProvider
 {
-	public MIHookServerDatagenProvider(DataGenerator generator)
+	public MIMachineHookServerDatagenProvider(DataGenerator generator)
 	{
 		super(generator, "MI Extended Datagen/Server/MI", MI.ID);
 	}
