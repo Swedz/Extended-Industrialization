@@ -18,6 +18,22 @@ import java.lang.reflect.Field;
 
 public class DatagenRecipeWrapper extends DatagenJsonObjectWrapper
 {
+	private static MachineRecipe getActualRecipe(MachineRecipeBuilder recipeBuilder)
+	{
+		try
+		{
+			Field fieldRecipe = MIRecipeJson.class.getDeclaredField("recipe");
+			fieldRecipe.setAccessible(true);
+			MachineRecipe actualRecipe = (MachineRecipe) fieldRecipe.get(recipeBuilder);
+			fieldRecipe.setAccessible(false);
+			return actualRecipe;
+		}
+		catch (NoSuchFieldException | IllegalAccessException ex)
+		{
+			throw new RuntimeException(ex);
+		}
+	}
+	
 	protected final String name;
 	
 	public DatagenRecipeWrapper(DatagenProvider provider, String path, String name)
@@ -37,24 +53,13 @@ public class DatagenRecipeWrapper extends DatagenJsonObjectWrapper
 	
 	public void modernIndustrializationMachineRecipe(MachineRecipeBuilder recipeBuilder)
 	{
-		try
-		{
-			// TODO fix this garbage
-			Field fieldRecipe = MIRecipeJson.class.getDeclaredField("recipe");
-			fieldRecipe.setAccessible(true);
-			MachineRecipe actualRecipe = (MachineRecipe) fieldRecipe.get(recipeBuilder);
-			fieldRecipe.setAccessible(false);
-			MachineRecipeType recipeType = (MachineRecipeType) actualRecipe.getType();
-			
-			DataResult<JsonElement> result = recipeType.codec().encodeStart(JsonOps.INSTANCE, actualRecipe);
-			JsonElement jsonElement = Util.getOrThrow(result, (error) -> new EncoderException("Failed to encode recipe '" + name + "': " + error));
-			JsonObject json = jsonElement.getAsJsonObject();
-			json.addProperty("type", recipeType.getId().toString());
-			this.set(json);
-		}
-		catch (NoSuchFieldException | IllegalAccessException ex)
-		{
-			throw new RuntimeException(ex);
-		}
+		MachineRecipe actualRecipe = getActualRecipe(recipeBuilder);
+		MachineRecipeType recipeType = (MachineRecipeType) actualRecipe.getType();
+		
+		DataResult<JsonElement> result = recipeType.codec().encodeStart(JsonOps.INSTANCE, actualRecipe);
+		JsonElement jsonElement = Util.getOrThrow(result, (error) -> new EncoderException("Failed to encode recipe '" + name + "': " + error));
+		JsonObject json = jsonElement.getAsJsonObject();
+		json.addProperty("type", recipeType.getId().toString());
+		this.set(json);
 	}
 }

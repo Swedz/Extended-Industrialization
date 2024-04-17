@@ -2,6 +2,7 @@ package net.swedz.intothetwilight.datagen.server.provider;
 
 import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
+import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import aztech.modern_industrialization.materials.Material;
 import aztech.modern_industrialization.materials.MaterialRegistry;
 import aztech.modern_industrialization.materials.part.PartTemplate;
@@ -11,6 +12,7 @@ import net.swedz.intothetwilight.datagen.api.object.DatagenRecipeWrapper;
 import net.swedz.intothetwilight.mi.machines.MIMachineHook;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 import static aztech.modern_industrialization.materials.part.MIParts.*;
 import static aztech.modern_industrialization.materials.property.MaterialProperty.*;
@@ -32,6 +34,15 @@ public final class ITTMIServerDatagenProvider extends DatagenProvider
 		DatagenRecipeWrapper remove = new DatagenRecipeWrapper(this, path, name);
 		remove.remove();
 		remove.write();
+	}
+	
+	private void addMaterialRecipe(Material material, String name, MachineRecipeType recipeType, int eu, Consumer<MachineRecipeBuilder> recipeBuilder)
+	{
+		DatagenRecipeWrapper wrapper = new DatagenRecipeWrapper(this, "materials/%s/%s".formatted(material.name, recipeType.getPath()), name);
+		MachineRecipeBuilder recipe = new MachineRecipeBuilder(recipeType, eu, (int) (200 * material.get(HARDNESS).timeFactor));
+		recipeBuilder.accept(recipe);
+		wrapper.modernIndustrializationMachineRecipe(recipe);
+		wrapper.write();
 	}
 	
 	@Override
@@ -57,17 +68,9 @@ public final class ITTMIServerDatagenProvider extends DatagenProvider
 					this.removeRecipe("materials/%s/forge_hammer".formatted(material.name), "plate_to_curved_plate_with_tool");
 					this.removeRecipe("materials/%s/compressor".formatted(material.name), "plate");
 					
-					DatagenRecipeWrapper wrapper = new DatagenRecipeWrapper(
-							this,
-							"materials/%s/%s".formatted(material.name, MIMachineHook.BENDING_MACHINE.getPath()),
-							"plate"
-					);
-					wrapper.modernIndustrializationMachineRecipe(
-							new MachineRecipeBuilder(MIMachineHook.BENDING_MACHINE, 2, (int) (200 * material.get(HARDNESS).timeFactor))
-									.addItemInput(material.getPart(PLATE), 1)
-									.addItemOutput(material.getPart(CURVED_PLATE), 1)
-					);
-					wrapper.write();
+					this.addMaterialRecipe(material, "plate", MIMachineHook.BENDING_MACHINE, 2, (r) -> r
+							.addItemInput(material.getPart(PLATE), 1)
+							.addItemOutput(material.getPart(CURVED_PLATE), 1));
 				}
 			}
 		}
