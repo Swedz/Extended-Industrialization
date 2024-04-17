@@ -51,27 +51,21 @@ public final class ITTMIServerDatagenProvider extends DatagenProvider
 		for(Map.Entry<String, Material> entry : MaterialRegistry.getMaterials().entrySet())
 		{
 			Material material = entry.getValue();
-			if(this.hasPart(material, CURVED_PLATE))
+			if(this.hasPart(material, CURVED_PLATE) && this.hasPart(material, PLATE))
 			{
-				if(this.hasPart(material, DOUBLE_INGOT))
-				{
-					this.removeRecipe("materials/%s/forge_hammer".formatted(material.name), "double_ingot_to_curved_plate");
-					this.removeRecipe("materials/%s/forge_hammer".formatted(material.name), "double_ingot_to_curved_plate_with_tool");
-				}
-				if(this.hasPart(material, INGOT))
-				{
-					this.removeRecipe("materials/%s/forge_hammer".formatted(material.name), "ingot_to_curved_plate");
-					this.removeRecipe("materials/%s/forge_hammer".formatted(material.name), "ingot_to_curved_plate_with_tool");
-				}
-				if(this.hasPart(material, PLATE))
-				{
-					this.removeRecipe("materials/%s/forge_hammer".formatted(material.name), "plate_to_curved_plate_with_tool");
-					this.removeRecipe("materials/%s/compressor".formatted(material.name), "plate");
-					
-					this.addMaterialRecipe(material, "plate", MIMachineHook.BENDING_MACHINE, 2, (r) -> r
-							.addItemInput(material.getPart(PLATE), 1)
-							.addItemOutput(material.getPart(CURVED_PLATE), 1));
-				}
+				this.removeRecipe("materials/%s/compressor".formatted(material.name), "plate");
+				
+				this.addMaterialRecipe(material, "plate", MIMachineHook.BENDING_MACHINE, 2, (r) -> r
+						.addItemInput(material.getPart(PLATE), 1)
+						.addItemOutput(material.getPart(CURVED_PLATE), 1));
+			}
+			if(this.hasPart(material, RING) && this.hasPart(material, ROD))
+			{
+				this.removeRecipe("materials/%s/compressor".formatted(material.name), "ring");
+				
+				this.addMaterialRecipe(material, "ring", MIMachineHook.BENDING_MACHINE, 2, (r) -> r
+						.addItemInput(material.getPart(ROD), 1)
+						.addItemOutput(material.getPart(RING), 1));
 			}
 		}
 	}
