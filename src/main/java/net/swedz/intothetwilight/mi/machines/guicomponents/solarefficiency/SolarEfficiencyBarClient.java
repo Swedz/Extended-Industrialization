@@ -8,8 +8,8 @@ import aztech.modern_industrialization.util.RenderHelper;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.swedz.intothetwilight.ITTText;
 import net.swedz.intothetwilight.IntoTheTwilight;
 
 public final class SolarEfficiencyBarClient implements GuiComponentClient
@@ -68,8 +68,7 @@ public final class SolarEfficiencyBarClient implements GuiComponentClient
 		{
 			if(RenderHelper.isPointWithinRectangle(params.renderX, params.renderY, WIDTH, HEIGHT, cursorX - x, cursorY - y))
 			{
-				// TODO use translatable
-				guiGraphics.renderTooltip(font, Component.literal(String.format("Solar Efficiency : %d %%", efficiency)), cursorX, cursorY);
+				guiGraphics.renderTooltip(font, ITTText.SOLAR_EFFICIENCY.text(efficiency), cursorX, cursorY);
 			}
 		}
 	}

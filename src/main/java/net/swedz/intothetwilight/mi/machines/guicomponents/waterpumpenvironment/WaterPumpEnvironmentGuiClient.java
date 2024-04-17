@@ -8,8 +8,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
+import net.swedz.intothetwilight.ITTText;
 
 import java.util.List;
 
@@ -57,10 +57,9 @@ public final class WaterPumpEnvironmentGuiClient implements GuiComponentClient
 			{
 				if(RenderHelper.isPointWithinRectangle(params.renderX, params.renderY, 20, 20, cursorX - x, cursorY - y))
 				{
-					// TODO use translatable
 					List<FormattedCharSequence> lines = List.of(
-							Component.literal("Invalid Pump Environment").withStyle(ChatFormatting.RED).getVisualOrderText(),
-							Component.literal("Must be in Ocean or River biome.").withStyle(ChatFormatting.RED).getVisualOrderText()
+							ITTText.WATER_PUMP_ENVIRONMENT_0.text().withStyle(ChatFormatting.RED).getVisualOrderText(),
+							ITTText.WATER_PUMP_ENVIRONMENT_1.text().withStyle(ChatFormatting.RED).getVisualOrderText()
 					);
 					guiGraphics.renderTooltip(font, lines, cursorX, cursorY);
 				}
