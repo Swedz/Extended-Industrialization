@@ -9,7 +9,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.swedz.miextended.MIEText;
+import net.swedz.miextended.text.MIEText;
 import net.swedz.miextended.MIExtended;
 
 public final class SolarEfficiencyBarClient implements GuiComponentClient

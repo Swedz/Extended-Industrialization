@@ -1,7 +1,8 @@
-package net.swedz.miextended;
+package net.swedz.miextended.text;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.swedz.miextended.MIExtended;
 
 public enum MIEText
 {

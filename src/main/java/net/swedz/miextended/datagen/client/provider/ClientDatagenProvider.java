@@ -1,7 +1,7 @@
 package net.swedz.miextended.datagen.client.provider;
 
 import net.minecraft.data.DataGenerator;
-import net.swedz.miextended.MIEText;
+import net.swedz.miextended.text.MIEText;
 import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.datagen.api.DatagenProvider;
 import net.swedz.miextended.datagen.api.object.DatagenLanguageWrapper;

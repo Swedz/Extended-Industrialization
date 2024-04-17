@@ -9,7 +9,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.FormattedCharSequence;
-import net.swedz.miextended.MIEText;
+import net.swedz.miextended.text.MIEText;
 
 import java.util.List;
 
