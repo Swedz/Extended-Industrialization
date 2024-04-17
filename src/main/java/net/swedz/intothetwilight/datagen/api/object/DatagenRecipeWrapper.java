@@ -4,6 +4,7 @@ import aztech.modern_industrialization.machines.recipe.MIRecipeJson;
 import aztech.modern_industrialization.machines.recipe.MachineRecipe;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.DataResult;
@@ -23,6 +24,15 @@ public class DatagenRecipeWrapper extends DatagenJsonObjectWrapper
 	{
 		super(provider, DatagenOutputTarget.DATA_PACK, (p) -> p.resolve("recipes").resolve(path).resolve(name + ".json"));
 		this.name = name;
+	}
+	
+	public void remove()
+	{
+		JsonArray conditions = new JsonArray();
+		JsonObject falseCondition = new JsonObject();
+		falseCondition.addProperty("type", "neoforge:false");
+		conditions.add(falseCondition);
+		this.get().add("neoforge:conditions", conditions);
 	}
 	
 	public void modernIndustrializationMachineRecipe(MachineRecipeBuilder recipeBuilder)
