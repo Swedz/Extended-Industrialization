@@ -1,0 +1,5 @@
+{
+  "text.miextended.solar_efficiency": "Solar Efficiency : %d %%",
+  "text.miextended.water_pump_environment_0": "Invalid Pump Environment",
+  "text.miextended.water_pump_environment_1": "Must be in Ocean or River biome."
+}
