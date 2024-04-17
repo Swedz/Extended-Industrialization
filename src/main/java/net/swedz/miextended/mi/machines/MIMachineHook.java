@@ -6,7 +6,6 @@ import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.guicomponents.ProgressBar;
 import aztech.modern_industrialization.machines.guicomponents.RecipeEfficiencyBar;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
-import aztech.modern_industrialization.machines.init.MachineRegistrationHelper;
 import aztech.modern_industrialization.machines.init.SingleBlockCraftingMachines;
 import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
@@ -58,18 +57,17 @@ public final class MIMachineHook
 	
 	public static void singleBlockSpecialMachines()
 	{
-		MachineRegistrationHelper.registerMachine(
-				"Bronze Solar Boiler", "bronze_solar_boiler",
+		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+				"Bronze Solar Boiler", "bronze_solar_boiler", "solar_boiler",
+				MachineCasings.BRICKED_BRONZE, true, true, false,
 				(bep) -> new SolarBoilerMachineBlockEntity(bep, true),
 				MachineBlockEntity::registerFluidApi
 		);
-		MachineRegistrationHelper.registerMachine(
-				"Steel Solar Boiler", "steel_solar_boiler",
-				(bep) -> new SolarBoilerMachineBlockEntity(bep, false),
+		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+				"Steel Solar Boiler", "steel_solar_boiler", "solar_boiler",
+				MachineCasings.BRICKED_STEEL, true, true, false,
+				(bep) -> new SolarBoilerMachineBlockEntity(bep, true),
 				MachineBlockEntity::registerFluidApi
 		);
-		
-		MachineRegistrationHelper.addMachineModel("bronze_solar_boiler", "solar_boiler", MachineCasings.BRICKED_BRONZE, true, true, false);
-		MachineRegistrationHelper.addMachineModel("steel_solar_boiler", "solar_boiler", MachineCasings.BRICKED_STEEL, true, true, false);
 	}
 }
