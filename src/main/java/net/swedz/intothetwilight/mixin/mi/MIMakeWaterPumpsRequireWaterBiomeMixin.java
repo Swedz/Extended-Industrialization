@@ -31,7 +31,7 @@ public abstract class MIMakeWaterPumpsRequireWaterBiomeMixin extends MachineBloc
 	private void init(BEP bep, String blockName, CallbackInfo callback)
 	{
 		this.registerGuiComponent(new WaterPumpEnvironmentGui.Server(
-				new WaterPumpEnvironmentGui.Parameters(79, 29),
+				new WaterPumpEnvironmentGui.Parameters(57, 29),
 				() -> this.isWaterBiome(level.getBiome(worldPosition))
 		));
 	}
