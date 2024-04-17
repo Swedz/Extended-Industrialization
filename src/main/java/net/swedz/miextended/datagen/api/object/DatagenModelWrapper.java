@@ -70,4 +70,12 @@ public class DatagenModelWrapper extends DatagenJsonObjectWrapper
 	{
 		this.get().addProperty("parent", "%s:block/%s".formatted(provider.modId(), blockId));
 	}
+	
+	public void standardItemGenerated(String itemId)
+	{
+		this.get().addProperty("parent", "minecraft:item/generated");
+		JsonObject textures = new JsonObject();
+		textures.addProperty("layer0", "%s:item/%s".formatted(provider.modId(), itemId));
+		this.get().add("textures", textures);
+	}
 }

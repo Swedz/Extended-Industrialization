@@ -1,5 +1,6 @@
 package net.swedz.miextended.mi.hook.tracker;
 
+import aztech.modern_industrialization.definition.FluidDefinition;
 import aztech.modern_industrialization.machines.models.MachineCasing;
 import com.google.common.collect.Maps;
 import net.swedz.miextended.datagen.api.object.DatagenLanguageWrapper;
@@ -30,10 +31,11 @@ public final class MIHookTracker
 		return OPEN;
 	}
 	
-	public static final List<Consumer<DatagenLanguageWrapper>>     LANGUAGE     = Lists.newArrayList();
-	public static final Map<String, Consumer<DatagenModelWrapper>> BLOCK_STATES = Maps.newHashMap();
-	public static final Map<String, Consumer<DatagenModelWrapper>> BLOCK_MODELS = Maps.newHashMap();
-	public static final Map<String, Consumer<DatagenModelWrapper>> ITEM_MODELS  = Maps.newHashMap();
+	public static final List<Consumer<DatagenLanguageWrapper>>     LANGUAGE          = Lists.newArrayList();
+	public static final Map<String, Consumer<DatagenModelWrapper>> BLOCK_STATES      = Maps.newHashMap();
+	public static final Map<String, Consumer<DatagenModelWrapper>> BLOCK_MODELS      = Maps.newHashMap();
+	public static final Map<String, Consumer<DatagenModelWrapper>> ITEM_MODELS       = Maps.newHashMap();
+	public static final List<FluidDefinition>                      FLUID_DEFINITIONS = Lists.newArrayList();
 	
 	public static void addLanguageEntry(String id, String englishName, TriConsumer<DatagenLanguageWrapper, String, String> action)
 	{
@@ -45,6 +47,11 @@ public final class MIHookTracker
 		LANGUAGE.add((wrapper) -> action.accept(wrapper, id, englishName));
 	}
 	
+	public static void addItemLanguageEntry(String id, String englishName)
+	{
+		addLanguageEntry(id, englishName, DatagenLanguageWrapper::addItem);
+	}
+	
 	public static void addMachineLanguageEntry(String id, String englishName)
 	{
 		addLanguageEntry(id, englishName, DatagenLanguageWrapper::addBlock);
@@ -53,6 +60,11 @@ public final class MIHookTracker
 	public static void addMachineRecipeTypeLanguageEntry(String id, String englishName)
 	{
 		addLanguageEntry(id, englishName, DatagenLanguageWrapper::addRecipeCategory);
+	}
+	
+	public static void addFluidDefinitionLanguageEntry(String id, String englishName)
+	{
+		addLanguageEntry(id, englishName, DatagenLanguageWrapper::addFluidDefinition);
 	}
 	
 	public static void addMachineModelBlockState(String id)
@@ -77,6 +89,16 @@ public final class MIHookTracker
 		BLOCK_MODELS.put(id, (wrapper) -> wrapper.modernIndustrializationMachineBlockModel(id, overlay, defaultCasing, front, top, side, active));
 	}
 	
+	public static void addStandardItemModelEntry(String id)
+	{
+		if(!OPEN)
+		{
+			throw new IllegalStateException("Tried to add item model entry while the tracker was closed.");
+		}
+		
+		ITEM_MODELS.put(id, (wrapper) -> wrapper.standardItemGenerated(id));
+	}
+	
 	public static void addMachineModelItemModel(String id)
 	{
 		if(!OPEN)
@@ -85,5 +107,15 @@ public final class MIHookTracker
 		}
 		
 		ITEM_MODELS.put(id, (wrapper) -> wrapper.parentBlockItemModel(id));
+	}
+	
+	public static void addFluidDefinition(FluidDefinition fluidDefinition)
+	{
+		if(!OPEN)
+		{
+			throw new IllegalStateException("Tried to add fluid definition entry while the tracker was closed.");
+		}
+		
+		FLUID_DEFINITIONS.add(fluidDefinition);
 	}
 }

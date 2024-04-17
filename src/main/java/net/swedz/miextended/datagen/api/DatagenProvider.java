@@ -23,7 +23,7 @@ import java.util.function.Function;
 
 public abstract class DatagenProvider implements DataProvider
 {
-	protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 	
 	protected final DataGenerator generator;
 	protected final PackOutput    output;
