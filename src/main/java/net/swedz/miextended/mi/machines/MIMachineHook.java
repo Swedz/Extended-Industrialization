@@ -14,6 +14,8 @@ import net.swedz.miextended.mi.machines.blockentities.SolarBoilerMachineBlockEnt
 
 import java.util.List;
 
+import static aztech.modern_industrialization.machines.init.SingleBlockCraftingMachines.*;
+
 public final class MIMachineHook
 {
 	public static List<ElectricBlastFurnaceBlockEntity.Tier> blastFurnaceTiers()
@@ -27,11 +29,14 @@ public final class MIMachineHook
 	{
 	}
 	
-	public static MachineRecipeType BENDING_MACHINE;
+	public static MachineRecipeType
+			BENDING_MACHINE,
+			ALLOY_SMELTER;
 	
 	public static void machineRecipeTypes()
 	{
 		BENDING_MACHINE = MIMachineRecipeTypes.create("bending_machine").withItemInputs().withItemOutputs();
+		ALLOY_SMELTER = MIMachineRecipeTypes.create("alloy_smelter").withItemInputs().withItemOutputs();
 	}
 	
 	public static void singleBlockCraftingMachines()
@@ -41,14 +46,28 @@ public final class MIMachineHook
 		SingleBlockCraftingMachines.registerMachineTiers(
 				"Bending Machine", "bending_machine", BENDING_MACHINE,
 				1, 1, 0, 0,
-				(guiParams) -> {},
+				(params) -> {},
 				new ProgressBar.Parameters(77, 34, "compress"),
 				new RecipeEfficiencyBar.Parameters(38, 62),
 				new EnergyBar.Parameters(18, 30),
 				(items) -> items.addSlot(56, 35).addSlot(102, 35),
 				(fluids) -> {},
 				true, false, false,
-				SingleBlockCraftingMachines.TIER_BRONZE | SingleBlockCraftingMachines.TIER_STEEL | SingleBlockCraftingMachines.TIER_ELECTRIC,
+				TIER_BRONZE | TIER_STEEL | TIER_ELECTRIC,
+				16
+		);
+		
+		SingleBlockCraftingMachines.registerMachineTiers(
+				"Alloy Smelter", "alloy_smelter", ALLOY_SMELTER,
+				2, 1, 0, 0,
+				(params) -> {},
+				new ProgressBar.Parameters(88, 33, "arrow"),
+				new RecipeEfficiencyBar.Parameters(38, 62),
+				new EnergyBar.Parameters(14, 34),
+				(items) -> items.addSlots(40, 35, 2, 1).addSlot(120, 35),
+				(fluids) -> {},
+				true, false, false,
+				TIER_STEEL | TIER_ELECTRIC,
 				16
 		);
 		

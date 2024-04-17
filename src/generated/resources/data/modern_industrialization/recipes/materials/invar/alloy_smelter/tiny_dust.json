@@ -1,0 +1,21 @@
+{
+  "type": "modern_industrialization:alloy_smelter",
+  "duration": 200,
+  "eu": 4,
+  "item_inputs": [
+    {
+      "amount": 18,
+      "tag": "forge:tiny_dusts/iron"
+    },
+    {
+      "amount": 9,
+      "tag": "forge:tiny_dusts/nickel"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 3,
+      "item": "modern_industrialization:invar_ingot"
+    }
+  ]
+}

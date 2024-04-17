@@ -50,6 +50,22 @@ public final class MIMachineHookServerDatagenProvider extends DatagenProvider
 		this.addMaterialRecipe(material, name, recipeType, eu, (int) (200 * material.get(HARDNESS).timeFactor), recipeBuilder);
 	}
 	
+	private void addAlloySmelterRecipes(Material componentA, int amountA, Material componentB, int amountB, Material result, int amountResult)
+	{
+		this.addMaterialRecipe(result, "dust", MIMachineHook.ALLOY_SMELTER, 4, 10 * 20, (r) -> r
+				.addItemInput(componentA.getPart(DUST).getTaggedIngredient(), amountA, 1)
+				.addItemInput(componentB.getPart(DUST).getTaggedIngredient(), amountB, 1)
+				.addItemOutput(result.getPart(INGOT), amountResult));
+		this.addMaterialRecipe(result, "tiny_dust", MIMachineHook.ALLOY_SMELTER, 4, 10 * 20, (r) -> r
+				.addItemInput(componentA.getPart(TINY_DUST).getTaggedIngredient(), amountA * 9, 1)
+				.addItemInput(componentB.getPart(TINY_DUST).getTaggedIngredient(), amountB * 9, 1)
+				.addItemOutput(result.getPart(INGOT), amountResult));
+		this.addMaterialRecipe(result, "ingot", MIMachineHook.ALLOY_SMELTER, 4, 10 * 20, (r) -> r
+				.addItemInput(componentA.getPart(INGOT).getTaggedIngredient(), amountA, 1)
+				.addItemInput(componentB.getPart(INGOT).getTaggedIngredient(), amountB, 1)
+				.addItemOutput(result.getPart(INGOT), amountResult));
+	}
+	
 	@Override
 	public void run()
 	{
@@ -61,7 +77,7 @@ public final class MIMachineHookServerDatagenProvider extends DatagenProvider
 				this.removeRecipe("materials/%s/compressor".formatted(material.name), "plate");
 				
 				this.addMaterialRecipe(material, "plate", MIMachineHook.BENDING_MACHINE, 2, (r) -> r
-						.addItemInput(material.getPart(PLATE), 1)
+						.addItemInput(material.getPart(PLATE).getTaggedIngredient(), 1, 1)
 						.addItemOutput(material.getPart(CURVED_PLATE), 1));
 			}
 			if(this.hasPart(material, RING) && this.hasPart(material, ROD))
@@ -69,9 +85,35 @@ public final class MIMachineHookServerDatagenProvider extends DatagenProvider
 				this.removeRecipe("materials/%s/compressor".formatted(material.name), "ring");
 				
 				this.addMaterialRecipe(material, "ring", MIMachineHook.BENDING_MACHINE, 2, (r) -> r
-						.addItemInput(material.getPart(ROD), 1)
+						.addItemInput(material.getPart(ROD).getTaggedIngredient(), 1, 1)
 						.addItemOutput(material.getPart(RING), 1));
 			}
 		}
+		
+		this.addAlloySmelterRecipes(
+				MaterialRegistry.getMaterial("tin"), 1,
+				MaterialRegistry.getMaterial("copper"), 3,
+				MaterialRegistry.getMaterial("bronze"), 4
+		);
+		this.addAlloySmelterRecipes(
+				MaterialRegistry.getMaterial("lead"), 1,
+				MaterialRegistry.getMaterial("antimony"), 1,
+				MaterialRegistry.getMaterial("battery_alloy"), 2
+		);
+		this.addAlloySmelterRecipes(
+				MaterialRegistry.getMaterial("copper"), 1,
+				MaterialRegistry.getMaterial("nickel"), 1,
+				MaterialRegistry.getMaterial("cupronickel"), 2
+		);
+		this.addAlloySmelterRecipes(
+				MaterialRegistry.getMaterial("iron"), 2,
+				MaterialRegistry.getMaterial("nickel"), 1,
+				MaterialRegistry.getMaterial("invar"), 3
+		);
+		this.addAlloySmelterRecipes(
+				MaterialRegistry.getMaterial("gold"), 1,
+				MaterialRegistry.getMaterial("silver"), 1,
+				MaterialRegistry.getMaterial("electrum"), 2
+		);
 	}
 }
