@@ -85,7 +85,7 @@ public final class MIMachineHook
 		MIMachineHookHelper.registerSingleBlockSpecialMachine(
 				"Steel Solar Boiler", "steel_solar_boiler", "solar_boiler",
 				MachineCasings.BRICKED_STEEL, true, true, false,
-				(bep) -> new SolarBoilerMachineBlockEntity(bep, true),
+				(bep) -> new SolarBoilerMachineBlockEntity(bep, false),
 				MachineBlockEntity::registerFluidApi
 		);
 	}
