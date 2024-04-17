@@ -36,13 +36,18 @@ public final class ITTMIServerDatagenProvider extends DatagenProvider
 		remove.write();
 	}
 	
-	private void addMaterialRecipe(Material material, String name, MachineRecipeType recipeType, int eu, Consumer<MachineRecipeBuilder> recipeBuilder)
+	private void addMaterialRecipe(Material material, String name, MachineRecipeType recipeType, int eu, int duration, Consumer<MachineRecipeBuilder> recipeBuilder)
 	{
 		DatagenRecipeWrapper wrapper = new DatagenRecipeWrapper(this, "materials/%s/%s".formatted(material.name, recipeType.getPath()), name);
-		MachineRecipeBuilder recipe = new MachineRecipeBuilder(recipeType, eu, (int) (200 * material.get(HARDNESS).timeFactor));
+		MachineRecipeBuilder recipe = new MachineRecipeBuilder(recipeType, eu, duration);
 		recipeBuilder.accept(recipe);
 		wrapper.modernIndustrializationMachineRecipe(recipe);
 		wrapper.write();
+	}
+	
+	private void addMaterialRecipe(Material material, String name, MachineRecipeType recipeType, int eu, Consumer<MachineRecipeBuilder> recipeBuilder)
+	{
+		this.addMaterialRecipe(material, name, recipeType, eu, (int) (200 * material.get(HARDNESS).timeFactor), recipeBuilder);
 	}
 	
 	@Override
