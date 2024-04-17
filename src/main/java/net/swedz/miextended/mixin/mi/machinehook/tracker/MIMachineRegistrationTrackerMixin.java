@@ -6,6 +6,7 @@ import aztech.modern_industrialization.machines.init.MachineRegistrationHelper;
 import aztech.modern_industrialization.machines.models.MachineCasing;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.miextended.mi.machines.MIMachineHookTracker;
+import net.swedz.miextended.tooltips.MIETooltips;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,6 +33,7 @@ public class MIMachineRegistrationTrackerMixin
 		if(MIMachineHookTracker.isOpen())
 		{
 			MIMachineHookTracker.addMachineLanguageEntry(id, englishName);
+			MIETooltips.addExtendedItem(id);
 		}
 	}
 	
