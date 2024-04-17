@@ -66,8 +66,7 @@ public final class MIMachineHookServerDatagenProvider extends DatagenProvider
 				.addItemOutput(result.getPart(INGOT), amountResult));
 	}
 	
-	@Override
-	public void run()
+	private void bendingMachineRecipes()
 	{
 		for(Map.Entry<String, Material> entry : MaterialRegistry.getMaterials().entrySet())
 		{
@@ -89,7 +88,10 @@ public final class MIMachineHookServerDatagenProvider extends DatagenProvider
 						.addItemOutput(material.getPart(RING), 1));
 			}
 		}
-		
+	}
+	
+	private void alloySmelterRecipes()
+	{
 		this.addAlloySmelterRecipes(
 				MaterialRegistry.getMaterial("tin"), 1,
 				MaterialRegistry.getMaterial("copper"), 3,
@@ -115,5 +117,17 @@ public final class MIMachineHookServerDatagenProvider extends DatagenProvider
 				MaterialRegistry.getMaterial("silver"), 1,
 				MaterialRegistry.getMaterial("electrum"), 2
 		);
+	}
+	
+	private void recipes()
+	{
+		this.bendingMachineRecipes();
+		this.alloySmelterRecipes();
+	}
+	
+	@Override
+	public void run()
+	{
+		this.recipes();
 	}
 }
