@@ -1,0 +1,23 @@
+{
+  "type": "modern_industrialization:canning_machine",
+  "duration": 100,
+  "eu": 2,
+  "fluid_outputs": [
+    {
+      "amount": 1000,
+      "fluid": "modern_industrialization:raw_synthetic_oil"
+    }
+  ],
+  "item_inputs": [
+    {
+      "amount": 1,
+      "item": "modern_industrialization:raw_synthetic_oil_bucket"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "minecraft:bucket"
+    }
+  ]
+}
