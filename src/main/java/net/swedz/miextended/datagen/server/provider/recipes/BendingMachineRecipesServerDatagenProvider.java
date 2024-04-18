@@ -22,7 +22,7 @@ public final class BendingMachineRecipesServerDatagenProvider extends RecipesSer
 	{
 		if(this.hasPart(material, from) && this.hasPart(material, to))
 		{
-			this.removeRecipeDirectly("modern_industrialization/recipes/materials/%s/compressor/%s".formatted(material.name, name));
+			this.removeRecipeDirectly("modern_industrialization/recipes/materials/%s/compressor".formatted(material.name), name);
 			
 			this.addMaterialMachineRecipe(material, name, MIMachineHook.BENDING_MACHINE, 2, (r) -> r
 					.addItemInput(material.getPart(from).getTaggedIngredient(), 1, 1)

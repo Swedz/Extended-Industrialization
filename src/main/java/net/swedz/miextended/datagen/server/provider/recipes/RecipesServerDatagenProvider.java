@@ -4,8 +4,6 @@ import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import aztech.modern_industrialization.materials.Material;
 import aztech.modern_industrialization.materials.part.PartTemplate;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import net.minecraft.data.DataGenerator;
 import net.swedz.miextended.datagen.api.DatagenOutputTarget;
 import net.swedz.miextended.datagen.api.DatagenProvider;
@@ -35,15 +33,11 @@ public abstract class RecipesServerDatagenProvider extends DatagenProvider
 		remove.write();
 	}
 	
-	protected void removeRecipeDirectly(String path)
+	protected void removeRecipeDirectly(String path, String name)
 	{
-		JsonObject json = new JsonObject();
-		JsonArray conditions = new JsonArray();
-		JsonObject falseCondition = new JsonObject();
-		falseCondition.addProperty("type", "neoforge:false");
-		conditions.add(falseCondition);
-		json.add("neoforge:conditions", conditions);
-		this.writeJsonForce(DatagenOutputTarget.DATA_PACK, Path.of(path + ".json"), json);
+		DatagenRecipeWrapper remove = new DatagenRecipeWrapper(null, path, name);
+		remove.remove();
+		this.writeJsonForce(DatagenOutputTarget.DATA_PACK, Path.of(path).resolve(name + ".json"), remove.get());
 	}
 	
 	protected void addMachineRecipe(String path, String name, MachineRecipeType recipeType, int eu, int duration, Consumer<MachineRecipeBuilder> recipeBuilder)
