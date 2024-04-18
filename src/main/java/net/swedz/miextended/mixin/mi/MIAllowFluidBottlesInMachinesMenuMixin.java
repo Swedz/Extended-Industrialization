@@ -35,7 +35,7 @@ import java.util.Optional;
 public class MIAllowFluidBottlesInMachinesMenuMixin
 {
 	@Unique
-	private static final int CAPACITY = 1000;
+	private static final int CAPACITY = 250;
 	
 	@Unique
 	private static final Map<Fluid, ItemStack> BOTTLE_ITEMS = Map.of(
