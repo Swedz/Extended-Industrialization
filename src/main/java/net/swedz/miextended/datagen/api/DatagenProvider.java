@@ -91,6 +91,12 @@ public abstract class DatagenProvider implements DataProvider
 		return this.nonGeneratedPath().resolve(target.directory()).resolve(modId);
 	}
 	
+	public void writeJsonForce(DatagenOutputTarget target, Path path, JsonElement json)
+	{
+		Path generatedPath = this.generatedPath().resolve(target.directory()).resolve(path);
+		saveFutures.add(DataProvider.saveStable(cachedOutput, GSON.toJsonTree(json), generatedPath));
+	}
+	
 	public void writeJsonForce(DatagenOutputTarget target, Function<Path, Path> pathFunction, JsonElement json)
 	{
 		Path generatedPath = pathFunction.apply(this.generatedPath(target));
