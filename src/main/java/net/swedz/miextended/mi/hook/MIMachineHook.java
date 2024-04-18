@@ -1,5 +1,6 @@
 package net.swedz.miextended.mi.hook;
 
+import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.blockentities.multiblocks.ElectricBlastFurnaceBlockEntity;
 import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
@@ -11,6 +12,8 @@ import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import com.google.common.collect.Lists;
 import net.swedz.miextended.mi.machines.blockentities.SolarBoilerMachineBlockEntity;
+import net.swedz.miextended.mi.machines.blockentities.honeyextractor.ElectricHoneyExtractorMachineBlockEntity;
+import net.swedz.miextended.mi.machines.blockentities.honeyextractor.SteamHoneyExtractorMachineBlockEntity;
 
 import java.util.List;
 
@@ -87,6 +90,18 @@ public final class MIMachineHook
 				MachineCasings.BRICKED_STEEL, true, true, false,
 				(bep) -> new SolarBoilerMachineBlockEntity(bep, false),
 				MachineBlockEntity::registerFluidApi
+		);
+		
+		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+				"Steel Honey Extractor", "steel_honey_extractor", "honey_extractor",
+				MachineCasings.STEEL, true, false, false,
+				(bep) -> new SteamHoneyExtractorMachineBlockEntity(bep, false)
+		);
+		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+				"Electric Honey Extractor", "electric_honey_extractor", "honey_extractor",
+				CableTier.LV.casing, true, false, false,
+				ElectricHoneyExtractorMachineBlockEntity::new,
+				ElectricHoneyExtractorMachineBlockEntity::registerEnergyApi
 		);
 	}
 }
