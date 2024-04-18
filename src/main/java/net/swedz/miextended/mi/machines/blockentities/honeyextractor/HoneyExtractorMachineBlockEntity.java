@@ -29,17 +29,21 @@ public abstract class HoneyExtractorMachineBlockEntity extends MachineBlockEntit
 	
 	private static final int OPERATION_TICKS = 100;
 	
+	protected final long euCost;
+	
 	protected int pumpingTicks;
 	
 	protected final IsActiveComponent isActiveComponent;
 	
-	public HoneyExtractorMachineBlockEntity(BEP bep, String blockName)
+	public HoneyExtractorMachineBlockEntity(BEP bep, String blockName, long euCost)
 	{
 		super(
 				bep,
 				new MachineGuiParameters.Builder(blockName, false).build(),
 				new OrientationComponent.Params(true, false, false)
 		);
+		
+		this.euCost = euCost;
 		
 		this.isActiveComponent = new IsActiveComponent();
 		this.registerGuiComponent(new ProgressBar.Server(
@@ -94,9 +98,10 @@ public abstract class HoneyExtractorMachineBlockEntity extends MachineBlockEntit
 		BeehiveBlockEntity hive = optionalHive.get();
 		BlockState hiveBlockState = hive.getBlockState();
 		
-		long eu = this.consumeEu(1);
-		pumpingTicks += eu;
-		this.updateActive(eu > 0);
+		long eu = this.consumeEu(euCost);
+		boolean active = eu > 0;
+		pumpingTicks += active ? 1 : 0;
+		this.updateActive(active);
 		
 		if(pumpingTicks == OPERATION_TICKS)
 		{

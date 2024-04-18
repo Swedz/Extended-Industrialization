@@ -23,7 +23,7 @@ public final class SteamHoneyExtractorMachineBlockEntity extends HoneyExtractorM
 	
 	public SteamHoneyExtractorMachineBlockEntity(BEP bep, boolean bronze)
 	{
-		super(bep, bronze ? "bronze_honey_extractor" : "steel_honey_extractor");
+		super(bep, bronze ? "bronze_honey_extractor" : "steel_honey_extractor", bronze ? 1 : 2);
 		
 		long capacity = FluidType.BUCKET_VOLUME * (bronze ? 8 : 16);
 		

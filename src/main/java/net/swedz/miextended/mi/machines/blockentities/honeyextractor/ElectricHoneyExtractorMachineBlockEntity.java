@@ -33,7 +33,7 @@ public final class ElectricHoneyExtractorMachineBlockEntity extends HoneyExtract
 	
 	public ElectricHoneyExtractorMachineBlockEntity(BEP bep)
 	{
-		super(bep, "electric_honey_extractor");
+		super(bep, "electric_honey_extractor", 4);
 		
 		long capacity = FluidType.BUCKET_VOLUME * 32;
 		
