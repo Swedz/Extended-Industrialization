@@ -44,9 +44,9 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 		ResourceLocation id = BuiltInRegistries.ITEM.getKey(foodItem);
 		int count = (int) Math.ceil(food.getNutrition() / 2D);
 		this.addMachineRecipe("canning_machine/canned_food/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.CANNING_MACHINE, 2, 5 * 20, (r) -> r
-				.addItemInput(MIEItems.TIN_CAN.asItem(), count)
+				.addItemInput(MIEItems.TIN_CAN, count)
 				.addItemInput(foodItem, 1)
-				.addItemOutput(MIEItems.CANNED_FOOD.asItem(), count));
+				.addItemOutput(MIEItems.CANNED_FOOD, count));
 	}
 	
 	private void bucketRecipes()
