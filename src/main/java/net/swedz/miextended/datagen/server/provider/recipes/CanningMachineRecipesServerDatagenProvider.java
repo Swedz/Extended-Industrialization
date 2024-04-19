@@ -5,6 +5,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BowlFoodItem;
+import net.minecraft.world.item.HoneyBottleItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.FlowingFluid;
@@ -27,7 +28,7 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 	
 	private void addFillingAndEmptyingRecipes(FluidStack fluidStack, Item emptyItem, Item fullItem)
 	{
-		ResourceLocation id = BuiltInRegistries.FLUID.getKey(fluidStack.getFluid());
+		ResourceLocation id = BuiltInRegistries.ITEM.getKey(fullItem);
 		this.addMachineRecipe("canning_machine/filling/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.CANNING_MACHINE, 2, 5 * 20, (r) -> r
 				.addFluidInput(fluidStack.getFluid(), fluidStack.getAmount())
 				.addItemInput(emptyItem, 1)
@@ -69,7 +70,7 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 	{
 		for(Item item : BuiltInRegistries.ITEM)
 		{
-			if(item.isEdible() && item != MIEItems.CANNED_FOOD.asItem() && !(item instanceof BowlFoodItem))
+			if(item.isEdible() && item != MIEItems.CANNED_FOOD.asItem() && !(item instanceof BowlFoodItem) && !(item instanceof HoneyBottleItem))
 			{
 				FoodProperties food = item.getFoodProperties(item.getDefaultInstance(), null);
 				this.addCannedFoodRecipe(item, food);
