@@ -1,0 +1,21 @@
+{
+  "type": "modern_industrialization:canning_machine",
+  "duration": 100,
+  "eu": 2,
+  "item_inputs": [
+    {
+      "amount": 3,
+      "item": "miextended:tin_can"
+    },
+    {
+      "amount": 1,
+      "item": "minecraft:suspicious_stew"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 3,
+      "item": "miextended:canned_food"
+    }
+  ]
+}
