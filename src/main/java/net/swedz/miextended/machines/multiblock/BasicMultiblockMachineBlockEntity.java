@@ -17,7 +17,7 @@ import aztech.modern_industrialization.util.Tickable;
 
 public abstract class BasicMultiblockMachineBlockEntity extends MultiblockMachineBlockEntity implements Tickable, MultiblockInventoryComponentHolder
 {
-	private ShapeMatcher shapeMatcher = null;
+	private ShapeMatcher shapeMatcher;
 	
 	protected OperatingState operatingState = OperatingState.NOT_MATCHED;
 	
@@ -34,6 +34,10 @@ public abstract class BasicMultiblockMachineBlockEntity extends MultiblockMachin
 		this.isActive = new IsActiveComponent();
 		
 		this.registerComponents(activeShape, isActive);
+	}
+	
+	public void onSuccessfulMatch(ShapeMatcher shapeMatcher)
+	{
 	}
 	
 	@Override
@@ -63,6 +67,8 @@ public abstract class BasicMultiblockMachineBlockEntity extends MultiblockMachin
 			if(shapeMatcher.isMatchSuccessful())
 			{
 				inventory.rebuild(shapeMatcher);
+				
+				this.onSuccessfulMatch(shapeMatcher);
 				
 				shapeValid.shapeValid = true;
 				operatingState = OperatingState.TRYING_TO_RESUME;
