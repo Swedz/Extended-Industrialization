@@ -3,6 +3,8 @@ package net.swedz.miextended.datagen.server.provider.recipes;
 import com.google.common.collect.Sets;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.BowlFoodItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.FlowingFluid;
@@ -11,6 +13,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.fluids.MIEFluids;
+import net.swedz.miextended.items.MIEItems;
 import net.swedz.miextended.mi.hook.MIMachineHook;
 
 import java.util.Set;
@@ -35,6 +38,16 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 				.addFluidOutput(fluidStack.getFluid(), fluidStack.getAmount()));
 	}
 	
+	private void addCannedFoodRecipe(Item foodItem, FoodProperties food)
+	{
+		ResourceLocation id = BuiltInRegistries.ITEM.getKey(foodItem);
+		int count = (int) Math.ceil(food.getNutrition() / 2D);
+		this.addMachineRecipe("canning_machine/canned_food/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.CANNING_MACHINE, 2, 5 * 20, (r) -> r
+				.addItemInput(MIEItems.TIN_CAN.asItem(), count)
+				.addItemInput(foodItem, 1)
+				.addItemOutput(MIEItems.CANNED_FOOD.asItem(), count));
+	}
+	
 	private void bucketRecipes()
 	{
 		Set<Fluid> uniqueFluids = Sets.newHashSet();
@@ -52,11 +65,25 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 		}
 	}
 	
+	private void cannedFoodRecipes()
+	{
+		for(Item item : BuiltInRegistries.ITEM)
+		{
+			if(item.isEdible() && item != MIEItems.CANNED_FOOD.asItem() && !(item instanceof BowlFoodItem))
+			{
+				FoodProperties food = item.getFoodProperties(item.getDefaultInstance(), null);
+				this.addCannedFoodRecipe(item, food);
+			}
+		}
+	}
+	
 	@Override
 	public void run()
 	{
 		this.bucketRecipes();
 		
 		this.addFillingAndEmptyingRecipes(new FluidStack(MIEFluids.HONEY.asFluid(), 250), Items.GLASS_BOTTLE, Items.HONEY_BOTTLE);
+		
+		this.cannedFoodRecipes();
 	}
 }
