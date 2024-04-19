@@ -8,7 +8,6 @@ import aztech.modern_industrialization.textures.coloramp.Coloramp;
 import aztech.modern_industrialization.textures.coloramp.IColoramp;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.FilePackResources;
 import net.minecraft.server.packs.PackResources;
@@ -17,6 +16,7 @@ import net.minecraft.server.packs.resources.MultiPackResourceManager;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.miextended.datagen.api.DatagenProvider;
 import net.swedz.miextended.datagen.api.object.DatagenImageWrapper;
 import net.swedz.miextended.datagen.api.object.DatagenLanguageWrapper;
@@ -31,9 +31,9 @@ import java.util.function.Consumer;
 
 public final class MIHookClientDatagenProvider extends DatagenProvider
 {
-	public MIHookClientDatagenProvider(DataGenerator generator)
+	public MIHookClientDatagenProvider(GatherDataEvent event)
 	{
-		super(generator, "MI Extended Datagen/Client/MI", MI.ID);
+		super(event, "MI Extended Datagen/Client/MI", MI.ID);
 	}
 	
 	private void language()

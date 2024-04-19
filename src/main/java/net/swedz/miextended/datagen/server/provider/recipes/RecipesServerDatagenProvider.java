@@ -4,7 +4,7 @@ import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import aztech.modern_industrialization.materials.Material;
 import aztech.modern_industrialization.materials.part.PartTemplate;
-import net.minecraft.data.DataGenerator;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.miextended.datagen.api.DatagenOutputTarget;
 import net.swedz.miextended.datagen.api.DatagenProvider;
 import net.swedz.miextended.datagen.api.object.DatagenRecipeWrapper;
@@ -16,9 +16,9 @@ import static aztech.modern_industrialization.materials.property.MaterialPropert
 
 public abstract class RecipesServerDatagenProvider extends DatagenProvider
 {
-	protected RecipesServerDatagenProvider(DataGenerator generator, String name, String modId)
+	protected RecipesServerDatagenProvider(GatherDataEvent event, String name, String modId)
 	{
-		super(generator, name, modId);
+		super(event, name, modId);
 	}
 	
 	protected boolean hasPart(Material material, PartTemplate part)

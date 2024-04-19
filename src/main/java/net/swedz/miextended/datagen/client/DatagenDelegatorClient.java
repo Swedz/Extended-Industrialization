@@ -8,7 +8,7 @@ public final class DatagenDelegatorClient
 {
 	public static void configure(GatherDataEvent event)
 	{
-		event.getGenerator().addProvider(event.includeClient(), new ClientDatagenProvider(event.getGenerator()));
-		event.getGenerator().addProvider(event.includeClient(), new MIHookClientDatagenProvider(event.getGenerator()));
+		event.getGenerator().addProvider(event.includeClient(), new ClientDatagenProvider(event));
+		event.getGenerator().addProvider(event.includeClient(), new MIHookClientDatagenProvider(event));
 	}
 }

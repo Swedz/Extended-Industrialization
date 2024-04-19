@@ -2,17 +2,17 @@ package net.swedz.miextended.datagen.server.provider.recipes;
 
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.fluids.MIEFluids;
 
 public final class VanillaCompatRecipesServerDatagenProvider extends RecipesServerDatagenProvider
 {
-	public VanillaCompatRecipesServerDatagenProvider(DataGenerator generator)
+	public VanillaCompatRecipesServerDatagenProvider(GatherDataEvent event)
 	{
-		super(generator, "MI Extended Datagen/Server/Recipes/Vanilla Compat", MIExtended.ID);
+		super(event, "MI Extended Datagen/Server/Recipes/Vanilla Compat", MIExtended.ID);
 	}
 	
 	private void addHoneyWaxingRecipe(Item from, Item to)

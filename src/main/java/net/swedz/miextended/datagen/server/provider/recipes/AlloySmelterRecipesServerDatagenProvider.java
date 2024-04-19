@@ -2,7 +2,7 @@ package net.swedz.miextended.datagen.server.provider.recipes;
 
 import aztech.modern_industrialization.materials.Material;
 import aztech.modern_industrialization.materials.MaterialRegistry;
-import net.minecraft.data.DataGenerator;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.mi.hook.MIMachineHook;
 
@@ -10,9 +10,9 @@ import static aztech.modern_industrialization.materials.part.MIParts.*;
 
 public final class AlloySmelterRecipesServerDatagenProvider extends RecipesServerDatagenProvider
 {
-	public AlloySmelterRecipesServerDatagenProvider(DataGenerator generator)
+	public AlloySmelterRecipesServerDatagenProvider(GatherDataEvent event)
 	{
-		super(generator, "MI Extended Datagen/Server/Recipes/Alloy Smelter", MIExtended.ID);
+		super(event, "MI Extended Datagen/Server/Recipes/Alloy Smelter", MIExtended.ID);
 	}
 	
 	private void addAlloySmelterRecipes(Material componentA, int amountA, Material componentB, int amountB, Material result, int amountResult)

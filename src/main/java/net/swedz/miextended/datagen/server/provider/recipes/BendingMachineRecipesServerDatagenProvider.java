@@ -3,7 +3,7 @@ package net.swedz.miextended.datagen.server.provider.recipes;
 import aztech.modern_industrialization.materials.Material;
 import aztech.modern_industrialization.materials.MaterialRegistry;
 import aztech.modern_industrialization.materials.part.PartTemplate;
-import net.minecraft.data.DataGenerator;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.mi.hook.MIMachineHook;
 
@@ -14,9 +14,9 @@ import static aztech.modern_industrialization.materials.property.MaterialPropert
 
 public final class BendingMachineRecipesServerDatagenProvider extends RecipesServerDatagenProvider
 {
-	public BendingMachineRecipesServerDatagenProvider(DataGenerator generator)
+	public BendingMachineRecipesServerDatagenProvider(GatherDataEvent event)
 	{
-		super(generator, "MI Extended Datagen/Server/Recipes/Bending Machine", MIExtended.ID);
+		super(event, "MI Extended Datagen/Server/Recipes/Bending Machine", MIExtended.ID);
 	}
 	
 	private void addBendingMachineRecipes(String name, Material material, PartTemplate from, PartTemplate to)

@@ -9,6 +9,8 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.miextended.MIExtended;
 import org.apache.commons.compress.utils.Lists;
 import org.slf4j.Logger;
@@ -25,8 +27,9 @@ public abstract class DatagenProvider implements DataProvider
 {
 	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 	
-	protected final DataGenerator generator;
-	protected final PackOutput    output;
+	protected final DataGenerator      generator;
+	protected final ExistingFileHelper existingFileHelper;
+	protected final PackOutput         output;
 	
 	protected final List<CompletableFuture<?>> saveFutures = Lists.newArrayList();
 	
@@ -36,9 +39,10 @@ public abstract class DatagenProvider implements DataProvider
 	
 	protected final Logger log;
 	
-	protected DatagenProvider(DataGenerator generator, String name, String modId)
+	protected DatagenProvider(GatherDataEvent event, String name, String modId)
 	{
-		this.generator = generator;
+		this.generator = event.getGenerator();
+		this.existingFileHelper = event.getExistingFileHelper();
 		this.output = generator.getPackOutput();
 		this.name = name;
 		this.modId = modId;

@@ -2,12 +2,12 @@ package net.swedz.miextended.datagen.server.provider.recipes;
 
 import com.google.common.collect.Sets;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.fluids.MIEFluids;
@@ -17,9 +17,9 @@ import java.util.Set;
 
 public final class CanningMachineRecipesServerDatagenProvider extends RecipesServerDatagenProvider
 {
-	public CanningMachineRecipesServerDatagenProvider(DataGenerator generator)
+	public CanningMachineRecipesServerDatagenProvider(GatherDataEvent event)
 	{
-		super(generator, "MI Extended Datagen/Server/Recipes/Canning Machine", MIExtended.ID);
+		super(event, "MI Extended Datagen/Server/Recipes/Canning Machine", MIExtended.ID);
 	}
 	
 	private void addFillingAndEmptyingRecipes(FluidStack fluidStack, Item emptyItem, Item fullItem)

@@ -10,9 +10,9 @@ public final class DatagenDelegatorServer
 {
 	public static void configure(GatherDataEvent event)
 	{
-		event.getGenerator().addProvider(event.includeServer(), new AlloySmelterRecipesServerDatagenProvider(event.getGenerator()));
-		event.getGenerator().addProvider(event.includeServer(), new BendingMachineRecipesServerDatagenProvider(event.getGenerator()));
-		event.getGenerator().addProvider(event.includeServer(), new CanningMachineRecipesServerDatagenProvider(event.getGenerator()));
-		event.getGenerator().addProvider(event.includeServer(), new VanillaCompatRecipesServerDatagenProvider(event.getGenerator()));
+		event.getGenerator().addProvider(event.includeServer(), new AlloySmelterRecipesServerDatagenProvider(event));
+		event.getGenerator().addProvider(event.includeServer(), new BendingMachineRecipesServerDatagenProvider(event));
+		event.getGenerator().addProvider(event.includeServer(), new CanningMachineRecipesServerDatagenProvider(event));
+		event.getGenerator().addProvider(event.includeServer(), new VanillaCompatRecipesServerDatagenProvider(event));
 	}
 }
