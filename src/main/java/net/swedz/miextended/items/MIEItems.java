@@ -21,7 +21,7 @@ public final class MIEItems
 	}
 	
 	public static final Item TIN_CAN     = create().identifiable("tin_can", "Tin Can").withBasicModel().register().asItem();
-	public static final Item CANNED_FOOD = create().identifiable("canned_food", "Canned Food").withCreator(TinCanFoodItem::new).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).fast().build())).withBasicModel().register().asItem();
+	public static final Item CANNED_FOOD = create().identifiable("canned_food", "Canned Food").withCreator(TinCanFoodItem::new).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).meat().fast().build())).withBasicModel().register().asItem();
 	
 	private static MIEItemWrapper create()
 	{
