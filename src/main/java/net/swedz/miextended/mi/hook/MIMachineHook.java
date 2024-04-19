@@ -34,7 +34,7 @@ public final class MIMachineHook
 	{
 		MIMachineHookHelper.registerMultiblockMachine(
 				"Farmer", "farmer", "farmer",
-				BRONZE_PLATED_BRICKS, true, false, false,
+				BRONZE_PLATED_BRICKS, true, true, false,
 				FarmerBlockEntity::new,
 				(__) -> FarmerBlockEntity.registerReiShapes()
 		);
