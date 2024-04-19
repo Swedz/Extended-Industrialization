@@ -1,15 +1,17 @@
 package net.swedz.miextended.api.item;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.registries.DeferredItem;
 import net.swedz.miextended.api.MCIdentifiable;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
-public abstract class ItemWrapper<P extends Item.Properties, S extends ItemWrapper<P, S>>
+public abstract class ItemWrapper<P extends Item.Properties, S extends ItemWrapper<P, S>> implements ItemLike
 {
 	protected final String modId;
 	
@@ -20,6 +22,8 @@ public abstract class ItemWrapper<P extends Item.Properties, S extends ItemWrapp
 	protected ItemCreator<P> creator = this.defaultCreator();
 	
 	protected Consumer<ItemModelBuilder> modelBuilder;
+	
+	protected Optional<DeferredItem<Item>> deferredItem = Optional.empty();
 	
 	public ItemWrapper(String modId)
 	{
@@ -33,7 +37,7 @@ public abstract class ItemWrapper<P extends Item.Properties, S extends ItemWrapp
 		return Item::new;
 	}
 	
-	protected abstract void commonRegister();
+	protected abstract DeferredItem commonRegister();
 	
 	protected final S self()
 	{
@@ -75,11 +79,6 @@ public abstract class ItemWrapper<P extends Item.Properties, S extends ItemWrapp
 	{
 		this.creator = creator;
 		return this.self();
-	}
-	
-	public Item asItem()
-	{
-		return BuiltInRegistries.ITEM.get(this.encloseId());
 	}
 	
 	public P properties()
@@ -124,13 +123,13 @@ public abstract class ItemWrapper<P extends Item.Properties, S extends ItemWrapp
 	
 	public S register()
 	{
-		this.commonRegister();
+		deferredItem = Optional.of(this.commonRegister());
 		return this.self();
 	}
 	
-	public Item build()
+	@Override
+	public Item asItem()
 	{
-		this.register();
-		return this.asItem();
+		return deferredItem.orElseThrow(() -> new IllegalStateException("Cannot get item that hasn't been registered yet")).asItem();
 	}
 }

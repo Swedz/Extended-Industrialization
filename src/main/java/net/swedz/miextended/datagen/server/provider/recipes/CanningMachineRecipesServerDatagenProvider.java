@@ -44,9 +44,9 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 		ResourceLocation id = BuiltInRegistries.ITEM.getKey(foodItem);
 		int count = (int) Math.ceil(food.getNutrition() / 2D);
 		this.addMachineRecipe("canning_machine/canned_food/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.CANNING_MACHINE, 2, 5 * 20, (r) -> r
-				.addItemInput(MIEItems.TIN_CAN, count)
+				.addItemInput(MIEItems.TIN_CAN.asItem(), count)
 				.addItemInput(foodItem, 1)
-				.addItemOutput(MIEItems.CANNED_FOOD, count));
+				.addItemOutput(MIEItems.CANNED_FOOD.asItem(), count));
 	}
 	
 	private void bucketRecipes()
@@ -70,7 +70,7 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 	{
 		for(Item item : BuiltInRegistries.ITEM)
 		{
-			if(item.isEdible() && item != MIEItems.CANNED_FOOD && !(item instanceof BowlFoodItem) && !(item instanceof HoneyBottleItem))
+			if(item.isEdible() && item != MIEItems.CANNED_FOOD.asItem() && !(item instanceof BowlFoodItem) && !(item instanceof HoneyBottleItem))
 			{
 				FoodProperties food = item.getFoodProperties(item.getDefaultInstance(), null);
 				this.addCannedFoodRecipe(item, food);

@@ -1,5 +1,7 @@
 package net.swedz.miextended.items;
 
+import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.registries.DeferredItem;
 import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.api.item.ItemWrapper;
 
@@ -17,8 +19,8 @@ public class MIEItemWrapper extends ItemWrapper<MIEItemProperties, MIEItemWrappe
 	}
 	
 	@Override
-	protected void commonRegister()
+	protected DeferredItem<Item> commonRegister()
 	{
-		MIEItems.include(this);
+		return MIEItems.include(this);
 	}
 }
