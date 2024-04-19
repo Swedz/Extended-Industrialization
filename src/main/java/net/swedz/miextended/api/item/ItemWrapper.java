@@ -127,4 +127,10 @@ public abstract class ItemWrapper<P extends Item.Properties, S extends ItemWrapp
 		this.commonRegister();
 		return this.self();
 	}
+	
+	public Item build()
+	{
+		this.register();
+		return this.asItem();
+	}
 }
