@@ -11,9 +11,9 @@ import aztech.modern_industrialization.machines.init.SingleBlockCraftingMachines
 import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import com.google.common.collect.Lists;
-import net.swedz.miextended.mi.machines.blockentities.SolarBoilerMachineBlockEntity;
-import net.swedz.miextended.mi.machines.blockentities.honeyextractor.ElectricHoneyExtractorMachineBlockEntity;
-import net.swedz.miextended.mi.machines.blockentities.honeyextractor.SteamHoneyExtractorMachineBlockEntity;
+import net.swedz.miextended.machines.blockentities.SolarBoilerMachineBlockEntity;
+import net.swedz.miextended.machines.blockentities.honeyextractor.ElectricHoneyExtractorMachineBlockEntity;
+import net.swedz.miextended.machines.blockentities.honeyextractor.SteamHoneyExtractorMachineBlockEntity;
 
 import java.util.List;
 

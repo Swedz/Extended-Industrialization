@@ -1,10 +1,10 @@
 package net.swedz.miextended.mi.hook;
 
 import aztech.modern_industrialization.machines.GuiComponentsClient;
-import net.swedz.miextended.mi.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
-import net.swedz.miextended.mi.machines.guicomponents.solarefficiency.SolarEfficiencyBarClient;
-import net.swedz.miextended.mi.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGui;
-import net.swedz.miextended.mi.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGuiClient;
+import net.swedz.miextended.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
+import net.swedz.miextended.machines.guicomponents.solarefficiency.SolarEfficiencyBarClient;
+import net.swedz.miextended.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGui;
+import net.swedz.miextended.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGuiClient;
 
 public final class MIGuiComponentsClientHook
 {

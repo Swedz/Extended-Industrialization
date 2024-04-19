@@ -1,4 +1,4 @@
-package net.swedz.miextended.mi.machines.blockentities.honeyextractor;
+package net.swedz.miextended.machines.blockentities.honeyextractor;
 
 import aztech.modern_industrialization.MIFluids;
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;

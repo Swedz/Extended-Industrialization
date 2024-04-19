@@ -1,4 +1,4 @@
-package net.swedz.miextended.mi.machines.guicomponents.waterpumpenvironment;
+package net.swedz.miextended.machines.guicomponents.waterpumpenvironment;
 
 import aztech.modern_industrialization.machines.gui.ClientComponentRenderer;
 import aztech.modern_industrialization.machines.gui.GuiComponentClient;

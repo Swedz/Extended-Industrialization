@@ -8,7 +8,7 @@ import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.biome.Biome;
-import net.swedz.miextended.mi.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGui;
+import net.swedz.miextended.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;

@@ -1,4 +1,4 @@
-package net.swedz.miextended.mi.machines.components;
+package net.swedz.miextended.machines.components;
 
 import aztech.modern_industrialization.MIFluids;
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;

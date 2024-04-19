@@ -1,4 +1,4 @@
-package net.swedz.miextended.mi.machines.blockentities;
+package net.swedz.miextended.machines.blockentities;
 
 import aztech.modern_industrialization.MIFluids;
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
@@ -18,9 +18,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.swedz.miextended.mi.machines.components.ExtendedSteamHeaterComponent;
-import net.swedz.miextended.mi.machines.components.SolarBurningComponent;
-import net.swedz.miextended.mi.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
+import net.swedz.miextended.machines.components.ExtendedSteamHeaterComponent;
+import net.swedz.miextended.machines.components.SolarBurningComponent;
+import net.swedz.miextended.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
 
 import java.util.Arrays;
 import java.util.Collections;
