@@ -16,7 +16,8 @@
         "mi.hook.tracker.MIMachineRecipeTypeRegistrationTrackerMixin",
         "mi.hook.tracker.MIMachineRegistrationTrackerMixin",
         "mi.MIAllowFluidBottlesInMachinesMenuMixin",
-        "mi.MIMakeWaterPumpsRequireWaterBiomeMixin"
+        "mi.MIMakeWaterPumpsRequireWaterBiomeMixin",
+        "CannedFoodUsedForCatsMixin"
     ],
     "client": [
         "client.mi.MIGuiComponentsClientMixin"
