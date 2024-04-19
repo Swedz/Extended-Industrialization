@@ -93,7 +93,7 @@ public final class MIMachineHook
 				new EnergyBar.Parameters(14, 35),
 				(items) -> items.addSlots(58, 27, 1, 2).addSlots(102, 27, 1, 2),
 				(fluids) -> fluids.addSlot(38, 27).addSlot(122, 27),
-				true, false, false,
+				true, false, true,
 				TIER_STEEL | TIER_ELECTRIC,
 				16
 		);

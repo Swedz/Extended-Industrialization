@@ -5,7 +5,9 @@
     "front": "modern_industrialization:block/machines/canning_machine/overlay_front",
     "front_active": "modern_industrialization:block/machines/canning_machine/overlay_front_active",
     "item_auto": "modern_industrialization:block/overlays/item_auto",
-    "output": "modern_industrialization:block/overlays/output"
+    "output": "modern_industrialization:block/overlays/output",
+    "side": "modern_industrialization:block/machines/canning_machine/overlay_side",
+    "side_active": "modern_industrialization:block/machines/canning_machine/overlay_side_active"
   },
   "loader": "modern_industrialization:machine"
 }
