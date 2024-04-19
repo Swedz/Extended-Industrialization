@@ -118,12 +118,12 @@ public final class MIMachineHook
 		
 		MIMachineHookHelper.registerSingleBlockSpecialMachine(
 				"Steel Honey Extractor", "steel_honey_extractor", "honey_extractor",
-				MachineCasings.STEEL, true, false, false,
+				MachineCasings.STEEL, true, false, true,
 				(bep) -> new SteamHoneyExtractorMachineBlockEntity(bep, false)
 		);
 		MIMachineHookHelper.registerSingleBlockSpecialMachine(
 				"Electric Honey Extractor", "electric_honey_extractor", "honey_extractor",
-				CableTier.LV.casing, true, false, false,
+				CableTier.LV.casing, true, false, true,
 				ElectricHoneyExtractorMachineBlockEntity::new,
 				ElectricHoneyExtractorMachineBlockEntity::registerEnergyApi
 		);
