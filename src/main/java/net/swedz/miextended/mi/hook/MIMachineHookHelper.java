@@ -29,4 +29,23 @@ public final class MIMachineHookHelper
 	{
 		registerSingleBlockSpecialMachine(englishName, id, overlayFolder, defaultCasing, frontOverlay, topOverlay, sideOverlay, true, factory, extraRegistrators);
 	}
+	
+	@SafeVarargs
+	public static void registerMultiblockMachine(String englishName, String id, String overlayFolder,
+												 MachineCasing defaultCasing, boolean frontOverlay, boolean topOverlay, boolean sideOverlay, boolean hasActive,
+												 Function<BEP, MachineBlockEntity> factory,
+												 Consumer<BlockEntityType<?>>... extraRegistrators)
+	{
+		MachineRegistrationHelper.registerMachine(englishName, id, factory, extraRegistrators);
+		MachineRegistrationHelper.addMachineModel(id, overlayFolder, defaultCasing, frontOverlay, topOverlay, sideOverlay, hasActive);
+	}
+	
+	@SafeVarargs
+	public static void registerMultiblockMachine(String englishName, String id, String overlayFolder,
+												 MachineCasing defaultCasing, boolean frontOverlay, boolean topOverlay, boolean sideOverlay,
+												 Function<BEP, MachineBlockEntity> factory,
+												 Consumer<BlockEntityType<?>>... extraRegistrators)
+	{
+		registerMultiblockMachine(englishName, id, overlayFolder, defaultCasing, frontOverlay, topOverlay, sideOverlay, true, factory, extraRegistrators);
+	}
 }

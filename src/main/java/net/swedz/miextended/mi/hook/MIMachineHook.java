@@ -14,10 +14,12 @@ import com.google.common.collect.Lists;
 import net.swedz.miextended.machines.blockentities.SolarBoilerMachineBlockEntity;
 import net.swedz.miextended.machines.blockentities.honeyextractor.ElectricHoneyExtractorMachineBlockEntity;
 import net.swedz.miextended.machines.blockentities.honeyextractor.SteamHoneyExtractorMachineBlockEntity;
+import net.swedz.miextended.machines.blockentities.multiblock.farmer.FarmerBlockEntity;
 
 import java.util.List;
 
 import static aztech.modern_industrialization.machines.init.SingleBlockCraftingMachines.*;
+import static aztech.modern_industrialization.machines.models.MachineCasings.*;
 
 public final class MIMachineHook
 {
@@ -30,6 +32,12 @@ public final class MIMachineHook
 	
 	public static void multiblockMachines()
 	{
+		MIMachineHookHelper.registerMultiblockMachine(
+				"Farmer", "farmer", "farmer",
+				BRONZE_PLATED_BRICKS, true, false, false,
+				FarmerBlockEntity::new,
+				(__) -> FarmerBlockEntity.registerReiShapes()
+		);
 	}
 	
 	public static MachineRecipeType
