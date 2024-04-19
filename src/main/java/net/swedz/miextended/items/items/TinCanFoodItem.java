@@ -24,12 +24,12 @@ public final class TinCanFoodItem extends Item
 		{
 			if(itemstack.isEmpty())
 			{
-				return new ItemStack(MIEItems.TIN_CAN.asItem());
+				return new ItemStack(MIEItems.TIN_CAN);
 			}
 			else
 			{
 				PlayerMainInvWrapper inventory = new PlayerMainInvWrapper(player.getInventory());
-				ItemStack remainder = ItemHandlerHelper.insertItemStacked(inventory, new ItemStack(MIEItems.TIN_CAN.asItem()), false);
+				ItemStack remainder = ItemHandlerHelper.insertItemStacked(inventory, new ItemStack(MIEItems.TIN_CAN), false);
 				if(!remainder.isEmpty())
 				{
 					ItemHandlerHelper.giveItemToPlayer(player, remainder);
