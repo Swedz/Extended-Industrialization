@@ -87,28 +87,24 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	
 	private boolean wetten(FarmerBlocks dirtBlocks, FarmerBlocks cropBlocks)
 	{
-		for(FarmerBlock entry : dirtBlocks)
+		if(this.consumeWater(Simulation.SIMULATE))
 		{
-			BlockPos pos = entry.pos();
-			BlockState state = entry.state();
-			if(state.getBlock() instanceof FarmBlock)
+			for(FarmerBlock entry : dirtBlocks)
 			{
-				int moisture = state.getValue(FarmBlock.MOISTURE);
-				if(moisture < 7)
+				BlockPos pos = entry.pos();
+				BlockState state = entry.state();
+				if(state.getBlock() instanceof FarmBlock)
 				{
-					if(this.consumeWater(Simulation.SIMULATE))
+					int moisture = state.getValue(FarmBlock.MOISTURE);
+					if(moisture < 7 && this.consumeWater(Simulation.ACT))
 					{
-						this.consumeWater(Simulation.ACT);
 						level.setBlock(pos, state.setValue(FarmBlock.MOISTURE, 7), 2);
 						return true;
-					}
-					else
-					{
-						return false;
 					}
 				}
 			}
 		}
+		
 		return false;
 	}
 	
