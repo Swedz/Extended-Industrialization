@@ -45,7 +45,7 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 		this.dirtPositions = Collections.unmodifiableList(dirtPositions);
 	}
 	
-	private boolean slurpWater(Simulation simulation)
+	private boolean consumeWater(Simulation simulation)
 	{
 		return MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), Fluids.WATER, 50, simulation) == 50;
 	}
@@ -61,9 +61,9 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 				int moisture = state.getValue(FarmBlock.MOISTURE);
 				if(moisture < 7)
 				{
-					if(this.slurpWater(Simulation.SIMULATE))
+					if(this.consumeWater(Simulation.SIMULATE))
 					{
-						this.slurpWater(Simulation.ACT);
+						this.consumeWater(Simulation.ACT);
 						level.setBlock(pos, state.setValue(FarmBlock.MOISTURE, 7), 2);
 						return true;
 					}
@@ -121,9 +121,9 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	@Override
 	public void on(FarmlandLoseMoistureEvent event)
 	{
-		if(this.slurpWater(Simulation.SIMULATE))
+		if(this.consumeWater(Simulation.SIMULATE))
 		{
-			this.slurpWater(Simulation.ACT);
+			this.consumeWater(Simulation.ACT);
 			event.setCanceled(true);
 		}
 	}
