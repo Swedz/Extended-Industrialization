@@ -1,20 +1,32 @@
 package net.swedz.miextended.machines.components.farmer;
 
+import aztech.modern_industrialization.inventory.MIItemStorage;
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.components.IsActiveComponent;
 import aztech.modern_industrialization.machines.components.MultiblockInventoryComponent;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
+import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
+import aztech.modern_industrialization.thirdparty.fabrictransfer.api.transaction.Transaction;
 import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.IPlantable;
 import net.swedz.miextended.api.MachineInventoryHelper;
 import net.swedz.miextended.api.event.FarmlandLoseMoistureEvent;
@@ -138,12 +150,72 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	
 	private boolean harvest()
 	{
-		// TODO
+		if(processTick != 20)
+		{
+			return false;
+		}
+		
+		for(FarmerBlock cropBlockEntry : cropBlocks)
+		{
+			BlockPos pos = cropBlockEntry.pos();
+			BlockState state = cropBlockEntry.state();
+			if(state.getBlock() instanceof CropBlock cropBlock && cropBlock.isMaxAge(state))
+			{
+				ResourceLocation lootTableId = state.getBlock().getLootTable();
+				LootTable lootTable = level.getServer().getLootData().getLootTable(lootTableId);
+				LootParams lootParams = new LootParams.Builder((ServerLevel) level)
+						.withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
+						.withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
+						.withParameter(LootContextParams.BLOCK_STATE, state)
+						.create(LootContextParamSets.BLOCK);
+				List<ItemStack> items = lootTable.getRandomItems(lootParams);
+				
+				if(items.size() == 0)
+				{
+					continue;
+				}
+				
+				try (Transaction transaction = Transaction.openOuter())
+				{
+					MIItemStorage itemOutput = new MIItemStorage(inventory.getItemOutputs());
+					
+					boolean success = true;
+					for(ItemStack item : items)
+					{
+						long inserted = itemOutput.insertAllSlot(ItemVariant.of(item), item.getCount(), transaction);
+						if(inserted != item.getCount())
+						{
+							success = false;
+							break;
+						}
+					}
+					if(!success)
+					{
+						continue;
+					}
+					
+					BlockState newState = Blocks.AIR.defaultBlockState();
+					level.setBlock(pos, newState, 1 | 2);
+					level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(state));
+					cropBlockEntry.updateState(newState);
+					
+					transaction.commit();
+				}
+				
+				return true;
+			}
+		}
+		
 		return false;
 	}
 	
 	private boolean plant()
 	{
+		if(processTick != 20)
+		{
+			return false;
+		}
+		
 		List<PlantableConfigurableItemStack> plantables = plantableStacks.getItems();
 		plantables.removeIf((plantable) -> !plantable.isPlantable() || (!plantingMode.includeEmptyStacks() && plantable.getStack().isEmpty()));
 		
