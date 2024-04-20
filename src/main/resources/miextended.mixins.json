@@ -5,6 +5,7 @@
     "compatibilityLevel": "JAVA_17",
     "mixins": [
         "CannedFoodUsedForCatsMixin",
+        "event.TreeGrowthEventMixin",
         "event.FarmlandLoseMoistureEventMixin",
         "mi.AbstractConfigurableStackAccessor",
         "mi.MakePlayerLockNotifyListenersMixin",

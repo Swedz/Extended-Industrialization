@@ -7,6 +7,7 @@ import net.neoforged.bus.api.Event;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.swedz.miextended.api.event.FarmlandLoseMoistureEvent;
+import net.swedz.miextended.api.event.TreeGrowthEvent;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -22,6 +23,12 @@ public final class IsolatedListeners
 		
 		withListener(
 				FarmlandLoseMoistureEvent.class,
+				(event) -> event.getLevel() instanceof Level,
+				(event) -> (Level) event.getLevel(),
+				(event) -> new ChunkPos(event.getPos())
+		);
+		withListener(
+				TreeGrowthEvent.class,
 				(event) -> event.getLevel() instanceof Level,
 				(event) -> (Level) event.getLevel(),
 				(event) -> new ChunkPos(event.getPos())

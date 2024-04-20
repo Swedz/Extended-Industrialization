@@ -8,6 +8,7 @@ import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.transaction.Transaction;
 import aztech.modern_industrialization.util.Simulation;
+import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -28,15 +29,17 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.IPlantable;
-import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.api.MachineInventoryHelper;
 import net.swedz.miextended.api.event.FarmlandLoseMoistureEvent;
+import net.swedz.miextended.api.event.TreeGrowthEvent;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListener;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListeners;
+import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 public final class FarmerComponent implements IComponent
@@ -46,6 +49,9 @@ public final class FarmerComponent implements IComponent
 	private final PlantingMode                 plantingMode;
 	
 	private final IsolatedListener<FarmlandLoseMoistureEvent> listenerFarmlandLoseMoisture;
+	private final IsolatedListener<TreeGrowthEvent>           listenerTreeGrowth;
+	
+	private final Map<BlockPos, List<BlockPos>> trees = Maps.newHashMap();
 	
 	public boolean tilling;
 	
@@ -74,6 +80,14 @@ public final class FarmerComponent implements IComponent
 			{
 				this.consumeWater(Simulation.ACT);
 				event.setCanceled(true);
+			}
+		};
+		this.listenerTreeGrowth = (event) ->
+		{
+			if(dirtPositions.contains(event.getPos().below()))
+			{
+				// TODO server reboot will make trees get forgotten...
+				trees.put(event.getPos(), event.getPositions());
 			}
 		};
 	}
@@ -160,6 +174,72 @@ public final class FarmerComponent implements IComponent
 		return false;
 	}
 	
+	private List<ItemStack> getHarvestItems(BlockPos pos, BlockState state)
+	{
+		ResourceLocation lootTableId = state.getBlock().getLootTable();
+		LootTable lootTable = level.getServer().getLootData().getLootTable(lootTableId);
+		LootParams lootParams = new LootParams.Builder((ServerLevel) level)
+				.withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
+				.withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
+				.withParameter(LootContextParams.BLOCK_STATE, state)
+				.create(LootContextParamSets.BLOCK);
+		return lootTable.getRandomItems(lootParams);
+	}
+	
+	private List<ItemStack> getHarvestItems(List<BlockPos> blockPositions, List<BlockState> blockStates)
+	{
+		List<ItemStack> items = Lists.newArrayList();
+		for(int i = 0; i < blockPositions.size(); i++)
+		{
+			items.addAll(this.getHarvestItems(blockPositions.get(i), blockStates.get(i)));
+		}
+		return items;
+	}
+	
+	private boolean harvestBlocks(FarmerBlock cropBlockEntry, List<BlockPos> blockPositions, List<BlockState> blockStates)
+	{
+		try (Transaction transaction = Transaction.openOuter())
+		{
+			List<ItemStack> items = this.getHarvestItems(blockPositions, blockStates);
+			
+			if(items.size() == 0)
+			{
+				return false;
+			}
+			
+			MIItemStorage itemOutput = new MIItemStorage(inventory.getItemOutputs());
+			
+			boolean success = true;
+			for(ItemStack item : items)
+			{
+				long inserted = itemOutput.insertAllSlot(ItemVariant.of(item), item.getCount(), transaction);
+				if(inserted != item.getCount())
+				{
+					success = false;
+					break;
+				}
+			}
+			if(!success)
+			{
+				return false;
+			}
+			
+			BlockState newState = Blocks.AIR.defaultBlockState();
+			int i = 0;
+			for(BlockPos blockPosition : blockPositions)
+			{
+				level.setBlock(blockPosition, newState, 1 | 2);
+				level.gameEvent(GameEvent.BLOCK_DESTROY, blockPosition, GameEvent.Context.of(blockStates.get(i)));
+				i++;
+			}
+			cropBlockEntry.updateState(newState);
+			
+			transaction.commit();
+		}
+		
+		return true;
+	}
+	
 	private boolean harvest()
 	{
 		if(processTick != 20)
@@ -174,53 +254,20 @@ public final class FarmerComponent implements IComponent
 			
 			if(state.getBlock() instanceof CropBlock cropBlock && cropBlock.isMaxAge(state))
 			{
-				ResourceLocation lootTableId = state.getBlock().getLootTable();
-				LootTable lootTable = level.getServer().getLootData().getLootTable(lootTableId);
-				LootParams lootParams = new LootParams.Builder((ServerLevel) level)
-						.withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
-						.withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
-						.withParameter(LootContextParams.BLOCK_STATE, state)
-						.create(LootContextParamSets.BLOCK);
-				List<ItemStack> items = lootTable.getRandomItems(lootParams);
-				
-				if(items.size() == 0)
+				if(this.harvestBlocks(cropBlockEntry, List.of(pos), List.of(state)))
 				{
-					continue;
+					return true;
 				}
-				
-				try (Transaction transaction = Transaction.openOuter())
-				{
-					MIItemStorage itemOutput = new MIItemStorage(inventory.getItemOutputs());
-					
-					boolean success = true;
-					for(ItemStack item : items)
-					{
-						long inserted = itemOutput.insertAllSlot(ItemVariant.of(item), item.getCount(), transaction);
-						if(inserted != item.getCount())
-						{
-							success = false;
-							break;
-						}
-					}
-					if(!success)
-					{
-						continue;
-					}
-					
-					BlockState newState = Blocks.AIR.defaultBlockState();
-					level.setBlock(pos, newState, 1 | 2);
-					level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(state));
-					cropBlockEntry.updateState(newState);
-					
-					transaction.commit();
-				}
-				
-				return true;
 			}
 			
-			else if(state.is(BlockTags.LOGS))
+			else if(trees.containsKey(pos))
 			{
-				MIExtended.LOGGER.info("we can harvest a tree");
+				List<BlockPos> blockPositions = trees.remove(pos);
+				List<BlockState> blockStates = blockPositions.stream().map((p) -> level.getBlockState(p)).toList();
+				if(this.harvestBlocks(cropBlockEntry, blockPositions, blockStates))
+				{
+					return true;
+				}
 			}
 		}
 		
@@ -313,11 +360,13 @@ public final class FarmerComponent implements IComponent
 		this.level = level;
 		this.shapeMatcher = shapeMatcher;
 		IsolatedListeners.register(level, shapeMatcher.getSpannedChunks(), FarmlandLoseMoistureEvent.class, listenerFarmlandLoseMoisture);
+		IsolatedListeners.register(level, shapeMatcher.getSpannedChunks(), TreeGrowthEvent.class, listenerTreeGrowth);
 	}
 	
 	public void unregisterListeners(Level level, ShapeMatcher shapeMatcher)
 	{
 		IsolatedListeners.unregister(level, shapeMatcher.getSpannedChunks(), FarmlandLoseMoistureEvent.class, listenerFarmlandLoseMoisture);
+		IsolatedListeners.unregister(level, shapeMatcher.getSpannedChunks(), TreeGrowthEvent.class, listenerTreeGrowth);
 		this.shapeMatcher = null;
 	}
 	
