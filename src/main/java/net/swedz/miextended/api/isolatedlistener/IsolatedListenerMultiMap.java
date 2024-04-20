@@ -7,14 +7,13 @@ import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.bus.api.Event;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class IsolatedListenerMultiMap
 {
-	private final Map<LevelAccessor, HashMap<ChunkPos, Map<Class<?>, Set<IsolatedListener<?>>>>> storage = new HashMap<>();
+	private final Map<LevelAccessor, Map<ChunkPos, Map<Class<?>, Set<IsolatedListener<?>>>>> storage = Maps.newHashMap();
 	
 	public <E extends Event> void add(LevelAccessor level, ChunkPos chunk, Class<E> listenerClass, IsolatedListener<E> listener)
 	{
