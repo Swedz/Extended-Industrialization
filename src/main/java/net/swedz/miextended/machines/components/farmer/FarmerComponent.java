@@ -33,7 +33,6 @@ import net.swedz.miextended.api.MachineInventoryHelper;
 import net.swedz.miextended.api.event.FarmlandLoseMoistureEvent;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListener;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListeners;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,9 +45,7 @@ public final class FarmerComponent implements IComponent
 	private final IsActiveComponent            isActive;
 	private final PlantingMode                 plantingMode;
 	
-	private final IsolatedListener<FarmlandLoseMoistureEvent>      listenerFarmlandLoseMoisture;
-	
-	private final List<BlockPos> treePositions = Lists.newArrayList();
+	private final IsolatedListener<FarmlandLoseMoistureEvent> listenerFarmlandLoseMoisture;
 	
 	public boolean tilling;
 	
@@ -221,7 +218,7 @@ public final class FarmerComponent implements IComponent
 				return true;
 			}
 			
-			else if(treePositions.contains(pos))
+			else if(state.is(BlockTags.LOGS))
 			{
 				MIExtended.LOGGER.info("we can harvest a tree");
 			}
