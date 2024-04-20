@@ -23,14 +23,15 @@ import net.swedz.miextended.api.isolatedlistener.IsolatedListeners;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
 
 public final class FarmerComponent implements IComponent, IsolatedListener<FarmlandLoseMoistureEvent>
 {
 	private final MultiblockInventoryComponent inventory;
 	private final IsActiveComponent            isActive;
+	private final PlantingMode                 plantingMode;
 	
-	public PlantingMode plantingMode;
-	public boolean      tilling;
+	public boolean tilling;
 	
 	private Level        level;
 	private ShapeMatcher shapeMatcher;
@@ -135,7 +136,7 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	private boolean plant(FarmerBlocks dirtBlocks, FarmerBlocks cropBlocks)
 	{
 		List<PlantableConfigurableItemStack> plantables = plantableStacks.getItems();
-		plantables.removeIf((plantable) -> !plantable.isPlantable());
+		plantables.removeIf((plantable) -> !plantable.isPlantable() || (!plantingMode.includeEmptyStacks() && plantable.getStack().isEmpty()));
 		
 		if(plantables.size() == 0)
 		{
@@ -144,7 +145,7 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 		
 		for(FarmerBlock blockEntry : dirtBlocks)
 		{
-			int index = plantingMode == PlantingMode.ALTERNATING_LINES ? blockEntry.line() % plantables.size() : 0;
+			int index = plantingMode.index(blockEntry, plantables);
 			PlantableConfigurableItemStack plantable = plantables.get(index);
 			if(blockEntry.state().getBlock() instanceof FarmBlock && !plantable.getStack().isEmpty())
 			{
@@ -271,7 +272,27 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	
 	public enum PlantingMode
 	{
-		ALTERNATING_LINES,
-		AS_NEEDED
+		ALTERNATING_LINES(true, (block, plantables) -> block.line() % plantables.size()),
+		AS_NEEDED(false, (block, plantables) -> 0);
+		
+		private final boolean includeEmptyStacks;
+		
+		private final BiFunction<FarmerBlock, List<PlantableConfigurableItemStack>, Integer> index;
+		
+		PlantingMode(boolean includeEmptyStacks, BiFunction<FarmerBlock, List<PlantableConfigurableItemStack>, Integer> index)
+		{
+			this.includeEmptyStacks = includeEmptyStacks;
+			this.index = index;
+		}
+		
+		public boolean includeEmptyStacks()
+		{
+			return includeEmptyStacks;
+		}
+		
+		public int index(FarmerBlock block, List<PlantableConfigurableItemStack> plantables)
+		{
+			return index.apply(block, plantables);
+		}
 	}
 }
