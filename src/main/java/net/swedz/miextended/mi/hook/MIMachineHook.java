@@ -15,6 +15,7 @@ import net.swedz.miextended.machines.blockentities.SolarBoilerMachineBlockEntity
 import net.swedz.miextended.machines.blockentities.honeyextractor.ElectricHoneyExtractorMachineBlockEntity;
 import net.swedz.miextended.machines.blockentities.honeyextractor.SteamHoneyExtractorMachineBlockEntity;
 import net.swedz.miextended.machines.blockentities.multiblock.farmer.FarmerBlockEntity;
+import net.swedz.miextended.machines.blockentities.multiblock.farmer.SteamFarmerBlockEntity;
 
 import java.util.List;
 
@@ -33,10 +34,10 @@ public final class MIMachineHook
 	public static void multiblockMachines()
 	{
 		MIMachineHookHelper.registerMultiblockMachine(
-				"Farmer", "farmer", "farmer",
+				"Steam Farmer", "steam_farmer", "farmer",
 				BRONZE_PLATED_BRICKS, true, true, false,
-				FarmerBlockEntity::new,
-				(__) -> FarmerBlockEntity.registerReiShapes()
+				SteamFarmerBlockEntity::new,
+				(__) -> FarmerBlockEntity.registerReiShapes("steam_farmer")
 		);
 	}
 	

@@ -24,7 +24,7 @@ import org.apache.commons.compress.utils.Lists;
 import java.util.Collections;
 import java.util.List;
 
-public class FarmerBlockEntity extends BasicMultiblockMachineBlockEntity
+public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntity
 {
 	private static final int MAX_HEIGHT              = 4;
 	private static final int RADIUS_START            = 3;
@@ -33,23 +33,41 @@ public class FarmerBlockEntity extends BasicMultiblockMachineBlockEntity
 	private static final ShapeTemplate[]  SHAPE_TEMPLATES;
 	private static final List<BlockPos>[] DIRT_POSITIONS;
 	
-	private final FarmerComponent farmer;
+	protected final long euCost;
 	
-	public FarmerBlockEntity(BEP bep)
+	protected final FarmerComponent farmer;
+	
+	public FarmerBlockEntity(BEP bep, String blockId, long euCost)
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder("farmer", false).backgroundHeight(128).build(),
+				new MachineGuiParameters.Builder(blockId, false).backgroundHeight(128).build(),
 				SHAPE_TEMPLATES
 		);
 		
-		this.farmer = new FarmerComponent();
+		this.euCost = euCost;
+		
+		this.farmer = new FarmerComponent(inventory);
 		
 		this.registerGuiComponent(CommonGuiComponents.rangedShapeSelection(
 				this, activeShape,
 				List.of(MIText.ShapeTextSmall.text(), MIText.ShapeTextMedium.text(), MIText.ShapeTextLarge.text(), MIText.ShapeTextExtreme.text()),
 				true
 		));
+	}
+	
+	public abstract long consumeEu(long max);
+	
+	@Override
+	public void onLink(ShapeMatcher shapeMatcher)
+	{
+		farmer.registerListeners(level, shapeMatcher);
+	}
+	
+	@Override
+	public void onUnlink(ShapeMatcher shapeMatcher)
+	{
+		farmer.unregisterListeners(level, shapeMatcher);
 	}
 	
 	@Override
@@ -64,14 +82,38 @@ public class FarmerBlockEntity extends BasicMultiblockMachineBlockEntity
 	{
 		super.tick();
 		
-		isActive.updateActive(false, this);
+		if(level.isClientSide)
+		{
+			return;
+		}
+		
+		if(this.isShapeValid())
+		{
+			long eu = this.consumeEu(euCost);
+			boolean active = eu > 0;
+			this.updateActive(active);
+			
+			if(active)
+			{
+				farmer.run();
+			}
+		}
+		else
+		{
+			this.updateActive(false);
+		}
 	}
 	
-	public static void registerReiShapes()
+	private void updateActive(boolean active)
+	{
+		isActive.updateActive(active, this);
+	}
+	
+	public static void registerReiShapes(String machine)
 	{
 		for(ShapeTemplate shapeTemplate : SHAPE_TEMPLATES)
 		{
-			ReiMachineRecipes.registerMultiblockShape("farmer", shapeTemplate);
+			ReiMachineRecipes.registerMultiblockShape(machine, shapeTemplate);
 		}
 	}
 	

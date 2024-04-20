@@ -36,6 +36,14 @@ public abstract class BasicMultiblockMachineBlockEntity extends MultiblockMachin
 		this.registerComponents(activeShape, isActive);
 	}
 	
+	public void onLink(ShapeMatcher shapeMatcher)
+	{
+	}
+	
+	public void onUnlink(ShapeMatcher shapeMatcher)
+	{
+	}
+	
 	public void onSuccessfulMatch(ShapeMatcher shapeMatcher)
 	{
 	}
@@ -57,6 +65,8 @@ public abstract class BasicMultiblockMachineBlockEntity extends MultiblockMachin
 		{
 			shapeMatcher = new ShapeMatcher(level, worldPosition, orientation.facingDirection, this.getActiveShape());
 			shapeMatcher.registerListeners(level);
+			
+			this.onLink(shapeMatcher);
 		}
 		if(shapeMatcher.needsRematch())
 		{
@@ -88,6 +98,9 @@ public abstract class BasicMultiblockMachineBlockEntity extends MultiblockMachin
 		{
 			shapeMatcher.unlinkHatches();
 			shapeMatcher.unregisterListeners(level);
+			
+			this.onUnlink(shapeMatcher);
+			
 			shapeMatcher = null;
 		}
 	}
