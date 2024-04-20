@@ -4,12 +4,10 @@ import aztech.modern_industrialization.inventory.ChangeListener;
 import aztech.modern_industrialization.inventory.ConfigurableItemStack;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import net.minecraft.core.BlockPos;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.IPlantable;
-import net.neoforged.neoforge.common.PlantType;
 
 final class PlantableConfigurableItemStack extends ChangeListener
 {
@@ -18,7 +16,7 @@ final class PlantableConfigurableItemStack extends ChangeListener
 	
 	private Item lastUpdateItem;
 	
-	private PlantableType plantable = PlantableType.NOT_PLANTABLE;
+	private boolean plantable;
 	
 	PlantableConfigurableItemStack(FarmerComponentPlantableStacks farmerComponentPlantableStacks, ConfigurableItemStack stack)
 	{
@@ -45,20 +43,26 @@ final class PlantableConfigurableItemStack extends ChangeListener
 	
 	public boolean isPlantable()
 	{
-		return plantable != PlantableType.NOT_PLANTABLE;
+		return plantable;
+	}
+	
+	public IPlantable asPlantable()
+	{
+		if(!plantable)
+		{
+			throw new IllegalStateException("Tried to get plantable of non-plantable stack");
+		}
+		return (IPlantable) ((BlockItem) this.getItem()).getBlock();
+	}
+	
+	public boolean canBePlantedOn(FarmerComponent.FarmerBlock block)
+	{
+		return block.canBePlantedOnBy(this.asPlantable());
 	}
 	
 	public BlockState getPlant(BlockPos pos)
 	{
-		if(plantable == PlantableType.VANILLA_BLOCK)
-		{
-			return ((BlockItem) this.getItem()).getBlock().defaultBlockState();
-		}
-		else if(plantable == PlantableType.NEOFORGE_PLANTABLE)
-		{
-			return ((IPlantable) this.getItem()).getPlant(farmerComponentPlantableStacks.getFarmer().getLevel(), pos);
-		}
-		throw new IllegalStateException("Tried to get plant of non-plantable");
+		return this.asPlantable().getPlant(farmerComponentPlantableStacks.getFarmer().getLevel(), pos);
 	}
 	
 	@Override
@@ -68,22 +72,8 @@ final class PlantableConfigurableItemStack extends ChangeListener
 		Item item = itemVariant.getItem();
 		if(lastUpdateItem != item)
 		{
-			if(itemVariant.isBlank())
-			{
-				plantable = PlantableType.NOT_PLANTABLE;
-			}
-			else if(item.getDefaultInstance().is(ItemTags.VILLAGER_PLANTABLE_SEEDS) && item instanceof BlockItem)
-			{
-				plantable = PlantableType.VANILLA_BLOCK;
-			}
-			else if(item instanceof IPlantable plant && plant.getPlantType(farmerComponentPlantableStacks.getFarmer().getLevel(), null) == PlantType.CROP)
-			{
-				plantable = PlantableType.NEOFORGE_PLANTABLE;
-			}
-			else
-			{
-				plantable = PlantableType.NOT_PLANTABLE;
-			}
+			plantable = item instanceof BlockItem blockItem &&
+						blockItem.getBlock() instanceof IPlantable;
 		}
 		lastUpdateItem = item;
 	}

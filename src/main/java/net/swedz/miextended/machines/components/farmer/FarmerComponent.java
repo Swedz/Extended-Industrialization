@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.common.IPlantable;
 import net.swedz.miextended.api.MachineInventoryHelper;
 import net.swedz.miextended.api.event.FarmlandLoseMoistureEvent;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListener;
@@ -147,7 +148,7 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 		{
 			int index = plantingMode.index(blockEntry, plantables);
 			PlantableConfigurableItemStack plantable = plantables.get(index);
-			if(blockEntry.state().getBlock() instanceof FarmBlock && !plantable.getStack().isEmpty())
+			if(plantable.canBePlantedOn(blockEntry) && !plantable.getStack().isEmpty())
 			{
 				BlockPos pos = blockEntry.pos().above();
 				BlockState state = level.getBlockState(pos);
@@ -261,8 +262,39 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 		}
 	}
 	
-	private record FarmerBlock(int line, BlockPos pos, BlockState state) implements Comparable<FarmerBlock>
+	public final class FarmerBlock implements Comparable<FarmerBlock>
 	{
+		private final int        line;
+		private final BlockPos   pos;
+		private final BlockState state;
+		
+		private FarmerBlock(int line, BlockPos pos, BlockState state)
+		{
+			this.line = line;
+			this.pos = pos;
+			this.state = state;
+		}
+		
+		public int line()
+		{
+			return line;
+		}
+		
+		public BlockPos pos()
+		{
+			return pos;
+		}
+		
+		public BlockState state()
+		{
+			return state;
+		}
+		
+		public boolean canBePlantedOnBy(IPlantable plantable)
+		{
+			return state.canSustainPlant(level, pos, Direction.UP, plantable);
+		}
+		
 		@Override
 		public int compareTo(FarmerBlock other)
 		{
