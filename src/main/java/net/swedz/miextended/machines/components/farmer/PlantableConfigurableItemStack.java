@@ -2,12 +2,12 @@ package net.swedz.miextended.machines.components.farmer;
 
 import aztech.modern_industrialization.inventory.ChangeListener;
 import aztech.modern_industrialization.inventory.ConfigurableItemStack;
+import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.common.PlantType;
@@ -32,9 +32,16 @@ final class PlantableConfigurableItemStack extends ChangeListener implements Com
 		return stack;
 	}
 	
+	public ItemVariant getItemVariant()
+	{
+		return (stack.isPlayerLocked() || stack.isMachineLocked()) && stack.getResource().isBlank() ?
+				ItemVariant.of(stack.getLockedInstance()) :
+				stack.getResource();
+	}
+	
 	public Item getItem()
 	{
-		return stack.getResource().getItem();
+		return this.getItemVariant().getItem();
 	}
 	
 	public boolean isPlantable()
@@ -58,28 +65,25 @@ final class PlantableConfigurableItemStack extends ChangeListener implements Com
 	@Override
 	protected void onChange()
 	{
-		ItemStack itemStack = stack.getResource().toStack();
-		Item item = itemStack.getItem();
+		ItemVariant itemVariant = this.getItemVariant();
+		Item item = itemVariant.getItem();
 		if(lastUpdateItem != item)
 		{
-			if(itemStack.isEmpty())
+			if(itemVariant.isBlank())
 			{
 				plantable = PlantableType.NOT_PLANTABLE;
 			}
+			else if(item.getDefaultInstance().is(ItemTags.VILLAGER_PLANTABLE_SEEDS) && item instanceof BlockItem)
+			{
+				plantable = PlantableType.VANILLA_BLOCK;
+			}
+			else if(item instanceof IPlantable plant && plant.getPlantType(farmerComponentPlantableStacks.getFarmer().getLevel(), null) == PlantType.CROP)
+			{
+				plantable = PlantableType.NEOFORGE_PLANTABLE;
+			}
 			else
 			{
-				if(itemStack.is(ItemTags.VILLAGER_PLANTABLE_SEEDS) && item instanceof BlockItem)
-				{
-					plantable = PlantableType.VANILLA_BLOCK;
-				}
-				else if(item instanceof IPlantable plant && plant.getPlantType(farmerComponentPlantableStacks.getFarmer().getLevel(), null) == PlantType.CROP)
-				{
-					plantable = PlantableType.NEOFORGE_PLANTABLE;
-				}
-				else
-				{
-					plantable = PlantableType.NOT_PLANTABLE;
-				}
+				plantable = PlantableType.NOT_PLANTABLE;
 			}
 		}
 		lastUpdateItem = item;

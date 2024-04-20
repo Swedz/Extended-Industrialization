@@ -39,10 +39,13 @@ public final class FarmerComponentPlantableStacks
 			if(listener != null)
 			{
 				stack.removeListener(listener);
-				items.remove(listener);
 			}
-			
-			listener = new PlantableConfigurableItemStack(this, stack);
+		}
+		listeners.clear();
+		items.clear();
+		for(ConfigurableItemStack stack : stacks)
+		{
+			PlantableConfigurableItemStack listener = new PlantableConfigurableItemStack(this, stack);
 			listener.listenAll(List.of(stack), null);
 			listeners.put(stack, listener);
 			items.add(listener);

@@ -4,7 +4,12 @@
     "package": "net.swedz.miextended.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
+        "CannedFoodUsedForCatsMixin",
         "event.FarmlandLoseMoistureEventMixin",
+        "mi.AbstractConfigurableStackAccessor",
+        "mi.MakePlayerLockNotifyListenersMixin",
+        "mi.MIAllowFluidBottlesInMachinesMenuMixin",
+        "mi.MIMakeWaterPumpsRequireWaterBiomeMixin",
         "mi.hook.MIBlastFurnaceTierMixin",
         "mi.hook.MIFluidsMixin",
         "mi.hook.MIMachineRecipeTypesMixin",
@@ -15,10 +20,7 @@
         "mi.hook.tracker.MIItemDefinitionRegistrationTrackerMixin",
         "mi.hook.tracker.MIMachineModelRegistrationTrackerMixin",
         "mi.hook.tracker.MIMachineRecipeTypeRegistrationTrackerMixin",
-        "mi.hook.tracker.MIMachineRegistrationTrackerMixin",
-        "mi.MIAllowFluidBottlesInMachinesMenuMixin",
-        "mi.MIMakeWaterPumpsRequireWaterBiomeMixin",
-        "CannedFoodUsedForCatsMixin"
+        "mi.hook.tracker.MIMachineRegistrationTrackerMixin"
     ],
     "client": [
         "client.mi.MIGuiComponentsClientMixin"

@@ -134,7 +134,7 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	{
 		for(PlantableConfigurableItemStack plantable : plantableStacks.getItems())
 		{
-			if(plantable.isPlantable())
+			if(plantable.isPlantable() && !plantable.getStack().isEmpty())
 			{
 				// TODO use indexing once the order of dirtBlocks and cropBlocks is deterministic
 				for(FarmerBlock blockEntry : dirtBlocks)
