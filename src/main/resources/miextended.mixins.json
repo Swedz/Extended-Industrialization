@@ -4,6 +4,7 @@
     "package": "net.swedz.miextended.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
+        "event.FarmlandLoseMoistureEventMixin",
         "mi.hook.MIBlastFurnaceTierMixin",
         "mi.hook.MIFluidsMixin",
         "mi.hook.MIMachineRecipeTypesMixin",
