@@ -1,4 +1,4 @@
-package net.swedz.miextended.machines.components.farmer;
+package net.swedz.miextended.machines.components.farmer.task;
 
 public final class FarmerTaskOperations
 {
@@ -19,5 +19,10 @@ public final class FarmerTaskOperations
 	public boolean didOperate()
 	{
 		return operations > 0;
+	}
+	
+	public void reset()
+	{
+		operations = 0;
 	}
 }

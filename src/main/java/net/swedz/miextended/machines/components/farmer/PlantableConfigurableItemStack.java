@@ -6,21 +6,20 @@ import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVa
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.IPlantable;
 
-final class PlantableConfigurableItemStack extends ChangeListener
+public final class PlantableConfigurableItemStack extends ChangeListener
 {
-	private final FarmerComponentPlantableStacks farmerComponentPlantableStacks;
-	private final ConfigurableItemStack          stack;
+	private final ConfigurableItemStack stack;
 	
 	private Item lastUpdateItem;
 	
 	private boolean plantable;
 	
-	PlantableConfigurableItemStack(FarmerComponentPlantableStacks farmerComponentPlantableStacks, ConfigurableItemStack stack)
+	PlantableConfigurableItemStack(ConfigurableItemStack stack)
 	{
-		this.farmerComponentPlantableStacks = farmerComponentPlantableStacks;
 		this.stack = stack;
 	}
 	
@@ -55,14 +54,9 @@ final class PlantableConfigurableItemStack extends ChangeListener
 		return (IPlantable) ((BlockItem) this.getItem()).getBlock();
 	}
 	
-	public boolean canBePlantedOn(FarmerComponent.FarmerBlock block)
+	public BlockState getPlant(Level level, BlockPos pos)
 	{
-		return block.canBePlantedOnBy(this.asPlantable());
-	}
-	
-	public BlockState getPlant(BlockPos pos)
-	{
-		return this.asPlantable().getPlant(farmerComponentPlantableStacks.getFarmer().getLevel(), pos);
+		return this.asPlantable().getPlant(level, pos);
 	}
 	
 	@Override

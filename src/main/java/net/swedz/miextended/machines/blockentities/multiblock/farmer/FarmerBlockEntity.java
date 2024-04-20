@@ -17,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.swedz.miextended.machines.components.farmer.FarmerComponent;
+import net.swedz.miextended.machines.components.farmer.PlantingMode;
 import net.swedz.miextended.machines.multiblock.BasicMultiblockMachineBlockEntity;
 import net.swedz.miextended.machines.multiblock.members.PredicateSimpleMember;
 import net.swedz.miextended.text.MIEText;
@@ -39,7 +40,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	
 	protected final FarmerComponent farmer;
 	
-	public FarmerBlockEntity(BEP bep, String blockId, long euCost, FarmerComponent.PlantingMode defaultPlantingMode, boolean canChoosePlantingMode, int maxOperationsPerTask)
+	public FarmerBlockEntity(BEP bep, String blockId, long euCost, PlantingMode defaultPlantingMode, boolean canChoosePlantingMode, int maxOperationsPerTask)
 	{
 		super(
 				bep,
@@ -65,8 +66,8 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		if(canChoosePlantingMode)
 		{
 			lines.add(new ShapeSelection.LineInfo(
-					FarmerComponent.PlantingMode.values().length,
-					Stream.of(FarmerComponent.PlantingMode.values()).map(FarmerComponent.PlantingMode::textComponent).toList(),
+					PlantingMode.values().length,
+					Stream.of(PlantingMode.values()).map(PlantingMode::textComponent).toList(),
 					true
 			));
 		}
@@ -86,7 +87,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 						}
 						else if(line == 2)
 						{
-							farmer.plantingMode = FarmerComponent.PlantingMode.values()[farmer.plantingMode.ordinal() + delta];
+							farmer.plantingMode = PlantingMode.values()[farmer.plantingMode.ordinal() + delta];
 						}
 					}
 					

@@ -1,60 +1,44 @@
 package net.swedz.miextended.machines.components.farmer;
 
-import aztech.modern_industrialization.inventory.MIItemStorage;
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.components.IsActiveComponent;
 import aztech.modern_industrialization.machines.components.MultiblockInventoryComponent;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
-import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
-import aztech.modern_industrialization.thirdparty.fabrictransfer.api.transaction.Transaction;
 import aztech.modern_industrialization.util.Simulation;
-import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.FarmBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.IPlantable;
 import net.swedz.miextended.api.MachineInventoryHelper;
 import net.swedz.miextended.api.event.FarmlandLoseMoistureEvent;
 import net.swedz.miextended.api.event.TreeGrowthEvent;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListener;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListeners;
-import net.swedz.miextended.text.MIEText;
-import org.apache.commons.compress.utils.Lists;
+import net.swedz.miextended.machines.components.farmer.block.FarmerBlockMap;
+import net.swedz.miextended.machines.components.farmer.task.FarmerTask;
+import net.swedz.miextended.machines.components.farmer.task.FarmerTaskFactory;
+import net.swedz.miextended.machines.components.farmer.task.tasks.FertilizingFarmerTask;
+import net.swedz.miextended.machines.components.farmer.task.tasks.HarvestingFarmerTask;
+import net.swedz.miextended.machines.components.farmer.task.tasks.HydratingFarmerTask;
+import net.swedz.miextended.machines.components.farmer.task.tasks.PlantingFarmerTask;
+import net.swedz.miextended.machines.components.farmer.task.tasks.TillingFarmerTask;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
 
 public final class FarmerComponent implements IComponent
 {
-	private final MultiblockInventoryComponent inventory;
-	private final IsActiveComponent            isActive;
-	private final PlantingMode                 defaultPlantingMode;
-	private final int                          maxOperationsPerTask;
+	private final MultiblockInventoryComponent   inventory;
+	private final IsActiveComponent              isActive;
+	private final FarmerComponentPlantableStacks plantableStacks;
+	private final PlantingMode                   defaultPlantingMode;
+	private final int                            maxOperationsPerTask;
+	
+	private final FarmerBlockMap   blockMap;
+	private final List<FarmerTask> tasks;
 	
 	private final IsolatedListener<FarmlandLoseMoistureEvent> listenerFarmlandLoseMoisture;
 	private final IsolatedListener<TreeGrowthEvent>           listenerTreeGrowth;
-	
-	private final Map<BlockPos, List<BlockPos>> trees = Maps.newHashMap();
 	
 	public PlantingMode plantingMode;
 	public boolean      tilling;
@@ -62,14 +46,7 @@ public final class FarmerComponent implements IComponent
 	private Level        level;
 	private ShapeMatcher shapeMatcher;
 	
-	private List<BlockPos> dirtPositions = List.of();
-	
-	private final FarmerComponentPlantableStacks plantableStacks;
-	
-	private int          processTick;
-	private FarmerBlocks dirtBlocks;
-	private FarmerBlocks cropBlocks;
-	private boolean      hasWater;
+	private int processTick;
 	
 	public FarmerComponent(MultiblockInventoryComponent inventory, IsActiveComponent isActive, PlantingMode defaultPlantingMode, int maxOperationsPerTask)
 	{
@@ -79,6 +56,16 @@ public final class FarmerComponent implements IComponent
 		this.defaultPlantingMode = defaultPlantingMode;
 		this.plantingMode = defaultPlantingMode;
 		this.maxOperationsPerTask = maxOperationsPerTask;
+		
+		this.blockMap = new FarmerBlockMap();
+		List<FarmerTaskFactory> taskFactories = List.of(
+				TillingFarmerTask::new,
+				HydratingFarmerTask::new,
+				FertilizingFarmerTask::new,
+				HarvestingFarmerTask::new,
+				PlantingFarmerTask::new
+		);
+		this.tasks = taskFactories.stream().map((f) -> f.create(inventory, blockMap, plantableStacks, maxOperationsPerTask)).toList();
 		
 		this.listenerFarmlandLoseMoisture = (event) ->
 		{
@@ -90,23 +77,17 @@ public final class FarmerComponent implements IComponent
 		};
 		this.listenerTreeGrowth = (event) ->
 		{
-			if(dirtPositions.contains(event.getPos().below()))
+			if(blockMap.containsDirtAt(event.getPos().below()))
 			{
 				// TODO server reboot will make trees get forgotten...
-				trees.put(event.getPos(), event.getPositions());
+				blockMap.addTree(event.getPos(), event.getPositions());
 			}
 		};
 	}
 	
 	public void fromOffsets(BlockPos controllerPos, Direction controllerDirection, List<BlockPos> offsets)
 	{
-		List<BlockPos> dirtPositions = new ArrayList<>(offsets.size());
-		for(BlockPos offset : offsets)
-		{
-			BlockPos worldPos = ShapeMatcher.toWorldPos(controllerPos, controllerDirection, offset);
-			dirtPositions.add(worldPos);
-		}
-		this.dirtPositions = Collections.unmodifiableList(dirtPositions);
+		blockMap.fromOffsets(level, controllerPos, controllerDirection, offsets);
 	}
 	
 	public void updateStackListeners()
@@ -119,236 +100,6 @@ public final class FarmerComponent implements IComponent
 		return MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), Fluids.WATER, 50, simulation) == 50;
 	}
 	
-	@SuppressWarnings("deprecation")
-	private boolean till()
-	{
-		if(!tilling || !hasWater)
-		{
-			return false;
-		}
-		
-		FarmerTaskOperations operations = new FarmerTaskOperations(maxOperationsPerTask);
-		
-		for(FarmerBlock dirtBlockEntry : dirtBlocks)
-		{
-			BlockPos pos = dirtBlockEntry.pos();
-			BlockState state = dirtBlockEntry.state();
-			if(state.is(BlockTags.DIRT))
-			{
-				BlockState newState = Blocks.FARMLAND.defaultBlockState();
-				if(Blocks.FARMLAND.canSurvive(newState, level, pos))
-				{
-					level.setBlock(pos, newState, 1 | 2 | 8);
-					level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(newState));
-					dirtBlockEntry.updateState(newState);
-					
-					if(operations.operate())
-					{
-						return true;
-					}
-				}
-			}
-		}
-		
-		return operations.didOperate();
-	}
-	
-	private boolean wetten()
-	{
-		if(!hasWater)
-		{
-			return false;
-		}
-		
-		FarmerTaskOperations operations = new FarmerTaskOperations(maxOperationsPerTask);
-		
-		for(FarmerBlock dirtBlockEntry : dirtBlocks)
-		{
-			BlockPos pos = dirtBlockEntry.pos();
-			BlockState state = dirtBlockEntry.state();
-			if(state.getBlock() instanceof FarmBlock)
-			{
-				int moisture = state.getValue(FarmBlock.MOISTURE);
-				if(moisture < 7 && this.consumeWater(Simulation.ACT))
-				{
-					BlockState newState = state.setValue(FarmBlock.MOISTURE, 7);
-					level.setBlock(pos, newState, 2);
-					dirtBlockEntry.updateState(newState);
-					
-					if(operations.operate())
-					{
-						return true;
-					}
-				}
-			}
-		}
-		
-		return operations.didOperate();
-	}
-	
-	private boolean fertilize()
-	{
-		// TODO
-		return false;
-	}
-	
-	private List<ItemStack> getHarvestItems(BlockPos pos, BlockState state)
-	{
-		ResourceLocation lootTableId = state.getBlock().getLootTable();
-		LootTable lootTable = level.getServer().getLootData().getLootTable(lootTableId);
-		LootParams lootParams = new LootParams.Builder((ServerLevel) level)
-				.withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
-				.withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
-				.withParameter(LootContextParams.BLOCK_STATE, state)
-				.create(LootContextParamSets.BLOCK);
-		return lootTable.getRandomItems(lootParams);
-	}
-	
-	private List<ItemStack> getHarvestItems(List<BlockPos> blockPositions, List<BlockState> blockStates)
-	{
-		List<ItemStack> items = Lists.newArrayList();
-		for(int i = 0; i < blockPositions.size(); i++)
-		{
-			items.addAll(this.getHarvestItems(blockPositions.get(i), blockStates.get(i)));
-		}
-		return items;
-	}
-	
-	private boolean harvestBlocks(FarmerBlock cropBlockEntry, List<BlockPos> blockPositions, List<BlockState> blockStates)
-	{
-		try (Transaction transaction = Transaction.openOuter())
-		{
-			List<ItemStack> items = this.getHarvestItems(blockPositions, blockStates);
-			
-			if(items.size() == 0)
-			{
-				return false;
-			}
-			
-			MIItemStorage itemOutput = new MIItemStorage(inventory.getItemOutputs());
-			
-			boolean success = true;
-			for(ItemStack item : items)
-			{
-				long inserted = itemOutput.insertAllSlot(ItemVariant.of(item), item.getCount(), transaction);
-				if(inserted != item.getCount())
-				{
-					success = false;
-					break;
-				}
-			}
-			if(!success)
-			{
-				return false;
-			}
-			
-			BlockState newState = Blocks.AIR.defaultBlockState();
-			int i = 0;
-			for(BlockPos blockPosition : blockPositions)
-			{
-				level.setBlock(blockPosition, newState, 1 | 2);
-				level.gameEvent(GameEvent.BLOCK_DESTROY, blockPosition, GameEvent.Context.of(blockStates.get(i)));
-				i++;
-			}
-			cropBlockEntry.updateState(newState);
-			
-			transaction.commit();
-		}
-		
-		return true;
-	}
-	
-	private boolean harvest()
-	{
-		if(processTick % 10 != 0)
-		{
-			return false;
-		}
-		
-		FarmerTaskOperations operations = new FarmerTaskOperations(maxOperationsPerTask);
-		
-		for(FarmerBlock cropBlockEntry : cropBlocks)
-		{
-			BlockPos pos = cropBlockEntry.pos();
-			BlockState state = cropBlockEntry.state();
-			
-			if(state.getBlock() instanceof CropBlock cropBlock && cropBlock.isMaxAge(state))
-			{
-				if(this.harvestBlocks(cropBlockEntry, List.of(pos), List.of(state)))
-				{
-					if(operations.operate())
-					{
-						return true;
-					}
-				}
-			}
-			
-			else if(trees.containsKey(pos))
-			{
-				List<BlockPos> blockPositions = trees.remove(pos);
-				List<BlockState> blockStates = blockPositions.stream().map((p) -> level.getBlockState(p)).toList();
-				if(this.harvestBlocks(cropBlockEntry, blockPositions, blockStates))
-				{
-					if(operations.operate())
-					{
-						return true;
-					}
-				}
-			}
-		}
-		
-		return operations.didOperate();
-	}
-	
-	private boolean plant()
-	{
-		if(processTick % 5 != 0)
-		{
-			return false;
-		}
-		
-		List<PlantableConfigurableItemStack> plantables = plantableStacks.getItems();
-		plantables.removeIf((plantable) -> !plantable.isPlantable() || (!plantingMode.includeEmptyStacks() && plantable.getStack().isEmpty()));
-		
-		if(plantables.size() == 0)
-		{
-			return false;
-		}
-		
-		FarmerTaskOperations operations = new FarmerTaskOperations(maxOperationsPerTask);
-		
-		int blockIndex = 0;
-		for(FarmerBlock dirtBlockEntry : dirtBlocks)
-		{
-			int index = plantingMode.index(dirtBlockEntry, plantables);
-			PlantableConfigurableItemStack plantable = plantables.get(index);
-			if(plantable.canBePlantedOn(dirtBlockEntry) && !plantable.getStack().isEmpty())
-			{
-				FarmerBlock cropBlockEntry = cropBlocks.get(blockIndex);
-				BlockPos pos = cropBlockEntry.pos();
-				BlockState state = cropBlockEntry.state();
-				if(state.isAir())
-				{
-					BlockState plantState = plantable.getPlant(pos);
-					
-					plantable.getStack().decrement(1);
-					
-					level.setBlock(pos, plantState, 1 | 2);
-					level.gameEvent(GameEvent.BLOCK_PLACE, pos, GameEvent.Context.of(plantState));
-					cropBlockEntry.updateState(plantState);
-					
-					if(operations.operate())
-					{
-						return true;
-					}
-				}
-			}
-			blockIndex++;
-		}
-		
-		return operations.didOperate();
-	}
-	
 	public void tick()
 	{
 		if(level == null)
@@ -358,28 +109,14 @@ public final class FarmerComponent implements IComponent
 		
 		processTick++;
 		
-		dirtBlocks = new FarmerBlocks();
-		cropBlocks = new FarmerBlocks();
-		int line = 0;
-		Integer lastX = null;
-		for(BlockPos pos : dirtPositions)
+		blockMap.markDirty();
+		
+		boolean hasWater = this.consumeWater(Simulation.SIMULATE);
+		
+		for(FarmerTask task : tasks)
 		{
-			if(lastX != null && lastX != pos.getX())
-			{
-				line++;
-			}
-			dirtBlocks.put(line, pos);
-			cropBlocks.put(line, pos.above());
-			lastX = pos.getX();
+			task.run(level, plantingMode, tilling, processTick, hasWater);
 		}
-		
-		hasWater = this.consumeWater(Simulation.SIMULATE);
-		
-		this.till();
-		this.wetten();
-		this.fertilize();
-		this.harvest();
-		this.plant();
 		
 		if(processTick >= 20)
 		{
@@ -414,112 +151,5 @@ public final class FarmerComponent implements IComponent
 	{
 		tilling = tag.getBoolean("tilling");
 		plantingMode = PlantingMode.values()[tag.contains("planting_mode") ? tag.getInt("planting_mode") : defaultPlantingMode.ordinal()];
-	}
-	
-	public MultiblockInventoryComponent getInventory()
-	{
-		return inventory;
-	}
-	
-	public boolean isActive()
-	{
-		return isActive.isActive;
-	}
-	
-	public Level getLevel()
-	{
-		return level;
-	}
-	
-	private record FarmerTick(FarmerBlocks dirtBlocks, FarmerBlocks cropBlocks, boolean hasWater)
-	{
-	}
-	
-	private final class FarmerBlocks extends ArrayList<FarmerBlock>
-	{
-		public void put(int line, BlockPos pos)
-		{
-			this.add(new FarmerBlock(line, pos, level.getBlockState(pos)));
-		}
-	}
-	
-	public final class FarmerBlock implements Comparable<FarmerBlock>
-	{
-		private final int      line;
-		private final BlockPos pos;
-		
-		private BlockState state;
-		
-		private FarmerBlock(int line, BlockPos pos, BlockState state)
-		{
-			this.line = line;
-			this.pos = pos;
-			this.state = state;
-		}
-		
-		public int line()
-		{
-			return line;
-		}
-		
-		public BlockPos pos()
-		{
-			return pos;
-		}
-		
-		public BlockState state()
-		{
-			return state;
-		}
-		
-		public void updateState(BlockState state)
-		{
-			this.state = state;
-		}
-		
-		public boolean canBePlantedOnBy(IPlantable plantable)
-		{
-			return state.canSustainPlant(level, pos, Direction.UP, plantable);
-		}
-		
-		@Override
-		public int compareTo(FarmerBlock other)
-		{
-			return pos.compareTo(other.pos());
-		}
-	}
-	
-	public enum PlantingMode
-	{
-		AS_NEEDED(MIEText.FARMER_PLANTING_AS_NEEDED.text(), false, (block, plantables) -> 0),
-		ALTERNATING_LINES(MIEText.FARMER_PLANTING_ALTERNATING_LINES.text(), true, (block, plantables) -> block.line() % plantables.size());
-		
-		private final Component textComponent;
-		
-		private final boolean includeEmptyStacks;
-		
-		private final BiFunction<FarmerBlock, List<PlantableConfigurableItemStack>, Integer> index;
-		
-		PlantingMode(Component textComponent, boolean includeEmptyStacks, BiFunction<FarmerBlock, List<PlantableConfigurableItemStack>, Integer> index)
-		{
-			this.textComponent = textComponent;
-			this.includeEmptyStacks = includeEmptyStacks;
-			this.index = index;
-		}
-		
-		public Component textComponent()
-		{
-			return textComponent;
-		}
-		
-		public boolean includeEmptyStacks()
-		{
-			return includeEmptyStacks;
-		}
-		
-		public int index(FarmerBlock block, List<PlantableConfigurableItemStack> plantables)
-		{
-			return index.apply(block, plantables);
-		}
 	}
 }
