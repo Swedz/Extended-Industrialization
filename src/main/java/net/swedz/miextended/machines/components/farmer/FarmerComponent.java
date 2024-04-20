@@ -242,7 +242,7 @@ public final class FarmerComponent implements IComponent
 	
 	private boolean harvest()
 	{
-		if(processTick != 20)
+		if(processTick % 10 != 0)
 		{
 			return false;
 		}
@@ -276,7 +276,7 @@ public final class FarmerComponent implements IComponent
 	
 	private boolean plant()
 	{
-		if(processTick != 20)
+		if(processTick % 5 != 0)
 		{
 			return false;
 		}
@@ -325,6 +325,8 @@ public final class FarmerComponent implements IComponent
 			return;
 		}
 		
+		processTick++;
+		
 		dirtBlocks = new FarmerBlocks();
 		cropBlocks = new FarmerBlocks();
 		int line = 0;
@@ -348,8 +350,7 @@ public final class FarmerComponent implements IComponent
 		this.harvest();
 		this.plant();
 		
-		processTick++;
-		if(processTick > 20)
+		if(processTick >= 20)
 		{
 			processTick = 0;
 		}
