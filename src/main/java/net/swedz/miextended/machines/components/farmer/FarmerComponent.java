@@ -83,10 +83,10 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 			return false;
 		}
 		
-		for(FarmerBlock blockEntry : dirtBlocks)
+		for(FarmerBlock dirtBlockEntry : dirtBlocks)
 		{
-			BlockPos pos = blockEntry.pos();
-			BlockState state = blockEntry.state();
+			BlockPos pos = dirtBlockEntry.pos();
+			BlockState state = dirtBlockEntry.state();
 			if(state.is(BlockTags.DIRT))
 			{
 				BlockState newState = Blocks.FARMLAND.defaultBlockState();
@@ -109,10 +109,10 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 			return false;
 		}
 		
-		for(FarmerBlock blockEntry : dirtBlocks)
+		for(FarmerBlock dirtBlockEntry : dirtBlocks)
 		{
-			BlockPos pos = blockEntry.pos();
-			BlockState state = blockEntry.state();
+			BlockPos pos = dirtBlockEntry.pos();
+			BlockState state = dirtBlockEntry.state();
 			if(state.getBlock() instanceof FarmBlock)
 			{
 				int moisture = state.getValue(FarmBlock.MOISTURE);
@@ -149,14 +149,16 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 			return false;
 		}
 		
-		for(FarmerBlock blockEntry : dirtBlocks)
+		int blockIndex = 0;
+		for(FarmerBlock dirtBlockEntry : dirtBlocks)
 		{
-			int index = plantingMode.index(blockEntry, plantables);
+			int index = plantingMode.index(dirtBlockEntry, plantables);
 			PlantableConfigurableItemStack plantable = plantables.get(index);
-			if(plantable.canBePlantedOn(blockEntry) && !plantable.getStack().isEmpty())
+			if(plantable.canBePlantedOn(dirtBlockEntry) && !plantable.getStack().isEmpty())
 			{
-				BlockPos pos = blockEntry.pos().above();
-				BlockState state = level.getBlockState(pos);
+				FarmerBlock cropBlockEntry = cropBlocks.get(blockIndex);
+				BlockPos pos = cropBlockEntry.pos();
+				BlockState state = cropBlockEntry.state();
 				if(state.isAir())
 				{
 					BlockState plantState = plantable.getPlant(pos);
@@ -169,6 +171,7 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 					return true;
 				}
 			}
+			blockIndex++;
 		}
 		
 		return false;
