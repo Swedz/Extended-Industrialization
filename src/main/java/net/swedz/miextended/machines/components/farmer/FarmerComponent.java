@@ -29,7 +29,8 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	private final MultiblockInventoryComponent inventory;
 	private final IsActiveComponent            isActive;
 	
-	public boolean tilling;
+	public PlantingMode plantingMode;
+	public boolean      tilling;
 	
 	private Level        level;
 	private ShapeMatcher shapeMatcher;
@@ -40,11 +41,12 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	
 	private int processTick;
 	
-	public FarmerComponent(MultiblockInventoryComponent inventory, IsActiveComponent isActive)
+	public FarmerComponent(MultiblockInventoryComponent inventory, IsActiveComponent isActive, PlantingMode plantingMode)
 	{
 		this.inventory = inventory;
 		this.isActive = isActive;
 		this.plantableStacks = new FarmerComponentPlantableStacks(this);
+		this.plantingMode = plantingMode;
 	}
 	
 	public void fromOffsets(BlockPos controllerPos, Direction controllerDirection, List<BlockPos> offsets)
@@ -132,26 +134,32 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	
 	private boolean plant(FarmerBlocks dirtBlocks, FarmerBlocks cropBlocks)
 	{
-		for(PlantableConfigurableItemStack plantable : plantableStacks.getItems())
+		List<PlantableConfigurableItemStack> plantables = plantableStacks.getItems();
+		plantables.removeIf((plantable) -> !plantable.isPlantable());
+		
+		if(plantables.size() == 0)
 		{
-			if(plantable.isPlantable() && !plantable.getStack().isEmpty())
+			return false;
+		}
+		
+		for(FarmerBlock blockEntry : dirtBlocks)
+		{
+			int index = plantingMode == PlantingMode.ALTERNATING_LINES ? blockEntry.line() % plantables.size() : 0;
+			PlantableConfigurableItemStack plantable = plantables.get(index);
+			if(blockEntry.state().getBlock() instanceof FarmBlock && !plantable.getStack().isEmpty())
 			{
-				// TODO use indexing once the order of dirtBlocks and cropBlocks is deterministic
-				for(FarmerBlock blockEntry : dirtBlocks)
+				BlockPos pos = blockEntry.pos().above();
+				BlockState state = level.getBlockState(pos);
+				if(state.isAir())
 				{
-					if(blockEntry.state().getBlock() instanceof FarmBlock)
-					{
-						BlockPos pos = blockEntry.pos().above();
-						BlockState state = level.getBlockState(pos);
-						if(state.isAir())
-						{
-							BlockState plantState = plantable.getPlant(pos);
-							plantable.getStack().decrement(1);
-							level.setBlock(pos, plantState, 1 | 2);
-							level.gameEvent(GameEvent.BLOCK_PLACE, pos, GameEvent.Context.of(plantState));
-							return true;
-						}
-					}
+					BlockState plantState = plantable.getPlant(pos);
+					
+					plantable.getStack().decrement(1);
+					
+					level.setBlock(pos, plantState, 1 | 2);
+					level.gameEvent(GameEvent.BLOCK_PLACE, pos, GameEvent.Context.of(plantState));
+					
+					return true;
 				}
 			}
 		}
@@ -168,13 +176,18 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 		
 		FarmerBlocks dirtBlocks = new FarmerBlocks();
 		FarmerBlocks cropBlocks = new FarmerBlocks();
+		int line = 0;
+		Integer lastX = null;
 		for(BlockPos pos : dirtPositions)
 		{
-			dirtBlocks.put(pos);
-			cropBlocks.put(pos.above());
+			if(lastX != null && lastX != pos.getX())
+			{
+				line++;
+			}
+			dirtBlocks.put(line, pos);
+			cropBlocks.put(line, pos.above());
+			lastX = pos.getX();
 		}
-		dirtBlocks.shuffle();
-		cropBlocks.shuffle();
 		
 		this.till(dirtBlocks, cropBlocks);
 		this.wetten(dirtBlocks, cropBlocks);
@@ -241,18 +254,24 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	
 	private final class FarmerBlocks extends ArrayList<FarmerBlock>
 	{
-		public void put(BlockPos pos)
+		public void put(int line, BlockPos pos)
 		{
-			this.add(new FarmerBlock(pos, level.getBlockState(pos)));
-		}
-		
-		public void shuffle()
-		{
-			Collections.shuffle(this);
+			this.add(new FarmerBlock(line, pos, level.getBlockState(pos)));
 		}
 	}
 	
-	private record FarmerBlock(BlockPos pos, BlockState state)
+	private record FarmerBlock(int line, BlockPos pos, BlockState state) implements Comparable<FarmerBlock>
 	{
+		@Override
+		public int compareTo(FarmerBlock other)
+		{
+			return pos.compareTo(other.pos());
+		}
+	}
+	
+	public enum PlantingMode
+	{
+		ALTERNATING_LINES,
+		AS_NEEDED
 	}
 }

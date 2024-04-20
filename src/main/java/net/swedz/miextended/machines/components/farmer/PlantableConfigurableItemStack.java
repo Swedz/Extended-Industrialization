@@ -4,7 +4,6 @@ import aztech.modern_industrialization.inventory.ChangeListener;
 import aztech.modern_industrialization.inventory.ConfigurableItemStack;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -12,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.common.PlantType;
 
-final class PlantableConfigurableItemStack extends ChangeListener implements Comparable<PlantableConfigurableItemStack>
+final class PlantableConfigurableItemStack extends ChangeListener
 {
 	private final FarmerComponentPlantableStacks farmerComponentPlantableStacks;
 	private final ConfigurableItemStack          stack;
@@ -93,11 +92,5 @@ final class PlantableConfigurableItemStack extends ChangeListener implements Com
 	protected boolean isValid(Object token)
 	{
 		return true;
-	}
-	
-	@Override
-	public int compareTo(PlantableConfigurableItemStack other)
-	{
-		return BuiltInRegistries.ITEM.getKey(this.getItem()).compareTo(BuiltInRegistries.ITEM.getKey(other.getItem()));
 	}
 }

@@ -38,7 +38,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	
 	protected final FarmerComponent farmer;
 	
-	public FarmerBlockEntity(BEP bep, String blockId, long euCost)
+	public FarmerBlockEntity(BEP bep, String blockId, long euCost, FarmerComponent.PlantingMode plantingMode)
 	{
 		super(
 				bep,
@@ -48,7 +48,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		
 		this.euCost = euCost;
 		
-		this.farmer = new FarmerComponent(inventory, isActive);
+		this.farmer = new FarmerComponent(inventory, isActive, plantingMode);
 		
 		this.registerGuiComponent(new ShapeSelection.Server(
 				new ShapeSelection.Behavior()

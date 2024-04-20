@@ -2,11 +2,11 @@ package net.swedz.miextended.machines.components.farmer;
 
 import aztech.modern_industrialization.inventory.ConfigurableItemStack;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import org.apache.commons.compress.utils.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
 
 public final class FarmerComponentPlantableStacks
 {
@@ -14,7 +14,7 @@ public final class FarmerComponentPlantableStacks
 	
 	private final Map<ConfigurableItemStack, PlantableConfigurableItemStack> listeners = Maps.newHashMap();
 	
-	private final TreeSet<PlantableConfigurableItemStack> items = Sets.newTreeSet();
+	private final List<PlantableConfigurableItemStack> items = Lists.newArrayList();
 	
 	FarmerComponentPlantableStacks(FarmerComponent farmer)
 	{
@@ -26,9 +26,9 @@ public final class FarmerComponentPlantableStacks
 		return farmer;
 	}
 	
-	public TreeSet<PlantableConfigurableItemStack> getItems()
+	public List<PlantableConfigurableItemStack> getItems()
 	{
-		return Sets.newTreeSet((Iterable) items);
+		return new ArrayList<>(items);
 	}
 	
 	public void update(List<ConfigurableItemStack> stacks)
