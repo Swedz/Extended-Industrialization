@@ -8,9 +8,12 @@ import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluids;
 import net.swedz.miextended.api.MachineInventoryHelper;
 import net.swedz.miextended.api.event.FarmlandLoseMoistureEvent;
@@ -25,6 +28,8 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 {
 	private final MultiblockInventoryComponent inventory;
 	private final IsActiveComponent            isActive;
+	
+	public boolean tilling;
 	
 	private Level        level;
 	private ShapeMatcher shapeMatcher;
@@ -51,6 +56,33 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	private boolean consumeWater(Simulation simulation)
 	{
 		return MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), Fluids.WATER, 50, simulation) == 50;
+	}
+	
+	@SuppressWarnings("deprecation")
+	private boolean till(FarmerBlocks dirtBlocks, FarmerBlocks cropBlocks)
+	{
+		if(!tilling)
+		{
+			return false;
+		}
+		
+		for(FarmerBlock entry : dirtBlocks)
+		{
+			BlockPos pos = entry.pos();
+			BlockState state = entry.state();
+			if(state.is(BlockTags.DIRT))
+			{
+				BlockState newState = Blocks.FARMLAND.defaultBlockState();
+				if(Blocks.FARMLAND.canSurvive(newState, level, pos))
+				{
+					level.setBlock(pos, newState, 1 | 2 | 8);
+					level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(newState));
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	private boolean wetten(FarmerBlocks dirtBlocks, FarmerBlocks cropBlocks)
@@ -115,6 +147,7 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 		dirtBlocks.shuffle();
 		cropBlocks.shuffle();
 		
+		this.till(dirtBlocks, cropBlocks);
 		this.wetten(dirtBlocks, cropBlocks);
 		this.fertilize(dirtBlocks, cropBlocks);
 		this.harvest(dirtBlocks, cropBlocks);
@@ -147,11 +180,13 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	@Override
 	public void writeNbt(CompoundTag tag)
 	{
+		tag.putBoolean("tilling", tilling);
 	}
 	
 	@Override
 	public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
 	{
+		tilling = tag.getBoolean("tilling");
 	}
 	
 	private final class FarmerBlocks extends ArrayList<FarmerBlock>

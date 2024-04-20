@@ -6,6 +6,7 @@ import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.compat.rei.machines.ReiMachineRecipes;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
+import aztech.modern_industrialization.machines.guicomponents.ShapeSelection;
 import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.multiblocks.HatchFlags;
 import aztech.modern_industrialization.machines.multiblocks.HatchType;
@@ -13,10 +14,10 @@ import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.swedz.miextended.machines.components.FarmerComponent;
-import net.swedz.miextended.machines.guicomponents.CommonGuiComponents;
 import net.swedz.miextended.machines.multiblock.BasicMultiblockMachineBlockEntity;
 import net.swedz.miextended.machines.multiblock.members.PredicateSimpleMember;
 import org.apache.commons.compress.utils.Lists;
@@ -49,10 +50,46 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		
 		this.farmer = new FarmerComponent(inventory, isActive);
 		
-		this.registerGuiComponent(CommonGuiComponents.rangedShapeSelection(
-				this, activeShape,
-				List.of(MIText.ShapeTextSmall.text(), MIText.ShapeTextMedium.text(), MIText.ShapeTextLarge.text(), MIText.ShapeTextExtreme.text()),
-				true
+		this.registerGuiComponent(new ShapeSelection.Server(
+				new ShapeSelection.Behavior()
+				{
+					@Override
+					public void handleClick(int line, int delta)
+					{
+						if(line == 0)
+						{
+							activeShape.incrementShape(FarmerBlockEntity.this, delta);
+						}
+						else if(line == 1)
+						{
+							farmer.tilling = !farmer.tilling;
+						}
+					}
+					
+					@Override
+					public int getCurrentIndex(int line)
+					{
+						if(line == 0)
+						{
+							return activeShape.getActiveShapeIndex();
+						}
+						else if(line == 1)
+						{
+							return farmer.tilling ? 1 : 0;
+						}
+						throw new IllegalStateException();
+					}
+				},
+				new ShapeSelection.LineInfo(
+						4,
+						List.of(MIText.ShapeTextSmall.text(), MIText.ShapeTextMedium.text(), MIText.ShapeTextLarge.text(), MIText.ShapeTextExtreme.text()),
+						true
+				),
+				new ShapeSelection.LineInfo(
+						2,
+						List.of(Component.literal("Not Tilling"), Component.literal("Tilling")),
+						true
+				)
 		));
 	}
 	
