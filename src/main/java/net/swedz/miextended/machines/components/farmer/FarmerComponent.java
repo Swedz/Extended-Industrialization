@@ -49,6 +49,7 @@ public final class FarmerComponent implements IComponent
 	private final MultiblockInventoryComponent inventory;
 	private final IsActiveComponent            isActive;
 	private final PlantingMode                 defaultPlantingMode;
+	private final int                          maxOperationsPerTask;
 	
 	private final IsolatedListener<FarmlandLoseMoistureEvent> listenerFarmlandLoseMoisture;
 	private final IsolatedListener<TreeGrowthEvent>           listenerTreeGrowth;
@@ -70,13 +71,14 @@ public final class FarmerComponent implements IComponent
 	private FarmerBlocks cropBlocks;
 	private boolean      hasWater;
 	
-	public FarmerComponent(MultiblockInventoryComponent inventory, IsActiveComponent isActive, PlantingMode defaultPlantingMode)
+	public FarmerComponent(MultiblockInventoryComponent inventory, IsActiveComponent isActive, PlantingMode defaultPlantingMode, int maxOperationsPerTask)
 	{
 		this.inventory = inventory;
 		this.isActive = isActive;
 		this.plantableStacks = new FarmerComponentPlantableStacks(this);
 		this.defaultPlantingMode = defaultPlantingMode;
 		this.plantingMode = defaultPlantingMode;
+		this.maxOperationsPerTask = maxOperationsPerTask;
 		
 		this.listenerFarmlandLoseMoisture = (event) ->
 		{
@@ -125,6 +127,8 @@ public final class FarmerComponent implements IComponent
 			return false;
 		}
 		
+		FarmerTaskOperations operations = new FarmerTaskOperations(maxOperationsPerTask);
+		
 		for(FarmerBlock dirtBlockEntry : dirtBlocks)
 		{
 			BlockPos pos = dirtBlockEntry.pos();
@@ -137,12 +141,16 @@ public final class FarmerComponent implements IComponent
 					level.setBlock(pos, newState, 1 | 2 | 8);
 					level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(newState));
 					dirtBlockEntry.updateState(newState);
-					return true;
+					
+					if(operations.operate())
+					{
+						return true;
+					}
 				}
 			}
 		}
 		
-		return false;
+		return operations.didOperate();
 	}
 	
 	private boolean wetten()
@@ -151,6 +159,8 @@ public final class FarmerComponent implements IComponent
 		{
 			return false;
 		}
+		
+		FarmerTaskOperations operations = new FarmerTaskOperations(maxOperationsPerTask);
 		
 		for(FarmerBlock dirtBlockEntry : dirtBlocks)
 		{
@@ -164,12 +174,16 @@ public final class FarmerComponent implements IComponent
 					BlockState newState = state.setValue(FarmBlock.MOISTURE, 7);
 					level.setBlock(pos, newState, 2);
 					dirtBlockEntry.updateState(newState);
-					return true;
+					
+					if(operations.operate())
+					{
+						return true;
+					}
 				}
 			}
 		}
 		
-		return false;
+		return operations.didOperate();
 	}
 	
 	private boolean fertilize()
@@ -251,6 +265,8 @@ public final class FarmerComponent implements IComponent
 			return false;
 		}
 		
+		FarmerTaskOperations operations = new FarmerTaskOperations(maxOperationsPerTask);
+		
 		for(FarmerBlock cropBlockEntry : cropBlocks)
 		{
 			BlockPos pos = cropBlockEntry.pos();
@@ -260,7 +276,10 @@ public final class FarmerComponent implements IComponent
 			{
 				if(this.harvestBlocks(cropBlockEntry, List.of(pos), List.of(state)))
 				{
-					return true;
+					if(operations.operate())
+					{
+						return true;
+					}
 				}
 			}
 			
@@ -270,12 +289,15 @@ public final class FarmerComponent implements IComponent
 				List<BlockState> blockStates = blockPositions.stream().map((p) -> level.getBlockState(p)).toList();
 				if(this.harvestBlocks(cropBlockEntry, blockPositions, blockStates))
 				{
-					return true;
+					if(operations.operate())
+					{
+						return true;
+					}
 				}
 			}
 		}
 		
-		return false;
+		return operations.didOperate();
 	}
 	
 	private boolean plant()
@@ -292,6 +314,8 @@ public final class FarmerComponent implements IComponent
 		{
 			return false;
 		}
+		
+		FarmerTaskOperations operations = new FarmerTaskOperations(maxOperationsPerTask);
 		
 		int blockIndex = 0;
 		for(FarmerBlock dirtBlockEntry : dirtBlocks)
@@ -313,13 +337,16 @@ public final class FarmerComponent implements IComponent
 					level.gameEvent(GameEvent.BLOCK_PLACE, pos, GameEvent.Context.of(plantState));
 					cropBlockEntry.updateState(plantState);
 					
-					return true;
+					if(operations.operate())
+					{
+						return true;
+					}
 				}
 			}
 			blockIndex++;
 		}
 		
-		return false;
+		return operations.didOperate();
 	}
 	
 	public void tick()

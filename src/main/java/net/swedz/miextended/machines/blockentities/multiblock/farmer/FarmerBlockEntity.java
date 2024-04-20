@@ -39,7 +39,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	
 	protected final FarmerComponent farmer;
 	
-	public FarmerBlockEntity(BEP bep, String blockId, long euCost, FarmerComponent.PlantingMode defaultPlantingMode, boolean canChoosePlantingMode)
+	public FarmerBlockEntity(BEP bep, String blockId, long euCost, FarmerComponent.PlantingMode defaultPlantingMode, boolean canChoosePlantingMode, int maxOperationsPerTask)
 	{
 		super(
 				bep,
@@ -49,7 +49,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		
 		this.euCost = euCost;
 		
-		this.farmer = new FarmerComponent(inventory, isActive, defaultPlantingMode);
+		this.farmer = new FarmerComponent(inventory, isActive, defaultPlantingMode, maxOperationsPerTask);
 		
 		List<ShapeSelection.LineInfo> lines = Lists.newArrayList();
 		lines.add(new ShapeSelection.LineInfo(
