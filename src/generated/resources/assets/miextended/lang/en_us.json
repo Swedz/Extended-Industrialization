@@ -2,6 +2,10 @@
   "item.miextended.canned_food": "Canned Food",
   "item.miextended.tin_can": "Tin Can",
   "text.miextended.added_by_mie": "(Added by MI Extended)",
+  "text.miextended.farmer_not_tilling": "Not Tilling",
+  "text.miextended.farmer_planting_alternating_lines": "Alternating Lines",
+  "text.miextended.farmer_planting_as_needed": "As Needed",
+  "text.miextended.farmer_tilling": "Tilling",
   "text.miextended.solar_efficiency": "Solar Efficiency : %d %%",
   "text.miextended.water_pump_environment_0": "Invalid Pump Environment",
   "text.miextended.water_pump_environment_1": "Must be in Ocean or River biome."

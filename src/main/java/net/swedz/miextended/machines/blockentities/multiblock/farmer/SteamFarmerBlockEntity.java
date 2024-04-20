@@ -9,7 +9,7 @@ public final class SteamFarmerBlockEntity extends FarmerBlockEntity
 {
 	public SteamFarmerBlockEntity(BEP bep)
 	{
-		super(bep, "steam_farmer", 8, FarmerComponent.PlantingMode.AS_NEEDED);
+		super(bep, "steam_farmer", 8, FarmerComponent.PlantingMode.AS_NEEDED, false);
 	}
 	
 	@Override

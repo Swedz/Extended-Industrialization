@@ -14,16 +14,17 @@ import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.swedz.miextended.machines.components.farmer.FarmerComponent;
 import net.swedz.miextended.machines.multiblock.BasicMultiblockMachineBlockEntity;
 import net.swedz.miextended.machines.multiblock.members.PredicateSimpleMember;
+import net.swedz.miextended.text.MIEText;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntity
 {
@@ -38,7 +39,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	
 	protected final FarmerComponent farmer;
 	
-	public FarmerBlockEntity(BEP bep, String blockId, long euCost, FarmerComponent.PlantingMode plantingMode)
+	public FarmerBlockEntity(BEP bep, String blockId, long euCost, FarmerComponent.PlantingMode defaultPlantingMode, boolean canChoosePlantingMode)
 	{
 		super(
 				bep,
@@ -48,8 +49,27 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		
 		this.euCost = euCost;
 		
-		this.farmer = new FarmerComponent(inventory, isActive, plantingMode);
+		this.farmer = new FarmerComponent(inventory, isActive, defaultPlantingMode);
 		
+		List<ShapeSelection.LineInfo> lines = Lists.newArrayList();
+		lines.add(new ShapeSelection.LineInfo(
+				4,
+				List.of(MIText.ShapeTextSmall.text(), MIText.ShapeTextMedium.text(), MIText.ShapeTextLarge.text(), MIText.ShapeTextExtreme.text()),
+				true
+		));
+		lines.add(new ShapeSelection.LineInfo(
+				2,
+				List.of(MIEText.FARMER_NOT_TILLING.text(), MIEText.FARMER_TILLING.text()),
+				true
+		));
+		if(canChoosePlantingMode)
+		{
+			lines.add(new ShapeSelection.LineInfo(
+					FarmerComponent.PlantingMode.values().length,
+					Stream.of(FarmerComponent.PlantingMode.values()).map(FarmerComponent.PlantingMode::textComponent).toList(),
+					true
+			));
+		}
 		this.registerGuiComponent(new ShapeSelection.Server(
 				new ShapeSelection.Behavior()
 				{
@@ -64,6 +84,10 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 						{
 							farmer.tilling = !farmer.tilling;
 						}
+						else if(line == 2)
+						{
+							farmer.plantingMode = FarmerComponent.PlantingMode.values()[farmer.plantingMode.ordinal() + delta];
+						}
 					}
 					
 					@Override
@@ -77,19 +101,14 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 						{
 							return farmer.tilling ? 1 : 0;
 						}
+						else if(line == 2)
+						{
+							return farmer.plantingMode.ordinal();
+						}
 						throw new IllegalStateException();
 					}
 				},
-				new ShapeSelection.LineInfo(
-						4,
-						List.of(MIText.ShapeTextSmall.text(), MIText.ShapeTextMedium.text(), MIText.ShapeTextLarge.text(), MIText.ShapeTextExtreme.text()),
-						true
-				),
-				new ShapeSelection.LineInfo(
-						2,
-						List.of(Component.literal("Not Tilling"), Component.literal("Tilling")),
-						true
-				)
+				lines.toArray(new ShapeSelection.LineInfo[0])
 		));
 	}
 	

@@ -9,7 +9,11 @@ public enum MIEText
 	ADDED_BY_MIE("(Added by MI Extended)"),
 	SOLAR_EFFICIENCY("Solar Efficiency : %d %%"),
 	WATER_PUMP_ENVIRONMENT_0("Invalid Pump Environment"),
-	WATER_PUMP_ENVIRONMENT_1("Must be in Ocean or River biome.");
+	WATER_PUMP_ENVIRONMENT_1("Must be in Ocean or River biome."),
+	FARMER_NOT_TILLING("Not Tilling"),
+	FARMER_TILLING("Tilling"),
+	FARMER_PLANTING_AS_NEEDED("As Needed"),
+	FARMER_PLANTING_ALTERNATING_LINES("Alternating Lines");
 	
 	private final String englishText;
 	

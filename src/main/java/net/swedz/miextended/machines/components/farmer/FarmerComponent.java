@@ -12,6 +12,7 @@ import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -34,6 +35,7 @@ import net.swedz.miextended.api.event.FarmlandLoseMoistureEvent;
 import net.swedz.miextended.api.event.TreeGrowthEvent;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListener;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListeners;
+import net.swedz.miextended.text.MIEText;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;
@@ -46,14 +48,15 @@ public final class FarmerComponent implements IComponent
 {
 	private final MultiblockInventoryComponent inventory;
 	private final IsActiveComponent            isActive;
-	private final PlantingMode                 plantingMode;
+	private final PlantingMode                 defaultPlantingMode;
 	
 	private final IsolatedListener<FarmlandLoseMoistureEvent> listenerFarmlandLoseMoisture;
 	private final IsolatedListener<TreeGrowthEvent>           listenerTreeGrowth;
 	
 	private final Map<BlockPos, List<BlockPos>> trees = Maps.newHashMap();
 	
-	public boolean tilling;
+	public PlantingMode plantingMode;
+	public boolean      tilling;
 	
 	private Level        level;
 	private ShapeMatcher shapeMatcher;
@@ -67,12 +70,13 @@ public final class FarmerComponent implements IComponent
 	private FarmerBlocks cropBlocks;
 	private boolean      hasWater;
 	
-	public FarmerComponent(MultiblockInventoryComponent inventory, IsActiveComponent isActive, PlantingMode plantingMode)
+	public FarmerComponent(MultiblockInventoryComponent inventory, IsActiveComponent isActive, PlantingMode defaultPlantingMode)
 	{
 		this.inventory = inventory;
 		this.isActive = isActive;
 		this.plantableStacks = new FarmerComponentPlantableStacks(this);
-		this.plantingMode = plantingMode;
+		this.defaultPlantingMode = defaultPlantingMode;
+		this.plantingMode = defaultPlantingMode;
 		
 		this.listenerFarmlandLoseMoisture = (event) ->
 		{
@@ -375,12 +379,14 @@ public final class FarmerComponent implements IComponent
 	public void writeNbt(CompoundTag tag)
 	{
 		tag.putBoolean("tilling", tilling);
+		tag.putInt("planting_mode", plantingMode.ordinal());
 	}
 	
 	@Override
 	public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
 	{
 		tilling = tag.getBoolean("tilling");
+		plantingMode = PlantingMode.values()[tag.contains("planting_mode") ? tag.getInt("planting_mode") : defaultPlantingMode.ordinal()];
 	}
 	
 	public MultiblockInventoryComponent getInventory()
@@ -458,17 +464,25 @@ public final class FarmerComponent implements IComponent
 	
 	public enum PlantingMode
 	{
-		ALTERNATING_LINES(true, (block, plantables) -> block.line() % plantables.size()),
-		AS_NEEDED(false, (block, plantables) -> 0);
+		AS_NEEDED(MIEText.FARMER_PLANTING_AS_NEEDED.text(), false, (block, plantables) -> 0),
+		ALTERNATING_LINES(MIEText.FARMER_PLANTING_ALTERNATING_LINES.text(), true, (block, plantables) -> block.line() % plantables.size());
+		
+		private final Component textComponent;
 		
 		private final boolean includeEmptyStacks;
 		
 		private final BiFunction<FarmerBlock, List<PlantableConfigurableItemStack>, Integer> index;
 		
-		PlantingMode(boolean includeEmptyStacks, BiFunction<FarmerBlock, List<PlantableConfigurableItemStack>, Integer> index)
+		PlantingMode(Component textComponent, boolean includeEmptyStacks, BiFunction<FarmerBlock, List<PlantableConfigurableItemStack>, Integer> index)
 		{
+			this.textComponent = textComponent;
 			this.includeEmptyStacks = includeEmptyStacks;
 			this.index = index;
+		}
+		
+		public Component textComponent()
+		{
+			return textComponent;
 		}
 		
 		public boolean includeEmptyStacks()
