@@ -1,6 +1,7 @@
 package net.swedz.miextended.machines.components;
 
 import aztech.modern_industrialization.machines.IComponent;
+import aztech.modern_industrialization.machines.components.IsActiveComponent;
 import aztech.modern_industrialization.machines.components.MultiblockInventoryComponent;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import aztech.modern_industrialization.util.Simulation;
@@ -23,15 +24,17 @@ import java.util.List;
 public final class FarmerComponent implements IComponent, IsolatedListener<FarmlandLoseMoistureEvent>
 {
 	private final MultiblockInventoryComponent inventory;
+	private final IsActiveComponent            isActive;
 	
-	private Level level;
+	private Level        level;
 	private ShapeMatcher shapeMatcher;
 	
 	private List<BlockPos> dirtPositions = List.of();
 	
-	public FarmerComponent(MultiblockInventoryComponent inventory)
+	public FarmerComponent(MultiblockInventoryComponent inventory, IsActiveComponent isActive)
 	{
 		this.inventory = inventory;
+		this.isActive = isActive;
 	}
 	
 	public void fromOffsets(BlockPos controllerPos, Direction controllerDirection, List<BlockPos> offsets)
@@ -121,7 +124,7 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	@Override
 	public void on(FarmlandLoseMoistureEvent event)
 	{
-		if(this.consumeWater(Simulation.SIMULATE))
+		if(isActive.isActive && this.consumeWater(Simulation.SIMULATE))
 		{
 			this.consumeWater(Simulation.ACT);
 			event.setCanceled(true);

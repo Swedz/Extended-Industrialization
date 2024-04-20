@@ -47,7 +47,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		
 		this.euCost = euCost;
 		
-		this.farmer = new FarmerComponent(inventory);
+		this.farmer = new FarmerComponent(inventory, isActive);
 		
 		this.registerGuiComponent(CommonGuiComponents.rangedShapeSelection(
 				this, activeShape,
