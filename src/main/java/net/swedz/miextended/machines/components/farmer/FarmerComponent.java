@@ -28,21 +28,27 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.IPlantable;
+import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.api.MachineInventoryHelper;
 import net.swedz.miextended.api.event.FarmlandLoseMoistureEvent;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListener;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListeners;
+import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public final class FarmerComponent implements IComponent, IsolatedListener<FarmlandLoseMoistureEvent>
+public final class FarmerComponent implements IComponent
 {
 	private final MultiblockInventoryComponent inventory;
 	private final IsActiveComponent            isActive;
 	private final PlantingMode                 plantingMode;
+	
+	private final IsolatedListener<FarmlandLoseMoistureEvent>      listenerFarmlandLoseMoisture;
+	
+	private final List<BlockPos> treePositions = Lists.newArrayList();
 	
 	public boolean tilling;
 	
@@ -64,6 +70,15 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 		this.isActive = isActive;
 		this.plantableStacks = new FarmerComponentPlantableStacks(this);
 		this.plantingMode = plantingMode;
+		
+		this.listenerFarmlandLoseMoisture = (event) ->
+		{
+			if(isActive.isActive && this.consumeWater(Simulation.SIMULATE))
+			{
+				this.consumeWater(Simulation.ACT);
+				event.setCanceled(true);
+			}
+		};
 	}
 	
 	public void fromOffsets(BlockPos controllerPos, Direction controllerDirection, List<BlockPos> offsets)
@@ -159,6 +174,7 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 		{
 			BlockPos pos = cropBlockEntry.pos();
 			BlockState state = cropBlockEntry.state();
+			
 			if(state.getBlock() instanceof CropBlock cropBlock && cropBlock.isMaxAge(state))
 			{
 				ResourceLocation lootTableId = state.getBlock().getLootTable();
@@ -203,6 +219,11 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 				}
 				
 				return true;
+			}
+			
+			else if(treePositions.contains(pos))
+			{
+				MIExtended.LOGGER.info("we can harvest a tree");
 			}
 		}
 		
@@ -290,26 +311,16 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 		}
 	}
 	
-	@Override
-	public void on(FarmlandLoseMoistureEvent event)
-	{
-		if(isActive.isActive && this.consumeWater(Simulation.SIMULATE))
-		{
-			this.consumeWater(Simulation.ACT);
-			event.setCanceled(true);
-		}
-	}
-	
 	public void registerListeners(Level level, ShapeMatcher shapeMatcher)
 	{
 		this.level = level;
 		this.shapeMatcher = shapeMatcher;
-		IsolatedListeners.register(level, shapeMatcher.getSpannedChunks(), FarmlandLoseMoistureEvent.class, this);
+		IsolatedListeners.register(level, shapeMatcher.getSpannedChunks(), FarmlandLoseMoistureEvent.class, listenerFarmlandLoseMoisture);
 	}
 	
 	public void unregisterListeners(Level level, ShapeMatcher shapeMatcher)
 	{
-		IsolatedListeners.unregister(level, shapeMatcher.getSpannedChunks(), FarmlandLoseMoistureEvent.class, this);
+		IsolatedListeners.unregister(level, shapeMatcher.getSpannedChunks(), FarmlandLoseMoistureEvent.class, listenerFarmlandLoseMoisture);
 		this.shapeMatcher = null;
 	}
 	
