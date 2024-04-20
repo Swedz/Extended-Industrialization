@@ -41,7 +41,10 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	
 	private final FarmerComponentPlantableStacks plantableStacks;
 	
-	private int processTick;
+	private int          processTick;
+	private FarmerBlocks dirtBlocks;
+	private FarmerBlocks cropBlocks;
+	private boolean      hasWater;
 	
 	public FarmerComponent(MultiblockInventoryComponent inventory, IsActiveComponent isActive, PlantingMode plantingMode)
 	{
@@ -73,9 +76,9 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	}
 	
 	@SuppressWarnings("deprecation")
-	private boolean till(FarmerBlocks dirtBlocks, FarmerBlocks cropBlocks)
+	private boolean till()
 	{
-		if(!tilling)
+		if(!tilling || !hasWater)
 		{
 			return false;
 		}
@@ -99,22 +102,24 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 		return false;
 	}
 	
-	private boolean wetten(FarmerBlocks dirtBlocks, FarmerBlocks cropBlocks)
+	private boolean wetten()
 	{
-		if(this.consumeWater(Simulation.SIMULATE))
+		if(!hasWater)
 		{
-			for(FarmerBlock blockEntry : dirtBlocks)
+			return false;
+		}
+		
+		for(FarmerBlock blockEntry : dirtBlocks)
+		{
+			BlockPos pos = blockEntry.pos();
+			BlockState state = blockEntry.state();
+			if(state.getBlock() instanceof FarmBlock)
 			{
-				BlockPos pos = blockEntry.pos();
-				BlockState state = blockEntry.state();
-				if(state.getBlock() instanceof FarmBlock)
+				int moisture = state.getValue(FarmBlock.MOISTURE);
+				if(moisture < 7 && this.consumeWater(Simulation.ACT))
 				{
-					int moisture = state.getValue(FarmBlock.MOISTURE);
-					if(moisture < 7 && this.consumeWater(Simulation.ACT))
-					{
-						level.setBlock(pos, state.setValue(FarmBlock.MOISTURE, 7), 2);
-						return true;
-					}
+					level.setBlock(pos, state.setValue(FarmBlock.MOISTURE, 7), 2);
+					return true;
 				}
 			}
 		}
@@ -122,19 +127,19 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 		return false;
 	}
 	
-	private boolean fertilize(FarmerBlocks dirtBlocks, FarmerBlocks cropBlocks)
+	private boolean fertilize()
 	{
 		// TODO
 		return false;
 	}
 	
-	private boolean harvest(FarmerBlocks dirtBlocks, FarmerBlocks cropBlocks)
+	private boolean harvest()
 	{
 		// TODO
 		return false;
 	}
 	
-	private boolean plant(FarmerBlocks dirtBlocks, FarmerBlocks cropBlocks)
+	private boolean plant()
 	{
 		List<PlantableConfigurableItemStack> plantables = plantableStacks.getItems();
 		plantables.removeIf((plantable) -> !plantable.isPlantable() || (!plantingMode.includeEmptyStacks() && plantable.getStack().isEmpty()));
@@ -169,15 +174,15 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 		return false;
 	}
 	
-	public void run()
+	public void tick()
 	{
 		if(level == null)
 		{
 			return;
 		}
 		
-		FarmerBlocks dirtBlocks = new FarmerBlocks();
-		FarmerBlocks cropBlocks = new FarmerBlocks();
+		dirtBlocks = new FarmerBlocks();
+		cropBlocks = new FarmerBlocks();
 		int line = 0;
 		Integer lastX = null;
 		for(BlockPos pos : dirtPositions)
@@ -191,11 +196,13 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 			lastX = pos.getX();
 		}
 		
-		this.till(dirtBlocks, cropBlocks);
-		this.wetten(dirtBlocks, cropBlocks);
-		this.fertilize(dirtBlocks, cropBlocks);
-		this.harvest(dirtBlocks, cropBlocks);
-		this.plant(dirtBlocks, cropBlocks);
+		hasWater = this.consumeWater(Simulation.SIMULATE);
+		
+		this.till();
+		this.wetten();
+		this.fertilize();
+		this.harvest();
+		this.plant();
 		
 		processTick++;
 		if(processTick > 20)
@@ -252,6 +259,10 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	public Level getLevel()
 	{
 		return level;
+	}
+	
+	private record FarmerTick(FarmerBlocks dirtBlocks, FarmerBlocks cropBlocks, boolean hasWater)
+	{
 	}
 	
 	private final class FarmerBlocks extends ArrayList<FarmerBlock>

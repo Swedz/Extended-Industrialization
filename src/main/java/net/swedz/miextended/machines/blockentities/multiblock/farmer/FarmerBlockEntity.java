@@ -134,7 +134,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 			
 			if(active)
 			{
-				farmer.run();
+				farmer.tick();
 			}
 		}
 		else
