@@ -69,7 +69,7 @@ public final class FarmerComponent implements IComponent
 		
 		this.listenerFarmlandLoseMoisture = (event) ->
 		{
-			if(isActive.isActive && this.consumeWater(Simulation.SIMULATE))
+			if(isActive.isActive && blockMap.containsDirtAt(event.getPos()) && this.consumeWater(Simulation.SIMULATE))
 			{
 				this.consumeWater(Simulation.ACT);
 				event.setCanceled(true);
