@@ -17,7 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
-import net.swedz.miextended.machines.components.FarmerComponent;
+import net.swedz.miextended.machines.components.farmer.FarmerComponent;
 import net.swedz.miextended.machines.multiblock.BasicMultiblockMachineBlockEntity;
 import net.swedz.miextended.machines.multiblock.members.PredicateSimpleMember;
 import org.apache.commons.compress.utils.Lists;
@@ -112,6 +112,8 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	{
 		List<BlockPos> offsets = DIRT_POSITIONS[activeShape.getActiveShapeIndex()];
 		farmer.fromOffsets(worldPosition, orientation.facingDirection, offsets);
+		
+		farmer.updateStackListeners();
 	}
 	
 	@Override

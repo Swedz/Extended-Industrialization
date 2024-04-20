@@ -1,4 +1,4 @@
-package net.swedz.miextended.machines.components;
+package net.swedz.miextended.machines.components.farmer;
 
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.components.IsActiveComponent;
@@ -36,10 +36,15 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	
 	private List<BlockPos> dirtPositions = List.of();
 	
+	private final FarmerComponentPlantableStacks plantableStacks;
+	
+	private int processTick;
+	
 	public FarmerComponent(MultiblockInventoryComponent inventory, IsActiveComponent isActive)
 	{
 		this.inventory = inventory;
 		this.isActive = isActive;
+		this.plantableStacks = new FarmerComponentPlantableStacks(this);
 	}
 	
 	public void fromOffsets(BlockPos controllerPos, Direction controllerDirection, List<BlockPos> offsets)
@@ -51,6 +56,11 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 			dirtPositions.add(worldPos);
 		}
 		this.dirtPositions = Collections.unmodifiableList(dirtPositions);
+	}
+	
+	public void updateStackListeners()
+	{
+		plantableStacks.update(inventory.getItemInputs());
 	}
 	
 	private boolean consumeWater(Simulation simulation)
@@ -66,10 +76,10 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 			return false;
 		}
 		
-		for(FarmerBlock entry : dirtBlocks)
+		for(FarmerBlock blockEntry : dirtBlocks)
 		{
-			BlockPos pos = entry.pos();
-			BlockState state = entry.state();
+			BlockPos pos = blockEntry.pos();
+			BlockState state = blockEntry.state();
 			if(state.is(BlockTags.DIRT))
 			{
 				BlockState newState = Blocks.FARMLAND.defaultBlockState();
@@ -89,10 +99,10 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	{
 		if(this.consumeWater(Simulation.SIMULATE))
 		{
-			for(FarmerBlock entry : dirtBlocks)
+			for(FarmerBlock blockEntry : dirtBlocks)
 			{
-				BlockPos pos = entry.pos();
-				BlockState state = entry.state();
+				BlockPos pos = blockEntry.pos();
+				BlockState state = blockEntry.state();
 				if(state.getBlock() instanceof FarmBlock)
 				{
 					int moisture = state.getValue(FarmBlock.MOISTURE);
@@ -122,7 +132,30 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	
 	private boolean plant(FarmerBlocks dirtBlocks, FarmerBlocks cropBlocks)
 	{
-		// TODO
+		for(PlantableConfigurableItemStack plantable : plantableStacks.getItems())
+		{
+			if(plantable.isPlantable())
+			{
+				// TODO use indexing once the order of dirtBlocks and cropBlocks is deterministic
+				for(FarmerBlock blockEntry : dirtBlocks)
+				{
+					if(blockEntry.state().getBlock() instanceof FarmBlock)
+					{
+						BlockPos pos = blockEntry.pos().above();
+						BlockState state = level.getBlockState(pos);
+						if(state.isAir())
+						{
+							BlockState plantState = plantable.getPlant(pos);
+							plantable.getStack().decrement(1);
+							level.setBlock(pos, plantState, 1 | 2);
+							level.gameEvent(GameEvent.BLOCK_PLACE, pos, GameEvent.Context.of(plantState));
+							return true;
+						}
+					}
+				}
+			}
+		}
+		
 		return false;
 	}
 	
@@ -148,6 +181,12 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 		this.fertilize(dirtBlocks, cropBlocks);
 		this.harvest(dirtBlocks, cropBlocks);
 		this.plant(dirtBlocks, cropBlocks);
+		
+		processTick++;
+		if(processTick > 20)
+		{
+			processTick = 0;
+		}
 	}
 	
 	@Override
@@ -183,6 +222,21 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
 	{
 		tilling = tag.getBoolean("tilling");
+	}
+	
+	public MultiblockInventoryComponent getInventory()
+	{
+		return inventory;
+	}
+	
+	public boolean isActive()
+	{
+		return isActive.isActive;
+	}
+	
+	public Level getLevel()
+	{
+		return level;
 	}
 	
 	private final class FarmerBlocks extends ArrayList<FarmerBlock>
