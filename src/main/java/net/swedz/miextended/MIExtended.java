@@ -3,6 +3,7 @@ package net.swedz.miextended;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.swedz.miextended.api.isolatedlistener.IsolatedListeners;
 import net.swedz.miextended.datagen.DatagenDelegator;
 import net.swedz.miextended.items.MIEItems;
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ public final class MIExtended
 	public MIExtended(IEventBus bus)
 	{
 		MIEItems.init(bus);
+		
+		IsolatedListeners.init();
 		
 		bus.register(new DatagenDelegator());
 	}
