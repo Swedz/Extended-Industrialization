@@ -5,8 +5,7 @@ import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
-import net.swedz.miextended.api.MachineInventoryHelper;
+import net.swedz.miextended.machines.components.farmer.FarmerComponent;
 import net.swedz.miextended.machines.components.farmer.FarmerComponentPlantableStacks;
 import net.swedz.miextended.machines.components.farmer.block.FarmerBlock;
 import net.swedz.miextended.machines.components.farmer.block.FarmerBlockMap;
@@ -18,11 +17,6 @@ public final class HydratingFarmerTask extends FarmerTask
 	public HydratingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations)
 	{
 		super(inventory, blockMap, plantableStacks, maxOperations);
-	}
-	
-	private boolean consumeWater(Simulation simulation)
-	{
-		return MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), Fluids.WATER, 50, simulation) == 50;
 	}
 	
 	@Override
@@ -41,7 +35,7 @@ public final class HydratingFarmerTask extends FarmerTask
 			if(state.getBlock() instanceof FarmBlock)
 			{
 				int moisture = state.getValue(FarmBlock.MOISTURE);
-				if(moisture < 7 && this.consumeWater(Simulation.ACT))
+				if(moisture < 7 && FarmerComponent.consumeWater(inventory, Simulation.ACT))
 				{
 					BlockState newState = state.setValue(FarmBlock.MOISTURE, 7);
 					dirt.setBlock(level, newState, 2);

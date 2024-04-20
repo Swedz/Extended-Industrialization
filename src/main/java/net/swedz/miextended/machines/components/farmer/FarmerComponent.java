@@ -69,9 +69,9 @@ public final class FarmerComponent implements IComponent
 		
 		this.listenerFarmlandLoseMoisture = (event) ->
 		{
-			if(isActive.isActive && blockMap.containsDirtAt(event.getPos()) && this.consumeWater(Simulation.SIMULATE))
+			if(isActive.isActive && blockMap.containsDirtAt(event.getPos()) && consumeWater(inventory, Simulation.SIMULATE))
 			{
-				this.consumeWater(Simulation.ACT);
+				consumeWater(inventory, Simulation.ACT);
 				event.setCanceled(true);
 			}
 		};
@@ -85,6 +85,11 @@ public final class FarmerComponent implements IComponent
 		};
 	}
 	
+	public static boolean consumeWater(MultiblockInventoryComponent inventory, Simulation simulation)
+	{
+		return MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), Fluids.WATER, 50, simulation) == 50;
+	}
+	
 	public void fromOffsets(BlockPos controllerPos, Direction controllerDirection, List<BlockPos> offsets)
 	{
 		blockMap.fromOffsets(level, controllerPos, controllerDirection, offsets);
@@ -93,11 +98,6 @@ public final class FarmerComponent implements IComponent
 	public void updateStackListeners()
 	{
 		plantableStacks.update(inventory.getItemInputs());
-	}
-	
-	private boolean consumeWater(Simulation simulation)
-	{
-		return MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), Fluids.WATER, 50, simulation) == 50;
 	}
 	
 	public void tick()
@@ -111,7 +111,7 @@ public final class FarmerComponent implements IComponent
 		
 		blockMap.markDirty();
 		
-		boolean hasWater = this.consumeWater(Simulation.SIMULATE);
+		boolean hasWater = consumeWater(inventory, Simulation.SIMULATE);
 		
 		for(FarmerTask task : tasks)
 		{
