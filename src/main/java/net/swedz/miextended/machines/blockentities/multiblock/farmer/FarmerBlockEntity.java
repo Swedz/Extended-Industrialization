@@ -186,17 +186,19 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 			}
 			
 			List<BlockPos> dirtBlocks = Lists.newArrayList();
-			int maxDistance = (int) Math.pow((RADIUS_START + 2) + (i * RADIUS_LEVEL_MULTIPLIER), 2);
-			for(int x = -maxDistance; x <= maxDistance; x++)
+			double maxDistance = (RADIUS_START + 1.5) + (i * RADIUS_LEVEL_MULTIPLIER);
+			int maxDistanceRounded = (int) Math.ceil(maxDistance);
+			int maxDistanceSquared = (int) Math.pow(maxDistance, 2);
+			for(int x = -maxDistanceRounded; x <= maxDistanceRounded; x++)
 			{
-				for(int z = -maxDistance; z <= maxDistance; z++)
+				for(int z = -maxDistanceRounded; z <= maxDistanceRounded; z++)
 				{
 					if(Math.abs(x) <= 1 && Math.abs(z) <= 1)
 					{
 						continue;
 					}
 					int distance = (int) (Math.pow(x, 2) + Math.pow(z, 2));
-					if(distance < maxDistance)
+					if(distance < maxDistanceSquared)
 					{
 						builder.add(x, -1, z + 1, dirt);
 						dirtBlocks.add(new BlockPos(x, -1, z + 1));
