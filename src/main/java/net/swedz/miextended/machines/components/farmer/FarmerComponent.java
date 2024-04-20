@@ -94,6 +94,7 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 				{
 					level.setBlock(pos, newState, 1 | 2 | 8);
 					level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(newState));
+					dirtBlockEntry.updateState(newState);
 					return true;
 				}
 			}
@@ -118,7 +119,9 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 				int moisture = state.getValue(FarmBlock.MOISTURE);
 				if(moisture < 7 && this.consumeWater(Simulation.ACT))
 				{
-					level.setBlock(pos, state.setValue(FarmBlock.MOISTURE, 7), 2);
+					BlockState newState = state.setValue(FarmBlock.MOISTURE, 7);
+					level.setBlock(pos, newState, 2);
+					dirtBlockEntry.updateState(newState);
 					return true;
 				}
 			}
@@ -167,6 +170,7 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 					
 					level.setBlock(pos, plantState, 1 | 2);
 					level.gameEvent(GameEvent.BLOCK_PLACE, pos, GameEvent.Context.of(plantState));
+					cropBlockEntry.updateState(plantState);
 					
 					return true;
 				}
@@ -278,9 +282,10 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 	
 	public final class FarmerBlock implements Comparable<FarmerBlock>
 	{
-		private final int        line;
-		private final BlockPos   pos;
-		private final BlockState state;
+		private final int      line;
+		private final BlockPos pos;
+		
+		private BlockState state;
 		
 		private FarmerBlock(int line, BlockPos pos, BlockState state)
 		{
@@ -302,6 +307,11 @@ public final class FarmerComponent implements IComponent, IsolatedListener<Farml
 		public BlockState state()
 		{
 			return state;
+		}
+		
+		public void updateState(BlockState state)
+		{
+			this.state = state;
 		}
 		
 		public boolean canBePlantedOnBy(IPlantable plantable)
