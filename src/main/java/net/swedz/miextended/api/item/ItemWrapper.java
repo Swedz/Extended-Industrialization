@@ -121,6 +121,18 @@ public abstract class ItemWrapper<P extends Item.Properties, S extends ItemWrapp
 		return this.withBasicModel(identifiable.id());
 	}
 	
+	public S withHandheldModel(String texture)
+	{
+		return this.withModel((b) -> b
+				.parent(new ModelFile.UncheckedModelFile("item/handheld"))
+				.texture("layer0", new ResourceLocation(modId, "item/" + texture)));
+	}
+	
+	public S withHandheldModel()
+	{
+		return this.withHandheldModel(identifiable.id());
+	}
+	
 	public S register()
 	{
 		deferredItem = Optional.of(this.commonRegister());

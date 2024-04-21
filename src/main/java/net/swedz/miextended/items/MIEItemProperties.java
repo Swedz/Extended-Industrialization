@@ -1,12 +1,29 @@
 package net.swedz.miextended.items;
 
+import com.google.common.collect.Sets;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 
+import java.util.Set;
+
 public final class MIEItemProperties extends Item.Properties
 {
+	private final Set<TagKey<Item>> tags = Sets.newHashSet();
+	
+	public Set<TagKey<Item>> tags()
+	{
+		return Set.copyOf(tags);
+	}
+	
+	public MIEItemProperties tag(TagKey<Item> tag)
+	{
+		tags.add(tag);
+		return this;
+	}
+	
 	// region Inherited methods
 	@Override
 	public MIEItemProperties food(FoodProperties food)
