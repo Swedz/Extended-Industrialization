@@ -21,6 +21,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.swedz.miextended.machines.components.farmer.PlantingMode;
+import net.swedz.miextended.machines.components.farmer.task.FarmerProcessRates;
+import net.swedz.miextended.machines.components.farmer.task.FarmerTaskType;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
@@ -36,12 +38,19 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 			.withElectric()
 			.complete();
 	
+	private static final FarmerProcessRates PROCESS_RATES = new FarmerProcessRates(1)
+			.withInterval(FarmerTaskType.TILLING, 1)
+			.withInterval(FarmerTaskType.HYDRATING, 1)
+			.withInterval(FarmerTaskType.FERTLIZING, 1)
+			.withInterval(FarmerTaskType.HARVESTING, 5)
+			.withInterval(FarmerTaskType.PLANTING, 5);
+	
 	private final RedstoneControlComponent redstoneControl;
 	private final List<EnergyComponent>    energyInputs = Lists.newArrayList();
 	
 	public ElectricFarmerBlockEntity(BEP bep)
 	{
-		super(bep, "electric_farmer", 16, PlantingMode.ALTERNATING_LINES, true, 4, SHAPES);
+		super(bep, "electric_farmer", 16, PlantingMode.ALTERNATING_LINES, true, PROCESS_RATES, SHAPES);
 		
 		this.redstoneControl = new RedstoneControlComponent();
 		this.registerComponents(redstoneControl);

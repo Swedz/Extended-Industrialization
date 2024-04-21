@@ -7,9 +7,9 @@ import net.swedz.miextended.machines.components.farmer.task.FarmerTask;
 
 public final class FertilizingFarmerTask extends FarmerTask
 {
-	public FertilizingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations)
+	public FertilizingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations, int processInterval)
 	{
-		super(inventory, blockMap, plantableStacks, maxOperations);
+		super(inventory, blockMap, plantableStacks, maxOperations, processInterval);
 	}
 	
 	@Override

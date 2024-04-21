@@ -17,6 +17,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
 import net.swedz.miextended.machines.components.farmer.FarmerComponent;
 import net.swedz.miextended.machines.components.farmer.PlantingMode;
+import net.swedz.miextended.machines.components.farmer.task.FarmerProcessRates;
 import net.swedz.miextended.machines.multiblock.BasicMultiblockMachineBlockEntity;
 import net.swedz.miextended.machines.multiblock.members.PredicateSimpleMember;
 import net.swedz.miextended.text.MIEText;
@@ -44,7 +45,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	
 	protected final FarmerComponent farmer;
 	
-	public FarmerBlockEntity(BEP bep, String blockId, long euCost, PlantingMode defaultPlantingMode, boolean canChoosePlantingMode, int maxOperationsPerTask, ShapeWrapper shapes)
+	public FarmerBlockEntity(BEP bep, String blockId, long euCost, PlantingMode defaultPlantingMode, boolean canChoosePlantingMode, FarmerProcessRates processRates, ShapeWrapper shapes)
 	{
 		super(
 				bep,
@@ -56,7 +57,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		
 		this.euCost = euCost;
 		
-		this.farmer = new FarmerComponent(inventory, isActive, defaultPlantingMode, maxOperationsPerTask);
+		this.farmer = new FarmerComponent(inventory, isActive, defaultPlantingMode, processRates);
 		
 		this.registerComponents(farmer);
 		

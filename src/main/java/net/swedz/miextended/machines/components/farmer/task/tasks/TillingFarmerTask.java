@@ -14,9 +14,9 @@ import net.swedz.miextended.machines.components.farmer.task.FarmerTask;
 
 public final class TillingFarmerTask extends FarmerTask
 {
-	public TillingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations)
+	public TillingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations, int processInterval)
 	{
-		super(inventory, blockMap, plantableStacks, maxOperations);
+		super(inventory, blockMap, plantableStacks, maxOperations, processInterval);
 	}
 	
 	@SuppressWarnings("deprecation")

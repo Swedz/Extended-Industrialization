@@ -9,6 +9,8 @@ import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.util.Simulation;
 import net.swedz.miextended.machines.components.farmer.PlantingMode;
+import net.swedz.miextended.machines.components.farmer.task.FarmerProcessRates;
+import net.swedz.miextended.machines.components.farmer.task.FarmerTaskType;
 import net.swedz.miextended.mi.hook.MIMachineHook;
 
 public final class SteamFarmerBlockEntity extends FarmerBlockEntity
@@ -21,9 +23,16 @@ public final class SteamFarmerBlockEntity extends FarmerBlockEntity
 			)
 			.complete();
 	
+	private static final FarmerProcessRates PROCESS_RATES = new FarmerProcessRates(1)
+			.withInterval(FarmerTaskType.TILLING, 1)
+			.withInterval(FarmerTaskType.HYDRATING, 1)
+			.withInterval(FarmerTaskType.FERTLIZING, 1)
+			.withInterval(FarmerTaskType.HARVESTING, 2 * 20)
+			.withInterval(FarmerTaskType.PLANTING, 10);
+	
 	public SteamFarmerBlockEntity(BEP bep)
 	{
-		super(bep, "steam_farmer", 8, PlantingMode.AS_NEEDED, false, 1, SHAPES);
+		super(bep, "steam_farmer", 8, PlantingMode.AS_NEEDED, false, PROCESS_RATES, SHAPES);
 	}
 	
 	public static void registerReiShapes()

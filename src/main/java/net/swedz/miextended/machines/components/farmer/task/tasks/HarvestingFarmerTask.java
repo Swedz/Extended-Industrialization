@@ -29,9 +29,9 @@ import java.util.List;
 
 public final class HarvestingFarmerTask extends FarmerTask
 {
-	public HarvestingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations)
+	public HarvestingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations, int processInterval)
 	{
-		super(inventory, blockMap, plantableStacks, maxOperations);
+		super(inventory, blockMap, plantableStacks, maxOperations, processInterval);
 	}
 	
 	private List<ItemStack> getHarvestItems(BlockPos pos, BlockState state)
@@ -103,11 +103,6 @@ public final class HarvestingFarmerTask extends FarmerTask
 	@Override
 	protected boolean run()
 	{
-		if(processTick % 10 != 0)
-		{
-			return false;
-		}
-		
 		for(FarmerTile tile : blockMap)
 		{
 			FarmerBlock crop = tile.crop();

@@ -15,19 +15,14 @@ import java.util.List;
 
 public final class PlantingFarmerTask extends FarmerTask
 {
-	public PlantingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations)
+	public PlantingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations, int processInterval)
 	{
-		super(inventory, blockMap, plantableStacks, maxOperations);
+		super(inventory, blockMap, plantableStacks, maxOperations, processInterval);
 	}
 	
 	@Override
 	protected boolean run()
 	{
-		if(processTick % 5 != 0)
-		{
-			return false;
-		}
-		
 		List<PlantableConfigurableItemStack> plantables = plantableStacks.getItems();
 		plantables.removeIf((plantable) -> !plantable.isPlantable() || (!plantingMode.includeEmptyStacks() && plantable.getStack().isEmpty()));
 		

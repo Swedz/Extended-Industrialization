@@ -6,5 +6,5 @@ import net.swedz.miextended.machines.components.farmer.block.FarmerBlockMap;
 
 public interface FarmerTaskFactory
 {
-	FarmerTask create(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations);
+	FarmerTask create(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations, int processInterval);
 }

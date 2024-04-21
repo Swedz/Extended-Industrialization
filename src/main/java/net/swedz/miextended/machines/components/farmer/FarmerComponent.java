@@ -17,16 +17,13 @@ import net.swedz.miextended.api.isolatedlistener.IsolatedListener;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListeners;
 import net.swedz.miextended.machines.components.farmer.block.FarmerBlockMap;
 import net.swedz.miextended.machines.components.farmer.block.FarmerTree;
+import net.swedz.miextended.machines.components.farmer.task.FarmerProcessRates;
 import net.swedz.miextended.machines.components.farmer.task.FarmerTask;
-import net.swedz.miextended.machines.components.farmer.task.FarmerTaskFactory;
-import net.swedz.miextended.machines.components.farmer.task.tasks.FertilizingFarmerTask;
-import net.swedz.miextended.machines.components.farmer.task.tasks.HarvestingFarmerTask;
-import net.swedz.miextended.machines.components.farmer.task.tasks.HydratingFarmerTask;
-import net.swedz.miextended.machines.components.farmer.task.tasks.PlantingFarmerTask;
-import net.swedz.miextended.machines.components.farmer.task.tasks.TillingFarmerTask;
+import net.swedz.miextended.machines.components.farmer.task.FarmerTaskType;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public final class FarmerComponent implements IComponent
 {
@@ -34,7 +31,7 @@ public final class FarmerComponent implements IComponent
 	private final IsActiveComponent              isActive;
 	private final FarmerComponentPlantableStacks plantableStacks;
 	private final PlantingMode                   defaultPlantingMode;
-	private final int                            maxOperationsPerTask;
+	private final FarmerProcessRates             processRates;
 	
 	private final FarmerBlockMap   blockMap;
 	private final List<FarmerTask> tasks;
@@ -50,24 +47,19 @@ public final class FarmerComponent implements IComponent
 	
 	private int processTick;
 	
-	public FarmerComponent(MultiblockInventoryComponent inventory, IsActiveComponent isActive, PlantingMode defaultPlantingMode, int maxOperationsPerTask)
+	public FarmerComponent(MultiblockInventoryComponent inventory, IsActiveComponent isActive, PlantingMode defaultPlantingMode, FarmerProcessRates processRates)
 	{
 		this.inventory = inventory;
 		this.isActive = isActive;
 		this.plantableStacks = new FarmerComponentPlantableStacks(this);
 		this.defaultPlantingMode = defaultPlantingMode;
 		this.plantingMode = defaultPlantingMode;
-		this.maxOperationsPerTask = maxOperationsPerTask;
+		this.processRates = processRates;
 		
 		this.blockMap = new FarmerBlockMap();
-		List<FarmerTaskFactory> taskFactories = List.of(
-				TillingFarmerTask::new,
-				HydratingFarmerTask::new,
-				FertilizingFarmerTask::new,
-				HarvestingFarmerTask::new,
-				PlantingFarmerTask::new
-		);
-		this.tasks = taskFactories.stream().map((f) -> f.create(inventory, blockMap, plantableStacks, maxOperationsPerTask)).toList();
+		this.tasks = Stream.of(FarmerTaskType.values())
+				.map((task) -> task.create(inventory, blockMap, plantableStacks, processRates.maxOperations(), processRates.interval(task)))
+				.toList();
 		
 		this.listenerFarmlandLoseMoisture = (event) ->
 		{
@@ -119,7 +111,7 @@ public final class FarmerComponent implements IComponent
 			task.run(level, plantingMode, tilling, processTick, hasWater);
 		}
 		
-		if(processTick >= 20)
+		if(processTick >= 60 * 20)
 		{
 			processTick = 0;
 		}
