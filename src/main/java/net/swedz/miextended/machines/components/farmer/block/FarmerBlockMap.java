@@ -4,6 +4,7 @@ import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
@@ -62,16 +63,13 @@ public final class FarmerBlockMap implements Iterable<FarmerTile>
 		List<FarmerTile> tiles = new ArrayList<>(offsets.size());
 		List<BlockPos> dirtPositions = new ArrayList<>(offsets.size());
 		
-		int line = 0;
-		Integer lastX = null;
+		int minX = offsets.stream().mapToInt(Vec3i::getX).min().orElseThrow();
+		
 		for(BlockPos offset : offsets)
 		{
 			BlockPos pos = ShapeMatcher.toWorldPos(controllerPos, controllerDirection, offset);
 			
-			if(lastX != null && lastX != pos.getX())
-			{
-				line++;
-			}
+			int line = Math.abs(pos.getX() - minX);
 			
 			int quadrant;
 			if(pos.getX() > centerPos.getX() && pos.getZ() <= centerPos.getZ())
@@ -101,8 +99,6 @@ public final class FarmerBlockMap implements Iterable<FarmerTile>
 			crop.updateState(level);
 			tiles.add(new FarmerTile(dirt, crop, line, quadrant));
 			dirtPositions.add(pos);
-			
-			lastX = pos.getX();
 		}
 		
 		this.tiles = Collections.unmodifiableList(tiles);
