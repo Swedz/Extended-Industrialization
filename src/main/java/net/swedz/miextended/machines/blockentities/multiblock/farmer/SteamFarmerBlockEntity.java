@@ -5,11 +5,11 @@ import aztech.modern_industrialization.MIIdentifier;
 import aztech.modern_industrialization.compat.rei.machines.ReiMachineRecipes;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.helper.SteamHelper;
-import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.util.Simulation;
 import net.swedz.miextended.machines.components.farmer.PlantingMode;
+import net.swedz.miextended.mi.hook.MIMachineHook;
 
 public final class SteamFarmerBlockEntity extends FarmerBlockEntity
 {
@@ -17,7 +17,7 @@ public final class SteamFarmerBlockEntity extends FarmerBlockEntity
 			.withCasing(
 					SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(new MIIdentifier("bronze_plated_bricks"))),
 					SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(new MIIdentifier("bronze_machine_casing_pipe"))),
-					MachineCasings.BRONZE // TODO use pipe
+					MIMachineHook.Casings.BRONZE_PIPE
 			)
 			.complete();
 	

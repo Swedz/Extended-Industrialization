@@ -72,6 +72,13 @@ public final class MIHookClientDatagenProvider extends DatagenProvider
 		log.info("End of BLOCK_MODELS");
 	}
 	
+	private void machineCasingModels()
+	{
+		log.info("Start of MACHINE_CASING_MODELS");
+		this.models(MIHookTracker.MACHINE_CASING_MODELS, "models/machine_casing");
+		log.info("End of MACHINE_CASING_MODELS");
+	}
+	
 	private void itemModels()
 	{
 		log.info("Start of ITEM_MODELS");
@@ -147,6 +154,7 @@ public final class MIHookClientDatagenProvider extends DatagenProvider
 		this.language();
 		this.blockStates();
 		this.blockModels();
+		this.machineCasingModels();
 		this.itemModels();
 		this.textures();
 	}

@@ -33,8 +33,9 @@ public final class MIHookTracker
 	
 	public static final List<Consumer<DatagenLanguageWrapper>>     LANGUAGE          = Lists.newArrayList();
 	public static final Map<String, Consumer<DatagenModelWrapper>> BLOCK_STATES      = Maps.newHashMap();
-	public static final Map<String, Consumer<DatagenModelWrapper>> BLOCK_MODELS      = Maps.newHashMap();
-	public static final Map<String, Consumer<DatagenModelWrapper>> ITEM_MODELS       = Maps.newHashMap();
+	public static final Map<String, Consumer<DatagenModelWrapper>> BLOCK_MODELS          = Maps.newHashMap();
+	public static final Map<String, Consumer<DatagenModelWrapper>> MACHINE_CASING_MODELS = Maps.newHashMap();
+	public static final Map<String, Consumer<DatagenModelWrapper>> ITEM_MODELS           = Maps.newHashMap();
 	public static final List<FluidDefinition>                      FLUID_DEFINITIONS = Lists.newArrayList();
 	
 	public static void addLanguageEntry(String id, String englishName, TriConsumer<DatagenLanguageWrapper, String, String> action)
@@ -87,6 +88,16 @@ public final class MIHookTracker
 		}
 		
 		BLOCK_MODELS.put(id, (wrapper) -> wrapper.modernIndustrializationMachineBlockModel(id, overlay, defaultCasing, front, top, side, active));
+	}
+	
+	public static void addMachineCasingModel(String id)
+	{
+		if(!OPEN)
+		{
+			throw new IllegalStateException("Tried to add machine casing model entry while the tracker was closed.");
+		}
+		
+		MACHINE_CASING_MODELS.put(id, (wrapper) -> wrapper.modernIndustrializationMachineCasingModel(id));
 	}
 	
 	public static void addStandardItemModelEntry(String id)

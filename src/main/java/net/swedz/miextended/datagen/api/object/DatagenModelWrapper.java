@@ -1,5 +1,6 @@
 package net.swedz.miextended.datagen.api.object;
 
+import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.machines.models.MachineCasing;
 import com.google.gson.JsonObject;
 import net.swedz.miextended.datagen.api.DatagenOutputTarget;
@@ -64,6 +65,13 @@ public class DatagenModelWrapper extends DatagenJsonObjectWrapper
 		defaultOverlays.addProperty("fluid_auto", "%s:block/overlays/fluid_auto".formatted(provider.modId()));
 		
 		this.get().add("default_overlays", defaultOverlays);
+	}
+	
+	public void modernIndustrializationMachineCasingModel(String id)
+	{
+		this.get().addProperty("block", "%s:%s".formatted(provider.modId(), id));
+		
+		this.get().addProperty("loader", "%s:use_block_model".formatted(MI.ID));
 	}
 	
 	public void parentBlockItemModel(String blockId)

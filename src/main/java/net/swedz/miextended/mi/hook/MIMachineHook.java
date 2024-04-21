@@ -8,6 +8,7 @@ import aztech.modern_industrialization.machines.guicomponents.ProgressBar;
 import aztech.modern_industrialization.machines.guicomponents.RecipeEfficiencyBar;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
 import aztech.modern_industrialization.machines.init.SingleBlockCraftingMachines;
+import aztech.modern_industrialization.machines.models.MachineCasing;
 import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import com.google.common.collect.Lists;
@@ -24,6 +25,17 @@ import static aztech.modern_industrialization.machines.models.MachineCasings.*;
 
 public final class MIMachineHook
 {
+	public static final class Casings
+	{
+		public static MachineCasing
+				BRONZE_PIPE;
+	}
+	
+	public static void machineCasings()
+	{
+		Casings.BRONZE_PIPE = MachineCasings.create("bronze_machine_casing_pipe");
+	}
+	
 	public static List<ElectricBlastFurnaceBlockEntity.Tier> blastFurnaceTiers()
 	{
 		List<ElectricBlastFurnaceBlockEntity.Tier> list = Lists.newArrayList();
