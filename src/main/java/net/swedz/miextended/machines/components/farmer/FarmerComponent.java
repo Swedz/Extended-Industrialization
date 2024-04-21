@@ -16,6 +16,7 @@ import net.swedz.miextended.api.event.TreeGrowthEvent;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListener;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListeners;
 import net.swedz.miextended.machines.components.farmer.block.FarmerBlockMap;
+import net.swedz.miextended.machines.components.farmer.block.FarmerTree;
 import net.swedz.miextended.machines.components.farmer.task.FarmerTask;
 import net.swedz.miextended.machines.components.farmer.task.FarmerTaskFactory;
 import net.swedz.miextended.machines.components.farmer.task.tasks.FertilizingFarmerTask;
@@ -24,6 +25,7 @@ import net.swedz.miextended.machines.components.farmer.task.tasks.HydratingFarme
 import net.swedz.miextended.machines.components.farmer.task.tasks.PlantingFarmerTask;
 import net.swedz.miextended.machines.components.farmer.task.tasks.TillingFarmerTask;
 
+import java.util.Arrays;
 import java.util.List;
 
 public final class FarmerComponent implements IComponent
@@ -79,7 +81,6 @@ public final class FarmerComponent implements IComponent
 		{
 			if(blockMap.containsDirtAt(event.getPos().below()))
 			{
-				// TODO server reboot will make trees get forgotten...
 				blockMap.addTree(event.getPos(), event.getPositions());
 			}
 		};
@@ -144,6 +145,16 @@ public final class FarmerComponent implements IComponent
 	{
 		tag.putBoolean("tilling", tilling);
 		tag.putInt("planting_mode", plantingMode.ordinal());
+		
+		CompoundTag cache = new CompoundTag();
+		CompoundTag trees = new CompoundTag();
+		for(FarmerTree tree : blockMap.trees().values())
+		{
+			long[] list = tree.blocks().stream().mapToLong(BlockPos::asLong).toArray();
+			trees.putLongArray(Long.toString(tree.base().asLong()), list);
+		}
+		cache.put("trees", trees);
+		tag.put("cache", cache);
 	}
 	
 	@Override
@@ -151,5 +162,14 @@ public final class FarmerComponent implements IComponent
 	{
 		tilling = tag.getBoolean("tilling");
 		plantingMode = PlantingMode.values()[tag.contains("planting_mode") ? tag.getInt("planting_mode") : defaultPlantingMode.ordinal()];
+		
+		CompoundTag cache = tag.getCompound("cache");
+		CompoundTag trees = cache.getCompound("trees");
+		for(String key : trees.getAllKeys())
+		{
+			BlockPos base = BlockPos.of(Long.parseLong(key));
+			List<BlockPos> blocks = Arrays.stream(trees.getLongArray(key)).mapToObj(BlockPos::of).toList();
+			blockMap.addTree(base, blocks);
+		}
 	}
 }

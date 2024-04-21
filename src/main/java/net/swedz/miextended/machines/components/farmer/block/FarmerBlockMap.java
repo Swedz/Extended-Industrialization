@@ -35,6 +35,11 @@ public final class FarmerBlockMap implements Iterable<FarmerTile>
 		return dirtPositions.contains(pos);
 	}
 	
+	public Map<BlockPos, FarmerTree> trees()
+	{
+		return Map.copyOf(trees);
+	}
+	
 	public void addTree(BlockPos base, List<BlockPos> blocks)
 	{
 		trees.put(base, new FarmerTree(base, blocks));

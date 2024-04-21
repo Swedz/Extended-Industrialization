@@ -52,6 +52,8 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		
 		this.farmer = new FarmerComponent(inventory, isActive, defaultPlantingMode, maxOperationsPerTask);
 		
+		this.registerComponents(farmer);
+		
 		List<ShapeSelection.LineInfo> lines = Lists.newArrayList();
 		lines.add(new ShapeSelection.LineInfo(
 				4,
