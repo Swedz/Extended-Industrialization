@@ -13,7 +13,8 @@ public enum MIEText
 	FARMER_NOT_TILLING("Not Tilling"),
 	FARMER_TILLING("Tilling"),
 	FARMER_PLANTING_AS_NEEDED("As Needed"),
-	FARMER_PLANTING_ALTERNATING_LINES("Alternating Lines");
+	FARMER_PLANTING_ALTERNATING_LINES("Alternating Lines"),
+	FARMER_PLANTING_QUADRANTS("Quadrants");
 	
 	private final String englishText;
 	

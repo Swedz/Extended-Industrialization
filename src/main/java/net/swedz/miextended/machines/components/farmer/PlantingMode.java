@@ -11,7 +11,8 @@ import java.util.function.BiFunction;
 public enum PlantingMode
 {
 	AS_NEEDED(MIEText.FARMER_PLANTING_AS_NEEDED.text(), false, (block, plantables) -> 0),
-	ALTERNATING_LINES(MIEText.FARMER_PLANTING_ALTERNATING_LINES.text(), true, (block, plantables) -> block.line() % plantables.size());
+	ALTERNATING_LINES(MIEText.FARMER_PLANTING_ALTERNATING_LINES.text(), true, (block, plantables) -> block.line() % plantables.size()),
+	QUADRANTS(MIEText.FARMER_PLANTING_QUADRANTS.text(), true, (block, plantables) -> block.quadrant() % plantables.size());
 	
 	private final Component textComponent;
 	
