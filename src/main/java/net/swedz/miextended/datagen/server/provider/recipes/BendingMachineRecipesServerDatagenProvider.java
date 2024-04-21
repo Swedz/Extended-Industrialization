@@ -23,7 +23,7 @@ public final class BendingMachineRecipesServerDatagenProvider extends RecipesSer
 	{
 		if(this.hasPart(material, from) && this.hasPart(material, to))
 		{
-			this.addMaterialMachineRecipe(material, name, MIMachineHook.BENDING_MACHINE, 2, (int) ((200 * material.get(HARDNESS).timeFactor) / 2), (r) -> r
+			this.addMaterialMachineRecipe(material, name, MIMachineHook.RecipeTypes.BENDING_MACHINE, 2, (int) ((200 * material.get(HARDNESS).timeFactor) / 2), (r) -> r
 					.addItemInput(material.getPart(from).getTaggedIngredient(), 1, 1)
 					.addItemOutput(material.getPart(to), 1));
 		}

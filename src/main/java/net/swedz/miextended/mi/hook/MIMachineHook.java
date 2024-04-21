@@ -47,16 +47,19 @@ public final class MIMachineHook
 		);
 	}
 	
-	public static MachineRecipeType
-			BENDING_MACHINE,
-			ALLOY_SMELTER,
-			CANNING_MACHINE;
+	public static final class RecipeTypes
+	{
+		public static MachineRecipeType
+				BENDING_MACHINE,
+				ALLOY_SMELTER,
+				CANNING_MACHINE;
+	}
 	
 	public static void machineRecipeTypes()
 	{
-		BENDING_MACHINE = MIMachineRecipeTypes.create("bending_machine").withItemInputs().withItemOutputs();
-		ALLOY_SMELTER = MIMachineRecipeTypes.create("alloy_smelter").withItemInputs().withItemOutputs();
-		CANNING_MACHINE = MIMachineRecipeTypes.create("canning_machine").withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
+		RecipeTypes.BENDING_MACHINE = MIMachineRecipeTypes.create("bending_machine").withItemInputs().withItemOutputs();
+		RecipeTypes.ALLOY_SMELTER = MIMachineRecipeTypes.create("alloy_smelter").withItemInputs().withItemOutputs();
+		RecipeTypes.CANNING_MACHINE = MIMachineRecipeTypes.create("canning_machine").withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
 	}
 	
 	public static void singleBlockCraftingMachines()
@@ -64,7 +67,7 @@ public final class MIMachineHook
 		// @formatter:off
 		
 		SingleBlockCraftingMachines.registerMachineTiers(
-				"Bending Machine", "bending_machine", BENDING_MACHINE,
+				"Bending Machine", "bending_machine", RecipeTypes.BENDING_MACHINE,
 				1, 1, 0, 0,
 				(params) -> {},
 				new ProgressBar.Parameters(77, 34, "compress"),
@@ -78,7 +81,7 @@ public final class MIMachineHook
 		);
 		
 		SingleBlockCraftingMachines.registerMachineTiers(
-				"Alloy Smelter", "alloy_smelter", ALLOY_SMELTER,
+				"Alloy Smelter", "alloy_smelter", RecipeTypes.ALLOY_SMELTER,
 				2, 1, 0, 0,
 				(params) -> {},
 				new ProgressBar.Parameters(88, 33, "arrow"),
@@ -92,7 +95,7 @@ public final class MIMachineHook
 		);
 		
 		SingleBlockCraftingMachines.registerMachineTiers(
-				"Canning Machine", "canning_machine", CANNING_MACHINE,
+				"Canning Machine", "canning_machine", RecipeTypes.CANNING_MACHINE,
 				2, 2, 1, 1,
 				(params) -> {},
 				new ProgressBar.Parameters(79, 34, "canning"),

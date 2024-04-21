@@ -29,11 +29,11 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 	private void addFillingAndEmptyingRecipes(FluidStack fluidStack, Item emptyItem, Item fullItem)
 	{
 		ResourceLocation id = BuiltInRegistries.ITEM.getKey(fullItem);
-		this.addMachineRecipe("canning_machine/filling/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.CANNING_MACHINE, 2, 5 * 20, (r) -> r
+		this.addMachineRecipe("canning_machine/filling/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.RecipeTypes.CANNING_MACHINE, 2, 5 * 20, (r) -> r
 				.addFluidInput(fluidStack.getFluid(), fluidStack.getAmount())
 				.addItemInput(emptyItem, 1)
 				.addItemOutput(fullItem, 1));
-		this.addMachineRecipe("canning_machine/emptying/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.CANNING_MACHINE, 2, 5 * 20, (r) -> r
+		this.addMachineRecipe("canning_machine/emptying/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.RecipeTypes.CANNING_MACHINE, 2, 5 * 20, (r) -> r
 				.addItemInput(fullItem, 1)
 				.addItemOutput(emptyItem, 1)
 				.addFluidOutput(fluidStack.getFluid(), fluidStack.getAmount()));
@@ -43,7 +43,7 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 	{
 		ResourceLocation id = BuiltInRegistries.ITEM.getKey(foodItem);
 		int count = (int) Math.ceil(food.getNutrition() / 2D);
-		this.addMachineRecipe("canning_machine/canned_food/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.CANNING_MACHINE, 2, 5 * 20, (r) -> r
+		this.addMachineRecipe("canning_machine/canned_food/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.RecipeTypes.CANNING_MACHINE, 2, 5 * 20, (r) -> r
 				.addItemInput(MIEItems.TIN_CAN, count)
 				.addItemInput(foodItem, 1)
 				.addItemOutput(MIEItems.CANNED_FOOD, count));

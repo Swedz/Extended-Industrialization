@@ -17,15 +17,15 @@ public final class AlloySmelterRecipesServerDatagenProvider extends RecipesServe
 	
 	private void addAlloySmelterRecipes(Material componentA, int amountA, Material componentB, int amountB, Material result, int amountResult)
 	{
-		this.addMaterialMachineRecipe(result, "dust", MIMachineHook.ALLOY_SMELTER, 4, 10 * 20, (r) -> r
+		this.addMaterialMachineRecipe(result, "dust", MIMachineHook.RecipeTypes.ALLOY_SMELTER, 4, 10 * 20, (r) -> r
 				.addItemInput(componentA.getPart(DUST).getTaggedIngredient(), amountA, 1)
 				.addItemInput(componentB.getPart(DUST).getTaggedIngredient(), amountB, 1)
 				.addItemOutput(result.getPart(INGOT), amountResult));
-		this.addMaterialMachineRecipe(result, "tiny_dust", MIMachineHook.ALLOY_SMELTER, 4, 10 * 20, (r) -> r
+		this.addMaterialMachineRecipe(result, "tiny_dust", MIMachineHook.RecipeTypes.ALLOY_SMELTER, 4, 10 * 20, (r) -> r
 				.addItemInput(componentA.getPart(TINY_DUST).getTaggedIngredient(), amountA * 9, 1)
 				.addItemInput(componentB.getPart(TINY_DUST).getTaggedIngredient(), amountB * 9, 1)
 				.addItemOutput(result.getPart(INGOT), amountResult));
-		this.addMaterialMachineRecipe(result, "ingot", MIMachineHook.ALLOY_SMELTER, 4, 10 * 20, (r) -> r
+		this.addMaterialMachineRecipe(result, "ingot", MIMachineHook.RecipeTypes.ALLOY_SMELTER, 4, 10 * 20, (r) -> r
 				.addItemInput(componentA.getPart(INGOT).getTaggedIngredient(), amountA, 1)
 				.addItemInput(componentB.getPart(INGOT).getTaggedIngredient(), amountB, 1)
 				.addItemOutput(result.getPart(INGOT), amountResult));
