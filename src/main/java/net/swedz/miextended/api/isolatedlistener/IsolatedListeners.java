@@ -5,6 +5,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.Event;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.swedz.miextended.api.event.FarmlandLoseMoistureEvent;
 import net.swedz.miextended.api.event.TreeGrowthEvent;
@@ -21,6 +22,12 @@ public final class IsolatedListeners
 	{
 		NeoForge.EVENT_BUS.addListener(ServerStoppedEvent.class, (__) -> serverStopCleanup());
 		
+		withListener(
+				BlockEvent.FarmlandTrampleEvent.class,
+				(event) -> event.getLevel() instanceof Level,
+				(event) -> (Level) event.getLevel(),
+				(event) -> new ChunkPos(event.getPos())
+		);
 		withListener(
 				FarmlandLoseMoistureEvent.class,
 				(event) -> event.getLevel() instanceof Level,

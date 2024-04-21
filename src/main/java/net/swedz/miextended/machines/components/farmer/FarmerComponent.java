@@ -10,6 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.swedz.miextended.api.MachineInventoryHelper;
 import net.swedz.miextended.api.event.FarmlandLoseMoistureEvent;
 import net.swedz.miextended.api.event.TreeGrowthEvent;
@@ -36,8 +37,9 @@ public final class FarmerComponent implements IComponent
 	private final FarmerBlockMap   blockMap;
 	private final List<FarmerTask> tasks;
 	
-	private final IsolatedListener<FarmlandLoseMoistureEvent> listenerFarmlandLoseMoisture;
-	private final IsolatedListener<TreeGrowthEvent>           listenerTreeGrowth;
+	private final IsolatedListener<BlockEvent.FarmlandTrampleEvent> listenerFarmlandTrample;
+	private final IsolatedListener<FarmlandLoseMoistureEvent>       listenerFarmlandLoseMoisture;
+	private final IsolatedListener<TreeGrowthEvent>                 listenerTreeGrowth;
 	
 	public PlantingMode plantingMode;
 	public boolean      tilling;
@@ -61,6 +63,13 @@ public final class FarmerComponent implements IComponent
 				.map((task) -> task.create(inventory, blockMap, plantableStacks, processRates.maxOperations(), processRates.interval(task)))
 				.toList();
 		
+		this.listenerFarmlandTrample = (event) ->
+		{
+			if(tilling && blockMap.containsDirtAt(event.getPos()))
+			{
+				event.setCanceled(true);
+			}
+		};
 		this.listenerFarmlandLoseMoisture = (event) ->
 		{
 			if(isActive.isActive && blockMap.containsDirtAt(event.getPos()) && consumeWater(inventory, Simulation.SIMULATE))
@@ -121,12 +130,14 @@ public final class FarmerComponent implements IComponent
 	{
 		this.level = level;
 		this.shapeMatcher = shapeMatcher;
+		IsolatedListeners.register(level, shapeMatcher.getSpannedChunks(), BlockEvent.FarmlandTrampleEvent.class, listenerFarmlandTrample);
 		IsolatedListeners.register(level, shapeMatcher.getSpannedChunks(), FarmlandLoseMoistureEvent.class, listenerFarmlandLoseMoisture);
 		IsolatedListeners.register(level, shapeMatcher.getSpannedChunks(), TreeGrowthEvent.class, listenerTreeGrowth);
 	}
 	
 	public void unregisterListeners(Level level, ShapeMatcher shapeMatcher)
 	{
+		IsolatedListeners.unregister(level, shapeMatcher.getSpannedChunks(), BlockEvent.FarmlandTrampleEvent.class, listenerFarmlandTrample);
 		IsolatedListeners.unregister(level, shapeMatcher.getSpannedChunks(), FarmlandLoseMoistureEvent.class, listenerFarmlandLoseMoisture);
 		IsolatedListeners.unregister(level, shapeMatcher.getSpannedChunks(), TreeGrowthEvent.class, listenerTreeGrowth);
 		this.shapeMatcher = null;
