@@ -13,7 +13,6 @@ import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
 import net.swedz.miextended.machines.components.farmer.FarmerComponent;
 import net.swedz.miextended.machines.components.farmer.PlantingMode;
@@ -105,7 +104,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 						else if(line == 2)
 						{
 							int newIndex = farmer.plantingMode.ordinal() + delta;
-							farmer.plantingMode = PlantingMode.values()[Mth.clamp(newIndex, 0, PlantingMode.values().length - 1)];
+							farmer.plantingMode = PlantingMode.fromIndex(newIndex);
 						}
 					}
 					

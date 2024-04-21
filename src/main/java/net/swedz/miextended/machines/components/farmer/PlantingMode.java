@@ -1,6 +1,7 @@
 package net.swedz.miextended.machines.components.farmer;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.swedz.miextended.machines.components.farmer.block.FarmerTile;
 import net.swedz.miextended.text.MIEText;
 
@@ -38,5 +39,22 @@ public enum PlantingMode
 	public int index(FarmerTile tile, List<PlantableConfigurableItemStack> plantables)
 	{
 		return index.apply(tile, plantables);
+	}
+	
+	public static PlantingMode fromIndex(int index)
+	{
+		return values()[Mth.clamp(index, 0, values().length - 1)];
+	}
+	
+	public static PlantingMode fromName(String name)
+	{
+		for(PlantingMode mode : values())
+		{
+			if(mode.name().equals(name))
+			{
+				return mode;
+			}
+		}
+		return null;
 	}
 }

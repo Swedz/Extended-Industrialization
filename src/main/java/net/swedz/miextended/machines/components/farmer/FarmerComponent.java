@@ -147,7 +147,7 @@ public final class FarmerComponent implements IComponent
 	public void writeNbt(CompoundTag tag)
 	{
 		tag.putBoolean("tilling", tilling);
-		tag.putInt("planting_mode", plantingMode.ordinal());
+		tag.putString("planting_mode", plantingMode.name());
 		
 		CompoundTag cache = new CompoundTag();
 		CompoundTag trees = new CompoundTag();
@@ -164,7 +164,11 @@ public final class FarmerComponent implements IComponent
 	public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
 	{
 		tilling = tag.getBoolean("tilling");
-		plantingMode = PlantingMode.values()[tag.contains("planting_mode") ? tag.getInt("planting_mode") : defaultPlantingMode.ordinal()];
+		plantingMode = PlantingMode.fromName(tag.getString("planting_mode"));
+		if(plantingMode == null)
+		{
+			plantingMode = defaultPlantingMode;
+		}
 		
 		CompoundTag cache = tag.getCompound("cache");
 		CompoundTag trees = cache.getCompound("trees");
