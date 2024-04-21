@@ -9,6 +9,7 @@ import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.components.UpgradeComponent;
+import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.multiblocks.HatchBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
@@ -44,6 +45,9 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 		
 		this.redstoneControl = new RedstoneControlComponent();
 		this.registerComponents(redstoneControl);
+		
+		this.registerGuiComponent(new SlotPanel.Server(this)
+				.withRedstoneControl(redstoneControl));
 	}
 	
 	public static void registerReiShapes()
@@ -96,5 +100,11 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 			result = redstoneControl.onUse(this, player, hand);
 		}
 		return result;
+	}
+	
+	@Override
+	public boolean isEnabled()
+	{
+		return redstoneControl.doAllowNormalOperation(this);
 	}
 }

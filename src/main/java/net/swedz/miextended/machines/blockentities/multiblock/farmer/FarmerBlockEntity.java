@@ -153,6 +153,11 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		farmer.updateStackListeners();
 	}
 	
+	public boolean isEnabled()
+	{
+		return true;
+	}
+	
 	@Override
 	public void tick()
 	{
@@ -163,7 +168,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 			return;
 		}
 		
-		if(this.isShapeValid())
+		if(this.isEnabled() && this.isShapeValid())
 		{
 			long eu = this.consumeEu(euCost);
 			boolean active = eu > 0;
@@ -180,7 +185,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		}
 	}
 	
-	private void updateActive(boolean active)
+	protected void updateActive(boolean active)
 	{
 		isActive.updateActive(active, this);
 	}
