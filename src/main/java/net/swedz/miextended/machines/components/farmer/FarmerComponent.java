@@ -60,7 +60,8 @@ public final class FarmerComponent implements IComponent
 		
 		this.blockMap = new FarmerBlockMap();
 		this.tasks = Stream.of(FarmerTaskType.values())
-				.map((task) -> task.create(inventory, blockMap, plantableStacks, processRates.maxOperations(), processRates.interval(task)))
+				.filter(processRates::contains)
+				.map((task) -> task.create(inventory, blockMap, plantableStacks, processRates.maxOperations(task), processRates.interval(task)))
 				.toList();
 		
 		this.listenerFarmlandTrample = (event) ->

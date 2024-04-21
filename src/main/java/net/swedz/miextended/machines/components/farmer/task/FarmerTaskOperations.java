@@ -11,6 +11,11 @@ public final class FarmerTaskOperations
 		this.max = max;
 	}
 	
+	public int max()
+	{
+		return max;
+	}
+	
 	public boolean operate()
 	{
 		return ++operations >= max;

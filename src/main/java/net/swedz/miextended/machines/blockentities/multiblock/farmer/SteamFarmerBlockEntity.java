@@ -23,12 +23,11 @@ public final class SteamFarmerBlockEntity extends FarmerBlockEntity
 			)
 			.complete();
 	
-	private static final FarmerProcessRates PROCESS_RATES = new FarmerProcessRates(1)
-			.withInterval(FarmerTaskType.TILLING, 1)
-			.withInterval(FarmerTaskType.HYDRATING, 1)
-			.withInterval(FarmerTaskType.FERTLIZING, 1)
-			.withInterval(FarmerTaskType.HARVESTING, 2 * 20)
-			.withInterval(FarmerTaskType.PLANTING, 10);
+	private static final FarmerProcessRates PROCESS_RATES = new FarmerProcessRates()
+			.with(FarmerTaskType.TILLING, 1, 1)
+			.with(FarmerTaskType.HYDRATING, 1, 1)
+			.with(FarmerTaskType.HARVESTING, 1, 2 * 20)
+			.with(FarmerTaskType.PLANTING, 1, 10);
 	
 	public SteamFarmerBlockEntity(BEP bep)
 	{

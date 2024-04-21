@@ -6,28 +6,28 @@ import java.util.Map;
 
 public final class FarmerProcessRates
 {
-	private final int maxOperations;
-	
+	private final Map<FarmerTaskType, Integer> maxOperations = Maps.newHashMap();
 	private final Map<FarmerTaskType, Integer> intervals = Maps.newHashMap();
 	
-	public FarmerProcessRates(int maxOperations)
+	public FarmerProcessRates with(FarmerTaskType task, int maxOperations, int interval)
 	{
-		this.maxOperations = maxOperations;
-	}
-	
-	public int maxOperations()
-	{
-		return maxOperations;
-	}
-	
-	public FarmerProcessRates withInterval(FarmerTaskType task, int interval)
-	{
-		intervals.put(task, interval);
+		this.maxOperations.put(task, maxOperations);
+		this.intervals.put(task, interval);
 		return this;
+	}
+	
+	public boolean contains(FarmerTaskType task)
+	{
+		return maxOperations.containsKey(task);
+	}
+	
+	public int maxOperations(FarmerTaskType task)
+	{
+		return maxOperations.getOrDefault(task, 0);
 	}
 	
 	public int interval(FarmerTaskType type)
 	{
-		return intervals.getOrDefault(type, 1);
+		return intervals.getOrDefault(type, 0);
 	}
 }

@@ -38,12 +38,12 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 			.withElectric()
 			.complete();
 	
-	private static final FarmerProcessRates PROCESS_RATES = new FarmerProcessRates(1)
-			.withInterval(FarmerTaskType.TILLING, 1)
-			.withInterval(FarmerTaskType.HYDRATING, 1)
-			.withInterval(FarmerTaskType.FERTLIZING, 1)
-			.withInterval(FarmerTaskType.HARVESTING, 5)
-			.withInterval(FarmerTaskType.PLANTING, 5);
+	private static final FarmerProcessRates PROCESS_RATES = new FarmerProcessRates()
+			.with(FarmerTaskType.TILLING, 1, 1)
+			.with(FarmerTaskType.HYDRATING, 1, 1)
+			.with(FarmerTaskType.FERTLIZING, 1, 1)
+			.with(FarmerTaskType.HARVESTING, 1, 5)
+			.with(FarmerTaskType.PLANTING, 1, 5);
 	
 	private final RedstoneControlComponent redstoneControl;
 	private final List<EnergyComponent>    energyInputs = Lists.newArrayList();

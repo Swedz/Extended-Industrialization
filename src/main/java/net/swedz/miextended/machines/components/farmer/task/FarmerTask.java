@@ -32,7 +32,7 @@ public abstract class FarmerTask
 	
 	public boolean run(Level level, PlantingMode plantingMode, boolean tilling, int processTick, boolean hasWater)
 	{
-		if(processInterval == 0 || processTick % processInterval != 0)
+		if(operations.max() == 0 || processInterval == 0 || processTick % processInterval != 0)
 		{
 			return false;
 		}
