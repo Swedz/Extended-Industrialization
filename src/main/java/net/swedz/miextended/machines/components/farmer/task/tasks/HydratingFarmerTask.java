@@ -22,7 +22,7 @@ public final class HydratingFarmerTask extends FarmerTask
 	@Override
 	protected boolean run()
 	{
-		if(!hasWater)
+		if(!tilling || !hasWater)
 		{
 			return false;
 		}
