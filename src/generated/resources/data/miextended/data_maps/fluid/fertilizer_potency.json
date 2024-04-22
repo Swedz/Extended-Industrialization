@@ -1,0 +1,16 @@
+{
+  "values": {
+    "modern_industrialization:composted_manure": {
+      "mb_to_consume_per_fertilizer_tick": 50,
+      "tick_rate": 25
+    },
+    "modern_industrialization:manure": {
+      "mb_to_consume_per_fertilizer_tick": 100,
+      "tick_rate": 25
+    },
+    "modern_industrialization:npk_fertilizer": {
+      "mb_to_consume_per_fertilizer_tick": 10,
+      "tick_rate": 10
+    }
+  }
+}

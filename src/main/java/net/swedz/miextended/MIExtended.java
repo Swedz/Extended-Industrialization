@@ -6,9 +6,11 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.swedz.miextended.api.capabilities.CapabilitiesListeners;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListeners;
 import net.swedz.miextended.datagen.DatagenDelegator;
+import net.swedz.miextended.datamaps.MIEDataMaps;
 import net.swedz.miextended.items.MIEItemWrapper;
 import net.swedz.miextended.items.MIEItems;
 import org.slf4j.Logger;
@@ -51,5 +53,8 @@ public final class MIExtended
 		bus.addListener(FMLCommonSetupEvent.class, (event) ->
 				MIEItems.all().forEach(MIEItemWrapper::runItemRegistrationListener));
 		bus.addListener(RegisterCapabilitiesEvent.class, CapabilitiesListeners::triggerAll);
+		
+		bus.addListener(RegisterDataMapTypesEvent.class, (event) ->
+				event.register(MIEDataMaps.FERTILIZER_POTENCY));
 	}
 }
