@@ -23,4 +23,10 @@ public final class ItemModelsDatagenProvider extends ItemModelProvider
 			item.modelBuilder().accept(itemModelBuilder);
 		}
 	}
+	
+	@Override
+	public String getName()
+	{
+		return this.getClass().getSimpleName();
+	}
 }

@@ -26,4 +26,10 @@ public final class DataMapDatagenProvider extends DataMapProvider
 	{
 		builder(MIEDataMaps.FERTILIZER_POTENCY).add(fluidDefinition.getId(), new FertilizerPotency(tickRate, mbToConsumePerFertilizerTick), false);
 	}
+	
+	@Override
+	public String getName()
+	{
+		return this.getClass().getSimpleName();
+	}
 }

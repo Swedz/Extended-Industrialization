@@ -31,6 +31,12 @@ public final class MachineModelsMIHookDatagenProvider extends BlockStateProvider
 		}
 	}
 	
+	@Override
+	public String getName()
+	{
+		return this.getClass().getSimpleName();
+	}
+	
 	private static final class MachineModelBuilder<T extends ModelBuilder<T>> extends CustomLoaderBuilder<T>
 	{
 		private final MIHookTracker.MachineModelProperties props;

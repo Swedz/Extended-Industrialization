@@ -29,4 +29,10 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 			}
 		}
 	}
+	
+	@Override
+	public String getName()
+	{
+		return this.getClass().getSimpleName();
+	}
 }

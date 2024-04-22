@@ -22,4 +22,10 @@ public final class LanguageMIHookDatagenProvider extends LanguageProvider
 			action.accept(this);
 		}
 	}
+	
+	@Override
+	public String getName()
+	{
+		return this.getClass().getSimpleName();
+	}
 }

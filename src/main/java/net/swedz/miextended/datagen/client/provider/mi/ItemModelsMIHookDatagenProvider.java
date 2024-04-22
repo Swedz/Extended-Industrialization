@@ -22,4 +22,10 @@ public final class ItemModelsMIHookDatagenProvider extends ItemModelProvider
 			action.accept(this);
 		}
 	}
+	
+	@Override
+	public String getName()
+	{
+		return this.getClass().getSimpleName();
+	}
 }

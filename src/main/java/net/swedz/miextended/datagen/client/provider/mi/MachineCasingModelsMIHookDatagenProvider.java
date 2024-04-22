@@ -49,7 +49,7 @@ public final class MachineCasingModelsMIHookDatagenProvider extends ModelProvide
 	@Override
 	public String getName()
 	{
-		return "Machine Casings";
+		return this.getClass().getSimpleName();
 	}
 	
 	private static final class UseBlockModelModelBuilder<T extends ModelBuilder<T>> extends CustomLoaderBuilder<T>
