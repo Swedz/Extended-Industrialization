@@ -17,6 +17,14 @@ repositories {
 		url = "https://api.modrinth.com/maven"
 	}
 	maven {
+		name "Modmaven"
+		url "https://modmaven.dev"
+		content {
+			// GrandPower
+			includeGroup "dev.technici4n"
+		}
+	}
+	maven {
 		name = "shedaniel"
 		url "https://maven.shedaniel.me"
 		content {
@@ -37,6 +45,8 @@ dependencies {
 	implementation "net.neoforged:neoforge:${neoforge_version}"
 
 	implementation "maven.modrinth:modern-industrialization:${modern_industrialization_version}"
+
+	implementation "dev.technici4n:GrandPower:${grandpower_version}"
 
 	implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
 

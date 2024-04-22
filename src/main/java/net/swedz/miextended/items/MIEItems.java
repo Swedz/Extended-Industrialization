@@ -1,6 +1,7 @@
 package net.swedz.miextended.items;
 
 import com.google.common.collect.Sets;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
@@ -8,6 +9,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.api.item.ItemCreator;
+import net.swedz.miextended.items.items.ElectricToolItem;
 import net.swedz.miextended.items.items.TinCanFoodItem;
 
 import java.util.Set;
@@ -24,6 +26,7 @@ public final class MIEItems
 	
 	public static final MIEItemWrapper<Item>             TIN_CAN              = create("tin_can", "Tin Can", Item::new).withBasicModel().register();
 	public static final MIEItemWrapper<TinCanFoodItem>   CANNED_FOOD          = create("canned_food", "Canned Food", TinCanFoodItem::new).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).meat().fast().build())).withBasicModel().register();
+	public static final MIEItemWrapper<ElectricToolItem> ELETRIC_MINING_DRILL = create("electric_mining_drill", "Electric Mining Drill", ElectricToolItem::new).tag(ItemTags.PICKAXES, ItemTags.SHOVELS).withSimplyEnergyItemCapability().withHandheldModel().register();
 	
 	private static <I extends Item> MIEItemWrapper<I> create(String id, String englishName, ItemCreator<I, MIEItemProperties> creator)
 	{
