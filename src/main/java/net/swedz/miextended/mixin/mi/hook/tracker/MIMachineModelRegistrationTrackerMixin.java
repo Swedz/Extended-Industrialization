@@ -21,9 +21,7 @@ public class MIMachineModelRegistrationTrackerMixin
 	{
 		if(MIHookTracker.isOpen())
 		{
-			MIHookTracker.addMachineModelBlockState(id);
-			MIHookTracker.addMachineModelBlockModel(id, overlay, defaultCasing, front, top, side, active);
-			MIHookTracker.addMachineModelItemModel(id);
+			MIHookTracker.addMachineModel(id, defaultCasing, overlay, front, top, side, active);
 		}
 	}
 }

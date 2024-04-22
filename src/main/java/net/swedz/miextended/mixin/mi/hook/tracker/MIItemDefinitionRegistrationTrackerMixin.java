@@ -2,6 +2,8 @@ package net.swedz.miextended.mixin.mi.hook.tracker;
 
 import aztech.modern_industrialization.definition.ItemDefinition;
 import aztech.modern_industrialization.items.SortOrder;
+import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.mi.hook.tracker.MIHookTracker;
@@ -20,16 +22,13 @@ public class MIItemDefinitionRegistrationTrackerMixin
 			at = @At("RETURN")
 	)
 	private void item(String englishName, DeferredItem item,
-					  BiConsumer modelGenerator, SortOrder sortOrder,
+					  BiConsumer<Item, ItemModelProvider> modelGenerator, SortOrder sortOrder,
 					  CallbackInfo callback)
 	{
 		if(MIHookTracker.isOpen())
 		{
-			String id = item.getId().getPath();
-			MIHookTracker.addItemLanguageEntry(id, englishName);
-			// TODO use proper item model generation
-			//  can leave this as-is until we need an item with a non-standard item model
-			MIHookTracker.addStandardItemModelEntry(id);
+			MIHookTracker.addItemLanguageEntry(item, englishName);
+			MIHookTracker.addItemModel(item, modelGenerator);
 			MIExtended.includeItemRegisteredByMI(item.getId());
 		}
 	}

@@ -21,10 +21,8 @@
         "mi.hook.MITooltipsMixin",
         "mi.hook.tracker.MIFluidDefinitionRegistrationTrackerMixin",
         "mi.hook.tracker.MIItemDefinitionRegistrationTrackerMixin",
-        "mi.hook.tracker.MIMachineCasingRegistrationTrackerMixin",
         "mi.hook.tracker.MIMachineModelRegistrationTrackerMixin",
-        "mi.hook.tracker.MIMachineRecipeTypeRegistrationTrackerMixin",
-        "mi.hook.tracker.MIMachineRegistrationTrackerMixin"
+        "mi.hook.tracker.MIMachineRecipeTypeRegistrationTrackerMixin"
     ],
     "client": [
         "client.mi.MIGuiComponentsClientMixin"

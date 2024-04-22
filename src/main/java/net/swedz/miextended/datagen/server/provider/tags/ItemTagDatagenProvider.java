@@ -21,18 +21,12 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 	@Override
 	protected void addTags(HolderLookup.Provider provider)
 	{
-		MIExtended.LOGGER.info("Start of ITEM_TAGS");
-		
 		for(MIEItemWrapper<?> item : MIEItems.all())
 		{
-			MIExtended.LOGGER.info("- {} has {} tags:", item.encloseId(), item.getTags().size());
 			for(TagKey<Item> tag : item.getTags())
 			{
-				MIExtended.LOGGER.info("  - {}", tag.location());
 				this.tag(tag).add(item.asItem());
 			}
 		}
-		
-		MIExtended.LOGGER.info("End of ITEM_TAGS");
 	}
 }

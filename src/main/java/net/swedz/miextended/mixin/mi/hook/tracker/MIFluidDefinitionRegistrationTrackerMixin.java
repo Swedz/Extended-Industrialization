@@ -21,8 +21,9 @@ public class MIFluidDefinitionRegistrationTrackerMixin
 	{
 		if(MIHookTracker.isOpen())
 		{
-			MIHookTracker.addFluidDefinitionLanguageEntry(id, englishName);
-			MIHookTracker.addFluidDefinition(FluidDefinition.class.cast(this));
+			FluidDefinition fluidDefinition = FluidDefinition.class.cast(this);
+			MIHookTracker.addFluidDefinitionLanguageEntry(fluidDefinition);
+			MIHookTracker.addFluidDefinition(fluidDefinition);
 		}
 	}
 }

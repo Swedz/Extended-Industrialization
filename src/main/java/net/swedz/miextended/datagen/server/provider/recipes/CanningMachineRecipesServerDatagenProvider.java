@@ -2,6 +2,7 @@ package net.swedz.miextended.datagen.server.provider.recipes;
 
 import com.google.common.collect.Sets;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BowlFoodItem;
@@ -12,7 +13,6 @@ import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.fluids.MIEFluids;
 import net.swedz.miextended.items.MIEItems;
 import net.swedz.miextended.mi.hook.MIMachineHook;
@@ -23,33 +23,48 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 {
 	public CanningMachineRecipesServerDatagenProvider(GatherDataEvent event)
 	{
-		super(event, "MI Extended Datagen/Server/Recipes/Canning Machine", MIExtended.ID);
+		super(event);
 	}
 	
-	private void addFillingAndEmptyingRecipes(FluidStack fluidStack, Item emptyItem, Item fullItem)
+	private static void addFillingAndEmptyingRecipes(FluidStack fluidStack, Item emptyItem, Item fullItem, RecipeOutput output)
 	{
 		ResourceLocation id = BuiltInRegistries.ITEM.getKey(fullItem);
-		this.addMachineRecipe("canning_machine/filling/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.RecipeTypes.CANNING_MACHINE, 2, 5 * 20, (r) -> r
-				.addFluidInput(fluidStack.getFluid(), fluidStack.getAmount())
-				.addItemInput(emptyItem, 1)
-				.addItemOutput(fullItem, 1));
-		this.addMachineRecipe("canning_machine/emptying/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.RecipeTypes.CANNING_MACHINE, 2, 5 * 20, (r) -> r
-				.addItemInput(fullItem, 1)
-				.addItemOutput(emptyItem, 1)
-				.addFluidOutput(fluidStack.getFluid(), fluidStack.getAmount()));
+		addMachineRecipe(
+				"canning_machine/filling/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.RecipeTypes.CANNING_MACHINE,
+				2, 5 * 20,
+				(r) -> r
+						.addFluidInput(fluidStack.getFluid(), fluidStack.getAmount())
+						.addItemInput(emptyItem, 1)
+						.addItemOutput(fullItem, 1),
+				output
+		);
+		addMachineRecipe(
+				"canning_machine/emptying/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.RecipeTypes.CANNING_MACHINE,
+				2, 5 * 20,
+				(r) -> r
+						.addItemInput(fullItem, 1)
+						.addItemOutput(emptyItem, 1)
+						.addFluidOutput(fluidStack.getFluid(), fluidStack.getAmount()),
+				output
+		);
 	}
 	
-	private void addCannedFoodRecipe(Item foodItem, FoodProperties food)
+	private static void addCannedFoodRecipe(Item foodItem, FoodProperties food, RecipeOutput output)
 	{
 		ResourceLocation id = BuiltInRegistries.ITEM.getKey(foodItem);
 		int count = (int) Math.ceil(food.getNutrition() / 2D);
-		this.addMachineRecipe("canning_machine/canned_food/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.RecipeTypes.CANNING_MACHINE, 2, 5 * 20, (r) -> r
-				.addItemInput(MIEItems.TIN_CAN, count)
-				.addItemInput(foodItem, 1)
-				.addItemOutput(MIEItems.CANNED_FOOD, count));
+		addMachineRecipe(
+				"canning_machine/canned_food/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.RecipeTypes.CANNING_MACHINE,
+				2, 5 * 20,
+				(r) -> r
+						.addItemInput(MIEItems.TIN_CAN, count)
+						.addItemInput(foodItem, 1)
+						.addItemOutput(MIEItems.CANNED_FOOD, count),
+				output
+		);
 	}
 	
-	private void bucketRecipes()
+	private static void bucketRecipes(RecipeOutput output)
 	{
 		Set<Fluid> uniqueFluids = Sets.newHashSet();
 		for(Fluid fluid : BuiltInRegistries.FLUID)
@@ -60,31 +75,31 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 				Item fullItem = processedFluid.getBucket();
 				if(fullItem != Items.AIR)
 				{
-					this.addFillingAndEmptyingRecipes(new FluidStack(processedFluid, 1000), Items.BUCKET, fullItem);
+					addFillingAndEmptyingRecipes(new FluidStack(processedFluid, 1000), Items.BUCKET, fullItem, output);
 				}
 			}
 		}
 	}
 	
-	private void cannedFoodRecipes()
+	private static void cannedFoodRecipes(RecipeOutput output)
 	{
 		for(Item item : BuiltInRegistries.ITEM)
 		{
 			if(item.isEdible() && item != MIEItems.CANNED_FOOD.asItem() && !(item instanceof BowlFoodItem) && !(item instanceof HoneyBottleItem))
 			{
 				FoodProperties food = item.getFoodProperties(item.getDefaultInstance(), null);
-				this.addCannedFoodRecipe(item, food);
+				addCannedFoodRecipe(item, food, output);
 			}
 		}
 	}
 	
 	@Override
-	public void run()
+	protected void buildRecipes(RecipeOutput output)
 	{
-		this.bucketRecipes();
+		bucketRecipes(output);
 		
-		this.addFillingAndEmptyingRecipes(new FluidStack(MIEFluids.HONEY.asFluid(), 250), Items.GLASS_BOTTLE, Items.HONEY_BOTTLE);
+		addFillingAndEmptyingRecipes(new FluidStack(MIEFluids.HONEY.asFluid(), 250), Items.GLASS_BOTTLE, Items.HONEY_BOTTLE, output);
 		
-		this.cannedFoodRecipes();
+		cannedFoodRecipes(output);
 	}
 }

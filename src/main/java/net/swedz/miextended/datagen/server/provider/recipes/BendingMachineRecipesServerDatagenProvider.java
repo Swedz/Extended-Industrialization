@@ -3,8 +3,8 @@ package net.swedz.miextended.datagen.server.provider.recipes;
 import aztech.modern_industrialization.materials.Material;
 import aztech.modern_industrialization.materials.MaterialRegistry;
 import aztech.modern_industrialization.materials.part.PartTemplate;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.mi.hook.MIMachineHook;
 
 import java.util.Map;
@@ -16,27 +16,32 @@ public final class BendingMachineRecipesServerDatagenProvider extends RecipesSer
 {
 	public BendingMachineRecipesServerDatagenProvider(GatherDataEvent event)
 	{
-		super(event, "MI Extended Datagen/Server/Recipes/Bending Machine", MIExtended.ID);
+		super(event);
 	}
 	
-	private void addBendingMachineRecipes(String name, Material material, PartTemplate from, PartTemplate to)
+	private static void addBendingMachineRecipes(String name, Material material, PartTemplate from, PartTemplate to, RecipeOutput output)
 	{
-		if(this.hasPart(material, from) && this.hasPart(material, to))
+		if(hasPart(material, from) && hasPart(material, to))
 		{
-			this.addMaterialMachineRecipe(material, name, MIMachineHook.RecipeTypes.BENDING_MACHINE, 2, (int) ((200 * material.get(HARDNESS).timeFactor) / 2), (r) -> r
-					.addItemInput(material.getPart(from).getTaggedIngredient(), 1, 1)
-					.addItemOutput(material.getPart(to), 1));
+			addMaterialMachineRecipe(
+					material, name, MIMachineHook.RecipeTypes.BENDING_MACHINE,
+					2, (int) ((200 * material.get(HARDNESS).timeFactor) / 2),
+					(r) -> r
+							.addItemInput(material.getPart(from).getTaggedIngredient(), 1, 1)
+							.addItemOutput(material.getPart(to), 1),
+					output
+			);
 		}
 	}
 	
 	@Override
-	public void run()
+	protected void buildRecipes(RecipeOutput output)
 	{
 		for(Map.Entry<String, Material> entry : MaterialRegistry.getMaterials().entrySet())
 		{
 			Material material = entry.getValue();
-			this.addBendingMachineRecipes("plate", material, PLATE, CURVED_PLATE);
-			this.addBendingMachineRecipes("ring", material, ROD, RING);
+			addBendingMachineRecipes("plate", material, PLATE, CURVED_PLATE, output);
+			addBendingMachineRecipes("ring", material, ROD, RING, output);
 		}
 	}
 }
