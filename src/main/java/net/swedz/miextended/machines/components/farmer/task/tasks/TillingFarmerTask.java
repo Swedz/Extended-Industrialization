@@ -11,12 +11,13 @@ import net.swedz.miextended.machines.components.farmer.block.FarmerBlock;
 import net.swedz.miextended.machines.components.farmer.block.FarmerBlockMap;
 import net.swedz.miextended.machines.components.farmer.block.FarmerTile;
 import net.swedz.miextended.machines.components.farmer.task.FarmerTask;
+import net.swedz.miextended.machines.components.farmer.task.FarmerTaskType;
 
 public final class TillingFarmerTask extends FarmerTask
 {
 	public TillingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations, int processInterval)
 	{
-		super(inventory, blockMap, plantableStacks, maxOperations, processInterval);
+		super(FarmerTaskType.TILLING, inventory, blockMap, plantableStacks, maxOperations, processInterval);
 	}
 	
 	@SuppressWarnings("deprecation")

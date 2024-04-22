@@ -159,6 +159,21 @@ public final class FarmerComponent implements IComponent
 		}
 		cache.put("trees", trees);
 		tag.put("cache", cache);
+		
+		CompoundTag tasksTag = new CompoundTag();
+		for(FarmerTask task : tasks)
+		{
+			CompoundTag taskTag = new CompoundTag();
+			task.writeNbt(taskTag);
+			if(!taskTag.isEmpty())
+			{
+				tasksTag.put(task.type().name(), taskTag);
+			}
+		}
+		if(!tasksTag.isEmpty())
+		{
+			tag.put("tasks", tasksTag);
+		}
 	}
 	
 	@Override
@@ -178,6 +193,16 @@ public final class FarmerComponent implements IComponent
 			BlockPos base = BlockPos.of(Long.parseLong(key));
 			List<BlockPos> blocks = Arrays.stream(trees.getLongArray(key)).mapToObj(BlockPos::of).toList();
 			blockMap.addTree(base, blocks);
+		}
+		
+		CompoundTag tasksTag = tag.getCompound("tasks");
+		if(!tasksTag.isEmpty())
+		{
+			for(FarmerTask task : tasks)
+			{
+				CompoundTag taskTag = tasksTag.getCompound(task.type().name());
+				task.readNbt(taskTag, isUpgradingMachine);
+			}
 		}
 	}
 }

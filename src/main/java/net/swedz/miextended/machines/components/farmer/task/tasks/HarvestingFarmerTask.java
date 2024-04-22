@@ -23,6 +23,7 @@ import net.swedz.miextended.machines.components.farmer.block.FarmerBlockMap;
 import net.swedz.miextended.machines.components.farmer.block.FarmerTile;
 import net.swedz.miextended.machines.components.farmer.block.FarmerTree;
 import net.swedz.miextended.machines.components.farmer.task.FarmerTask;
+import net.swedz.miextended.machines.components.farmer.task.FarmerTaskType;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 {
 	public HarvestingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations, int processInterval)
 	{
-		super(inventory, blockMap, plantableStacks, maxOperations, processInterval);
+		super(FarmerTaskType.HARVESTING, inventory, blockMap, plantableStacks, maxOperations, processInterval);
 	}
 	
 	private List<ItemStack> getHarvestItems(BlockPos pos, BlockState state)

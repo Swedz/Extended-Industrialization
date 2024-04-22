@@ -10,6 +10,7 @@ import net.swedz.miextended.machines.components.farmer.block.FarmerBlock;
 import net.swedz.miextended.machines.components.farmer.block.FarmerBlockMap;
 import net.swedz.miextended.machines.components.farmer.block.FarmerTile;
 import net.swedz.miextended.machines.components.farmer.task.FarmerTask;
+import net.swedz.miextended.machines.components.farmer.task.FarmerTaskType;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public final class PlantingFarmerTask extends FarmerTask
 {
 	public PlantingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations, int processInterval)
 	{
-		super(inventory, blockMap, plantableStacks, maxOperations, processInterval);
+		super(FarmerTaskType.PLANTING, inventory, blockMap, plantableStacks, maxOperations, processInterval);
 	}
 	
 	@Override
