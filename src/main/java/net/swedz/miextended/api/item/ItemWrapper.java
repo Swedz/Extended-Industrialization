@@ -135,8 +135,8 @@ public abstract class ItemWrapper<I extends Item, P extends Item.Properties, S e
 	}
 	
 	@Override
-	public Item asItem()
+	public I asItem()
 	{
-		return deferredItem.orElseThrow(() -> new IllegalStateException("Cannot get item that hasn't been registered yet")).asItem();
+		return deferredItem.orElseThrow(() -> new IllegalStateException("Cannot get item that hasn't been registered yet")).get();
 	}
 }
