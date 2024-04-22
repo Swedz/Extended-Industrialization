@@ -1,5 +1,6 @@
 package net.swedz.miextended.datagen.server;
 
+import net.minecraft.data.DataProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.miextended.datagen.server.provider.datamaps.DataMapDatagenProvider;
 import net.swedz.miextended.datagen.server.provider.recipes.AlloySmelterRecipesServerDatagenProvider;
@@ -8,17 +9,24 @@ import net.swedz.miextended.datagen.server.provider.recipes.CanningMachineRecipe
 import net.swedz.miextended.datagen.server.provider.recipes.VanillaCompatRecipesServerDatagenProvider;
 import net.swedz.miextended.datagen.server.provider.tags.ItemTagDatagenProvider;
 
+import java.util.function.Function;
+
 public final class DatagenDelegatorServer
 {
 	public static void configure(GatherDataEvent event)
 	{
-		event.getGenerator().addProvider(event.includeServer(), new DataMapDatagenProvider(event));
+		add(event, DataMapDatagenProvider::new);
 		
-		event.getGenerator().addProvider(event.includeServer(), new AlloySmelterRecipesServerDatagenProvider(event));
-		event.getGenerator().addProvider(event.includeServer(), new BendingMachineRecipesServerDatagenProvider(event));
-		event.getGenerator().addProvider(event.includeServer(), new CanningMachineRecipesServerDatagenProvider(event));
-		event.getGenerator().addProvider(event.includeServer(), new VanillaCompatRecipesServerDatagenProvider(event));
+		add(event, AlloySmelterRecipesServerDatagenProvider::new);
+		add(event, BendingMachineRecipesServerDatagenProvider::new);
+		add(event, CanningMachineRecipesServerDatagenProvider::new);
+		add(event, VanillaCompatRecipesServerDatagenProvider::new);
 		
-		event.getGenerator().addProvider(event.includeServer(), new ItemTagDatagenProvider(event));
+		add(event, ItemTagDatagenProvider::new);
+	}
+	
+	private static void add(GatherDataEvent event, Function<GatherDataEvent, DataProvider> providerCreator)
+	{
+		event.getGenerator().addProvider(event.includeServer(), providerCreator.apply(event));
 	}
 }
