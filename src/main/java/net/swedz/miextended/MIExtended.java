@@ -1,5 +1,6 @@
 package net.swedz.miextended;
 
+import com.google.common.collect.Sets;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -13,6 +14,8 @@ import net.swedz.miextended.items.MIEItems;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Set;
+
 @Mod(MIExtended.ID)
 public final class MIExtended
 {
@@ -24,6 +27,18 @@ public final class MIExtended
 	}
 	
 	public static final Logger LOGGER = LoggerFactory.getLogger("MI Extended");
+	
+	private static final Set<ResourceLocation> ITEMS_REGISTERED_BY_MI_BUT_ARE_FROM_MIE_ACTUALLY = Sets.newHashSet();
+	
+	public static void includeItemRegisteredByMI(ResourceLocation itemKey)
+	{
+		ITEMS_REGISTERED_BY_MI_BUT_ARE_FROM_MIE_ACTUALLY.add(itemKey);
+	}
+	
+	public static boolean isItemRegisteredByMIButActuallyFromMIE(ResourceLocation itemKey)
+	{
+		return ITEMS_REGISTERED_BY_MI_BUT_ARE_FROM_MIE_ACTUALLY.contains(itemKey);
+	}
 	
 	public MIExtended(IEventBus bus)
 	{

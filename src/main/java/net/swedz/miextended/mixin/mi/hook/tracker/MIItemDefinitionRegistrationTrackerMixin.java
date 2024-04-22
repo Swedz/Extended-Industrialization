@@ -3,8 +3,8 @@ package net.swedz.miextended.mixin.mi.hook.tracker;
 import aztech.modern_industrialization.definition.ItemDefinition;
 import aztech.modern_industrialization.items.SortOrder;
 import net.neoforged.neoforge.registries.DeferredItem;
+import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.mi.hook.tracker.MIHookTracker;
-import net.swedz.miextended.tooltips.MIETooltips;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -30,7 +30,7 @@ public class MIItemDefinitionRegistrationTrackerMixin
 			// TODO use proper item model generation
 			//  can leave this as-is until we need an item with a non-standard item model
 			MIHookTracker.addStandardItemModelEntry(id);
-			MIETooltips.addExtendedItem(id);
+			MIExtended.includeItemRegisteredByMI(item.getId());
 		}
 	}
 }

@@ -18,6 +18,7 @@
         "mi.hook.MIMultiblockMachinesMixin",
         "mi.hook.MISingleBlockCraftingMachinesMixin",
         "mi.hook.MISingleBlockSpecialMachinesMixin",
+        "mi.hook.MITooltipsMixin",
         "mi.hook.tracker.MIFluidDefinitionRegistrationTrackerMixin",
         "mi.hook.tracker.MIItemDefinitionRegistrationTrackerMixin",
         "mi.hook.tracker.MIMachineCasingRegistrationTrackerMixin",
