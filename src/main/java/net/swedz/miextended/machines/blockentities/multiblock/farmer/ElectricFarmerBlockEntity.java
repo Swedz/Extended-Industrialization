@@ -42,7 +42,7 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 			.with(FarmerTaskType.TILLING, 1, 1)
 			.with(FarmerTaskType.HYDRATING, 1, 1)
 			.with(FarmerTaskType.FERTLIZING, 1, 1)
-			.with(FarmerTaskType.HARVESTING, 1, 5)
+			.with(FarmerTaskType.HARVESTING, Integer.MAX_VALUE, 5)
 			.with(FarmerTaskType.PLANTING, 1, 5);
 	
 	private final RedstoneControlComponent redstoneControl;
