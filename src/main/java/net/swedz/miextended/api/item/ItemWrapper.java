@@ -11,7 +11,7 @@ import net.swedz.miextended.api.MCIdentifiable;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public abstract class ItemWrapper<P extends Item.Properties, S extends ItemWrapper<P, S>> implements ItemLike
+public abstract class ItemWrapper<I extends Item, P extends Item.Properties, S extends ItemWrapper<I, P, S>> implements ItemLike
 {
 	protected final String modId;
 	
@@ -19,11 +19,11 @@ public abstract class ItemWrapper<P extends Item.Properties, S extends ItemWrapp
 	
 	protected P properties = this.defaultProperties();
 	
-	protected ItemCreator<P> creator = this.defaultCreator();
+	protected ItemCreator<I, P> creator;
 	
 	protected Consumer<ItemModelBuilder> modelBuilder;
 	
-	protected Optional<DeferredItem<Item>> deferredItem = Optional.empty();
+	protected Optional<DeferredItem<I>> deferredItem = Optional.empty();
 	
 	public ItemWrapper(String modId)
 	{
@@ -32,12 +32,7 @@ public abstract class ItemWrapper<P extends Item.Properties, S extends ItemWrapp
 	
 	protected abstract P defaultProperties();
 	
-	protected ItemCreator<P> defaultCreator()
-	{
-		return Item::new;
-	}
-	
-	protected abstract DeferredItem commonRegister();
+	protected abstract DeferredItem<I> commonRegister();
 	
 	protected final S self()
 	{
@@ -70,12 +65,12 @@ public abstract class ItemWrapper<P extends Item.Properties, S extends ItemWrapp
 		return new ResourceLocation(modId, identifiable.id());
 	}
 	
-	public ItemCreator<P> creator()
+	public ItemCreator<I, P> creator()
 	{
 		return creator;
 	}
 	
-	public S withCreator(ItemCreator<P> creator)
+	public S withCreator(ItemCreator<I, P> creator)
 	{
 		this.creator = creator;
 		return this.self();

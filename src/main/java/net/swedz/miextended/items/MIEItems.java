@@ -7,6 +7,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.miextended.MIExtended;
+import net.swedz.miextended.api.item.ItemCreator;
 import net.swedz.miextended.items.items.TinCanFoodItem;
 
 import java.util.Set;
@@ -21,12 +22,12 @@ public final class MIEItems
 		ITEMS.register(bus);
 	}
 	
-	public static final MIEItemWrapper TIN_CAN     = create().identifiable("tin_can", "Tin Can").withBasicModel().register();
-	public static final MIEItemWrapper CANNED_FOOD = create().identifiable("canned_food", "Canned Food").withCreator(TinCanFoodItem::new).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).meat().fast().build())).withBasicModel().register();
+	public static final MIEItemWrapper<Item>             TIN_CAN              = create("tin_can", "Tin Can", Item::new).withBasicModel().register();
+	public static final MIEItemWrapper<TinCanFoodItem>   CANNED_FOOD          = create("canned_food", "Canned Food", TinCanFoodItem::new).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).meat().fast().build())).withBasicModel().register();
 	
-	private static MIEItemWrapper create()
+	private static <I extends Item> MIEItemWrapper<I> create(String id, String englishName, ItemCreator<I, MIEItemProperties> creator)
 	{
-		return new MIEItemWrapper();
+		return new MIEItemWrapper<I>().identifiable(id, englishName).withCreator(creator);
 	}
 	
 	public static Set<MIEItemWrapper> all()
@@ -34,7 +35,7 @@ public final class MIEItems
 		return Set.copyOf(ITEM_WRAPPERS);
 	}
 	
-	static DeferredItem<Item> include(MIEItemWrapper wrapper)
+	static <I extends Item> DeferredItem<I> include(MIEItemWrapper<I> wrapper)
 	{
 		ITEM_WRAPPERS.add(wrapper);
 		return ITEMS.registerItem(wrapper.id(false), (p) -> wrapper.creator().create((MIEItemProperties) p), wrapper.properties());
