@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "modern_industrialization:item/honey_bucket"
+    "layer0": "miextended:item/manure_bucket"
   }
 }

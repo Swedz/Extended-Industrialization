@@ -5,7 +5,7 @@
   "fluid_inputs": [
     {
       "amount": 1000,
-      "fluid": "modern_industrialization:manure"
+      "fluid": "miextended:honey"
     }
   ],
   "item_inputs": [
@@ -17,7 +17,7 @@
   "item_outputs": [
     {
       "amount": 1,
-      "item": "modern_industrialization:manure_bucket"
+      "item": "miextended:honey_bucket"
     }
   ]
 }

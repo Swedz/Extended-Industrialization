@@ -3,7 +3,7 @@
     "eu": 16,
     "duration": 200,
     "fluid_inputs": {
-        "fluid": "modern_industrialization:honey",
+        "fluid": "miextended:honey",
         "amount": 1000
     },
     "item_outputs": {

@@ -2,22 +2,22 @@
   "type": "modern_industrialization:canning_machine",
   "duration": 100,
   "eu": 2,
-  "fluid_inputs": [
+  "fluid_outputs": [
     {
       "amount": 1000,
-      "fluid": "modern_industrialization:composted_manure"
+      "fluid": "miextended:composted_manure"
     }
   ],
   "item_inputs": [
     {
       "amount": 1,
-      "item": "minecraft:bucket"
+      "item": "miextended:composted_manure_bucket"
     }
   ],
   "item_outputs": [
     {
       "amount": 1,
-      "item": "modern_industrialization:composted_manure_bucket"
+      "item": "minecraft:bucket"
     }
   ]
 }
