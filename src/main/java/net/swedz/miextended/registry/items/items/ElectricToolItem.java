@@ -1,4 +1,4 @@
-package net.swedz.miextended.items.items;
+package net.swedz.miextended.registry.items.items;
 
 import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.CableTier;

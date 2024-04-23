@@ -5,7 +5,7 @@ import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.miextended.items.MIEItems;
+import net.swedz.miextended.registry.items.MIEItems;
 
 public final class CommonRecipesServerDatagenProvider extends RecipesServerDatagenProvider
 {

@@ -11,8 +11,8 @@ import net.swedz.miextended.api.capabilities.CapabilitiesListeners;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListeners;
 import net.swedz.miextended.datagen.DatagenDelegator;
 import net.swedz.miextended.datamaps.MIEDataMaps;
-import net.swedz.miextended.items.MIEItemWrapper;
-import net.swedz.miextended.items.MIEItems;
+import net.swedz.miextended.registry.items.MIEItems;
+import net.swedz.miextended.registry.items.ItemHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +51,9 @@ public final class MIExtended
 		bus.register(new DatagenDelegator());
 		
 		bus.addListener(FMLCommonSetupEvent.class, (event) ->
-				MIEItems.all().forEach(MIEItemWrapper::runItemRegistrationListener));
+		{
+			MIEItems.values().forEach(ItemHolder::triggerRegistrationListener);
+		});
 		bus.addListener(RegisterCapabilitiesEvent.class, CapabilitiesListeners::triggerAll);
 		
 		bus.addListener(RegisterDataMapTypesEvent.class, (event) ->

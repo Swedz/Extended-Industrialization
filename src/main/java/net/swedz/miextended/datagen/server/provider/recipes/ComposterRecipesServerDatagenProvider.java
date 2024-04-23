@@ -8,8 +8,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.miextended.fluids.MIEFluids;
-import net.swedz.miextended.items.MIEItems;
 import net.swedz.miextended.mi.hook.MIMachineHook;
+import net.swedz.miextended.registry.items.MIEItems;
 
 public final class ComposterRecipesServerDatagenProvider extends RecipesServerDatagenProvider
 {

@@ -1,4 +1,4 @@
-package net.swedz.miextended.items.items;
+package net.swedz.miextended.registry.items.items;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
-import net.swedz.miextended.items.MIEItems;
+import net.swedz.miextended.registry.items.MIEItems;
 
 public final class TinCanFoodItem extends Item
 {

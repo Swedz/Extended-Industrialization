@@ -8,7 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.miextended.MIExtended;
-import net.swedz.miextended.items.MIEItems;
+import net.swedz.miextended.registry.items.MIEItems;
 import net.swedz.miextended.text.MIEText;
 
 import java.util.List;

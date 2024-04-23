@@ -4,8 +4,8 @@ import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.miextended.MIExtended;
-import net.swedz.miextended.items.MIEItemWrapper;
-import net.swedz.miextended.items.MIEItems;
+import net.swedz.miextended.registry.items.MIEItems;
+import net.swedz.miextended.registry.items.ItemHolder;
 
 public final class ItemModelsDatagenProvider extends ItemModelProvider
 {
@@ -17,9 +17,9 @@ public final class ItemModelsDatagenProvider extends ItemModelProvider
 	@Override
 	protected void registerModels()
 	{
-		for(MIEItemWrapper item : MIEItems.all())
+		for(ItemHolder item : MIEItems.values())
 		{
-			ItemModelBuilder itemModelBuilder = this.getBuilder("item/%s".formatted(item.identifiable().id()));
+			ItemModelBuilder itemModelBuilder = this.getBuilder("item/%s".formatted(item.identifier().id()));
 			item.modelBuilder().accept(itemModelBuilder);
 		}
 	}

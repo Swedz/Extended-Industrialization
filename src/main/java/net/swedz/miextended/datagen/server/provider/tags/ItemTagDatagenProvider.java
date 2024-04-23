@@ -6,8 +6,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.miextended.MIExtended;
-import net.swedz.miextended.items.MIEItemWrapper;
-import net.swedz.miextended.items.MIEItems;
+import net.swedz.miextended.registry.items.MIEItems;
+import net.swedz.miextended.registry.items.ItemHolder;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -21,9 +21,9 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 	@Override
 	protected void addTags(HolderLookup.Provider provider)
 	{
-		for(MIEItemWrapper<?> item : MIEItems.all())
+		for(ItemHolder<?> item : MIEItems.values())
 		{
-			for(TagKey<Item> tag : item.getTags())
+			for(TagKey<Item> tag : item.tags())
 			{
 				this.tag(tag).add(item.asItem());
 			}
