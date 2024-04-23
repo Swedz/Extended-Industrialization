@@ -24,6 +24,11 @@ public final class MIEBlocks
 		{
 			BLOCKS.register(bus);
 		}
+		
+		public static void include(BlockHolder holder)
+		{
+			HOLDERS.add(holder);
+		}
 	}
 	
 	public static void init(IEventBus bus)
@@ -36,16 +41,27 @@ public final class MIEBlocks
 		return Set.copyOf(Registry.HOLDERS);
 	}
 	
-	public static <BlockType extends Block, ItemType extends BlockItem> BlockHolder<BlockType, ItemType> create(String id, String englishName,
-																												Function<BlockBehaviour.Properties, BlockType> blockCreator,
-																												Function<Item.Properties, ItemType> itemCreator)
+	public static <BlockType extends Block> BlockHolder<BlockType> create(String id, String englishName,
+																		  Function<BlockBehaviour.Properties, BlockType> blockCreator)
 	{
-		BlockHolder<BlockType, ItemType> holder = new BlockHolder<>(
+		BlockHolder<BlockType> holder = new BlockHolder<>(
+				MIExtended.id(id), englishName,
+				Registry.BLOCKS, blockCreator
+		);
+		Registry.include(holder);
+		return holder;
+	}
+	
+	public static <BlockType extends Block, ItemType extends BlockItem> BlockWithItemHolder<BlockType, ItemType> create(String id, String englishName,
+																														Function<BlockBehaviour.Properties, BlockType> blockCreator,
+																														Function<Item.Properties, ItemType> itemCreator)
+	{
+		BlockWithItemHolder<BlockType, ItemType> holder = new BlockWithItemHolder<>(
 				MIExtended.id(id), englishName,
 				Registry.BLOCKS, blockCreator,
 				MIEItems.Registry.ITEMS, itemCreator
 		);
-		Registry.HOLDERS.add(holder);
+		Registry.include(holder);
 		return holder;
 	}
 }

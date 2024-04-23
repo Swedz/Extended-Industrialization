@@ -26,6 +26,11 @@ public final class MIEItems
 		{
 			ITEMS.register(bus);
 		}
+		
+		public static void include(ItemHolder holder)
+		{
+			HOLDERS.add(holder);
+		}
 	}
 	
 	public static void init(IEventBus bus)
@@ -47,7 +52,7 @@ public final class MIEItems
 	public static <Type extends Item> ItemHolder<Type> create(String id, String englishName, Function<Item.Properties, Type> creator)
 	{
 		ItemHolder<Type> holder = new ItemHolder<>(MIExtended.id(id), englishName, Registry.ITEMS, creator);
-		Registry.HOLDERS.add(holder);
+		Registry.include(holder);
 		return holder;
 	}
 }

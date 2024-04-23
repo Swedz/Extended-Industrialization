@@ -6,7 +6,7 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.miextended.fluids.MIEFluids;
+import net.swedz.miextended.registry.fluids.MIEFluids;
 
 public final class VanillaCompatRecipesServerDatagenProvider extends RecipesServerDatagenProvider
 {

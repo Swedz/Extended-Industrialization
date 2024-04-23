@@ -1,11 +1,11 @@
 package net.swedz.miextended.datagen.server.provider.datamaps;
 
-import aztech.modern_industrialization.definition.FluidDefinition;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.miextended.datamaps.FertilizerPotency;
 import net.swedz.miextended.datamaps.MIEDataMaps;
-import net.swedz.miextended.fluids.MIEFluids;
+import net.swedz.miextended.registry.fluids.FluidHolder;
+import net.swedz.miextended.registry.fluids.MIEFluids;
 
 public final class DataMapDatagenProvider extends DataMapProvider
 {
@@ -22,9 +22,9 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		this.addFluidFertilizerPotency(MIEFluids.NPK_FERTILIZER, 10, 10);
 	}
 	
-	private void addFluidFertilizerPotency(FluidDefinition fluidDefinition, int tickRate, int mbToConsumePerFertilizerTick)
+	private void addFluidFertilizerPotency(FluidHolder fluid, int tickRate, int mbToConsumePerFertilizerTick)
 	{
-		builder(MIEDataMaps.FERTILIZER_POTENCY).add(fluidDefinition.getId(), new FertilizerPotency(tickRate, mbToConsumePerFertilizerTick), false);
+		builder(MIEDataMaps.FERTILIZER_POTENCY).add(fluid.identifier().location(), new FertilizerPotency(tickRate, mbToConsumePerFertilizerTick), false);
 	}
 	
 	@Override

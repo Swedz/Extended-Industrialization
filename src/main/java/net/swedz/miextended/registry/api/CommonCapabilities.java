@@ -3,7 +3,9 @@ package net.swedz.miextended.registry.api;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import dev.technici4n.grandpower.api.ISimpleEnergyItem;
 import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper;
 
 public final class CommonCapabilities
 {
@@ -20,5 +22,10 @@ public final class CommonCapabilities
 				),
 				item
 		);
+	}
+	
+	public static <Type extends Item> void bucketItem(Type item, RegisterCapabilitiesEvent event)
+	{
+		event.registerItem(Capabilities.FluidHandler.ITEM, (stack, context) -> new FluidBucketWrapper(stack), item);
 	}
 }

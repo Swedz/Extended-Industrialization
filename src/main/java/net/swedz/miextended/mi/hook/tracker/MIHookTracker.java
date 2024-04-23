@@ -38,7 +38,6 @@ public final class MIHookTracker
 	public static final List<Consumer<LanguageProvider>>    LANGUAGE          = Lists.newArrayList();
 	public static final Map<String, MachineModelProperties> MACHINE_MODELS    = Maps.newHashMap();
 	public static final List<Consumer<ItemModelProvider>>   ITEM_MODELS       = Lists.newArrayList();
-	public static final List<FluidDefinition>               FLUID_DEFINITIONS = Lists.newArrayList();
 	
 	public static void addLanguageEntry(Consumer<LanguageProvider> action)
 	{
@@ -83,16 +82,6 @@ public final class MIHookTracker
 		}
 		
 		ITEM_MODELS.add((provider) -> modelProvider.accept(item.asItem(), provider));
-	}
-	
-	public static void addFluidDefinition(FluidDefinition fluidDefinition)
-	{
-		if(!OPEN)
-		{
-			throw new IllegalStateException("Tried to add fluid definition entry while the tracker was closed.");
-		}
-		
-		FLUID_DEFINITIONS.add(fluidDefinition);
 	}
 	
 	public record MachineModelProperties(

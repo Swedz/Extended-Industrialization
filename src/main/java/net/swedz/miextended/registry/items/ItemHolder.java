@@ -13,17 +13,22 @@ import java.util.function.Function;
 
 public class ItemHolder<Type extends Item> extends ModeledRegisteredObjectHolder<Item, Type, ItemModelBuilder, ItemHolder<Type>> implements ItemLike
 {
-	private final ItemRegisterableWrapper<Type> registerItem;
+	private final ItemRegisterableWrapper<Type> registerableItem;
 	
 	public ItemHolder(ResourceLocation id, String englishName, DeferredRegister.Items registerItems, Function<Item.Properties, Type> creator)
 	{
 		super(id, englishName);
-		this.registerItem = new ItemRegisterableWrapper<>(registerItems, new Item.Properties(), creator);
+		this.registerableItem = new ItemRegisterableWrapper<>(registerItems, new Item.Properties(), creator);
+	}
+	
+	public ItemRegisterableWrapper<Type> registerableItem()
+	{
+		return registerableItem;
 	}
 	
 	public ItemHolder<Type> withProperties(Consumer<Item.Properties> action)
 	{
-		action.accept(registerItem.properties());
+		action.accept(registerableItem.properties());
 		return this;
 	}
 	
@@ -32,7 +37,7 @@ public class ItemHolder<Type extends Item> extends ModeledRegisteredObjectHolder
 	{
 		this.guaranteeUnlocked();
 		
-		registerItem.register(identifier, DeferredRegister.Items::registerItem);
+		registerableItem.register(identifier, DeferredRegister.Items::registerItem);
 		
 		this.lock();
 		return this.self();
@@ -41,7 +46,7 @@ public class ItemHolder<Type extends Item> extends ModeledRegisteredObjectHolder
 	@Override
 	public Type get()
 	{
-		return registerItem.getOrThrow();
+		return registerableItem.getOrThrow();
 	}
 	
 	@Override

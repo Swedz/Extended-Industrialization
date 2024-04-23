@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.swedz.miextended.fluids.MIEFluids;
+import net.swedz.miextended.registry.fluids.MIEFluids;
 
 import java.util.List;
 import java.util.Optional;

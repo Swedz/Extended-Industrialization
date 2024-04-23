@@ -1,7 +1,6 @@
 package net.swedz.miextended.datagen.client.provider.mi;
 
 import aztech.modern_industrialization.MI;
-import aztech.modern_industrialization.definition.FluidDefinition;
 import aztech.modern_industrialization.resource.FastPathPackResources;
 import aztech.modern_industrialization.textures.TextureHelper;
 import aztech.modern_industrialization.textures.TextureManager;
@@ -25,7 +24,10 @@ import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.miextended.MIExtended;
-import net.swedz.miextended.mi.hook.tracker.MIHookTracker;
+import net.swedz.miextended.registry.fluids.FluidHolder;
+import net.swedz.miextended.registry.fluids.FluidProperties;
+import net.swedz.miextended.registry.fluids.MIEFluids;
+import net.swedz.miextended.registry.fluids.MIFluidHolder;
 import org.apache.commons.compress.utils.Lists;
 
 import java.io.IOException;
@@ -63,9 +65,12 @@ public final class TexturesMIHookDatagenProvider implements DataProvider
 		List<CompletableFuture<?>> futures = new ArrayList<>();
 		Consumer<IORunnable> defer = (r) -> futures.add(CompletableFuture.runAsync(r::safeRun, Util.backgroundExecutor()));
 		
-		for(FluidDefinition fluid : MIHookTracker.FLUID_DEFINITIONS)
+		for(FluidHolder holder : MIEFluids.values())
 		{
-			defer.accept(() -> registerFluidTextures(mtm, fluid));
+			if(holder instanceof MIFluidHolder fluid)
+			{
+				defer.accept(() -> registerFluidTextures(mtm, fluid));
+			}
 		}
 		
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
@@ -74,13 +79,15 @@ public final class TexturesMIHookDatagenProvider implements DataProvider
 				.thenRun(() -> MIExtended.LOGGER.info("\"I used the png to destroy the png.\": 2 Electric Boogaloo"));
 	}
 	
-	private static void registerFluidTextures(TextureManager tm, FluidDefinition fluid)
+	private static void registerFluidTextures(TextureManager tm, MIFluidHolder fluid)
 	{
+		FluidProperties properties = fluid.properties();
+		
 		String path = "modern_industrialization:textures/fluid/";
 		String bucket = path + "bucket.png";
 		String bucket_content = path + "bucket_content.png";
 		
-		IColoramp fluidColoramp = new Coloramp(fluid.color);
+		IColoramp fluidColoramp = new Coloramp(properties.color());
 		
 		try
 		{
@@ -90,25 +97,25 @@ public final class TexturesMIHookDatagenProvider implements DataProvider
 			NativeImage oldBucketImage = bucket_image;
 			bucket_image = TextureHelper.blend(oldBucketImage, bucket_content_image);
 			oldBucketImage.close();
-			if(fluid.isGas)
+			if(properties.isGas())
 			{
 				TextureHelper.flip(bucket_image);
 			}
-			tm.addTexture(String.format("modern_industrialization:textures/item/%s_bucket.png", fluid.path()), bucket_image);
+			tm.addTexture(String.format("miextended:textures/item/%s_bucket.png", fluid.identifier().id()), bucket_image);
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 		
-		String pathFluid = path + String.format("template/%s.png", fluid.fluidTexture.path);
+		String pathFluid = path + String.format("template/%s.png", properties.texture().path);
 		try
 		{
 			NativeImage fluidAnim = tm.getAssetAsTexture(pathFluid);
 			TextureHelper.colorize(fluidAnim, fluidColoramp);
-			TextureHelper.setAlpha(fluidAnim, fluid.opacity);
-			tm.addTexture(String.format("modern_industrialization:textures/fluid/%s_still.png", fluid.path()), fluidAnim, true);
-			tm.addMcMeta(String.format("modern_industrialization:textures/fluid/%s_still.png.mcmeta", fluid.path()), fluid.fluidTexture.mcMetaInfo);
+			TextureHelper.setAlpha(fluidAnim, properties.opacity());
+			tm.addTexture(String.format("miextended:textures/fluid/%s_still.png", fluid.identifier().id()), fluidAnim, true);
+			tm.addMcMeta(String.format("miextended:textures/fluid/%s_still.png.mcmeta", fluid.identifier().id()), properties.texture().mcMetaInfo);
 		}
 		catch (IOException e)
 		{

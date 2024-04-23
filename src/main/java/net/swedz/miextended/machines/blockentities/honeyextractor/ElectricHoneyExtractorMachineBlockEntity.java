@@ -18,7 +18,7 @@ import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.swedz.miextended.fluids.MIEFluids;
+import net.swedz.miextended.registry.fluids.MIEFluids;
 
 import java.util.Collections;
 import java.util.List;

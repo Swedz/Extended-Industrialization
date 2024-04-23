@@ -14,6 +14,8 @@ import net.swedz.miextended.datagen.DatagenDelegator;
 import net.swedz.miextended.datamaps.MIEDataMaps;
 import net.swedz.miextended.registry.blocks.BlockHolder;
 import net.swedz.miextended.registry.blocks.MIEBlocks;
+import net.swedz.miextended.registry.fluids.FluidHolder;
+import net.swedz.miextended.registry.fluids.MIEFluids;
 import net.swedz.miextended.registry.items.MIEItems;
 import net.swedz.miextended.registry.items.ItemHolder;
 import org.slf4j.Logger;
@@ -51,6 +53,7 @@ public final class MIExtended
 		Set<MCIdentifiable> identifiables = Sets.newHashSet();
 		identifiables.addAll(MIEItems.values());
 		identifiables.addAll(MIEBlocks.values());
+		identifiables.addAll(MIEFluids.values());
 		return identifiables;
 	}
 	
@@ -58,6 +61,7 @@ public final class MIExtended
 	{
 		MIEItems.init(bus);
 		MIEBlocks.init(bus);
+		MIEFluids.init(bus);
 		
 		IsolatedListeners.init();
 		
@@ -67,6 +71,7 @@ public final class MIExtended
 		{
 			MIEItems.values().forEach(ItemHolder::triggerRegistrationListener);
 			MIEBlocks.values().forEach(BlockHolder::triggerRegistrationListener);
+			MIEFluids.values().forEach(FluidHolder::triggerRegistrationListener);
 		});
 		bus.addListener(RegisterCapabilitiesEvent.class, CapabilitiesListeners::triggerAll);
 		
