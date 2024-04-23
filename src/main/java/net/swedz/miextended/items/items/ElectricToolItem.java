@@ -3,7 +3,6 @@ package net.swedz.miextended.items.items;
 import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.items.DynamicToolItem;
-import aztech.modern_industrialization.items.ItemHelper;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import dev.technici4n.grandpower.api.ISimpleEnergyItem;
@@ -21,6 +20,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
@@ -50,9 +50,15 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	private static final long ENERGY_CAPACITY = 60 * 20 * CableTier.HV.getMaxTransfer();
 	private static final long ENERGY_COST     = 2048;
 	
-	public ElectricToolItem(Properties properties)
+	private final Multimap<Attribute, AttributeModifier> defaultModifiers;
+	
+	public ElectricToolItem(Properties properties, boolean chainsaw)
 	{
 		super(properties.stacksTo(1).rarity(Rarity.UNCOMMON));
+		
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+		builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", chainsaw ? 16 : 10, AttributeModifier.Operation.ADDITION));
+		this.defaultModifiers = builder.build();
 	}
 	
 	@Override
@@ -65,7 +71,8 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
 	{
 		return enchantment.category.canEnchant(stack.getItem()) ||
-			   (enchantment.category == EnchantmentCategory.DIGGER && enchantment != Enchantments.SILK_TOUCH && enchantment != Enchantments.BLOCK_FORTUNE);
+			   (enchantment.category == EnchantmentCategory.DIGGER && enchantment != Enchantments.SILK_TOUCH && enchantment != Enchantments.BLOCK_FORTUNE) ||
+			   (stack.is(ItemTags.AXES) && enchantment.category == EnchantmentCategory.WEAPON && enchantment != Enchantments.SWEEPING_EDGE);
 	}
 	
 	@Override
@@ -105,15 +112,29 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 		return 1;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
+	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot slot)
+	{
+		return slot == EquipmentSlot.MAINHAND ? defaultModifiers : super.getDefaultAttributeModifiers(slot);
+	}
+	
+	/*@Override
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack)
 	{
 		if(slot == EquipmentSlot.MAINHAND && this.getStoredEnergy(stack) > 0)
 		{
-			return ItemHelper.createToolModifiers(8);
+			if(stack.is(ItemTags.PICKAXES))
+			{
+				return ItemHelper.createToolModifiers(10);
+			}
+			else if(stack.is(ItemTags.AXES))
+			{
+				return ItemHelper.createToolModifiers(16);
+			}
 		}
 		return ImmutableMultimap.of();
-	}
+	}*/
 	
 	@Override
 	public boolean isBarVisible(ItemStack stack)
