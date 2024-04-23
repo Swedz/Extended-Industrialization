@@ -8,8 +8,10 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.miextended.MIExtended;
+import net.swedz.miextended.items.MIEItems;
 import net.swedz.miextended.text.MIEText;
 
+import java.util.List;
 import java.util.Optional;
 
 import static aztech.modern_industrialization.MITooltips.*;
@@ -18,6 +20,9 @@ public final class MIETooltips
 {
 	public static final Parser<MutableComponent> ADDED_BY_MIE_PARSER = (component) ->
 			component.withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.BLUE);
+	
+	public static final Parser<MutableComponent> MULCH_GANG_FOR_LIFE_PARSER = (component) ->
+			component.withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.GRAY);
 	
 	public static final TooltipAttachment ENERGY_STORED_ITEM = TooltipAttachment.of(
 			(itemStack, item) ->
@@ -48,6 +53,14 @@ public final class MIETooltips
 				}
 				return Optional.empty();
 			}).noShiftRequired();
+	
+	public static final TooltipAttachment MULCH_GANG_FOR_LIFE = TooltipAttachment.ofMultilines(
+			MIEItems.MULCH,
+			List.of(
+					MULCH_GANG_FOR_LIFE_PARSER.parse(MIEText.MULCH_GANG_FOR_LIFE_0.text()),
+					MULCH_GANG_FOR_LIFE_PARSER.parse(MIEText.MULCH_GANG_FOR_LIFE_1.text())
+			)
+	).noShiftRequired();
 	
 	public static void init()
 	{

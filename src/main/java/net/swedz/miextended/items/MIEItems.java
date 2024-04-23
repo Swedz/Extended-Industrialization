@@ -28,6 +28,7 @@ public final class MIEItems
 	public static final MIEItemWrapper<TinCanFoodItem>   CANNED_FOOD          = create("canned_food", "Canned Food", TinCanFoodItem::new).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).meat().fast().build())).withBasicModel().register();
 	public static final MIEItemWrapper<ElectricToolItem> ELETRIC_MINING_DRILL = create("electric_mining_drill", "Electric Mining Drill", (p) -> new ElectricToolItem(p, false)).tag(ItemTags.PICKAXES, ItemTags.SHOVELS).withSimplyEnergyItemCapability().withHandheldModel().register();
 	public static final MIEItemWrapper<ElectricToolItem> ELETRIC_CHAINSAW     = create("electric_chainsaw", "Electric Chainsaw", (p) -> new ElectricToolItem(p, true)).tag(ItemTags.AXES).withSimplyEnergyItemCapability().withHandheldModel().register();
+	public static final MIEItemWrapper<Item>             MULCH                = create("mulch", "Mulch", Item::new).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).fast().build())).withBasicModel().register();
 	
 	private static <I extends Item> MIEItemWrapper<I> create(String id, String englishName, ItemCreator<I, MIEItemProperties> creator)
 	{

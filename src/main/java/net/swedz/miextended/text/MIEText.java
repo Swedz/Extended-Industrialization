@@ -14,7 +14,9 @@ public enum MIEText
 	FARMER_TILLING("Tilling"),
 	FARMER_PLANTING_AS_NEEDED("As Needed"),
 	FARMER_PLANTING_ALTERNATING_LINES("Alternating Lines"),
-	FARMER_PLANTING_QUADRANTS("Quadrants");
+	FARMER_PLANTING_QUADRANTS("Quadrants"),
+	MULCH_GANG_FOR_LIFE_0("I love mulch!"),
+	MULCH_GANG_FOR_LIFE_1("Mulch is my favorite food!");
 	
 	private final String englishText;
 	

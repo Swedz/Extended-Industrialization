@@ -1,0 +1,21 @@
+{
+  "type": "modern_industrialization:mixer",
+  "duration": 100,
+  "eu": 2,
+  "item_inputs": [
+    {
+      "amount": 1,
+      "item": "minecraft:dirt"
+    },
+    {
+      "amount": 6,
+      "item": "modern_industrialization:wood_pulp"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "miextended:mulch"
+    }
+  ]
+}

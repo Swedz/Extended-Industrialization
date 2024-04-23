@@ -1,0 +1,21 @@
+{
+  "type": "modern_industrialization:canning_machine",
+  "duration": 100,
+  "eu": 2,
+  "item_inputs": [
+    {
+      "amount": 1,
+      "item": "miextended:tin_can"
+    },
+    {
+      "amount": 1,
+      "item": "miextended:mulch"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "miextended:canned_food"
+    }
+  ]
+}
