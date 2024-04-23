@@ -4,13 +4,13 @@
   "eu": 4,
   "fluid_inputs": [
     {
-      "amount": 100,
+      "amount": 150,
       "fluid": "modern_industrialization:manure"
     }
   ],
   "fluid_outputs": [
     {
-      "amount": 100,
+      "amount": 200,
       "fluid": "modern_industrialization:composted_manure"
     }
   ],
@@ -18,6 +18,10 @@
     {
       "amount": 1,
       "item": "minecraft:bone_meal"
+    },
+    {
+      "amount": 1,
+      "item": "miextended:mulch"
     }
   ]
 }

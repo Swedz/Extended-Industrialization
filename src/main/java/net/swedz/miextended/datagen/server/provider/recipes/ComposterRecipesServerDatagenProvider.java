@@ -8,6 +8,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.miextended.fluids.MIEFluids;
+import net.swedz.miextended.items.MIEItems;
 import net.swedz.miextended.mi.hook.MIMachineHook;
 
 public final class ComposterRecipesServerDatagenProvider extends RecipesServerDatagenProvider
@@ -47,9 +48,10 @@ public final class ComposterRecipesServerDatagenProvider extends RecipesServerDa
 				"composter/fertilizer", "composted_manure", MIMachineHook.RecipeTypes.COMPOSTER,
 				4, 5 * 20,
 				(r) -> r
-						.addFluidInput(MIEFluids.MANURE, 100)
+						.addFluidInput(MIEFluids.MANURE, 150)
 						.addItemInput(Items.BONE_MEAL, 1)
-						.addFluidOutput(MIEFluids.COMPOSTED_MANURE, 100),
+						.addItemInput(MIEItems.MULCH, 1)
+						.addFluidOutput(MIEFluids.COMPOSTED_MANURE, 200),
 				output
 		);
 	}
