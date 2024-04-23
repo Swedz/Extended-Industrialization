@@ -6,7 +6,7 @@ import net.neoforged.neoforge.client.model.generators.ModelBuilder;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public abstract class ModeledRegisteredObjectHolder<Thing, ActualThing extends Thing, Properties, ModelBuilderType extends ModelBuilder, Self extends ModeledRegisteredObjectHolder<Thing, ActualThing, Properties, ModelBuilderType, Self>> extends RegisteredObjectHolder<Thing, ActualThing, Properties, Self>
+public abstract class ModeledRegisteredObjectHolder<Thing, ActualThing extends Thing, ModelBuilderType extends ModelBuilder, Self extends ModeledRegisteredObjectHolder<Thing, ActualThing, ModelBuilderType, Self>> extends RegisteredObjectHolder<Thing, ActualThing, Self>
 {
 	protected Consumer<ModelBuilderType> modelBuilder;
 	
@@ -22,6 +22,7 @@ public abstract class ModeledRegisteredObjectHolder<Thing, ActualThing extends T
 	
 	public Self withModel(Function<Self, Consumer<ModelBuilderType>> modelBuilderCreator)
 	{
+		this.guaranteeUnlocked();
 		this.modelBuilder = modelBuilderCreator.apply(this.self());
 		return this.self();
 	}

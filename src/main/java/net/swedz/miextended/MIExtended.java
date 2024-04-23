@@ -7,10 +7,13 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
+import net.swedz.miextended.api.MCIdentifiable;
 import net.swedz.miextended.api.capabilities.CapabilitiesListeners;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListeners;
 import net.swedz.miextended.datagen.DatagenDelegator;
 import net.swedz.miextended.datamaps.MIEDataMaps;
+import net.swedz.miextended.registry.blocks.BlockHolder;
+import net.swedz.miextended.registry.blocks.MIEBlocks;
 import net.swedz.miextended.registry.items.MIEItems;
 import net.swedz.miextended.registry.items.ItemHolder;
 import org.slf4j.Logger;
@@ -42,9 +45,19 @@ public final class MIExtended
 		return ITEMS_REGISTERED_BY_MI_BUT_ARE_FROM_MIE_ACTUALLY.contains(itemKey);
 	}
 	
+	// TODO use this for translation generating
+	public static Set<MCIdentifiable> getAllIdentifiables()
+	{
+		Set<MCIdentifiable> identifiables = Sets.newHashSet();
+		identifiables.addAll(MIEItems.values());
+		identifiables.addAll(MIEBlocks.values());
+		return identifiables;
+	}
+	
 	public MIExtended(IEventBus bus)
 	{
 		MIEItems.init(bus);
+		MIEBlocks.init(bus);
 		
 		IsolatedListeners.init();
 		
@@ -53,6 +66,7 @@ public final class MIExtended
 		bus.addListener(FMLCommonSetupEvent.class, (event) ->
 		{
 			MIEItems.values().forEach(ItemHolder::triggerRegistrationListener);
+			MIEBlocks.values().forEach(BlockHolder::triggerRegistrationListener);
 		});
 		bus.addListener(RegisterCapabilitiesEvent.class, CapabilitiesListeners::triggerAll);
 		

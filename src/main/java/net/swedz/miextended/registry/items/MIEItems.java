@@ -7,22 +7,30 @@ import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.miextended.MIExtended;
-import net.swedz.miextended.registry.items.items.ElectricToolItem;
-import net.swedz.miextended.registry.items.items.TinCanFoodItem;
 import net.swedz.miextended.registry.api.CommonCapabilities;
 import net.swedz.miextended.registry.api.CommonModelBuilders;
+import net.swedz.miextended.registry.items.items.ElectricToolItem;
+import net.swedz.miextended.registry.items.items.TinCanFoodItem;
 
 import java.util.Set;
 import java.util.function.Function;
 
 public final class MIEItems
 {
-	private static final DeferredRegister.Items ITEM_REGISTER = DeferredRegister.createItems(MIExtended.ID);
-	private static final Set<ItemHolder>        ITEM_HOLDERS  = Sets.newHashSet();
+	public static final class Registry
+	{
+		public static final  DeferredRegister.Items ITEMS   = DeferredRegister.createItems(MIExtended.ID);
+		private static final Set<ItemHolder>        HOLDERS = Sets.newHashSet();
+		
+		private static void init(IEventBus bus)
+		{
+			ITEMS.register(bus);
+		}
+	}
 	
 	public static void init(IEventBus bus)
 	{
-		ITEM_REGISTER.register(bus);
+		Registry.init(bus);
 	}
 	
 	public static final ItemHolder<Item>             TIN_CAN              = create("tin_can", "Tin Can", Item::new).withModel(CommonModelBuilders::generated).register();
@@ -33,13 +41,13 @@ public final class MIEItems
 	
 	public static Set<ItemHolder> values()
 	{
-		return Set.copyOf(ITEM_HOLDERS);
+		return Set.copyOf(Registry.HOLDERS);
 	}
 	
 	public static <Type extends Item> ItemHolder<Type> create(String id, String englishName, Function<Item.Properties, Type> creator)
 	{
-		ItemHolder<Type> holder = new ItemHolder<Type>(MIExtended.id(id), englishName, ITEM_REGISTER).withCreator(creator);
-		ITEM_HOLDERS.add(holder);
+		ItemHolder<Type> holder = new ItemHolder<>(MIExtended.id(id), englishName, Registry.ITEMS, creator);
+		Registry.HOLDERS.add(holder);
 		return holder;
 	}
 }
