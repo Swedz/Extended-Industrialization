@@ -126,7 +126,7 @@ public final class MIMachineHook
 				"Composter", "composter", RecipeTypes.COMPOSTER,
 				2, 2, 1, 1,
 				(params) -> {},
-				new ProgressBar.Parameters(79, 34, "centrifuge"),
+				new ProgressBar.Parameters(78, 34, "centrifuge"),
 				new RecipeEfficiencyBar.Parameters(38, 66),
 				new EnergyBar.Parameters(14, 35),
 				(items) -> items.addSlots(58, 27, 1, 2).addSlots(102, 27, 1, 2),
