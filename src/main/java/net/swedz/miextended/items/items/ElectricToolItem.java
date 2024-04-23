@@ -10,25 +10,35 @@ import dev.technici4n.grandpower.api.ISimpleEnergyItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.Vanishable;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.TierSortingRegistry;
 
@@ -190,6 +200,48 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	}
 	
 	@Override
+	public InteractionResult useOn(UseOnContext context)
+	{
+		ItemStack stack = context.getItemInHand();
+		Level level = context.getLevel();
+		BlockPos pos = context.getClickedPos();
+		BlockState state = level.getBlockState(pos);
+		Player player = context.getPlayer();
+		if(this.getStoredEnergy(stack) > 0)
+		{
+			if(stack.is(ItemTags.AXES))
+			{
+				Block newBlock = StrippingAccess.getStrippedBlocks().get(state.getBlock());
+				if(newBlock != null)
+				{
+					level.playSound(player, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1, 1);
+					if(!level.isClientSide)
+					{
+						level.setBlock(pos, newBlock.defaultBlockState().setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS)), 11);
+						this.tryUseEnergy(stack, ENERGY_COST);
+					}
+					return InteractionResult.sidedSuccess(level.isClientSide);
+				}
+			}
+			if(stack.is(ItemTags.SHOVELS))
+			{
+				BlockState newState =PathingAccess.getPathStates().get(state.getBlock());
+				if(newState != null)
+				{
+					level.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1, 1);
+					if(!level.isClientSide)
+					{
+						level.setBlock(pos, newState, 11);
+						this.tryUseEnergy(stack, ENERGY_COST);
+					}
+					return InteractionResult.sidedSuccess(level.isClientSide);
+				}
+			}
+		}
+		return super.useOn(context);
+	}
+	
+	@Override
 	public int getEnchantmentLevel(ItemStack stack, Enchantment enchantment)
 	{
 		return this.getAllEnchantments(stack).getOrDefault(enchantment, 0);
@@ -217,5 +269,31 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	public boolean isFoil(ItemStack stack)
 	{
 		return this.getAllEnchantments(stack).size() > (this.getStoredEnergy(stack) > 0 ? 1 : 0);
+	}
+	
+	private static class StrippingAccess extends AxeItem
+	{
+		private StrippingAccess(Tier material, float attackDamage, float attackSpeed, Properties settings)
+		{
+			super(material, attackDamage, attackSpeed, settings);
+		}
+		
+		public static Map<Block, Block> getStrippedBlocks()
+		{
+			return AxeItem.STRIPPABLES;
+		}
+	}
+	
+	private static class PathingAccess extends ShovelItem
+	{
+		private PathingAccess(Tier material, float attackDamage, float attackSpeed, Properties settings)
+		{
+			super(material, attackDamage, attackSpeed, settings);
+		}
+		
+		public static Map<Block, BlockState> getPathStates()
+		{
+			return ShovelItem.FLATTENABLES;
+		}
 	}
 }
