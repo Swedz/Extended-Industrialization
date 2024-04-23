@@ -64,7 +64,8 @@ public final class MIMachineHook
 		public static MachineRecipeType
 				BENDING_MACHINE,
 				ALLOY_SMELTER,
-				CANNING_MACHINE;
+				CANNING_MACHINE,
+				COMPOSTER;
 	}
 	
 	public static void machineRecipeTypes()
@@ -72,6 +73,7 @@ public final class MIMachineHook
 		RecipeTypes.BENDING_MACHINE = MIMachineRecipeTypes.create("bending_machine").withItemInputs().withItemOutputs();
 		RecipeTypes.ALLOY_SMELTER = MIMachineRecipeTypes.create("alloy_smelter").withItemInputs().withItemOutputs();
 		RecipeTypes.CANNING_MACHINE = MIMachineRecipeTypes.create("canning_machine").withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
+		RecipeTypes.COMPOSTER = MIMachineRecipeTypes.create("composter").withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
 	}
 	
 	public static void singleBlockCraftingMachines()
@@ -117,6 +119,20 @@ public final class MIMachineHook
 				(fluids) -> fluids.addSlot(38, 27).addSlot(122, 27),
 				true, false, true,
 				TIER_STEEL | TIER_ELECTRIC,
+				16
+		);
+		
+		SingleBlockCraftingMachines.registerMachineTiers(
+				"Composter", "composter", RecipeTypes.COMPOSTER,
+				2, 2, 1, 1,
+				(params) -> {},
+				new ProgressBar.Parameters(79, 34, "centrifuge"),
+				new RecipeEfficiencyBar.Parameters(38, 66),
+				new EnergyBar.Parameters(14, 35),
+				(items) -> items.addSlots(58, 27, 1, 2).addSlots(102, 27, 1, 2),
+				(fluids) -> fluids.addSlot(38, 27).addSlot(122, 27),
+				true, true, false,
+				TIER_BRONZE | TIER_STEEL | TIER_ELECTRIC,
 				16
 		);
 		

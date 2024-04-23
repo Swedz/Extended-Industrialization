@@ -6,6 +6,7 @@ import net.swedz.miextended.datagen.server.provider.datamaps.DataMapDatagenProvi
 import net.swedz.miextended.datagen.server.provider.recipes.AlloySmelterRecipesServerDatagenProvider;
 import net.swedz.miextended.datagen.server.provider.recipes.BendingMachineRecipesServerDatagenProvider;
 import net.swedz.miextended.datagen.server.provider.recipes.CanningMachineRecipesServerDatagenProvider;
+import net.swedz.miextended.datagen.server.provider.recipes.ComposterRecipesServerDatagenProvider;
 import net.swedz.miextended.datagen.server.provider.recipes.VanillaCompatRecipesServerDatagenProvider;
 import net.swedz.miextended.datagen.server.provider.tags.ItemTagDatagenProvider;
 
@@ -20,6 +21,7 @@ public final class DatagenDelegatorServer
 		add(event, AlloySmelterRecipesServerDatagenProvider::new);
 		add(event, BendingMachineRecipesServerDatagenProvider::new);
 		add(event, CanningMachineRecipesServerDatagenProvider::new);
+		add(event, ComposterRecipesServerDatagenProvider::new);
 		add(event, VanillaCompatRecipesServerDatagenProvider::new);
 		
 		add(event, ItemTagDatagenProvider::new);

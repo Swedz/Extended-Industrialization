@@ -1,0 +1,17 @@
+{
+  "type": "modern_industrialization:composter",
+  "duration": 100,
+  "eu": 2,
+  "item_inputs": [
+    {
+      "amount": 13,
+      "item": "minecraft:spruce_sapling"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "minecraft:bone_meal"
+    }
+  ]
+}
