@@ -214,8 +214,8 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	}
 	
 	@Override
-	public boolean isFoil(ItemStack pStack)
+	public boolean isFoil(ItemStack stack)
 	{
-		return !this.getAllEnchantments(pStack).isEmpty();
+		return this.getAllEnchantments(stack).size() > (this.getStoredEnergy(stack) > 0 ? 1 : 0);
 	}
 }
