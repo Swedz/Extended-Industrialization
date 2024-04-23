@@ -57,7 +57,7 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 		super(properties.stacksTo(1).rarity(Rarity.UNCOMMON));
 		
 		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-		builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", chainsaw ? 16 : 10, AttributeModifier.Operation.ADDITION));
+		builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", chainsaw ? 15 : 9, AttributeModifier.Operation.ADDITION));
 		this.defaultModifiers = builder.build();
 	}
 	
