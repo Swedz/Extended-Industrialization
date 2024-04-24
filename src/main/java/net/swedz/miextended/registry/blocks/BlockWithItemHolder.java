@@ -7,33 +7,26 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.swedz.miextended.registry.api.registerable.ItemRegisterableWrapper;
+import net.swedz.miextended.registry.items.ItemHolder;
 
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class BlockWithItemHolder<BlockType extends Block, ItemType extends BlockItem> extends BlockHolder<BlockType> implements ItemLike
 {
-	private final ItemRegisterableWrapper<ItemType> registerableItem;
+	private final ItemHolder<ItemType> itemHolder;
 	
 	public BlockWithItemHolder(ResourceLocation location, String englishName,
 							   DeferredRegister.Blocks registerBlocks, Function<BlockBehaviour.Properties, BlockType> blockCreator,
 							   DeferredRegister.Items registerItems, BiFunction<Block, Item.Properties, ItemType> itemCreator)
 	{
 		super(location, englishName, registerBlocks, blockCreator);
-		this.registerableItem = new ItemRegisterableWrapper<>(registerItems, new Item.Properties(), (p) -> itemCreator.apply(this.get(), p));
+		this.itemHolder = new ItemHolder<>(location, englishName, registerItems, (p) -> itemCreator.apply(this.get(), p));
 	}
 	
-	public ItemRegisterableWrapper<ItemType> registerableItem()
+	public ItemHolder<ItemType> item()
 	{
-		return registerableItem;
-	}
-	
-	public BlockWithItemHolder<BlockType, ItemType> withItemProperties(Consumer<Item.Properties> action)
-	{
-		action.accept(registerableItem.properties());
-		return this;
+		return itemHolder;
 	}
 	
 	@Override
@@ -42,7 +35,7 @@ public class BlockWithItemHolder<BlockType extends Block, ItemType extends Block
 		this.guaranteeUnlocked();
 		
 		registerableBlock.register(identifier, DeferredRegister.Blocks::registerBlock);
-		registerableItem.register(identifier, DeferredRegister.Items::registerItem);
+		itemHolder.register();
 		
 		this.lock();
 		return this;
@@ -57,6 +50,6 @@ public class BlockWithItemHolder<BlockType extends Block, ItemType extends Block
 	@Override
 	public Item asItem()
 	{
-		return registerableItem.getOrThrow();
+		return itemHolder.asItem();
 	}
 }

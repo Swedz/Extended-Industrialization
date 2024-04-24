@@ -67,6 +67,7 @@ public final class MIEBlocks
 				MIEItems.Registry.ITEMS, itemCreator
 		);
 		Registry.include(holder);
+		MIEItems.Registry.include(holder.item());
 		return holder;
 	}
 }

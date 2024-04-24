@@ -119,27 +119,11 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 		return slot == EquipmentSlot.MAINHAND ? defaultModifiers : super.getDefaultAttributeModifiers(slot);
 	}
 	
-	/*@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack)
-	{
-		if(slot == EquipmentSlot.MAINHAND && this.getStoredEnergy(stack) > 0)
-		{
-			if(stack.is(ItemTags.PICKAXES))
-			{
-				return ItemHelper.createToolModifiers(10);
-			}
-			else if(stack.is(ItemTags.AXES))
-			{
-				return ItemHelper.createToolModifiers(16);
-			}
-		}
-		return ImmutableMultimap.of();
-	}*/
-	
 	@Override
 	public boolean isBarVisible(ItemStack stack)
 	{
-		return true;
+		CompoundTag tag = stack.getTag();
+		return tag == null || !tag.getBoolean("hide_bar");
 	}
 	
 	@Override

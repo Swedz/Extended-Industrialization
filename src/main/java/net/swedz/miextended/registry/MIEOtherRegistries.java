@@ -1,6 +1,7 @@
 package net.swedz.miextended.registry;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.bus.api.IEventBus;
@@ -13,9 +14,12 @@ public final class MIEOtherRegistries
 	
 	public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, MIExtended.ID);
 	
+	public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MIExtended.ID);
+	
 	public static void init(IEventBus bus)
 	{
 		RECIPE_SERIALIZERS.register(bus);
 		RECIPE_TYPES.register(bus);
+		CREATIVE_MODE_TABS.register(bus);
 	}
 }

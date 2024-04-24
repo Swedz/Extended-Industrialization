@@ -33,5 +33,7 @@ public final class LanguageDatagenProvider extends LanguageProvider
 		{
 			this.add(block.get(), block.identifier().englishName());
 		}
+		
+		this.add("itemGroup.%s.%s".formatted(MIExtended.ID, MIExtended.ID), "MI Extended");
 	}
 }
