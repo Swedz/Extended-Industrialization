@@ -1,4 +1,4 @@
-package net.swedz.miextended.mixin.mi.hook.tracker;
+package net.swedz.miextended.mixin.mihack;
 
 import aztech.modern_industrialization.datagen.model.MachineModelsToGenerate;
 import aztech.modern_industrialization.machines.models.MachineCasing;
@@ -9,11 +9,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MachineModelsToGenerate.class)
-public class MIMachineModelRegistrationTrackerMixin
+public class InterceptRegisterMachineModelMixin
 {
 	@Inject(
 			method = "register",
-			at = @At("HEAD")
+			at = @At("HEAD"),
+			cancellable = true
 	)
 	private static void register(String id, MachineCasing defaultCasing, String overlay,
 								 boolean front, boolean top, boolean side, boolean active,
@@ -22,6 +23,7 @@ public class MIMachineModelRegistrationTrackerMixin
 		if(MIHookTracker.isOpen())
 		{
 			MIHookTracker.addMachineModel(id, defaultCasing, overlay, front, top, side, active);
+			callback.cancel();
 		}
 	}
 }

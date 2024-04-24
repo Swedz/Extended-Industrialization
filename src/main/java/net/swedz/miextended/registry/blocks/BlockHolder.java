@@ -3,14 +3,15 @@ package net.swedz.miextended.registry.blocks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.miextended.registry.api.ModeledRegisteredObjectHolder;
 import net.swedz.miextended.registry.api.registerable.BlockRegisterableWrapper;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class BlockHolder<BlockType extends Block> extends ModeledRegisteredObjectHolder<Block, BlockType, BlockModelBuilder, BlockHolder<BlockType>>
+public class BlockHolder<BlockType extends Block> extends ModeledRegisteredObjectHolder<Block, BlockType, BlockStateProvider, BlockHolder<BlockType>>
 {
 	protected final BlockRegisterableWrapper<BlockType> registerableBlock;
 	
@@ -24,6 +25,12 @@ public class BlockHolder<BlockType extends Block> extends ModeledRegisteredObjec
 	public BlockRegisterableWrapper<BlockType> registerableBlock()
 	{
 		return registerableBlock;
+	}
+	
+	public BlockHolder<BlockType> withProperties(Consumer<BlockBehaviour.Properties> action)
+	{
+		action.accept(registerableBlock.properties());
+		return this;
 	}
 	
 	@Override

@@ -1,9 +1,11 @@
 package net.swedz.miextended.registry.blocks;
 
 import com.google.common.collect.Sets;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -11,18 +13,21 @@ import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.registry.items.MIEItems;
 
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public final class MIEBlocks
 {
 	public static final class Registry
 	{
-		public static final  DeferredRegister.Blocks BLOCKS  = DeferredRegister.createBlocks(MIExtended.ID);
-		private static final Set<BlockHolder>        HOLDERS = Sets.newHashSet();
+		public static final  DeferredRegister.Blocks              BLOCKS         = DeferredRegister.createBlocks(MIExtended.ID);
+		public static final  DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MIExtended.ID);
+		private static final Set<BlockHolder>                     HOLDERS        = Sets.newHashSet();
 		
 		private static void init(IEventBus bus)
 		{
 			BLOCKS.register(bus);
+			BLOCK_ENTITIES.register(bus);
 		}
 		
 		public static void include(BlockHolder holder)
@@ -54,7 +59,7 @@ public final class MIEBlocks
 	
 	public static <BlockType extends Block, ItemType extends BlockItem> BlockWithItemHolder<BlockType, ItemType> create(String id, String englishName,
 																														Function<BlockBehaviour.Properties, BlockType> blockCreator,
-																														Function<Item.Properties, ItemType> itemCreator)
+																														BiFunction<Block, Item.Properties, ItemType> itemCreator)
 	{
 		BlockWithItemHolder<BlockType, ItemType> holder = new BlockWithItemHolder<>(
 				MIExtended.id(id), englishName,

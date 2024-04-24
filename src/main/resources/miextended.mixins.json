@@ -18,9 +18,11 @@
         "mi.hook.MISingleBlockCraftingMachinesMixin",
         "mi.hook.MISingleBlockSpecialMachinesMixin",
         "mi.hook.MITooltipsMixin",
-        "mi.hook.tracker.MIItemDefinitionRegistrationTrackerMixin",
-        "mi.hook.tracker.MIMachineModelRegistrationTrackerMixin",
-        "mi.hook.tracker.MIMachineRecipeTypeRegistrationTrackerMixin"
+        "mi.hook.tracker.MIMachineRecipeTypeRegistrationTrackerMixin",
+        "mihack.InterceptRegisterMachineMixin",
+        "mihack.InterceptRegisterMachineModelMixin",
+        "mihack.InterceptRegisterReiMachineRecipeMixin",
+        "mihack.InterceptRegisterSingleBlockMachineReiTiersMixin"
     ],
     "client": [
         "client.mi.MIGuiComponentsClientMixin"

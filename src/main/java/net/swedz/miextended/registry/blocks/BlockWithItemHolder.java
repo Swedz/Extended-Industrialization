@@ -9,6 +9,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.miextended.registry.api.registerable.ItemRegisterableWrapper;
 
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class BlockWithItemHolder<BlockType extends Block, ItemType extends BlockItem> extends BlockHolder<BlockType> implements ItemLike
@@ -17,15 +19,21 @@ public class BlockWithItemHolder<BlockType extends Block, ItemType extends Block
 	
 	public BlockWithItemHolder(ResourceLocation location, String englishName,
 							   DeferredRegister.Blocks registerBlocks, Function<BlockBehaviour.Properties, BlockType> blockCreator,
-							   DeferredRegister.Items registerItems, Function<Item.Properties, ItemType> itemCreator)
+							   DeferredRegister.Items registerItems, BiFunction<Block, Item.Properties, ItemType> itemCreator)
 	{
 		super(location, englishName, registerBlocks, blockCreator);
-		this.registerableItem = new ItemRegisterableWrapper<>(registerItems, new Item.Properties(), itemCreator);
+		this.registerableItem = new ItemRegisterableWrapper<>(registerItems, new Item.Properties(), (p) -> itemCreator.apply(this.get(), p));
 	}
 	
 	public ItemRegisterableWrapper<ItemType> registerableItem()
 	{
 		return registerableItem;
+	}
+	
+	public BlockWithItemHolder<BlockType, ItemType> withItemProperties(Consumer<Item.Properties> action)
+	{
+		action.accept(registerableItem.properties());
+		return this;
 	}
 	
 	@Override
