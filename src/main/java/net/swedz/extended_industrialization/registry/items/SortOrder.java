@@ -5,6 +5,7 @@ public enum SortOrder
 	GEAR,
 	OTHER_GEAR,
 	MACHINES,
+	PARTS,
 	RESOURCES,
 	BUCKETS,
 	UNSORTED
