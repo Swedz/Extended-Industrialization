@@ -27,28 +27,28 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		super(event);
 	}
 	
-	private static void addBronzeAndSteelMachineRecipes(String machine, Consumer<ShapedRecipeBuilder> crafting, Consumer<MachineRecipeBuilder> assembling, RecipeOutput output)
+	private static void addBasicCraftingMachineRecipes(String machineName, String machineTier, ItemLike machine, Consumer<ShapedRecipeBuilder> crafting, Consumer<MachineRecipeBuilder> assembling, RecipeOutput output)
 	{
-		ItemLike machineBronze = EIItems.valueOf("bronze_%s".formatted(machine));
-		ItemLike machineSteel = EIItems.valueOf("steel_%s".formatted(machine));
-		
-		ShapedRecipeBuilder shapedRecipeBuilder = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, machineBronze);
+		ShapedRecipeBuilder shapedRecipeBuilder = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, machine);
 		crafting.accept(shapedRecipeBuilder);
 		shapedRecipeBuilder
-				.unlockedBy(getHasName(machineBronze), has(machineBronze))
-				.save(output, EI.id("machines/%s/craft/bronze".formatted(machine)));
+				.unlockedBy(getHasName(machine), has(machine))
+				.save(output, EI.id("machines/%s/craft/%s".formatted(machineName, machineTier)));
 		
 		addMachineRecipe(
-				"machines/%s/assembler".formatted(machine), "bronze", MIMachineRecipeTypes.ASSEMBLER,
+				"machines/%s/assembler".formatted(machineName), machineTier, MIMachineRecipeTypes.ASSEMBLER,
 				8, 10 * 20,
 				(builder) ->
 				{
 					assembling.accept(builder);
-					builder.addItemOutput(machineBronze, 1);
+					builder.addItemOutput(machine, 1);
 				},
 				output
 		);
-		
+	}
+	
+	private static void addSteelUpgradeMachineRecipes(String machine, ItemLike machineBronze, ItemLike machineSteel, RecipeOutput output)
+	{
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, machineSteel)
 				.requires(machineBronze)
 				.requires(MIItem.STEEL_UPGRADE)
@@ -74,6 +74,27 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 						.addItemOutput(MIItem.STEEL_UPGRADE, 1),
 				output
 		);
+	}
+	
+	private static void addBronzeAndSteelMachineRecipes(String machine, Consumer<ShapedRecipeBuilder> crafting, Consumer<MachineRecipeBuilder> assembling, RecipeOutput output)
+	{
+		ItemLike machineBronze = EIItems.valueOf("bronze_%s".formatted(machine));
+		ItemLike machineSteel = EIItems.valueOf("steel_%s".formatted(machine));
+		
+		addBasicCraftingMachineRecipes(machine, "bronze", machineBronze, crafting, assembling, output);
+		
+		addSteelUpgradeMachineRecipes(machine, machineBronze, machineSteel, output);
+	}
+	
+	private static void addSteelMachineRecipes(String machine, Consumer<ShapedRecipeBuilder> crafting, Consumer<MachineRecipeBuilder> assembling, RecipeOutput output)
+	{
+		ItemLike machineSteel = EIItems.valueOf("steel_%s".formatted(machine));
+		
+		ShapedRecipeBuilder shapedRecipeBuilder = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, machineSteel);
+		crafting.accept(shapedRecipeBuilder);
+		shapedRecipeBuilder
+				.unlockedBy(getHasName(machineSteel), has(machineSteel))
+				.save(output, EI.id("machines/%s/craft/steel".formatted(machine)));
 	}
 	
 	@Override
