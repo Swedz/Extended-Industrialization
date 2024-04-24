@@ -6,8 +6,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.miextended.MIExtended;
-import net.swedz.miextended.registry.items.MIEItems;
 import net.swedz.miextended.registry.items.ItemHolder;
+import net.swedz.miextended.registry.items.MIEItems;
 
 import java.util.concurrent.CompletableFuture;
 

@@ -230,7 +230,7 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 			}
 			if(stack.is(ItemTags.SHOVELS))
 			{
-				BlockState newState =PathingAccess.getPathStates().get(state.getBlock());
+				BlockState newState = PathingAccess.getPathStates().get(state.getBlock());
 				if(newState != null)
 				{
 					level.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1, 1);

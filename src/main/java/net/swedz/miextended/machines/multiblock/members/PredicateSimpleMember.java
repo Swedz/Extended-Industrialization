@@ -1,7 +1,6 @@
 package net.swedz.miextended.machines.multiblock.members;
 
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 

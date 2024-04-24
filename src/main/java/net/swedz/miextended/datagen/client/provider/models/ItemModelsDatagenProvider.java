@@ -4,8 +4,8 @@ import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.miextended.MIExtended;
-import net.swedz.miextended.registry.items.MIEItems;
 import net.swedz.miextended.registry.items.ItemHolder;
+import net.swedz.miextended.registry.items.MIEItems;
 
 public final class ItemModelsDatagenProvider extends ItemModelProvider
 {

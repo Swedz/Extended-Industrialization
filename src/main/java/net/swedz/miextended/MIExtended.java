@@ -27,7 +27,7 @@ import java.util.Set;
 @Mod(MIExtended.ID)
 public final class MIExtended
 {
-	public static final String ID = "miextended";
+	public static final String ID   = "miextended";
 	public static final String NAME = "MI Extended";
 	
 	public static ResourceLocation id(String name)

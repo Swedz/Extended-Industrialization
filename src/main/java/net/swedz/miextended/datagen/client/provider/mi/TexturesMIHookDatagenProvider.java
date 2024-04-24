@@ -48,7 +48,7 @@ import java.util.function.Consumer;
  */
 public final class TexturesMIHookDatagenProvider implements DataProvider
 {
-	private final PackOutput         output;
+	private final PackOutput output;
 	private final ExistingFileHelper existingFileHelper;
 	
 	public TexturesMIHookDatagenProvider(GatherDataEvent event)

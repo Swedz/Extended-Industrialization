@@ -13,8 +13,8 @@ import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.swedz.miextended.registry.fluids.MIEFluids;
 import net.swedz.miextended.mi.hook.MIMachineHook;
+import net.swedz.miextended.registry.fluids.MIEFluids;
 import net.swedz.miextended.registry.items.MIEItems;
 
 import java.util.Set;

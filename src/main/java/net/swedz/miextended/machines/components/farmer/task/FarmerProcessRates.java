@@ -7,7 +7,7 @@ import java.util.Map;
 public final class FarmerProcessRates
 {
 	private final Map<FarmerTaskType, Integer> maxOperations = Maps.newHashMap();
-	private final Map<FarmerTaskType, Integer> intervals = Maps.newHashMap();
+	private final Map<FarmerTaskType, Integer> intervals     = Maps.newHashMap();
 	
 	public FarmerProcessRates with(FarmerTaskType task, int maxOperations, int interval)
 	{
