@@ -74,8 +74,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		shapedRecipeBuilder.offerTo(output, EI.id("machines/%s/craft/steel".formatted(machine)));
 	}
 	
-	@Override
-	protected void buildRecipes(RecipeOutput output)
+	private static void bendingMachine(RecipeOutput output)
 	{
 		addBronzeAndSteelMachineRecipes(
 				"bending_machine",
@@ -89,7 +88,10 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 						.pattern("PPP"),
 				output
 		);
-		
+	}
+	
+	private static void composter(RecipeOutput output)
+	{
 		addBronzeAndSteelMachineRecipes(
 				"composter",
 				(builder) -> builder
@@ -103,7 +105,10 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 						.pattern("PPP"),
 				output
 		);
-		
+	}
+	
+	private static void solarBoiler(RecipeOutput output)
+	{
 		addBronzeAndSteelMachineRecipes(
 				"solar_boiler",
 				(builder) -> builder
@@ -128,5 +133,13 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 						.pattern("BCB"),
 				output
 		);
+	}
+	
+	@Override
+	protected void buildRecipes(RecipeOutput output)
+	{
+		bendingMachine(output);
+		composter(output);
+		solarBoiler(output);
 	}
 }
