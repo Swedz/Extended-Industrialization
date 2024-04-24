@@ -32,4 +32,10 @@ public final class CommonModelBuilders
 	{
 		return handheld(item, item.identifier().id());
 	}
+	
+	public static Consumer<ItemModelBuilder> block(ItemHolder item)
+	{
+		return (builder) -> builder
+				.parent(new ModelFile.UncheckedModelFile("%s:block/%s".formatted(item.identifier().modId(), item.identifier().id())));
+	}
 }
