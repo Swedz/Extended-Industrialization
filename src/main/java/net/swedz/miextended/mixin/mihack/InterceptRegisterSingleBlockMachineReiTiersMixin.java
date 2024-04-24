@@ -23,9 +23,9 @@ public class InterceptRegisterSingleBlockMachineReiTiersMixin
 			at = @At("HEAD"),
 			cancellable = true
 	)
-	private static void registerMachine(String englishName, String machine,
-										MachineRecipeType recipeType, MachineCategoryParams categoryParams, int tiers,
-										CallbackInfo callback)
+	private static void registerReiTiers(String englishName, String machine,
+										 MachineRecipeType recipeType, MachineCategoryParams categoryParams, int tiers,
+										 CallbackInfo callback)
 	{
 		if(MIHookTracker.isOpen())
 		{
@@ -48,6 +48,7 @@ public class InterceptRegisterSingleBlockMachineReiTiersMixin
 							recipe -> recipe.getType() == recipeType && minEu <= recipe.eu && recipe.eu <= maxEu, false,
 							i < 2 ? SteamMode.BOTH : SteamMode.ELECTRIC_ONLY
 					);
+					MIHookTracker.addMachineRecipeTypeLanguageEntry(itemId, fullEnglishName);
 					ReiMachineRecipes.registerCategory(itemId, category);
 					ReiMachineRecipes.registerMachineClickArea(itemId, categoryParams.progressBarParams.toRectangle());
 					previousCategories.add(category);

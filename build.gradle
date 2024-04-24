@@ -92,6 +92,11 @@ runs {
 
 	data {
 		programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+
+		systemProperty 'mixin.env.remapRefMap', 'true'
+		systemProperty 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+		systemProperty 'mixin.debug.export', 'true'
+		systemProperty 'mixin.debug.verbose', 'true'
 	}
 }
 

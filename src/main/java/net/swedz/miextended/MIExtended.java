@@ -12,6 +12,7 @@ import net.swedz.miextended.api.capabilities.CapabilitiesListeners;
 import net.swedz.miextended.api.isolatedlistener.IsolatedListeners;
 import net.swedz.miextended.datagen.DatagenDelegator;
 import net.swedz.miextended.datamaps.MIEDataMaps;
+import net.swedz.miextended.registry.MIEOtherRegistries;
 import net.swedz.miextended.registry.blocks.BlockHolder;
 import net.swedz.miextended.registry.blocks.MIEBlocks;
 import net.swedz.miextended.registry.fluids.FluidHolder;
@@ -62,6 +63,7 @@ public final class MIExtended
 		MIEItems.init(bus);
 		MIEBlocks.init(bus);
 		MIEFluids.init(bus);
+		MIEOtherRegistries.init(bus);
 		
 		IsolatedListeners.init();
 		

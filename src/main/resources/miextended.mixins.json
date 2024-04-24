@@ -18,9 +18,9 @@
         "mi.hook.MISingleBlockCraftingMachinesMixin",
         "mi.hook.MISingleBlockSpecialMachinesMixin",
         "mi.hook.MITooltipsMixin",
-        "mi.hook.tracker.MIMachineRecipeTypeRegistrationTrackerMixin",
         "mihack.InterceptRegisterMachineMixin",
         "mihack.InterceptRegisterMachineModelMixin",
+        "mihack.InterceptRegisterMachineRecipeTypeMixin",
         "mihack.InterceptRegisterReiMachineRecipeMixin",
         "mihack.InterceptRegisterSingleBlockMachineReiTiersMixin"
     ],
