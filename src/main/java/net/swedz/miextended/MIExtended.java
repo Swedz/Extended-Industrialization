@@ -17,8 +17,8 @@ import net.swedz.miextended.registry.blocks.BlockHolder;
 import net.swedz.miextended.registry.blocks.MIEBlocks;
 import net.swedz.miextended.registry.fluids.FluidHolder;
 import net.swedz.miextended.registry.fluids.MIEFluids;
-import net.swedz.miextended.registry.items.MIEItems;
 import net.swedz.miextended.registry.items.ItemHolder;
+import net.swedz.miextended.registry.items.MIEItems;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,18 +35,6 @@ public final class MIExtended
 	}
 	
 	public static final Logger LOGGER = LoggerFactory.getLogger("MI Extended");
-	
-	private static final Set<ResourceLocation> ITEMS_REGISTERED_BY_MI_BUT_ARE_FROM_MIE_ACTUALLY = Sets.newHashSet();
-	
-	public static void includeItemRegisteredByMI(ResourceLocation itemKey)
-	{
-		ITEMS_REGISTERED_BY_MI_BUT_ARE_FROM_MIE_ACTUALLY.add(itemKey);
-	}
-	
-	public static boolean isItemRegisteredByMIButActuallyFromMIE(ResourceLocation itemKey)
-	{
-		return ITEMS_REGISTERED_BY_MI_BUT_ARE_FROM_MIE_ACTUALLY.contains(itemKey);
-	}
 	
 	// TODO use this for translation generating
 	public static Set<MCIdentifiable> getAllIdentifiables()

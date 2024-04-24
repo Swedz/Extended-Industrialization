@@ -1,12 +1,10 @@
 package net.swedz.miextended.tooltips;
 
-import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.swedz.miextended.MIExtended;
 import net.swedz.miextended.registry.items.MIEItems;
 import net.swedz.miextended.text.MIEText;
@@ -39,17 +37,6 @@ public final class MIETooltips
 									.arg(new NumberWithMax(energyStorage.getAmount(), capacity), EU_MAXED_PARSER).build());
 						}
 					}
-				}
-				return Optional.empty();
-			}).noShiftRequired();
-	
-	public static final TooltipAttachment ADDED_BY_MIE = TooltipAttachment.of(
-			(itemStack, item) ->
-			{
-				ResourceLocation key = BuiltInRegistries.ITEM.getKey(item);
-				if(key.getNamespace().equals(MI.ID) && MIExtended.isItemRegisteredByMIButActuallyFromMIE(key))
-				{
-					return Optional.of(ADDED_BY_MIE_PARSER.parse(MIEText.ADDED_BY_MIE.text()));
 				}
 				return Optional.empty();
 			}).noShiftRequired();
