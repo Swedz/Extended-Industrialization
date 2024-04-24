@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "modern_industrialization:fire_clay_bricks"
+    },
+    "C": {
+      "item": "minecraft:furnace"
+    },
+    "G": {
+      "tag": "forge:glass"
+    },
+    "S": {
+      "item": "modern_industrialization:silver_plate"
+    },
+    "T": {
+      "item": "modern_industrialization:bronze_tank"
+    }
+  },
+  "pattern": [
+    "GSG",
+    "SCS",
+    "BTB"
+  ],
+  "result": {
+    "item": "extended_industrialization:bronze_solar_boiler"
+  }
+}

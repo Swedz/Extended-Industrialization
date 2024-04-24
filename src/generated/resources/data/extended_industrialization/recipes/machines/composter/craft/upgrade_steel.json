@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "extended_industrialization:bronze_composter"
+    },
+    {
+      "item": "modern_industrialization:steel_upgrade"
+    }
+  ],
+  "result": {
+    "item": "extended_industrialization:steel_composter"
+  }
+}

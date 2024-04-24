@@ -8,6 +8,7 @@ import net.swedz.extended_industrialization.datagen.server.provider.recipes.Bend
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.CanningMachineRecipesServerDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.CommonRecipesServerDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.ComposterRecipesServerDatagenProvider;
+import net.swedz.extended_industrialization.datagen.server.provider.recipes.MachineItemRecipesServerDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.VanillaCompatRecipesServerDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.tags.ItemTagDatagenProvider;
 
@@ -24,6 +25,7 @@ public final class DatagenDelegatorServer
 		add(event, CanningMachineRecipesServerDatagenProvider::new);
 		add(event, CommonRecipesServerDatagenProvider::new);
 		add(event, ComposterRecipesServerDatagenProvider::new);
+		add(event, MachineItemRecipesServerDatagenProvider::new);
 		add(event, VanillaCompatRecipesServerDatagenProvider::new);
 		
 		add(event, ItemTagDatagenProvider::new);

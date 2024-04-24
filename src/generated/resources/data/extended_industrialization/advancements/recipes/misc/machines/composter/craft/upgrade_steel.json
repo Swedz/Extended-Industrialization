@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bronze_composter": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "extended_industrialization:bronze_composter"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "extended_industrialization:machines/composter/craft/upgrade_steel"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_bronze_composter"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "extended_industrialization:machines/composter/craft/upgrade_steel"
+    ]
+  }
+}
