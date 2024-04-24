@@ -1,5 +1,5 @@
 {
-  "type": "modern_industrialization:bending_machine",
+  "type": "miextended:bending_machine",
   "duration": 200,
   "eu": 2,
   "item_inputs": [

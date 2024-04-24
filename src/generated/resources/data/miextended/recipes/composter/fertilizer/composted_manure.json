@@ -1,5 +1,5 @@
 {
-  "type": "modern_industrialization:composter",
+  "type": "miextended:composter",
   "duration": 100,
   "eu": 4,
   "fluid_inputs": [
