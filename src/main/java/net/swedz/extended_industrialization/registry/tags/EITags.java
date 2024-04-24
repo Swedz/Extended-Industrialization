@@ -7,7 +7,7 @@ import net.minecraft.world.item.Item;
 
 public final class EITags
 {
-	public static TagKey<Item> forgeItem(String path)
+	public static TagKey<Item> itemForge(String path)
 	{
 		return TagKey.create(BuiltInRegistries.ITEM.key(), new ResourceLocation("forge", path));
 	}
