@@ -38,20 +38,20 @@ public final class EIItems
 		Registry.init(bus);
 	}
 	
-	public static final ItemHolder<Item>             TIN_CAN              = create("tin_can", "Tin Can", Item::new).withModel(CommonModelBuilders::generated).register();
-	public static final ItemHolder<TinCanFoodItem>   CANNED_FOOD          = create("canned_food", "Canned Food", TinCanFoodItem::new).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).meat().fast().build())).withModel(CommonModelBuilders::generated).register();
-	public static final ItemHolder<ElectricToolItem> ELETRIC_MINING_DRILL = create("electric_mining_drill", "Electric Mining Drill", (p) -> new ElectricToolItem(p, false)).tag(ItemTags.PICKAXES, ItemTags.SHOVELS).withCapabilities(CommonCapabilities::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
-	public static final ItemHolder<ElectricToolItem> ELETRIC_CHAINSAW     = create("electric_chainsaw", "Electric Chainsaw", (p) -> new ElectricToolItem(p, true)).tag(ItemTags.AXES).withCapabilities(CommonCapabilities::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
-	public static final ItemHolder<Item>             MULCH                = create("mulch", "Mulch", Item::new).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).fast().build())).withModel(CommonModelBuilders::generated).register();
+	public static final ItemHolder<Item>             TIN_CAN              = create("tin_can", "Tin Can", Item::new, SortOrder.OTHER_GEAR).withModel(CommonModelBuilders::generated).register();
+	public static final ItemHolder<TinCanFoodItem>   CANNED_FOOD          = create("canned_food", "Canned Food", TinCanFoodItem::new, SortOrder.OTHER_GEAR).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).meat().fast().build())).withModel(CommonModelBuilders::generated).register();
+	public static final ItemHolder<ElectricToolItem> ELETRIC_MINING_DRILL = create("electric_mining_drill", "Electric Mining Drill", (p) -> new ElectricToolItem(p, false), SortOrder.GEAR).tag(ItemTags.PICKAXES, ItemTags.SHOVELS).withCapabilities(CommonCapabilities::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
+	public static final ItemHolder<ElectricToolItem> ELETRIC_CHAINSAW     = create("electric_chainsaw", "Electric Chainsaw", (p) -> new ElectricToolItem(p, true), SortOrder.GEAR).tag(ItemTags.AXES).withCapabilities(CommonCapabilities::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
+	public static final ItemHolder<Item>             MULCH                = create("mulch", "Mulch", Item::new, SortOrder.RESOURCES).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).fast().build())).withModel(CommonModelBuilders::generated).register();
 	
 	public static Set<ItemHolder> values()
 	{
 		return Set.copyOf(Registry.HOLDERS);
 	}
 	
-	public static <Type extends Item> ItemHolder<Type> create(String id, String englishName, Function<Item.Properties, Type> creator)
+	public static <Type extends Item> ItemHolder<Type> create(String id, String englishName, Function<Item.Properties, Type> creator, SortOrder sortOrder)
 	{
-		ItemHolder<Type> holder = new ItemHolder<>(EI.id(id), englishName, Registry.ITEMS, creator);
+		ItemHolder<Type> holder = new ItemHolder<>(EI.id(id), englishName, Registry.ITEMS, creator).sorted(sortOrder);
 		Registry.include(holder);
 		return holder;
 	}

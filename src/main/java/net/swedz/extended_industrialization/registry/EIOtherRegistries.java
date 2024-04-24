@@ -10,6 +10,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.registry.items.EIItems;
+import net.swedz.extended_industrialization.registry.items.ItemHolder;
 
 import java.util.Comparator;
 import java.util.function.Supplier;
@@ -32,9 +33,10 @@ public final class EIOtherRegistries
 			})
 			.displayItems((params, output) ->
 			{
-				// TODO custom sorting
+				Comparator<ItemHolder> compareBySortOrder = Comparator.comparing(ItemHolder::sortOrder);
+				Comparator<ItemHolder> compareByName = Comparator.comparing((i) -> i.identifier().id());
 				EIItems.values().stream()
-						.sorted(Comparator.comparing(a -> a.identifier().id()))
+						.sorted(compareBySortOrder.thenComparing(compareByName))
 						.forEach(output::accept);
 			})
 			.build());

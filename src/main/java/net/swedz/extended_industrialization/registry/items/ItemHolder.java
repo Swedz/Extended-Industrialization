@@ -15,6 +15,8 @@ public class ItemHolder<Type extends Item> extends ModeledRegisteredObjectHolder
 {
 	private final ItemRegisterableWrapper<Type> registerableItem;
 	
+	private SortOrder sortOrder = SortOrder.UNSORTED;
+	
 	public ItemHolder(ResourceLocation id, String englishName, DeferredRegister.Items registerItems, Function<Item.Properties, Type> creator)
 	{
 		super(id, englishName);
@@ -29,6 +31,17 @@ public class ItemHolder<Type extends Item> extends ModeledRegisteredObjectHolder
 	public ItemHolder<Type> withProperties(Consumer<Item.Properties> action)
 	{
 		action.accept(registerableItem.properties());
+		return this;
+	}
+	
+	public SortOrder sortOrder()
+	{
+		return sortOrder;
+	}
+	
+	public ItemHolder<Type> sorted(SortOrder sortOrder)
+	{
+		this.sortOrder = sortOrder;
 		return this;
 	}
 	

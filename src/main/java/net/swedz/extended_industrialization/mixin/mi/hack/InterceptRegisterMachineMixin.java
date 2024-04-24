@@ -17,6 +17,7 @@ import net.swedz.extended_industrialization.hook.mi.hack.FakedMachineModelBuilde
 import net.swedz.extended_industrialization.hook.mi.tracker.MIHookTracker;
 import net.swedz.extended_industrialization.registry.blocks.BlockHolder;
 import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
+import net.swedz.extended_industrialization.registry.items.SortOrder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -49,7 +50,8 @@ public class InterceptRegisterMachineMixin
 					.create(
 							id, englishName,
 							(p) -> new MachineBlock(ctor, p),
-							BlockItem::new
+							BlockItem::new,
+							SortOrder.MACHINES
 					)
 					.withProperties((p) -> p
 							.mapColor(MapColor.METAL)

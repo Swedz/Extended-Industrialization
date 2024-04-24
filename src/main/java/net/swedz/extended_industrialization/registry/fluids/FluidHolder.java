@@ -15,6 +15,7 @@ import net.swedz.extended_industrialization.registry.api.RegisteredObjectHolder;
 import net.swedz.extended_industrialization.registry.api.registerable.SimpleRegisterableWrapper;
 import net.swedz.extended_industrialization.registry.blocks.BlockHolder;
 import net.swedz.extended_industrialization.registry.items.ItemHolder;
+import net.swedz.extended_industrialization.registry.items.SortOrder;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -38,6 +39,7 @@ public class FluidHolder<F extends Fluid, FT extends FluidType, FB extends Block
 		this.registerableFluidType = new SimpleRegisterableWrapper<>(registerFluidTypes, () -> creatorFluidType.apply(this));
 		this.blockHolder = new BlockHolder<>(location, englishName, registerBlocks, (p) -> creatorFluidBlock.apply(this, p));
 		this.bucketItemHolder = new ItemHolder<>(new ResourceLocation(location.getNamespace(), location.getPath() + "_bucket"), englishName + " Bucket", registerItems, (p) -> creatorBucketItem.apply(this, p))
+				.sorted(SortOrder.BUCKETS)
 				.withModel(CommonModelBuilders::generated)
 				.withCapabilities(CommonCapabilities::bucketItem);
 	}

@@ -11,6 +11,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.registry.items.EIItems;
+import net.swedz.extended_industrialization.registry.items.SortOrder;
 
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -59,13 +60,15 @@ public final class EIBlocks
 	
 	public static <BlockType extends Block, ItemType extends BlockItem> BlockWithItemHolder<BlockType, ItemType> create(String id, String englishName,
 																														Function<BlockBehaviour.Properties, BlockType> blockCreator,
-																														BiFunction<Block, Item.Properties, ItemType> itemCreator)
+																														BiFunction<Block, Item.Properties, ItemType> itemCreator,
+																														SortOrder sortOrder)
 	{
 		BlockWithItemHolder<BlockType, ItemType> holder = new BlockWithItemHolder<>(
 				EI.id(id), englishName,
 				Registry.BLOCKS, blockCreator,
 				EIItems.Registry.ITEMS, itemCreator
 		);
+		holder.item().sorted(sortOrder);
 		Registry.include(holder);
 		EIItems.Registry.include(holder.item());
 		return holder;

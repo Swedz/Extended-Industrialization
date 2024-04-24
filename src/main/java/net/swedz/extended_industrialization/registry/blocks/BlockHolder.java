@@ -30,7 +30,7 @@ public class BlockHolder<BlockType extends Block> extends ModeledRegisteredObjec
 	public BlockHolder<BlockType> withProperties(Consumer<BlockBehaviour.Properties> action)
 	{
 		action.accept(registerableBlock.properties());
-		return this;
+		return this.self();
 	}
 	
 	@Override
