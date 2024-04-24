@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "modern_industrialization:steel_machine_casing"
+    },
+    "P": {
+      "tag": "modern_industrialization:fluid_pipes"
+    },
+    "R": {
+      "item": "modern_industrialization:bronze_rod"
+    },
+    "T": {
+      "item": "modern_industrialization:steel_tank"
+    },
+    "r": {
+      "item": "modern_industrialization:bronze_rotor"
+    }
+  },
+  "pattern": [
+    "RrR",
+    "TCT",
+    "PPP"
+  ],
+  "result": {
+    "item": "extended_industrialization:steel_honey_extractor"
+  }
+}

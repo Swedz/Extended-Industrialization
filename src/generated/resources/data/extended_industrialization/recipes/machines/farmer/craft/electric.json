@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "modern_industrialization:robot_arm"
+    },
+    "C": {
+      "item": "modern_industrialization:clean_stainless_steel_machine_casing"
+    },
+    "F": {
+      "item": "extended_industrialization:steam_farmer"
+    },
+    "M": {
+      "item": "modern_industrialization:large_motor"
+    },
+    "P": {
+      "item": "modern_industrialization:large_pump"
+    },
+    "p": {
+      "item": "modern_industrialization:stainless_steel_machine_casing_pipe"
+    }
+  },
+  "pattern": [
+    "AMA",
+    "CFC",
+    "PpP"
+  ],
+  "result": {
+    "item": "extended_industrialization:electric_farmer"
+  }
+}

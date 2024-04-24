@@ -1,0 +1,37 @@
+{
+  "type": "modern_industrialization:assembler",
+  "duration": 200,
+  "eu": 8,
+  "item_inputs": [
+    {
+      "amount": 2,
+      "item": "modern_industrialization:large_pump"
+    },
+    {
+      "amount": 1,
+      "item": "modern_industrialization:stainless_steel_machine_casing_pipe"
+    },
+    {
+      "amount": 2,
+      "item": "modern_industrialization:robot_arm"
+    },
+    {
+      "amount": 2,
+      "item": "modern_industrialization:clean_stainless_steel_machine_casing"
+    },
+    {
+      "amount": 1,
+      "item": "extended_industrialization:steam_farmer"
+    },
+    {
+      "amount": 1,
+      "item": "modern_industrialization:large_motor"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "extended_industrialization:electric_farmer"
+    }
+  ]
+}
