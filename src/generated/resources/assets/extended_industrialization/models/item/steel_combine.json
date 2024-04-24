@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "extended_industrialization:item/combine"
+    "layer0": "extended_industrialization:item/steel_combine"
   }
 }

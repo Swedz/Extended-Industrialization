@@ -18,7 +18,7 @@
     ],
     "item_outputs": [
         {
-            "item": "extended_industrialization:combine",
+            "item": "extended_industrialization:steel_combine",
             "amount": 1
         }
     ]

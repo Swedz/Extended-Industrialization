@@ -265,7 +265,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 				"farmer", "steam",
 				(builder) -> builder
 						.define('B', "modern_industrialization:bronze_plated_bricks")
-						.define('C', EIItems.COMBINE)
+						.define('C', EIItems.STEEL_COMBINE)
 						.define('A', MIItem.ANALOG_CIRCUIT)
 						.define('M', MIItem.MOTOR)
 						.define('P', "modern_industrialization:bronze_machine_casing_pipe")
