@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "miextended:block/steel_alloy_smelter"
+    }
+  }
+}
