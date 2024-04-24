@@ -1,0 +1,21 @@
+{
+  "type": "extended_industrialization:canning_machine",
+  "duration": 100,
+  "eu": 2,
+  "item_inputs": [
+    {
+      "amount": 2,
+      "item": "extended_industrialization:tin_can"
+    },
+    {
+      "amount": 1,
+      "item": "minecraft:carrot"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 2,
+      "item": "extended_industrialization:canned_food"
+    }
+  ]
+}

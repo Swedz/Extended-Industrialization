@@ -1,0 +1,23 @@
+{
+  "type": "extended_industrialization:canning_machine",
+  "duration": 100,
+  "eu": 2,
+  "fluid_inputs": [
+    {
+      "amount": 250,
+      "fluid": "extended_industrialization:honey"
+    }
+  ],
+  "item_inputs": [
+    {
+      "amount": 1,
+      "item": "minecraft:glass_bottle"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "minecraft:honey_bottle"
+    }
+  ]
+}

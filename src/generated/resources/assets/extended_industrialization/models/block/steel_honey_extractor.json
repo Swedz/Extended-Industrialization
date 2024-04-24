@@ -1,0 +1,13 @@
+{
+  "casing": "steel",
+  "default_overlays": {
+    "fluid_auto": "modern_industrialization:block/overlays/fluid_auto",
+    "front": "extended_industrialization:block/machines/honey_extractor/overlay_front",
+    "front_active": "extended_industrialization:block/machines/honey_extractor/overlay_front_active",
+    "item_auto": "modern_industrialization:block/overlays/item_auto",
+    "output": "modern_industrialization:block/overlays/output",
+    "side": "extended_industrialization:block/machines/honey_extractor/overlay_side",
+    "side_active": "extended_industrialization:block/machines/honey_extractor/overlay_side_active"
+  },
+  "loader": "modern_industrialization:machine"
+}
