@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.mi.hook;
+package net.swedz.extended_industrialization.hook.mi;
 
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;

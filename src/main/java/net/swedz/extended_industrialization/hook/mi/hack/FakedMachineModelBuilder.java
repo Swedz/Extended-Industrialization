@@ -1,11 +1,11 @@
-package net.swedz.extended_industrialization.mi.hack;
+package net.swedz.extended_industrialization.hook.mi.hack;
 
 import aztech.modern_industrialization.machines.models.MachineUnbakedModel;
 import com.google.gson.JsonObject;
 import net.neoforged.neoforge.client.model.generators.CustomLoaderBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.swedz.extended_industrialization.mi.hook.tracker.MIHookTracker;
+import net.swedz.extended_industrialization.hook.mi.tracker.MIHookTracker;
 
 public final class FakedMachineModelBuilder<T extends ModelBuilder<T>> extends CustomLoaderBuilder<T>
 {

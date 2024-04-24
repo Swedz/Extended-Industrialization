@@ -1,7 +1,7 @@
 package net.swedz.extended_industrialization.mixin.client.mi;
 
 import aztech.modern_industrialization.machines.GuiComponentsClient;
-import net.swedz.extended_industrialization.mi.hook.MIGuiComponentsClientHook;
+import net.swedz.extended_industrialization.hook.mi.MIGuiComponentsClientHook;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

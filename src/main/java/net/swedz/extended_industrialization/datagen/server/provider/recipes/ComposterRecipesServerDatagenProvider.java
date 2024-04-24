@@ -7,7 +7,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.extended_industrialization.mi.hook.MIMachineHook;
+import net.swedz.extended_industrialization.hook.mi.MIMachineHook;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 import net.swedz.extended_industrialization.registry.items.EIItems;
 

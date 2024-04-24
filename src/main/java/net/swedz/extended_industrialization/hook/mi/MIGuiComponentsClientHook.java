@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.mi.hook;
+package net.swedz.extended_industrialization.hook.mi;
 
 import aztech.modern_industrialization.machines.GuiComponentsClient;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;

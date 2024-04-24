@@ -1,9 +1,9 @@
-package net.swedz.extended_industrialization.mixin.mihack;
+package net.swedz.extended_industrialization.mixin.mi.hack;
 
 import aztech.modern_industrialization.compat.rei.machines.ReiMachineRecipes;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.mi.hook.tracker.MIHookTracker;
+import net.swedz.extended_industrialization.hook.mi.tracker.MIHookTracker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;

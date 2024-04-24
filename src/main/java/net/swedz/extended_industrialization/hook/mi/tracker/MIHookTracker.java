@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.mi.hook.tracker;
+package net.swedz.extended_industrialization.hook.mi.tracker;
 
 import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.machines.models.MachineCasing;

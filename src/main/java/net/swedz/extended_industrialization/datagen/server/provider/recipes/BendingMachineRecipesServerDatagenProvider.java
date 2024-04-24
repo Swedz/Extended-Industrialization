@@ -5,7 +5,7 @@ import aztech.modern_industrialization.materials.MaterialRegistry;
 import aztech.modern_industrialization.materials.part.PartTemplate;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.extended_industrialization.mi.hook.MIMachineHook;
+import net.swedz.extended_industrialization.hook.mi.MIMachineHook;
 
 import java.util.Map;
 

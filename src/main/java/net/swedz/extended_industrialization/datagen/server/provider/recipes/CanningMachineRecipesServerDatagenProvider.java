@@ -13,7 +13,7 @@ import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.swedz.extended_industrialization.mi.hook.MIMachineHook;
+import net.swedz.extended_industrialization.hook.mi.MIMachineHook;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 import net.swedz.extended_industrialization.registry.items.EIItems;
 

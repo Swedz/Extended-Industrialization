@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.mixin.mihack;
+package net.swedz.extended_industrialization.mixin.mi.hack;
 
 import aztech.modern_industrialization.compat.rei.machines.MachineCategoryParams;
 import aztech.modern_industrialization.compat.rei.machines.ReiMachineRecipes;
@@ -6,7 +6,7 @@ import aztech.modern_industrialization.compat.rei.machines.SteamMode;
 import aztech.modern_industrialization.machines.init.SingleBlockCraftingMachines;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.mi.hook.tracker.MIHookTracker;
+import net.swedz.extended_industrialization.hook.mi.tracker.MIHookTracker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

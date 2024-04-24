@@ -3,7 +3,7 @@ package net.swedz.extended_industrialization.datagen.client.provider.mi;
 import aztech.modern_industrialization.MI;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.extended_industrialization.mi.hook.tracker.MIHookTracker;
+import net.swedz.extended_industrialization.hook.mi.tracker.MIHookTracker;
 
 import java.util.function.Consumer;
 

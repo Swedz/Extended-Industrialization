@@ -1,8 +1,8 @@
-package net.swedz.extended_industrialization.mixin.mihack;
+package net.swedz.extended_industrialization.mixin.mi.hack;
 
 import aztech.modern_industrialization.datagen.model.MachineModelsToGenerate;
 import aztech.modern_industrialization.machines.models.MachineCasing;
-import net.swedz.extended_industrialization.mi.hook.tracker.MIHookTracker;
+import net.swedz.extended_industrialization.hook.mi.tracker.MIHookTracker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

@@ -11,7 +11,7 @@ import aztech.modern_industrialization.util.Simulation;
 import net.swedz.extended_industrialization.machines.components.farmer.PlantingMode;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerProcessRates;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTaskType;
-import net.swedz.extended_industrialization.mi.hook.MIMachineHook;
+import net.swedz.extended_industrialization.hook.mi.MIMachineHook;
 
 public final class SteamFarmerBlockEntity extends FarmerBlockEntity
 {

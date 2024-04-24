@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.mi.hook;
+package net.swedz.extended_industrialization.hook.mi;
 
 import net.swedz.extended_industrialization.tooltips.EITooltips;
 

@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.mixin.mihack;
+package net.swedz.extended_industrialization.mixin.mi.hack;
 
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlock;
@@ -13,8 +13,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.mi.hack.FakedMachineModelBuilder;
-import net.swedz.extended_industrialization.mi.hook.tracker.MIHookTracker;
+import net.swedz.extended_industrialization.hook.mi.hack.FakedMachineModelBuilder;
+import net.swedz.extended_industrialization.hook.mi.tracker.MIHookTracker;
 import net.swedz.extended_industrialization.registry.blocks.BlockHolder;
 import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
 import org.spongepowered.asm.mixin.Mixin;

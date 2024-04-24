@@ -1,24 +1,24 @@
 package net.swedz.extended_industrialization.mixin.mi.hook;
 
-import aztech.modern_industrialization.machines.models.MachineCasings;
-import net.swedz.extended_industrialization.mi.hook.MIMachineHook;
-import net.swedz.extended_industrialization.mi.hook.tracker.MIHookTracker;
+import aztech.modern_industrialization.MITooltips;
+import net.swedz.extended_industrialization.hook.mi.MITooltipHook;
+import net.swedz.extended_industrialization.hook.mi.tracker.MIHookTracker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(MachineCasings.class)
-public class MIMachineCasingsMixin
+@Mixin(MITooltips.class)
+public class HookTooltipsMixin
 {
 	@Inject(
 			method = "<clinit>",
 			at = @At("TAIL")
 	)
-	private static void init(CallbackInfo callback)
+	private static void clinit(CallbackInfo callback)
 	{
 		MIHookTracker.open();
-		MIMachineHook.machineCasings();
+		MITooltipHook.hook();
 		MIHookTracker.close();
 	}
 }
