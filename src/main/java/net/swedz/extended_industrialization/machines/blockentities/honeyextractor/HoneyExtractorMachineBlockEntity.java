@@ -7,6 +7,7 @@ import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.IsActiveComponent;
 import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
+import aztech.modern_industrialization.machines.guicomponents.AutoExtract;
 import aztech.modern_industrialization.machines.guicomponents.ProgressBar;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.fluid.FluidVariant;
 import aztech.modern_industrialization.util.Tickable;
@@ -40,7 +41,7 @@ public abstract class HoneyExtractorMachineBlockEntity extends MachineBlockEntit
 		super(
 				bep,
 				new MachineGuiParameters.Builder(blockName, false).build(),
-				new OrientationComponent.Params(true, false, false)
+				new OrientationComponent.Params(true, false, true)
 		);
 		
 		this.euCost = euCost;
@@ -50,6 +51,8 @@ public abstract class HoneyExtractorMachineBlockEntity extends MachineBlockEntit
 				new ProgressBar.Parameters(79, 29, "extract"),
 				() -> (float) pumpingTicks / OPERATION_TICKS
 		));
+		
+		this.registerGuiComponent(new AutoExtract.Server(orientation));
 		
 		this.registerComponents(isActiveComponent, new IComponent()
 		{
@@ -120,7 +123,10 @@ public abstract class HoneyExtractorMachineBlockEntity extends MachineBlockEntit
 			pumpingTicks = 0;
 		}
 		
-		this.getInventory().autoExtractFluids(level, worldPosition, orientation.outputDirection);
+		if(orientation.extractFluids)
+		{
+			this.getInventory().autoExtractFluids(level, worldPosition, orientation.outputDirection);
+		}
 		this.setChanged();
 	}
 	
