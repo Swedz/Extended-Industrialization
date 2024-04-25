@@ -132,6 +132,33 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 	
 	private Optional<BrewingPickRecipeResult> pick()
 	{
+		// Check if there's a recipe for these reagents and capture all of the recipe steps
+		List<IBrewingRecipe> recipeSteps = Lists.newArrayList();
+		List<ItemStack> recipeReagentStacks = Lists.newArrayList();
+		List<ConfigurableItemStack> resultReagentSlotsToRemoveFrom = Lists.newArrayList();
+		for(ConfigurableItemStack slotReagent : params.reagent().slots(inventory.getItemInputs()))
+		{
+			ItemStack slotReagentStack = slotReagent.toStack();
+			if(slotReagent.isEmpty() || slotReagentStack.isEmpty())
+			{
+				continue;
+			}
+			for(IBrewingRecipe otherRecipe : BrewingRecipeRegistry.getRecipes())
+			{
+				if(otherRecipe.isIngredient(slotReagentStack))
+				{
+					recipeSteps.add(otherRecipe);
+					recipeReagentStacks.add(slotReagentStack);
+					resultReagentSlotsToRemoveFrom.add(slotReagent);
+					break;
+				}
+			}
+		}
+		if(recipeSteps.size() == 0)
+		{
+			return Optional.empty();
+		}
+		
 		// Find the slots that can be used for outputting
 		List<ConfigurableItemStack> resultOutputSlotsToAddTo = Lists.newArrayList();
 		for(ConfigurableItemStack slot : params.output().slots(inventory.getItemOutputs()))
@@ -143,7 +170,7 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 		}
 		
 		// Check all of the slots
-		// TODO optimize this by not checking the same slot with item in it
+		outer:
 		for(ConfigurableItemStack slot : params.bottle().slots(inventory.getItemInputs()))
 		{
 			// Get this bottle input
@@ -154,7 +181,6 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 			}
 			
 			// Transform this bottle stack and check if we need to consume water to do so
-			// TODO allow mismatch potions, like 2 glass bottles and 2 water bottles and it'll only consume half the water
 			ItemStack slotStackConverted;
 			boolean resultConsumeWater = false;
 			if(slotStack.is(Items.GLASS_BOTTLE))
@@ -167,33 +193,23 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 				slotStackConverted = slotStack.copy();
 			}
 			
-			// Check if there's a recipe for these reagents given this bottle input
+			// Check if there's a recipe for the reagents given this bottle input
 			// If there are multiple reagents, it will iterate over them and find the final one and generate the output itemstack for it
-			// TODO do this on the outside instead of on the inside of the for loop
-			List<ConfigurableItemStack> resultReagentSlotsToRemoveFrom = Lists.newArrayList();
+			// If there is a reagent that does not have a valid recipe with this bottle input in the correct sequential order, the recipe will fail to be picked
 			ItemStack resultOutput = slotStackConverted.copy();
-			boolean foundRecipe = false;
-			for(ConfigurableItemStack slotReagent : params.reagent().slots(inventory.getItemInputs()))
+			int recipeIndex = 0;
+			for(IBrewingRecipe recipe : recipeSteps)
 			{
-				ItemStack slotReagentStack = slotReagent.toStack();
-				if(slotReagent.isEmpty() || slotReagentStack.isEmpty())
+				ItemStack slotReagentStack = recipeReagentStacks.get(recipeIndex);
+				if(recipe.isInput(resultOutput))
 				{
-					continue;
+					resultOutput = recipe.getOutput(resultOutput, slotReagentStack);
 				}
-				for(IBrewingRecipe otherRecipe : BrewingRecipeRegistry.getRecipes())
+				else
 				{
-					if(otherRecipe.isInput(resultOutput) && otherRecipe.isIngredient(slotReagentStack))
-					{
-						foundRecipe = true;
-						resultReagentSlotsToRemoveFrom.add(slotReagent);
-						resultOutput = otherRecipe.getOutput(resultOutput, slotReagentStack);
-						break;
-					}
+					continue outer;
 				}
-			}
-			if(!foundRecipe)
-			{
-				continue;
+				recipeIndex++;
 			}
 			Potion potion = PotionUtils.getPotion(resultOutput);
 			PotionBrewing potionBrewingData = PotionBrewing.getFor(potion);
@@ -202,7 +218,7 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 				potionBrewingData = PotionBrewing.getFor(Potions.EMPTY);
 				if(potionBrewingData == null)
 				{
-					EI.LOGGER.warn("Failed to fetch potion brewing data from datamap for default potion! (operating on potion {})", BuiltInRegistries.POTION.getKey(potion));
+					EI.LOGGER.warn("Failed to fetch potion brewing data from datamap for default potion! Perhaps the default was overridden with nothing? (operating on potion {})", BuiltInRegistries.POTION.getKey(potion));
 					continue;
 				}
 			}
