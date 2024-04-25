@@ -6,6 +6,7 @@ import aztech.modern_industrialization.MITags;
 import aztech.modern_industrialization.materials.MIMaterials;
 import aztech.modern_industrialization.materials.part.MIParts;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.datagen.api.recipe.ShapedRecipeBuilder;
@@ -290,6 +291,36 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		);
 	}
 	
+	private static void brewery(RecipeOutput output)
+	{
+		addSteelMachineRecipes(
+				"brewery",
+				(builder) -> builder
+						.define('R', MIMaterials.BRONZE.getPart(MIParts.ROTOR))
+						.define('T', MIMaterials.STEEL.getPart(MIParts.TANK))
+						.define('B', Items.BLAZE_ROD)
+						.define('C', MIMaterials.STEEL.getPart(MIParts.MACHINE_CASING))
+						.define('P', MITags.FLUID_PIPES)
+						.pattern("RTR")
+						.pattern("BCB")
+						.pattern("PPP"),
+				output
+		);
+		addElectricMachineRecipes(
+				"brewery",
+				(builder) -> builder
+						.define('R', MIMaterials.TIN.getPart(MIParts.ROTOR))
+						.define('A', MIItem.ANALOG_CIRCUIT)
+						.define('B', Items.BLAZE_ROD)
+						.define('C', "modern_industrialization:basic_machine_hull")
+						.define('P', MIItem.PUMP)
+						.pattern("RAR")
+						.pattern("BCB")
+						.pattern("PAP"),
+				output
+		);
+	}
+	
 	@Override
 	protected void buildRecipes(RecipeOutput output)
 	{
@@ -300,5 +331,6 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		canningMachine(output);
 		honeyExtractor(output);
 		farmer(output);
+		brewery(output);
 	}
 }
