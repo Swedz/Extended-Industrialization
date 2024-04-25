@@ -64,6 +64,8 @@ public final class SteamBreweryMachineBlockEntity extends BreweryMachineBlockEnt
 		this.inventory = new MIInventory(itemStacks, fluidStacks, itemPositions, fluidPositions);
 		
 		this.registerComponents(inventory);
+		
+		// TODO add gunpowder overclock support
 	}
 	
 	@Override
