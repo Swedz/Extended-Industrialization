@@ -1,0 +1,305 @@
+{
+  "values": {
+    "minecraft:awkward": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:empty": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:fire_resistance": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:harming": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:healing": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:invisibility": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:leaping": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:long_fire_resistance": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:long_invisibility": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:long_leaping": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:long_night_vision": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:long_poison": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:long_regeneration": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:long_slow_falling": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:long_slowness": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:long_strength": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:long_swiftness": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:long_turtle_master": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:long_water_breathing": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:long_weakness": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:luck": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:mundane": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:night_vision": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:poison": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:regeneration": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:slow_falling": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:slowness": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:strength": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:strong_harming": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:strong_healing": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:strong_leaping": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:strong_poison": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:strong_regeneration": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:strong_slowness": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:strong_strength": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:strong_swiftness": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:strong_turtle_master": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:swiftness": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:thick": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:turtle_master": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:water": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:water_breathing": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    },
+    "minecraft:weakness": {
+      "blazing_essence": 1,
+      "bottles": 4,
+      "eu": 4,
+      "time": 200,
+      "water": 1000
+    }
+  }
+}

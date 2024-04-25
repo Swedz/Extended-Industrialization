@@ -66,7 +66,6 @@ public final class EI
 		});
 		bus.addListener(RegisterCapabilitiesEvent.class, CapabilitiesListeners::triggerAll);
 		
-		bus.addListener(RegisterDataMapTypesEvent.class, (event) ->
-				event.register(EIDataMaps.FERTILIZER_POTENCY));
+		bus.addListener(RegisterDataMapTypesEvent.class, EIDataMaps::init);
 	}
 }
