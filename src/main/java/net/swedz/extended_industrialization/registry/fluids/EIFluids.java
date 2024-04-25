@@ -45,6 +45,7 @@ public final class EIFluids
 	public static final FluidHolder MANURE           = create("manure", "Manure", 0x211404, FULL_OPACITY, FluidTexture.LAVA_LIKE, false).register();
 	public static final FluidHolder COMPOSTED_MANURE = create("composted_manure", "Composted Manure", 0x301b00, FULL_OPACITY, FluidTexture.LAVA_LIKE, false).register();
 	public static final FluidHolder NPK_FERTILIZER   = create("npk_fertilizer", "NPK Fertilizer", 0x4ABD44, NEAR_OPACITY, FluidTexture.WATER_LIKE, false).register();
+	public static final FluidHolder BLAZING_ESSENCE  = create("blazing_essence", "Blazing Essence", 0xFFD942, NEAR_OPACITY, FluidTexture.LAVA_LIKE, true).register();
 	
 	public static Set<FluidHolder> values()
 	{
