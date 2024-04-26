@@ -1,7 +1,5 @@
 package net.swedz.extended_industrialization.machines.components.craft.potion;
 
-import aztech.modern_industrialization.inventory.ConfigurableItemStack;
-import aztech.modern_industrialization.inventory.MIItemStorage;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.storage.StorageView;
 import com.google.common.collect.Lists;
@@ -20,7 +18,6 @@ import net.neoforged.neoforge.common.brewing.BrewingRecipe;
 import net.neoforged.neoforge.common.brewing.BrewingRecipeRegistry;
 import net.neoforged.neoforge.common.brewing.IBrewingRecipe;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.api.MachineInventoryHelper;
 import net.swedz.extended_industrialization.datamaps.PotionBrewingCosts;
 
 import java.util.Collections;
@@ -134,27 +131,23 @@ public final class PotionRecipe
 		return chain;
 	}
 	
-	public List<PotionRecipe> subchain(MIItemStorage reagentStorage)
+	public List<PotionRecipe> subchain(List<StorageView<ItemVariant>> truncatedReagentItems)
 	{
-		// Truncate the reagent storage to only include actual inputs, not air slots
-		List<StorageView<ItemVariant>> reagentItems = Lists.newArrayList(reagentStorage.iterator());
-		reagentItems.removeIf((item) -> MachineInventoryHelper.isActuallyJustAir((ConfigurableItemStack) item));
-		
 		// We can skip any logic if the chain is too small to match the reagents
-		if(this.chain().size() < reagentItems.size())
+		if(this.chain().size() < truncatedReagentItems.size())
 		{
 			return List.of();
 		}
 		
 		// Grab the tail end of the recipe's chain
-		int subchainStartIndex = this.chain().size() - reagentItems.size();
+		int subchainStartIndex = this.chain().size() - truncatedReagentItems.size();
 		int subchainEndIndex = this.chain().size();
 		List<PotionRecipe> subchain = this.chain().subList(subchainStartIndex, subchainEndIndex);
 		
 		// Compare all of the reagent inputs with this recipe's chain
-		for(int reagentIndex = 0; reagentIndex < reagentItems.size(); reagentIndex++)
+		for(int reagentIndex = 0; reagentIndex < truncatedReagentItems.size(); reagentIndex++)
 		{
-			StorageView<ItemVariant> reagent = reagentItems.get(reagentIndex);
+			StorageView<ItemVariant> reagent = truncatedReagentItems.get(reagentIndex);
 			ItemStack reagentStack = reagent.getResource().toStack();
 			PotionRecipe subrecipe = subchain.get(reagentIndex);
 			if(!subrecipe.reagent().test(reagentStack))

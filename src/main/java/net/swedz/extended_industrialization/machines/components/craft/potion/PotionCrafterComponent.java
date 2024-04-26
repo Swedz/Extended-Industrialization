@@ -168,32 +168,101 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 		return stack;
 	}
 	
-	private List<StorageView<ItemVariant>> truncatedReagentList(MIItemStorage storage)
+	private List<StorageView<ItemVariant>> truncate(MIItemStorage storage)
 	{
-		List<StorageView<ItemVariant>> storageList = Lists.newArrayList(storage.iterator());
-		storageList.removeIf((item) -> MachineInventoryHelper.isActuallyJustAir((ConfigurableItemStack) item));
-		return storageList;
+		List<StorageView<ItemVariant>> items = Lists.newArrayList(storage.iterator());
+		items.removeIf((item) -> MachineInventoryHelper.isActuallyJustAir((ConfigurableItemStack) item));
+		return items;
 	}
 	
 	private boolean takeItemInputs(PotionRecipe recipe, RollingRecipeFlags flags, boolean simulate)
 	{
 		MIItemStorage bottleStorage = new MIItemStorage(params.bottle().slots(inventory.getItemInputs()));
 		MIItemStorage reagentStorage = new MIItemStorage(params.reagent().slots(inventory.getItemInputs()));
+		List<StorageView<ItemVariant>> truncatedReagentItems = this.truncate(reagentStorage);
 		
-		List<PotionRecipe> subchain = recipe.subchain(reagentStorage);
+		List<PotionRecipe> subchain = recipe.subchain(truncatedReagentItems);
 		if(subchain.size() == 0)
 		{
 			return false;
 		}
-		EI.LOGGER.info("found recipe: {} with chain size of {}", BuiltInRegistries.POTION.getKey(recipe.potion()), subchain.size());
+		PotionRecipe startRecipe = subchain.get(0);
 		
 		try (Transaction transaction = Transaction.openOuter())
 		{
+			// Extract the bottles
+			boolean usedBottles = false;
+			for(StorageView<ItemVariant> item : bottleStorage)
+			{
+				if(item.isResourceBlank())
+				{
+					continue;
+				}
+				ItemStack itemStack = item.getResource().toStack();
+				
+				// Make sure this bottle can be used at the starting point of this recipe chain
+				ItemStack transformedItemStack = this.transform(itemStack);
+				if(!ItemStack.isSameItemSameTags(transformedItemStack, startRecipe.input()))
+				{
+					continue;
+				}
+				
+				// Check that we have enough of this bottle item
+				try (Transaction nested = Transaction.openNested(transaction))
+				{
+					int count = 0;
+					for(StorageView<ItemVariant> otherItem : bottleStorage)
+					{
+						ItemStack otherItemStack = otherItem.getResource().toStack();
+						if(ItemStack.isSameItemSameTags(itemStack, otherItemStack))
+						{
+							long extracted = bottleStorage.extractAllSlot(otherItem.getResource(), recipe.bottles() - count, nested);
+							count += extracted;
+							if(count == recipe.bottles())
+							{
+								usedBottles = true;
+								break;
+							}
+						}
+					}
+					if(!usedBottles)
+					{
+						continue;
+					}
+					
+					nested.commit();
+				}
+				
+				// Check if we need to provide the machine with water or not
+				flags.needsWater = itemStack.is(Items.GLASS_BOTTLE);
+				
+				break;
+			}
+			
+			// Extract the reagents
+			boolean usedReagents = true;
+			try (Transaction nested = Transaction.openNested(transaction))
+			{
+				for(StorageView<ItemVariant> item : truncatedReagentItems)
+				{
+					long extracted = reagentStorage.extractAllSlot(item.getResource(), 1, nested);
+					if(extracted != 1)
+					{
+						usedReagents = false;
+					}
+				}
+				
+				if(usedReagents)
+				{
+					nested.commit();
+				}
+			}
+			
 			if(!simulate)
 			{
 				transaction.commit();
 			}
-			return false;
+			return usedBottles && usedReagents;
 		}
 	}
 	
