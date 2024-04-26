@@ -25,9 +25,7 @@ import net.swedz.extended_industrialization.datamaps.PotionBrewingCosts;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -136,54 +134,36 @@ public final class PotionRecipe
 		return chain;
 	}
 	
-	public boolean chainMatchesReagentsExactly(MIItemStorage storage)
+	public List<PotionRecipe> subchain(MIItemStorage reagentStorage)
 	{
-		List<StorageView<ItemVariant>> storageList = Lists.newArrayList(storage.iterator());
+		// Truncate the reagent storage to only include actual inputs, not air slots
+		List<StorageView<ItemVariant>> reagentItems = Lists.newArrayList(reagentStorage.iterator());
+		reagentItems.removeIf((item) -> MachineInventoryHelper.isActuallyJustAir((ConfigurableItemStack) item));
 		
-		// Remove trailing empty slots
-		ListIterator<StorageView<ItemVariant>> reverseStorageIterator = storageList.listIterator(storageList.size());
-		while(reverseStorageIterator.hasPrevious())
+		// We can skip any logic if the chain is too small to match the reagents
+		if(this.chain().size() < reagentItems.size())
 		{
-			ConfigurableItemStack item = (ConfigurableItemStack) reverseStorageIterator.previous();
-			if(MachineInventoryHelper.isActuallyJustAir(item))
+			return List.of();
+		}
+		
+		// Grab the tail end of the recipe's chain
+		int subchainStartIndex = this.chain().size() - reagentItems.size();
+		int subchainEndIndex = this.chain().size();
+		List<PotionRecipe> subchain = this.chain().subList(subchainStartIndex, subchainEndIndex);
+		
+		// Compare all of the reagent inputs with this recipe's chain
+		for(int reagentIndex = 0; reagentIndex < reagentItems.size(); reagentIndex++)
+		{
+			StorageView<ItemVariant> reagent = reagentItems.get(reagentIndex);
+			ItemStack reagentStack = reagent.getResource().toStack();
+			PotionRecipe subrecipe = subchain.get(reagentIndex);
+			if(!subrecipe.reagent().test(reagentStack))
 			{
-				reverseStorageIterator.remove();
-			}
-			else
-			{
-				break;
+				return List.of();
 			}
 		}
 		
-		// Make sure the reagent list is the same size as the chain list
-		if(storageList.size() != this.chain().size())
-		{
-			return false;
-		}
-		
-		// Check to make sure the reagents match the recipe chain's reagents
-		Iterator<StorageView<ItemVariant>> storageIterator = storageList.iterator();
-		for(PotionRecipe recipe : this.chain())
-		{
-			if(!storageIterator.hasNext())
-			{
-				return false;
-			}
-			
-			ConfigurableItemStack item = (ConfigurableItemStack) storageIterator.next();
-			if(MachineInventoryHelper.isActuallyJustAir(item))
-			{
-				return false;
-			}
-			ItemStack reagent = MachineInventoryHelper.toActualItemStack(item);
-			
-			if(!recipe.reagent().test(reagent))
-			{
-				return false;
-			}
-		}
-		
-		return true;
+		return Collections.unmodifiableList(subchain);
 	}
 	
 	@Override

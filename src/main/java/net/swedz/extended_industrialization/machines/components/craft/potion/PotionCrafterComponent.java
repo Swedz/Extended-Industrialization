@@ -13,6 +13,7 @@ import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVa
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.storage.StorageView;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.transaction.Transaction;
 import aztech.modern_industrialization.util.Simulation;
+import com.google.common.collect.Lists;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +27,6 @@ import net.swedz.extended_industrialization.machines.components.craft.CrafterAcc
 import net.swedz.extended_industrialization.machines.components.craft.CrafterAccessWithBehavior;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -159,77 +159,41 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 		return Optional.empty();
 	}
 	
+	private ItemStack transform(ItemStack stack)
+	{
+		if(stack.is(Items.GLASS_BOTTLE))
+		{
+			return PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
+		}
+		return stack;
+	}
+	
+	private List<StorageView<ItemVariant>> truncatedReagentList(MIItemStorage storage)
+	{
+		List<StorageView<ItemVariant>> storageList = Lists.newArrayList(storage.iterator());
+		storageList.removeIf((item) -> MachineInventoryHelper.isActuallyJustAir((ConfigurableItemStack) item));
+		return storageList;
+	}
+	
 	private boolean takeItemInputs(PotionRecipe recipe, RollingRecipeFlags flags, boolean simulate)
 	{
 		MIItemStorage bottleStorage = new MIItemStorage(params.bottle().slots(inventory.getItemInputs()));
-		
 		MIItemStorage reagentStorage = new MIItemStorage(params.reagent().slots(inventory.getItemInputs()));
-		Iterator<StorageView<ItemVariant>> reagentStorageItems = reagentStorage.iterator();
 		
-		// Make sure the reagents match the recipe exactly
-		if(!recipe.chainMatchesReagentsExactly(reagentStorage))
+		List<PotionRecipe> subchain = recipe.subchain(reagentStorage);
+		if(subchain.size() == 0)
 		{
 			return false;
 		}
-		List<PotionRecipe> chain = recipe.chain();
-		PotionRecipe startRecipe = chain.get(0);
+		EI.LOGGER.info("found recipe: {} with chain size of {}", BuiltInRegistries.POTION.getKey(recipe.potion()), subchain.size());
 		
-		try(Transaction transaction = Transaction.openOuter())
+		try (Transaction transaction = Transaction.openOuter())
 		{
-			// Consume the bottles
-			int bottlesUsed = 0;
-			boolean hasEnoughBottles = false;
-			for(StorageView<ItemVariant> item : bottleStorage)
-			{
-				if(item.isResourceBlank())
-				{
-					continue;
-				}
-				boolean transformed = false;
-				ItemStack itemStack = item.getResource().toStack();
-				if(itemStack.is(Items.GLASS_BOTTLE))
-				{
-					itemStack = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
-					transformed = true;
-				}
-				if(ItemStack.isSameItemSameTags(itemStack, startRecipe.input()))
-				{
-					if(transformed)
-					{
-						flags.needsWater = true;
-					}
-					long extracted = bottleStorage.extractAllSlot(item.getResource(), recipe.bottles() - bottlesUsed, transaction);
-					bottlesUsed += extracted;
-					if(bottlesUsed == recipe.bottles())
-					{
-						hasEnoughBottles = true;
-						break;
-					}
-				}
-			}
-			
-			// Consume the reagents
-			boolean usedAllReagents = true;
-			for(PotionRecipe subrecipe : chain)
-			{
-				StorageView<ItemVariant> item = reagentStorageItems.next();
-				if(item.isResourceBlank())
-				{
-					usedAllReagents = false;
-					continue;
-				}
-				long extracted = reagentStorage.extractAllSlot(item.getResource(), 1, transaction);
-				if(extracted != 1)
-				{
-					usedAllReagents = false;
-				}
-			}
-			
 			if(!simulate)
 			{
 				transaction.commit();
 			}
-			return hasEnoughBottles && usedAllReagents;
+			return false;
 		}
 	}
 	
