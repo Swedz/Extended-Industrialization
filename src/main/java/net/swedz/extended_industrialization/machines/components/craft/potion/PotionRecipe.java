@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.machines.components.craft.potion;
 
+import aztech.modern_industrialization.inventory.ConfigurableItemStack;
 import aztech.modern_industrialization.inventory.MIItemStorage;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.storage.StorageView;
@@ -19,12 +20,14 @@ import net.neoforged.neoforge.common.brewing.BrewingRecipe;
 import net.neoforged.neoforge.common.brewing.BrewingRecipeRegistry;
 import net.neoforged.neoforge.common.brewing.IBrewingRecipe;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.api.MachineInventoryHelper;
 import net.swedz.extended_industrialization.datamaps.PotionBrewingCosts;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -136,13 +139,29 @@ public final class PotionRecipe
 	public boolean chainMatchesReagentsExactly(MIItemStorage storage)
 	{
 		List<StorageView<ItemVariant>> storageList = Lists.newArrayList(storage.iterator());
-		storageList.removeIf(StorageView::isResourceBlank);
 		
+		// Remove trailing empty slots
+		ListIterator<StorageView<ItemVariant>> reverseStorageIterator = storageList.listIterator(storageList.size());
+		while(reverseStorageIterator.hasPrevious())
+		{
+			ConfigurableItemStack item = (ConfigurableItemStack) reverseStorageIterator.previous();
+			if(MachineInventoryHelper.isActuallyJustAir(item))
+			{
+				reverseStorageIterator.remove();
+			}
+			else
+			{
+				break;
+			}
+		}
+		
+		// Make sure the reagent list is the same size as the chain list
 		if(storageList.size() != this.chain().size())
 		{
 			return false;
 		}
 		
+		// Check to make sure the reagents match the recipe chain's reagents
 		Iterator<StorageView<ItemVariant>> storageIterator = storageList.iterator();
 		for(PotionRecipe recipe : this.chain())
 		{
@@ -151,7 +170,12 @@ public final class PotionRecipe
 				return false;
 			}
 			
-			ItemStack reagent = storageIterator.next().getResource().toStack();
+			ConfigurableItemStack item = (ConfigurableItemStack) storageIterator.next();
+			if(MachineInventoryHelper.isActuallyJustAir(item))
+			{
+				return false;
+			}
+			ItemStack reagent = MachineInventoryHelper.toActualItemStack(item);
 			
 			if(!recipe.reagent().test(reagent))
 			{

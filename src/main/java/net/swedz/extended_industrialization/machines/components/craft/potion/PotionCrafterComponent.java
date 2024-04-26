@@ -167,6 +167,7 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 		MIItemStorage reagentStorage = new MIItemStorage(params.reagent().slots(inventory.getItemInputs()));
 		Iterator<StorageView<ItemVariant>> reagentStorageItems = reagentStorage.iterator();
 		
+		// Make sure the reagents match the recipe exactly
 		if(!recipe.chainMatchesReagentsExactly(reagentStorage))
 		{
 			return false;
@@ -203,6 +204,11 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 			for(PotionRecipe subrecipe : chain)
 			{
 				StorageView<ItemVariant> item = reagentStorageItems.next();
+				if(item.isResourceBlank())
+				{
+					usedAllReagents = false;
+					continue;
+				}
 				long extracted = reagentStorage.extractAllSlot(item.getResource(), 1, transaction);
 				if(extracted != 1)
 				{

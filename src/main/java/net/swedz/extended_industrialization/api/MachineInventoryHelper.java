@@ -2,13 +2,26 @@ package net.swedz.extended_industrialization.api;
 
 import aztech.modern_industrialization.definition.FluidLike;
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
+import aztech.modern_industrialization.inventory.ConfigurableItemStack;
 import aztech.modern_industrialization.util.Simulation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluid;
 
 import java.util.List;
 
 public final class MachineInventoryHelper
 {
+	public static boolean isActuallyJustAir(ConfigurableItemStack item)
+	{
+		return item.isLockedTo(Items.AIR) || (item.getLockedInstance() == null && item.isEmpty());
+	}
+	
+	public static ItemStack toActualItemStack(ConfigurableItemStack item)
+	{
+		return item.getLockedInstance() != null && item.isEmpty() ? item.getLockedInstance().getDefaultInstance() : item.getResource().toStack();
+	}
+	
 	public static boolean hasFluid(List<ConfigurableFluidStack> fluids, FluidLike fluid, int amount)
 	{
 		return fluids.stream().anyMatch((f) -> f.getResource().getFluid() == fluid.asFluid() && f.getAmount() >= amount);
