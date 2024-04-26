@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.alchemy.Potion;
 
-public record PotionBrewing(int bottles, int water, int blazingEssence, int time, int euCost)
+public record PotionBrewing(int bottles, int water, int blazingEssence, int time, int euCost, int totalEuCost)
 {
 	public static final Codec<PotionBrewing> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
@@ -24,8 +24,8 @@ public record PotionBrewing(int bottles, int water, int blazingEssence, int time
 		return potion.builtInRegistryHolder().getData(EIDataMaps.POTION_BREWING);
 	}
 	
-	public int totalEuCost()
+	public PotionBrewing(int bottles, int water, int blazingEssence, int time, int euCost)
 	{
-		return time * euCost;
+		this(bottles, water, blazingEssence, time, euCost, time * euCost);
 	}
 }

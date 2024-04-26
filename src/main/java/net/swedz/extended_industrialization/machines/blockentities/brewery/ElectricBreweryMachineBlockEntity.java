@@ -24,6 +24,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.machines.components.craft.PotionCrafterComponent;
 import net.swedz.extended_industrialization.machines.components.craft.PotionCrafterComponent.SlotRange;
+import net.swedz.extended_industrialization.machines.guicomponents.recipeefficiency.ModularRecipeEfficiencyBar;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 import org.apache.commons.compress.utils.Lists;
 
@@ -32,6 +33,9 @@ import java.util.List;
 
 public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlockEntity
 {
+	private static final int EFFICIENCY_BAR_X = 38;
+	private static final int EFFICIENCY_BAR_Y = 123;
+	
 	private final EnergyComponent energy;
 	private final MIEnergyStorage insertable;
 	private final RedstoneControlComponent redstoneControl;
@@ -49,7 +53,7 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 		this.upgrades = new UpgradeComponent();
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(STEAM_SLOT_X + 1, STEAM_SLOT_Y - 1), energy::getEu, energy::getCapacity));
-		// TODO this.registerGuiComponent(new RecipeEfficiencyBar.Server(efficiencyBarParams, crafter));
+		this.registerGuiComponent(new ModularRecipeEfficiencyBar.Server(new ModularRecipeEfficiencyBar.Parameters(EFFICIENCY_BAR_X, EFFICIENCY_BAR_Y), crafter));
 		this.registerGuiComponent(new SlotPanel.Server(this)
 				.withRedstoneControl(redstoneControl)
 				.withUpgrades(upgrades)

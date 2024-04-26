@@ -16,12 +16,15 @@ import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
+import net.swedz.extended_industrialization.machines.components.craft.CrafterAccessBehavior;
 import net.swedz.extended_industrialization.machines.components.craft.PotionCrafterComponent;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
-public abstract class BreweryMachineBlockEntity extends MachineBlockEntity implements Tickable, CrafterComponentHolder, PotionCrafterComponent.Behavior
+public abstract class BreweryMachineBlockEntity extends MachineBlockEntity implements Tickable, CrafterComponentHolder, CrafterAccessBehavior
 {
 	protected static final int STEAM_SLOT_X = 143;
 	protected static final int STEAM_SLOT_Y = 36;
@@ -41,6 +44,9 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 	protected static final int OUTPUT_SLOTS_X = 116;
 	protected static final int OUTPUT_SLOTS_Y = 64;
 	
+	protected static final int PROGRESS_BAR_X = 78;
+	protected static final int PROGRESS_BAR_Y = 80;
+	
 	protected final MachineTier tier;
 	protected final int         capacity;
 	
@@ -53,7 +59,7 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder(blockName, true).backgroundHeight(215).build(),
+				new MachineGuiParameters.Builder(blockName, true).backgroundHeight(223).build(),
 				new OrientationComponent.Params(true, true, false)
 		);
 		
@@ -66,7 +72,7 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 		
 		this.isActiveComponent = new IsActiveComponent();
 		this.registerGuiComponent(new ProgressBar.Server(
-				new ProgressBar.Parameters(78, 80, "triple_arrow"),
+				new ProgressBar.Parameters(PROGRESS_BAR_X, PROGRESS_BAR_Y, "triple_arrow"),
 				crafter::getProgress
 		));
 		
@@ -87,6 +93,18 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 	public CrafterAccess getCrafterComponent()
 	{
 		return crafter;
+	}
+	
+	@Override
+	public Level getCrafterWorld()
+	{
+		return level;
+	}
+	
+	@Override
+	public UUID getOwnerUuid()
+	{
+		return placedBy.placerId;
 	}
 	
 	@Override

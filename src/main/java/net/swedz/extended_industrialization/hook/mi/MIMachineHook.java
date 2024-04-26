@@ -159,24 +159,31 @@ public final class MIMachineHook
 		MIMachineHookHelper.registerSingleBlockSpecialMachine(
 				"Steel Honey Extractor", "steel_honey_extractor", "honey_extractor",
 				MachineCasings.STEEL, true, false, true,
-				(bep) -> new SteamHoneyExtractorMachineBlockEntity(bep, false)
+				(bep) -> new SteamHoneyExtractorMachineBlockEntity(bep, false),
+				MachineBlockEntity::registerFluidApi
 		);
 		MIMachineHookHelper.registerSingleBlockSpecialMachine(
 				"Electric Honey Extractor", "electric_honey_extractor", "honey_extractor",
 				CableTier.LV.casing, true, false, true,
 				ElectricHoneyExtractorMachineBlockEntity::new,
+				MachineBlockEntity::registerFluidApi,
 				ElectricHoneyExtractorMachineBlockEntity::registerEnergyApi
 		);
 		
 		MIMachineHookHelper.registerSingleBlockSpecialMachine(
 				"Steel Brewery", "steel_brewery", "brewery",
 				MachineCasings.STEEL, true, false, true,
-				(bep) -> new SteamBreweryMachineBlockEntity(bep, false)
+				(bep) -> new SteamBreweryMachineBlockEntity(bep, false),
+				MachineBlockEntity::registerItemApi,
+				MachineBlockEntity::registerFluidApi
 		);
 		MIMachineHookHelper.registerSingleBlockSpecialMachine(
 				"Electric Brewery", "electric_brewery", "brewery",
 				CableTier.LV.casing, true, false, true,
-				ElectricBreweryMachineBlockEntity::new
+				ElectricBreweryMachineBlockEntity::new,
+				MachineBlockEntity::registerItemApi,
+				MachineBlockEntity::registerFluidApi,
+				ElectricBreweryMachineBlockEntity::registerEnergyApi
 		);
 	}
 }

@@ -1,12 +1,13 @@
 package net.swedz.extended_industrialization.machines.components.craft;
 
-import aztech.modern_industrialization.api.machine.component.CrafterAccess;
 import aztech.modern_industrialization.api.machine.component.InventoryAccess;
 import aztech.modern_industrialization.inventory.AbstractConfigurableStack;
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.inventory.ConfigurableItemStack;
 import aztech.modern_industrialization.machines.IComponent;
+import aztech.modern_industrialization.machines.components.CrafterComponent;
 import aztech.modern_industrialization.machines.components.MachineInventoryComponent;
+import aztech.modern_industrialization.thirdparty.fabrictransfer.api.fluid.FluidVariant;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import aztech.modern_industrialization.util.Simulation;
 import com.google.common.collect.Maps;
@@ -30,43 +31,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public final class PotionCrafterComponent implements IComponent.ServerOnly, CrafterAccess
+public final class PotionCrafterComponent implements IComponent.ServerOnly, CrafterAccessWithBehavior
 {
 	private final Params params;
 	private final MachineInventoryComponent inventory;
-	private final Behavior behavior;
+	private final CrafterAccessBehavior behavior;
 	
 	private BrewingPickRecipeResult processResult;
 	
 	private long usedEnergy;
+	private long recipeMaxEu;
 	
 	private int efficiencyTicks;
 	private int maxEfficiencyTicks;
 	
-	public PotionCrafterComponent(Params params, MachineInventoryComponent inventory, Behavior behavior)
+	private long previousBaseEu = -1;
+	private long previousMaxEu  = -1;
+	
+	public PotionCrafterComponent(Params params, MachineInventoryComponent inventory, CrafterAccessBehavior behavior)
 	{
 		this.params = params;
 		this.inventory = inventory;
 		this.behavior = behavior;
 	}
 	
-	public interface Behavior
+	@Override
+	public CrafterAccessBehavior getBehavior()
 	{
-		default boolean isEnabled()
-		{
-			return true;
-		}
-		
-		long consumeEu(long max, Simulation simulation);
-		
-		default boolean canConsumeEu(long amount)
-		{
-			return this.consumeEu(amount, Simulation.SIMULATE) == amount;
-		}
-		
-		long getBaseRecipeEu();
-		
-		long getMaxRecipeEu();
+		return behavior;
 	}
 	
 	@Override
@@ -119,7 +111,7 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 	@Override
 	public long getCurrentRecipeEu()
 	{
-		return processResult.recipe().totalEuCost();
+		return recipeMaxEu;
 	}
 	
 	private void clearActiveRecipeIfPossible()
@@ -130,7 +122,7 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 		}
 	}
 	
-	private Optional<BrewingPickRecipeResult> pick()
+	private Optional<BrewingPickRecipeResult> findRecipe()
 	{
 		// Check if there's a recipe for these reagents and capture all of the recipe steps
 		List<IBrewingRecipe> recipeSteps = Lists.newArrayList();
@@ -272,7 +264,7 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 			}
 			
 			return Optional.of(new BrewingPickRecipeResult(
-					potionBrewingData,
+					potion, potionBrewingData,
 					resultConsumeWater,
 					resultBottleSlotsToRemoveFrom, resultReagentSlotsToRemoveFrom,
 					resultOutput,
@@ -281,46 +273,6 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 		}
 		
 		return Optional.empty();
-	}
-	
-	private boolean pickAndStart()
-	{
-		if(processResult != null)
-		{
-			return true;
-		}
-		
-		if(!behavior.canConsumeEu(1))
-		{
-			return false;
-		}
-		
-		Optional<BrewingPickRecipeResult> pick = this.pick();
-		if(pick.isEmpty())
-		{
-			return false;
-		}
-		processResult = pick.get();
-		
-		if(processResult.recipe().blazingEssence() > 0)
-		{
-			MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), EIFluids.BLAZING_ESSENCE, processResult.recipe().blazingEssence(), Simulation.ACT);
-		}
-		if(processResult.consumeWater())
-		{
-			MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), Fluids.WATER, processResult.recipe().water(), Simulation.ACT);
-		}
-		List<ConfigurableItemStack> bottleSlots = params.bottle().slots(inventory.getItemInputs());
-		for(Map.Entry<Integer, Integer> entry : processResult.bottleSlotsToRemoveFrom().entrySet())
-		{
-			bottleSlots.get(entry.getKey()).decrement(entry.getValue());
-		}
-		for(ConfigurableItemStack slot : processResult.reagentSlotsToRemoveFrom())
-		{
-			slot.decrement(1);
-		}
-		
-		return true;
 	}
 	
 	private void doBlazeEssenceStuff()
@@ -338,41 +290,146 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 		}
 		
 		slotPowder.decrement(1);
+		
+		slotEssence.setKey(FluidVariant.of(EIFluids.BLAZING_ESSENCE.asFluid()));
 		slotEssence.increment(20);
+	}
+	
+	private boolean updateActiveRecipe()
+	{
+		Optional<BrewingPickRecipeResult> found = this.findRecipe();
+		if(found.isPresent())
+		{
+			BrewingPickRecipeResult recipe = found.get();
+			
+			// Consume the inputs
+			if(recipe.recipe().blazingEssence() > 0)
+			{
+				MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), EIFluids.BLAZING_ESSENCE, recipe.recipe().blazingEssence(), Simulation.ACT);
+			}
+			if(recipe.consumeWater())
+			{
+				MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), Fluids.WATER, recipe.recipe().water(), Simulation.ACT);
+			}
+			List<ConfigurableItemStack> bottleSlots = params.bottle().slots(inventory.getItemInputs());
+			for(Map.Entry<Integer, Integer> entry : recipe.bottleSlotsToRemoveFrom().entrySet())
+			{
+				bottleSlots.get(entry.getKey()).decrement(entry.getValue());
+			}
+			for(ConfigurableItemStack slot : recipe.reagentSlotsToRemoveFrom())
+			{
+				slot.decrement(1);
+			}
+			
+			// Make sure we recalculate the max efficiency ticks if the recipe changes or if
+			// the efficiency has reached 0 (the latter is to recalculate the efficiency for
+			// 0.3.6 worlds without having to break and replace the machines)
+			if(processResult == null || processResult.potion() != recipe.potion() || efficiencyTicks == 0)
+			{
+				maxEfficiencyTicks = this.getRecipeMaxEfficiencyTicks(recipe.recipe());
+			}
+			// Start the actual recipe
+			processResult = recipe;
+			usedEnergy = 0;
+			recipeMaxEu = this.getRecipeMaxEu(recipe.recipe(), efficiencyTicks);
+			
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public boolean tickRecipe()
 	{
 		this.doBlazeEssenceStuff();
 		
-		if(!this.pickAndStart())
-		{
-			return false;
-		}
-		
 		boolean active = false;
-		long amountToAdd = Math.min(this.getCurrentRecipeEu() - usedEnergy, processResult.recipe().euCost()); // TODO use overclocking
-		if(behavior.canConsumeEu(amountToAdd))
+		boolean enabled = behavior.isEnabled();
+		
+		boolean started = false;
+		if(usedEnergy == 0 && enabled)
 		{
-			usedEnergy += behavior.consumeEu(amountToAdd, Simulation.ACT);
-			active = true;
+			if(behavior.canConsumeEu(1))
+			{
+				started = this.updateActiveRecipe();
+			}
 		}
 		
-		if(usedEnergy == this.getCurrentRecipeEu())
+		long eu = 0;
+		boolean finished = false;
+		if(processResult != null && (usedEnergy > 0 || started) && enabled)
 		{
-			processResult.push();
+			recipeMaxEu = this.getRecipeMaxEu(processResult.recipe(), efficiencyTicks);
+			long amountToConsume = Math.min(recipeMaxEu, processResult.recipe().totalEuCost() - usedEnergy);
+			eu = behavior.consumeEu(amountToConsume, Simulation.ACT);
+			active = eu > 0;
+			usedEnergy += eu;
 			
-			processResult = null;
-			usedEnergy = 0;
+			if(usedEnergy == processResult.recipe().totalEuCost())
+			{
+				// TODO output better
+				processResult.push();
+				
+				usedEnergy = 0;
+				finished = true;
+			}
 		}
+		
+		if(processResult != null && (previousBaseEu != behavior.getBaseRecipeEu() || previousMaxEu != behavior.getMaxRecipeEu()))
+		{
+			previousBaseEu = behavior.getBaseRecipeEu();
+			previousMaxEu = behavior.getMaxRecipeEu();
+			maxEfficiencyTicks = this.getRecipeMaxEfficiencyTicks(processResult.recipe());
+			efficiencyTicks = Math.min(efficiencyTicks, maxEfficiencyTicks);
+		}
+		
+		// If we finished a recipe, we can add an efficiency tick
+		if(finished)
+		{
+			if(efficiencyTicks < maxEfficiencyTicks)
+			{
+				efficiencyTicks++;
+			}
+		}
+		// If we didn't use the max energy this tick and the recipe is still ongoing, remove one efficiency tick
+		else if(eu < recipeMaxEu)
+		{
+			if(efficiencyTicks > 0)
+			{
+				efficiencyTicks--;
+			}
+		}
+		
+		// If the recipe is done, allow starting another one when the efficiency reaches 0
+		this.clearActiveRecipeIfPossible();
 		
 		return active;
+	}
+	
+	private long getRecipeMaxEu(PotionBrewing recipe, int efficiencyTicks)
+	{
+		long baseEu = Math.max(behavior.getBaseRecipeEu(), recipe.euCost());
+		return Math.min(recipe.totalEuCost(), Math.min((int) Math.floor(baseEu * CrafterComponent.getEfficiencyOverclock(efficiencyTicks)), behavior.getMaxRecipeEu()));
+	}
+	
+	private int getRecipeMaxEfficiencyTicks(PotionBrewing recipe)
+	{
+		for(int ticks = 0; true; ++ticks)
+		{
+			if(this.getRecipeMaxEu(recipe, ticks) == Math.min(behavior.getMaxRecipeEu(), recipe.totalEuCost()))
+			{
+				return ticks;
+			}
+		}
 	}
 	
 	@Override
 	public void writeNbt(CompoundTag tag)
 	{
 		tag.putLong("usedEnergy", usedEnergy);
+		tag.putLong("recipeMaxEu", recipeMaxEu);
 		// TODO store active recipe
 		/*if(activeRecipe != null)
 		{
@@ -390,6 +447,7 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 	public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
 	{
 		usedEnergy = tag.getInt("usedEnergy");
+		recipeMaxEu = tag.getInt("recipeMaxEu");
 		// TODO read active recipe
 		/*this.delayedActiveRecipe = tag.contains("activeRecipe") ? new ResourceLocation(tag.getString("activeRecipe")) : null;
 		if(delayedActiveRecipe == null && usedEnergy > 0)
@@ -402,7 +460,7 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 	}
 	
 	private record BrewingPickRecipeResult(
-			PotionBrewing recipe,
+			Potion potion, PotionBrewing recipe,
 			boolean consumeWater,
 			Map<Integer, Integer> bottleSlotsToRemoveFrom,
 			List<ConfigurableItemStack> reagentSlotsToRemoveFrom,
