@@ -7,7 +7,7 @@ import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.datamaps.EIDataMaps;
 import net.swedz.extended_industrialization.datamaps.FertilizerPotency;
-import net.swedz.extended_industrialization.datamaps.PotionBrewing;
+import net.swedz.extended_industrialization.datamaps.PotionBrewingCosts;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 import net.swedz.extended_industrialization.registry.fluids.FluidHolder;
 
@@ -40,7 +40,7 @@ public final class DataMapDatagenProvider extends DataMapProvider
 	
 	private void addPotionBrewing(ResourceKey<Potion> potion, int bottles, int water, int blazingEssence, int time, int euCost)
 	{
-		this.builder(EIDataMaps.POTION_BREWING).add(potion, new PotionBrewing(bottles, water, blazingEssence, time, euCost), false);
+		this.builder(EIDataMaps.POTION_BREWING).add(potion, new PotionBrewingCosts(bottles, water, blazingEssence, time, euCost), false);
 	}
 	
 	@Override

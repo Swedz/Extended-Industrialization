@@ -20,8 +20,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.swedz.extended_industrialization.machines.components.craft.PotionCrafterComponent;
-import net.swedz.extended_industrialization.machines.components.craft.PotionCrafterComponent.SlotRange;
+import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent;
+import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent.SlotRange;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 import org.apache.commons.compress.utils.Lists;
 

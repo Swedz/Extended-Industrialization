@@ -18,7 +18,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.machines.components.craft.CrafterAccessBehavior;
-import net.swedz.extended_industrialization.machines.components.craft.PotionCrafterComponent;
+import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent;
 
 import java.util.Collections;
 import java.util.List;

@@ -12,6 +12,7 @@ import net.swedz.extended_industrialization.api.capabilities.CapabilitiesListene
 import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListeners;
 import net.swedz.extended_industrialization.datagen.DatagenDelegator;
 import net.swedz.extended_industrialization.datamaps.EIDataMaps;
+import net.swedz.extended_industrialization.machines.components.craft.potion.PotionRecipe;
 import net.swedz.extended_industrialization.registry.EIOtherRegistries;
 import net.swedz.extended_industrialization.registry.blocks.BlockHolder;
 import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
@@ -63,6 +64,7 @@ public final class EI
 			EIItems.values().forEach(ItemHolder::triggerRegistrationListener);
 			EIBlocks.values().forEach(BlockHolder::triggerRegistrationListener);
 			EIFluids.values().forEach(FluidHolder::triggerRegistrationListener);
+			PotionRecipe.init();
 		});
 		bus.addListener(RegisterCapabilitiesEvent.class, CapabilitiesListeners::triggerAll);
 		

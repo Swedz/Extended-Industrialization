@@ -14,9 +14,9 @@ public final class EIDataMaps
 			.synced(FertilizerPotency.CODEC, true)
 			.build();
 	
-	public static final DataMapType<Potion, PotionBrewing> POTION_BREWING = DataMapType
-			.builder(EI.id("potion_brewing"), Registries.POTION, PotionBrewing.CODEC)
-			.synced(PotionBrewing.CODEC, true)
+	public static final DataMapType<Potion, PotionBrewingCosts> POTION_BREWING = DataMapType
+			.builder(EI.id("potion_brewing"), Registries.POTION, PotionBrewingCosts.CODEC)
+			.synced(PotionBrewingCosts.CODEC, true)
 			.build();
 	
 	public static void init(RegisterDataMapTypesEvent event)
