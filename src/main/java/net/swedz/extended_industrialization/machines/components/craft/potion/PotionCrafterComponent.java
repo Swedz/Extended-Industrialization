@@ -19,7 +19,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.material.Fluids;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.api.MachineInventoryHelper;
 import net.swedz.extended_industrialization.machines.components.craft.CrafterAccessBehavior;
 import net.swedz.extended_industrialization.machines.components.craft.CrafterAccessWithBehavior;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
@@ -137,7 +139,7 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 	{
 		for(PotionRecipe recipe : this.getRecipes())
 		{
-			if(this.takeItemInputs(recipe, true))
+			if(this.takeItemInputs(recipe, true) && this.takeFluidInputs(recipe, true))
 			{
 				EI.LOGGER.info("found recipe: {}", BuiltInRegistries.POTION.getKey(recipe.potion()));
 			}
@@ -226,7 +228,13 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 	
 	private boolean takeFluidInputs(PotionRecipe recipe, boolean simulate)
 	{
-		return false;
+		boolean usedBlazingEssence = recipe.blazingEssence() == 0 || MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), EIFluids.BLAZING_ESSENCE, recipe.blazingEssence(), simulate) == recipe.blazingEssence();
+		
+		// TODO only consume water if we need to
+		boolean needsWater = true;
+		boolean usedWater = !needsWater || recipe.water() == 0 || MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), Fluids.WATER, recipe.water(), simulate) == recipe.water();
+		
+		return usedBlazingEssence && usedWater;
 	}
 	
 	private boolean putItemOutputs(PotionRecipe recipe, boolean simulate)

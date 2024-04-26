@@ -59,8 +59,18 @@ public final class MachineInventoryHelper
 		return totalRemoved;
 	}
 	
+	public static long consumeFluid(List<ConfigurableFluidStack> fluids, FluidLike fluid, long max, boolean simulation)
+	{
+		return consumeFluid(fluids, fluid, max, simulation ? Simulation.SIMULATE : Simulation.ACT);
+	}
+	
 	public static long consumeFluid(List<ConfigurableFluidStack> fluids, Fluid fluid, long max, Simulation simulation)
 	{
 		return consumeFluid(fluids, () -> fluid, max, simulation);
+	}
+	
+	public static long consumeFluid(List<ConfigurableFluidStack> fluids, Fluid fluid, long max, boolean simulate)
+	{
+		return consumeFluid(fluids, fluid, max, simulate ? Simulation.SIMULATE : Simulation.ACT);
 	}
 }
