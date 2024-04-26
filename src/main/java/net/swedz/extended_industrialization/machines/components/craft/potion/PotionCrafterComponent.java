@@ -135,11 +135,17 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 		}
 	}
 	
+	private static final class RollingRecipeFlags
+	{
+		private boolean needsWater;
+	}
+	
 	private Optional<PotionRecipe> tryStartRecipe()
 	{
 		for(PotionRecipe recipe : this.getRecipes())
 		{
-			if(this.takeItemInputs(recipe, true) && this.takeFluidInputs(recipe, true))
+			RollingRecipeFlags flags = new RollingRecipeFlags();
+			if(this.takeItemInputs(recipe, flags, true) && this.takeFluidInputs(recipe, flags, true))
 			{
 				EI.LOGGER.info("found recipe: {}", BuiltInRegistries.POTION.getKey(recipe.potion()));
 			}
@@ -162,7 +168,7 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 		return stack;
 	}
 	
-	private boolean takeItemInputs(PotionRecipe recipe, boolean simulate)
+	private boolean takeItemInputs(PotionRecipe recipe, RollingRecipeFlags flags, boolean simulate)
 	{
 		MIItemStorage bottleStorage = new MIItemStorage(params.bottle().slots(inventory.getItemInputs()));
 		
@@ -188,9 +194,19 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 				{
 					continue;
 				}
-				ItemStack itemStack = this.transform(item.getResource().toStack());
+				boolean transformed = false;
+				ItemStack itemStack = item.getResource().toStack();
+				if(itemStack.is(Items.GLASS_BOTTLE))
+				{
+					itemStack = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
+					transformed = true;
+				}
 				if(ItemStack.isSameItemSameTags(itemStack, startRecipe.input()))
 				{
+					if(transformed)
+					{
+						flags.needsWater = true;
+					}
 					long extracted = bottleStorage.extractAllSlot(item.getResource(), recipe.bottles() - bottlesUsed, transaction);
 					bottlesUsed += extracted;
 					if(bottlesUsed == recipe.bottles())
@@ -226,18 +242,16 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 		}
 	}
 	
-	private boolean takeFluidInputs(PotionRecipe recipe, boolean simulate)
+	private boolean takeFluidInputs(PotionRecipe recipe, RollingRecipeFlags flags, boolean simulate)
 	{
 		boolean usedBlazingEssence = recipe.blazingEssence() == 0 || MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), EIFluids.BLAZING_ESSENCE, recipe.blazingEssence(), simulate) == recipe.blazingEssence();
 		
-		// TODO only consume water if we need to
-		boolean needsWater = true;
-		boolean usedWater = !needsWater || recipe.water() == 0 || MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), Fluids.WATER, recipe.water(), simulate) == recipe.water();
+		boolean usedWater = !flags.needsWater || recipe.water() == 0 || MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), Fluids.WATER, recipe.water(), simulate) == recipe.water();
 		
 		return usedBlazingEssence && usedWater;
 	}
 	
-	private boolean putItemOutputs(PotionRecipe recipe, boolean simulate)
+	private boolean putItemOutputs(PotionRecipe recipe, RollingRecipeFlags flags, boolean simulate)
 	{
 		return false;
 	}
