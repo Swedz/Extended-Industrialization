@@ -159,15 +159,6 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 		return Optional.empty();
 	}
 	
-	private ItemStack transform(ItemStack stack)
-	{
-		if(stack.is(Items.GLASS_BOTTLE))
-		{
-			return PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
-		}
-		return stack;
-	}
-	
 	private boolean takeItemInputs(PotionRecipe recipe, RollingRecipeFlags flags, boolean simulate)
 	{
 		MIItemStorage bottleStorage = new MIItemStorage(params.bottle().slots(inventory.getItemInputs()));
