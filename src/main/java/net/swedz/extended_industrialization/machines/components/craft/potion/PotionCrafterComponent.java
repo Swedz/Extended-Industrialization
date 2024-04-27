@@ -15,11 +15,13 @@ import aztech.modern_industrialization.thirdparty.fabrictransfer.api.transaction
 import aztech.modern_industrialization.util.Simulation;
 import com.google.common.collect.Lists;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.material.Fluids;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.api.MachineInventoryHelper;
 import net.swedz.extended_industrialization.machines.components.craft.CrafterAccessBehavior;
 import net.swedz.extended_industrialization.machines.components.craft.CrafterAccessWithBehavior;
@@ -427,15 +429,10 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 	{
 		tag.putLong("usedEnergy", usedEnergy);
 		tag.putLong("recipeMaxEu", recipeMaxEu);
-		// TODO store active recipe
-		/*if(activeRecipe != null)
+		if(activeRecipe != null)
 		{
-			tag.putString("activeRecipe", this.activeRecipe.id().toString());
+			tag.putString("activeRecipe", activeRecipe.id().toString());
 		}
-		else if(delayedActiveRecipe != null)
-		{
-			tag.putString("activeRecipe", this.delayedActiveRecipe.toString());
-		}*/
 		tag.putInt("efficiencyTicks", efficiencyTicks);
 		tag.putInt("maxEfficiencyTicks", maxEfficiencyTicks);
 	}
@@ -445,13 +442,12 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 	{
 		usedEnergy = tag.getInt("usedEnergy");
 		recipeMaxEu = tag.getInt("recipeMaxEu");
-		// TODO read active recipe
-		/*this.delayedActiveRecipe = tag.contains("activeRecipe") ? new ResourceLocation(tag.getString("activeRecipe")) : null;
-		if(delayedActiveRecipe == null && usedEnergy > 0)
+		activeRecipe = tag.contains("activeRecipe") ? PotionRecipe.getRecipe(new ResourceLocation(tag.getString("activeRecipe"))) : null;
+		if(activeRecipe == null && usedEnergy > 0)
 		{
 			usedEnergy = 0;
-			MI.LOGGER.error("Had to set the usedEnergy of CrafterComponent to 0, but that should never happen!");
-		}*/
+			EI.LOGGER.error("Had to set the usedEnergy of PotionCrafterComponent to 0, but that should never happen!");
+		}
 		efficiencyTicks = tag.getInt("efficiencyTicks");
 		maxEfficiencyTicks = tag.getInt("maxEfficiencyTicks");
 	}
