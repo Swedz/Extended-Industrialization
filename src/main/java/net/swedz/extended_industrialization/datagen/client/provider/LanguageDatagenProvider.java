@@ -3,10 +3,10 @@ package net.swedz.extended_industrialization.datagen.client.provider;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.registry.fluids.FluidHolder;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
-import net.swedz.extended_industrialization.registry.items.ItemHolder;
+import net.swedz.extended_industrialization.registry.fluids.FluidHolder;
 import net.swedz.extended_industrialization.registry.items.EIItems;
+import net.swedz.extended_industrialization.registry.items.ItemHolder;
 import net.swedz.extended_industrialization.text.EIText;
 
 public final class LanguageDatagenProvider extends LanguageProvider

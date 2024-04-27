@@ -8,10 +8,10 @@ import aztech.modern_industrialization.machines.helper.SteamHelper;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.util.Simulation;
+import net.swedz.extended_industrialization.hook.mi.MIMachineHook;
 import net.swedz.extended_industrialization.machines.components.farmer.PlantingMode;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerProcessRates;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTaskType;
-import net.swedz.extended_industrialization.hook.mi.MIMachineHook;
 
 public final class SteamFarmerBlockEntity extends FarmerBlockEntity
 {

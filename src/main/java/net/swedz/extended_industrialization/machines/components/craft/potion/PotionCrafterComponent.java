@@ -23,8 +23,8 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.material.Fluids;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.api.MachineInventoryHelper;
-import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
 import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccess;
+import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 
 import java.util.List;
@@ -32,7 +32,7 @@ import java.util.Optional;
 
 public final class PotionCrafterComponent implements IComponent.ServerOnly, ModularCrafterAccess
 {
-	private final Params                    params;
+	private final Params                       params;
 	private final MachineInventoryComponent    inventory;
 	private final ModularCrafterAccessBehavior behavior;
 	

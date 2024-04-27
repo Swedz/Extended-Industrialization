@@ -24,9 +24,9 @@ import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 import net.swedz.extended_industrialization.registry.fluids.FluidHolder;
 import net.swedz.extended_industrialization.registry.fluids.FluidProperties;
-import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 import net.swedz.extended_industrialization.registry.fluids.MIFluidHolder;
 import org.apache.commons.compress.utils.Lists;
 
