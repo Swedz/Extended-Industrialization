@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "extended_industrialization:block/bronze_waste_collector"
+    }
+  }
+}
