@@ -278,7 +278,7 @@ public final class PotionRecipe
 	{
 		RECIPES = Collections.unmodifiableList(fetchRecipes());
 		
-		printDebug();
+		// printDebug();
 	}
 	
 	private static void printDebug()
