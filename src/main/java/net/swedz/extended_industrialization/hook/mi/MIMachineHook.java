@@ -164,7 +164,7 @@ public final class MIMachineHook
 				MachineCasings.STEEL, true, false, true,
 				(bep) -> new SteamFluidHarvestingMachineBlockEntity(
 						bep, "steel_honey_extractor",
-						2, HoneyExtractorBehavior.STEAM,
+						2, HoneyExtractorBehavior.STEEL,
 						16 * FluidType.BUCKET_VOLUME, EIFluids.HONEY
 				),
 				MachineBlockEntity::registerFluidApi

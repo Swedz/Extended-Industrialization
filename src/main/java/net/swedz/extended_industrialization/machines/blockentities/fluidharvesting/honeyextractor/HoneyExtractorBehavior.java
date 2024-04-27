@@ -18,7 +18,7 @@ import java.util.Optional;
 
 public final class HoneyExtractorBehavior extends FluidHarvestingBehavior
 {
-	public static final FluidHarvestingBehaviorCreator STEAM    = (m, e) -> new HoneyExtractorBehavior(m, e, 100, 1);
+	public static final FluidHarvestingBehaviorCreator STEEL    = (m, e) -> new HoneyExtractorBehavior(m, e, 100, 1);
 	public static final FluidHarvestingBehaviorCreator ELECTRIC = (m, e) -> new HoneyExtractorBehavior(m, e, 100, 2);
 	
 	private BeehiveBlockEntity hive;
