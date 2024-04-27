@@ -5,7 +5,6 @@ import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.fluid.FluidVariant;
-import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
@@ -18,7 +17,7 @@ import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 
 import java.util.Optional;
 
-public final class HoneyExtractorBehavior implements FluidHarvestingBehavior
+public final class HoneyExtractorBehavior extends FluidHarvestingBehavior
 {
 	public static HoneyExtractorBehavior steam(MachineBlockEntity machine)
 	{
@@ -30,43 +29,11 @@ public final class HoneyExtractorBehavior implements FluidHarvestingBehavior
 		return new HoneyExtractorBehavior(machine, EuConsumerBehavior.electric(machine, energy, redstone), 2);
 	}
 	
-	private final MachineBlockEntity machine;
-	
-	private final EuConsumerBehavior euBehavior;
-	
-	private final float outputMultiplier;
-	
 	private BeehiveBlockEntity hive;
 	
 	private HoneyExtractorBehavior(MachineBlockEntity machine, EuConsumerBehavior euBehavior, float outputMultiplier)
 	{
-		this.machine = machine;
-		this.euBehavior = euBehavior;
-		this.outputMultiplier = outputMultiplier;
-	}
-	
-	@Override
-	public MachineBlockEntity getMachineBlockEntity()
-	{
-		return machine;
-	}
-	
-	@Override
-	public int totalPumpingTicks()
-	{
-		return 100;
-	}
-	
-	@Override
-	public long consumeEu(long max)
-	{
-		return euBehavior.consumeEu(max, Simulation.ACT);
-	}
-	
-	@Override
-	public float getOutputMultiplier()
-	{
-		return outputMultiplier;
+		super(machine, euBehavior, 100, outputMultiplier);
 	}
 	
 	@Override

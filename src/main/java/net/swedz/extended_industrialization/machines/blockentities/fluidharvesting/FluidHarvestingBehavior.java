@@ -2,26 +2,55 @@ package net.swedz.extended_industrialization.machines.blockentities.fluidharvest
 
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.util.Simulation;
+import net.swedz.extended_industrialization.api.EuConsumerBehavior;
 
 import java.util.List;
 
-public interface FluidHarvestingBehavior
+public abstract class FluidHarvestingBehavior
 {
-	MachineBlockEntity getMachineBlockEntity();
+	protected final MachineBlockEntity machine;
 	
-	default ConfigurableFluidStack getMachineBlockFluidStack()
+	protected final EuConsumerBehavior euBehavior;
+	
+	protected final int   totalPumpingTicks;
+	protected final float outputMultiplier;
+	
+	protected FluidHarvestingBehavior(MachineBlockEntity machine, EuConsumerBehavior euBehavior, int totalPumpingTicks, float outputMultiplier)
+	{
+		this.machine = machine;
+		this.euBehavior = euBehavior;
+		this.totalPumpingTicks = totalPumpingTicks;
+		this.outputMultiplier = outputMultiplier;
+	}
+	
+	public MachineBlockEntity getMachineBlockEntity()
+	{
+		return machine;
+	}
+	
+	public ConfigurableFluidStack getMachineBlockFluidStack()
 	{
 		List<ConfigurableFluidStack> fluidStacks = this.getMachineBlockEntity().getInventory().getFluidStacks();
 		return fluidStacks.get(fluidStacks.size() - 1);
 	}
 	
-	int totalPumpingTicks();
+	public int totalPumpingTicks()
+	{
+		return totalPumpingTicks;
+	}
 	
-	long consumeEu(long max);
+	public long consumeEu(long max)
+	{
+		return euBehavior.consumeEu(max, Simulation.ACT);
+	}
 	
-	float getOutputMultiplier();
+	public float getOutputMultiplier()
+	{
+		return outputMultiplier;
+	}
 	
-	boolean canOperate();
+	public abstract boolean canOperate();
 	
-	void operate();
+	public abstract void operate();
 }
