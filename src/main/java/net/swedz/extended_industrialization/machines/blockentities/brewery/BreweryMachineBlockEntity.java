@@ -27,25 +27,25 @@ import java.util.UUID;
 public abstract class BreweryMachineBlockEntity extends MachineBlockEntity implements Tickable, CrafterComponentHolder, ModularCrafterAccessBehavior
 {
 	protected static final int STEAM_SLOT_X = 143;
-	protected static final int STEAM_SLOT_Y = 36;
+	protected static final int STEAM_SLOT_Y = 27;
 	
 	protected static final int BLAZING_ESSENCE_SLOT_X = 8;
-	protected static final int BLAZING_ESSENCE_SLOT_Y = 17;
+	protected static final int BLAZING_ESSENCE_SLOT_Y = 27;
 	
 	protected static final int WATER_SLOT_X = 26;
-	protected static final int WATER_SLOT_Y = 39;
+	protected static final int WATER_SLOT_Y = 27;
 	
 	protected static final int INPUT_BOTTLE_SLOTS_X = 8;
-	protected static final int INPUT_BOTTLE_SLOTS_Y = 64;
+	protected static final int INPUT_BOTTLE_SLOTS_Y = 47;
 	
 	protected static final int INPUT_REAGENT_SLOTS_X = 53;
-	protected static final int INPUT_REAGENT_SLOTS_Y = 36;
+	protected static final int INPUT_REAGENT_SLOTS_Y = 27;
 	
 	protected static final int OUTPUT_SLOTS_X = 116;
-	protected static final int OUTPUT_SLOTS_Y = 64;
+	protected static final int OUTPUT_SLOTS_Y = 47;
 	
 	protected static final int PROGRESS_BAR_X = 78;
-	protected static final int PROGRESS_BAR_Y = 80;
+	protected static final int PROGRESS_BAR_Y = 63;
 	
 	protected final MachineTier tier;
 	protected final int         capacity;
@@ -59,7 +59,7 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder(blockName, true).backgroundHeight(223).build(),
+				new MachineGuiParameters.Builder(blockName, true).backgroundHeight(206).build(),
 				new OrientationComponent.Params(true, true, false)
 		);
 		
@@ -76,7 +76,7 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 				crafter::getProgress
 		));
 		
-		this.registerComponents(isActiveComponent, inventory);
+		this.registerComponents(isActiveComponent, inventory, crafter);
 		
 		this.registerGuiComponent(new AutoExtract.Server(orientation));
 	}

@@ -32,16 +32,14 @@ import net.swedz.extended_industrialization.api.EILubricantHelper;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent.SlotRange;
 import net.swedz.extended_industrialization.machines.guicomponents.recipeefficiency.ModularRecipeEfficiencyBar;
-import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 import org.apache.commons.compress.utils.Lists;
 
-import java.util.Arrays;
 import java.util.List;
 
 public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlockEntity implements EnergyComponentHolder
 {
 	private static final int EFFICIENCY_BAR_X = 38;
-	private static final int EFFICIENCY_BAR_Y = 123;
+	private static final int EFFICIENCY_BAR_Y = 106;
 	
 	private final EnergyComponent energy;
 	private final MIEnergyStorage insertable;
@@ -98,22 +96,19 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 		SlotRange<ConfigurableItemStack> slotsReagent = SlotRange.item(10, 13);
 		SlotRange<ConfigurableItemStack> slotsOutput = SlotRange.item(0, 8);
 		
-		List<ConfigurableFluidStack> fluidInputs = Arrays.asList(
-				ConfigurableFluidStack.lockedInputSlot(20, EIFluids.BLAZING_ESSENCE.asFluid()),
+		List<ConfigurableFluidStack> fluidInputs = List.of(
 				ConfigurableFluidStack.lockedInputSlot(capacity, Fluids.WATER)
 		);
 		SlotPositions fluidPositions = new SlotPositions.Builder()
-				.addSlot(BLAZING_ESSENCE_SLOT_X + 18, BLAZING_ESSENCE_SLOT_Y)
 				.addSlot(WATER_SLOT_X, WATER_SLOT_Y)
 				.build();
-		SlotRange<ConfigurableFluidStack> slotsBlazingEssence = SlotRange.fluid(0);
-		SlotRange<ConfigurableFluidStack> slotsWater = SlotRange.fluid(1);
+		SlotRange<ConfigurableFluidStack> slotsWater = SlotRange.fluid(0);
 		
 		return Pair.of(
 				new MachineInventoryComponent(itemInputs, itemOutputs, fluidInputs, List.of(), itemPositions, fluidPositions),
 				new PotionCrafterComponent.Params(
 						slotsBlazePowder, slotsBottle, slotsReagent, slotsOutput,
-						slotsBlazingEssence, slotsWater
+						slotsWater
 				)
 		);
 	}

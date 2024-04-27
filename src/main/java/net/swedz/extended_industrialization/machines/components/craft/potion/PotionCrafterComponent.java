@@ -8,7 +8,6 @@ import aztech.modern_industrialization.inventory.MIItemStorage;
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.components.CrafterComponent;
 import aztech.modern_industrialization.machines.components.MachineInventoryComponent;
-import aztech.modern_industrialization.thirdparty.fabrictransfer.api.fluid.FluidVariant;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.storage.StorageView;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.transaction.Transaction;
@@ -25,7 +24,6 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.api.MachineInventoryHelper;
 import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccess;
 import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
-import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +33,8 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 	private final Params                       params;
 	private final MachineInventoryComponent    inventory;
 	private final ModularCrafterAccessBehavior behavior;
+	
+	private int blazingEssence;
 	
 	private PotionRecipe activeRecipe;
 	
@@ -143,13 +143,14 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 		for(PotionRecipe recipe : this.getRecipes())
 		{
 			RollingRecipeFlags flags = new RollingRecipeFlags();
-			if(this.takeItemInputs(recipe, flags, true) && this.takeFluidInputs(recipe, flags, true) && this.putItemOutputs(recipe, true))
+			if(this.takeItemInputs(recipe, flags, true) && this.takeFluidInputs(recipe, flags, true) && this.takeBlazingEssenceInputs(recipe, true) && this.putItemOutputs(recipe, true))
 			{
 				// The flags should come out to be exactly the same... but just in case
 				flags = new RollingRecipeFlags();
 				
 				this.takeItemInputs(recipe, flags, false);
 				this.takeFluidInputs(recipe, flags, false);
+				this.takeBlazingEssenceInputs(recipe, false);
 				
 				return Optional.of(recipe);
 			}
@@ -267,11 +268,20 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 	
 	private boolean takeFluidInputs(PotionRecipe recipe, RollingRecipeFlags flags, boolean simulate)
 	{
-		boolean usedBlazingEssence = recipe.blazingEssence() == 0 || MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), EIFluids.BLAZING_ESSENCE, recipe.blazingEssence(), simulate) == recipe.blazingEssence();
-		
-		boolean usedWater = !flags.needsWater || recipe.water() == 0 || MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), Fluids.WATER, recipe.water(), simulate) == recipe.water();
-		
-		return usedBlazingEssence && usedWater;
+		return !flags.needsWater || recipe.water() == 0 || MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), Fluids.WATER, recipe.water(), simulate) == recipe.water();
+	}
+	
+	private boolean takeBlazingEssenceInputs(PotionRecipe recipe, boolean simulate)
+	{
+		if(blazingEssence < recipe.blazingEssence())
+		{
+			return false;
+		}
+		if(!simulate)
+		{
+			blazingEssence -= recipe.blazingEssence();
+		}
+		return true;
 	}
 	
 	private boolean putItemOutputs(PotionRecipe recipe, boolean simulate)
@@ -302,16 +312,13 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 			return;
 		}
 		
-		ConfigurableFluidStack slotEssence = params.blazingEssence().slot(inventory.getFluidInputs());
-		if(slotEssence.getAmount() > 0)
+		if(blazingEssence > 0)
 		{
 			return;
 		}
 		
 		slotPowder.decrement(1);
-		
-		slotEssence.setKey(FluidVariant.of(EIFluids.BLAZING_ESSENCE.asFluid()));
-		slotEssence.increment(20);
+		blazingEssence = 20;
 	}
 	
 	private boolean updateActiveRecipe()
@@ -427,6 +434,7 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 	@Override
 	public void writeNbt(CompoundTag tag)
 	{
+		tag.putInt("blazingEssence", blazingEssence);
 		tag.putLong("usedEnergy", usedEnergy);
 		tag.putLong("recipeMaxEu", recipeMaxEu);
 		if(activeRecipe != null)
@@ -440,8 +448,9 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 	@Override
 	public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
 	{
-		usedEnergy = tag.getInt("usedEnergy");
-		recipeMaxEu = tag.getInt("recipeMaxEu");
+		blazingEssence = tag.getInt("blazingEssence");
+		usedEnergy = tag.getLong("usedEnergy");
+		recipeMaxEu = tag.getLong("recipeMaxEu");
 		activeRecipe = tag.contains("activeRecipe") ? PotionRecipe.getRecipe(new ResourceLocation(tag.getString("activeRecipe"))) : null;
 		if(activeRecipe == null && usedEnergy > 0)
 		{
@@ -495,7 +504,6 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 			SlotRange<ConfigurableItemStack> bottle,
 			SlotRange<ConfigurableItemStack> reagent,
 			SlotRange<ConfigurableItemStack> output,
-			SlotRange<ConfigurableFluidStack> blazingEssence,
 			SlotRange<ConfigurableFluidStack> water
 	)
 	{

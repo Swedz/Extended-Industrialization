@@ -22,7 +22,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent.SlotRange;
-import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.Arrays;
@@ -60,7 +59,7 @@ public final class SteamBreweryMachineBlockEntity extends BreweryMachineBlockEnt
 		SlotPositions itemPositions = new SlotPositions.Builder()
 				.addSlot(BLAZING_ESSENCE_SLOT_X, BLAZING_ESSENCE_SLOT_Y)
 				.addSlots(INPUT_BOTTLE_SLOTS_X, INPUT_BOTTLE_SLOTS_Y, 3, 3)
-				.addSlot(INPUT_REAGENT_SLOTS_X + 18 + 9, INPUT_REAGENT_SLOTS_Y)
+				.addSlot(INPUT_REAGENT_SLOTS_X + 27, INPUT_REAGENT_SLOTS_Y)
 				.addSlots(OUTPUT_SLOTS_X, OUTPUT_SLOTS_Y, 3, 3)
 				.build();
 		SlotRange<ConfigurableItemStack> slotsBlazePowder = SlotRange.item(0);
@@ -70,22 +69,19 @@ public final class SteamBreweryMachineBlockEntity extends BreweryMachineBlockEnt
 		
 		List<ConfigurableFluidStack> fluidInputs = Arrays.asList(
 				ConfigurableFluidStack.lockedInputSlot(capacity, MIFluids.STEAM.asFluid()),
-				ConfigurableFluidStack.lockedInputSlot(20, EIFluids.BLAZING_ESSENCE.asFluid()),
 				ConfigurableFluidStack.lockedInputSlot(capacity, Fluids.WATER)
 		);
 		SlotPositions fluidPositions = new SlotPositions.Builder()
 				.addSlot(STEAM_SLOT_X, STEAM_SLOT_Y)
-				.addSlot(BLAZING_ESSENCE_SLOT_X + 18, BLAZING_ESSENCE_SLOT_Y)
 				.addSlot(WATER_SLOT_X, WATER_SLOT_Y)
 				.build();
-		SlotRange<ConfigurableFluidStack> slotsBlazingEssence = SlotRange.fluid(1);
-		SlotRange<ConfigurableFluidStack> slotsWater = SlotRange.fluid(2);
+		SlotRange<ConfigurableFluidStack> slotsWater = SlotRange.fluid(1);
 		
 		return Pair.of(
 				new MachineInventoryComponent(itemInputs, itemOutputs, fluidInputs, List.of(), itemPositions, fluidPositions),
 				new PotionCrafterComponent.Params(
 						slotsBlazePowder, slotsBottle, slotsReagent, slotsOutput,
-						slotsBlazingEssence, slotsWater
+						slotsWater
 				)
 		);
 	}
