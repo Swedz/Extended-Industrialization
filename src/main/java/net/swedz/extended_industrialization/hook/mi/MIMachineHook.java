@@ -15,8 +15,9 @@ import com.google.common.collect.Lists;
 import net.swedz.extended_industrialization.machines.blockentities.SolarBoilerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.brewery.ElectricBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.brewery.SteamBreweryMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentities.honeyextractor.ElectricHoneyExtractorMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentities.honeyextractor.SteamHoneyExtractorMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.ElectricFluidHarvestingMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.honeyextractor.ElectricHoneyExtractorMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.honeyextractor.SteamHoneyExtractorMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.SteamFarmerBlockEntity;
 
@@ -167,7 +168,7 @@ public final class MIMachineHook
 				CableTier.LV.casing, true, false, true,
 				ElectricHoneyExtractorMachineBlockEntity::new,
 				MachineBlockEntity::registerFluidApi,
-				ElectricHoneyExtractorMachineBlockEntity::registerEnergyApi
+				ElectricFluidHarvestingMachineBlockEntity::registerEnergyApi
 		);
 		
 		MIMachineHookHelper.registerSingleBlockSpecialMachine(

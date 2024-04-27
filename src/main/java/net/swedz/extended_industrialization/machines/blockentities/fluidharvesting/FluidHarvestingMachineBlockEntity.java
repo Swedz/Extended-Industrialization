@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.blockentities.honeyextractor;
+package net.swedz.extended_industrialization.machines.blockentities.fluidharvesting;
 
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.machines.BEP;
@@ -9,26 +9,15 @@ import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.AutoExtract;
 import aztech.modern_industrialization.machines.guicomponents.ProgressBar;
-import aztech.modern_industrialization.thirdparty.fabrictransfer.api.fluid.FluidVariant;
+import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.BeehiveBlock;
-import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 
-import java.util.List;
-import java.util.Optional;
-
-public abstract class HoneyExtractorMachineBlockEntity extends MachineBlockEntity implements Tickable
+public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEntity implements Tickable
 {
 	protected static final int OUTPUT_SLOT_X = 110;
 	protected static final int OUTPUT_SLOT_Y = 30;
-	
-	private static final int OPERATION_TICKS = 100;
 	
 	protected final long euCost;
 	
@@ -36,7 +25,7 @@ public abstract class HoneyExtractorMachineBlockEntity extends MachineBlockEntit
 	
 	protected final IsActiveComponent isActiveComponent;
 	
-	public HoneyExtractorMachineBlockEntity(BEP bep, String blockName, long euCost)
+	public FluidHarvestingMachineBlockEntity(BEP bep, String blockName, long euCost)
 	{
 		super(
 				bep,
@@ -49,7 +38,7 @@ public abstract class HoneyExtractorMachineBlockEntity extends MachineBlockEntit
 		this.isActiveComponent = new IsActiveComponent();
 		this.registerGuiComponent(new ProgressBar.Server(
 				new ProgressBar.Parameters(79, 29, "extract"),
-				() -> (float) pumpingTicks / OPERATION_TICKS
+				() -> (float) pumpingTicks / this.getFluidHarvestingBehavior().totalPumpingTicks()
 		));
 		
 		this.registerGuiComponent(new AutoExtract.Server(orientation));
@@ -70,9 +59,7 @@ public abstract class HoneyExtractorMachineBlockEntity extends MachineBlockEntit
 		});
 	}
 	
-	protected abstract long consumeEu(long max);
-	
-	protected abstract int getHoneyMultiplier();
+	public abstract FluidHarvestingBehavior getFluidHarvestingBehavior();
 	
 	@Override
 	public void tick()
@@ -82,44 +69,28 @@ public abstract class HoneyExtractorMachineBlockEntity extends MachineBlockEntit
 			return;
 		}
 		
-		List<ConfigurableFluidStack> fluidStacks = this.getInventory().getFluidStacks();
-		ConfigurableFluidStack honeyStack = fluidStacks.get(fluidStacks.size() - 1);
-		
-		if(honeyStack.getRemainingSpace() < FluidType.BUCKET_VOLUME / 5)
+		ConfigurableFluidStack fluidStack = this.getFluidHarvestingBehavior().getMachineBlockFluidStack();
+		if(fluidStack.getRemainingSpace() < FluidType.BUCKET_VOLUME / 5)
 		{
 			this.updateActive(false);
 			return;
 		}
 		
-		Optional<BeehiveBlockEntity> optionalHive = this.getHive();
-		if(optionalHive.isEmpty())
+		if(!this.getFluidHarvestingBehavior().canOperate())
 		{
 			pumpingTicks = 0;
 			this.updateActive(false);
 			return;
 		}
-		BeehiveBlockEntity hive = optionalHive.get();
-		BlockState hiveBlockState = hive.getBlockState();
 		
-		long eu = this.consumeEu(euCost);
+		long eu = this.getFluidHarvestingBehavior().consumeEu(euCost);
 		boolean active = eu > 0;
 		pumpingTicks += active ? 1 : 0;
 		this.updateActive(active);
 		
-		if(pumpingTicks == OPERATION_TICKS)
+		if(pumpingTicks == this.getFluidHarvestingBehavior().totalPumpingTicks())
 		{
-			int honeyLevel = hiveBlockState.getValue(BeehiveBlock.HONEY_LEVEL);
-			
-			if(honeyLevel > 0)
-			{
-				level.setBlock(hive.getBlockPos(), hiveBlockState.setValue(BeehiveBlock.HONEY_LEVEL, honeyLevel - 1), 1 | 2);
-				
-				long honeyToCollect = Math.min((long) this.getHoneyMultiplier() * FluidType.BUCKET_VOLUME / 5, honeyStack.getRemainingSpace());
-				
-				honeyStack.setKey(FluidVariant.of(EIFluids.HONEY.asFluid()));
-				honeyStack.increment(honeyToCollect);
-			}
-			
+			this.getFluidHarvestingBehavior().operate();
 			pumpingTicks = 0;
 		}
 		
@@ -135,10 +106,12 @@ public abstract class HoneyExtractorMachineBlockEntity extends MachineBlockEntit
 		isActiveComponent.updateActive(active, this);
 	}
 	
-	private Optional<BeehiveBlockEntity> getHive()
+	@Override
+	protected MachineModelClientData getMachineModelData()
 	{
-		BlockPos touchingBlockPos = worldPosition.relative(orientation.facingDirection);
-		BlockEntity touchingBlockEntity = level.getBlockEntity(touchingBlockPos);
-		return touchingBlockEntity instanceof BeehiveBlockEntity beehive ? Optional.of(beehive) : Optional.empty();
+		MachineModelClientData data = new MachineModelClientData();
+		data.isActive = isActiveComponent.isActive;
+		orientation.writeModelData(data);
+		return data;
 	}
 }
