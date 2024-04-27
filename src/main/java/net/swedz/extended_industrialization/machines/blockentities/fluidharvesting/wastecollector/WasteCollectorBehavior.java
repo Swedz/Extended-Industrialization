@@ -18,7 +18,7 @@ public final class WasteCollectorBehavior extends FluidHarvestingBehavior
 	public static final FluidHarvestingBehaviorCreator ELECTRIC = (m, e) -> new WasteCollectorBehavior(m, e, 15 * 20, 4, 0);
 	
 	private static final int MAX_ANIMALS       = 1;
-	private static final int MANURE_PER_ANIMAL = 1000;
+	private static final int MANURE_PER_ANIMAL = 500;
 	
 	private final int range;
 	
