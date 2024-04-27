@@ -18,6 +18,7 @@ import net.swedz.extended_industrialization.machines.blockentities.brewery.Elect
 import net.swedz.extended_industrialization.machines.blockentities.brewery.SteamBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.ElectricFluidHarvestingMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.SteamFluidHarvestingMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentities.multiblock.assembler.AdvancedAssemblerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.SteamFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
@@ -62,6 +63,13 @@ public final class MIMachineHook
 				CLEAN_STAINLESS_STEEL, true, true, false,
 				ElectricFarmerBlockEntity::new,
 				(__) -> ElectricFarmerBlockEntity.registerReiShapes()
+		);
+		
+		MIMachineHookHelper.registerMultiblockMachine(
+				"Advanced Assembler", "advanced_assembler", "advanced_assembler",
+				CLEAN_STAINLESS_STEEL, true, false, false,
+				AdvancedAssemblerBlockEntity::new,
+				(__) -> AdvancedAssemblerBlockEntity.registerReiShapes()
 		);
 	}
 	

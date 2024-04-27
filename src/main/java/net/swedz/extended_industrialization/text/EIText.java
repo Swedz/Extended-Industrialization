@@ -15,7 +15,8 @@ public enum EIText
 	FARMER_PLANTING_ALTERNATING_LINES("Alternating Lines"),
 	FARMER_PLANTING_QUADRANTS("Quadrants"),
 	MULCH_GANG_FOR_LIFE_0("I love mulch!"),
-	MULCH_GANG_FOR_LIFE_1("Mulch is my favorite food!");
+	MULCH_GANG_FOR_LIFE_1("Mulch is my favorite food!"),
+	ADVANCED_ASSEMBLER_SIZE("Machines: %d");
 	
 	private final String englishText;
 	
