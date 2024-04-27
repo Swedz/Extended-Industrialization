@@ -18,7 +18,8 @@ public enum EIText
 	MULCH_GANG_FOR_LIFE_1("Mulch is my favorite food!"),
 	ADVANCED_ASSEMBLER_SIZE("Machines: %d"),
 	FLUID_FERTILIZERS("Fluid Fertilizers"),
-	FLUID_FERTILIZERS_RATE("Uses : %dmb/%.1fs");
+	FLUID_FERTILIZERS_RATE("Cycle Rate : %.1fs"),
+	FLUID_FERTILIZERS_USES("Consumes : %dmb");
 	
 	private final String englishText;
 	

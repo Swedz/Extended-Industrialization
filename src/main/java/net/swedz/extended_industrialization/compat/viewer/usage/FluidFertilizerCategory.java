@@ -19,7 +19,7 @@ public final class FluidFertilizerCategory extends ViewerCategory<Fluid>
 {
 	public FluidFertilizerCategory()
 	{
-		super(Fluid.class, EI.id("fluid_fertilizers"), EIText.FLUID_FERTILIZERS.text(), EIFluids.NPK_FERTILIZER.asFluid().getBucket().getDefaultInstance(), 150, 35);
+		super(Fluid.class, EI.id("fluid_fertilizers"), EIText.FLUID_FERTILIZERS.text(), EIFluids.NPK_FERTILIZER.asFluid().getBucket().getDefaultInstance(), 150, 45);
 	}
 	
 	@Override
@@ -43,14 +43,16 @@ public final class FluidFertilizerCategory extends ViewerCategory<Fluid>
 	@Override
 	public void buildLayout(Fluid recipe, LayoutBuilder builder)
 	{
-		builder.inputSlot(15, 10).variant(FluidVariant.of(recipe));
+		builder.inputSlot(15, 15).variant(FluidVariant.of(recipe));
 	}
 	
 	@Override
 	public void buildWidgets(Fluid recipe, WidgetList widgets)
 	{
 		FertilizerPotency fertilizerPotency = FertilizerPotency.getFor(recipe);
-		Component text = EIText.FLUID_FERTILIZERS_RATE.text(fertilizerPotency.mbToConsumePerFertilizerTick(), fertilizerPotency.tickRate() / 20f);
-		widgets.secondaryText(text, 40, 14);
+		Component rate = EIText.FLUID_FERTILIZERS_RATE.text(fertilizerPotency.tickRate() / 20f);
+		widgets.secondaryText(rate, 40, 14);
+		Component cost = EIText.FLUID_FERTILIZERS_USES.text(fertilizerPotency.mbToConsumePerFertilizerTick());
+		widgets.secondaryText(cost, 40, 24);
 	}
 }
