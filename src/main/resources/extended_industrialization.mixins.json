@@ -11,18 +11,19 @@
         "mi.MakePlayerLockNotifyListenersMixin",
         "mi.MIAllowFluidBottlesInMachinesMenuMixin",
         "mi.MIMakeWaterPumpsRequireWaterBiomeMixin",
+        "mi.hack.InterceptRegisterMachineMixin",
+        "mi.hack.InterceptRegisterMachineModelMixin",
+        "mi.hack.InterceptRegisterMachineRecipeTypeMixin",
+        "mi.hack.InterceptRegisterMultiblockShapeReiRecipeMixin",
+        "mi.hack.InterceptRegisterReiMachineRecipeMixin",
+        "mi.hack.InterceptRegisterSingleBlockMachineReiTiersMixin",
         "mi.hook.HookBlastFurnaceTierMixin",
         "mi.hook.HookMachineCasingsMixin",
         "mi.hook.HookMachineRecipeTypesMixin",
         "mi.hook.HookMultiblockMachinesMixin",
         "mi.hook.HookSingleBlockCraftingMachinesMixin",
         "mi.hook.HookSingleBlockSpecialMachinesMixin",
-        "mi.hook.HookTooltipsMixin",
-        "mi.hack.InterceptRegisterMachineMixin",
-        "mi.hack.InterceptRegisterMachineModelMixin",
-        "mi.hack.InterceptRegisterMachineRecipeTypeMixin",
-        "mi.hack.InterceptRegisterReiMachineRecipeMixin",
-        "mi.hack.InterceptRegisterSingleBlockMachineReiTiersMixin"
+        "mi.hook.HookTooltipsMixin"
     ],
     "client": [
         "client.mi.MIGuiComponentsClientMixin"
