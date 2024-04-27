@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public interface CrafterAccessBehavior
+public interface ModularCrafterAccessBehavior
 {
 	default boolean isEnabled()
 	{

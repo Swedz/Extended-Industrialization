@@ -17,14 +17,14 @@ import aztech.modern_industrialization.util.Tickable;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
-import net.swedz.extended_industrialization.machines.components.craft.CrafterAccessBehavior;
+import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class BreweryMachineBlockEntity extends MachineBlockEntity implements Tickable, CrafterComponentHolder, CrafterAccessBehavior
+public abstract class BreweryMachineBlockEntity extends MachineBlockEntity implements Tickable, CrafterComponentHolder, ModularCrafterAccessBehavior
 {
 	protected static final int STEAM_SLOT_X = 143;
 	protected static final int STEAM_SLOT_Y = 36;

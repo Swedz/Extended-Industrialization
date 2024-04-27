@@ -4,16 +4,16 @@ import aztech.modern_industrialization.machines.GuiComponents;
 import aztech.modern_industrialization.machines.gui.GuiComponent;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.swedz.extended_industrialization.machines.components.craft.CrafterAccessWithBehavior;
+import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccess;
 
 public final class ModularRecipeEfficiencyBar
 {
 	public static final class Server implements GuiComponent.Server<Data>
 	{
-		private final Parameters                params;
-		private final CrafterAccessWithBehavior crafter;
+		private final Parameters           params;
+		private final ModularCrafterAccess crafter;
 		
-		public Server(Parameters params, CrafterAccessWithBehavior crafter)
+		public Server(Parameters params, ModularCrafterAccess crafter)
 		{
 			this.params = params;
 			this.crafter = crafter;

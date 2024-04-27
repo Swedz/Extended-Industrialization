@@ -23,18 +23,18 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.material.Fluids;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.api.MachineInventoryHelper;
-import net.swedz.extended_industrialization.machines.components.craft.CrafterAccessBehavior;
-import net.swedz.extended_industrialization.machines.components.craft.CrafterAccessWithBehavior;
+import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
+import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccess;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 
 import java.util.List;
 import java.util.Optional;
 
-public final class PotionCrafterComponent implements IComponent.ServerOnly, CrafterAccessWithBehavior
+public final class PotionCrafterComponent implements IComponent.ServerOnly, ModularCrafterAccess
 {
 	private final Params                    params;
-	private final MachineInventoryComponent inventory;
-	private final CrafterAccessBehavior     behavior;
+	private final MachineInventoryComponent    inventory;
+	private final ModularCrafterAccessBehavior behavior;
 	
 	private PotionRecipe activeRecipe;
 	
@@ -47,7 +47,7 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 	private long previousBaseEu = -1;
 	private long previousMaxEu  = -1;
 	
-	public PotionCrafterComponent(Params params, MachineInventoryComponent inventory, CrafterAccessBehavior behavior)
+	public PotionCrafterComponent(Params params, MachineInventoryComponent inventory, ModularCrafterAccessBehavior behavior)
 	{
 		this.params = params;
 		this.inventory = inventory;
@@ -55,7 +55,7 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Craf
 	}
 	
 	@Override
-	public CrafterAccessBehavior getBehavior()
+	public ModularCrafterAccessBehavior getBehavior()
 	{
 		return behavior;
 	}
