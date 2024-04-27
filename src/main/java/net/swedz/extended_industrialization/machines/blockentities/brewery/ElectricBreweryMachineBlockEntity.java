@@ -4,6 +4,8 @@ import aztech.modern_industrialization.MICapabilities;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
+import aztech.modern_industrialization.api.machine.component.EnergyAccess;
+import aztech.modern_industrialization.api.machine.holder.EnergyComponentHolder;
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.inventory.ConfigurableItemStack;
 import aztech.modern_industrialization.inventory.SlotPositions;
@@ -18,10 +20,15 @@ import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.init.MachineTier;
 import aztech.modern_industrialization.util.Simulation;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
+import net.swedz.extended_industrialization.api.EILubricantHelper;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent.SlotRange;
 import net.swedz.extended_industrialization.machines.guicomponents.recipeefficiency.ModularRecipeEfficiencyBar;
@@ -31,7 +38,7 @@ import org.apache.commons.compress.utils.Lists;
 import java.util.Arrays;
 import java.util.List;
 
-public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlockEntity
+public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlockEntity implements EnergyComponentHolder
 {
 	private static final int EFFICIENCY_BAR_X = 38;
 	private static final int EFFICIENCY_BAR_Y = 123;
@@ -112,9 +119,50 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 	}
 	
 	@Override
+	public boolean isEnabled()
+	{
+		return redstoneControl.doAllowNormalOperation(this);
+	}
+	
+	@Override
 	public long consumeEu(long max, Simulation simulation)
 	{
-		return redstoneControl.doAllowNormalOperation(this) ? energy.consumeEu(max, simulation) : 0;
+		return energy.consumeEu(max, simulation);
+	}
+	
+	@Override
+	public long getMaxRecipeEu()
+	{
+		return tier.getMaxEu() + upgrades.getAddMaxEUPerTick();
+	}
+	
+	@Override
+	public EnergyAccess getEnergyComponent()
+	{
+		return energy;
+	}
+	
+	@Override
+	protected InteractionResult onUse(Player player, InteractionHand hand, Direction face)
+	{
+		InteractionResult result = super.onUse(player, hand, face);
+		if(!result.consumesAction())
+		{
+			result = redstoneControl.onUse(this, player, hand);
+		}
+		if(!result.consumesAction())
+		{
+			result = casing.onUse(this, player, hand);
+		}
+		if(!result.consumesAction())
+		{
+			result = upgrades.onUse(this, player, hand);
+		}
+		if(!result.consumesAction())
+		{
+			result = EILubricantHelper.onUse(crafter, player, hand);
+		}
+		return result;
 	}
 	
 	public static void registerEnergyApi(BlockEntityType<?> bet)
