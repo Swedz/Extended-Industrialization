@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.honeyextractor;
+package net.swedz.extended_industrialization.machines.components.fluidharvesting.honeyextractor;
 
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
@@ -10,8 +10,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.api.EuConsumerBehavior;
-import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.FluidHarvestingBehavior;
-import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.FluidHarvestingBehaviorCreator;
+import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehavior;
+import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehaviorCreator;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 
 import java.util.Optional;

@@ -18,10 +18,10 @@ import net.swedz.extended_industrialization.machines.blockentities.brewery.Elect
 import net.swedz.extended_industrialization.machines.blockentities.brewery.SteamBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.ElectricFluidHarvestingMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.SteamFluidHarvestingMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
-import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.wastecollector.WasteCollectorBehavior;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.SteamFarmerBlockEntity;
+import net.swedz.extended_industrialization.machines.components.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
+import net.swedz.extended_industrialization.machines.components.fluidharvesting.wastecollector.WasteCollectorBehavior;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 
 import java.util.List;

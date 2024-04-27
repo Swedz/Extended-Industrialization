@@ -7,6 +7,7 @@ import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.inventory.SlotPositions;
 import aztech.modern_industrialization.machines.BEP;
 import net.swedz.extended_industrialization.api.EuConsumerBehavior;
+import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehaviorCreator;
 
 import java.util.Arrays;
 import java.util.Collections;

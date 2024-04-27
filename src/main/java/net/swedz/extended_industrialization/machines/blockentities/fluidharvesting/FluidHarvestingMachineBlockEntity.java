@@ -14,6 +14,8 @@ import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.api.EuConsumerBehavior;
+import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehavior;
+import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehaviorCreator;
 
 public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEntity implements Tickable
 {

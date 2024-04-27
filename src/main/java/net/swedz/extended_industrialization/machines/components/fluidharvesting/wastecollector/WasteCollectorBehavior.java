@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.wastecollector;
+package net.swedz.extended_industrialization.machines.components.fluidharvesting.wastecollector;
 
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
@@ -7,8 +7,8 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 import net.swedz.extended_industrialization.api.EuConsumerBehavior;
-import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.FluidHarvestingBehavior;
-import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.FluidHarvestingBehaviorCreator;
+import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehavior;
+import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehaviorCreator;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 
 public final class WasteCollectorBehavior extends FluidHarvestingBehavior

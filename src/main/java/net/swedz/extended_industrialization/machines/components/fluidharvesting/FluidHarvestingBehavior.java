@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.blockentities.fluidharvesting;
+package net.swedz.extended_industrialization.machines.components.fluidharvesting;
 
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
