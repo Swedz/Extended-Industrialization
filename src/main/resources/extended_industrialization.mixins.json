@@ -23,7 +23,8 @@
         "mi.hook.HookMultiblockMachinesMixin",
         "mi.hook.HookSingleBlockCraftingMachinesMixin",
         "mi.hook.HookSingleBlockSpecialMachinesMixin",
-        "mi.hook.HookTooltipsMixin"
+        "mi.hook.HookTooltipsMixin",
+        "mi.hook.HookViewerSetupMixin"
     ],
     "client": [
         "client.mi.MIGuiComponentsClientMixin"

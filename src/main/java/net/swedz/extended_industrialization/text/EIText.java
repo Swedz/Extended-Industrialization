@@ -16,7 +16,9 @@ public enum EIText
 	FARMER_PLANTING_QUADRANTS("Quadrants"),
 	MULCH_GANG_FOR_LIFE_0("I love mulch!"),
 	MULCH_GANG_FOR_LIFE_1("Mulch is my favorite food!"),
-	ADVANCED_ASSEMBLER_SIZE("Machines: %d");
+	ADVANCED_ASSEMBLER_SIZE("Machines: %d"),
+	FLUID_FERTILIZERS("Fluid Fertilizers"),
+	FLUID_FERTILIZERS_RATE("Uses : %dmb/%.1fs");
 	
 	private final String englishText;
 	
