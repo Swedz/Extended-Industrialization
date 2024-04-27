@@ -19,6 +19,7 @@ import net.swedz.extended_industrialization.machines.blockentities.brewery.Steam
 import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.ElectricFluidHarvestingMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.SteamFluidHarvestingMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
+import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.wastecollector.WasteCollectorBehavior;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.SteamFarmerBlockEntity;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
@@ -195,6 +196,38 @@ public final class MIMachineHook
 				MachineBlockEntity::registerItemApi,
 				MachineBlockEntity::registerFluidApi,
 				ElectricBreweryMachineBlockEntity::registerEnergyApi
+		);
+		
+		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+				"Bronze Waste Collector", "bronze_waste_collector", "waste_collector",
+				MachineCasings.BRONZE, false, true, false,
+				(bep) -> new SteamFluidHarvestingMachineBlockEntity(
+						bep, "bronze_waste_collector",
+						1, WasteCollectorBehavior.BRONZE,
+						8 * FluidType.BUCKET_VOLUME, EIFluids.MANURE
+				),
+				MachineBlockEntity::registerFluidApi
+		);
+		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+				"Steel Waste Collector", "steel_waste_collector", "waste_collector",
+				MachineCasings.STEEL, false, true, false,
+				(bep) -> new SteamFluidHarvestingMachineBlockEntity(
+						bep, "steel_waste_collector",
+						2, WasteCollectorBehavior.STEEL,
+						16 * FluidType.BUCKET_VOLUME, EIFluids.MANURE
+				),
+				MachineBlockEntity::registerFluidApi
+		);
+		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+				"Electric Waste Collector", "electric_waste_collector", "waste_collector",
+				CableTier.LV.casing, false, true, false,
+				(bep) -> new ElectricFluidHarvestingMachineBlockEntity(
+						bep, "electric_waste_collector",
+						4, WasteCollectorBehavior.ELECTRIC,
+						32 * FluidType.BUCKET_VOLUME, EIFluids.MANURE
+				),
+				MachineBlockEntity::registerFluidApi,
+				ElectricFluidHarvestingMachineBlockEntity::registerEnergyApi
 		);
 	}
 }
