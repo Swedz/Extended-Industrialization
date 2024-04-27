@@ -2,8 +2,6 @@ package net.swedz.extended_industrialization.machines.blockentities.fluidharvest
 
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
-import aztech.modern_industrialization.machines.components.EnergyComponent;
-import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.fluid.FluidVariant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.BeehiveBlock;
@@ -13,27 +11,21 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.api.EuConsumerBehavior;
 import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.FluidHarvestingBehavior;
+import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.FluidHarvestingBehaviorCreator;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 
 import java.util.Optional;
 
 public final class HoneyExtractorBehavior extends FluidHarvestingBehavior
 {
-	public static HoneyExtractorBehavior steam(MachineBlockEntity machine)
-	{
-		return new HoneyExtractorBehavior(machine, EuConsumerBehavior.steam(machine), 1);
-	}
-	
-	public static HoneyExtractorBehavior electric(MachineBlockEntity machine, EnergyComponent energy, RedstoneControlComponent redstone)
-	{
-		return new HoneyExtractorBehavior(machine, EuConsumerBehavior.electric(machine, energy, redstone), 2);
-	}
+	public static final FluidHarvestingBehaviorCreator STEAM    = (m, e) -> new HoneyExtractorBehavior(m, e, 100, 1);
+	public static final FluidHarvestingBehaviorCreator ELECTRIC = (m, e) -> new HoneyExtractorBehavior(m, e, 100, 2);
 	
 	private BeehiveBlockEntity hive;
 	
-	private HoneyExtractorBehavior(MachineBlockEntity machine, EuConsumerBehavior euBehavior, float outputMultiplier)
+	private HoneyExtractorBehavior(MachineBlockEntity machine, EuConsumerBehavior euBehavior, int totalPumpingTicks, float outputMultiplier)
 	{
-		super(machine, euBehavior, 100, outputMultiplier);
+		super(machine, euBehavior, totalPumpingTicks, outputMultiplier);
 	}
 	
 	@Override

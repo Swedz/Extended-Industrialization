@@ -13,6 +13,7 @@ import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.fluids.FluidType;
+import net.swedz.extended_industrialization.api.EuConsumerBehavior;
 
 public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEntity implements Tickable
 {
@@ -21,11 +22,15 @@ public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEnti
 	
 	protected final long euCost;
 	
-	protected int pumpingTicks;
+	protected final FluidHarvestingBehaviorCreator behaviorCreator;
+	
+	protected FluidHarvestingBehavior behavior;
 	
 	protected final IsActiveComponent isActiveComponent;
 	
-	public FluidHarvestingMachineBlockEntity(BEP bep, String blockName, long euCost)
+	protected int pumpingTicks;
+	
+	public FluidHarvestingMachineBlockEntity(BEP bep, String blockName, long euCost, FluidHarvestingBehaviorCreator behaviorCreator)
 	{
 		super(
 				bep,
@@ -34,6 +39,7 @@ public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEnti
 		);
 		
 		this.euCost = euCost;
+		this.behaviorCreator = behaviorCreator;
 		
 		this.isActiveComponent = new IsActiveComponent();
 		this.registerGuiComponent(new ProgressBar.Server(
@@ -59,7 +65,16 @@ public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEnti
 		});
 	}
 	
-	public abstract FluidHarvestingBehavior getFluidHarvestingBehavior();
+	protected abstract EuConsumerBehavior createEuConsumerBehavior();
+	
+	public FluidHarvestingBehavior getFluidHarvestingBehavior()
+	{
+		if(behavior == null)
+		{
+			behavior = behaviorCreator.create(this, this.createEuConsumerBehavior());
+		}
+		return behavior;
+	}
 	
 	@Override
 	public void tick()

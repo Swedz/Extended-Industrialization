@@ -12,14 +12,16 @@ import aztech.modern_industrialization.machines.models.MachineCasing;
 import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import com.google.common.collect.Lists;
+import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.machines.blockentities.SolarBoilerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.brewery.ElectricBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.brewery.SteamBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.ElectricFluidHarvestingMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.honeyextractor.ElectricHoneyExtractorMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.honeyextractor.SteamHoneyExtractorMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.SteamFluidHarvestingMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.SteamFarmerBlockEntity;
+import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 
 import java.util.List;
 
@@ -160,13 +162,21 @@ public final class MIMachineHook
 		MIMachineHookHelper.registerSingleBlockSpecialMachine(
 				"Steel Honey Extractor", "steel_honey_extractor", "honey_extractor",
 				MachineCasings.STEEL, true, false, true,
-				(bep) -> new SteamHoneyExtractorMachineBlockEntity(bep, false),
+				(bep) -> new SteamFluidHarvestingMachineBlockEntity(
+						bep, "steel_honey_extractor",
+						2, HoneyExtractorBehavior.STEAM,
+						16 * FluidType.BUCKET_VOLUME, EIFluids.HONEY
+				),
 				MachineBlockEntity::registerFluidApi
 		);
 		MIMachineHookHelper.registerSingleBlockSpecialMachine(
 				"Electric Honey Extractor", "electric_honey_extractor", "honey_extractor",
 				CableTier.LV.casing, true, false, true,
-				ElectricHoneyExtractorMachineBlockEntity::new,
+				(bep) -> new ElectricFluidHarvestingMachineBlockEntity(
+						bep, "electric_honey_extractor",
+						4, HoneyExtractorBehavior.ELECTRIC,
+						32 * FluidType.BUCKET_VOLUME, EIFluids.HONEY
+				),
 				MachineBlockEntity::registerFluidApi,
 				ElectricFluidHarvestingMachineBlockEntity::registerEnergyApi
 		);

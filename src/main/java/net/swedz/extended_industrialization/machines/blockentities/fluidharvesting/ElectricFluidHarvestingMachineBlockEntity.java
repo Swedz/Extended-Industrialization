@@ -16,21 +16,22 @@ import aztech.modern_industrialization.machines.components.RedstoneControlCompon
 import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.swedz.extended_industrialization.api.EuConsumerBehavior;
 
 import java.util.Collections;
 import java.util.List;
 
-public abstract class ElectricFluidHarvestingMachineBlockEntity extends FluidHarvestingMachineBlockEntity implements EnergyComponentHolder
+public final class ElectricFluidHarvestingMachineBlockEntity extends FluidHarvestingMachineBlockEntity implements EnergyComponentHolder
 {
-	protected final MIInventory inventory;
+	private final MIInventory inventory;
 	
-	protected final EnergyComponent          energy;
-	protected final MIEnergyStorage          insertable;
-	protected final RedstoneControlComponent redstoneControl;
+	private final EnergyComponent          energy;
+	private final MIEnergyStorage          insertable;
+	private final RedstoneControlComponent redstoneControl;
 	
-	public ElectricFluidHarvestingMachineBlockEntity(BEP bep, String blockName, long euCost, long capacity, FluidLike fluid)
+	public ElectricFluidHarvestingMachineBlockEntity(BEP bep, String blockName, long euCost, FluidHarvestingBehaviorCreator behaviorCreator, long capacity, FluidLike fluid)
 	{
-		super(bep, blockName, euCost);
+		super(bep, blockName, euCost, behaviorCreator);
 		
 		List<ConfigurableFluidStack> fluidStacks = Collections.singletonList(
 				ConfigurableFluidStack.lockedOutputSlot(capacity, fluid.asFluid())
@@ -42,12 +43,18 @@ public abstract class ElectricFluidHarvestingMachineBlockEntity extends FluidHar
 		this.insertable = energy.buildInsertable((tier) -> tier == CableTier.LV);
 		this.redstoneControl = new RedstoneControlComponent();
 		
-		this.registerComponents(energy, inventory, redstoneControl);
+		this.registerComponents(inventory, energy, redstoneControl);
 		
 		this.registerGuiComponent(new EnergyBar.Server(
 				new EnergyBar.Parameters(18, 29), energy::getEu, energy::getCapacity
 		));
 		this.registerGuiComponent(new SlotPanel.Server(this).withRedstoneControl(redstoneControl));
+	}
+	
+	@Override
+	protected EuConsumerBehavior createEuConsumerBehavior()
+	{
+		return EuConsumerBehavior.electric(this, energy, redstoneControl);
 	}
 	
 	@Override
