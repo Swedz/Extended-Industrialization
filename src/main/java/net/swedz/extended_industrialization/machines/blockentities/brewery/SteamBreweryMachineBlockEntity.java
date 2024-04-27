@@ -97,17 +97,6 @@ public final class SteamBreweryMachineBlockEntity extends BreweryMachineBlockEnt
 	}
 	
 	@Override
-	protected InteractionResult onUse(Player player, InteractionHand hand, Direction face)
-	{
-		InteractionResult result = super.onUse(player, hand, face);
-		if(!result.consumesAction())
-		{
-			return overclockComponent.onUse(this, player, hand);
-		}
-		return result;
-	}
-	
-	@Override
 	public long getMaxRecipeEu()
 	{
 		return overclockComponent.getRecipeEu(tier.getMaxEu());
@@ -120,6 +109,12 @@ public final class SteamBreweryMachineBlockEntity extends BreweryMachineBlockEnt
 	}
 	
 	@Override
+	public List<Component> getTooltips()
+	{
+		return overclockComponent.getTooltips();
+	}
+	
+	@Override
 	public void tick()
 	{
 		super.tick();
@@ -127,8 +122,13 @@ public final class SteamBreweryMachineBlockEntity extends BreweryMachineBlockEnt
 	}
 	
 	@Override
-	public List<Component> getTooltips()
+	protected InteractionResult onUse(Player player, InteractionHand hand, Direction face)
 	{
-		return overclockComponent.getTooltips();
+		InteractionResult result = super.onUse(player, hand, face);
+		if(!result.consumesAction())
+		{
+			return overclockComponent.onUse(this, player, hand);
+		}
+		return result;
 	}
 }
