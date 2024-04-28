@@ -19,7 +19,11 @@ public enum EIText
 	ADVANCED_ASSEMBLER_SIZE("Machines: %d"),
 	FLUID_FERTILIZERS("Fluid Fertilizers"),
 	FLUID_FERTILIZERS_TIME("Cycle Time : %.1fs"),
-	FLUID_FERTILIZERS_CONSUMES("Consumes : %dmb");
+	FLUID_FERTILIZERS_CONSUMES("Consumes : %dmb"),
+	MULTIBLOCK_SHAPE_VALID("Shape Valid"),
+	MULTIBLOCK_SHAPE_INVALID("Shape Invalid"),
+	MULTIBLOCK_STATUS_ACTIVE("Status : Active"),
+	MULTIBLOCK_STATUS_INACTIVE("Status : Inactive");
 	
 	private final String englishText;
 	
