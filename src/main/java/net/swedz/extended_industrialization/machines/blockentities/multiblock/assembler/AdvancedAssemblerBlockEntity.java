@@ -24,6 +24,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
+import net.swedz.extended_industrialization.machines.guicomponents.CommonGuiComponents;
 import net.swedz.extended_industrialization.machines.multiblock.BasicMultiblockMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.multiblock.members.PredicateSimpleMember;
 import net.swedz.extended_industrialization.registry.tags.EITags;
@@ -41,7 +42,7 @@ public final class AdvancedAssemblerBlockEntity extends BasicMultiblockMachineBl
 	
 	public AdvancedAssemblerBlockEntity(BEP bep)
 	{
-		super(bep, new MachineGuiParameters.Builder("advanced_assembler", false).backgroundHeight(128).build(), SHAPE_TEMPLATES);
+		super(bep, new MachineGuiParameters.Builder("advanced_assembler", false).backgroundHeight(200).build(), SHAPE_TEMPLATES);
 		
 		this.upgrades = new UpgradeComponent();
 		this.redstoneControl = new RedstoneControlComponent();
@@ -49,6 +50,8 @@ public final class AdvancedAssemblerBlockEntity extends BasicMultiblockMachineBl
 		this.registerGuiComponent(new SlotPanel.Server(this)
 				.withRedstoneControl(redstoneControl)
 				.withUpgrades(upgrades));
+		
+		this.registerGuiComponent(CommonGuiComponents.standardMultiblockScreen(this, isActive));
 		
 		this.registerGuiComponent(new ShapeSelection.Server(
 				new ShapeSelection.Behavior()
