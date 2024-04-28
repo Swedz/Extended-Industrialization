@@ -15,6 +15,8 @@ import java.util.List;
 
 public final class ModularMultiblockGuiClient implements GuiComponentClient
 {
+	private int height;
+	
 	private List<ModularMultiblockGuiLine> text;
 	
 	public ModularMultiblockGuiClient(FriendlyByteBuf buf)
@@ -25,6 +27,7 @@ public final class ModularMultiblockGuiClient implements GuiComponentClient
 	@Override
 	public void readCurrentData(FriendlyByteBuf buf)
 	{
+		height = buf.readInt();
 		text = buf.readCollection(Lists::newArrayListWithCapacity, ModularMultiblockGuiLine::read);
 	}
 	
@@ -42,12 +45,26 @@ public final class ModularMultiblockGuiClient implements GuiComponentClient
 		public void renderBackground(GuiGraphics graphics, int x, int y)
 		{
 			Minecraft minecraftClient = Minecraft.getInstance();
+			Font font = minecraftClient.font;
+			
 			graphics.blit(
 					TEXTURE,
 					x + ModularMultiblockGui.X, y + ModularMultiblockGui.Y, 0, 0,
-					ModularMultiblockGui.W, ModularMultiblockGui.H, ModularMultiblockGui.W, ModularMultiblockGui.H
+					ModularMultiblockGui.W, 2, ModularMultiblockGui.W, ModularMultiblockGui.H
 			);
-			Font font = minecraftClient.font;
+			for(int i = 0; i < height - 4; i++)
+			{
+				graphics.blit(
+						TEXTURE,
+						x + ModularMultiblockGui.X, y + ModularMultiblockGui.Y + 2 + i, 0, 2,
+						ModularMultiblockGui.W, 1, ModularMultiblockGui.W, ModularMultiblockGui.H
+				);
+			}
+			graphics.blit(
+					TEXTURE,
+					x + ModularMultiblockGui.X, y + ModularMultiblockGui.Y + height - 2, 0, ModularMultiblockGui.H - 2,
+					ModularMultiblockGui.W, 2, ModularMultiblockGui.W, ModularMultiblockGui.H
+			);
 			
 			int deltaY = 23;
 			for(ModularMultiblockGuiLine line : text)

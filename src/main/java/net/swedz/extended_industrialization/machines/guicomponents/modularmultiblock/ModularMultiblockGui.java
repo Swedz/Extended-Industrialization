@@ -4,7 +4,6 @@ import aztech.modern_industrialization.machines.gui.GuiComponent;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -15,23 +14,26 @@ public final class ModularMultiblockGui
 	
 	public static final class Server implements GuiComponent.Server<Data>
 	{
+		private final int height;
+		
 		private final Supplier<List<ModularMultiblockGuiLine>> textSupplier;
 		
-		public Server(Supplier<List<ModularMultiblockGuiLine>> textSupplier)
+		public Server(int height, Supplier<List<ModularMultiblockGuiLine>> textSupplier)
 		{
+			this.height = height;
 			this.textSupplier = textSupplier;
 		}
 		
 		@Override
 		public Data copyData()
 		{
-			return new Data(textSupplier.get());
+			return new Data(height, textSupplier.get());
 		}
 		
 		@Override
 		public boolean needsSync(Data cachedData)
 		{
-			return !textSupplier.get().equals(cachedData.text);
+			return height != cachedData.height() || !textSupplier.get().equals(cachedData.text());
 		}
 		
 		@Override
@@ -43,6 +45,7 @@ public final class ModularMultiblockGui
 		@Override
 		public void writeCurrentData(FriendlyByteBuf buf)
 		{
+			buf.writeInt(height);
 			buf.writeCollection(textSupplier.get(), ModularMultiblockGuiLine::write);
 		}
 		
@@ -53,19 +56,8 @@ public final class ModularMultiblockGui
 		}
 	}
 	
-	private static final class Data
+	private record Data(int height, List<ModularMultiblockGuiLine> text)
 	{
-		final List<ModularMultiblockGuiLine> text;
-		
-		private Data()
-		{
-			this(Lists.newArrayList());
-		}
-		
-		private Data(List<ModularMultiblockGuiLine> text)
-		{
-			this.text = text;
-		}
 	}
 	
 	public static final int X = 4;

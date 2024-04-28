@@ -35,9 +35,9 @@ public final class CommonGuiComponents
 		);
 	}
 	
-	public static ModularMultiblockGui.Server standardMultiblockScreen(MultiblockMachineBlockEntity machine, IsActiveComponent isActive)
+	public static ModularMultiblockGui.Server standardMultiblockScreen(MultiblockMachineBlockEntity machine, IsActiveComponent isActive, int height)
 	{
-		return new ModularMultiblockGui.Server(() ->
+		return new ModularMultiblockGui.Server(height, () ->
 		{
 			List<ModularMultiblockGuiLine> text = Lists.newArrayList();
 			
@@ -52,5 +52,10 @@ public final class CommonGuiComponents
 			
 			return text;
 		});
+	}
+	
+	public static ModularMultiblockGui.Server standardMultiblockScreen(MultiblockMachineBlockEntity machine, IsActiveComponent isActive)
+	{
+		return standardMultiblockScreen(machine, isActive, ModularMultiblockGui.H);
 	}
 }
