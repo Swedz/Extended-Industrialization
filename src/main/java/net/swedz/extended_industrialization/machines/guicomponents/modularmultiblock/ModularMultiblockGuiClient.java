@@ -52,14 +52,11 @@ public final class ModularMultiblockGuiClient implements GuiComponentClient
 					x + ModularMultiblockGui.X, y + ModularMultiblockGui.Y, 0, 0,
 					ModularMultiblockGui.W, 2, ModularMultiblockGui.W, ModularMultiblockGui.H
 			);
-			for(int i = 0; i < height - 4; i++)
-			{
-				graphics.blit(
-						TEXTURE,
-						x + ModularMultiblockGui.X, y + ModularMultiblockGui.Y + 2 + i, 0, 2,
-						ModularMultiblockGui.W, 1, ModularMultiblockGui.W, ModularMultiblockGui.H
-				);
-			}
+			graphics.blit(
+					TEXTURE,
+					x + ModularMultiblockGui.X, y + ModularMultiblockGui.Y + 2, 0, 2,
+					ModularMultiblockGui.W, height - 4, ModularMultiblockGui.W, ModularMultiblockGui.H
+			);
 			graphics.blit(
 					TEXTURE,
 					x + ModularMultiblockGui.X, y + ModularMultiblockGui.Y + height - 2, 0, ModularMultiblockGui.H - 2,

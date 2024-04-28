@@ -20,6 +20,10 @@ public final class ModularMultiblockGui
 		
 		public Server(int height, Supplier<List<ModularMultiblockGuiLine>> textSupplier)
 		{
+			if(height <= 4 || height > H)
+			{
+				throw new IllegalArgumentException("Provided height outside of acceptable bounds");
+			}
 			this.height = height;
 			this.textSupplier = textSupplier;
 		}
