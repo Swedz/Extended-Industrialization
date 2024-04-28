@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.components.farmer.PlantingMode;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerProcessRates;
+import net.swedz.extended_industrialization.machines.guicomponents.CommonGuiComponents;
 import net.swedz.extended_industrialization.machines.multiblock.BasicMultiblockMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.multiblock.members.PredicateSimpleMember;
 import net.swedz.extended_industrialization.text.EIText;
@@ -48,7 +49,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder(blockId, false).backgroundHeight(128).build(),
+				new MachineGuiParameters.Builder(blockId, false).backgroundHeight(200).build(),
 				shapes.shapeTemplates()
 		);
 		
@@ -59,6 +60,8 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		this.farmer = new FarmerComponent(inventory, isActive, defaultPlantingMode, processRates);
 		
 		this.registerComponents(farmer);
+		
+		this.registerGuiComponent(CommonGuiComponents.standardMultiblockScreen(this, isActive));
 		
 		List<ShapeSelection.LineInfo> lines = Lists.newArrayList();
 		List<Component> sizes = Lists.newArrayList();
