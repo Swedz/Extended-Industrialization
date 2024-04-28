@@ -4,7 +4,7 @@ import aztech.modern_industrialization.materials.Material;
 import aztech.modern_industrialization.materials.MaterialRegistry;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.extended_industrialization.hook.mi.MIMachineHook;
+import net.swedz.extended_industrialization.machines.EIMachines;
 
 import static aztech.modern_industrialization.materials.part.MIParts.*;
 
@@ -18,7 +18,7 @@ public final class AlloySmelterRecipesServerDatagenProvider extends RecipesServe
 	private static void addAlloySmelterRecipes(Material componentA, int amountA, Material componentB, int amountB, Material result, int amountResult, RecipeOutput output)
 	{
 		addMaterialMachineRecipe(
-				result, "dust", MIMachineHook.RecipeTypes.ALLOY_SMELTER,
+				result, "dust", EIMachines.RecipeTypes.ALLOY_SMELTER,
 				4, 10 * 20,
 				(r) -> r
 						.addItemInput(componentA.getPart(DUST).getTaggedIngredient(), amountA, 1)
@@ -27,7 +27,7 @@ public final class AlloySmelterRecipesServerDatagenProvider extends RecipesServe
 				output
 		);
 		addMaterialMachineRecipe(
-				result, "tiny_dust", MIMachineHook.RecipeTypes.ALLOY_SMELTER,
+				result, "tiny_dust", EIMachines.RecipeTypes.ALLOY_SMELTER,
 				4, 10 * 20,
 				(r) -> r
 						.addItemInput(componentA.getPart(TINY_DUST).getTaggedIngredient(), amountA * 9, 1)
@@ -36,7 +36,7 @@ public final class AlloySmelterRecipesServerDatagenProvider extends RecipesServe
 				output
 		);
 		addMaterialMachineRecipe(
-				result, "ingot", MIMachineHook.RecipeTypes.ALLOY_SMELTER,
+				result, "ingot", EIMachines.RecipeTypes.ALLOY_SMELTER,
 				4, 10 * 20,
 				(r) -> r
 						.addItemInput(componentA.getPart(INGOT).getTaggedIngredient(), amountA, 1)

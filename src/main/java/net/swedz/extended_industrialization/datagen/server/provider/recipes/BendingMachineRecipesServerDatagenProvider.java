@@ -5,7 +5,7 @@ import aztech.modern_industrialization.materials.MaterialRegistry;
 import aztech.modern_industrialization.materials.part.PartTemplate;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.extended_industrialization.hook.mi.MIMachineHook;
+import net.swedz.extended_industrialization.machines.EIMachines;
 
 import java.util.Map;
 
@@ -24,7 +24,7 @@ public final class BendingMachineRecipesServerDatagenProvider extends RecipesSer
 		if(hasPart(material, from) && hasPart(material, to))
 		{
 			addMaterialMachineRecipe(
-					material, name, MIMachineHook.RecipeTypes.BENDING_MACHINE,
+					material, name, EIMachines.RecipeTypes.BENDING_MACHINE,
 					2, (int) ((200 * material.get(HARDNESS).timeFactor) / 2),
 					(r) -> r
 							.addItemInput(material.getPart(from).getTaggedIngredient(), 1, 1)

@@ -7,7 +7,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.extended_industrialization.hook.mi.MIMachineHook;
+import net.swedz.extended_industrialization.machines.EIMachines;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 import net.swedz.extended_industrialization.registry.items.EIItems;
 
@@ -28,7 +28,7 @@ public final class ComposterRecipesServerDatagenProvider extends RecipesServerDa
 			{
 				int amountNeeded = Math.max(1, (int) Math.floor((8 / chance) / 2));
 				addMachineRecipe(
-						"composter/standard/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.RecipeTypes.COMPOSTER,
+						"composter/standard/%s".formatted(id.getNamespace()), id.getPath(), EIMachines.RecipeTypes.COMPOSTER,
 						2, 5 * 20,
 						(r) -> r
 								.addItemInput(item, amountNeeded)
@@ -45,7 +45,7 @@ public final class ComposterRecipesServerDatagenProvider extends RecipesServerDa
 		addStandardCompostingRecipes(output);
 		
 		addMachineRecipe(
-				"composter/fertilizer", "composted_manure", MIMachineHook.RecipeTypes.COMPOSTER,
+				"composter/fertilizer", "composted_manure", EIMachines.RecipeTypes.COMPOSTER,
 				4, 5 * 20,
 				(r) -> r
 						.addFluidInput(EIFluids.MANURE, 150)

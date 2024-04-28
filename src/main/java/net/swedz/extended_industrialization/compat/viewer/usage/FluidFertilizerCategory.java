@@ -50,9 +50,9 @@ public final class FluidFertilizerCategory extends ViewerCategory<Fluid>
 	public void buildWidgets(Fluid recipe, WidgetList widgets)
 	{
 		FertilizerPotency fertilizerPotency = FertilizerPotency.getFor(recipe);
-		Component rate = EIText.FLUID_FERTILIZERS_RATE.text(fertilizerPotency.tickRate() / 20f);
+		Component rate = EIText.FLUID_FERTILIZERS_TIME.text(fertilizerPotency.tickRate() / 20f);
 		widgets.secondaryText(rate, 40, 14);
-		Component cost = EIText.FLUID_FERTILIZERS_USES.text(fertilizerPotency.mbToConsumePerFertilizerTick());
+		Component cost = EIText.FLUID_FERTILIZERS_CONSUMES.text(fertilizerPotency.mbToConsumePerFertilizerTick());
 		widgets.secondaryText(cost, 40, 24);
 	}
 }

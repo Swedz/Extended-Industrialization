@@ -1,7 +1,7 @@
 package net.swedz.extended_industrialization.mixin.mi.hook;
 
 import aztech.modern_industrialization.MITooltips;
-import net.swedz.extended_industrialization.hook.mi.MITooltipHook;
+import net.swedz.extended_industrialization.hook.mi.MIHookDelegator;
 import net.swedz.extended_industrialization.hook.mi.tracker.MIHookTracker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,7 +18,7 @@ public class HookTooltipsMixin
 	private static void clinit(CallbackInfo callback)
 	{
 		MIHookTracker.open();
-		MITooltipHook.hook();
+		MIHookDelegator.tooltips();
 		MIHookTracker.close();
 	}
 }

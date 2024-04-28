@@ -13,7 +13,7 @@ import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.swedz.extended_industrialization.hook.mi.MIMachineHook;
+import net.swedz.extended_industrialization.machines.EIMachines;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 import net.swedz.extended_industrialization.registry.items.EIItems;
 
@@ -30,7 +30,7 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 	{
 		ResourceLocation id = BuiltInRegistries.ITEM.getKey(fullItem);
 		addMachineRecipe(
-				"canning_machine/filling/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.RecipeTypes.CANNING_MACHINE,
+				"canning_machine/filling/%s".formatted(id.getNamespace()), id.getPath(), EIMachines.RecipeTypes.CANNING_MACHINE,
 				2, 5 * 20,
 				(r) -> r
 						.addFluidInput(fluidStack.getFluid(), fluidStack.getAmount())
@@ -39,7 +39,7 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 				output
 		);
 		addMachineRecipe(
-				"canning_machine/emptying/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.RecipeTypes.CANNING_MACHINE,
+				"canning_machine/emptying/%s".formatted(id.getNamespace()), id.getPath(), EIMachines.RecipeTypes.CANNING_MACHINE,
 				2, 5 * 20,
 				(r) -> r
 						.addItemInput(fullItem, 1)
@@ -54,7 +54,7 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 		ResourceLocation id = BuiltInRegistries.ITEM.getKey(foodItem);
 		int count = (int) Math.ceil(food.getNutrition() / 2D);
 		addMachineRecipe(
-				"canning_machine/canned_food/%s".formatted(id.getNamespace()), id.getPath(), MIMachineHook.RecipeTypes.CANNING_MACHINE,
+				"canning_machine/canned_food/%s".formatted(id.getNamespace()), id.getPath(), EIMachines.RecipeTypes.CANNING_MACHINE,
 				2, 5 * 20,
 				(r) -> r
 						.addItemInput(EIItems.TIN_CAN, count)

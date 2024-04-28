@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.hook.mi;
+package net.swedz.extended_industrialization.machines;
 
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
@@ -11,8 +11,8 @@ import aztech.modern_industrialization.machines.init.SingleBlockCraftingMachines
 import aztech.modern_industrialization.machines.models.MachineCasing;
 import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
-import com.google.common.collect.Lists;
 import net.neoforged.neoforge.fluids.FluidType;
+import net.swedz.extended_industrialization.hook.mi.MIMachineHookHelper;
 import net.swedz.extended_industrialization.machines.blockentities.SolarBoilerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.brewery.ElectricBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.brewery.SteamBreweryMachineBlockEntity;
@@ -30,7 +30,7 @@ import java.util.List;
 import static aztech.modern_industrialization.machines.init.SingleBlockCraftingMachines.*;
 import static aztech.modern_industrialization.machines.models.MachineCasings.*;
 
-public final class MIMachineHook
+public final class EIMachines
 {
 	public static final class Casings
 	{
@@ -38,19 +38,16 @@ public final class MIMachineHook
 				BRONZE_PIPE;
 	}
 	
-	public static void machineCasings()
+	public static void casings()
 	{
 		Casings.BRONZE_PIPE = MachineCasings.create("bronze_machine_casing_pipe");
 	}
 	
-	public static List<ElectricBlastFurnaceBlockEntity.Tier> blastFurnaceTiers()
+	public static void blastFurnaceTiers(List<ElectricBlastFurnaceBlockEntity.Tier> list)
 	{
-		List<ElectricBlastFurnaceBlockEntity.Tier> list = Lists.newArrayList();
-		
-		return list;
 	}
 	
-	public static void multiblockMachines()
+	public static void multiblocks()
 	{
 		MIMachineHookHelper.registerMultiblockMachine(
 				"Steam Farmer", "steam_farmer", "farmer",
@@ -82,7 +79,7 @@ public final class MIMachineHook
 				COMPOSTER;
 	}
 	
-	public static void machineRecipeTypes()
+	public static void recipeTypes()
 	{
 		RecipeTypes.BENDING_MACHINE = MIMachineRecipeTypes.create("bending_machine").withItemInputs().withItemOutputs();
 		RecipeTypes.ALLOY_SMELTER = MIMachineRecipeTypes.create("alloy_smelter").withItemInputs().withItemOutputs();
@@ -90,7 +87,7 @@ public final class MIMachineHook
 		RecipeTypes.COMPOSTER = MIMachineRecipeTypes.create("composter").withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
 	}
 	
-	public static void singleBlockCraftingMachines()
+	public static void singleBlockCrafting()
 	{
 		// @formatter:off
 		
@@ -153,7 +150,7 @@ public final class MIMachineHook
 		// @formatter:on
 	}
 	
-	public static void singleBlockSpecialMachines()
+	public static void singleBlockSpecial()
 	{
 		MIMachineHookHelper.registerSingleBlockSpecialMachine(
 				"Bronze Solar Boiler", "bronze_solar_boiler", "solar_boiler",

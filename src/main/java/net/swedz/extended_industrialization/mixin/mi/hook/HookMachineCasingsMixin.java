@@ -1,7 +1,7 @@
 package net.swedz.extended_industrialization.mixin.mi.hook;
 
 import aztech.modern_industrialization.machines.models.MachineCasings;
-import net.swedz.extended_industrialization.hook.mi.MIMachineHook;
+import net.swedz.extended_industrialization.hook.mi.MIHookDelegator;
 import net.swedz.extended_industrialization.hook.mi.tracker.MIHookTracker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,7 +18,7 @@ public class HookMachineCasingsMixin
 	private static void init(CallbackInfo callback)
 	{
 		MIHookTracker.open();
-		MIMachineHook.machineCasings();
+		MIHookDelegator.machineCasings();
 		MIHookTracker.close();
 	}
 }
