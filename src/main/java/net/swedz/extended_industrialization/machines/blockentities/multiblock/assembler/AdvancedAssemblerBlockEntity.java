@@ -27,8 +27,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.swedz.extended_industrialization.machines.guicomponents.CommonGuiComponents;
-import net.swedz.extended_industrialization.machines.guicomponents.modularnoninventoryslots.ModularNonInventorySlotType;
-import net.swedz.extended_industrialization.machines.guicomponents.modularnoninventoryslots.ModularNonInventorySlots;
+import net.swedz.extended_industrialization.machines.guicomponents.advancedassemblermachineslot.AdvancedAssemblerMachineSlot;
 import net.swedz.extended_industrialization.machines.multiblock.BasicMultiblockMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.multiblock.members.PredicateSimpleMember;
 import net.swedz.extended_industrialization.registry.tags.EITags;
@@ -57,15 +56,14 @@ public final class AdvancedAssemblerBlockEntity extends BasicMultiblockMachineBl
 				.withRedstoneControl(redstoneControl)
 				.withUpgrades(upgrades));
 		
-		this.registerGuiComponent(new ModularNonInventorySlots.Server(this)
-				.withSlot(
-						152, 86, ModularNonInventorySlotType.MACHINE,
-						() -> inputMachines,
-						(machine, stack) -> inputMachines = stack,
-						() -> this.getMachineStackSize(activeShape.getActiveShapeIndex())
-				));
+		this.registerGuiComponent(new AdvancedAssemblerMachineSlot.Server(
+				this,
+				() -> this.getMachineStackSize(activeShape.getActiveShapeIndex()),
+				() -> inputMachines,
+				(machine, stack) -> inputMachines = stack
+		));
 		
-		this.registerGuiComponent(CommonGuiComponents.standardMultiblockScreen(this, isActive, 66));
+		this.registerGuiComponent(CommonGuiComponents.standardMultiblockScreen(this, isActive, 80));
 		
 		this.registerGuiComponent(new ShapeSelection.Server(
 				new ShapeSelection.Behavior()
