@@ -17,6 +17,7 @@ public enum EIText
 	MULCH_GANG_FOR_LIFE_0("I love mulch!"),
 	MULCH_GANG_FOR_LIFE_1("Mulch is my favorite food!"),
 	ADVANCED_ASSEMBLER_SIZE("Machines: %d"),
+	ADVANCED_ASSEMBLER_MACHINE_INPUT("Insert electric crafting machines to run in parallel."),
 	FLUID_FERTILIZERS("Fluid Fertilizers"),
 	FLUID_FERTILIZERS_TIME("Cycle Time : %.1fs"),
 	FLUID_FERTILIZERS_CONSUMES("Consumes : %dmb"),

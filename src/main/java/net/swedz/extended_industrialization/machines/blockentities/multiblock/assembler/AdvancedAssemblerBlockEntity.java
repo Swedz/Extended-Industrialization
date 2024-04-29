@@ -20,11 +20,15 @@ import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.swedz.extended_industrialization.machines.guicomponents.CommonGuiComponents;
+import net.swedz.extended_industrialization.machines.guicomponents.modularnoninventoryslots.ModularNonInventorySlotType;
+import net.swedz.extended_industrialization.machines.guicomponents.modularnoninventoryslots.ModularNonInventorySlots;
 import net.swedz.extended_industrialization.machines.multiblock.BasicMultiblockMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.multiblock.members.PredicateSimpleMember;
 import net.swedz.extended_industrialization.registry.tags.EITags;
@@ -40,6 +44,8 @@ public final class AdvancedAssemblerBlockEntity extends BasicMultiblockMachineBl
 	private final RedstoneControlComponent redstoneControl;
 	private final List<EnergyComponent>    energyInputs = Lists.newArrayList();
 	
+	private ItemStack inputMachines = ItemStack.EMPTY;
+	
 	public AdvancedAssemblerBlockEntity(BEP bep)
 	{
 		super(bep, new MachineGuiParameters.Builder("advanced_assembler", false).backgroundHeight(200).build(), SHAPE_TEMPLATES);
@@ -51,7 +57,15 @@ public final class AdvancedAssemblerBlockEntity extends BasicMultiblockMachineBl
 				.withRedstoneControl(redstoneControl)
 				.withUpgrades(upgrades));
 		
-		this.registerGuiComponent(CommonGuiComponents.standardMultiblockScreen(this, isActive));
+		this.registerGuiComponent(new ModularNonInventorySlots.Server(this)
+				.withSlot(
+						152, 86, ModularNonInventorySlotType.MACHINE,
+						() -> inputMachines,
+						(machine, stack) -> inputMachines = stack,
+						() -> this.getMachineStackSize(activeShape.getActiveShapeIndex())
+				));
+		
+		this.registerGuiComponent(CommonGuiComponents.standardMultiblockScreen(this, isActive, 66));
 		
 		this.registerGuiComponent(new ShapeSelection.Server(
 				new ShapeSelection.Behavior()
@@ -59,6 +73,12 @@ public final class AdvancedAssemblerBlockEntity extends BasicMultiblockMachineBl
 					@Override
 					public void handleClick(int line, int delta)
 					{
+						int newShapeIndex = Mth.clamp(activeShape.getActiveShapeIndex() + delta, 0, SHAPE_TEMPLATES.length - 1);
+						int newMachineStackSize = AdvancedAssemblerBlockEntity.this.getMachineStackSize(newShapeIndex);
+						if(newMachineStackSize < inputMachines.getCount())
+						{
+							return;
+						}
 						activeShape.incrementShape(AdvancedAssemblerBlockEntity.this, delta);
 					}
 					
@@ -70,10 +90,15 @@ public final class AdvancedAssemblerBlockEntity extends BasicMultiblockMachineBl
 				},
 				new ShapeSelection.LineInfo(
 						SPLIT,
-						IntStream.range(0, SPLIT).map((i) -> (int) (BASE_MACHINES * Math.pow(MULT_MACHINES, i))).mapToObj(EIText.ADVANCED_ASSEMBLER_SIZE::text).toList(),
+						IntStream.range(0, SPLIT).map(this::getMachineStackSize).mapToObj(EIText.ADVANCED_ASSEMBLER_SIZE::text).toList(),
 						false
 				)
 		));
+	}
+	
+	private int getMachineStackSize(int sizeIndex)
+	{
+		return (int) (BASE_MACHINES * Math.pow(MULT_MACHINES, sizeIndex));
 	}
 	
 	@Override

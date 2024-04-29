@@ -38,6 +38,7 @@
   "item.extended_industrialization.steel_combine": "Steel Combine",
   "item.extended_industrialization.tin_can": "Tin Can",
   "itemGroup.extended_industrialization.extended_industrialization": "Extended Industrialization",
+  "text.extended_industrialization.advanced_assembler_machine_input": "Insert electric crafting machines to run in parallel.",
   "text.extended_industrialization.advanced_assembler_size": "Machines: %d",
   "text.extended_industrialization.farmer_not_tilling": "Not Tilling",
   "text.extended_industrialization.farmer_planting_alternating_lines": "Alternating Lines",
