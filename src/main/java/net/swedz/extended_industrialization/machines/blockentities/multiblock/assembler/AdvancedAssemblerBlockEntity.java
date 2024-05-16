@@ -76,7 +76,6 @@ public final class AdvancedAssemblerBlockEntity extends BasicMultiblockMachineBl
 				.withRedstoneControl(redstoneControl)
 				.withUpgrades(upgrades));
 		
-		// TODO what does this even do???
 		this.registerGuiComponent(new ReiSlotLocking.Server(crafter::lockRecipe, () -> operatingState != OperatingState.NOT_MATCHED));
 		
 		this.registerGuiComponent(new AdvancedAssemblerMachineSlot.Server(
