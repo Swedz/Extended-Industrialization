@@ -36,6 +36,11 @@ public abstract class BasicMultiblockMachineBlockEntity extends MultiblockMachin
 		this.registerComponents(activeShape, isActive);
 	}
 	
+	protected void updateActive(boolean active)
+	{
+		isActive.updateActive(active, this);
+	}
+	
 	public void onLink(ShapeMatcher shapeMatcher)
 	{
 	}

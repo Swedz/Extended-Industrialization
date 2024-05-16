@@ -188,11 +188,6 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		}
 	}
 	
-	protected void updateActive(boolean active)
-	{
-		isActive.updateActive(active, this);
-	}
-	
 	public static final class ShapeWrapper
 	{
 		public static ShapeWrapper of(int maxHeight)

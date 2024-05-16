@@ -12,8 +12,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.machines.components.craft.advancedassembler.AdvancedAssemblerMachineComponent;
 
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 public final class AdvancedAssemblerMachineSlot
@@ -37,20 +37,24 @@ public final class AdvancedAssemblerMachineSlot
 			   machineBlock.getBlockEntityInstance() instanceof ElectricCraftingMachineBlockEntity;
 	}
 	
+	public static ElectricCraftingMachineBlockEntity getMachine(ItemStack itemStack)
+	{
+		return (ElectricCraftingMachineBlockEntity) ((MachineBlock) ((BlockItem) itemStack.getItem()).getBlock()).getBlockEntityInstance();
+	}
+	
 	public static final class Server implements GuiComponent.Server<Integer>
 	{
 		private final MachineBlockEntity machine;
 		
-		private final Supplier<Integer>                         getMaxMachines;
-		private final Supplier<ItemStack>                       getMachineStack;
-		private final BiConsumer<MachineBlockEntity, ItemStack> setMachineStack;
+		private final Supplier<Integer> getMaxMachines;
 		
-		public Server(MachineBlockEntity machine, Supplier<Integer> getMaxMachines, Supplier<ItemStack> getMachineStack, BiConsumer<MachineBlockEntity, ItemStack> setMachineStack)
+		private final AdvancedAssemblerMachineComponent machines;
+		
+		public Server(MachineBlockEntity machine, Supplier<Integer> getMaxMachines, AdvancedAssemblerMachineComponent machines)
 		{
 			this.machine = machine;
 			this.getMaxMachines = getMaxMachines;
-			this.getMachineStack = getMachineStack;
-			this.setMachineStack = setMachineStack;
+			this.machines = machines;
 		}
 		
 		@Override
@@ -92,13 +96,13 @@ public final class AdvancedAssemblerMachineSlot
 						@Override
 						protected ItemStack getRealStack()
 						{
-							return getMachineStack.get();
+							return machines.getMachines();
 						}
 						
 						@Override
 						protected void setRealStack(ItemStack itemStack)
 						{
-							setMachineStack.accept(machine, itemStack);
+							machines.setMachines(machine, itemStack);
 						}
 						
 						@Override

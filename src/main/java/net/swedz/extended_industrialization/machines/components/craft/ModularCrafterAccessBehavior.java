@@ -22,6 +22,11 @@ public interface ModularCrafterAccessBehavior
 		return this.consumeEu(amount, Simulation.SIMULATE) == amount;
 	}
 	
+	default boolean isRecipeBanned(long recipeEuCost)
+	{
+		return recipeEuCost > this.getMaxRecipeEu();
+	}
+	
 	long getBaseRecipeEu();
 	
 	long getMaxRecipeEu();

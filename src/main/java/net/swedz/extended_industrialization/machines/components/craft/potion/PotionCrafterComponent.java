@@ -90,12 +90,14 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 		return maxEfficiencyTicks;
 	}
 	
+	@Override
 	public void decreaseEfficiencyTicks()
 	{
 		efficiencyTicks = Math.max(efficiencyTicks - 1, 0);
 		this.clearActiveRecipeIfPossible();
 	}
 	
+	@Override
 	public void increaseEfficiencyTicks(int increment)
 	{
 		efficiencyTicks = Math.min(efficiencyTicks + increment, maxEfficiencyTicks);
