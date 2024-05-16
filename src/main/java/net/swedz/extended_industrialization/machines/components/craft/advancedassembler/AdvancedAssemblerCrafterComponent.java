@@ -273,7 +273,7 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 		return false;
 	}
 	
-	private int calculateItemRecipeMultiplier(MachineRecipe recipe)
+	private int calculateItemInputRecipeMultiplier(MachineRecipe recipe)
 	{
 		List<ItemStack> itemsInHatches = inventory.getItemInputs().stream()
 				.map((item) -> item.getResource().toStack((int) item.getAmount()))
@@ -304,7 +304,53 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 		return itemMultiplier;
 	}
 	
-	private int calculateFluidRecipeMultiplier(MachineRecipe recipe)
+	private int calculateItemOutputRecipeMultiplier(MachineRecipe recipe)
+	{
+		List<ItemStack> itemsInHatches = inventory.getItemOutputs().stream()
+				.map((item) -> item.getResource().toStack((int) item.getAmount()))
+				.toList();
+		
+		int itemMultiplier = machines.getMachineCount();
+		for(MachineRecipe.ItemOutput output : recipe.itemOutputs)
+		{
+			if(output.probability < 1)
+			{
+				continue;
+			}
+			
+			int maxOutputCount = output.amount * machines.getMachineCount();
+			
+			int outputSpace = 0;
+			for(ConfigurableItemStack item : inventory.getItemOutputs())
+			{
+				ItemVariant key = item.getResource();
+				if(key.getItem() == output.item || key.isBlank())
+				{
+					int remainingCapacity = (int) item.getRemainingCapacityFor(ItemVariant.of(output.item));
+					outputSpace += remainingCapacity;
+					if(outputSpace >= maxOutputCount)
+					{
+						outputSpace = maxOutputCount;
+						break;
+					}
+				}
+			}
+			
+			int multiplier = outputSpace / output.amount;
+			if(multiplier < itemMultiplier)
+			{
+				itemMultiplier = multiplier;
+			}
+			if(itemMultiplier <= 1)
+			{
+				break;
+			}
+		}
+		
+		return itemMultiplier;
+	}
+	
+	private int calculateFluidInputRecipeMultiplier(MachineRecipe recipe)
 	{
 		int fluidMultiplier = machines.getMachineCount();
 		for(MachineRecipe.FluidInput input : recipe.fluidInputs)
@@ -331,21 +377,74 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 		return fluidMultiplier;
 	}
 	
+	private int calculateFluidOutputRecipeMultiplier(MachineRecipe recipe)
+	{
+		int fluidMultiplier = machines.getMachineCount();
+		for(int i = 0; i < Math.min(recipe.fluidOutputs.size(), behavior.getMaxFluidOutputs()); ++i)
+		{
+			MachineRecipe.FluidOutput output = recipe.fluidOutputs.get(i);
+			
+			if(output.probability < 1)
+			{
+				continue;
+			}
+			
+			long maxOutputCount = output.amount * machines.getMachineCount();
+			
+			outer:
+			for(int tries = 0; tries < 2; tries++)
+			{
+				for(ConfigurableFluidStack stack : inventory.getFluidOutputs())
+				{
+					FluidVariant outputKey = FluidVariant.of(output.fluid);
+					if(stack.isResourceAllowedByLock(outputKey) && ((tries == 1 && stack.isResourceBlank()) || stack.getResource().equals(outputKey)))
+					{
+						long outputSpace = Math.min(stack.getRemainingSpace(), maxOutputCount);
+						
+						int multiplier = (int) (outputSpace / output.amount);
+						if(multiplier < fluidMultiplier)
+						{
+							fluidMultiplier = multiplier;
+						}
+						if(fluidMultiplier <= 1)
+						{
+							break outer;
+						}
+					}
+				}
+			}
+		}
+		
+		return fluidMultiplier;
+	}
+	
 	private boolean tryStartRecipe(MachineRecipe recipe)
 	{
 		if(machines.getMachineCount() > 1)
 		{
-			int itemMultiplier = this.calculateItemRecipeMultiplier(recipe);
-			if(itemMultiplier > 1)
+			int itemInputMultiplier = this.calculateItemInputRecipeMultiplier(recipe);
+			if(itemInputMultiplier > 1)
 			{
-				int fluidMultiplier = this.calculateFluidRecipeMultiplier(recipe);
-				if(fluidMultiplier > 1)
+				int itemOutputMultiplier = this.calculateItemOutputRecipeMultiplier(recipe);
+				if(itemOutputMultiplier > 1)
 				{
-					int multiplier = Math.min(itemMultiplier, fluidMultiplier);
-					if(this.tryStartRecipe(recipe, multiplier))
+					int itemMultiplier = Math.min(itemInputMultiplier, itemOutputMultiplier);
+					
+					int fluidInputMultiplier = this.calculateFluidInputRecipeMultiplier(recipe);
+					if(fluidInputMultiplier > 1)
 					{
-						recipeMultiplier = multiplier;
-						return true;
+						int fluidOutputMultiplier = this.calculateFluidOutputRecipeMultiplier(recipe);
+						if(fluidOutputMultiplier > 1)
+						{
+							int fluidMultiplier = Math.min(fluidInputMultiplier, fluidOutputMultiplier);
+							
+							int multiplier = Math.min(itemMultiplier, fluidMultiplier);
+							if(this.tryStartRecipe(recipe, multiplier))
+							{
+								recipeMultiplier = multiplier;
+								return true;
+							}
+						}
 					}
 				}
 			}
