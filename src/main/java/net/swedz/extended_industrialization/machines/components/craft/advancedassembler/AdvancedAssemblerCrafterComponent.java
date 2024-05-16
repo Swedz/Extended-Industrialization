@@ -309,7 +309,7 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 		int fluidMultiplier = machines.getMachineCount();
 		for(MachineRecipe.FluidInput input : recipe.fluidInputs)
 		{
-			int countFluidInHatches = 0;
+			long countFluidInHatches = 0;
 			for(ConfigurableFluidStack stack : inventory.getFluidInputs())
 			{
 				if(stack.getResource().equals(FluidVariant.of(input.fluid)))
@@ -318,7 +318,7 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 				}
 			}
 			
-			int multiplier = countFluidInHatches / (int) input.amount;
+			int multiplier = (int) (countFluidInHatches / input.amount);
 			if(multiplier < fluidMultiplier)
 			{
 				fluidMultiplier = multiplier;
