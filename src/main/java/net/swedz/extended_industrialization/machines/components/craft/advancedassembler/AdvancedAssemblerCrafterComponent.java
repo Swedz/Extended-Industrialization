@@ -831,7 +831,7 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 		long totalEu = recipe.getTotalEu() * recipeMultiplier;
 		for(int ticks = 0; true; ++ticks)
 		{
-			if(this.getRecipeMaxEu(eu, totalEu, ticks) == Math.min(behavior.getMaxRecipeEu() * recipeMultiplier, totalEu * recipeMultiplier))
+			if(this.getRecipeMaxEu(eu, totalEu, ticks) == Math.min(behavior.getMaxRecipeEu() * recipeMultiplier, totalEu))
 			{
 				return ticks;
 			}
