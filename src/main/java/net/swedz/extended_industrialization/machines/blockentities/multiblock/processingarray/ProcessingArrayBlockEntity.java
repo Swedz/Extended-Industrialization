@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.blockentities.multiblock.assembler;
+package net.swedz.extended_industrialization.machines.blockentities.multiblock.processingarray;
 
 import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.MIBlock;
@@ -36,8 +36,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.swedz.extended_industrialization.api.EILubricantHelper;
 import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.MultipliedCrafterComponent;
-import net.swedz.extended_industrialization.machines.components.craft.advancedassembler.AdvancedAssemblerMachineComponent;
-import net.swedz.extended_industrialization.machines.guicomponents.advancedassemblermachineslot.AdvancedAssemblerMachineSlot;
+import net.swedz.extended_industrialization.machines.components.craft.processingarray.ProcessingArrayMachineComponent;
+import net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot.ProcessingArrayMachineSlot;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGui;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGuiLine;
 import net.swedz.extended_industrialization.machines.multiblock.BasicMultiblockMachineBlockEntity;
@@ -50,21 +50,21 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
-public final class AdvancedAssemblerBlockEntity extends BasicMultiblockMachineBlockEntity implements EnergyListComponentHolder, CrafterComponentHolder, ModularCrafterAccessBehavior
+public final class ProcessingArrayBlockEntity extends BasicMultiblockMachineBlockEntity implements EnergyListComponentHolder, CrafterComponentHolder, ModularCrafterAccessBehavior
 {
 	private final UpgradeComponent         upgrades;
 	private final RedstoneControlComponent redstoneControl;
 	
-	private final AdvancedAssemblerMachineComponent machines;
-	private final MultipliedCrafterComponent        crafter;
+	private final ProcessingArrayMachineComponent machines;
+	private final MultipliedCrafterComponent      crafter;
 	
 	private final List<EnergyComponent> energyInputs = Lists.newArrayList();
 	
-	public AdvancedAssemblerBlockEntity(BEP bep)
+	public ProcessingArrayBlockEntity(BEP bep)
 	{
-		super(bep, new MachineGuiParameters.Builder("advanced_assembler", false).backgroundHeight(200).build(), SHAPE_TEMPLATES);
+		super(bep, new MachineGuiParameters.Builder("processing_array", false).backgroundHeight(200).build(), SHAPE_TEMPLATES);
 		
-		this.machines = new AdvancedAssemblerMachineComponent();
+		this.machines = new ProcessingArrayMachineComponent();
 		this.crafter = new MultipliedCrafterComponent(
 				this, inventory, this,
 				machines::getMachineRecipeType, machines::getMachineCount
@@ -81,7 +81,7 @@ public final class AdvancedAssemblerBlockEntity extends BasicMultiblockMachineBl
 		
 		this.registerGuiComponent(new ReiSlotLocking.Server(crafter::lockRecipe, () -> operatingState != OperatingState.NOT_MATCHED));
 		
-		this.registerGuiComponent(new AdvancedAssemblerMachineSlot.Server(
+		this.registerGuiComponent(new ProcessingArrayMachineSlot.Server(
 				this,
 				() -> this.getMachineStackSize(activeShape.getActiveShapeIndex()),
 				machines
@@ -124,12 +124,12 @@ public final class AdvancedAssemblerBlockEntity extends BasicMultiblockMachineBl
 					public void handleClick(int line, int delta)
 					{
 						int newShapeIndex = Mth.clamp(activeShape.getActiveShapeIndex() + delta, 0, SHAPE_TEMPLATES.length - 1);
-						int newMachineStackSize = AdvancedAssemblerBlockEntity.this.getMachineStackSize(newShapeIndex);
+						int newMachineStackSize = ProcessingArrayBlockEntity.this.getMachineStackSize(newShapeIndex);
 						if(newMachineStackSize < machines.getMachines().getCount())
 						{
 							return;
 						}
-						activeShape.incrementShape(AdvancedAssemblerBlockEntity.this, delta);
+						activeShape.incrementShape(ProcessingArrayBlockEntity.this, delta);
 					}
 					
 					@Override
@@ -140,7 +140,7 @@ public final class AdvancedAssemblerBlockEntity extends BasicMultiblockMachineBl
 				},
 				new ShapeSelection.LineInfo(
 						SPLIT,
-						IntStream.range(0, SPLIT).map(this::getMachineStackSize).mapToObj(EIText.ADVANCED_ASSEMBLER_SIZE::text).toList(),
+						IntStream.range(0, SPLIT).map(this::getMachineStackSize).mapToObj(EIText.PROCESSING_ARRAY_SIZE::text).toList(),
 						false
 				)
 		));
@@ -315,7 +315,7 @@ public final class AdvancedAssemblerBlockEntity extends BasicMultiblockMachineBl
 	{
 		for(ShapeTemplate shapeTemplate : SHAPE_TEMPLATES)
 		{
-			ReiMachineRecipes.registerMultiblockShape("advanced_assembler", shapeTemplate);
+			ReiMachineRecipes.registerMultiblockShape("processing_array", shapeTemplate);
 		}
 	}
 }

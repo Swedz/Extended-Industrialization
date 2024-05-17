@@ -18,7 +18,7 @@ import net.swedz.extended_industrialization.machines.blockentities.brewery.Elect
 import net.swedz.extended_industrialization.machines.blockentities.brewery.SteamBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.ElectricFluidHarvestingMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.SteamFluidHarvestingMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentities.multiblock.assembler.AdvancedAssemblerBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentities.multiblock.processingarray.ProcessingArrayBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.SteamFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
@@ -63,10 +63,10 @@ public final class EIMachines
 		);
 		
 		MIMachineHookHelper.registerMultiblockMachine(
-				"Advanced Assembler", "advanced_assembler", "advanced_assembler",
+				"Processing Array", "processing_array", "processing_array",
 				CLEAN_STAINLESS_STEEL, true, false, false,
-				AdvancedAssemblerBlockEntity::new,
-				(__) -> AdvancedAssemblerBlockEntity.registerReiShapes()
+				ProcessingArrayBlockEntity::new,
+				(__) -> ProcessingArrayBlockEntity.registerReiShapes()
 		);
 	}
 	

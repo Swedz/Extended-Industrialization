@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.guicomponents.advancedassemblermachineslot;
+package net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot;
 
 import aztech.modern_industrialization.inventory.BackgroundRenderedSlot;
 import aztech.modern_industrialization.inventory.SlotGroup;
@@ -21,11 +21,11 @@ import net.swedz.extended_industrialization.text.EIText;
 
 import java.util.List;
 
-public final class AdvancedAssemblerMachineSlotClient implements GuiComponentClient
+public final class ProcessingArrayMachineSlotClient implements GuiComponentClient
 {
 	private int maxMachines;
 	
-	public AdvancedAssemblerMachineSlotClient(FriendlyByteBuf buf)
+	public ProcessingArrayMachineSlotClient(FriendlyByteBuf buf)
 	{
 		this.readCurrentData(buf);
 	}
@@ -43,13 +43,13 @@ public final class AdvancedAssemblerMachineSlotClient implements GuiComponentCli
 		{
 			public ClientSlot()
 			{
-				super(new SimpleContainer(1), 0, AdvancedAssemblerMachineSlot.getSlotX(menu.getGuiParams()), AdvancedAssemblerMachineSlot.getSlotY());
+				super(new SimpleContainer(1), 0, ProcessingArrayMachineSlot.getSlotX(menu.getGuiParams()), ProcessingArrayMachineSlot.getSlotY());
 			}
 			
 			@Override
 			public boolean mayPlace(ItemStack itemStack)
 			{
-				return AdvancedAssemblerMachineSlot.isMachine(itemStack);
+				return ProcessingArrayMachineSlot.isMachine(itemStack);
 			}
 			
 			@Override
@@ -73,7 +73,7 @@ public final class AdvancedAssemblerMachineSlotClient implements GuiComponentCli
 			@Override
 			public Component getTooltip()
 			{
-				return EIText.ADVANCED_ASSEMBLER_MACHINE_INPUT.text().withStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xA9A9A9)));
+				return EIText.PROCESSING_ARRAY_MACHINE_INPUT.text().withStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xA9A9A9)));
 			}
 		}
 		
@@ -87,7 +87,7 @@ public final class AdvancedAssemblerMachineSlotClient implements GuiComponentCli
 		{
 			private Rectangle getBox(int leftPos, int topPos)
 			{
-				return new Rectangle(leftPos + machineScreen.getGuiParams().backgroundWidth, topPos + 10 + AdvancedAssemblerMachineSlot.getSlotY() - 19, 31, 34);
+				return new Rectangle(leftPos + machineScreen.getGuiParams().backgroundWidth, topPos + 10 + ProcessingArrayMachineSlot.getSlotY() - 19, 31, 34);
 			}
 			
 			@Override

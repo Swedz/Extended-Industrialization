@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.components.craft.advancedassembler;
+package net.swedz.extended_industrialization.machines.components.craft.processingarray;
 
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
@@ -8,11 +8,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.machines.guicomponents.advancedassemblermachineslot.AdvancedAssemblerMachineSlot;
+import net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot.ProcessingArrayMachineSlot;
 
-public final class AdvancedAssemblerMachineComponent implements IComponent.ServerOnly, DropableComponent
+public final class ProcessingArrayMachineComponent implements IComponent.ServerOnly, DropableComponent
 {
-	public static final ResourceLocation ID = EI.id("advanced_assembler_machine");
+	public static final ResourceLocation ID = EI.id("processing_array_machine");
 	
 	private ItemStack machines = ItemStack.EMPTY;
 	
@@ -41,7 +41,7 @@ public final class AdvancedAssemblerMachineComponent implements IComponent.Serve
 	public void setMachines(MachineBlockEntity be, ItemStack machines)
 	{
 		this.machines = machines;
-		this.machineRecipeType = machines.isEmpty() ? null : AdvancedAssemblerMachineSlot.getMachine(machines).recipeType();
+		this.machineRecipeType = machines.isEmpty() ? null : ProcessingArrayMachineSlot.getMachine(machines).recipeType();
 		be.setChanged();
 		be.sync();
 	}
@@ -58,7 +58,7 @@ public final class AdvancedAssemblerMachineComponent implements IComponent.Serve
 		machines = ItemStack.of(tag.getCompound("machinesStack"));
 		if(!machines.isEmpty())
 		{
-			machineRecipeType = AdvancedAssemblerMachineSlot.getMachine(machines).recipeType();
+			machineRecipeType = ProcessingArrayMachineSlot.getMachine(machines).recipeType();
 		}
 	}
 	

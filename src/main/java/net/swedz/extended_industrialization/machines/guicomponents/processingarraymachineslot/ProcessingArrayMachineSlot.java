@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.guicomponents.advancedassemblermachineslot;
+package net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot;
 
 import aztech.modern_industrialization.inventory.HackySlot;
 import aztech.modern_industrialization.inventory.SlotGroup;
@@ -12,13 +12,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.machines.components.craft.advancedassembler.AdvancedAssemblerMachineComponent;
+import net.swedz.extended_industrialization.machines.components.craft.processingarray.ProcessingArrayMachineComponent;
 
 import java.util.function.Supplier;
 
-public final class AdvancedAssemblerMachineSlot
+public final class ProcessingArrayMachineSlot
 {
-	public static final ResourceLocation ID = EI.id("advanced_assembler_machine_slot");
+	public static final ResourceLocation ID = EI.id("processing_array_machine_slot");
 	
 	public static int getSlotX(MachineGuiParameters guiParameters)
 	{
@@ -48,9 +48,9 @@ public final class AdvancedAssemblerMachineSlot
 		
 		private final Supplier<Integer> getMaxMachines;
 		
-		private final AdvancedAssemblerMachineComponent machines;
+		private final ProcessingArrayMachineComponent machines;
 		
-		public Server(MachineBlockEntity machine, Supplier<Integer> getMaxMachines, AdvancedAssemblerMachineComponent machines)
+		public Server(MachineBlockEntity machine, Supplier<Integer> getMaxMachines, ProcessingArrayMachineComponent machines)
 		{
 			this.machine = machine;
 			this.getMaxMachines = getMaxMachines;

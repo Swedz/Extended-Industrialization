@@ -1,5 +1,4 @@
 {
-  "block.modern_industrialization.advanced_assembler": "Advanced Assembler",
   "block.modern_industrialization.bronze_bending_machine": "Bronze Bending Machine",
   "block.modern_industrialization.bronze_composter": "Bronze Composter",
   "block.modern_industrialization.bronze_solar_boiler": "Bronze Solar Boiler",
@@ -12,6 +11,7 @@
   "block.modern_industrialization.electric_farmer": "Electric Farmer",
   "block.modern_industrialization.electric_honey_extractor": "Electric Honey Extractor",
   "block.modern_industrialization.electric_waste_collector": "Electric Waste Collector",
+  "block.modern_industrialization.processing_array": "Processing Array",
   "block.modern_industrialization.steam_farmer": "Steam Farmer",
   "block.modern_industrialization.steel_alloy_smelter": "Steel Alloy Smelter",
   "block.modern_industrialization.steel_bending_machine": "Steel Bending Machine",

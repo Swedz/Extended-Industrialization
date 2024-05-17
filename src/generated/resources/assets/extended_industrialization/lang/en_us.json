@@ -1,5 +1,4 @@
 {
-  "block.extended_industrialization.advanced_assembler": "Advanced Assembler",
   "block.extended_industrialization.bronze_bending_machine": "Bronze Bending Machine",
   "block.extended_industrialization.bronze_composter": "Bronze Composter",
   "block.extended_industrialization.bronze_solar_boiler": "Bronze Solar Boiler",
@@ -16,6 +15,7 @@
   "block.extended_industrialization.honey": "Honey",
   "block.extended_industrialization.manure": "Manure",
   "block.extended_industrialization.npk_fertilizer": "NPK Fertilizer",
+  "block.extended_industrialization.processing_array": "Processing Array",
   "block.extended_industrialization.steam_farmer": "Steam Farmer",
   "block.extended_industrialization.steel_alloy_smelter": "Steel Alloy Smelter",
   "block.extended_industrialization.steel_bending_machine": "Steel Bending Machine",
@@ -38,8 +38,6 @@
   "item.extended_industrialization.steel_combine": "Steel Combine",
   "item.extended_industrialization.tin_can": "Tin Can",
   "itemGroup.extended_industrialization.extended_industrialization": "Extended Industrialization",
-  "text.extended_industrialization.advanced_assembler_machine_input": "Insert electric crafting machines to run in parallel.",
-  "text.extended_industrialization.advanced_assembler_size": "Machines: %d",
   "text.extended_industrialization.farmer_not_tilling": "Not Tilling",
   "text.extended_industrialization.farmer_planting_alternating_lines": "Alternating Lines",
   "text.extended_industrialization.farmer_planting_as_needed": "As Needed",
@@ -54,6 +52,8 @@
   "text.extended_industrialization.multiblock_shape_valid": "Shape Valid",
   "text.extended_industrialization.multiblock_status_active": "Status : Active",
   "text.extended_industrialization.multiblock_status_inactive": "Status : Inactive",
+  "text.extended_industrialization.processing_array_machine_input": "Insert electric crafting machines to run in parallel.",
+  "text.extended_industrialization.processing_array_size": "Machines: %d",
   "text.extended_industrialization.solar_efficiency": "Solar Efficiency : %d %%",
   "text.extended_industrialization.water_pump_environment_0": "Invalid Pump Environment",
   "text.extended_industrialization.water_pump_environment_1": "Must be in Ocean or River biome."
