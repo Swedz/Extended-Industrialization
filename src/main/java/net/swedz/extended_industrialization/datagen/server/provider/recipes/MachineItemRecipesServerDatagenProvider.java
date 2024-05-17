@@ -25,7 +25,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 	
 	private static String machine(String machine, String tier)
 	{
-		return "%s:%s_%s".formatted(EI.ID, tier, machine);
+		return "%s:%s".formatted(EI.ID, tier == null ? machine : "%s_%s".formatted(tier, machine));
 	}
 	
 	private static String machineBronze(String machine)
@@ -40,12 +40,19 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 	
 	private static void addBasicCraftingMachineRecipes(String machineName, String machineTier, Consumer<ShapedRecipeBuilder> crafting, RecipeOutput output)
 	{
+		String recipeId = machineTier == null ? "" : "/%s".formatted(machineTier);
+		
 		ShapedRecipeBuilder shapedRecipeBuilder = new ShapedRecipeBuilder();
 		crafting.accept(shapedRecipeBuilder);
 		shapedRecipeBuilder.setOutput(machine(machineName, machineTier), 1);
-		shapedRecipeBuilder.offerTo(output, EI.id("machines/%s/craft/%s".formatted(machineName, machineTier)));
+		shapedRecipeBuilder.offerTo(output, EI.id("machines/%s/craft%s".formatted(machineName, recipeId)));
 		
-		shapedRecipeBuilder.exportToAssembler().offerTo(output, EI.id("machines/%s/assembler/%s".formatted(machineName, machineTier)));
+		shapedRecipeBuilder.exportToAssembler().offerTo(output, EI.id("machines/%s/assembler%s".formatted(machineName, recipeId)));
+	}
+	
+	private static void addBasicCraftingMachineRecipes(String machineName, Consumer<ShapedRecipeBuilder> crafting, RecipeOutput output)
+	{
+		addBasicCraftingMachineRecipes(machineName, null, crafting, output);
 	}
 	
 	private static void addBronzeMachineRecipes(String machine, Consumer<ShapedRecipeBuilder> crafting, RecipeOutput output)
@@ -350,6 +357,22 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		);
 	}
 	
+	private static void processingArray(RecipeOutput output)
+	{
+		addBasicCraftingMachineRecipes(
+				"processing_array",
+				(builder) -> builder
+						.define('A', MIItem.ROBOT_ARM)
+						.define('D', MIItem.DIGITAL_CIRCUIT)
+						.define('C', "modern_industrialization:clean_stainless_steel_machine_casing")
+						.define('S', "modern_industrialization:assembler")
+						.pattern("ADA")
+						.pattern("CSC")
+						.pattern("ADA"),
+				output
+		);
+	}
+	
 	@Override
 	protected void buildRecipes(RecipeOutput output)
 	{
@@ -362,5 +385,6 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		farmer(output);
 		brewery(output);
 		wasteCollector(output);
+		processingArray(output);
 	}
 }
