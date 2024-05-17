@@ -35,7 +35,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.swedz.extended_industrialization.api.EILubricantHelper;
 import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
-import net.swedz.extended_industrialization.machines.components.craft.advancedassembler.AdvancedAssemblerCrafterComponent;
+import net.swedz.extended_industrialization.machines.components.craft.multiplied.MultipliedCrafterComponent;
 import net.swedz.extended_industrialization.machines.components.craft.advancedassembler.AdvancedAssemblerMachineComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.advancedassemblermachineslot.AdvancedAssemblerMachineSlot;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGui;
@@ -56,7 +56,7 @@ public final class AdvancedAssemblerBlockEntity extends BasicMultiblockMachineBl
 	private final RedstoneControlComponent redstoneControl;
 	
 	private final AdvancedAssemblerMachineComponent machines;
-	private final AdvancedAssemblerCrafterComponent crafter;
+	private final MultipliedCrafterComponent        crafter;
 	
 	private final List<EnergyComponent> energyInputs = Lists.newArrayList();
 	
@@ -65,7 +65,10 @@ public final class AdvancedAssemblerBlockEntity extends BasicMultiblockMachineBl
 		super(bep, new MachineGuiParameters.Builder("advanced_assembler", false).backgroundHeight(200).build(), SHAPE_TEMPLATES);
 		
 		this.machines = new AdvancedAssemblerMachineComponent();
-		this.crafter = new AdvancedAssemblerCrafterComponent(this, machines, inventory, this);
+		this.crafter = new MultipliedCrafterComponent(
+				this, inventory, this,
+				machines::getMachineRecipeType, machines::getMachineCount
+		);
 		
 		this.upgrades = new UpgradeComponent();
 		this.redstoneControl = new RedstoneControlComponent();

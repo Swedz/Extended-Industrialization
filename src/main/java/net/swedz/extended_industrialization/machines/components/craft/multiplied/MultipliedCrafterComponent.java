@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.components.craft.advancedassembler;
+package net.swedz.extended_industrialization.machines.components.craft.multiplied;
 
 import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.api.machine.component.InventoryAccess;
@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Supplier;
 
 import static aztech.modern_industrialization.util.Simulation.*;
 
@@ -39,17 +40,19 @@ import static aztech.modern_industrialization.util.Simulation.*;
  * <br><br>
  * Aside from formatting, here are the changes I made:
  * <ul>
- *     <li>Instead of using <code>behavior.recipeType()</code> to get the recipe type, it is fetched from <code>machines.getMachineRecipeType()</code></li>
+ *     <li>Instead of using <code>behavior.recipeType()</code> to get the recipe type, it is fetched from <code>recipeTypeGetter</code></li>
  *     <li>Recipe inputs and outputs are multiplied by the <code>recipeMultiplier</code> variable</li>
  * </ul>
  */
-public final class AdvancedAssemblerCrafterComponent implements IComponent.ServerOnly, ModularCrafterAccess
+public final class MultipliedCrafterComponent implements IComponent.ServerOnly, ModularCrafterAccess
 {
 	private final MachineProcessCondition.Context conditionContext;
 	
-	private final AdvancedAssemblerMachineComponent machines;
-	private final MultiblockInventoryComponent      inventory;
-	private final ModularCrafterAccessBehavior      behavior;
+	private final MultiblockInventoryComponent inventory;
+	private final ModularCrafterAccessBehavior behavior;
+	
+	private final Supplier<MachineRecipeType> recipeTypeGetter;
+	private final Supplier<Integer>           maxMultiplierGetter;
 	
 	private RecipeHolder<MachineRecipe> activeRecipe = null;
 	private ResourceLocation            delayedActiveRecipe;
@@ -69,12 +72,14 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 	private int lastInvHash    = 0;
 	private int lastForcedTick = 0;
 	
-	public AdvancedAssemblerCrafterComponent(MachineBlockEntity blockEntity, AdvancedAssemblerMachineComponent machines, MultiblockInventoryComponent inventory, ModularCrafterAccessBehavior behavior)
+	public MultipliedCrafterComponent(MachineBlockEntity blockEntity, MultiblockInventoryComponent inventory, ModularCrafterAccessBehavior behavior,
+									  Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter)
 	{
-		this.machines = machines;
 		this.inventory = inventory;
 		this.behavior = behavior;
 		this.conditionContext = () -> blockEntity;
+		this.recipeTypeGetter = recipeTypeGetter;
+		this.maxMultiplierGetter = maxMultiplierGetter;
 	}
 	
 	@Override
@@ -174,7 +179,7 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 	{
 		if(delayedActiveRecipe != null)
 		{
-			activeRecipe = machines.getMachineRecipeType().getRecipe(behavior.getCrafterWorld(), delayedActiveRecipe);
+			activeRecipe = recipeTypeGetter.get().getRecipe(behavior.getCrafterWorld(), delayedActiveRecipe);
 			delayedActiveRecipe = null;
 			if(activeRecipe == null)
 			{
@@ -216,7 +221,7 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 	
 	private Iterable<RecipeHolder<MachineRecipe>> getRecipes()
 	{
-		if(!machines.hasMachines())
+		if(recipeTypeGetter.get() == null)
 		{
 			return Collections.emptyList();
 		}
@@ -245,7 +250,7 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 			}
 			
 			ServerLevel serverWorld = (ServerLevel) behavior.getCrafterWorld();
-			MachineRecipeType recipeType = machines.getMachineRecipeType();
+			MachineRecipeType recipeType = recipeTypeGetter.get();
 			List<RecipeHolder<MachineRecipe>> recipes = new ArrayList<>(recipeType.getFluidOnlyRecipes(serverWorld));
 			for(ConfigurableItemStack stack : inventory.getItemInputs())
 			{
@@ -279,7 +284,7 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 				.map((item) -> item.getResource().toStack((int) item.getAmount()))
 				.toList();
 		
-		int itemMultiplier = machines.getMachineCount();
+		int itemMultiplier = maxMultiplierGetter.get();
 		for(MachineRecipe.ItemInput input : recipe.itemInputs)
 		{
 			int countItemsInHatches = 0;
@@ -310,7 +315,7 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 				.map((item) -> item.getResource().toStack((int) item.getAmount()))
 				.toList();
 		
-		int itemMultiplier = machines.getMachineCount();
+		int itemMultiplier = maxMultiplierGetter.get();
 		for(MachineRecipe.ItemOutput output : recipe.itemOutputs)
 		{
 			if(output.probability < 1)
@@ -318,7 +323,7 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 				continue;
 			}
 			
-			int maxOutputCount = output.amount * machines.getMachineCount();
+			int maxOutputCount = output.amount * maxMultiplierGetter.get();
 			
 			int outputSpace = 0;
 			for(ConfigurableItemStack item : inventory.getItemOutputs())
@@ -352,7 +357,7 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 	
 	private int calculateFluidInputRecipeMultiplier(MachineRecipe recipe)
 	{
-		int fluidMultiplier = machines.getMachineCount();
+		int fluidMultiplier = maxMultiplierGetter.get();
 		for(MachineRecipe.FluidInput input : recipe.fluidInputs)
 		{
 			long countFluidInHatches = 0;
@@ -379,7 +384,7 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 	
 	private int calculateFluidOutputRecipeMultiplier(MachineRecipe recipe)
 	{
-		int fluidMultiplier = machines.getMachineCount();
+		int fluidMultiplier = maxMultiplierGetter.get();
 		for(int i = 0; i < Math.min(recipe.fluidOutputs.size(), behavior.getMaxFluidOutputs()); ++i)
 		{
 			MachineRecipe.FluidOutput output = recipe.fluidOutputs.get(i);
@@ -389,7 +394,7 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 				continue;
 			}
 			
-			long maxOutputCount = output.amount * machines.getMachineCount();
+			long maxOutputCount = output.amount * maxMultiplierGetter.get();
 			
 			outer:
 			for(int tries = 0; tries < 2; tries++)
@@ -420,7 +425,7 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 	
 	private boolean tryStartRecipe(MachineRecipe recipe)
 	{
-		if(machines.getMachineCount() > 1)
+		if(maxMultiplierGetter.get() > 1)
 		{
 			int itemInputMultiplier = this.calculateItemInputRecipeMultiplier(recipe);
 			if(itemInputMultiplier > 1)
@@ -803,7 +808,7 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 		if(delayedActiveRecipe == null && usedEnergy > 0)
 		{
 			usedEnergy = 0;
-			EI.LOGGER.error("Had to set the usedEnergy of AdvancedAssemblerCrafterComponent to 0, but that should never happen!");
+			EI.LOGGER.error("Had to set the usedEnergy of MultipliedCrafterComponent to 0, but that should never happen!");
 		}
 		recipeMultiplier = tag.getInt("recipeMultiplier");
 		efficiencyTicks = tag.getInt("efficiencyTicks");
@@ -859,7 +864,12 @@ public final class AdvancedAssemblerCrafterComponent implements IComponent.Serve
 	public void lockRecipe(ResourceLocation recipeId, net.minecraft.world.entity.player.Inventory inventory)
 	{
 		// Find MachineRecipe
-		Optional<RecipeHolder<MachineRecipe>> optionalMachineRecipe = machines.getMachineRecipeType().getRecipes(behavior.getCrafterWorld()).stream()
+		MachineRecipeType recipeType = recipeTypeGetter.get();
+		if(recipeType == null)
+		{
+			return;
+		}
+		Optional<RecipeHolder<MachineRecipe>> optionalMachineRecipe = recipeType.getRecipes(behavior.getCrafterWorld()).stream()
 				.filter((recipe) -> recipe.id().equals(recipeId)).findFirst();
 		if(optionalMachineRecipe.isEmpty())
 		{
