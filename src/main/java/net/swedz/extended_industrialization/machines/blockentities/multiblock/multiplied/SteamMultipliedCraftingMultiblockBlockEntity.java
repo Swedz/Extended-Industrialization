@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.swedz.extended_industrialization.machines.components.craft.multiplied.MultipliedCrafterComponent;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -24,13 +25,12 @@ public class SteamMultipliedCraftingMultiblockBlockEntity extends AbstractMultip
 	private boolean steel;
 	
 	public SteamMultipliedCraftingMultiblockBlockEntity(BEP bep, String name, ShapeTemplate[] shapeTemplates,
-														Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter,
+														Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter, MultipliedCrafterComponent.EuCostTransformer euCostTransformer,
 														List<OverclockComponent.Catalyst> overclockCatalysts)
 	{
-		super(bep, name, shapeTemplates, recipeTypeGetter, maxMultiplierGetter);
+		super(bep, name, shapeTemplates, recipeTypeGetter, maxMultiplierGetter, euCostTransformer);
 		
 		overclock = new OverclockComponent(overclockCatalysts);
-		
 		this.registerComponents(overclock);
 	}
 	

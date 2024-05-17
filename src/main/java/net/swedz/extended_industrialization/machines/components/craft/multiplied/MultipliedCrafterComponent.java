@@ -52,7 +52,8 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 	private final ModularCrafterAccessBehavior behavior;
 	
 	private final Supplier<MachineRecipeType> recipeTypeGetter;
-	private final Supplier<Integer>           maxMultiplierGetter;
+	private final Supplier<Integer> maxMultiplierGetter;
+	private final EuCostTransformer euCostTransformer;
 	
 	private RecipeHolder<MachineRecipe> activeRecipe = null;
 	private ResourceLocation            delayedActiveRecipe;
@@ -73,13 +74,42 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 	private int lastForcedTick = 0;
 	
 	public MultipliedCrafterComponent(MachineBlockEntity blockEntity, MultiblockInventoryComponent inventory, ModularCrafterAccessBehavior behavior,
-									  Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter)
+									  Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter, EuCostTransformer euCostTransformer)
 	{
 		this.inventory = inventory;
 		this.behavior = behavior;
 		this.conditionContext = () -> blockEntity;
 		this.recipeTypeGetter = recipeTypeGetter;
 		this.maxMultiplierGetter = maxMultiplierGetter;
+		this.euCostTransformer = euCostTransformer;
+	}
+	
+	public MachineRecipeType getRecipeType()
+	{
+		return recipeTypeGetter.get();
+	}
+	
+	public int getMaxMultiplier()
+	{
+		return maxMultiplierGetter.get();
+	}
+	
+	public interface EuCostTransformer
+	{
+		EuCostTransformer UNCHANGED                     = (crafter, eu) -> eu;
+		EuCostTransformer MULTIPLY_BY_RECIPE_MULTIPLIER = (crafter, eu) -> eu * crafter.getRecipeMultiplier();
+		
+		static EuCostTransformer scaledMultiplyBy(long multiplier)
+		{
+			return (crafter, eu) -> (long) (eu * multiplier * ((double) crafter.getRecipeMultiplier() / crafter.getMaxMultiplier()));
+		}
+		
+		long transform(MultipliedCrafterComponent crafter, long eu);
+	}
+	
+	public long transformEuCost(long eu)
+	{
+		return euCostTransformer.transform(this, eu);
 	}
 	
 	@Override
@@ -179,7 +209,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 	{
 		if(delayedActiveRecipe != null)
 		{
-			activeRecipe = recipeTypeGetter.get().getRecipe(behavior.getCrafterWorld(), delayedActiveRecipe);
+			activeRecipe = this.getRecipeType().getRecipe(behavior.getCrafterWorld(), delayedActiveRecipe);
 			delayedActiveRecipe = null;
 			if(activeRecipe == null)
 			{
@@ -211,7 +241,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 				}
 				activeRecipe = recipe;
 				usedEnergy = 0;
-				recipeEnergy = recipe.value().getTotalEu() * recipeMultiplier;
+				recipeEnergy = this.transformEuCost(recipe.value().getTotalEu());
 				recipeMaxEu = this.getRecipeMaxEu(recipe.value().eu, recipeEnergy, efficiencyTicks);
 				return true;
 			}
@@ -221,7 +251,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 	
 	private Iterable<RecipeHolder<MachineRecipe>> getRecipes()
 	{
-		if(recipeTypeGetter.get() == null)
+		if(this.getRecipeType() == null)
 		{
 			return Collections.emptyList();
 		}
@@ -250,7 +280,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 			}
 			
 			ServerLevel serverWorld = (ServerLevel) behavior.getCrafterWorld();
-			MachineRecipeType recipeType = recipeTypeGetter.get();
+			MachineRecipeType recipeType = this.getRecipeType();
 			List<RecipeHolder<MachineRecipe>> recipes = new ArrayList<>(recipeType.getFluidOnlyRecipes(serverWorld));
 			for(ConfigurableItemStack stack : inventory.getItemInputs())
 			{
@@ -284,7 +314,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 				.map((item) -> item.getResource().toStack((int) item.getAmount()))
 				.toList();
 		
-		int itemMultiplier = maxMultiplierGetter.get();
+		int itemMultiplier = this.getMaxMultiplier();
 		for(MachineRecipe.ItemInput input : recipe.itemInputs)
 		{
 			int countItemsInHatches = 0;
@@ -315,7 +345,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 				.map((item) -> item.getResource().toStack((int) item.getAmount()))
 				.toList();
 		
-		int itemMultiplier = maxMultiplierGetter.get();
+		int itemMultiplier = this.getMaxMultiplier();
 		for(MachineRecipe.ItemOutput output : recipe.itemOutputs)
 		{
 			if(output.probability < 1)
@@ -323,7 +353,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 				continue;
 			}
 			
-			int maxOutputCount = output.amount * maxMultiplierGetter.get();
+			int maxOutputCount = output.amount * this.getMaxMultiplier();
 			
 			int outputSpace = 0;
 			for(ConfigurableItemStack item : inventory.getItemOutputs())
@@ -357,7 +387,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 	
 	private int calculateFluidInputRecipeMultiplier(MachineRecipe recipe)
 	{
-		int fluidMultiplier = maxMultiplierGetter.get();
+		int fluidMultiplier = this.getMaxMultiplier();
 		for(MachineRecipe.FluidInput input : recipe.fluidInputs)
 		{
 			long countFluidInHatches = 0;
@@ -384,7 +414,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 	
 	private int calculateFluidOutputRecipeMultiplier(MachineRecipe recipe)
 	{
-		int fluidMultiplier = maxMultiplierGetter.get();
+		int fluidMultiplier = this.getMaxMultiplier();
 		for(int i = 0; i < Math.min(recipe.fluidOutputs.size(), behavior.getMaxFluidOutputs()); ++i)
 		{
 			MachineRecipe.FluidOutput output = recipe.fluidOutputs.get(i);
@@ -394,7 +424,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 				continue;
 			}
 			
-			long maxOutputCount = output.amount * maxMultiplierGetter.get();
+			long maxOutputCount = output.amount * this.getMaxMultiplier();
 			
 			outer:
 			for(int tries = 0; tries < 2; tries++)
@@ -425,7 +455,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 	
 	private boolean tryStartRecipe(MachineRecipe recipe)
 	{
-		if(maxMultiplierGetter.get() > 1)
+		if(this.getMaxMultiplier() > 1)
 		{
 			int itemInputMultiplier = this.calculateItemInputRecipeMultiplier(recipe);
 			if(itemInputMultiplier > 1)
@@ -826,17 +856,17 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 	
 	private long getRecipeMaxEu(long recipeEu, long totalEu, int efficiencyTicks)
 	{
-		long baseEu = Math.max(behavior.getBaseRecipeEu() * recipeMultiplier, recipeEu * recipeMultiplier);
-		return Math.min(totalEu, Math.min((int) Math.floor(baseEu * CrafterComponent.getEfficiencyOverclock(efficiencyTicks)), behavior.getMaxRecipeEu() * recipeMultiplier));
+		long baseEu = Math.max(this.transformEuCost(behavior.getBaseRecipeEu()), this.transformEuCost(recipeEu));
+		return Math.min(totalEu, Math.min((int) Math.floor(baseEu * CrafterComponent.getEfficiencyOverclock(efficiencyTicks)), this.transformEuCost(behavior.getMaxRecipeEu())));
 	}
 	
 	private int getRecipeMaxEfficiencyTicks(MachineRecipe recipe)
 	{
 		long eu = recipe.eu;
-		long totalEu = recipe.getTotalEu() * recipeMultiplier;
+		long totalEu = this.transformEuCost(recipe.getTotalEu());
 		for(int ticks = 0; true; ++ticks)
 		{
-			if(this.getRecipeMaxEu(eu, totalEu, ticks) == Math.min(behavior.getMaxRecipeEu() * recipeMultiplier, totalEu))
+			if(this.getRecipeMaxEu(eu, totalEu, ticks) == Math.min(this.transformEuCost(behavior.getMaxRecipeEu()), totalEu))
 			{
 				return ticks;
 			}
@@ -864,7 +894,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 	public void lockRecipe(ResourceLocation recipeId, net.minecraft.world.entity.player.Inventory inventory)
 	{
 		// Find MachineRecipe
-		MachineRecipeType recipeType = recipeTypeGetter.get();
+		MachineRecipeType recipeType = this.getRecipeType();
 		if(recipeType == null)
 		{
 			return;

@@ -30,7 +30,7 @@ public abstract class AbstractMultipliedCraftingMultiblockBlockEntity extends Ba
 	protected final MultipliedCrafterComponent crafter;
 	
 	public AbstractMultipliedCraftingMultiblockBlockEntity(BEP bep, String name, ShapeTemplate[] shapeTemplates,
-														   Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter)
+														   Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter, MultipliedCrafterComponent.EuCostTransformer euCostTransformer)
 	{
 		super(bep, new MachineGuiParameters.Builder(name, false).backgroundHeight(200).build(), shapeTemplates);
 		
@@ -39,7 +39,7 @@ public abstract class AbstractMultipliedCraftingMultiblockBlockEntity extends Ba
 		
 		this.crafter = new MultipliedCrafterComponent(
 				this, inventory, this,
-				this::getRecipeType, this::getMaxMultiplier
+				this::getRecipeType, this::getMaxMultiplier, euCostTransformer
 		);
 		
 		this.registerComponents(crafter);
@@ -67,7 +67,7 @@ public abstract class AbstractMultipliedCraftingMultiblockBlockEntity extends Ba
 						text.add(new ModularMultiblockGuiLine(MIText.EfficiencyTicks.text(crafter.getEfficiencyTicks(), crafter.getMaxEfficiencyTicks())));
 					}
 					
-					text.add(new ModularMultiblockGuiLine(MIText.BaseEuRecipe.text(TextHelper.getEuTextTick(crafter.getBaseRecipeEu() * crafter.getRecipeMultiplier()))));
+					text.add(new ModularMultiblockGuiLine(MIText.BaseEuRecipe.text(TextHelper.getEuTextTick(euCostTransformer.transform(crafter, crafter.getBaseRecipeEu())))));
 					
 					text.add(new ModularMultiblockGuiLine(MIText.CurrentEuRecipe.text(TextHelper.getEuTextTick(crafter.getCurrentRecipeEu()))));
 				}

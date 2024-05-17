@@ -15,6 +15,7 @@ import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.ElectricMultipliedCraftingMultiblockBlockEntity;
+import net.swedz.extended_industrialization.machines.components.craft.multiplied.MultipliedCrafterComponent;
 import net.swedz.extended_industrialization.machines.components.craft.processingarray.ProcessingArrayMachineComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot.ProcessingArrayMachineSlot;
 import net.swedz.extended_industrialization.machines.multiblock.members.PredicateSimpleMember;
@@ -29,7 +30,7 @@ public final class ProcessingArrayBlockEntity extends ElectricMultipliedCrafting
 	
 	public ProcessingArrayBlockEntity(BEP bep)
 	{
-		super(bep, "processing_array", SHAPE_TEMPLATES, null, null, MachineTier.LV);
+		super(bep, "processing_array", SHAPE_TEMPLATES, null, null, MultipliedCrafterComponent.EuCostTransformer.MULTIPLY_BY_RECIPE_MULTIPLIER, MachineTier.LV);
 		
 		this.machines = new ProcessingArrayMachineComponent();
 		
