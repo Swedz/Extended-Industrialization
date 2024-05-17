@@ -8,12 +8,14 @@
             "amount": 6
         },
         {
-            "item": "modern_industrialization:steel_bolt",
-            "amount": 2
-        },
-        {
             "item": "modern_industrialization:steel_rod",
             "amount": 1
+        }
+    ],
+    "fluid_inputs": [
+        {
+            "fluid": "modern_industrialization:soldering_alloy",
+            "amount": 50
         }
     ],
     "item_outputs": [
