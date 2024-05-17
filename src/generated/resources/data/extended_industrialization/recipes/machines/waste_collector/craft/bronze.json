@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:iron_bars"
+    },
+    "C": {
+      "item": "modern_industrialization:bronze_machine_casing"
+    },
+    "P": {
+      "tag": "modern_industrialization:fluid_pipes"
+    },
+    "R": {
+      "item": "modern_industrialization:copper_rotor"
+    }
+  },
+  "pattern": [
+    "BBB",
+    "RCR",
+    "PPP"
+  ],
+  "result": {
+    "item": "extended_industrialization:bronze_waste_collector"
+  }
+}

@@ -321,6 +321,35 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		);
 	}
 	
+	private static void wasteCollector(RecipeOutput output)
+	{
+		addBronzeAndSteelMachineRecipes(
+				"waste_collector",
+				(builder) -> builder
+						.define('B', Items.IRON_BARS)
+						.define('R', MIMaterials.COPPER.getPart(MIParts.ROTOR))
+						.define('C', MIMaterials.BRONZE.getPart(MIParts.MACHINE_CASING))
+						.define('P', MITags.FLUID_PIPES)
+						.pattern("BBB")
+						.pattern("RCR")
+						.pattern("PPP"),
+				output
+		);
+		addElectricMachineRecipes(
+				"waste_collector",
+				(builder) -> builder
+						.define('B', Items.IRON_BARS)
+						.define('R', MIMaterials.TIN.getPart(MIParts.ROTOR))
+						.define('C', "modern_industrialization:basic_machine_hull")
+						.define('c', MIMaterials.TIN.getPart(MIParts.CABLE))
+						.define('P', MIItem.PUMP)
+						.pattern("BBB")
+						.pattern("RCR")
+						.pattern("cPc"),
+				output
+		);
+	}
+	
 	@Override
 	protected void buildRecipes(RecipeOutput output)
 	{
@@ -332,5 +361,6 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		honeyExtractor(output);
 		farmer(output);
 		brewery(output);
+		wasteCollector(output);
 	}
 }

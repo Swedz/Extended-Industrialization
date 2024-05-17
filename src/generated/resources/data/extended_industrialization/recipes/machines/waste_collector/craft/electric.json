@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:iron_bars"
+    },
+    "C": {
+      "item": "modern_industrialization:basic_machine_hull"
+    },
+    "P": {
+      "item": "modern_industrialization:pump"
+    },
+    "R": {
+      "item": "modern_industrialization:tin_rotor"
+    },
+    "c": {
+      "item": "modern_industrialization:tin_cable"
+    }
+  },
+  "pattern": [
+    "BBB",
+    "RCR",
+    "cPc"
+  ],
+  "result": {
+    "item": "extended_industrialization:electric_waste_collector"
+  }
+}
