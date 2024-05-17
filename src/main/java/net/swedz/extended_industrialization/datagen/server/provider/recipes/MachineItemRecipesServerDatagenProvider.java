@@ -373,6 +373,21 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		);
 	}
 	
+	private static void largeFurnace(RecipeOutput output)
+	{
+		addBasicCraftingMachineRecipes(
+				"large_steam_furnace",
+				(builder) -> builder
+						.define('B', "modern_industrialization:bronze_plated_bricks")
+						.define('I', "modern_industrialization:heatproof_machine_casing")
+						.define('F', "modern_industrialization:bronze_furnace")
+						.pattern("BIB")
+						.pattern("IFI")
+						.pattern("BIB"),
+				output
+		);
+	}
+	
 	@Override
 	protected void buildRecipes(RecipeOutput output)
 	{
@@ -386,5 +401,6 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		brewery(output);
 		wasteCollector(output);
 		processingArray(output);
+		largeFurnace(output);
 	}
 }
