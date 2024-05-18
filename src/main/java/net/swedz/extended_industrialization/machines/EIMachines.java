@@ -30,7 +30,7 @@ import net.swedz.extended_industrialization.machines.blockentities.fluidharvesti
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.SteamFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.SteamMultipliedCraftingMultiblockBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentities.multiblock.processingarray.ProcessingArrayBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentities.multiblock.ProcessingArrayBlockEntity;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.MultipliedCrafterComponent;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.wastecollector.WasteCollectorBehavior;

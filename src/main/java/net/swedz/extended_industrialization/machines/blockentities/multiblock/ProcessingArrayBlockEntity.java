@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.blockentities.multiblock.processingarray;
+package net.swedz.extended_industrialization.machines.blockentities.multiblock;
 
 import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.MIBlock;
