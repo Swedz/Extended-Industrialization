@@ -287,10 +287,10 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 				(builder) -> builder
 						.define('A', MIItem.ROBOT_ARM)
 						.define('M', MIItem.LARGE_MOTOR)
-						.define('C', "modern_industrialization:clean_stainless_steel_machine_casing")
+						.define('C', "modern_industrialization:steel_machine_casing")
 						.define('F', EIItems.valueOf("steam_farmer"))
 						.define('P', MIItem.LARGE_PUMP)
-						.define('p', "modern_industrialization:stainless_steel_machine_casing_pipe")
+						.define('p', "modern_industrialization:steel_machine_casing_pipe")
 						.pattern("AMA")
 						.pattern("CFC")
 						.pattern("PpP"),

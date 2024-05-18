@@ -29,6 +29,7 @@ public final class MachineCasingModelsMIHookDatagenProvider extends ModelProvide
 	protected void registerModels()
 	{
 		this.imitateBlock(EIMachines.Casings.BRONZE_PIPE, MIMaterials.BRONZE.getPart(MIParts.MACHINE_CASING_PIPE).asBlock());
+		this.imitateBlock(EIMachines.Casings.STEEL_PIPE, MIMaterials.STEEL.getPart(MIParts.MACHINE_CASING_PIPE).asBlock());
 		this.imitateBlock(EIMachines.Casings.STEEL_PLATED_BRICKS, EIBlocks.STEEL_PLATED_BRICKS.get());
 	}
 	

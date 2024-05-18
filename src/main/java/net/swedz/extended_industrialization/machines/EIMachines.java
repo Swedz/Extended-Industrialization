@@ -51,12 +51,14 @@ public final class EIMachines
 	{
 		public static MachineCasing
 				BRONZE_PIPE,
+				STEEL_PIPE,
 				STEEL_PLATED_BRICKS;
 	}
 	
 	public static void casings()
 	{
-		Casings.BRONZE_PIPE = MachineCasings.create("bronze_machine_casing_pipe");
+		Casings.BRONZE_PIPE = MachineCasings.create("bronze_pipe");
+		Casings.STEEL_PIPE = MachineCasings.create("steel_pipe");
 		Casings.STEEL_PLATED_BRICKS = MachineCasings.create("steel_plated_bricks");
 	}
 	
@@ -72,9 +74,10 @@ public final class EIMachines
 				SteamFarmerBlockEntity::new,
 				(__) -> SteamFarmerBlockEntity.registerReiShapes()
 		);
+		
 		MIMachineHookHelper.registerMultiblockMachine(
 				"Electric Farmer", "electric_farmer", "farmer",
-				CLEAN_STAINLESS_STEEL, true, true, false,
+				STEEL, true, true, false,
 				ElectricFarmerBlockEntity::new,
 				(__) -> ElectricFarmerBlockEntity.registerReiShapes()
 		);

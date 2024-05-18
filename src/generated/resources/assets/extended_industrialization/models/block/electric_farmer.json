@@ -1,5 +1,5 @@
 {
-  "casing": "clean_stainless_steel_machine_casing",
+  "casing": "steel",
   "default_overlays": {
     "fluid_auto": "modern_industrialization:block/overlays/fluid_auto",
     "front": "extended_industrialization:block/machines/farmer/overlay_front",
