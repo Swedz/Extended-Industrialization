@@ -11,6 +11,7 @@ import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.guicomponents.ProgressBar;
 import aztech.modern_industrialization.machines.guicomponents.RecipeEfficiencyBar;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
+import aztech.modern_industrialization.machines.init.MachineTier;
 import aztech.modern_industrialization.machines.init.SingleBlockCraftingMachines;
 import aztech.modern_industrialization.machines.models.MachineCasing;
 import aztech.modern_industrialization.machines.models.MachineCasings;
@@ -31,10 +32,12 @@ import net.swedz.extended_industrialization.machines.blockentities.multiblock.La
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.ProcessingArrayBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.SteamFarmerBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.ElectricMultipliedCraftingMultiblockBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.SteamMultipliedCraftingMultiblockBlockEntity;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.MultipliedCrafterComponent;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.wastecollector.WasteCollectorBehavior;
+import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 
 import java.util.List;
@@ -97,7 +100,7 @@ public final class EIMachines
 					BRONZE_PLATED_BRICKS, true, false, false,
 					(bep) -> new SteamMultipliedCraftingMultiblockBlockEntity(
 							bep, "large_steam_furnace", new ShapeTemplate[]{shape},
-							() -> MIMachineRecipeTypes.FURNACE, () -> 8, MultipliedCrafterComponent.EuCostTransformer.scaledMultiplyBy(5),
+							() -> MIMachineRecipeTypes.FURNACE, () -> 8, MultipliedCrafterComponent.EuCostTransformer.scaledMultiplyBy(6),
 							OverclockComponent.getDefaultCatalysts()
 					)
 			);
@@ -114,6 +117,43 @@ public final class EIMachines
 		ReiMachineRecipes.registerWorkstation("bronze_furnace", EI.id("large_electric_furnace"));
 		ReiMachineRecipes.registerWorkstation("steel_furnace", EI.id("large_electric_furnace"));
 		ReiMachineRecipes.registerWorkstation("electric_furnace", EI.id("large_electric_furnace"));
+		
+		{
+			SimpleMember bronzePlatedBricks = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("bronze_plated_bricks")));
+			HatchFlags hatches = new HatchFlags.Builder().with(HatchType.ITEM_INPUT, HatchType.ITEM_OUTPUT, HatchType.FLUID_INPUT).build();
+			ShapeTemplate shape = new ShapeTemplate.Builder(BRONZE_PLATED_BRICKS).add3by3LevelsRoofed(-1, 1, bronzePlatedBricks, hatches).build();
+			MIMachineHookHelper.registerMultiblockMachine(
+					"Large Steam Macerator", "large_steam_macerator", "large_macerator",
+					BRONZE_PLATED_BRICKS, true, false, false,
+					(bep) -> new SteamMultipliedCraftingMultiblockBlockEntity(
+							bep, "large_steam_macerator", new ShapeTemplate[]{shape},
+							() -> MIMachineRecipeTypes.MACERATOR, () -> 8, MultipliedCrafterComponent.EuCostTransformer.scaledMultiplyBy(6),
+							OverclockComponent.getDefaultCatalysts()
+					)
+			);
+			ReiMachineRecipes.registerMultiblockShape("large_steam_macerator", shape);
+			ReiMachineRecipes.registerWorkstation("bronze_macerator", EI.id("large_steam_macerator"));
+			ReiMachineRecipes.registerWorkstation("steel_macerator", EI.id("large_steam_macerator"));
+		}
+		
+		{
+			SimpleMember steelPlatedBricks = SimpleMember.forBlock(EIBlocks.STEEL_PLATED_BRICKS);
+			HatchFlags hatches = new HatchFlags.Builder().with(HatchType.ITEM_INPUT, HatchType.ITEM_OUTPUT, HatchType.ENERGY_INPUT).build();
+			ShapeTemplate shape = new ShapeTemplate.Builder(Casings.STEEL_PLATED_BRICKS).add3by3LevelsRoofed(-1, 1, steelPlatedBricks, hatches).build();
+			MIMachineHookHelper.registerMultiblockMachine(
+					"Large Electric Macerator", "large_electric_macerator", "large_macerator",
+					Casings.STEEL_PLATED_BRICKS, true, false, false,
+					(bep) -> new ElectricMultipliedCraftingMultiblockBlockEntity(
+							bep, "large_electric_macerator", new ShapeTemplate[]{shape},
+							() -> MIMachineRecipeTypes.MACERATOR, () -> 16, MultipliedCrafterComponent.EuCostTransformer.scaledMultiplyBy(12),
+							MachineTier.MULTIBLOCK
+					)
+			);
+			ReiMachineRecipes.registerMultiblockShape("large_electric_macerator", shape);
+			ReiMachineRecipes.registerWorkstation("bronze_macerator", EI.id("large_electric_macerator"));
+			ReiMachineRecipes.registerWorkstation("steel_macerator", EI.id("large_electric_macerator"));
+			ReiMachineRecipes.registerWorkstation("electric_macerator", EI.id("large_electric_macerator"));
+		}
 	}
 	
 	public static final class RecipeTypes
