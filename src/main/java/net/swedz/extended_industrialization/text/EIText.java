@@ -25,7 +25,12 @@ public enum EIText
 	MULTIBLOCK_SHAPE_INVALID("Shape Invalid"),
 	MULTIBLOCK_STATUS_ACTIVE("Status : Active"),
 	MULTIBLOCK_STATUS_INACTIVE("Status : Inactive"),
-	COILS_LEF_TIER("Runs LEF in batches of %d at %s the EU cost");
+	COILS_LEF_TIER("Runs LEF in batches of up to %d at %s the EU cost"),
+	MACHINE_BATCHER_RECIPE("Can run %s recipes in batches"),
+	MACHINE_BATCHER_RECIPE_FURNACE("Furnace"),
+	MACHINE_BATCHER_RECIPE_MACERATOR("Macerator"),
+	MACHINE_BATCHER_SIZE_AND_COST("Runs in batches of up to %d at %s the EU cost"),
+	MACHINE_BATCHER_COILS("Batch size is determined by coil used");
 	
 	private final String englishText;
 	

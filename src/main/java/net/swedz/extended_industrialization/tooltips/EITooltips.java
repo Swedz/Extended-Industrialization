@@ -9,6 +9,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.BlockItem;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
+import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
 import net.swedz.extended_industrialization.registry.items.EIItems;
 import net.swedz.extended_industrialization.text.EIText;
 
@@ -68,6 +69,38 @@ public final class EITooltips
 					return Optional.empty();
 				}
 			});
+	
+	public static final TooltipAttachment LARGE_STEAM_FURNACE = TooltipAttachment.ofMultilines(
+			EIBlocks.get("large_steam_furnace"),
+			List.of(
+					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_RECIPE.text(EIText.MACHINE_BATCHER_RECIPE_FURNACE.text().withStyle(NUMBER_TEXT))),
+					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_SIZE_AND_COST.text(DEFAULT_PARSER.parse(8), RATIO_PERCENTAGE_PARSER.parse(0.75f)))
+			)
+	);
+	
+	public static final TooltipAttachment LARGE_ELECTRIC_FURNACE = TooltipAttachment.ofMultilines(
+			EIBlocks.get("large_electric_furnace"),
+			List.of(
+					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_RECIPE.text(EIText.MACHINE_BATCHER_RECIPE_FURNACE.text().withStyle(NUMBER_TEXT))),
+					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_COILS.text())
+			)
+	);
+	
+	public static final TooltipAttachment LARGE_STEAM_MACERATOR = TooltipAttachment.ofMultilines(
+			EIBlocks.get("large_steam_macerator"),
+			List.of(
+					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_RECIPE.text(EIText.MACHINE_BATCHER_RECIPE_MACERATOR.text().withStyle(NUMBER_TEXT))),
+					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_SIZE_AND_COST.text(DEFAULT_PARSER.parse(8), RATIO_PERCENTAGE_PARSER.parse(0.75f)))
+			)
+	);
+	
+	public static final TooltipAttachment LARGE_ELECTRIC_MACERATOR = TooltipAttachment.ofMultilines(
+			EIBlocks.get("large_electric_macerator"),
+			List.of(
+					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_RECIPE.text(EIText.MACHINE_BATCHER_RECIPE_MACERATOR.text().withStyle(NUMBER_TEXT))),
+					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_SIZE_AND_COST.text(DEFAULT_PARSER.parse(16), RATIO_PERCENTAGE_PARSER.parse(0.75f)))
+			)
+	);
 	
 	public static void init()
 	{

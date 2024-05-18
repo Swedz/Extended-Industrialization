@@ -51,6 +51,11 @@ public final class EIBlocks
 		return Set.copyOf(Registry.HOLDERS);
 	}
 	
+	public static Block get(String id)
+	{
+		return Registry.HOLDERS.stream().filter((b) -> b.identifier().id().equals(id)).findFirst().orElseThrow().get();
+	}
+	
 	public static <BlockType extends Block> BlockHolder<BlockType> create(String id, String englishName,
 																		  Function<BlockBehaviour.Properties, BlockType> blockCreator)
 	{
