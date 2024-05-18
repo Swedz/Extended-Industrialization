@@ -66,7 +66,7 @@ public final class LargeElectricFurnaceBlockEntity extends ElectricMultipliedCra
 	@Override
 	protected long transformEuCost(long eu)
 	{
-		return MultipliedCrafterComponent.EuCostTransformer.scaledByCostEfficiency(this.getActiveTier().euCostEfficiency()).transform(crafter, eu);
+		return MultipliedCrafterComponent.EuCostTransformer.scaledMultiplyBy((long) (crafter.getMaxMultiplier() * this.getActiveTier().euCostMultiplier())).transform(crafter, eu);
 	}
 	
 	private static List<Tier>      TIERS           = List.of();
@@ -77,7 +77,7 @@ public final class LargeElectricFurnaceBlockEntity extends ElectricMultipliedCra
 		return TIERS;
 	}
 	
-	public record Tier(ResourceLocation blockId, int batchSize, float euCostEfficiency)
+	public record Tier(ResourceLocation blockId, int batchSize, float euCostMultiplier)
 	{
 		public String getTranslationKey()
 		{
@@ -94,7 +94,7 @@ public final class LargeElectricFurnaceBlockEntity extends ElectricMultipliedCra
 	{
 		List<Tier> tiers = Lists.newArrayList();
 		LargeElectricFurnaceTier.getAll().forEach((block, tier) ->
-				tiers.add(new Tier(block.location(), tier.batchSize(), tier.euCostEfficiency())));
+				tiers.add(new Tier(block.location(), tier.batchSize(), tier.euCostMultiplier())));
 		tiers.sort(Comparator.comparingInt(Tier::batchSize));
 		
 		TIERS = Collections.unmodifiableList(tiers);

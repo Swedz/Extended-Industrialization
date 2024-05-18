@@ -44,9 +44,9 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		this.builder(EIDataMaps.FERTILIZER_POTENCY).add(fluid.identifier().location(), new FertilizerPotency(tickRate, mbToConsumePerFertilizerTick), false);
 	}
 	
-	private void addLargeElectricFurnaceTier(ResourceLocation block, int batchSize, float euCostEfficiency)
+	private void addLargeElectricFurnaceTier(ResourceLocation block, int batchSize, float euCostMultiplier)
 	{
-		this.builder(EIDataMaps.LARGE_ELECTRIC_FURNACE_TIER).add(block, new LargeElectricFurnaceTier(batchSize, euCostEfficiency), false);
+		this.builder(EIDataMaps.LARGE_ELECTRIC_FURNACE_TIER).add(block, new LargeElectricFurnaceTier(batchSize, euCostMultiplier), false);
 	}
 	
 	private void addPotionBrewing(ResourceKey<Potion> potion, int bottles, int water, int blazingEssence, int time, int euCost)
