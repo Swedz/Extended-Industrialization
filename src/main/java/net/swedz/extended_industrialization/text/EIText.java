@@ -24,7 +24,8 @@ public enum EIText
 	MULTIBLOCK_SHAPE_VALID("Shape Valid"),
 	MULTIBLOCK_SHAPE_INVALID("Shape Invalid"),
 	MULTIBLOCK_STATUS_ACTIVE("Status : Active"),
-	MULTIBLOCK_STATUS_INACTIVE("Status : Inactive");
+	MULTIBLOCK_STATUS_INACTIVE("Status : Inactive"),
+	COILS_LEF_TIER("Runs LEF in batches of %d at %s the EU cost");
 	
 	private final String englishText;
 	

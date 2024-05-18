@@ -43,6 +43,7 @@
   "itemGroup.extended_industrialization.extended_industrialization": "Extended Industrialization",
   "lef_tier.extended_industrialization.modern_industrialization.cupronickel_coil": "Cupronickel",
   "lef_tier.extended_industrialization.modern_industrialization.kanthal_coil": "Kanthal",
+  "text.extended_industrialization.coils_lef_tier": "Runs LEF in batches of %d at %s the EU cost",
   "text.extended_industrialization.farmer_not_tilling": "Not Tilling",
   "text.extended_industrialization.farmer_planting_alternating_lines": "Alternating Lines",
   "text.extended_industrialization.farmer_planting_as_needed": "As Needed",

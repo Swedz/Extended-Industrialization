@@ -11,6 +11,7 @@ import aztech.modern_industrialization.machines.multiblocks.HatchFlags;
 import aztech.modern_industrialization.machines.multiblocks.HatchType;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
+import com.google.common.collect.Maps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
@@ -22,6 +23,9 @@ import org.apache.commons.compress.utils.Lists;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static aztech.modern_industrialization.machines.models.MachineCasings.*;
 
@@ -69,12 +73,18 @@ public final class LargeElectricFurnaceBlockEntity extends ElectricMultipliedCra
 		return MultipliedCrafterComponent.EuCostTransformer.scaledMultiplyBy((long) (crafter.getMaxMultiplier() * this.getActiveTier().euCostMultiplier())).transform(crafter, eu);
 	}
 	
-	private static List<Tier>      TIERS           = List.of();
-	private static ShapeTemplate[] SHAPE_TEMPLATES = new ShapeTemplate[0];
+	private static List<Tier>                  TIERS           = List.of();
+	private static Map<ResourceLocation, Tier> TIERS_BY_COIL   = Collections.unmodifiableMap(Maps.newHashMap());
+	private static ShapeTemplate[]             SHAPE_TEMPLATES = new ShapeTemplate[0];
 	
 	public static List<Tier> getTiers()
 	{
 		return TIERS;
+	}
+	
+	public static Map<ResourceLocation, Tier> getTiersByCoil()
+	{
+		return TIERS_BY_COIL;
 	}
 	
 	public record Tier(ResourceLocation blockId, int batchSize, float euCostMultiplier)
@@ -98,6 +108,7 @@ public final class LargeElectricFurnaceBlockEntity extends ElectricMultipliedCra
 		tiers.sort(Comparator.comparingInt(Tier::batchSize));
 		
 		TIERS = Collections.unmodifiableList(tiers);
+		TIERS_BY_COIL = TIERS.stream().collect(Collectors.toMap(LargeElectricFurnaceBlockEntity.Tier::blockId, Function.identity()));
 		
 		SHAPE_TEMPLATES = new ShapeTemplate[TIERS.size()];
 		

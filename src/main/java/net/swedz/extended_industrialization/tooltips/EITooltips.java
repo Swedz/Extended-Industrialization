@@ -4,8 +4,11 @@ import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.item.BlockItem;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.registry.items.EIItems;
 import net.swedz.extended_industrialization.text.EIText;
 
@@ -18,6 +21,9 @@ public final class EITooltips
 {
 	public static final Parser<MutableComponent> MULCH_GANG_FOR_LIFE_PARSER = (component) ->
 			component.withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.GRAY);
+	
+	public static final Parser<Float> RATIO_PERCENTAGE_PARSER = (ratio) ->
+			Component.literal("%d%%".formatted((int) (ratio * 100))).withStyle(NUMBER_TEXT);
 	
 	public static final TooltipAttachment ENERGY_STORED_ITEM = TooltipAttachment.of(
 			(itemStack, item) ->
@@ -45,6 +51,23 @@ public final class EITooltips
 					MULCH_GANG_FOR_LIFE_PARSER.parse(EIText.MULCH_GANG_FOR_LIFE_1.text())
 			)
 	).noShiftRequired();
+	
+	public static final TooltipAttachment COILS = TooltipAttachment.of(
+			(itemStack, item) ->
+			{
+				if(item instanceof BlockItem blockItem && LargeElectricFurnaceBlockEntity.getTiersByCoil().containsKey(BuiltInRegistries.BLOCK.getKey(blockItem.getBlock())))
+				{
+					LargeElectricFurnaceBlockEntity.Tier tier = LargeElectricFurnaceBlockEntity.getTiersByCoil()
+							.get(BuiltInRegistries.BLOCK.getKey(((BlockItem) itemStack.getItem()).getBlock()));
+					int batchSize = tier.batchSize();
+					float euCostMultiplier = tier.euCostMultiplier();
+					return Optional.of(DEFAULT_PARSER.parse(EIText.COILS_LEF_TIER.text(DEFAULT_PARSER.parse(batchSize), RATIO_PERCENTAGE_PARSER.parse(euCostMultiplier))));
+				}
+				else
+				{
+					return Optional.empty();
+				}
+			});
 	
 	public static void init()
 	{
