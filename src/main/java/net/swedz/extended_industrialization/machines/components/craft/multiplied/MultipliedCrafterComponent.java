@@ -52,8 +52,8 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 	private final ModularCrafterAccessBehavior behavior;
 	
 	private final Supplier<MachineRecipeType> recipeTypeGetter;
-	private final Supplier<Integer> maxMultiplierGetter;
-	private final EuCostTransformer euCostTransformer;
+	private final Supplier<Integer>           maxMultiplierGetter;
+	private final EuCostTransformer           euCostTransformer;
 	
 	private RecipeHolder<MachineRecipe> activeRecipe = null;
 	private ResourceLocation            delayedActiveRecipe;

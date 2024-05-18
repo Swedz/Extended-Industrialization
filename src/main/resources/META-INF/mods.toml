@@ -10,10 +10,10 @@ authors = "${mod_authors}"
 description = '''${mod_description}'''
 
 [[mixins]]
-config="${mod_id}.mixins.json"
+config = "${mod_id}.mixins.json"
 
 [[accessTransformers]]
-file="${mod_id}.accesstransformer.cfg"
+file = "${mod_id}.accesstransformer.cfg"
 
 [[dependencies.${ mod_id }]]
 modId = "neoforge"

@@ -6,10 +6,10 @@ import aztech.modern_industrialization.machines.blockentities.multiblocks.Electr
 import com.google.common.collect.Lists;
 import net.swedz.extended_industrialization.compat.viewer.usage.EIViewerSetup;
 import net.swedz.extended_industrialization.machines.EIMachines;
-import net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot.ProcessingArrayMachineSlot;
-import net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot.ProcessingArrayMachineSlotClient;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGui;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGuiClient;
+import net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot.ProcessingArrayMachineSlot;
+import net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot.ProcessingArrayMachineSlotClient;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBarClient;
 import net.swedz.extended_industrialization.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGui;
