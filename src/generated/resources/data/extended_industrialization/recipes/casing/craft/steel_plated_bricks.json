@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "modern_industrialization:fire_clay_bricks"
+    },
+    "S": {
+      "item": "modern_industrialization:steel_plate"
+    }
+  },
+  "pattern": [
+    "SSS",
+    "SBS",
+    "SSS"
+  ],
+  "result": {
+    "item": "extended_industrialization:steel_plated_bricks"
+  }
+}

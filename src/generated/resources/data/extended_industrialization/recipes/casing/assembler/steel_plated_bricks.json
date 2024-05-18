@@ -1,0 +1,21 @@
+{
+  "type": "modern_industrialization:assembler",
+  "duration": 200,
+  "eu": 8,
+  "item_inputs": [
+    {
+      "amount": 1,
+      "item": "modern_industrialization:fire_clay_bricks"
+    },
+    {
+      "amount": 8,
+      "item": "modern_industrialization:steel_plate"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "extended_industrialization:steel_plated_bricks"
+    }
+  ]
+}

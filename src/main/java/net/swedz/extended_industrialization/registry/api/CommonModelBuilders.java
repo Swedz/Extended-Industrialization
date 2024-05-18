@@ -1,8 +1,10 @@
 package net.swedz.extended_industrialization.registry.api;
 
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.swedz.extended_industrialization.registry.blocks.BlockHolder;
 import net.swedz.extended_industrialization.registry.items.ItemHolder;
 
 import java.util.function.Consumer;
@@ -37,5 +39,11 @@ public final class CommonModelBuilders
 	{
 		return (builder) -> builder
 				.parent(new ModelFile.UncheckedModelFile("%s:block/%s".formatted(item.identifier().modId(), item.identifier().id())));
+	}
+	
+	public static Consumer<BlockStateProvider> blockCubeAll(BlockHolder block)
+	{
+		return (builder) -> builder
+				.simpleBlockWithItem(block.get(), builder.cubeAll(block.get()));
 	}
 }

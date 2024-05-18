@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.registry.blocks;
 
+import aztech.modern_industrialization.util.TagHelper;
 import com.google.common.collect.Sets;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.registry.api.CommonModelBuilders;
 import net.swedz.extended_industrialization.registry.items.EIItems;
 import net.swedz.extended_industrialization.registry.items.SortOrder;
 
@@ -41,6 +43,8 @@ public final class EIBlocks
 	{
 		Registry.init(bus);
 	}
+	
+	public static final BlockHolder<Block> STEEL_PLATED_BRICKS = create("steel_plated_bricks", "Steel Plated Bricks", Block::new, BlockItem::new, SortOrder.CASINGS).withProperties((p) -> p.destroyTime(5f).explosionResistance(6f)).withModel(CommonModelBuilders::blockCubeAll).tag(TagHelper.getMiningLevelTag(1)).register();
 	
 	public static Set<BlockHolder> values()
 	{

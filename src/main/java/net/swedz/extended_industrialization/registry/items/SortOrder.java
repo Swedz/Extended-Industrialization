@@ -4,6 +4,7 @@ public enum SortOrder
 {
 	GEAR,
 	OTHER_GEAR,
+	CASINGS,
 	MACHINES,
 	PARTS,
 	RESOURCES,

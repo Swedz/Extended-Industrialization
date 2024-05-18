@@ -46,12 +46,14 @@ public final class EIMachines
 	public static final class Casings
 	{
 		public static MachineCasing
-				BRONZE_PIPE;
+				BRONZE_PIPE,
+				STEEL_PLATED_BRICKS;
 	}
 	
 	public static void casings()
 	{
 		Casings.BRONZE_PIPE = MachineCasings.create("bronze_machine_casing_pipe");
+		Casings.STEEL_PLATED_BRICKS = MachineCasings.create("steel_plated_bricks");
 	}
 	
 	public static void blastFurnaceTiers(List<ElectricBlastFurnaceBlockEntity.Tier> list)

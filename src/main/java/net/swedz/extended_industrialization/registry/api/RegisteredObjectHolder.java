@@ -9,6 +9,7 @@ import net.swedz.extended_industrialization.api.MCIdentifier;
 import net.swedz.extended_industrialization.api.capabilities.CapabilitiesListeners;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;

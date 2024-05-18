@@ -16,6 +16,7 @@ import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.machines.EIMachines;
+import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
 
 public final class MachineCasingModelsMIHookDatagenProvider extends ModelProvider<BlockModelBuilder>
 {
@@ -28,6 +29,7 @@ public final class MachineCasingModelsMIHookDatagenProvider extends ModelProvide
 	protected void registerModels()
 	{
 		this.imitateBlock(EIMachines.Casings.BRONZE_PIPE, MIMaterials.BRONZE.getPart(MIParts.MACHINE_CASING_PIPE).asBlock());
+		this.imitateBlock(EIMachines.Casings.STEEL_PLATED_BRICKS, EIBlocks.STEEL_PLATED_BRICKS.get());
 	}
 	
 	private void imitateBlock(MachineCasing casing, Block block)
