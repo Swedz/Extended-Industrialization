@@ -1,17 +1,12 @@
 package net.swedz.extended_industrialization.datagen.server.provider.recipes;
 
-import aztech.modern_industrialization.MIBlock;
 import aztech.modern_industrialization.MIItem;
 import aztech.modern_industrialization.MITags;
-import aztech.modern_industrialization.materials.MIMaterials;
-import aztech.modern_industrialization.materials.part.MIParts;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.datagen.api.recipe.ShapedRecipeBuilder;
 import net.swedz.extended_industrialization.datagen.api.recipe.ShapelessRecipeBuilder;
-import net.swedz.extended_industrialization.registry.items.EIItems;
 import net.swedz.extended_industrialization.registry.tags.EITags;
 
 import java.util.function.Consumer;
@@ -94,9 +89,9 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addBronzeAndSteelMachineRecipes(
 				"bending_machine",
 				(builder) -> builder
-						.define('G', MIMaterials.COPPER.getPart(MIParts.GEAR))
-						.define('R', MIMaterials.COPPER.getPart(MIParts.ROD))
-						.define('C', MIMaterials.BRONZE.getPart(MIParts.MACHINE_CASING))
+						.define('G', "modern_industrialization:copper_gear")
+						.define('R', "modern_industrialization:copper_rod")
+						.define('C', "modern_industrialization:bronze_machine_casing")
 						.define('P', MITags.FLUID_PIPES)
 						.pattern("GRG")
 						.pattern("RCR")
@@ -106,11 +101,11 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addElectricMachineRecipes(
 				"bending_machine",
 				(builder) -> builder
-						.define('A', MIItem.ANALOG_CIRCUIT)
-						.define('P', MIItem.PISTON)
-						.define('M', MIItem.MOTOR)
+						.define('A', "modern_industrialization:analog_circuit")
+						.define('P', "modern_industrialization:piston")
+						.define('M', "modern_industrialization:motor")
 						.define('C', "modern_industrialization:basic_machine_hull")
-						.define('c', MIMaterials.TIN.getPart(MIParts.CABLE))
+						.define('c', "modern_industrialization:tin_cable")
 						.pattern("APA")
 						.pattern("MCM")
 						.pattern("cPc"),
@@ -123,10 +118,10 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addBronzeAndSteelMachineRecipes(
 				"composter",
 				(builder) -> builder
-						.define('G', MIMaterials.COPPER.getPart(MIParts.GEAR))
-						.define('O', MIMaterials.BRONZE.getPart(MIParts.BARREL))
-						.define('R', MIMaterials.COPPER.getPart(MIParts.ROTOR))
-						.define('C', MIMaterials.BRONZE.getPart(MIParts.MACHINE_CASING))
+						.define('G', "modern_industrialization:copper_gear")
+						.define('O', "modern_industrialization:bronze_barrel")
+						.define('R', "modern_industrialization:copper_rotor")
+						.define('C', "modern_industrialization:bronze_machine_casing")
 						.define('P', MITags.FLUID_PIPES)
 						.pattern("GOG")
 						.pattern("RCR")
@@ -136,12 +131,12 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addElectricMachineRecipes(
 				"composter",
 				(builder) -> builder
-						.define('A', MIItem.ANALOG_CIRCUIT)
+						.define('A', "modern_industrialization:analog_circuit")
 						.define('P', MITags.FLUID_PIPES)
-						.define('M', MIItem.MOTOR)
+						.define('M', "modern_industrialization:motor")
 						.define('C', "modern_industrialization:basic_machine_hull")
-						.define('c', MIMaterials.TIN.getPart(MIParts.CABLE))
-						.define('p', MIItem.PUMP)
+						.define('c', "modern_industrialization:tin_cable")
+						.define('p', "modern_industrialization:pump")
 						.pattern("APA")
 						.pattern("MCM")
 						.pattern("cpc"),
@@ -156,8 +151,8 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 				(builder) -> builder
 						.define('G', EITags.itemForge("glass"))
 						.define('S', EITags.itemForge("plates/silver"))
-						.define('B', MIBlock.BLOCK_FIRE_CLAY_BRICKS)
-						.define('C', ingredient("modern_industrialization:bronze_boiler"))
+						.define('B', "modern_industrialization:fire_clay_bricks")
+						.define('C', "modern_industrialization:bronze_boiler")
 						.pattern("GGG")
 						.pattern("SSS")
 						.pattern("BCB"),
@@ -168,8 +163,8 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 				(builder) -> builder
 						.define('G', EITags.itemForge("glass"))
 						.define('S', EITags.itemForge("plates/silver"))
-						.define('B', MIBlock.BLOCK_FIRE_CLAY_BRICKS)
-						.define('C', ingredient("modern_industrialization:steel_boiler"))
+						.define('B', "modern_industrialization:fire_clay_bricks")
+						.define('C', "modern_industrialization:steel_boiler")
 						.pattern("GGG")
 						.pattern("SSS")
 						.pattern("BCB"),
@@ -183,8 +178,8 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 				"alloy_smelter",
 				(builder) -> builder
 						.define('I', EITags.itemForge("plates/invar"))
-						.define('R', MIMaterials.BRONZE.getPart(MIParts.ROTOR))
-						.define('C', MIMaterials.STEEL.getPart(MIParts.MACHINE_CASING))
+						.define('R', "modern_industrialization:bronze_rotor")
+						.define('C', "modern_industrialization:steel_machine_casing")
 						.define('P', MITags.FLUID_PIPES)
 						.pattern("IRI")
 						.pattern("ICI")
@@ -194,11 +189,11 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addElectricMachineRecipes(
 				"alloy_smelter",
 				(builder) -> builder
-						.define('W', MIMaterials.CUPRONICKEL.getPart(MIParts.WIRE_MAGNETIC))
-						.define('R', MIMaterials.TIN.getPart(MIParts.ROTOR))
-						.define('A', MIItem.ANALOG_CIRCUIT)
+						.define('W', "modern_industrialization:cupronickel_wire_magnetic")
+						.define('R', "modern_industrialization:tin_rotor")
+						.define('A', "modern_industrialization:analog_circuit")
 						.define('C', "modern_industrialization:basic_machine_hull")
-						.define('c', MIMaterials.TIN.getPart(MIParts.CABLE))
+						.define('c', "modern_industrialization:tin_cable")
 						.pattern("WRW")
 						.pattern("ACA")
 						.pattern("cWc"),
@@ -212,9 +207,9 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 				"canning_machine",
 				(builder) -> builder
 						.define('P', MITags.FLUID_PIPES)
-						.define('T', MIMaterials.STEEL.getPart(MIParts.TANK))
-						.define('R', MIMaterials.BRONZE.getPart(MIParts.ROTOR))
-						.define('C', MIMaterials.STEEL.getPart(MIParts.MACHINE_CASING))
+						.define('T', "modern_industrialization:steel_tank")
+						.define('R', "modern_industrialization:bronze_rotor")
+						.define('C', "modern_industrialization:steel_machine_casing")
 						.pattern("PTP")
 						.pattern("RCR")
 						.pattern("PPP"),
@@ -224,11 +219,11 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 				"canning_machine",
 				(builder) -> builder
 						.define('P', MITags.FLUID_PIPES)
-						.define('R', MIMaterials.TIN.getPart(MIParts.ROTOR))
-						.define('p', MIItem.PUMP)
+						.define('R', "modern_industrialization:tin_rotor")
+						.define('p', "modern_industrialization:pump")
 						.define('C', "modern_industrialization:basic_machine_hull")
-						.define('A', MIItem.ANALOG_CIRCUIT)
-						.define('c', MIItem.CONVEYOR)
+						.define('A', "modern_industrialization:analog_circuit")
+						.define('c', "modern_industrialization:conveyor")
 						.pattern("PRP")
 						.pattern("pCp")
 						.pattern("AcA"),
@@ -241,10 +236,10 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addSteelMachineRecipes(
 				"honey_extractor",
 				(builder) -> builder
-						.define('R', MIMaterials.BRONZE.getPart(MIParts.ROD))
-						.define('r', MIMaterials.BRONZE.getPart(MIParts.ROTOR))
-						.define('T', MIMaterials.STEEL.getPart(MIParts.TANK))
-						.define('C', MIMaterials.STEEL.getPart(MIParts.MACHINE_CASING))
+						.define('R', "modern_industrialization:bronze_rod")
+						.define('r', "modern_industrialization:bronze_rotor")
+						.define('T', "modern_industrialization:steel_tank")
+						.define('C', "modern_industrialization:steel_machine_casing")
 						.define('P', MITags.FLUID_PIPES)
 						.pattern("RrR")
 						.pattern("TCT")
@@ -254,12 +249,12 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addElectricMachineRecipes(
 				"honey_extractor",
 				(builder) -> builder
-						.define('A', MIItem.ANALOG_CIRCUIT)
-						.define('R', MIMaterials.TIN.getPart(MIParts.ROTOR))
+						.define('A', "modern_industrialization:analog_circuit")
+						.define('R', "modern_industrialization:tin_rotor")
 						.define('G', EITags.itemForge("glass"))
 						.define('C', "modern_industrialization:basic_machine_hull")
-						.define('c', MIMaterials.TIN.getPart(MIParts.CABLE))
-						.define('P', MIItem.PUMP)
+						.define('c', "modern_industrialization:tin_cable")
+						.define('P', "modern_industrialization:pump")
 						.pattern("ARA")
 						.pattern("GCG")
 						.pattern("cPc"),
@@ -273,9 +268,9 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 				"farmer", "steam",
 				(builder) -> builder
 						.define('B', "modern_industrialization:bronze_plated_bricks")
-						.define('C', EIItems.STEEL_COMBINE)
-						.define('A', MIItem.ANALOG_CIRCUIT)
-						.define('M', MIItem.MOTOR)
+						.define('C', "extended_industrialization:steel_combine")
+						.define('A', "modern_industrialization:analog_circuit")
+						.define('M', "modern_industrialization:motor")
 						.define('P', "modern_industrialization:bronze_machine_casing_pipe")
 						.pattern("BCB")
 						.pattern("AMA")
@@ -285,11 +280,11 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addBasicCraftingMachineRecipes(
 				"farmer", "electric",
 				(builder) -> builder
-						.define('A', MIItem.ROBOT_ARM)
-						.define('M', MIItem.LARGE_MOTOR)
+						.define('A', "modern_industrialization:robot_arm")
+						.define('M', "modern_industrialization:large_motor")
 						.define('C', "modern_industrialization:steel_machine_casing")
-						.define('F', EIItems.valueOf("steam_farmer"))
-						.define('P', MIItem.LARGE_PUMP)
+						.define('F', "extended_industrialization:steam_farmer")
+						.define('P', "modern_industrialization:large_pump")
 						.define('p', "modern_industrialization:steel_machine_casing_pipe")
 						.pattern("AMA")
 						.pattern("CFC")
@@ -303,10 +298,10 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addSteelMachineRecipes(
 				"brewery",
 				(builder) -> builder
-						.define('R', MIMaterials.BRONZE.getPart(MIParts.ROTOR))
-						.define('T', MIMaterials.STEEL.getPart(MIParts.TANK))
-						.define('B', Items.BLAZE_ROD)
-						.define('C', MIMaterials.STEEL.getPart(MIParts.MACHINE_CASING))
+						.define('R', "modern_industrialization:bronze_rotor")
+						.define('T', "modern_industrialization:steel_tank")
+						.define('B', "minecraft:blaze_rod")
+						.define('C', "modern_industrialization:steel_machine_casing")
 						.define('P', MITags.FLUID_PIPES)
 						.pattern("RTR")
 						.pattern("BCB")
@@ -316,11 +311,11 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addElectricMachineRecipes(
 				"brewery",
 				(builder) -> builder
-						.define('R', MIMaterials.TIN.getPart(MIParts.ROTOR))
-						.define('A', MIItem.ANALOG_CIRCUIT)
-						.define('B', Items.BLAZE_ROD)
+						.define('R', "modern_industrialization:tin_rotor")
+						.define('A', "modern_industrialization:analog_circuit")
+						.define('B', "minecraft:blaze_rod")
 						.define('C', "modern_industrialization:basic_machine_hull")
-						.define('P', MIItem.PUMP)
+						.define('P', "modern_industrialization:pump")
 						.pattern("RAR")
 						.pattern("BCB")
 						.pattern("PAP"),
@@ -333,9 +328,9 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addBronzeAndSteelMachineRecipes(
 				"waste_collector",
 				(builder) -> builder
-						.define('B', Items.IRON_BARS)
-						.define('R', MIMaterials.COPPER.getPart(MIParts.ROTOR))
-						.define('C', MIMaterials.BRONZE.getPart(MIParts.MACHINE_CASING))
+						.define('B', "minecraft:iron_bars")
+						.define('R', "modern_industrialization:copper_rotor")
+						.define('C', "modern_industrialization:bronze_machine_casing")
 						.define('P', MITags.FLUID_PIPES)
 						.pattern("BBB")
 						.pattern("RCR")
@@ -345,11 +340,11 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addElectricMachineRecipes(
 				"waste_collector",
 				(builder) -> builder
-						.define('B', Items.IRON_BARS)
-						.define('R', MIMaterials.TIN.getPart(MIParts.ROTOR))
+						.define('B', "minecraft:iron_bars")
+						.define('R', "modern_industrialization:tin_rotor")
 						.define('C', "modern_industrialization:basic_machine_hull")
-						.define('c', MIMaterials.TIN.getPart(MIParts.CABLE))
-						.define('P', MIItem.PUMP)
+						.define('c', "modern_industrialization:tin_cable")
+						.define('P', "modern_industrialization:pump")
 						.pattern("BBB")
 						.pattern("RCR")
 						.pattern("cPc"),
@@ -362,8 +357,8 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addBasicCraftingMachineRecipes(
 				"processing_array",
 				(builder) -> builder
-						.define('A', MIItem.ROBOT_ARM)
-						.define('D', MIItem.DIGITAL_CIRCUIT)
+						.define('A', "modern_industrialization:robot_arm")
+						.define('D', "modern_industrialization:digital_circuit")
 						.define('C', "modern_industrialization:clean_stainless_steel_machine_casing")
 						.define('S', "modern_industrialization:assembler")
 						.pattern("ADA")
@@ -378,12 +373,14 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addBasicCraftingMachineRecipes(
 				"large_steam_furnace",
 				(builder) -> builder
+						.define('C', "modern_industrialization:bronze_curved_plate")
 						.define('B', "modern_industrialization:bronze_plated_bricks")
-						.define('I', "modern_industrialization:heatproof_machine_casing")
 						.define('F', "modern_industrialization:bronze_furnace")
-						.pattern("BIB")
-						.pattern("IFI")
-						.pattern("BIB"),
+						.define('M', "modern_industrialization:bronze_machine_casing")
+						.define('R', "modern_industrialization:fire_clay_bricks")
+						.pattern("CBC")
+						.pattern("FMF")
+						.pattern("RRR"),
 				output
 		);
 	}
