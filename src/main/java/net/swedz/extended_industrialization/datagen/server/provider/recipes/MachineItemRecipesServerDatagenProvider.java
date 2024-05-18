@@ -383,6 +383,50 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 						.pattern("RRR"),
 				output
 		);
+		
+		addBasicCraftingMachineRecipes(
+				"large_electric_furnace",
+				(builder) -> builder
+						.define('C', "modern_industrialization:cupronickel_wire_magnetic")
+						.define('E', "modern_industrialization:electronic_circuit")
+						.define('F', "modern_industrialization:electric_furnace")
+						.define('H', "modern_industrialization:advanced_machine_hull")
+						.define('I', "modern_industrialization:heatproof_machine_casing")
+						.pattern("CEC")
+						.pattern("FHF")
+						.pattern("IEI"),
+				output
+		);
+	}
+	
+	private static void largeMacerator(RecipeOutput output)
+	{
+		addBasicCraftingMachineRecipes(
+				"large_steam_macerator",
+				(builder) -> builder
+						.define('C', "modern_industrialization:bronze_curved_plate")
+						.define('B', "modern_industrialization:bronze_plated_bricks")
+						.define('F', "modern_industrialization:bronze_macerator")
+						.define('M', "modern_industrialization:bronze_machine_casing")
+						.pattern("CBC")
+						.pattern("FMF")
+						.pattern("CBC"),
+				output
+		);
+		
+		addBasicCraftingMachineRecipes(
+				"large_electric_macerator",
+				(builder) -> builder
+						.define('I', "modern_industrialization:invar_rotary_blade")
+						.define('E', "modern_industrialization:electronic_circuit")
+						.define('M', "modern_industrialization:electric_macerator")
+						.define('H', "modern_industrialization:advanced_machine_hull")
+						.define('S', "extended_industrialization:steel_plated_bricks")
+						.pattern("IEI")
+						.pattern("MHM")
+						.pattern("SES"),
+				output
+		);
 	}
 	
 	@Override
@@ -399,5 +443,6 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		wasteCollector(output);
 		processingArray(output);
 		largeFurnace(output);
+		largeMacerator(output);
 	}
 }

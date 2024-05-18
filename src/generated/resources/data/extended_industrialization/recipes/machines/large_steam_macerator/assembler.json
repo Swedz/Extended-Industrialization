@@ -4,20 +4,16 @@
   "eu": 8,
   "item_inputs": [
     {
-      "amount": 1,
+      "amount": 2,
       "item": "modern_industrialization:bronze_plated_bricks"
     },
     {
-      "amount": 3,
-      "item": "modern_industrialization:fire_clay_bricks"
-    },
-    {
-      "amount": 2,
+      "amount": 4,
       "item": "modern_industrialization:bronze_curved_plate"
     },
     {
       "amount": 2,
-      "item": "modern_industrialization:bronze_furnace"
+      "item": "modern_industrialization:bronze_macerator"
     },
     {
       "amount": 1,
@@ -27,7 +23,7 @@
   "item_outputs": [
     {
       "amount": 1,
-      "item": "extended_industrialization:large_steam_furnace"
+      "item": "extended_industrialization:large_steam_macerator"
     }
   ]
 }

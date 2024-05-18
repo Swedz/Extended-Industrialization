@@ -9,21 +9,18 @@
       "item": "modern_industrialization:bronze_curved_plate"
     },
     "F": {
-      "item": "modern_industrialization:bronze_furnace"
+      "item": "modern_industrialization:bronze_macerator"
     },
     "M": {
       "item": "modern_industrialization:bronze_machine_casing"
-    },
-    "R": {
-      "item": "modern_industrialization:fire_clay_bricks"
     }
   },
   "pattern": [
     "CBC",
     "FMF",
-    "RRR"
+    "CBC"
   ],
   "result": {
-    "item": "extended_industrialization:large_steam_furnace"
+    "item": "extended_industrialization:large_steam_macerator"
   }
 }
