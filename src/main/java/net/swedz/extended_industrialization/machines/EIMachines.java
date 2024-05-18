@@ -89,7 +89,7 @@ public final class EIMachines
 					BRONZE_PLATED_BRICKS, true, false, false,
 					(bep) -> new SteamMultipliedCraftingMultiblockBlockEntity(
 							bep, "large_steam_furnace", new ShapeTemplate[]{shape},
-							() -> MIMachineRecipeTypes.FURNACE, () -> 64, MultipliedCrafterComponent.EuCostTransformer.scaledMultiplyBy(16),
+							() -> MIMachineRecipeTypes.FURNACE, () -> 8, MultipliedCrafterComponent.EuCostTransformer.scaledMultiplyBy(5),
 							OverclockComponent.getDefaultCatalysts()
 					)
 			);
