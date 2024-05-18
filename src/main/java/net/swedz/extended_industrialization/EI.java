@@ -2,16 +2,20 @@ package net.swedz.extended_industrialization;
 
 import com.google.common.collect.Sets;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.swedz.extended_industrialization.api.MCIdentifiable;
 import net.swedz.extended_industrialization.api.capabilities.CapabilitiesListeners;
 import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListeners;
 import net.swedz.extended_industrialization.datagen.DatagenDelegator;
 import net.swedz.extended_industrialization.datamaps.EIDataMaps;
+import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionRecipe;
 import net.swedz.extended_industrialization.registry.EIOtherRegistries;
 import net.swedz.extended_industrialization.registry.blocks.BlockHolder;
@@ -69,5 +73,13 @@ public final class EI
 		bus.addListener(RegisterCapabilitiesEvent.class, CapabilitiesListeners::triggerAll);
 		
 		bus.addListener(RegisterDataMapTypesEvent.class, EIDataMaps::init);
+		
+		NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, TagsUpdatedEvent.class, (event) ->
+		{
+			if(event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.SERVER_DATA_LOAD)
+			{
+				LargeElectricFurnaceBlockEntity.initTiers();
+			}
+		});
 	}
 }

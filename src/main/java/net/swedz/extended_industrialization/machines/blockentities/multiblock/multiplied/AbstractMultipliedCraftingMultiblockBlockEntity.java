@@ -25,7 +25,8 @@ import java.util.function.Supplier;
 public abstract class AbstractMultipliedCraftingMultiblockBlockEntity extends BasicMultiblockMachineBlockEntity implements CrafterComponentHolder, ModularCrafterAccessBehavior
 {
 	protected final Supplier<MachineRecipeType> recipeTypeGetter;
-	protected final Supplier<Integer>           maxMultiplierGetter;
+	protected final Supplier<Integer> maxMultiplierGetter;
+	protected final MultipliedCrafterComponent.EuCostTransformer euCostTransformer;
 	
 	protected final MultipliedCrafterComponent crafter;
 	
@@ -36,10 +37,11 @@ public abstract class AbstractMultipliedCraftingMultiblockBlockEntity extends Ba
 		
 		this.recipeTypeGetter = recipeTypeGetter;
 		this.maxMultiplierGetter = maxMultiplierGetter;
+		this.euCostTransformer = euCostTransformer;
 		
 		this.crafter = new MultipliedCrafterComponent(
 				this, inventory, this,
-				this::getRecipeType, this::getMaxMultiplier, euCostTransformer
+				this::getRecipeType, this::getMaxMultiplier, (c, eu) -> this.transformEuCost(eu)
 		);
 		
 		this.registerComponents(crafter);
@@ -67,7 +69,7 @@ public abstract class AbstractMultipliedCraftingMultiblockBlockEntity extends Ba
 						text.add(new ModularMultiblockGuiLine(MIText.EfficiencyTicks.text(crafter.getEfficiencyTicks(), crafter.getMaxEfficiencyTicks())));
 					}
 					
-					text.add(new ModularMultiblockGuiLine(MIText.BaseEuRecipe.text(TextHelper.getEuTextTick(euCostTransformer.transform(crafter, crafter.getBaseRecipeEu())))));
+					text.add(new ModularMultiblockGuiLine(MIText.BaseEuRecipe.text(TextHelper.getEuTextTick(this.transformEuCost(crafter.getBaseRecipeEu())))));
 					
 					text.add(new ModularMultiblockGuiLine(MIText.CurrentEuRecipe.text(TextHelper.getEuTextTick(crafter.getCurrentRecipeEu()))));
 				}
@@ -85,6 +87,11 @@ public abstract class AbstractMultipliedCraftingMultiblockBlockEntity extends Ba
 	protected int getMaxMultiplier()
 	{
 		return maxMultiplierGetter.get();
+	}
+	
+	protected long transformEuCost(long eu)
+	{
+		return euCostTransformer.transform(crafter, eu);
 	}
 	
 	@Override

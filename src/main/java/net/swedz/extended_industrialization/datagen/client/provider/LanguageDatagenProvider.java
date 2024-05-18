@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.datagen.client.provider;
 
+import aztech.modern_industrialization.MI;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
@@ -35,5 +36,8 @@ public final class LanguageDatagenProvider extends LanguageProvider
 		}
 		
 		this.add("itemGroup.%s.%s".formatted(EI.ID, EI.ID), EI.NAME);
+		
+		this.add("lef_tier.%s.%s.%s".formatted(EI.ID, MI.ID, "cupronickel_coil"), "Cupronickel");
+		this.add("lef_tier.%s.%s.%s".formatted(EI.ID, MI.ID, "kanthal_coil"), "Kanthal");
 	}
 }

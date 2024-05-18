@@ -104,6 +104,11 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 			return (crafter, eu) -> (long) (eu * multiplier * ((double) crafter.getRecipeMultiplier() / crafter.getMaxMultiplier()));
 		}
 		
+		static EuCostTransformer scaledByCostEfficiency(float costEfficiency)
+		{
+			return (crafter, eu) -> (long) (eu * (crafter.getMaxMultiplier() * costEfficiency) * ((double) crafter.getRecipeMultiplier() / crafter.getMaxMultiplier()));
+		}
+		
 		long transform(MultipliedCrafterComponent crafter, long eu);
 	}
 	

@@ -27,10 +27,11 @@ import net.swedz.extended_industrialization.machines.blockentities.brewery.Elect
 import net.swedz.extended_industrialization.machines.blockentities.brewery.SteamBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.ElectricFluidHarvestingMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.SteamFluidHarvestingMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentities.multiblock.ProcessingArrayBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.SteamFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.SteamMultipliedCraftingMultiblockBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentities.multiblock.ProcessingArrayBlockEntity;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.MultipliedCrafterComponent;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.wastecollector.WasteCollectorBehavior;
@@ -104,6 +105,15 @@ public final class EIMachines
 			ReiMachineRecipes.registerWorkstation("bronze_furnace", EI.id("large_steam_furnace"));
 			ReiMachineRecipes.registerWorkstation("steel_furnace", EI.id("large_steam_furnace"));
 		}
+		
+		MIMachineHookHelper.registerMultiblockMachine(
+				"Large Electric Furnace", "large_electric_furnace", "large_furnace",
+				HEATPROOF, true, false, false,
+				LargeElectricFurnaceBlockEntity::new
+		);
+		ReiMachineRecipes.registerWorkstation("bronze_furnace", EI.id("large_electric_furnace"));
+		ReiMachineRecipes.registerWorkstation("steel_furnace", EI.id("large_electric_furnace"));
+		ReiMachineRecipes.registerWorkstation("electric_furnace", EI.id("large_electric_furnace"));
 	}
 	
 	public static final class RecipeTypes
