@@ -53,6 +53,12 @@ public abstract class RegisteredObjectHolder<Thing, ActualThing extends Thing, S
 		return this.self();
 	}
 	
+	public final Self tag(List<TagKey<Thing>> tags)
+	{
+		this.tags.addAll(tags);
+		return this.self();
+	}
+	
 	public void triggerRegistrationListener()
 	{
 		if(registrationListener != null)
