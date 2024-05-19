@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.machines.blockentities.brewery;
 
 import aztech.modern_industrialization.MICapabilities;
-import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import aztech.modern_industrialization.api.machine.component.EnergyAccess;
@@ -51,11 +50,12 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 	{
 		super(bep, "electric_brewery", MachineTier.LV, 32 * FluidType.BUCKET_VOLUME);
 		
-		this.energy = new EnergyComponent(this, 3200);
-		this.insertable = energy.buildInsertable((tier) -> tier == CableTier.LV);
 		this.redstoneControl = new RedstoneControlComponent();
 		this.casing = new CasingComponent();
 		this.upgrades = new UpgradeComponent();
+		
+		this.energy = new EnergyComponent(this, 3200);
+		this.insertable = energy.buildInsertable(casing::canInsertEu);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(STEAM_SLOT_X + 1, STEAM_SLOT_Y - 1), energy::getEu, energy::getCapacity));
 		this.registerGuiComponent(new ModularRecipeEfficiencyBar.Server(new ModularRecipeEfficiencyBar.Parameters(EFFICIENCY_BAR_X, EFFICIENCY_BAR_Y), crafter));
