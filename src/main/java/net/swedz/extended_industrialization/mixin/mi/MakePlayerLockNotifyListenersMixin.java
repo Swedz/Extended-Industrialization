@@ -2,7 +2,6 @@ package net.swedz.extended_industrialization.mixin.mi;
 
 import aztech.modern_industrialization.inventory.AbstractConfigurableStack;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.storage.TransferVariant;
-import net.swedz.extended_industrialization.EI;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +26,6 @@ public class MakePlayerLockNotifyListenersMixin
 	)
 	private static <T, K extends TransferVariant<T>> void playerLockNoOverride(T instance, List<? extends AbstractConfigurableStack<T, K>> stacks, CallbackInfo ci, int iter, boolean allowEmptyStacks, Iterator var4, AbstractConfigurableStack stack)
 	{
-		EI.LOGGER.info("playerLockNoOverride");
 		((AbstractConfigurableStackAccessor) stack).invokeNotifyListeners();
 	}
 	
@@ -43,7 +41,6 @@ public class MakePlayerLockNotifyListenersMixin
 	)
 	private void playerLock(CallbackInfoReturnable<Boolean> callback)
 	{
-		EI.LOGGER.info("playerLock");
 		((AbstractConfigurableStackAccessor) this).invokeNotifyListeners();
 	}
 }
