@@ -23,6 +23,7 @@ import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.hook.mi.MIMachineHookHelper;
+import net.swedz.extended_industrialization.machines.blockentities.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.SolarBoilerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.brewery.ElectricBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.brewery.SteamBreweryMachineBlockEntity;
@@ -322,6 +323,13 @@ public final class EIMachines
 				),
 				MachineBlockEntity::registerFluidApi,
 				ElectricFluidHarvestingMachineBlockEntity::registerEnergyApi
+		);
+		
+		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+				"Machine Chainer", "machine_chainer", "machine_chainer",
+				CableTier.LV.casing, true, false, false,
+				MachineChainerMachineBlockEntity::new,
+				MachineChainerMachineBlockEntity::registerCapabilities
 		);
 	}
 }
