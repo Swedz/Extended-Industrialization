@@ -21,6 +21,7 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListener;
 import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListeners;
 import net.swedz.extended_industrialization.machines.blockentities.MachineChainerMachineBlockEntity;
+import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;
@@ -162,6 +163,11 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 		
 		for(BlockPos blockPos : this.getSpannedBlocks())
 		{
+			if(this.getLevel().getBlockState(blockPos).is(EIBlocks.MACHINE_CHAINER_RELAY.get()))
+			{
+				machinesFound.add(blockPos);
+				continue;
+			}
 			BlockEntity blockEntity = this.getLevel().getBlockEntity(blockPos);
 			if(!(blockEntity instanceof MachineBlockEntity))
 			{

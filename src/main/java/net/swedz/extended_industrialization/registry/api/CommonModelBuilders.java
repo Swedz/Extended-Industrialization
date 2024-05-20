@@ -41,6 +41,12 @@ public final class CommonModelBuilders
 				.parent(new ModelFile.UncheckedModelFile("%s:block/%s".formatted(item.identifier().modId(), item.identifier().id())));
 	}
 	
+	public static Consumer<BlockStateProvider> blockstateOnly(BlockHolder block)
+	{
+		return (builder) -> builder
+				.simpleBlock(block.get(), builder.models().getExistingFile(builder.modLoc("block/%s".formatted(block.identifier().id()))));
+	}
+	
 	public static Consumer<BlockStateProvider> blockCubeAll(BlockHolder block)
 	{
 		return (builder) -> builder
