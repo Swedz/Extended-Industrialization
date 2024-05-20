@@ -23,6 +23,9 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
+import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGui;
+import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGuiLine;
+import net.swedz.extended_industrialization.text.EIText;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;
@@ -31,10 +34,13 @@ import java.util.List;
 
 public final class MachineChainerMachineBlockEntity extends MachineBlockEntity implements Tickable
 {
+	private static final int MAX_CONNECTED_MACHINES = 64;
+	
 	private List<StorageWrapper<MIItemStorage>>  machineItemStorages;
 	private List<StorageWrapper<MIFluidStorage>> machineFluidStorages;
 	private List<MIEnergyStorage>                machineEnergyStorages;
 	
+	private int machines;
 	private int machineItemSlots;
 	private int machineFluidSlots;
 	
@@ -53,6 +59,15 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		);
 		
 		this.buildLinks();
+		
+		this.registerGuiComponent(new ModularMultiblockGui.Server(60, () ->
+		{
+			List<ModularMultiblockGuiLine> text = Lists.newArrayList();
+			
+			text.add(new ModularMultiblockGuiLine(EIText.MACHINE_CHAINER_CONNECTED_MACHINES.text(machines, MAX_CONNECTED_MACHINES)));
+			
+			return text;
+		}));
 	}
 	
 	@Override
@@ -92,7 +107,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		{
 			return machines;
 		}
-		for(int i = 1; i <= 64; i++)
+		for(int i = 1; i <= MAX_CONNECTED_MACHINES; i++)
 		{
 			BlockPos pos = worldPosition.relative(orientation.facingDirection, i);
 			BlockEntity blockEntity = level.getBlockEntity(pos);
@@ -145,6 +160,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		machineItemStorages = itemStorages;
 		machineFluidStorages = fluidStorages;
 		machineEnergyStorages = energyStorages;
+		this.machines = machines.size();
 		machineItemSlots = itemSlots;
 		machineFluidSlots = fluidSlots;
 	}

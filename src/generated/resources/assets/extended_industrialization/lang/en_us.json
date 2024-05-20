@@ -60,6 +60,7 @@
   "text.extended_industrialization.machine_batcher_recipe_furnace": "Furnace",
   "text.extended_industrialization.machine_batcher_recipe_macerator": "Macerator",
   "text.extended_industrialization.machine_batcher_size_and_cost": "Runs in batches of up to %d at %s the EU cost",
+  "text.extended_industrialization.machine_chainer_connected_machines": "Connected Machines : %d / %d",
   "text.extended_industrialization.mulch_gang_for_life_0": "I love mulch!",
   "text.extended_industrialization.mulch_gang_for_life_1": "Mulch is my favorite food!",
   "text.extended_industrialization.multiblock_shape_invalid": "Shape Invalid",
