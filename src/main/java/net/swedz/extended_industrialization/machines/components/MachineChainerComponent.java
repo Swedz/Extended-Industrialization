@@ -10,6 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -18,6 +19,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListener;
 import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListeners;
+import net.swedz.extended_industrialization.machines.blockentities.MachineChainerMachineBlockEntity;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;
@@ -26,8 +28,8 @@ import java.util.List;
 
 public final class MachineChainerComponent implements IComponent.ServerOnly
 {
-	private final MachineBlockEntity blockEntity;
-	private final int                maxConnectedMachines;
+	private final MachineChainerMachineBlockEntity parentBlockEntity;
+	private final int                              maxConnectedMachines;
 	
 	private final IsolatedListener<BlockEvent.NeighborNotifyEvent> listenerNeighborNotify;
 	
@@ -45,14 +47,14 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 	
 	private int tick;
 	
-	public MachineChainerComponent(MachineBlockEntity blockEntity, int maxConnectedMachines)
+	public MachineChainerComponent(MachineChainerMachineBlockEntity parentBlockEntity, int maxConnectedMachines)
 	{
-		this.blockEntity = blockEntity;
+		this.parentBlockEntity = parentBlockEntity;
 		this.maxConnectedMachines = maxConnectedMachines;
 		
 		this.listenerNeighborNotify = (event) ->
 		{
-			if(machineLinks.contains(event.getPos()) || event.getPos().equals(blockEntity.getBlockPos().relative(blockEntity.orientation.facingDirection, machineLinks.size() + 1)))
+			if(machineLinks.contains(event.getPos()) || event.getPos().equals(parentBlockEntity.getBlockPos().relative(parentBlockEntity.orientation.facingDirection, machineLinks.size() + 1)))
 			{
 				this.buildLinks();
 			}
@@ -61,7 +63,7 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 	
 	public Level getLevel()
 	{
-		return blockEntity.getLevel();
+		return parentBlockEntity.getLevel();
 	}
 	
 	public int getMaxConnectedMachinesCount()
@@ -79,7 +81,7 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 		List<BlockPos> blocks = Lists.newArrayList();
 		for(int i = 1; i <= maxConnectedMachines; i++)
 		{
-			blocks.add(blockEntity.getBlockPos().relative(blockEntity.orientation.facingDirection, i));
+			blocks.add(parentBlockEntity.getBlockPos().relative(parentBlockEntity.orientation.facingDirection, i));
 		}
 		return Collections.unmodifiableList(blocks);
 	}
@@ -125,7 +127,13 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 		
 		for(BlockPos blockPos : this.getSpannedBlocks())
 		{
-			if(!(this.getLevel().getBlockEntity(blockPos) instanceof MachineBlockEntity))
+			BlockEntity blockEntity = this.getLevel().getBlockEntity(blockPos);
+			if(!(blockEntity instanceof MachineBlockEntity))
+			{
+				break;
+			}
+			if(blockEntity instanceof MachineChainerMachineBlockEntity chainerBlockEntity &&
+			   (chainerBlockEntity.orientation.facingDirection == parentBlockEntity.orientation.facingDirection || chainerBlockEntity.orientation.facingDirection.getOpposite() == parentBlockEntity.orientation.facingDirection))
 			{
 				break;
 			}
