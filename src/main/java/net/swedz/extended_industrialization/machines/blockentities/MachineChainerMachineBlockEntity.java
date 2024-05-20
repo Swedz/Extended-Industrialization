@@ -15,6 +15,7 @@ import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import dev.technici4n.grandpower.api.ILongEnergyStorage;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -82,6 +83,13 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		MachineModelClientData data = new MachineModelClientData();
 		orientation.writeModelData(data);
 		return data;
+	}
+	
+	@Override
+	public void onPlaced(LivingEntity placer, ItemStack itemStack)
+	{
+		super.onPlaced(placer, itemStack);
+		this.buildLinks();
 	}
 	
 	@Override
