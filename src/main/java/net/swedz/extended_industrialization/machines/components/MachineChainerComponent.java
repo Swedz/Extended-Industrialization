@@ -5,6 +5,7 @@ import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +26,7 @@ import org.apache.commons.compress.utils.Lists;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public final class MachineChainerComponent implements IComponent.ServerOnly
 {
@@ -86,24 +88,36 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 		return Collections.unmodifiableList(blocks);
 	}
 	
-	private List<ChunkPos> getSpannedChunks()
+	private Set<ChunkPos> getSpannedChunks()
 	{
-		List<ChunkPos> chunks = Lists.newArrayList();
+		Set<ChunkPos> chunks = Sets.newHashSet();
 		for(BlockPos block : this.getSpannedBlocks())
 		{
 			chunks.add(new ChunkPos(block));
 		}
-		return Collections.unmodifiableList(chunks);
+		return Collections.unmodifiableSet(chunks);
 	}
+	
+	private Set<ChunkPos> previousSpannedChunks = Sets.newHashSet();
 	
 	public void registerListeners()
 	{
-		IsolatedListeners.register(this.getLevel(), this.getSpannedChunks(), BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
+		if(previousSpannedChunks.size() > 0)
+		{
+			throw new IllegalStateException("You cannot register listeners for a chainer that already has listeners registered");
+		}
+		Set<ChunkPos> spannedChunks = this.getSpannedChunks();
+		IsolatedListeners.register(this.getLevel(), spannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
+		previousSpannedChunks = spannedChunks;
 	}
 	
 	public void unregisterListeners()
 	{
-		IsolatedListeners.unregister(this.getLevel(), this.getSpannedChunks(), BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
+		if(previousSpannedChunks.size() > 0)
+		{
+			IsolatedListeners.unregister(this.getLevel(), previousSpannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
+			previousSpannedChunks = Sets.newHashSet();
+		}
 	}
 	
 	public void clearLinks()

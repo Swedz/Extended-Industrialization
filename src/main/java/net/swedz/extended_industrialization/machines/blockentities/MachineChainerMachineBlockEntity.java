@@ -72,7 +72,6 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		if(!level.isClientSide())
 		{
 			needsRebuild = true;
-			chainer.registerListeners();
 		}
 	}
 	
@@ -85,6 +84,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		{
 			needsRebuild = false;
 			chainer.buildLinks();
+			chainer.registerListeners();
 		}
 	}
 	
@@ -96,7 +96,9 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		if(!level.isClientSide())
 		{
 			needsRebuild = false;
+			chainer.unregisterListeners();
 			chainer.buildLinks();
+			chainer.registerListeners();
 		}
 	}
 	
@@ -118,8 +120,9 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	{
 		if(!level.isClientSide() && needsRebuild)
 		{
-			chainer.buildLinks();
 			needsRebuild = false;
+			chainer.buildLinks();
+			chainer.registerListeners();
 		}
 	}
 	
