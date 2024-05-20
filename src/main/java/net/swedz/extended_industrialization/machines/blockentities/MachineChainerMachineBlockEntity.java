@@ -134,7 +134,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	// TODO only rebuild when the blocks have changed
 	private void buildLinks()
 	{
-		List<MachineBlockEntity> machines = this.findMachines();
+		List<MachineBlockEntity> machinesFound = this.findMachines();
 		
 		List<StorageWrapper<MIItemStorage>> itemStorages = Lists.newArrayList();
 		List<StorageWrapper<MIFluidStorage>> fluidStorages = Lists.newArrayList();
@@ -142,7 +142,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		int itemSlots = 0;
 		int fluidSlots = 0;
 		
-		for(MachineBlockEntity machine : machines)
+		for(MachineBlockEntity machine : machinesFound)
 		{
 			MIInventory inventory = machine.getInventory();
 			MIItemStorage itemStorage = inventory.itemStorage;
@@ -168,7 +168,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		machineItemStorages = itemStorages;
 		machineFluidStorages = fluidStorages;
 		machineEnergyStorages = energyStorages;
-		this.machines = machines.size();
+		machines = machinesFound.size();
 		machineItemSlots = itemSlots;
 		machineFluidSlots = fluidSlots;
 	}
