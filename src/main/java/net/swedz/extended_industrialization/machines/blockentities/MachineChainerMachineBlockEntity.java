@@ -26,6 +26,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 {
 	private final MachineChainerComponent chainer;
 	
+	private int tick;
 	private boolean needsRebuild;
 	
 	public MachineChainerMachineBlockEntity(BEP bep)
@@ -48,6 +49,11 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			
 			return text;
 		}));
+	}
+	
+	public MachineChainerComponent getChainerComponent()
+	{
+		return chainer;
 	}
 	
 	@Override
@@ -118,7 +124,19 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	@Override
 	public void tick()
 	{
-		if(!level.isClientSide() && needsRebuild)
+		if(level.isClientSide())
+		{
+			return;
+		}
+		
+		if(++tick == 5 * 20)
+		{
+			tick = 0;
+			needsRebuild = true;
+			chainer.unregisterListeners();
+		}
+		
+		if(needsRebuild)
 		{
 			needsRebuild = false;
 			chainer.buildLinks();

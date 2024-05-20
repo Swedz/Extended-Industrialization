@@ -30,7 +30,7 @@ import java.util.Set;
 
 public final class MachineChainerComponent implements IComponent.ServerOnly
 {
-	private final MachineChainerMachineBlockEntity parentBlockEntity;
+	private final MachineChainerMachineBlockEntity machineBlockEntity;
 	private final int                              maxConnectedMachines;
 	
 	private final IsolatedListener<BlockEvent.NeighborNotifyEvent> listenerNeighborNotify;
@@ -49,14 +49,14 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 	
 	private int tick;
 	
-	public MachineChainerComponent(MachineChainerMachineBlockEntity parentBlockEntity, int maxConnectedMachines)
+	public MachineChainerComponent(MachineChainerMachineBlockEntity machineBlockEntity, int maxConnectedMachines)
 	{
-		this.parentBlockEntity = parentBlockEntity;
+		this.machineBlockEntity = machineBlockEntity;
 		this.maxConnectedMachines = maxConnectedMachines;
 		
 		this.listenerNeighborNotify = (event) ->
 		{
-			if(machineLinks.contains(event.getPos()) || event.getPos().equals(parentBlockEntity.getBlockPos().relative(parentBlockEntity.orientation.facingDirection, machineLinks.size() + 1)))
+			if(machineLinks.contains(event.getPos()) || event.getPos().equals(machineBlockEntity.getBlockPos().relative(machineBlockEntity.orientation.facingDirection, machineLinks.size() + 1)))
 			{
 				this.buildLinks();
 			}
@@ -65,7 +65,7 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 	
 	public Level getLevel()
 	{
-		return parentBlockEntity.getLevel();
+		return machineBlockEntity.getLevel();
 	}
 	
 	public int getMaxConnectedMachinesCount()
@@ -78,12 +78,33 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 		return machineLinks.size();
 	}
 	
+	private boolean containsMachineAt(BlockPos blockPos, boolean includeChainerChildren)
+	{
+		if(machineLinks.contains(blockPos))
+		{
+			return true;
+		}
+		if(includeChainerChildren)
+		{
+			for(BlockPos link : machineLinks)
+			{
+				BlockEntity blockEntity = this.getLevel().getBlockEntity(link);
+				if(blockEntity instanceof MachineChainerMachineBlockEntity chainerBlockEntity &&
+				   chainerBlockEntity.getChainerComponent().containsMachineAt(blockPos, true))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	private List<BlockPos> getSpannedBlocks()
 	{
 		List<BlockPos> blocks = Lists.newArrayList();
 		for(int i = 1; i <= maxConnectedMachines; i++)
 		{
-			blocks.add(parentBlockEntity.getBlockPos().relative(parentBlockEntity.orientation.facingDirection, i));
+			blocks.add(machineBlockEntity.getBlockPos().relative(machineBlockEntity.orientation.facingDirection, i));
 		}
 		return Collections.unmodifiableList(blocks);
 	}
@@ -104,7 +125,7 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 	{
 		if(previousSpannedChunks.size() > 0)
 		{
-			throw new IllegalStateException("You cannot register listeners for a chainer that already has listeners registered");
+			throw new IllegalStateException("Cannot register listeners for a chainer that already has listeners registered");
 		}
 		Set<ChunkPos> spannedChunks = this.getSpannedChunks();
 		IsolatedListeners.register(this.getLevel(), spannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
@@ -146,10 +167,17 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 			{
 				break;
 			}
-			if(blockEntity instanceof MachineChainerMachineBlockEntity chainerBlockEntity &&
-			   (chainerBlockEntity.orientation.facingDirection == parentBlockEntity.orientation.facingDirection || chainerBlockEntity.orientation.facingDirection.getOpposite() == parentBlockEntity.orientation.facingDirection))
+			if(blockEntity instanceof MachineChainerMachineBlockEntity chainerBlockEntity)
 			{
-				break;
+				if(chainerBlockEntity.orientation.facingDirection == machineBlockEntity.orientation.facingDirection ||
+				   chainerBlockEntity.orientation.facingDirection.getOpposite() == machineBlockEntity.orientation.facingDirection)
+				{
+					break;
+				}
+				if(chainerBlockEntity.getChainerComponent().containsMachineAt(machineBlockEntity.getBlockPos(), true))
+				{
+					break;
+				}
 			}
 			
 			boolean isMachine = false;
