@@ -1,11 +1,15 @@
 {
-  "casing": "lv",
+  "casing": "mv",
   "default_overlays": {
     "fluid_auto": "modern_industrialization:block/overlays/fluid_auto",
     "front": "extended_industrialization:block/machines/machine_chainer/overlay_front",
     "front_active": "extended_industrialization:block/machines/machine_chainer/overlay_front_active",
     "item_auto": "modern_industrialization:block/overlays/item_auto",
-    "output": "modern_industrialization:block/overlays/output"
+    "output": "modern_industrialization:block/overlays/output",
+    "side": "extended_industrialization:block/machines/machine_chainer/overlay_side",
+    "side_active": "extended_industrialization:block/machines/machine_chainer/overlay_side_active",
+    "top": "extended_industrialization:block/machines/machine_chainer/overlay_top",
+    "top_active": "extended_industrialization:block/machines/machine_chainer/overlay_top_active"
   },
   "loader": "modern_industrialization:machine"
 }
