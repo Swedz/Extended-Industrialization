@@ -11,6 +11,7 @@ import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.swedz.extended_industrialization.machines.components.MachineChainerComponent;
@@ -25,7 +26,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 {
 	private final MachineChainerComponent chainer;
 	
-	private long tick;
+	private boolean needsRebuild;
 	
 	public MachineChainerMachineBlockEntity(BEP bep)
 	{
@@ -43,7 +44,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		{
 			List<ModularMultiblockGuiLine> text = Lists.newArrayList();
 			
-			text.add(new ModularMultiblockGuiLine(EIText.MACHINE_CHAINER_CONNECTED_MACHINES.text(chainer.getMachineCount(), chainer.getMaxConnectedMachines())));
+			text.add(new ModularMultiblockGuiLine(EIText.MACHINE_CHAINER_CONNECTED_MACHINES.text(chainer.getConnectedMachineCount(), chainer.getMaxConnectedMachinesCount())));
 			
 			return text;
 		}));
@@ -64,18 +65,61 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	}
 	
 	@Override
+	public void setLevel(Level level)
+	{
+		super.setLevel(level);
+		
+		if(!level.isClientSide())
+		{
+			needsRebuild = true;
+			chainer.registerListeners();
+		}
+	}
+	
+	@Override
 	public void onPlaced(LivingEntity placer, ItemStack itemStack)
 	{
 		super.onPlaced(placer, itemStack);
-		chainer.buildLinks();
+		
+		if(!level.isClientSide())
+		{
+			needsRebuild = false;
+			chainer.buildLinks();
+		}
+	}
+	
+	@Override
+	public void setChanged()
+	{
+		super.setChanged();
+		
+		if(!level.isClientSide())
+		{
+			needsRebuild = false;
+			chainer.buildLinks();
+		}
+	}
+	
+	@Override
+	public void setRemoved()
+	{
+		super.setRemoved();
+		
+		if(!level.isClientSide())
+		{
+			needsRebuild = false;
+			chainer.unregisterListeners();
+			chainer.clearLinks();
+		}
 	}
 	
 	@Override
 	public void tick()
 	{
-		if(!level.isClientSide())
+		if(!level.isClientSide() && needsRebuild)
 		{
-			chainer.tick();
+			chainer.buildLinks();
+			needsRebuild = false;
 		}
 	}
 	

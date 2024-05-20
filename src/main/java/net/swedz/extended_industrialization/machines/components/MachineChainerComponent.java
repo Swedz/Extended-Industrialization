@@ -3,20 +3,21 @@ package net.swedz.extended_industrialization.machines.components;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
-import aztech.modern_industrialization.inventory.MIFluidStorage;
-import aztech.modern_industrialization.inventory.MIInventory;
-import aztech.modern_industrialization.inventory.MIItemStorage;
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
-import dev.technici4n.grandpower.api.ILongEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
+import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListener;
+import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListeners;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;
@@ -28,11 +29,13 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 	private final MachineBlockEntity blockEntity;
 	private final int                maxConnectedMachines;
 	
-	private List<StorageWrapper<MIItemStorage>>  machineItemStorages   = Lists.newArrayList();
-	private List<StorageWrapper<MIFluidStorage>> machineFluidStorages  = Lists.newArrayList();
-	private List<MIEnergyStorage>                machineEnergyStorages = Lists.newArrayList();
+	private final IsolatedListener<BlockEvent.NeighborNotifyEvent> listenerNeighborNotify;
 	
-	private int machines;
+	private List<BlockPos>                        machineLinks          = Lists.newArrayList();
+	private List<StorageWrapper<IItemHandler>>    machineItemWrappers   = Lists.newArrayList();
+	private List<StorageWrapper<IFluidHandler>>   machineFluidWrappers  = Lists.newArrayList();
+	private List<StorageWrapper<MIEnergyStorage>> machineEnergyWrappers = Lists.newArrayList();
+	
 	private int machineItemSlots;
 	private int machineFluidSlots;
 	
@@ -46,94 +49,132 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 	{
 		this.blockEntity = blockEntity;
 		this.maxConnectedMachines = maxConnectedMachines;
+		
+		this.listenerNeighborNotify = (event) ->
+		{
+			if(machineLinks.contains(event.getPos()) || event.getPos().equals(blockEntity.getBlockPos().relative(blockEntity.orientation.facingDirection, machineLinks.size() + 1)))
+			{
+				this.buildLinks();
+			}
+		};
 	}
 	
-	public int getMaxConnectedMachines()
+	public Level getLevel()
+	{
+		return blockEntity.getLevel();
+	}
+	
+	public int getMaxConnectedMachinesCount()
 	{
 		return maxConnectedMachines;
 	}
 	
-	public int getMachineCount()
+	public int getConnectedMachineCount()
 	{
-		return machines;
+		return machineLinks.size();
 	}
 	
-	private List<MachineBlockEntity> findMachines()
+	private List<BlockPos> getSpannedBlocks()
 	{
-		List<MachineBlockEntity> machines = Lists.newArrayList();
-		if(blockEntity.getLevel() == null)
-		{
-			return machines;
-		}
+		List<BlockPos> blocks = Lists.newArrayList();
 		for(int i = 1; i <= maxConnectedMachines; i++)
 		{
-			BlockPos pos = blockEntity.getBlockPos().relative(blockEntity.orientation.facingDirection, i);
-			BlockEntity blockEntity = this.blockEntity.getLevel().getBlockEntity(pos);
-			if(blockEntity instanceof MachineBlockEntity machineBlockEntity && machineBlockEntity.getInventory() != MIInventory.EMPTY)
-			{
-				machines.add(machineBlockEntity);
-			}
-			else
-			{
-				break;
-			}
+			blocks.add(blockEntity.getBlockPos().relative(blockEntity.orientation.facingDirection, i));
 		}
-		return machines;
+		return Collections.unmodifiableList(blocks);
 	}
 	
-	// TODO only rebuild when the blocks have changed
+	private List<ChunkPos> getSpannedChunks()
+	{
+		List<ChunkPos> chunks = Lists.newArrayList();
+		for(BlockPos block : this.getSpannedBlocks())
+		{
+			chunks.add(new ChunkPos(block));
+		}
+		return Collections.unmodifiableList(chunks);
+	}
+	
+	public void registerListeners()
+	{
+		IsolatedListeners.register(this.getLevel(), this.getSpannedChunks(), BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
+	}
+	
+	public void unregisterListeners()
+	{
+		IsolatedListeners.unregister(this.getLevel(), this.getSpannedChunks(), BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
+	}
+	
+	public void clearLinks()
+	{
+		machineLinks = List.of();
+		machineItemWrappers = List.of();
+		machineFluidWrappers = List.of();
+		machineEnergyWrappers = List.of();
+		machineItemSlots = 0;
+		machineFluidSlots = 0;
+	}
+	
 	public void buildLinks()
 	{
-		List<MachineBlockEntity> machinesFound = this.findMachines();
-		
-		List<StorageWrapper<MIItemStorage>> itemStorages = Lists.newArrayList();
-		List<StorageWrapper<MIFluidStorage>> fluidStorages = Lists.newArrayList();
-		List<MIEnergyStorage> energyStorages = Lists.newArrayList();
+		List<BlockPos> machinesFound = Lists.newArrayList();
+		List<StorageWrapper<IItemHandler>> itemWrappers = Lists.newArrayList();
+		List<StorageWrapper<IFluidHandler>> fluidWrappers = Lists.newArrayList();
+		List<StorageWrapper<MIEnergyStorage>> energyWrappers = Lists.newArrayList();
 		int itemSlots = 0;
 		int fluidSlots = 0;
 		
-		for(MachineBlockEntity machine : machinesFound)
+		for(BlockPos blockPos : this.getSpannedBlocks())
 		{
-			MIInventory inventory = machine.getInventory();
-			MIItemStorage itemStorage = inventory.itemStorage;
-			MIFluidStorage fluidStorage = inventory.fluidStorage;
+			if(!(this.getLevel().getBlockEntity(blockPos) instanceof MachineBlockEntity))
+			{
+				break;
+			}
 			
-			int itemSlotStart = itemSlots;
-			int fluidSlotStart = fluidSlots;
-			itemSlots += itemStorage.itemHandler.getSlots();
-			fluidSlots += fluidStorage.fluidHandler.getTanks();
-			int itemSlotEnd = itemSlots - 1;
-			int fluidSlotEnd = fluidSlots - 1;
+			boolean isMachine = false;
 			
-			itemStorages.add(new StorageWrapper<>(itemStorage, itemSlotStart, itemSlotEnd));
-			fluidStorages.add(new StorageWrapper<>(fluidStorage, fluidSlotStart, fluidSlotEnd));
+			IItemHandler itemHandler = this.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, blockPos, null);
+			if(itemHandler != null)
+			{
+				int itemSlotStart = itemSlots;
+				itemSlots += itemHandler.getSlots();
+				int itemSlotEnd = itemSlots - 1;
+				itemWrappers.add(new StorageWrapper<>(blockPos, itemHandler, itemSlotStart, itemSlotEnd));
+				isMachine = true;
+			}
 			
-			MIEnergyStorage energyStorage = machine.getLevel().getCapability(EnergyApi.SIDED, machine.getBlockPos(), null);
+			IFluidHandler fluidHandler = this.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, blockPos, null);
+			if(fluidHandler != null)
+			{
+				int fluidSlotStart = fluidSlots;
+				fluidSlots += fluidHandler.getTanks();
+				int fluidSlotEnd = fluidSlots - 1;
+				fluidWrappers.add(new StorageWrapper<>(blockPos, fluidHandler, fluidSlotStart, fluidSlotEnd));
+				isMachine = true;
+			}
+			
+			MIEnergyStorage energyStorage = this.getLevel().getCapability(EnergyApi.SIDED, blockPos, null);
 			if(energyStorage != null)
 			{
-				energyStorages.add(energyStorage);
+				energyWrappers.add(new StorageWrapper<>(blockPos, energyStorage, -1, -1));
+				isMachine = true;
 			}
+			
+			if(!isMachine)
+			{
+				break;
+			}
+			machinesFound.add(blockPos);
 		}
 		
-		machineItemStorages = itemStorages;
-		machineFluidStorages = fluidStorages;
-		machineEnergyStorages = energyStorages;
-		machines = machinesFound.size();
+		machineLinks = Collections.unmodifiableList(machinesFound);
+		machineItemWrappers = Collections.unmodifiableList(itemWrappers);
+		machineFluidWrappers = Collections.unmodifiableList(fluidWrappers);
+		machineEnergyWrappers = Collections.unmodifiableList(energyWrappers);
 		machineItemSlots = itemSlots;
 		machineFluidSlots = fluidSlots;
 	}
 	
-	public void tick()
-	{
-		if(++tick == 20)
-		{
-			tick = 0;
-			
-			this.buildLinks();
-		}
-	}
-	
-	private record StorageWrapper<S>(S storage, int slotStart, int slotEnd)
+	private record StorageWrapper<H>(BlockPos blockPos, H handler, int slotStart, int slotEnd)
 	{
 		public boolean contains(int slot)
 		{
@@ -175,22 +216,22 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 		@Override
 		public ItemStack getStackInSlot(int slot)
 		{
-			StorageWrapper<MIItemStorage> wrapper = getStorageFromSlot(slot, machineItemStorages);
-			return wrapper == null ? ItemStack.EMPTY : wrapper.storage().itemHandler.getStackInSlot(wrapper.getHandlerSlot(slot));
+			StorageWrapper<IItemHandler> wrapper = getStorageFromSlot(slot, machineItemWrappers);
+			return wrapper == null ? ItemStack.EMPTY : wrapper.handler().getStackInSlot(wrapper.getHandlerSlot(slot));
 		}
 		
 		@Override
 		public ItemStack insertItem(int __, ItemStack stack, boolean simulate)
 		{
-			List<StorageWrapper<MIItemStorage>> storagesShuffled = new ArrayList<>(machineItemStorages);
+			List<StorageWrapper<IItemHandler>> storagesShuffled = new ArrayList<>(machineItemWrappers);
 			Collections.shuffle(storagesShuffled);
 			
 			ItemStack remaining = stack;
-			for(StorageWrapper<MIItemStorage> wrapper : storagesShuffled)
+			for(StorageWrapper<IItemHandler> wrapper : storagesShuffled)
 			{
-				for(int slot = 0; slot < wrapper.storage().itemHandler.getSlots(); slot++)
+				for(int slot = 0; slot < wrapper.handler().getSlots(); slot++)
 				{
-					remaining = wrapper.storage().itemHandler.insertItem(slot, remaining, simulate);
+					remaining = wrapper.handler().insertItem(slot, remaining, simulate);
 					if(remaining.isEmpty())
 					{
 						return remaining;
@@ -204,22 +245,22 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 		@Override
 		public ItemStack extractItem(int slot, int amount, boolean simulate)
 		{
-			StorageWrapper<MIItemStorage> wrapper = getStorageFromSlot(slot, machineItemStorages);
-			return wrapper == null ? ItemStack.EMPTY : wrapper.storage().itemHandler.extractItem(wrapper.getHandlerSlot(slot), amount, simulate);
+			StorageWrapper<IItemHandler> wrapper = getStorageFromSlot(slot, machineItemWrappers);
+			return wrapper == null ? ItemStack.EMPTY : wrapper.handler().extractItem(wrapper.getHandlerSlot(slot), amount, simulate);
 		}
 		
 		@Override
 		public int getSlotLimit(int slot)
 		{
-			StorageWrapper<MIItemStorage> wrapper = getStorageFromSlot(slot, machineItemStorages);
-			return wrapper == null ? 0 : wrapper.storage().itemHandler.getSlotLimit(wrapper.getHandlerSlot(slot));
+			StorageWrapper<IItemHandler> wrapper = getStorageFromSlot(slot, machineItemWrappers);
+			return wrapper == null ? 0 : wrapper.handler().getSlotLimit(wrapper.getHandlerSlot(slot));
 		}
 		
 		@Override
 		public boolean isItemValid(int slot, ItemStack stack)
 		{
-			StorageWrapper<MIItemStorage> wrapper = getStorageFromSlot(slot, machineItemStorages);
-			return wrapper != null && wrapper.storage().itemHandler.isItemValid(wrapper.getHandlerSlot(slot), stack);
+			StorageWrapper<IItemHandler> wrapper = getStorageFromSlot(slot, machineItemWrappers);
+			return wrapper != null && wrapper.handler().isItemValid(wrapper.getHandlerSlot(slot), stack);
 		}
 	}
 	
@@ -234,35 +275,35 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 		@Override
 		public FluidStack getFluidInTank(int tank)
 		{
-			StorageWrapper<MIFluidStorage> wrapper = getStorageFromSlot(tank, machineFluidStorages);
-			return wrapper == null ? FluidStack.EMPTY : wrapper.storage().fluidHandler.getFluidInTank(wrapper.getHandlerSlot(tank));
+			StorageWrapper<IFluidHandler> wrapper = getStorageFromSlot(tank, machineFluidWrappers);
+			return wrapper == null ? FluidStack.EMPTY : wrapper.handler().getFluidInTank(wrapper.getHandlerSlot(tank));
 		}
 		
 		@Override
 		public int getTankCapacity(int tank)
 		{
-			StorageWrapper<MIFluidStorage> wrapper = getStorageFromSlot(tank, machineFluidStorages);
-			return wrapper == null ? 0 : wrapper.storage().fluidHandler.getTankCapacity(wrapper.getHandlerSlot(tank));
+			StorageWrapper<IFluidHandler> wrapper = getStorageFromSlot(tank, machineFluidWrappers);
+			return wrapper == null ? 0 : wrapper.handler().getTankCapacity(wrapper.getHandlerSlot(tank));
 		}
 		
 		@Override
 		public boolean isFluidValid(int tank, FluidStack stack)
 		{
-			StorageWrapper<MIFluidStorage> wrapper = getStorageFromSlot(tank, machineFluidStorages);
-			return wrapper != null && wrapper.storage().fluidHandler.isFluidValid(wrapper.getHandlerSlot(tank), stack);
+			StorageWrapper<IFluidHandler> wrapper = getStorageFromSlot(tank, machineFluidWrappers);
+			return wrapper != null && wrapper.handler().isFluidValid(wrapper.getHandlerSlot(tank), stack);
 		}
 		
 		@Override
 		public int fill(FluidStack resource, FluidAction action)
 		{
 			int amountFilled = 0;
-			for(int i = 0; i < machineFluidStorages.size(); i++)
+			for(int i = 0; i < machineFluidWrappers.size(); i++)
 			{
-				StorageWrapper<MIFluidStorage> wrapper = machineFluidStorages.get(i);
-				int remainingStorages = machineFluidStorages.size() - i;
+				StorageWrapper<IFluidHandler> wrapper = machineFluidWrappers.get(i);
+				int remainingStorages = machineFluidWrappers.size() - i;
 				int remainingAmountToInsert = resource.getAmount() - amountFilled;
 				int amountToInsert = remainingAmountToInsert / remainingStorages;
-				amountFilled += wrapper.storage().fluidHandler.fill(resource.copyWithAmount(amountToInsert), action);
+				amountFilled += wrapper.handler().fill(resource.copyWithAmount(amountToInsert), action);
 			}
 			return amountFilled;
 		}
@@ -270,15 +311,15 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 		private FluidStack drain(Fluid fluid, int maxAmount, FluidAction action)
 		{
 			int amountTransferred = 0;
-			for(int i = 0; i < machineFluidStorages.size(); i++)
+			for(int i = 0; i < machineFluidWrappers.size(); i++)
 			{
-				StorageWrapper<MIFluidStorage> wrapper = machineFluidStorages.get(i);
-				int remainingStorages = machineFluidStorages.size() - i;
+				StorageWrapper<IFluidHandler> wrapper = machineFluidWrappers.get(i);
+				int remainingStorages = machineFluidWrappers.size() - i;
 				int remainingAmountToTransfer = maxAmount - amountTransferred;
 				int amountToTansfer = remainingAmountToTransfer / remainingStorages;
 				FluidStack transferred = fluid == null ?
-						wrapper.storage().fluidHandler.drain(amountToTansfer, action) :
-						wrapper.storage().fluidHandler.drain(new FluidStack(fluid, amountToTansfer), action);
+						wrapper.handler().drain(amountToTansfer, action) :
+						wrapper.handler().drain(new FluidStack(fluid, amountToTansfer), action);
 				if(!transferred.isEmpty())
 				{
 					fluid = transferred.getFluid();
@@ -312,13 +353,13 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 		@Override
 		public long getAmount()
 		{
-			return machineEnergyStorages.stream().mapToLong(ILongEnergyStorage::getAmount).sum();
+			return machineEnergyWrappers.stream().mapToLong((wrapper) -> wrapper.handler().getAmount()).sum();
 		}
 		
 		@Override
 		public long getCapacity()
 		{
-			return machineEnergyStorages.stream().mapToLong(ILongEnergyStorage::getCapacity).sum();
+			return machineEnergyWrappers.stream().mapToLong((wrapper) -> wrapper.handler().getCapacity()).sum();
 		}
 		
 		@Override
@@ -331,13 +372,13 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 		public long receive(long maxReceive, boolean simulate)
 		{
 			long amountReceived = 0;
-			for(int i = 0; i < machineEnergyStorages.size(); i++)
+			for(int i = 0; i < machineEnergyWrappers.size(); i++)
 			{
-				MIEnergyStorage storage = machineEnergyStorages.get(i);
-				int remainingStorages = machineEnergyStorages.size() - i;
+				StorageWrapper<MIEnergyStorage> wrapper = machineEnergyWrappers.get(i);
+				int remainingStorages = machineEnergyWrappers.size() - i;
 				long remainingAmountToReceive = maxReceive - amountReceived;
 				long amountToReceive = remainingAmountToReceive / remainingStorages;
-				amountReceived += storage.receive(amountToReceive, simulate);
+				amountReceived += wrapper.handler().receive(amountToReceive, simulate);
 			}
 			return amountReceived;
 		}

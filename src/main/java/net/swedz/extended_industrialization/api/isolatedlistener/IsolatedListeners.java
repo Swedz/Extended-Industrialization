@@ -40,6 +40,12 @@ public final class IsolatedListeners
 				(event) -> (Level) event.getLevel(),
 				(event) -> new ChunkPos(event.getPos())
 		);
+		withListener(
+				BlockEvent.NeighborNotifyEvent.class,
+				(event) -> event.getLevel() instanceof Level,
+				(event) -> (Level) event.getLevel(),
+				(event) -> new ChunkPos(event.getPos())
+		);
 	}
 	
 	public static <E extends Event> IsolatedListener<E> register(Level level, ChunkPos chunk, Class<E> listenerClass, IsolatedListener<E> listener)
