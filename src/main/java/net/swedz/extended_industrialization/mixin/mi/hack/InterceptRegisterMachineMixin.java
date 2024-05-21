@@ -15,6 +15,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.hook.mi.hack.FakedMachineModelBuilder;
 import net.swedz.extended_industrialization.hook.mi.tracker.MIHookTracker;
+import net.swedz.extended_industrialization.registry.api.CommonModelBuilders;
 import net.swedz.extended_industrialization.registry.blocks.BlockHolder;
 import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
 import net.swedz.extended_industrialization.registry.items.SortOrder;
@@ -61,6 +62,11 @@ public class InterceptRegisterMachineMixin
 					.withModel((holder) -> (provider) ->
 					{
 						MIHookTracker.MachineModelProperties machineModelProperties = MIHookTracker.MACHINE_MODELS.get(id);
+						if(machineModelProperties == null)
+						{
+							CommonModelBuilders.blockstateOnly(holder).accept(provider);
+							return;
+						}
 						provider.simpleBlockWithItem(BuiltInRegistries.BLOCK.get(EI.id(id)), provider.models()
 								.getBuilder(id)
 								.customLoader((bmb, exFile) -> new FakedMachineModelBuilder<>(machineModelProperties, bmb, exFile))
