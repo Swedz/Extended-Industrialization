@@ -8,6 +8,8 @@ import net.swedz.extended_industrialization.compat.viewer.usage.EIViewerSetup;
 import net.swedz.extended_industrialization.machines.EIMachines;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGui;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGuiClient;
+import net.swedz.extended_industrialization.machines.guicomponents.modularselection.ConfigurationPanel;
+import net.swedz.extended_industrialization.machines.guicomponents.modularselection.ConfigurationPanelClient;
 import net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot.ProcessingArrayMachineSlot;
 import net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot.ProcessingArrayMachineSlotClient;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
@@ -26,6 +28,7 @@ public final class MIHookDelegator
 		GuiComponentsClient.register(WaterPumpEnvironmentGui.ID, WaterPumpEnvironmentGuiClient::new);
 		GuiComponentsClient.register(ModularMultiblockGui.ID, ModularMultiblockGuiClient::new);
 		GuiComponentsClient.register(ProcessingArrayMachineSlot.ID, ProcessingArrayMachineSlotClient::new);
+		GuiComponentsClient.register(ConfigurationPanel.ID, ConfigurationPanelClient::new);
 	}
 	
 	public static void machineCasings()

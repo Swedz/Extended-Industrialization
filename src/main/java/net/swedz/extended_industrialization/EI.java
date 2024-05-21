@@ -9,6 +9,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.swedz.extended_industrialization.api.MCIdentifiable;
 import net.swedz.extended_industrialization.api.capabilities.CapabilitiesListeners;
@@ -17,6 +18,7 @@ import net.swedz.extended_industrialization.datagen.DatagenDelegator;
 import net.swedz.extended_industrialization.datamaps.EIDataMaps;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionRecipe;
+import net.swedz.extended_industrialization.network.EIPackets;
 import net.swedz.extended_industrialization.registry.EIOtherRegistries;
 import net.swedz.extended_industrialization.registry.blocks.BlockHolder;
 import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
@@ -70,7 +72,10 @@ public final class EI
 			EIFluids.values().forEach(FluidHolder::triggerRegistrationListener);
 			PotionRecipe.init();
 		});
+		
 		bus.addListener(RegisterCapabilitiesEvent.class, CapabilitiesListeners::triggerAll);
+		
+		bus.addListener(RegisterPayloadHandlerEvent.class, EIPackets::init);
 		
 		bus.addListener(RegisterDataMapTypesEvent.class, EIDataMaps::init);
 		

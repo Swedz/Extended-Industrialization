@@ -31,7 +31,9 @@ public enum EIText
 	MACHINE_BATCHER_RECIPE_MACERATOR("Macerator"),
 	MACHINE_BATCHER_SIZE_AND_COST("Runs in batches of up to %d at %s the EU cost"),
 	MACHINE_BATCHER_COILS("Batch size is determined by coil used"),
-	MACHINE_CHAINER_CONNECTED_MACHINES("Connected Machines : %d / %d");
+	MACHINE_CHAINER_CONNECTED_MACHINES("Connected Machines : %d / %d"),
+	CONFIGURATION_PANEL_TITLE("Configure Machine"),
+	CONFIGURATION_PANEL_DESCRIPTION("Click to open configuration panel.");
 	
 	private final String englishText;
 	
