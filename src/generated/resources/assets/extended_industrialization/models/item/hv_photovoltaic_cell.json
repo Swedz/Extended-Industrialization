@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "extended_industrialization:item/hv_photovoltaic_cell"
+  }
+}

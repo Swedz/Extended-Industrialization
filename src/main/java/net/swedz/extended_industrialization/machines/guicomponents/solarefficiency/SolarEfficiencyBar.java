@@ -27,10 +27,15 @@ public final class SolarEfficiencyBar
 			this.calcificationSupplier = calcificationSupplier;
 		}
 		
+		public Server(Parameters params, Supplier<Boolean> workingSupplier, Supplier<Integer> efficiencySupplier)
+		{
+			this(params, workingSupplier, efficiencySupplier, () -> -1);
+		}
+		
 		@Override
 		public Data copyData()
 		{
-			return new Data(workingSupplier.get(), efficiencySupplier.get(), calcificationSupplier.get());
+			return new Data(workingSupplier.get(), efficiencySupplier.get(), calcificationSupplier != null ? calcificationSupplier.get() : -1);
 		}
 		
 		@Override

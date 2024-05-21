@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.datamaps;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
@@ -20,6 +21,11 @@ public final class EIDataMaps
 			.synced(LargeElectricFurnaceTier.CODEC, true)
 			.build();
 	
+	public static final DataMapType<Item, PhotovoltaicCell> PHOTOVOLTAIC_CELL = DataMapType
+			.builder(EI.id("photovoltaic_cell"), Registries.ITEM, PhotovoltaicCell.CODEC)
+			.synced(PhotovoltaicCell.CODEC, true)
+			.build();
+	
 	public static final DataMapType<Potion, PotionBrewingCosts> POTION_BREWING = DataMapType
 			.builder(EI.id("potion_brewing"), Registries.POTION, PotionBrewingCosts.CODEC)
 			.synced(PotionBrewingCosts.CODEC, true)
@@ -29,6 +35,7 @@ public final class EIDataMaps
 	{
 		event.register(FERTILIZER_POTENCY);
 		event.register(LARGE_ELECTRIC_FURNACE_TIER);
+		event.register(PHOTOVOLTAIC_CELL);
 		event.register(POTION_BREWING);
 	}
 }

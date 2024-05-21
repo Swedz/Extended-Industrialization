@@ -8,10 +8,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.BlockItem;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.datamaps.PhotovoltaicCell;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
 import net.swedz.extended_industrialization.registry.items.EIItems;
 import net.swedz.extended_industrialization.text.EIText;
+import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,9 @@ public final class EITooltips
 	
 	public static final Parser<Float> RATIO_PERCENTAGE_PARSER = (ratio) ->
 			Component.literal("%d%%".formatted((int) (ratio * 100))).withStyle(NUMBER_TEXT);
+	
+	public static final Parser<Long> TICKS_TO_HOURS_PARSER = (ticks) ->
+			Component.literal("%.1f".formatted((float) ticks / (60 * 60 * 20))).withStyle(NUMBER_TEXT);
 	
 	public static final TooltipAttachment ENERGY_STORED_ITEM = TooltipAttachment.of(
 			(itemStack, item) ->
@@ -70,6 +75,8 @@ public final class EITooltips
 				}
 			});
 	
+	// TODO combine the below tooltips into one, er- actually put it in the multiblock entity code itself
+	
 	public static final TooltipAttachment LARGE_STEAM_FURNACE = TooltipAttachment.ofMultilines(
 			EIBlocks.get("large_steam_furnace"),
 			List.of(
@@ -101,6 +108,29 @@ public final class EITooltips
 					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_SIZE_AND_COST.text(DEFAULT_PARSER.parse(16), RATIO_PERCENTAGE_PARSER.parse(0.75f)))
 			)
 	);
+	
+	public static final TooltipAttachment PHOTOVOLTAIC_CELLS = TooltipAttachment.ofMultilines(
+			(itemStack, item) ->
+			{
+				PhotovoltaicCell photovoltaicCell = PhotovoltaicCell.getFor(item);
+				if(photovoltaicCell != null)
+				{
+					int euPerTick = photovoltaicCell.euPerTick();
+					List<Component> lines = Lists.newArrayList();
+					lines.add(DEFAULT_PARSER.parse(EIText.PHOTOVOLTAIC_CELL_EU.text(EU_PER_TICK_PARSER.parse(euPerTick))));
+					if(item.canBeDepleted())
+					{
+						int ticksRemaining = item.canBeDepleted() ? item.getMaxDamage(itemStack) - item.getDamage(itemStack) : 0; // TODO improve this
+						lines.add(DEFAULT_PARSER.parse(EIText.PHOTOVOLTAIC_CELL_DURATION_IN_HOURS.text(TICKS_TO_HOURS_PARSER.parse((long) ticksRemaining))));
+					}
+					else
+					{
+						lines.add(DEFAULT_PARSER.parse(EIText.PHOTOVOLTAIC_CELL_DURATION_INDEFINITE.text()));
+					}
+					return Optional.of(lines);
+				}
+				return Optional.empty();
+			});
 	
 	public static void init()
 	{

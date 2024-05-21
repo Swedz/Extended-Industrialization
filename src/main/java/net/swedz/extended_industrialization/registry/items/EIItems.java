@@ -51,6 +51,12 @@ public final class EIItems
 	public static final ItemHolder<Item> MULCH          = create("mulch", "Mulch", Item::new, SortOrder.RESOURCES).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).fast().build())).withModel(CommonModelBuilders::generated).register();
 	public static final ItemHolder<Item> NETHERITE_DUST = create("netherite_dust", "Netherite Dust", Item::new, SortOrder.RESOURCES).tag(EITags.itemForge("dusts"), EITags.itemForge("dusts/netherite")).withModel(CommonModelBuilders::generated).register();
 	
+	public static final ItemHolder<Item> LV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("lv", "LV", 60 * 60 * 20);
+	public static final ItemHolder<Item> MV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("mv", "MV", 2 * 60 * 60 * 20);
+	public static final ItemHolder<Item> HV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("hv", "HV", 4 * 60 * 60 * 20);
+	public static final ItemHolder<Item> EV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("ev", "EV", 8 * 60 * 60 * 20);
+	public static final ItemHolder<Item> PERFECTED_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("perfected", "Perfected", 0);
+	
 	public static Set<ItemHolder> values()
 	{
 		return Set.copyOf(Registry.HOLDERS);
@@ -69,5 +75,21 @@ public final class EIItems
 		ItemHolder<Type> holder = new ItemHolder<>(EI.id(id), englishName, Registry.ITEMS, creator).sorted(sortOrder);
 		Registry.include(holder);
 		return holder;
+	}
+	
+	public static ItemHolder<Item> createPhotovoltaicCell(String id, String name, int duration)
+	{
+		return create("%s_photovoltaic_cell".formatted(id), "%s Photovoltaic Cell".formatted(name), Item::new, SortOrder.PARTS)
+				.withProperties((p) ->
+				{
+					p.stacksTo(1);
+					if(duration > 0)
+					{
+						p.durability(duration);
+					}
+				})
+				.tag(EITags.item("photovoltaic_cell"))
+				.withModel(CommonModelBuilders::generated)
+				.register();
 	}
 }

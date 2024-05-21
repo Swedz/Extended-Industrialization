@@ -12,6 +12,7 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.datagen.api.recipe.ShapedRecipeBuilder;
 import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
 import net.swedz.extended_industrialization.registry.items.EIItems;
+import net.swedz.extended_industrialization.registry.tags.EITags;
 
 import java.util.function.Consumer;
 
@@ -33,6 +34,20 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 		{
 			shapedRecipeBuilder.exportToAssembler().offerTo(output, EI.id(path + "/assembler/" + name));
 		}
+	}
+	
+	private static void photovoltaicCells(RecipeOutput output)
+	{
+		addMachineRecipe(
+				"packer/photovoltaic_cell", "lv", MIMachineRecipeTypes.PACKER,
+				4, 40 * 20,
+				(r) -> r
+						.addItemInput(EITags.itemForge("glass_panes"), 1)
+						.addItemInput(EITags.itemForge("plates/silver"), 1)
+						.addItemInput("modern_industrialization:rubber_sheet", 1)
+						.addItemOutput(EIItems.LV_PHOTOVOLTAIC_CELL, 1),
+				output
+		);
 	}
 	
 	@Override
@@ -59,5 +74,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 						.pattern("SSS"),
 				output
 		);
+		
+		photovoltaicCells(output);
 	}
 }

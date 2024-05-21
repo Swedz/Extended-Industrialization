@@ -8,9 +8,11 @@ import aztech.modern_industrialization.util.RenderHelper;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.text.EIText;
+import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 import java.util.Optional;
@@ -73,15 +75,13 @@ public final class SolarEfficiencyBarClient implements GuiComponentClient
 		{
 			if(RenderHelper.isPointWithinRectangle(params.renderX, params.renderY, WIDTH, HEIGHT, cursorX - x, cursorY - y))
 			{
-				guiGraphics.renderTooltip(
-						font,
-						List.of(
-								EIText.SOLAR_EFFICIENCY.text(efficiency),
-								EIText.CALCIFICATION_PERCENTAGE.text(calcification)
-						),
-						Optional.empty(),
-						cursorX, cursorY
-				);
+				List<Component> lines = Lists.newArrayList();
+				lines.add(EIText.SOLAR_EFFICIENCY.text(efficiency));
+				if(calcification >= 0)
+				{
+					lines.add(EIText.CALCIFICATION_PERCENTAGE.text(calcification));
+				}
+				guiGraphics.renderTooltip(font, lines, Optional.empty(), cursorX, cursorY);
 			}
 		}
 	}

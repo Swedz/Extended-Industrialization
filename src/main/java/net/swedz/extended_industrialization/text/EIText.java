@@ -37,7 +37,10 @@ public enum EIText
 	CONFIGURATION_PANEL_TITLE("Configure Machine"),
 	CONFIGURATION_PANEL_DESCRIPTION("Click to open configuration panel."),
 	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Casing for cable tier to convert from (LV by default)"),
-	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default)");
+	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default)"),
+	PHOTOVOLTAIC_CELL_EU("Will produce up to %s when placed in a Solar Panel."),
+	PHOTOVOLTAIC_CELL_DURATION_IN_HOURS("Will last for %s hour(s)."),
+	PHOTOVOLTAIC_CELL_DURATION_INDEFINITE("Will last forever.");
 	
 	private final String englishText;
 	
