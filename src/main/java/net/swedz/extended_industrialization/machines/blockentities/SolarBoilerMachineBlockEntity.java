@@ -1,6 +1,8 @@
 package net.swedz.extended_industrialization.machines.blockentities;
 
 import aztech.modern_industrialization.MIFluids;
+import aztech.modern_industrialization.MIText;
+import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.inventory.ConfigurableItemStack;
 import aztech.modern_industrialization.inventory.MIInventory;
@@ -22,6 +24,7 @@ import net.swedz.extended_industrialization.machines.components.ExtendedSteamHea
 import net.swedz.extended_industrialization.machines.components.SolarBurningComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -129,6 +132,11 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 	@Override
 	public List<Component> getTooltips()
 	{
-		return Collections.emptyList();
+		List<Component> returnList = new ArrayList<>();
+		returnList.add(new MITooltips.Line(MIText.MaxEuProductionSteam)
+				.arg(steamHeater.maxEuProduction, MITooltips.EU_PER_TICK_PARSER)
+				.arg(MIFluids.STEAM)
+				.build());
+		return returnList;
 	}
 }
