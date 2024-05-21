@@ -15,6 +15,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public final class ExtendedSteamHeaterComponent extends TemperatureComponent
 {
@@ -22,8 +23,8 @@ public final class ExtendedSteamHeaterComponent extends TemperatureComponent
 	
 	public final double temperatureToWork;
 	
-	public final long maxEuProduction;
-	public final long euPerDegree;
+	private final Supplier<Long> maxEuProduction;
+	private final Supplier<Long> euPerDegree;
 	
 	public final boolean acceptHighPressure;
 	public final boolean acceptLowPressure;
@@ -34,7 +35,7 @@ public final class ExtendedSteamHeaterComponent extends TemperatureComponent
 	
 	private final Reference2LongMap<Fluid> steamBuffer = new Reference2LongOpenHashMap<>();
 	
-	public ExtendedSteamHeaterComponent(double temperatureMax, double temperatureToWork, long maxEuProduction, long euPerDegree,
+	public ExtendedSteamHeaterComponent(double temperatureMax, double temperatureToWork, Supplier<Long> maxEuProduction, Supplier<Long> euPerDegree,
 										boolean acceptLowPressure, boolean acceptHighPressure, boolean requiresContinuousOperation)
 	{
 		super(temperatureMax);
@@ -46,14 +47,24 @@ public final class ExtendedSteamHeaterComponent extends TemperatureComponent
 		this.requiresContinuousOperation = requiresContinuousOperation;
 	}
 	
-	public ExtendedSteamHeaterComponent(double temperatureMax, double temperatureToWork, long maxEuProduction, long euPerDegree)
+	public ExtendedSteamHeaterComponent(double temperatureMax, double temperatureToWork, Supplier<Long> maxEuProduction, Supplier<Long> euPerDegree)
 	{
 		this(temperatureMax, temperatureToWork, maxEuProduction, euPerDegree, true, false, false);
 	}
 	
-	public ExtendedSteamHeaterComponent(double temperatureMax, double temperatureToWork, long maxEuProduction)
+	public ExtendedSteamHeaterComponent(double temperatureMax, double temperatureToWork, Supplier<Long> maxEuProduction)
 	{
-		this(temperatureMax, temperatureToWork, maxEuProduction, 0);
+		this(temperatureMax, temperatureToWork, maxEuProduction, () -> 0L);
+	}
+	
+	public long getMaxEuProduction()
+	{
+		return maxEuProduction.get();
+	}
+	
+	public long getEuPerDegree()
+	{
+		return euPerDegree.get();
 	}
 	
 	public boolean isWorking()
@@ -111,9 +122,10 @@ public final class ExtendedSteamHeaterComponent extends TemperatureComponent
 		
 		double totalEuProduced = euProducedLowPressure + euProducedHighPressure;
 		
+		long euPerDegree = this.getEuPerDegree();
 		if(requiresContinuousOperation && euPerDegree > 0)
 		{
-			this.decreaseTemperature(INPUT_ENERGY_RATIO_FOR_STARTUP * (maxEuProduction - totalEuProduced) / euPerDegree);
+			this.decreaseTemperature(INPUT_ENERGY_RATIO_FOR_STARTUP * (this.getMaxEuProduction() - totalEuProduced) / euPerDegree);
 		}
 		
 		return totalEuProduced;
@@ -131,7 +143,7 @@ public final class ExtendedSteamHeaterComponent extends TemperatureComponent
 		
 		if(this.isWorking())
 		{
-			long steamProduction = (long) Math.ceil(this.getWorkingTemperatureFullness() * maxEuProduction / euPerSteamMb);
+			long steamProduction = (long) Math.ceil(this.getWorkingTemperatureFullness() * this.getMaxEuProduction() / euPerSteamMb);
 			
 			try (Transaction transaction = Transaction.openOuter())
 			{
@@ -150,6 +162,7 @@ public final class ExtendedSteamHeaterComponent extends TemperatureComponent
 					steamBuffer.mergeLong(steam, -producedSteam, Long::sum);
 					
 					double euProduced = producedSteam * euPerSteamMb;
+					long euPerDegree = this.getEuPerDegree();
 					if(euPerDegree > 0)
 					{
 						this.decreaseTemperature(euProduced / euPerDegree);

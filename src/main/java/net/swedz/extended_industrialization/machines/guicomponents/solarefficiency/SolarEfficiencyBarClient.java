@@ -12,12 +12,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.text.EIText;
 
+import java.util.List;
+import java.util.Optional;
+
 public final class SolarEfficiencyBarClient implements GuiComponentClient
 {
 	public final SolarEfficiencyBar.Parameters params;
 	
 	public boolean working;
 	public int     efficiency;
+	public int     calcification;
 	
 	public SolarEfficiencyBarClient(FriendlyByteBuf buf)
 	{
@@ -30,6 +34,7 @@ public final class SolarEfficiencyBarClient implements GuiComponentClient
 	{
 		working = buf.readBoolean();
 		efficiency = buf.readInt();
+		calcification = buf.readInt();
 	}
 	
 	@Override
@@ -68,7 +73,15 @@ public final class SolarEfficiencyBarClient implements GuiComponentClient
 		{
 			if(RenderHelper.isPointWithinRectangle(params.renderX, params.renderY, WIDTH, HEIGHT, cursorX - x, cursorY - y))
 			{
-				guiGraphics.renderTooltip(font, EIText.SOLAR_EFFICIENCY.text(efficiency), cursorX, cursorY);
+				guiGraphics.renderTooltip(
+						font,
+						List.of(
+								EIText.SOLAR_EFFICIENCY.text(efficiency),
+								EIText.CALCIFICATION_PERCENTAGE.text(calcification)
+						),
+						Optional.empty(),
+						cursorX, cursorY
+				);
 			}
 		}
 	}

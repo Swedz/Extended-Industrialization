@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.components;
+package net.swedz.extended_industrialization.machines.components.solar.boiler;
 
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.components.TemperatureComponent;

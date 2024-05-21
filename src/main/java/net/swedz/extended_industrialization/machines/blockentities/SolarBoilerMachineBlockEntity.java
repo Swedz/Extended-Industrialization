@@ -21,8 +21,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.machines.components.ExtendedSteamHeaterComponent;
-import net.swedz.extended_industrialization.machines.components.SolarBurningComponent;
+import net.swedz.extended_industrialization.machines.components.solar.boiler.SolarBoilerCalcificationComponent;
+import net.swedz.extended_industrialization.machines.components.solar.boiler.SolarBurningComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
+import net.swedz.extended_industrialization.text.EIText;
+import net.swedz.extended_industrialization.tooltips.EITooltips;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,10 +48,12 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 	
 	private final MIInventory inventory;
 	
-	public final boolean bronze;
+	private final boolean bronze;
+	private final long    maxEuProduction;
 	
-	private final ExtendedSteamHeaterComponent steamHeater;
-	private final SolarBurningComponent        solarBurning;
+	private final SolarBoilerCalcificationComponent calcification;
+	private final ExtendedSteamHeaterComponent      steamHeater;
+	private final SolarBurningComponent             solarBurning;
 	
 	private IsActiveComponent isActiveComponent;
 	
@@ -73,7 +78,9 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 		inventory = new MIInventory(itemStacks, fluidStacks, itemPositions, fluidPositions);
 		
 		this.bronze = bronze;
-		steamHeater = new ExtendedSteamHeaterComponent(2400, 480, bronze ? 4 : 8);
+		maxEuProduction = bronze ? 4 : 8;
+		calcification = new SolarBoilerCalcificationComponent();
+		steamHeater = new ExtendedSteamHeaterComponent(2400, 480, () -> (long) Math.ceil(maxEuProduction * calcification.getEfficiency()));
 		solarBurning = new SolarBurningComponent(steamHeater, bronze ? 1 : 2, 4);
 		this.isActiveComponent = new IsActiveComponent();
 		
@@ -84,10 +91,11 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 		this.registerGuiComponent(new SolarEfficiencyBar.Server(
 				new SolarEfficiencyBar.Parameters(SOLAR_EFFICIENCY_X, SOLAR_EFFICIENCY_Y),
 				solarBurning::isWorking,
-				() -> (int) (steamHeater.getTemperatureFullness() * 100)
+				() -> (int) ((steamHeater.getTemperatureFullness() * calcification.getEfficiency()) * 100),
+				() -> (int) (calcification.getCalcification() * 100)
 		));
 		
-		this.registerComponents(inventory, isActiveComponent, steamHeater, solarBurning);
+		this.registerComponents(inventory, isActiveComponent, calcification, steamHeater, solarBurning);
 	}
 	
 	@Override
@@ -124,6 +132,11 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 			this.getInventory().autoExtractFluids(level, worldPosition, direction);
 		}
 		
+		if(steamHeater.isWorking())
+		{
+			calcification.tick();
+		}
+		
 		isActiveComponent.updateActive(steamHeater.isWorking(), this);
 		
 		this.setChanged();
@@ -132,11 +145,16 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 	@Override
 	public List<Component> getTooltips()
 	{
-		List<Component> returnList = new ArrayList<>();
-		returnList.add(new MITooltips.Line(MIText.MaxEuProductionSteam)
-				.arg(steamHeater.maxEuProduction, MITooltips.EU_PER_TICK_PARSER)
-				.arg(MIFluids.STEAM)
-				.build());
-		return returnList;
+		List<Component> tooltips = new ArrayList<>();
+		tooltips.add(
+				new MITooltips.Line(MIText.MaxEuProductionSteam)
+						.arg(maxEuProduction, MITooltips.EU_PER_TICK_PARSER)
+						.arg(MIFluids.STEAM)
+						.build()
+		);
+		tooltips.add(
+				MITooltips.DEFAULT_PARSER.parse(EIText.SOLAR_BOILER_CALCIFICATION.text(EITooltips.RATIO_PERCENTAGE_PARSER.parse(SolarBoilerCalcificationComponent.MINIMUM_EFFICIENCY)))
+		);
+		return tooltips;
 	}
 }

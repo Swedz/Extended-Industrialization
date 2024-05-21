@@ -17,18 +17,20 @@ public final class SolarEfficiencyBar
 		
 		private final Supplier<Boolean> workingSupplier;
 		private final Supplier<Integer> efficiencySupplier;
+		private final Supplier<Integer> calcificationSupplier;
 		
-		public Server(Parameters params, Supplier<Boolean> workingSupplier, Supplier<Integer> efficiencySupplier)
+		public Server(Parameters params, Supplier<Boolean> workingSupplier, Supplier<Integer> efficiencySupplier, Supplier<Integer> calcificationSupplier)
 		{
 			this.params = params;
 			this.workingSupplier = workingSupplier;
 			this.efficiencySupplier = efficiencySupplier;
+			this.calcificationSupplier = calcificationSupplier;
 		}
 		
 		@Override
 		public Data copyData()
 		{
-			return new Data(workingSupplier.get(), efficiencySupplier.get());
+			return new Data(workingSupplier.get(), efficiencySupplier.get(), calcificationSupplier.get());
 		}
 		
 		@Override
@@ -50,6 +52,7 @@ public final class SolarEfficiencyBar
 		{
 			buf.writeBoolean(workingSupplier.get());
 			buf.writeInt(efficiencySupplier.get());
+			buf.writeInt(calcificationSupplier.get());
 		}
 		
 		@Override
@@ -63,11 +66,13 @@ public final class SolarEfficiencyBar
 	{
 		final boolean working;
 		final int     efficiency;
+		final int     calcification;
 		
-		private Data(boolean working, int efficiency)
+		private Data(boolean working, int efficiency, int calcification)
 		{
 			this.working = working;
 			this.efficiency = efficiency;
+			this.calcification = calcification;
 		}
 	}
 	
