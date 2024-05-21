@@ -429,6 +429,22 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		);
 	}
 	
+	private static void universalTransformer(RecipeOutput output)
+	{
+		addBasicCraftingMachineRecipes(
+				"universal_transformer",
+				(builder) -> builder
+						.define('T', "modern_industrialization:tin_cable")
+						.define('E', "modern_industrialization:electrum_cable")
+						.define('A', "modern_industrialization:aluminum_cable")
+						.define('H', "modern_industrialization:basic_machine_hull")
+						.pattern("TEA")
+						.pattern(" H ")
+						.pattern("AET"),
+				output
+		);
+	}
+	
 	@Override
 	protected void buildRecipes(RecipeOutput output)
 	{
@@ -444,5 +460,6 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		processingArray(output);
 		largeFurnace(output);
 		largeMacerator(output);
+		universalTransformer(output);
 	}
 }

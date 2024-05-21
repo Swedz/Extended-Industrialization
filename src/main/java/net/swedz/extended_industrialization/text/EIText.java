@@ -33,7 +33,9 @@ public enum EIText
 	MACHINE_BATCHER_COILS("Batch size is determined by coil used"),
 	MACHINE_CHAINER_CONNECTED_MACHINES("Connected Machines : %d / %d"),
 	CONFIGURATION_PANEL_TITLE("Configure Machine"),
-	CONFIGURATION_PANEL_DESCRIPTION("Click to open configuration panel.");
+	CONFIGURATION_PANEL_DESCRIPTION("Click to open configuration panel."),
+	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Casing for cable tier to convert from (LV by default)"),
+	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default)");
 	
 	private final String englishText;
 	

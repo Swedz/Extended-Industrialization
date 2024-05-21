@@ -25,6 +25,7 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.hook.mi.MIMachineHookHelper;
 import net.swedz.extended_industrialization.machines.blockentities.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.SolarBoilerMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentities.UniversalTransformerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.brewery.ElectricBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.brewery.SteamBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.ElectricFluidHarvestingMachineBlockEntity;
@@ -329,6 +330,13 @@ public final class EIMachines
 				"Machine Chainer", "machine_chainer",
 				MachineChainerMachineBlockEntity::new,
 				MachineChainerMachineBlockEntity::registerCapabilities
+		);
+		
+		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+				"Universal Transformer", "universal_transformer", "universal_transformer",
+				CableTier.LV.casing, true, true, true,
+				UniversalTransformerMachineBlockEntity::new,
+				UniversalTransformerMachineBlockEntity::registerEnergyApi
 		);
 	}
 }

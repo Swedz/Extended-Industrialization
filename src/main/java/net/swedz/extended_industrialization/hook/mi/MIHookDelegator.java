@@ -14,6 +14,8 @@ import net.swedz.extended_industrialization.machines.guicomponents.processingarr
 import net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot.ProcessingArrayMachineSlotClient;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBarClient;
+import net.swedz.extended_industrialization.machines.guicomponents.universaltransformer.UniversalTransformerSlots;
+import net.swedz.extended_industrialization.machines.guicomponents.universaltransformer.UniversalTransformerSlotsClient;
 import net.swedz.extended_industrialization.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGui;
 import net.swedz.extended_industrialization.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGuiClient;
 import net.swedz.extended_industrialization.tooltips.EITooltips;
@@ -29,6 +31,7 @@ public final class MIHookDelegator
 		GuiComponentsClient.register(ModularMultiblockGui.ID, ModularMultiblockGuiClient::new);
 		GuiComponentsClient.register(ProcessingArrayMachineSlot.ID, ProcessingArrayMachineSlotClient::new);
 		GuiComponentsClient.register(ConfigurationPanel.ID, ConfigurationPanelClient::new);
+		GuiComponentsClient.register(UniversalTransformerSlots.ID, UniversalTransformerSlotsClient::new);
 	}
 	
 	public static void machineCasings()
