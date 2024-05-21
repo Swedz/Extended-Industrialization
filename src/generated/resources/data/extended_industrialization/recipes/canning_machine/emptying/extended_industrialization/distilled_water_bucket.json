@@ -1,0 +1,23 @@
+{
+  "type": "extended_industrialization:canning_machine",
+  "duration": 100,
+  "eu": 2,
+  "fluid_outputs": [
+    {
+      "amount": 1000,
+      "fluid": "extended_industrialization:distilled_water"
+    }
+  ],
+  "item_inputs": [
+    {
+      "amount": 1,
+      "item": "extended_industrialization:distilled_water_bucket"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "minecraft:bucket"
+    }
+  ]
+}

@@ -8,7 +8,7 @@ public enum EIText
 {
 	SOLAR_EFFICIENCY("Solar Efficiency : %d %%"),
 	CALCIFICATION_PERCENTAGE("Calcification : %d %%"),
-	SOLAR_BOILER_CALCIFICATION("Will calcify and lose efficiency over time to a minimum of %s efficiency. Breaking and placing the boiler again will reset this."),
+	SOLAR_BOILER_CALCIFICATION("Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Breaking and placing the boiler again will reset calcification."),
 	WATER_PUMP_ENVIRONMENT_0("Invalid Pump Environment"),
 	WATER_PUMP_ENVIRONMENT_1("Must be in Ocean or River biome."),
 	FARMER_NOT_TILLING("Not Tilling"),

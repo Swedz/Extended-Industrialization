@@ -9,26 +9,26 @@ public final class SolarBoilerCalcificationComponent implements IComponent.Serve
 	public static final long  CALCIFICATION_DURATION = 3 * 60 * 60 * 20;
 	public static final float MINIMUM_EFFICIENCY     = 0.33f;
 	
-	private long runTicks;
+	private long ticks;
 	
 	public void tick()
 	{
-		runTicks = Math.min(++runTicks, START_AFTER_TICKS + CALCIFICATION_DURATION);
+		ticks = Math.min(++ticks, START_AFTER_TICKS + CALCIFICATION_DURATION);
 	}
 	
 	public float getCalcification()
 	{
-		if(runTicks <= START_AFTER_TICKS)
+		if(ticks <= START_AFTER_TICKS)
 		{
 			return 0f;
 		}
-		long calcificationTicks = runTicks - START_AFTER_TICKS;
+		long calcificationTicks = ticks - START_AFTER_TICKS;
 		return (float) calcificationTicks / CALCIFICATION_DURATION;
 	}
 	
 	public float getEfficiency()
 	{
-		if(runTicks <= START_AFTER_TICKS)
+		if(ticks <= START_AFTER_TICKS)
 		{
 			return 1f;
 		}
@@ -40,12 +40,12 @@ public final class SolarBoilerCalcificationComponent implements IComponent.Serve
 	@Override
 	public void writeNbt(CompoundTag tag)
 	{
-		tag.putLong("calcification_ticks", runTicks);
+		tag.putLong("calcification_ticks", ticks);
 	}
 	
 	@Override
 	public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
 	{
-		runTicks = tag.getLong("calcification_ticks");
+		ticks = tag.getLong("calcification_ticks");
 	}
 }
