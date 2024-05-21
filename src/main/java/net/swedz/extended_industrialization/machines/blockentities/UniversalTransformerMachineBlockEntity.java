@@ -44,8 +44,8 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 				new OrientationComponent.Params(true, false, false)
 		);
 		
-		transformerFrom = new TransformerTierComponent();
-		transformerTo = new TransformerTierComponent();
+		transformerFrom = new TransformerTierComponent(true);
+		transformerTo = new TransformerTierComponent(false);
 		
 		redstoneControl = new RedstoneControlComponent();
 		

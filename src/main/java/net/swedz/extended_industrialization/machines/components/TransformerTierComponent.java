@@ -16,8 +16,15 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public final class TransformerTierComponent implements IComponent.ServerOnly, DropableComponent
 {
+	private final boolean isFrom;
+	
 	private ItemStack stack = ItemStack.EMPTY;
 	private CableTier tier  = CableTier.LV;
+	
+	public TransformerTierComponent(boolean isFrom)
+	{
+		this.isFrom = isFrom;
+	}
 	
 	public ItemStack getStack()
 	{
@@ -44,16 +51,21 @@ public final class TransformerTierComponent implements IComponent.ServerOnly, Dr
 		}
 	}
 	
+	private String nbtKey()
+	{
+		return "casing_" + (isFrom ? "from" : "to");
+	}
+	
 	@Override
 	public void writeNbt(CompoundTag tag)
 	{
-		tag.put("casing", stack.save(new CompoundTag()));
+		tag.put(this.nbtKey(), stack.save(new CompoundTag()));
 	}
 	
 	@Override
 	public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
 	{
-		this.setCasingInternal(ItemStack.of(tag.getCompound("casing")));
+		this.setCasingInternal(ItemStack.of(tag.getCompound(this.nbtKey())));
 	}
 	
 	@Override
