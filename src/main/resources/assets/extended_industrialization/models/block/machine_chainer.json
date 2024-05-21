@@ -1,0 +1,21 @@
+{
+    "casing": "mv",
+    "default_overlays": {
+        "fluid_auto": "modern_industrialization:block/overlays/fluid_auto",
+        "front": "extended_industrialization:block/machines/machine_chainer/overlay_front",
+        "item_auto": "modern_industrialization:block/overlays/item_auto",
+        "output": "modern_industrialization:block/overlays/output",
+        "left": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_left",
+        "right": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_right",
+        "top_n": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_up",
+        "top_s": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_down",
+        "top_e": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_right",
+        "top_w": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_left",
+        "bottom_n": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_down",
+        "bottom_s": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_up",
+        "bottom_e": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_right",
+        "bottom_w": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_left",
+        "back": "extended_industrialization:block/machines/machine_chainer/overlay_back"
+    },
+    "loader": "modern_industrialization:machine"
+}

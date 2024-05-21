@@ -12,12 +12,20 @@ import java.util.function.Function;
 public final class MIMachineHookHelper
 {
 	@SafeVarargs
+	public static void registerSingleBlockSpecialMachine(String englishName, String id,
+														 Function<BEP, MachineBlockEntity> factory,
+														 Consumer<BlockEntityType<?>>... extraRegistrators)
+	{
+		MachineRegistrationHelper.registerMachine(englishName, id, factory, extraRegistrators);
+	}
+	
+	@SafeVarargs
 	public static void registerSingleBlockSpecialMachine(String englishName, String id, String overlayFolder,
 														 MachineCasing defaultCasing, boolean frontOverlay, boolean topOverlay, boolean sideOverlay, boolean hasActive,
 														 Function<BEP, MachineBlockEntity> factory,
 														 Consumer<BlockEntityType<?>>... extraRegistrators)
 	{
-		MachineRegistrationHelper.registerMachine(englishName, id, factory, extraRegistrators);
+		registerSingleBlockSpecialMachine(englishName, id, factory, extraRegistrators);
 		MachineRegistrationHelper.addMachineModel(id, overlayFolder, defaultCasing, frontOverlay, topOverlay, sideOverlay, hasActive);
 	}
 	
@@ -31,12 +39,20 @@ public final class MIMachineHookHelper
 	}
 	
 	@SafeVarargs
+	public static void registerMultiblockMachine(String englishName, String id,
+												 Function<BEP, MachineBlockEntity> factory,
+												 Consumer<BlockEntityType<?>>... extraRegistrators)
+	{
+		MachineRegistrationHelper.registerMachine(englishName, id, factory, extraRegistrators);
+	}
+	
+	@SafeVarargs
 	public static void registerMultiblockMachine(String englishName, String id, String overlayFolder,
 												 MachineCasing defaultCasing, boolean frontOverlay, boolean topOverlay, boolean sideOverlay, boolean hasActive,
 												 Function<BEP, MachineBlockEntity> factory,
 												 Consumer<BlockEntityType<?>>... extraRegistrators)
 	{
-		MachineRegistrationHelper.registerMachine(englishName, id, factory, extraRegistrators);
+		registerMultiblockMachine(englishName, id, factory, extraRegistrators);
 		MachineRegistrationHelper.addMachineModel(id, overlayFolder, defaultCasing, frontOverlay, topOverlay, sideOverlay, hasActive);
 	}
 	

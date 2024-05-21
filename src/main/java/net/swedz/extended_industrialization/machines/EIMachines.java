@@ -326,8 +326,7 @@ public final class EIMachines
 		);
 		
 		MIMachineHookHelper.registerSingleBlockSpecialMachine(
-				"Machine Chainer", "machine_chainer", "machine_chainer",
-				CableTier.MV.casing, true, true, true,
+				"Machine Chainer", "machine_chainer",
 				MachineChainerMachineBlockEntity::new,
 				MachineChainerMachineBlockEntity::registerCapabilities
 		);
