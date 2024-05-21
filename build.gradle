@@ -153,3 +153,7 @@ minecraft {
 		file("src/main/resources/${mod_id}.accesstransformer.cfg")
 	}
 }
+
+processResources {
+	duplicatesStrategy = 'exclude'
+}
