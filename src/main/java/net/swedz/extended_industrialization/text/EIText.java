@@ -37,8 +37,8 @@ public enum EIText
 	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Casing for cable tier to convert from (LV by default)."),
 	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default)."),
 	PHOTOVOLTAIC_CELL_EU("Will produce up to %s when placed in a Solar Panel."),
-	PHOTOVOLTAIC_CELL_DURATION_IN_HOURS("Will last for %s hour(s)."),
-	PHOTOVOLTAIC_CELL_DURATION_INDEFINITE("Will last forever.");
+	PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME("Remaining Operation Time : %s"),
+	PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_HOURS("Remaining Operation Time : %s hour(s)");
 	
 	private final String englishText;
 	

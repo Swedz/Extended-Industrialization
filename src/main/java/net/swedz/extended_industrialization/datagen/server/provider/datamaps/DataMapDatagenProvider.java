@@ -10,12 +10,9 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.datamaps.EIDataMaps;
 import net.swedz.extended_industrialization.datamaps.FertilizerPotency;
 import net.swedz.extended_industrialization.datamaps.LargeElectricFurnaceTier;
-import net.swedz.extended_industrialization.datamaps.PhotovoltaicCell;
 import net.swedz.extended_industrialization.datamaps.PotionBrewingCosts;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 import net.swedz.extended_industrialization.registry.fluids.FluidHolder;
-import net.swedz.extended_industrialization.registry.items.EIItems;
-import net.swedz.extended_industrialization.registry.items.ItemHolder;
 
 import java.util.Map;
 
@@ -36,12 +33,6 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		this.addLargeElectricFurnaceTier(MI.id("cupronickel_coil"), 8, 0.75f);
 		this.addLargeElectricFurnaceTier(MI.id("kanthal_coil"), 32, 0.75f);
 		
-		this.addPhotovoltaicCell(EIItems.LV_PHOTOVOLTAIC_CELL, 32);
-		this.addPhotovoltaicCell(EIItems.MV_PHOTOVOLTAIC_CELL, 128);
-		this.addPhotovoltaicCell(EIItems.HV_PHOTOVOLTAIC_CELL, 512);
-		this.addPhotovoltaicCell(EIItems.EV_PHOTOVOLTAIC_CELL, 2048);
-		this.addPhotovoltaicCell(EIItems.PERFECTED_PHOTOVOLTAIC_CELL, 8192);
-		
 		for(Map.Entry<ResourceKey<Potion>, Potion> entry : BuiltInRegistries.POTION.entrySet())
 		{
 			this.addPotionBrewing(entry.getKey(), 4, 1000, 1, 10 * 20, 4);
@@ -56,11 +47,6 @@ public final class DataMapDatagenProvider extends DataMapProvider
 	private void addLargeElectricFurnaceTier(ResourceLocation block, int batchSize, float euCostMultiplier)
 	{
 		this.builder(EIDataMaps.LARGE_ELECTRIC_FURNACE_TIER).add(block, new LargeElectricFurnaceTier(batchSize, euCostMultiplier), false);
-	}
-	
-	private void addPhotovoltaicCell(ItemHolder item, int euPerTick)
-	{
-		this.builder(EIDataMaps.PHOTOVOLTAIC_CELL).add(item.identifier().location(), new PhotovoltaicCell(euPerTick), false);
 	}
 	
 	private void addPotionBrewing(ResourceKey<Potion> potion, int bottles, int water, int blazingEssence, int time, int euCost)

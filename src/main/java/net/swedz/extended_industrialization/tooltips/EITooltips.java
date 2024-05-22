@@ -9,10 +9,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.BlockItem;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.datamaps.PhotovoltaicCell;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
 import net.swedz.extended_industrialization.registry.items.EIItems;
+import net.swedz.extended_industrialization.registry.items.items.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.text.EIText;
 import org.apache.commons.compress.utils.Lists;
 
@@ -85,20 +85,19 @@ public final class EITooltips
 	public static final TooltipAttachment PHOTOVOLTAIC_CELLS = TooltipAttachment.ofMultilines(
 			(itemStack, item) ->
 			{
-				PhotovoltaicCell photovoltaicCell = PhotovoltaicCell.getFor(item);
-				if(photovoltaicCell != null)
+				if(item instanceof PhotovoltaicCellItem photovoltaicCell)
 				{
-					int euPerTick = photovoltaicCell.euPerTick();
+					int euPerTick = photovoltaicCell.getEuPerTick();
 					List<Component> lines = Lists.newArrayList();
 					lines.add(DEFAULT_PARSER.parse(EIText.PHOTOVOLTAIC_CELL_EU.text(EU_PER_TICK_PARSER.parse(euPerTick))));
-					if(item.canBeDepleted())
+					if(!photovoltaicCell.lastsForever())
 					{
-						int ticksRemaining = item.canBeDepleted() ? item.getMaxDamage(itemStack) - item.getDamage(itemStack) : 0; // TODO improve this
-						lines.add(DEFAULT_PARSER.parse(EIText.PHOTOVOLTAIC_CELL_DURATION_IN_HOURS.text(TICKS_TO_HOURS_PARSER.parse((long) ticksRemaining))));
+						int solarTicksRemaining = photovoltaicCell.getSolarTicksRemaining(itemStack);
+						lines.add(DEFAULT_PARSER.parse(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_HOURS.text(TICKS_TO_HOURS_PARSER.parse((long) solarTicksRemaining))));
 					}
 					else
 					{
-						lines.add(DEFAULT_PARSER.parse(EIText.PHOTOVOLTAIC_CELL_DURATION_INDEFINITE.text()));
+						lines.add(DEFAULT_PARSER.parse(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME.text(Component.literal("\u221E").withStyle(NUMBER_TEXT))));
 					}
 					return Optional.of(lines);
 				}
