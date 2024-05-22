@@ -44,8 +44,8 @@ public final class WaterPumpEnvironmentGuiClient implements GuiComponentClient
 		{
 			if(!validEnvironment)
 			{
-				int px = x + params.renderX;
-				int py = y + params.renderY;
+				int px = x + params.renderX();
+				int py = y + params.renderY();
 				guiGraphics.blit(MachineScreen.SLOT_ATLAS, px, py, 20, 58, 20, 20);
 			}
 		}
@@ -55,7 +55,7 @@ public final class WaterPumpEnvironmentGuiClient implements GuiComponentClient
 		{
 			if(!validEnvironment)
 			{
-				if(RenderHelper.isPointWithinRectangle(params.renderX, params.renderY, 20, 20, cursorX - x, cursorY - y))
+				if(RenderHelper.isPointWithinRectangle(params.renderX(), params.renderY(), 20, 20, cursorX - x, cursorY - y))
 				{
 					List<FormattedCharSequence> lines = List.of(
 							EIText.WATER_PUMP_ENVIRONMENT_0.text().withStyle(ChatFormatting.RED).getVisualOrderText(),

@@ -37,7 +37,7 @@ public final class ModularMultiblockGui
 		@Override
 		public boolean needsSync(Data cachedData)
 		{
-			return height != cachedData.height() || !textSupplier.get().equals(cachedData.text());
+			return !cachedData.equals(this.copyData());
 		}
 		
 		@Override

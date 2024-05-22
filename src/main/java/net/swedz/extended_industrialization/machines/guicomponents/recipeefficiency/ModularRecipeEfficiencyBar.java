@@ -10,7 +10,7 @@ public final class ModularRecipeEfficiencyBar
 {
 	public static final class Server implements GuiComponent.Server<Data>
 	{
-		private final Parameters           params;
+		private final Parameters params;
 		private final ModularCrafterAccess crafter;
 		
 		public Server(Parameters params, ModularCrafterAccess crafter)
@@ -86,44 +86,23 @@ public final class ModularRecipeEfficiencyBar
 		}
 	}
 	
-	private static final class Data
+	private record Data(
+			boolean hasActiveRecipe, int efficiencyTicks, int maxEfficiencyTicks, long currentRecipeEu,
+			long baseRecipeEu, long maxRecipeEu
+	)
 	{
-		final boolean hasActiveRecipe;
-		final int     efficiencyTicks;
-		final int     maxEfficiencyTicks;
-		final long    currentRecipeEu;
-		final long    baseRecipeEu;
-		final long    maxRecipeEu;
+		private Data(int efficiencyTicks, int maxEfficiencyTicks, long currentRecipeEu, long baseRecipeEu, long maxRecipeEu)
+		{
+			this(true, efficiencyTicks, maxEfficiencyTicks, currentRecipeEu, baseRecipeEu, maxRecipeEu);
+		}
 		
 		private Data()
 		{
-			this.hasActiveRecipe = false;
-			this.efficiencyTicks = 0;
-			this.maxEfficiencyTicks = 0;
-			this.currentRecipeEu = 0;
-			this.baseRecipeEu = 0;
-			this.maxRecipeEu = 0;
-		}
-		
-		private Data(int efficiencyTicks, int maxEfficiencyTicks, long currentRecipeEu, long baseRecipeEu, long maxRecipeEu)
-		{
-			this.efficiencyTicks = efficiencyTicks;
-			this.maxEfficiencyTicks = maxEfficiencyTicks;
-			this.hasActiveRecipe = true;
-			this.currentRecipeEu = currentRecipeEu;
-			this.baseRecipeEu = baseRecipeEu;
-			this.maxRecipeEu = maxRecipeEu;
+			this(false, 0, 0, 0, 0, 0);
 		}
 	}
 	
-	public static class Parameters
+	public record Parameters(int renderX, int renderY)
 	{
-		public final int renderX, renderY;
-		
-		public Parameters(int renderX, int renderY)
-		{
-			this.renderX = renderX;
-			this.renderY = renderY;
-		}
 	}
 }

@@ -66,7 +66,7 @@ public final class ProcessingArrayMachineSlot
 		@Override
 		public boolean needsSync(Integer cachedData)
 		{
-			return cachedData.equals(getMaxMachines.get());
+			return !cachedData.equals(getMaxMachines.get());
 		}
 		
 		@Override

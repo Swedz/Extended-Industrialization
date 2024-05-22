@@ -61,18 +61,18 @@ public final class ModularRecipeEfficiencyBarClient implements GuiComponentClien
 		@Override
 		public void renderBackground(GuiGraphics guiGraphics, int x, int y)
 		{
-			guiGraphics.blit(TEXTURE, x + params.renderX - 1, y + params.renderY - 1, 0, 2, WIDTH + 2, HEIGHT + 2, 102, 6);
+			guiGraphics.blit(TEXTURE, x + params.renderX() - 1, y + params.renderY() - 1, 0, 2, WIDTH + 2, HEIGHT + 2, 102, 6);
 			if(hasActiveRecipe)
 			{
 				int barPixels = (int) ((float) efficiencyTicks / maxEfficiencyTicks * WIDTH);
-				guiGraphics.blit(TEXTURE, x + params.renderX, y + params.renderY, 0, 0, barPixels, HEIGHT, 102, 6);
+				guiGraphics.blit(TEXTURE, x + params.renderX(), y + params.renderY(), 0, 0, barPixels, HEIGHT, 102, 6);
 			}
 		}
 		
 		@Override
 		public void renderTooltip(MachineScreen screen, Font font, GuiGraphics guiGraphics, int x, int y, int cursorX, int cursorY)
 		{
-			if(RenderHelper.isPointWithinRectangle(params.renderX, params.renderY, WIDTH, HEIGHT, cursorX - x, cursorY - y))
+			if(RenderHelper.isPointWithinRectangle(params.renderX(), params.renderY(), WIDTH, HEIGHT, cursorX - x, cursorY - y))
 			{
 				List<Component> tooltip = new ArrayList<>();
 				if(hasActiveRecipe)

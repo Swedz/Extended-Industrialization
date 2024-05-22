@@ -55,14 +55,7 @@ public final class WaterPumpEnvironmentGui
 		}
 	}
 	
-	public static final class Parameters
+	public record Parameters(int renderX, int renderY)
 	{
-		public final int renderX, renderY;
-		
-		public Parameters(int renderX, int renderY)
-		{
-			this.renderX = renderX;
-			this.renderY = renderY;
-		}
 	}
 }
