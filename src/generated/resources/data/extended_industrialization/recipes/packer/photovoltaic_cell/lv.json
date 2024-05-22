@@ -8,11 +8,11 @@
       "tag": "forge:glass_panes"
     },
     {
-      "amount": 1,
+      "amount": 2,
       "tag": "forge:plates/silver"
     },
     {
-      "amount": 1,
+      "amount": 4,
       "item": "modern_industrialization:rubber_sheet"
     }
   ],

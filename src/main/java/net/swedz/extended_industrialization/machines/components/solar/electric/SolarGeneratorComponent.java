@@ -64,7 +64,15 @@ public final class SolarGeneratorComponent implements IComponent.ServerOnly
 		ConfigurableItemStack slotCell = this.getSlotPhotovoltaicCell();
 		ItemStack cellStack = slotCell.toStack();
 		photovoltaicCell.incrementTick(cellStack);
-		slotCell.setKey(ItemVariant.of(cellStack));
+		if(photovoltaicCell.getSolarTicksRemaining(cellStack) > 0)
+		{
+			slotCell.setKey(ItemVariant.of(cellStack));
+		}
+		else
+		{
+			photovoltaicCell = null;
+			slotCell.setKey(ItemVariant.blank());
+		}
 	}
 	
 	public void tick()

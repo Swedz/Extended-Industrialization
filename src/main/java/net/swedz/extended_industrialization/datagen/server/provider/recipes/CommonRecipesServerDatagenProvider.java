@@ -43,8 +43,8 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				4, 40 * 20,
 				(r) -> r
 						.addItemInput(EITags.itemForge("glass_panes"), 1)
-						.addItemInput(EITags.itemForge("plates/silver"), 1)
-						.addItemInput("modern_industrialization:rubber_sheet", 1)
+						.addItemInput(EITags.itemForge("plates/silver"), 2)
+						.addItemInput("modern_industrialization:rubber_sheet", 4)
 						.addItemOutput(EIItems.LV_PHOTOVOLTAIC_CELL, 1),
 				output
 		);

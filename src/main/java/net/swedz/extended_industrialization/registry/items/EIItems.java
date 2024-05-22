@@ -52,11 +52,11 @@ public final class EIItems
 	public static final ItemHolder<Item> MULCH          = create("mulch", "Mulch", Item::new, SortOrder.RESOURCES).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).fast().build())).withModel(CommonModelBuilders::generated).register();
 	public static final ItemHolder<Item> NETHERITE_DUST = create("netherite_dust", "Netherite Dust", Item::new, SortOrder.RESOURCES).tag(EITags.itemForge("dusts"), EITags.itemForge("dusts/netherite")).withModel(CommonModelBuilders::generated).register();
 	
-	public static final ItemHolder<PhotovoltaicCellItem> LV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("lv", "LV", 32, 60 * 60 * 20);
-	public static final ItemHolder<PhotovoltaicCellItem> MV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("mv", "MV", 128, 2 * 60 * 60 * 20);
-	public static final ItemHolder<PhotovoltaicCellItem> HV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("hv", "HV", 512, 4 * 60 * 60 * 20);
-	public static final ItemHolder<PhotovoltaicCellItem> EV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("ev", "EV", 2048, 8 * 60 * 60 * 20);
-	public static final ItemHolder<PhotovoltaicCellItem> PERFECTED_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("perfected", "Perfected", 8192, 0);
+	public static final ItemHolder<PhotovoltaicCellItem> LV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("lv", "LV", 16, 15 * 60 * 20);
+	public static final ItemHolder<PhotovoltaicCellItem> MV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("mv", "MV", 64, 30 * 60 * 20);
+	public static final ItemHolder<PhotovoltaicCellItem> HV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("hv", "HV", 256, 60 * 60 * 20);
+	public static final ItemHolder<PhotovoltaicCellItem> EV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("ev", "EV", 1024, 2 * 60 * 60 * 20);
+	public static final ItemHolder<PhotovoltaicCellItem> PERFECTED_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("perfected", "Perfected", 4096, 0);
 	
 	public static Set<ItemHolder> values()
 	{

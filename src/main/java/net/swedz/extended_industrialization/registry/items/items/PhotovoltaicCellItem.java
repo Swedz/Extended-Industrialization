@@ -71,4 +71,18 @@ public final class PhotovoltaicCellItem extends Item
 		float hue = Math.max(0, (float) this.getSolarTicksRemaining(stack) / this.getDurationTicks());
 		return Mth.hsvToRgb(hue / 3, 1, 1);
 	}
+	
+	public static long calculateTotalEuProduced(int euPerTick, int durationTicks)
+	{
+		int dayLength = 12000;
+		int energyProduced = 0;
+		for(int tick = 0; tick <= durationTicks; tick++)
+		{
+			int time = tick % dayLength;
+			long timeFromNoon = Math.abs(6000 - time);
+			float efficiency = 1 - (timeFromNoon / 6000f);
+			energyProduced += (euPerTick * efficiency);
+		}
+		return energyProduced;
+	}
 }
