@@ -73,6 +73,7 @@
   "text.extended_industrialization.fluid_fertilizers": "Fluid Fertilizers",
   "text.extended_industrialization.fluid_fertilizers_consumes": "Consumes : %dmb",
   "text.extended_industrialization.fluid_fertilizers_time": "Cycle Time : %.1fs",
+  "text.extended_industrialization.generating_eu_per_tick": "Generating : %d EU/t",
   "text.extended_industrialization.machine_batcher_coils": "Batch size is determined by coil used.",
   "text.extended_industrialization.machine_batcher_recipe": "Can run %s recipes in batches.",
   "text.extended_industrialization.machine_batcher_size_and_cost": "Runs in batches of up to %d at %s the EU cost.",

@@ -1,15 +1,12 @@
 package net.swedz.extended_industrialization.registry.items.items;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.swedz.extended_industrialization.attachments.EIAttachments;
 
 public final class PhotovoltaicCellItem extends Item
 {
-	private static final String SOLAR_TICKS_KEY = "solar_ticks";
-	
 	private final int euPerTick;
 	private final int durationTicks;
 	
@@ -37,8 +34,7 @@ public final class PhotovoltaicCellItem extends Item
 	
 	public int getSolarTicks(ItemStack stack)
 	{
-		CompoundTag tag = stack.getOrCreateTag();
-		return tag.contains(SOLAR_TICKS_KEY, Tag.TAG_INT) ? tag.getInt(SOLAR_TICKS_KEY) : 0;
+		return stack.getData(EIAttachments.SOLAR_TICKS);
 	}
 	
 	public int getSolarTicksRemaining(ItemStack stack)
@@ -48,9 +44,12 @@ public final class PhotovoltaicCellItem extends Item
 	
 	public void incrementTick(ItemStack stack)
 	{
-		CompoundTag tag = stack.getOrCreateTag();
-		int solarTicks = this.getSolarTicks(stack);
-		tag.putInt(SOLAR_TICKS_KEY, solarTicks + 1);
+		int solarTicks = this.getSolarTicks(stack) + 1;
+		if(solarTicks > this.getDurationTicks())
+		{
+			return;
+		}
+		stack.setData(EIAttachments.SOLAR_TICKS, solarTicks);
 	}
 	
 	@Override

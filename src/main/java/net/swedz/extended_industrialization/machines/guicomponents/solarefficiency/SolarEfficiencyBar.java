@@ -18,24 +18,31 @@ public final class SolarEfficiencyBar
 		private final Supplier<Boolean> workingSupplier;
 		private final Supplier<Integer> efficiencySupplier;
 		private final Supplier<Integer> calcificationSupplier;
+		private final Supplier<Long>    energyProducedSupplier;
 		
-		public Server(Parameters params, Supplier<Boolean> workingSupplier, Supplier<Integer> efficiencySupplier, Supplier<Integer> calcificationSupplier)
+		private Server(Parameters params, Supplier<Boolean> workingSupplier, Supplier<Integer> efficiencySupplier, Supplier<Integer> calcificationSupplier, Supplier<Long> energyProducedSupplier)
 		{
 			this.params = params;
 			this.workingSupplier = workingSupplier;
 			this.efficiencySupplier = efficiencySupplier;
 			this.calcificationSupplier = calcificationSupplier;
+			this.energyProducedSupplier = energyProducedSupplier;
 		}
 		
-		public Server(Parameters params, Supplier<Boolean> workingSupplier, Supplier<Integer> efficiencySupplier)
+		public static Server calcification(Parameters params, Supplier<Boolean> workingSupplier, Supplier<Integer> efficiencySupplier, Supplier<Integer> calcificationSupplier)
 		{
-			this(params, workingSupplier, efficiencySupplier, () -> -1);
+			return new Server(params, workingSupplier, efficiencySupplier, calcificationSupplier, () -> -1L);
+		}
+		
+		public static Server energyProduced(Parameters params, Supplier<Boolean> workingSupplier, Supplier<Integer> efficiencySupplier, Supplier<Long> energyProducedSupplier)
+		{
+			return new Server(params, workingSupplier, efficiencySupplier, () -> -1, energyProducedSupplier);
 		}
 		
 		@Override
 		public Data copyData()
 		{
-			return new Data(workingSupplier.get(), efficiencySupplier.get(), calcificationSupplier != null ? calcificationSupplier.get() : -1);
+			return new Data(workingSupplier.get(), efficiencySupplier.get(), calcificationSupplier.get(), energyProducedSupplier.get());
 		}
 		
 		@Override
@@ -57,7 +64,22 @@ public final class SolarEfficiencyBar
 		{
 			buf.writeBoolean(workingSupplier.get());
 			buf.writeInt(efficiencySupplier.get());
-			buf.writeInt(calcificationSupplier.get());
+			
+			int calcification = calcificationSupplier.get();
+			boolean hasCalcification = calcification >= 0;
+			buf.writeBoolean(hasCalcification);
+			if(hasCalcification)
+			{
+				buf.writeInt(calcification);
+			}
+			
+			long energyProduced = energyProducedSupplier.get();
+			boolean hasEnergyProduced = energyProduced >= 0;
+			buf.writeBoolean(hasEnergyProduced);
+			if(hasEnergyProduced)
+			{
+				buf.writeLong(energyProduced);
+			}
 		}
 		
 		@Override
@@ -67,28 +89,11 @@ public final class SolarEfficiencyBar
 		}
 	}
 	
-	private static final class Data
+	private record Data(boolean working, int efficiency, int calcification, long energyProduced)
 	{
-		final boolean working;
-		final int     efficiency;
-		final int     calcification;
-		
-		private Data(boolean working, int efficiency, int calcification)
-		{
-			this.working = working;
-			this.efficiency = efficiency;
-			this.calcification = calcification;
-		}
 	}
 	
-	public static class Parameters
+	public record Parameters(int renderX, int renderY)
 	{
-		public final int renderX, renderY;
-		
-		public Parameters(int renderX, int renderY)
-		{
-			this.renderX = renderX;
-			this.renderY = renderY;
-		}
 	}
 }

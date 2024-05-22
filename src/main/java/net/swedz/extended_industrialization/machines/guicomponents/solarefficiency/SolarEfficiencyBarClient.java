@@ -23,7 +23,10 @@ public final class SolarEfficiencyBarClient implements GuiComponentClient
 	
 	public boolean working;
 	public int     efficiency;
+	public boolean hasCalcification;
 	public int     calcification;
+	public boolean hasEnergyProduced;
+	public long    energyProduced;
 	
 	public SolarEfficiencyBarClient(FriendlyByteBuf buf)
 	{
@@ -36,7 +39,18 @@ public final class SolarEfficiencyBarClient implements GuiComponentClient
 	{
 		working = buf.readBoolean();
 		efficiency = buf.readInt();
-		calcification = buf.readInt();
+		
+		hasCalcification = buf.readBoolean();
+		if(hasCalcification)
+		{
+			calcification = buf.readInt();
+		}
+		
+		hasEnergyProduced = buf.readBoolean();
+		if(hasEnergyProduced)
+		{
+			energyProduced = buf.readLong();
+		}
 	}
 	
 	@Override
@@ -56,16 +70,16 @@ public final class SolarEfficiencyBarClient implements GuiComponentClient
 		public void renderBackground(GuiGraphics guiGraphics, int x, int y)
 		{
 			guiGraphics.blit(TEXTURE,
-					x + params.renderX - 1, y + params.renderY - 1,
+					x + params.renderX() - 1, y + params.renderY() - 1,
 					0, 2, WIDTH + 2, HEIGHT + 2, 102, 6
 			);
 			int barPixels = (int) ((float) efficiency / 100 * WIDTH);
 			guiGraphics.blit(TEXTURE,
-					x + params.renderX, y + params.renderY,
+					x + params.renderX(), y + params.renderY(),
 					0, 0, barPixels, HEIGHT, 102, 6
 			);
 			guiGraphics.blit(SOLAR_STATE,
-					x + params.renderX - 20, y + params.renderY + HEIGHT / 2 - 6,
+					x + params.renderX() - 20, y + params.renderY() + HEIGHT / 2 - 6,
 					working ? 0 : 12, 0, 12, 12, 24, 12
 			);
 		}
@@ -73,13 +87,17 @@ public final class SolarEfficiencyBarClient implements GuiComponentClient
 		@Override
 		public void renderTooltip(MachineScreen screen, Font font, GuiGraphics guiGraphics, int x, int y, int cursorX, int cursorY)
 		{
-			if(RenderHelper.isPointWithinRectangle(params.renderX, params.renderY, WIDTH, HEIGHT, cursorX - x, cursorY - y))
+			if(RenderHelper.isPointWithinRectangle(params.renderX(), params.renderY(), WIDTH, HEIGHT, cursorX - x, cursorY - y))
 			{
 				List<Component> lines = Lists.newArrayList();
 				lines.add(EIText.SOLAR_EFFICIENCY.text(efficiency));
-				if(calcification >= 0)
+				if(hasCalcification)
 				{
 					lines.add(EIText.CALCIFICATION_PERCENTAGE.text(calcification));
+				}
+				if(hasEnergyProduced)
+				{
+					lines.add(EIText.GENERATING_EU_PER_TICK.text(energyProduced));
 				}
 				guiGraphics.renderTooltip(font, lines, Optional.empty(), cursorX, cursorY);
 			}

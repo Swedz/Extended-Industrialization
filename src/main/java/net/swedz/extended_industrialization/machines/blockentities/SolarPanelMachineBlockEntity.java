@@ -27,7 +27,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.machines.components.solar.SolarSunlightComponent;
+import net.swedz.extended_industrialization.machines.components.solar.electric.SolarGeneratorComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
+import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 
 import java.util.List;
 
@@ -53,7 +55,8 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	private final EnergyComponent energy;
 	private final MIEnergyStorage extractable;
 	
-	private final SolarSunlightComponent sunlight;
+	private final SolarSunlightComponent  sunlight;
+	private final SolarGeneratorComponent generator;
 	
 	public SolarPanelMachineBlockEntity(BEP bep)
 	{
@@ -73,15 +76,16 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 		);
 		SlotPositions itemPositions = new SlotPositions.Builder().addSlot(CELL_X, CELL_Y).build();
 		List<ConfigurableFluidStack> fluidStacks = List.of(
-				ConfigurableFluidStack.standardInputSlot(capacity)
+				ConfigurableFluidStack.lockedInputSlot(capacity, EIFluids.DISTILLED_WATER.asFluid())
 		);
 		SlotPositions fluidPositions = new SlotPositions.Builder().addSlot(WATER_X, WATER_Y).build();
 		inventory = new MIInventory(itemStacks, fluidStacks, itemPositions, fluidPositions);
 		
-		energy = new EnergyComponent(this, casing.getEuCapacity());
+		energy = new EnergyComponent(this, casing::getEuCapacity);
 		extractable = energy.buildExtractable(casing::canInsertEu);
 		
 		sunlight = new SolarSunlightComponent(this);
+		generator = new SolarGeneratorComponent(inventory, energy, this::getEfficiency);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(ENERGY_X, ENERGY_Y), energy::getEu, energy::getCapacity));
 		
@@ -89,13 +93,14 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 				.withRedstoneControl(redstoneControl)
 				.withCasing(casing));
 		
-		this.registerGuiComponent(new SolarEfficiencyBar.Server(
+		this.registerGuiComponent(SolarEfficiencyBar.Server.energyProduced(
 				new SolarEfficiencyBar.Parameters(SOLAR_EFFICIENCY_X, SOLAR_EFFICIENCY_Y),
 				sunlight::canOperate,
-				() -> (int) (this.getEfficiency() * 100)
+				() -> (int) (this.getEfficiency() * 100),
+				generator::getEnergyPerTick
 		));
 		
-		this.registerComponents(inventory, energy, redstoneControl, casing, sunlight);
+		this.registerComponents(inventory, energy, redstoneControl, casing, sunlight, generator);
 	}
 	
 	public float getEfficiency()
@@ -112,7 +117,7 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	@Override
 	protected MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData();
+		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
 		orientation.writeModelData(data);
 		return data;
 	}
@@ -131,12 +136,10 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 			return;
 		}
 		
-		if(!redstoneControl.doAllowNormalOperation(this))
+		if(redstoneControl.doAllowNormalOperation(this))
 		{
-			return;
+			generator.tick();
 		}
-		
-		// TODO
 	}
 	
 	@Override

@@ -36,7 +36,10 @@ public final class EITooltips
 			euCostTransformer.text().withStyle(NUMBER_TEXT);
 	
 	public static final Parser<Long> TICKS_TO_HOURS_PARSER = (ticks) ->
-			Component.literal("%.1f".formatted((float) ticks / (60 * 60 * 20))).withStyle(NUMBER_TEXT);
+	{
+		float hours = (float) ticks / (60 * 60 * 20);
+		return Component.literal((hours % 1 == 0 ? "%.0f" : "%.2f").formatted(hours)).withStyle(NUMBER_TEXT);
+	};
 	
 	public static final TooltipAttachment ENERGY_STORED_ITEM = TooltipAttachment.of(
 			(itemStack, item) ->

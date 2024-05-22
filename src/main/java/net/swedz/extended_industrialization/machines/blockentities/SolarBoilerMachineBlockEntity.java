@@ -93,7 +93,7 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 				new ProgressBar.Parameters(BURNING_PROGRESS_X, BURNING_PROGRESS_Y, "furnace", true),
 				() -> this.getEfficiency(false)
 		));
-		this.registerGuiComponent(new SolarEfficiencyBar.Server(
+		this.registerGuiComponent(SolarEfficiencyBar.Server.calcification(
 				new SolarEfficiencyBar.Parameters(SOLAR_EFFICIENCY_X, SOLAR_EFFICIENCY_Y),
 				sunlight::canOperate,
 				() -> (int) (this.getEfficiency(true) * 100),

@@ -14,6 +14,7 @@ import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.swedz.extended_industrialization.api.MCIdentifiable;
 import net.swedz.extended_industrialization.api.capabilities.CapabilitiesListeners;
 import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListeners;
+import net.swedz.extended_industrialization.attachments.EIAttachments;
 import net.swedz.extended_industrialization.datagen.DatagenDelegator;
 import net.swedz.extended_industrialization.datamaps.EIDataMaps;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
@@ -59,6 +60,7 @@ public final class EI
 		EIItems.init(bus);
 		EIBlocks.init(bus);
 		EIFluids.init(bus);
+		EIAttachments.init(bus);
 		EIOtherRegistries.init(bus);
 		
 		IsolatedListeners.init();
