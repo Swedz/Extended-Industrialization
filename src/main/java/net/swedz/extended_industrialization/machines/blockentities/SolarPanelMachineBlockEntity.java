@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.machines.blockentities;
 
 import aztech.modern_industrialization.MICapabilities;
+import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import aztech.modern_industrialization.api.machine.component.EnergyAccess;
@@ -21,6 +22,7 @@ import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -30,6 +32,8 @@ import net.swedz.extended_industrialization.machines.components.solar.SolarSunli
 import net.swedz.extended_industrialization.machines.components.solar.electric.SolarGeneratorComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
+import net.swedz.extended_industrialization.text.EIText;
+import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 
@@ -155,6 +159,21 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 			result = casing.onUse(this, player, hand);
 		}
 		return result;
+	}
+	
+	@Override
+	public List<Component> getTooltips()
+	{
+		List<Component> tooltips = Lists.newArrayList();
+		tooltips.add(
+				MITooltips.DEFAULT_PARSER.parse(EIText.SOLAR_PANEL_USE_PHOTOVOLTAIC_CELLS.text())
+		);
+		tooltips.add(
+				MITooltips.DEFAULT_PARSER.parse(EIText.SOLAR_PANEL_ACCEPTS_DISTILLED_WATER.text(
+						MITooltips.FLUID_PARSER.parse(EIFluids.DISTILLED_WATER.asFluid())
+				))
+		);
+		return tooltips;
 	}
 	
 	public static void registerEnergyApi(BlockEntityType<?> bet)

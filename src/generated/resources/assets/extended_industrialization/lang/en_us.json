@@ -91,6 +91,8 @@
   "text.extended_industrialization.processing_array_size": "Machines: %d",
   "text.extended_industrialization.solar_boiler_calcification": "Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Breaking and placing the boiler again will reset calcification.",
   "text.extended_industrialization.solar_efficiency": "Solar Efficiency : %d %%",
+  "text.extended_industrialization.solar_panel_accepts_distilled_water": "By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will deteriorate at half the speed!",
+  "text.extended_industrialization.solar_panel_use_photovoltaic_cells": "Energy generation rates are determined by how high the sun is in the sky and the type of Photovoltaic Cell used.",
   "text.extended_industrialization.universal_transformer_from_tier_input": "Casing for cable tier to convert from (LV by default).",
   "text.extended_industrialization.universal_transformer_to_tier_input": "Casing for cable tier to convert to (LV by default).",
   "text.extended_industrialization.water_pump_environment_0": "Invalid Pump Environment",
