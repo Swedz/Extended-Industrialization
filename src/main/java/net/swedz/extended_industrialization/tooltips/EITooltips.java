@@ -2,6 +2,7 @@ package net.swedz.extended_industrialization.tooltips;
 
 import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.EnergyApi;
+import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -10,7 +11,7 @@ import net.minecraft.world.item.BlockItem;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.datamaps.PhotovoltaicCell;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
-import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
+import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
 import net.swedz.extended_industrialization.registry.items.EIItems;
 import net.swedz.extended_industrialization.text.EIText;
 import org.apache.commons.compress.utils.Lists;
@@ -27,6 +28,12 @@ public final class EITooltips
 	
 	public static final Parser<Float> RATIO_PERCENTAGE_PARSER = (ratio) ->
 			Component.literal("%d%%".formatted((int) (ratio * 100))).withStyle(NUMBER_TEXT);
+	
+	public static final Parser<MachineRecipeType> MACHINE_RECIPE_TYPE_PARSER = (recipeType) ->
+			Component.translatable("recipe_type.%s.%s".formatted(recipeType.getId().getNamespace(), recipeType.getPath())).withStyle(NUMBER_TEXT);
+	
+	public static final Parser<EuCostTransformer> EU_COST_TRANSFORMER_PARSER = (euCostTransformer) ->
+			euCostTransformer.text().withStyle(NUMBER_TEXT);
 	
 	public static final Parser<Long> TICKS_TO_HOURS_PARSER = (ticks) ->
 			Component.literal("%.1f".formatted((float) ticks / (60 * 60 * 20))).withStyle(NUMBER_TEXT);
@@ -74,40 +81,6 @@ public final class EITooltips
 					return Optional.empty();
 				}
 			});
-	
-	// TODO combine the below tooltips into one, er- actually put it in the multiblock entity code itself
-	
-	public static final TooltipAttachment LARGE_STEAM_FURNACE = TooltipAttachment.ofMultilines(
-			EIBlocks.get("large_steam_furnace"),
-			List.of(
-					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_RECIPE.text(EIText.MACHINE_BATCHER_RECIPE_FURNACE.text().withStyle(NUMBER_TEXT))),
-					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_SIZE_AND_COST.text(DEFAULT_PARSER.parse(8), RATIO_PERCENTAGE_PARSER.parse(0.75f)))
-			)
-	);
-	
-	public static final TooltipAttachment LARGE_ELECTRIC_FURNACE = TooltipAttachment.ofMultilines(
-			EIBlocks.get("large_electric_furnace"),
-			List.of(
-					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_RECIPE.text(EIText.MACHINE_BATCHER_RECIPE_FURNACE.text().withStyle(NUMBER_TEXT))),
-					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_COILS.text())
-			)
-	);
-	
-	public static final TooltipAttachment LARGE_STEAM_MACERATOR = TooltipAttachment.ofMultilines(
-			EIBlocks.get("large_steam_macerator"),
-			List.of(
-					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_RECIPE.text(EIText.MACHINE_BATCHER_RECIPE_MACERATOR.text().withStyle(NUMBER_TEXT))),
-					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_SIZE_AND_COST.text(DEFAULT_PARSER.parse(8), RATIO_PERCENTAGE_PARSER.parse(0.75f)))
-			)
-	);
-	
-	public static final TooltipAttachment LARGE_ELECTRIC_MACERATOR = TooltipAttachment.ofMultilines(
-			EIBlocks.get("large_electric_macerator"),
-			List.of(
-					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_RECIPE.text(EIText.MACHINE_BATCHER_RECIPE_MACERATOR.text().withStyle(NUMBER_TEXT))),
-					DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_SIZE_AND_COST.text(DEFAULT_PARSER.parse(16), RATIO_PERCENTAGE_PARSER.parse(0.75f)))
-			)
-	);
 	
 	public static final TooltipAttachment PHOTOVOLTAIC_CELLS = TooltipAttachment.ofMultilines(
 			(itemStack, item) ->

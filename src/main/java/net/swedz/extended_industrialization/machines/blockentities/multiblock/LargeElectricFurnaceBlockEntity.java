@@ -17,7 +17,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.datamaps.LargeElectricFurnaceTier;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.ElectricMultipliedCraftingMultiblockBlockEntity;
-import net.swedz.extended_industrialization.machines.components.craft.multiplied.MultipliedCrafterComponent;
+import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
+import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformers;
+import net.swedz.extended_industrialization.text.EIText;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.Collections;
@@ -27,13 +29,19 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static aztech.modern_industrialization.MITooltips.*;
 import static aztech.modern_industrialization.machines.models.MachineCasings.*;
+import static net.swedz.extended_industrialization.tooltips.EITooltips.*;
 
 public final class LargeElectricFurnaceBlockEntity extends ElectricMultipliedCraftingMultiblockBlockEntity
 {
 	public LargeElectricFurnaceBlockEntity(BEP bep)
 	{
-		super(bep, "large_electric_furnace", SHAPE_TEMPLATES, () -> MIMachineRecipeTypes.FURNACE, null, null, MachineTier.MULTIBLOCK);
+		super(
+				bep, "large_electric_furnace", SHAPE_TEMPLATES,
+				() -> MIMachineRecipeTypes.FURNACE, null, null,
+				MachineTier.MULTIBLOCK
+		);
 		
 		List<Component> tierComponents = TIERS.stream().map(LargeElectricFurnaceBlockEntity.Tier::getDisplayName).toList();
 		
@@ -68,9 +76,18 @@ public final class LargeElectricFurnaceBlockEntity extends ElectricMultipliedCra
 	}
 	
 	@Override
-	protected long transformEuCost(long eu)
+	protected EuCostTransformer getEuCostTransformer()
 	{
-		return MultipliedCrafterComponent.EuCostTransformer.scaledMultiplyBy((long) (crafter.getMaxMultiplier() * this.getActiveTier().euCostMultiplier())).transform(crafter, eu);
+		return EuCostTransformers.percentage(() -> this.getActiveTier().euCostMultiplier());
+	}
+	
+	@Override
+	public List<Component> getTooltips()
+	{
+		return List.of(
+				DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_RECIPE.text(MACHINE_RECIPE_TYPE_PARSER.parse(this.getRecipeType()))),
+				DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_COILS.text())
+		);
 	}
 	
 	private static List<Tier>                  TIERS           = List.of();

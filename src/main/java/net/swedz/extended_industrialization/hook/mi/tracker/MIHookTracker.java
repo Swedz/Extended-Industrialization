@@ -36,26 +36,21 @@ public final class MIHookTracker
 	
 	public static void addLanguageEntry(Consumer<LanguageProvider> action)
 	{
-		if(!OPEN)
-		{
-			throw new IllegalStateException("Tried to add language entry while the tracker was closed.");
-		}
-		
 		LANGUAGE.add(action);
 	}
 	
-	public static void addMachineRecipeTypeLanguageEntry(String id, String englishName)
+	public static void addMachineRecipeTypeLanguageEntry(String modId, String id, String englishName)
+	{
+		addLanguageEntry((provider) -> provider.add("recipe_type.%s.%s".formatted(modId, id), englishName));
+	}
+	
+	public static void addReiCategoryLanguageEntry(String id, String englishName)
 	{
 		addLanguageEntry((provider) -> provider.add("rei_categories.%s.%s".formatted(MI.ID, id), englishName));
 	}
 	
 	public static void addMachineModel(String id, MachineCasing defaultCasing, String overlay, boolean front, boolean top, boolean side, boolean active)
 	{
-		if(!OPEN)
-		{
-			throw new IllegalStateException("Tried to add machine block model entry while the tracker was closed.");
-		}
-		
 		MACHINE_MODELS.put(id, new MachineModelProperties(defaultCasing, overlay, front, top, side, active));
 	}
 	

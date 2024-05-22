@@ -18,7 +18,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.swedz.extended_industrialization.api.EILubricantHelper;
-import net.swedz.extended_industrialization.machines.components.craft.multiplied.MultipliedCrafterComponent;
+import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class ElectricMultipliedCraftingMultiblockBlockEntity extends AbstractMul
 	private final List<EnergyComponent> energyInputs = Lists.newArrayList();
 	
 	public ElectricMultipliedCraftingMultiblockBlockEntity(BEP bep, String name, ShapeTemplate[] shapeTemplates,
-														   Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter, MultipliedCrafterComponent.EuCostTransformer euCostTransformer,
+														   Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter, EuCostTransformer euCostTransformer,
 														   MachineTier machineTier)
 	{
 		super(bep, name, shapeTemplates, recipeTypeGetter, maxMultiplierGetter, euCostTransformer);

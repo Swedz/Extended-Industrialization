@@ -20,6 +20,7 @@ import aztech.modern_industrialization.machines.multiblocks.HatchType;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
+import com.google.common.collect.Maps;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.hook.mi.MIMachineHookHelper;
@@ -37,13 +38,14 @@ import net.swedz.extended_industrialization.machines.blockentities.multiblock.fa
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.SteamFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.ElectricMultipliedCraftingMultiblockBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.SteamMultipliedCraftingMultiblockBlockEntity;
-import net.swedz.extended_industrialization.machines.components.craft.multiplied.MultipliedCrafterComponent;
+import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformers;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.wastecollector.WasteCollectorBehavior;
 import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 
 import java.util.List;
+import java.util.Map;
 
 import static aztech.modern_industrialization.machines.init.SingleBlockCraftingMachines.*;
 import static aztech.modern_industrialization.machines.models.MachineCasings.*;
@@ -106,7 +108,7 @@ public final class EIMachines
 					BRONZE_PLATED_BRICKS, true, false, false,
 					(bep) -> new SteamMultipliedCraftingMultiblockBlockEntity(
 							bep, "large_steam_furnace", new ShapeTemplate[]{shape},
-							() -> MIMachineRecipeTypes.FURNACE, () -> 8, MultipliedCrafterComponent.EuCostTransformer.scaledMultiplyBy(6),
+							() -> MIMachineRecipeTypes.FURNACE, () -> 8, EuCostTransformers.percentage(() -> 0.75f),
 							OverclockComponent.getDefaultCatalysts()
 					)
 			);
@@ -133,7 +135,7 @@ public final class EIMachines
 					BRONZE_PLATED_BRICKS, true, false, false,
 					(bep) -> new SteamMultipliedCraftingMultiblockBlockEntity(
 							bep, "large_steam_macerator", new ShapeTemplate[]{shape},
-							() -> MIMachineRecipeTypes.MACERATOR, () -> 8, MultipliedCrafterComponent.EuCostTransformer.scaledMultiplyBy(6),
+							() -> MIMachineRecipeTypes.MACERATOR, () -> 8, EuCostTransformers.percentage(() -> 0.75f),
 							OverclockComponent.getDefaultCatalysts()
 					)
 			);
@@ -151,7 +153,7 @@ public final class EIMachines
 					Casings.STEEL_PLATED_BRICKS, true, false, false,
 					(bep) -> new ElectricMultipliedCraftingMultiblockBlockEntity(
 							bep, "large_electric_macerator", new ShapeTemplate[]{shape},
-							() -> MIMachineRecipeTypes.MACERATOR, () -> 16, MultipliedCrafterComponent.EuCostTransformer.scaledMultiplyBy(12),
+							() -> MIMachineRecipeTypes.MACERATOR, () -> 16, EuCostTransformers.percentage(() -> 0.75f),
 							MachineTier.MULTIBLOCK
 					)
 			);
@@ -169,14 +171,28 @@ public final class EIMachines
 				ALLOY_SMELTER,
 				CANNING_MACHINE,
 				COMPOSTER;
+		
+		private static final Map<MachineRecipeType, String> RECIPE_TYPE_NAMES = Maps.newHashMap();
+		
+		public static Map<MachineRecipeType, String> getNames()
+		{
+			return RECIPE_TYPE_NAMES;
+		}
+		
+		private static MachineRecipeType create(String englishName, String id)
+		{
+			MachineRecipeType recipeType = MIMachineRecipeTypes.create(id);
+			RECIPE_TYPE_NAMES.put(recipeType, englishName);
+			return recipeType;
+		}
 	}
 	
 	public static void recipeTypes()
 	{
-		RecipeTypes.BENDING_MACHINE = MIMachineRecipeTypes.create("bending_machine").withItemInputs().withItemOutputs();
-		RecipeTypes.ALLOY_SMELTER = MIMachineRecipeTypes.create("alloy_smelter").withItemInputs().withItemOutputs();
-		RecipeTypes.CANNING_MACHINE = MIMachineRecipeTypes.create("canning_machine").withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
-		RecipeTypes.COMPOSTER = MIMachineRecipeTypes.create("composter").withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
+		RecipeTypes.BENDING_MACHINE = RecipeTypes.create("Bending Machine", "bending_machine").withItemInputs().withItemOutputs();
+		RecipeTypes.ALLOY_SMELTER = RecipeTypes.create("Alloy Smelter", "alloy_smelter").withItemInputs().withItemOutputs();
+		RecipeTypes.CANNING_MACHINE = RecipeTypes.create("Canning Machine", "canning_machine").withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
+		RecipeTypes.COMPOSTER = RecipeTypes.create("Composter", "composter").withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
 	}
 	
 	public static void singleBlockCrafting()

@@ -9,8 +9,10 @@ import aztech.modern_industrialization.machines.guicomponents.ReiSlotLocking;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import aztech.modern_industrialization.util.TextHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
+import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.MultipliedCrafterComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGui;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGuiLine;
@@ -22,16 +24,19 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import static aztech.modern_industrialization.MITooltips.*;
+import static net.swedz.extended_industrialization.tooltips.EITooltips.*;
+
 public abstract class AbstractMultipliedCraftingMultiblockBlockEntity extends BasicMultiblockMachineBlockEntity implements CrafterComponentHolder, ModularCrafterAccessBehavior
 {
 	protected final Supplier<MachineRecipeType> recipeTypeGetter;
-	protected final Supplier<Integer> maxMultiplierGetter;
-	protected final MultipliedCrafterComponent.EuCostTransformer euCostTransformer;
+	protected final Supplier<Integer>           maxMultiplierGetter;
+	protected final EuCostTransformer           euCostTransformer;
 	
 	protected final MultipliedCrafterComponent crafter;
 	
 	public AbstractMultipliedCraftingMultiblockBlockEntity(BEP bep, String name, ShapeTemplate[] shapeTemplates,
-														   Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter, MultipliedCrafterComponent.EuCostTransformer euCostTransformer)
+														   Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter, EuCostTransformer euCostTransformer)
 	{
 		super(bep, new MachineGuiParameters.Builder(name, false).backgroundHeight(200).build(), shapeTemplates);
 		
@@ -41,7 +46,7 @@ public abstract class AbstractMultipliedCraftingMultiblockBlockEntity extends Ba
 		
 		this.crafter = new MultipliedCrafterComponent(
 				this, inventory, this,
-				this::getRecipeType, this::getMaxMultiplier, (c, eu) -> this.transformEuCost(eu)
+				this::getRecipeType, this::getMaxMultiplier, this::getEuCostTransformer
 		);
 		
 		this.registerComponents(crafter);
@@ -89,9 +94,14 @@ public abstract class AbstractMultipliedCraftingMultiblockBlockEntity extends Ba
 		return maxMultiplierGetter.get();
 	}
 	
+	protected EuCostTransformer getEuCostTransformer()
+	{
+		return euCostTransformer;
+	}
+	
 	protected long transformEuCost(long eu)
 	{
-		return euCostTransformer.transform(crafter, eu);
+		return this.getEuCostTransformer().transform(crafter, eu);
 	}
 	
 	@Override
@@ -149,5 +159,14 @@ public abstract class AbstractMultipliedCraftingMultiblockBlockEntity extends Ba
 	
 	public void tickExtra()
 	{
+	}
+	
+	@Override
+	public List<Component> getTooltips()
+	{
+		return List.of(
+				DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_RECIPE.text(MACHINE_RECIPE_TYPE_PARSER.parse(this.getRecipeType()))),
+				DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_SIZE_AND_COST.text(DEFAULT_PARSER.parse(this.getMaxMultiplier()), EU_COST_TRANSFORMER_PARSER.parse(this.getEuCostTransformer())))
+		);
 	}
 }

@@ -48,7 +48,7 @@ public class InterceptRegisterSingleBlockMachineReiTiersMixin
 							recipe -> recipe.getType() == recipeType && minEu <= recipe.eu && recipe.eu <= maxEu, false,
 							i < 2 ? SteamMode.BOTH : SteamMode.ELECTRIC_ONLY
 					);
-					MIHookTracker.addMachineRecipeTypeLanguageEntry(itemId, fullEnglishName);
+					MIHookTracker.addReiCategoryLanguageEntry(itemId, fullEnglishName);
 					ReiMachineRecipes.registerCategory(itemId, category);
 					ReiMachineRecipes.registerMachineClickArea(itemId, categoryParams.progressBarParams.toRectangle());
 					previousCategories.add(category);
@@ -62,6 +62,10 @@ public class InterceptRegisterSingleBlockMachineReiTiersMixin
 			}
 			
 			callback.cancel();
+		}
+		else
+		{
+			MIHookTracker.addMachineRecipeTypeLanguageEntry(recipeType.getId().getNamespace(), recipeType.getPath(), englishName);
 		}
 	}
 }

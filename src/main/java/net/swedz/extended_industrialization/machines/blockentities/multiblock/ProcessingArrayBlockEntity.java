@@ -12,16 +12,18 @@ import aztech.modern_industrialization.machines.multiblocks.HatchType;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.ElectricMultipliedCraftingMultiblockBlockEntity;
-import net.swedz.extended_industrialization.machines.components.craft.multiplied.MultipliedCrafterComponent;
+import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformers;
 import net.swedz.extended_industrialization.machines.components.craft.processingarray.ProcessingArrayMachineComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot.ProcessingArrayMachineSlot;
 import net.swedz.extended_industrialization.machines.multiblock.members.PredicateSimpleMember;
 import net.swedz.extended_industrialization.registry.tags.EITags;
 import net.swedz.extended_industrialization.text.EIText;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
 public final class ProcessingArrayBlockEntity extends ElectricMultipliedCraftingMultiblockBlockEntity
@@ -30,7 +32,7 @@ public final class ProcessingArrayBlockEntity extends ElectricMultipliedCrafting
 	
 	public ProcessingArrayBlockEntity(BEP bep)
 	{
-		super(bep, "processing_array", SHAPE_TEMPLATES, null, null, MultipliedCrafterComponent.EuCostTransformer.MULTIPLY_BY_RECIPE_MULTIPLIER, MachineTier.LV);
+		super(bep, "processing_array", SHAPE_TEMPLATES, null, null, EuCostTransformers.FULL_COST, MachineTier.LV);
 		
 		this.machines = new ProcessingArrayMachineComponent();
 		
@@ -86,6 +88,12 @@ public final class ProcessingArrayBlockEntity extends ElectricMultipliedCrafting
 	private int getMachineStackSize(int sizeIndex)
 	{
 		return (int) (BASE_MACHINES * Math.pow(MULT_MACHINES, sizeIndex));
+	}
+	
+	@Override
+	public List<Component> getTooltips()
+	{
+		return List.of();
 	}
 	
 	private static final int MAX_MACHINES  = 64;

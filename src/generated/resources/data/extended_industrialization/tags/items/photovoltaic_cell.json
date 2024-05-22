@@ -1,9 +1,9 @@
 {
   "values": [
     "extended_industrialization:lv_photovoltaic_cell",
-    "extended_industrialization:mv_photovoltaic_cell",
+    "extended_industrialization:ev_photovoltaic_cell",
     "extended_industrialization:hv_photovoltaic_cell",
-    "extended_industrialization:perfected_photovoltaic_cell",
-    "extended_industrialization:ev_photovoltaic_cell"
+    "extended_industrialization:mv_photovoltaic_cell",
+    "extended_industrialization:perfected_photovoltaic_cell"
   ]
 }

@@ -13,7 +13,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.swedz.extended_industrialization.machines.components.craft.multiplied.MultipliedCrafterComponent;
+import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
+import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -25,7 +26,7 @@ public class SteamMultipliedCraftingMultiblockBlockEntity extends AbstractMultip
 	private boolean steel;
 	
 	public SteamMultipliedCraftingMultiblockBlockEntity(BEP bep, String name, ShapeTemplate[] shapeTemplates,
-														Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter, MultipliedCrafterComponent.EuCostTransformer euCostTransformer,
+														Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter, EuCostTransformer euCostTransformer,
 														List<OverclockComponent.Catalyst> overclockCatalysts)
 	{
 		super(bep, name, shapeTemplates, recipeTypeGetter, maxMultiplierGetter, euCostTransformer);
@@ -51,7 +52,10 @@ public class SteamMultipliedCraftingMultiblockBlockEntity extends AbstractMultip
 	@Override
 	public List<Component> getTooltips()
 	{
-		return overclock.getTooltips();
+		List<Component> tooltips = Lists.newArrayList();
+		tooltips.addAll(overclock.getTooltips());
+		tooltips.addAll(super.getTooltips());
+		return tooltips;
 	}
 	
 	@Override

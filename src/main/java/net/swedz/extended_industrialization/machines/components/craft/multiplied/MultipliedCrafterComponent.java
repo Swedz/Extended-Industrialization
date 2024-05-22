@@ -53,7 +53,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 	
 	private final Supplier<MachineRecipeType> recipeTypeGetter;
 	private final Supplier<Integer>           maxMultiplierGetter;
-	private final EuCostTransformer           euCostTransformer;
+	private final Supplier<EuCostTransformer> euCostTransformer;
 	
 	private RecipeHolder<MachineRecipe> activeRecipe = null;
 	private ResourceLocation            delayedActiveRecipe;
@@ -74,7 +74,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 	private int lastForcedTick = 0;
 	
 	public MultipliedCrafterComponent(MachineBlockEntity blockEntity, MultiblockInventoryComponent inventory, ModularCrafterAccessBehavior behavior,
-									  Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter, EuCostTransformer euCostTransformer)
+									  Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter, Supplier<EuCostTransformer> euCostTransformer)
 	{
 		this.inventory = inventory;
 		this.behavior = behavior;
@@ -94,22 +94,9 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 		return maxMultiplierGetter.get();
 	}
 	
-	public interface EuCostTransformer
-	{
-		EuCostTransformer UNCHANGED                     = (crafter, eu) -> eu;
-		EuCostTransformer MULTIPLY_BY_RECIPE_MULTIPLIER = (crafter, eu) -> eu * crafter.getRecipeMultiplier();
-		
-		static EuCostTransformer scaledMultiplyBy(long multiplier)
-		{
-			return (crafter, eu) -> (long) (eu * multiplier * ((double) crafter.getRecipeMultiplier() / crafter.getMaxMultiplier()));
-		}
-		
-		long transform(MultipliedCrafterComponent crafter, long eu);
-	}
-	
 	public long transformEuCost(long eu)
 	{
-		return euCostTransformer.transform(this, eu);
+		return euCostTransformer.get().transform(this, eu);
 	}
 	
 	@Override
