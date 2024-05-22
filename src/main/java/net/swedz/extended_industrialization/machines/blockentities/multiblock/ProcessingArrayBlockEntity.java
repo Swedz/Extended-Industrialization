@@ -15,7 +15,8 @@ import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
-import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.ElectricMultipliedCraftingMultiblockBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.AbstractElectricMultipliedCraftingMultiblockBlockEntity;
+import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformers;
 import net.swedz.extended_industrialization.machines.components.craft.processingarray.ProcessingArrayMachineComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot.ProcessingArrayMachineSlot;
@@ -26,13 +27,13 @@ import net.swedz.extended_industrialization.text.EIText;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public final class ProcessingArrayBlockEntity extends ElectricMultipliedCraftingMultiblockBlockEntity
+public final class ProcessingArrayBlockEntity extends AbstractElectricMultipliedCraftingMultiblockBlockEntity
 {
 	private final ProcessingArrayMachineComponent machines;
 	
 	public ProcessingArrayBlockEntity(BEP bep)
 	{
-		super(bep, "processing_array", SHAPE_TEMPLATES, null, null, EuCostTransformers.FULL_COST, MachineTier.LV);
+		super(bep, "processing_array", SHAPE_TEMPLATES, MachineTier.LV);
 		
 		this.machines = new ProcessingArrayMachineComponent();
 		
@@ -74,15 +75,21 @@ public final class ProcessingArrayBlockEntity extends ElectricMultipliedCrafting
 	}
 	
 	@Override
-	protected MachineRecipeType getRecipeType()
+	public MachineRecipeType getRecipeType()
 	{
 		return machines.getMachineRecipeType();
 	}
 	
 	@Override
-	protected int getMaxMultiplier()
+	public int getMaxMultiplier()
 	{
 		return machines.getMachineCount();
+	}
+	
+	@Override
+	public EuCostTransformer getEuCostTransformer()
+	{
+		return EuCostTransformers.FULL_COST;
 	}
 	
 	private int getMachineStackSize(int sizeIndex)

@@ -11,12 +11,13 @@ import aztech.modern_industrialization.machines.multiblocks.HatchFlags;
 import aztech.modern_industrialization.machines.multiblocks.HatchType;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
+import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import com.google.common.collect.Maps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.datamaps.LargeElectricFurnaceTier;
-import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.ElectricMultipliedCraftingMultiblockBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.AbstractElectricMultipliedCraftingMultiblockBlockEntity;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformers;
 import net.swedz.extended_industrialization.text.EIText;
@@ -33,15 +34,11 @@ import static aztech.modern_industrialization.MITooltips.*;
 import static aztech.modern_industrialization.machines.models.MachineCasings.*;
 import static net.swedz.extended_industrialization.tooltips.EITooltips.*;
 
-public final class LargeElectricFurnaceBlockEntity extends ElectricMultipliedCraftingMultiblockBlockEntity
+public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMultipliedCraftingMultiblockBlockEntity
 {
 	public LargeElectricFurnaceBlockEntity(BEP bep)
 	{
-		super(
-				bep, "large_electric_furnace", SHAPE_TEMPLATES,
-				() -> MIMachineRecipeTypes.FURNACE, null, null,
-				MachineTier.MULTIBLOCK
-		);
+		super(bep, "large_electric_furnace", SHAPE_TEMPLATES, MachineTier.MULTIBLOCK);
 		
 		List<Component> tierComponents = TIERS.stream().map(LargeElectricFurnaceBlockEntity.Tier::getDisplayName).toList();
 		
@@ -70,13 +67,19 @@ public final class LargeElectricFurnaceBlockEntity extends ElectricMultipliedCra
 	}
 	
 	@Override
-	protected int getMaxMultiplier()
+	public MachineRecipeType getRecipeType()
+	{
+		return MIMachineRecipeTypes.FURNACE;
+	}
+	
+	@Override
+	public int getMaxMultiplier()
 	{
 		return this.getActiveTier().batchSize();
 	}
 	
 	@Override
-	protected EuCostTransformer getEuCostTransformer()
+	public EuCostTransformer getEuCostTransformer()
 	{
 		return EuCostTransformers.percentage(() -> this.getActiveTier().euCostMultiplier());
 	}

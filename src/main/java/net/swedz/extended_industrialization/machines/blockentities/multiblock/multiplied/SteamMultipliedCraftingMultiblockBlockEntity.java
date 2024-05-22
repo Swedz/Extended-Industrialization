@@ -2,84 +2,42 @@ package net.swedz.extended_industrialization.machines.blockentities.multiblock.m
 
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.components.OverclockComponent;
-import aztech.modern_industrialization.machines.helper.SteamHelper;
-import aztech.modern_industrialization.machines.multiblocks.HatchBlockEntity;
-import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
-import aztech.modern_industrialization.util.Simulation;
-import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
-import java.util.function.Supplier;
 
-public class SteamMultipliedCraftingMultiblockBlockEntity extends AbstractMultipliedCraftingMultiblockBlockEntity
+public class SteamMultipliedCraftingMultiblockBlockEntity extends AbstractSteamMultipliedCraftingMultiblockBlockEntity
 {
-	private final OverclockComponent overclock;
+	private final MachineRecipeType recipeType;
+	private final int               maxMultiplier;
+	private final EuCostTransformer euCostTransformer;
 	
-	private boolean steel;
-	
-	public SteamMultipliedCraftingMultiblockBlockEntity(BEP bep, String name, ShapeTemplate[] shapeTemplates,
-														Supplier<MachineRecipeType> recipeTypeGetter, Supplier<Integer> maxMultiplierGetter, EuCostTransformer euCostTransformer,
-														List<OverclockComponent.Catalyst> overclockCatalysts)
+	public SteamMultipliedCraftingMultiblockBlockEntity(BEP bep, String name, ShapeTemplate[] shapeTemplates, List<OverclockComponent.Catalyst> overclockCatalysts, MachineRecipeType recipeType, int maxMultiplier, EuCostTransformer euCostTransformer)
 	{
-		super(bep, name, shapeTemplates, recipeTypeGetter, maxMultiplierGetter, euCostTransformer);
+		super(bep, name, shapeTemplates, overclockCatalysts);
 		
-		overclock = new OverclockComponent(overclockCatalysts);
-		this.registerComponents(overclock);
+		this.recipeType = recipeType;
+		this.maxMultiplier = maxMultiplier;
+		this.euCostTransformer = euCostTransformer;
 	}
 	
 	@Override
-	public void onSuccessfulMatch(ShapeMatcher shapeMatcher)
+	public MachineRecipeType getRecipeType()
 	{
-		steel = false;
-		for(HatchBlockEntity hatch : shapeMatcher.getMatchedHatches())
-		{
-			if(hatch.upgradesToSteel())
-			{
-				steel = true;
-				break;
-			}
-		}
+		return recipeType;
 	}
 	
 	@Override
-	public List<Component> getTooltips()
+	public int getMaxMultiplier()
 	{
-		List<Component> tooltips = Lists.newArrayList();
-		tooltips.addAll(overclock.getTooltips());
-		tooltips.addAll(super.getTooltips());
-		return tooltips;
+		return maxMultiplier;
 	}
 	
 	@Override
-	protected InteractionResult onUse(Player player, InteractionHand hand, Direction face)
+	public EuCostTransformer getEuCostTransformer()
 	{
-		InteractionResult result = super.onUse(player, hand, face);
-		return !result.consumesAction() ? overclock.onUse(this, player, hand) : result;
-	}
-	
-	@Override
-	public long consumeEu(long max, Simulation simulation)
-	{
-		return SteamHelper.consumeSteamEu(inventory.getFluidInputs(), max, simulation);
-	}
-	
-	@Override
-	public long getBaseRecipeEu()
-	{
-		return overclock.getRecipeEu(steel ? 4 : 2);
-	}
-	
-	@Override
-	public long getMaxRecipeEu()
-	{
-		return this.getBaseRecipeEu();
+		return euCostTransformer;
 	}
 }

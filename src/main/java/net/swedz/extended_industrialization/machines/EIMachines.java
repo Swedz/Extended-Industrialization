@@ -108,8 +108,8 @@ public final class EIMachines
 					BRONZE_PLATED_BRICKS, true, false, false,
 					(bep) -> new SteamMultipliedCraftingMultiblockBlockEntity(
 							bep, "large_steam_furnace", new ShapeTemplate[]{shape},
-							() -> MIMachineRecipeTypes.FURNACE, () -> 8, EuCostTransformers.percentage(() -> 0.75f),
-							OverclockComponent.getDefaultCatalysts()
+							OverclockComponent.getDefaultCatalysts(),
+							MIMachineRecipeTypes.FURNACE, 8, EuCostTransformers.percentage(() -> 0.75f)
 					)
 			);
 			ReiMachineRecipes.registerMultiblockShape("large_steam_furnace", shape);
@@ -135,8 +135,8 @@ public final class EIMachines
 					BRONZE_PLATED_BRICKS, true, false, false,
 					(bep) -> new SteamMultipliedCraftingMultiblockBlockEntity(
 							bep, "large_steam_macerator", new ShapeTemplate[]{shape},
-							() -> MIMachineRecipeTypes.MACERATOR, () -> 8, EuCostTransformers.percentage(() -> 0.75f),
-							OverclockComponent.getDefaultCatalysts()
+							OverclockComponent.getDefaultCatalysts(),
+							MIMachineRecipeTypes.MACERATOR, 8, EuCostTransformers.percentage(() -> 0.75f)
 					)
 			);
 			ReiMachineRecipes.registerMultiblockShape("large_steam_macerator", shape);
@@ -153,8 +153,8 @@ public final class EIMachines
 					Casings.STEEL_PLATED_BRICKS, true, false, false,
 					(bep) -> new ElectricMultipliedCraftingMultiblockBlockEntity(
 							bep, "large_electric_macerator", new ShapeTemplate[]{shape},
-							() -> MIMachineRecipeTypes.MACERATOR, () -> 16, EuCostTransformers.percentage(() -> 0.75f),
-							MachineTier.MULTIBLOCK
+							MachineTier.MULTIBLOCK,
+							MIMachineRecipeTypes.MACERATOR, 16, EuCostTransformers.percentage(() -> 0.75f)
 					)
 			);
 			ReiMachineRecipes.registerMultiblockShape("large_electric_macerator", shape);
