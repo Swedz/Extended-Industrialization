@@ -35,10 +35,10 @@ public final class EITooltips
 	public static final Parser<EuCostTransformer> EU_COST_TRANSFORMER_PARSER = (euCostTransformer) ->
 			euCostTransformer.text().withStyle(NUMBER_TEXT);
 	
-	public static final Parser<Long> TICKS_TO_HOURS_PARSER = (ticks) ->
+	public static final Parser<Long> TICKS_TO_MINUTES_PARSER = (ticks) ->
 	{
-		float hours = (float) ticks / (60 * 60 * 20);
-		return Component.literal((hours % 1 == 0 ? "%.0f" : "%.2f").formatted(hours)).withStyle(NUMBER_TEXT);
+		float minutes = (float) ticks / (60 * 20);
+		return Component.literal("%.2f".formatted(minutes)).withStyle(NUMBER_TEXT);
 	};
 	
 	public static final TooltipAttachment ENERGY_STORED_ITEM = TooltipAttachment.of(
@@ -96,7 +96,7 @@ public final class EITooltips
 					if(!photovoltaicCell.lastsForever())
 					{
 						int solarTicksRemaining = photovoltaicCell.getSolarTicksRemaining(itemStack);
-						lines.add(DEFAULT_PARSER.parse(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_HOURS.text(TICKS_TO_HOURS_PARSER.parse((long) solarTicksRemaining))));
+						lines.add(DEFAULT_PARSER.parse(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_MINUTES.text(TICKS_TO_MINUTES_PARSER.parse((long) solarTicksRemaining))));
 					}
 					else
 					{

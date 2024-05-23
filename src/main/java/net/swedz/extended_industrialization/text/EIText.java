@@ -38,7 +38,7 @@ public enum EIText
 	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default)."),
 	PHOTOVOLTAIC_CELL_EU("Will produce up to %s when placed in a Solar Panel."),
 	PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME("Remaining Operation Time : %s"),
-	PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_HOURS("Remaining Operation Time : %s hour(s)"),
+	PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_MINUTES("Remaining Operation Time : %s minute(s)"),
 	GENERATING_EU_PER_TICK("Generating : %d EU/t"),
 	SOLAR_PANEL_USE_PHOTOVOLTAIC_CELLS("Energy generation rates are determined by how high the sun is in the sky and the type of Photovoltaic Cell used."),
 	SOLAR_PANEL_ACCEPTS_DISTILLED_WATER("By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will deteriorate at half the speed!");

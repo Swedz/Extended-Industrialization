@@ -71,6 +71,7 @@ public final class SolarGeneratorComponent implements IComponent.ServerOnly
 		else
 		{
 			photovoltaicCell = null;
+			slotCell.setAmount(0);
 			slotCell.setKey(ItemVariant.blank());
 		}
 	}

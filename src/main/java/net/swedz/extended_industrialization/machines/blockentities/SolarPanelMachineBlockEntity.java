@@ -109,7 +109,7 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	
 	public float getEfficiency()
 	{
-		return sunlight.getClosenessToNoon();
+		return sunlight.getSolarEfficiency();
 	}
 	
 	@Override
@@ -140,7 +140,7 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 			return;
 		}
 		
-		if(redstoneControl.doAllowNormalOperation(this))
+		if(sunlight.canOperate() && redstoneControl.doAllowNormalOperation(this))
 		{
 			generator.tick();
 		}

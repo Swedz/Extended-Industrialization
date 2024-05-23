@@ -25,15 +25,29 @@ public final class SolarSunlightComponent implements IComponent.ServerOnly
 		return time >= 0 && time <= 12000;
 	}
 	
-	public float getClosenessToNoon()
+	public float getSolarEfficiency()
 	{
-		if(!this.isSolarTime())
+		if(!this.canOperate())
 		{
-			return 0f;
+			return 0;
 		}
 		long time = this.getTime();
-		long timeFromNoon = Math.abs(6000 - time);
-		return 1 - (timeFromNoon / 6000f);
+		if(time >= 4000 && time <= 8000)
+		{
+			return 1;
+		}
+		else if(time < 4000)
+		{
+			return (-1f / 16000000f) * time * time + (1f / 2000f) * time;
+		}
+		else if(time > 8000)
+		{
+			return (-1f / 16000000f) * time * time + (1f / 1000f) * time - 3f;
+		}
+		else
+		{
+			throw new IllegalStateException();
+		}
 	}
 	
 	public boolean hasSunlight()

@@ -80,7 +80,19 @@ public final class PhotovoltaicCellItem extends Item
 		{
 			int time = tick % dayLength;
 			long timeFromNoon = Math.abs(6000 - time);
-			float efficiency = 1 - (timeFromNoon / 6000f);
+			float efficiency = 0;
+			if(time >= 4000 && time <= 8000)
+			{
+				efficiency = 1;
+			}
+			else if(time < 4000)
+			{
+				efficiency = (-1f / 16000000f) * time * time + (1f / 2000f) * time;
+			}
+			else if(time > 8000)
+			{
+				efficiency = (-1f / 16000000f) * time * time + (1f / 1000f) * time - 3f;
+			}
 			energyProduced += (euPerTick * efficiency);
 		}
 		return energyProduced;

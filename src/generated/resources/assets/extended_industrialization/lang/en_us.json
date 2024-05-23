@@ -86,7 +86,7 @@
   "text.extended_industrialization.multiblock_status_inactive": "Status : Inactive",
   "text.extended_industrialization.photovoltaic_cell_eu": "Will produce up to %s when placed in a Solar Panel.",
   "text.extended_industrialization.photovoltaic_cell_remaining_operation_time": "Remaining Operation Time : %s",
-  "text.extended_industrialization.photovoltaic_cell_remaining_operation_time_hours": "Remaining Operation Time : %s hour(s)",
+  "text.extended_industrialization.photovoltaic_cell_remaining_operation_time_minutes": "Remaining Operation Time : %s minute(s)",
   "text.extended_industrialization.processing_array_machine_input": "Insert electric crafting machines to run in parallel.",
   "text.extended_industrialization.processing_array_size": "Machines: %d",
   "text.extended_industrialization.solar_boiler_calcification": "Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Breaking and placing the boiler again will reset calcification.",
