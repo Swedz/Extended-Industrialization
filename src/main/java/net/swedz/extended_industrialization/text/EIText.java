@@ -44,7 +44,11 @@ public enum EIText
 	GENERATING_EU_PER_TICK("Generating : %d EU/t"),
 	SOLAR_PANEL_PHOTOVOLTAIC_CELL("To produce energy, the Solar Panel needs a matching tier Photovoltaic Cell in its inventory."),
 	SOLAR_PANEL_SUNLIGHT("Energy generation rates are determined by how high the sun is in the sky and if the sky is visible."),
-	SOLAR_PANEL_DISTILLED_WATER("By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long!");
+	SOLAR_PANEL_DISTILLED_WATER("By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long!"),
+	STEAM_CHAINSAW_1("1) Right click still or flowing water to fill."),
+	STEAM_CHAINSAW_2("2) Place fuel inside the chainsaw (right click)."),
+	STEAM_CHAINSAW_3("3) Enjoy Silk Touch."),
+	STEAM_CHAINSAW_4("4) Toggle Silk Touch with shift-right click.");
 	
 	private final String englishText;
 	

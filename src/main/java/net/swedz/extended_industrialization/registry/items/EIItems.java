@@ -12,6 +12,7 @@ import net.swedz.extended_industrialization.registry.api.CommonCapabilities;
 import net.swedz.extended_industrialization.registry.api.CommonModelBuilders;
 import net.swedz.extended_industrialization.registry.items.items.ElectricToolItem;
 import net.swedz.extended_industrialization.registry.items.items.PhotovoltaicCellItem;
+import net.swedz.extended_industrialization.registry.items.items.SteamChainsawItem;
 import net.swedz.extended_industrialization.registry.items.items.TinCanFoodItem;
 import net.swedz.extended_industrialization.registry.tags.EITags;
 
@@ -41,8 +42,9 @@ public final class EIItems
 		Registry.init(bus);
 	}
 	
-	public static final ItemHolder<ElectricToolItem> ELETRIC_CHAINSAW     = create("electric_chainsaw", "Electric Chainsaw", (p) -> new ElectricToolItem(p, true), SortOrder.GEAR).tag(ItemTags.AXES).withCapabilities(CommonCapabilities::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
-	public static final ItemHolder<ElectricToolItem> ELETRIC_MINING_DRILL = create("electric_mining_drill", "Electric Mining Drill", (p) -> new ElectricToolItem(p, false), SortOrder.GEAR).tag(ItemTags.PICKAXES, ItemTags.SHOVELS).withCapabilities(CommonCapabilities::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
+	public static final ItemHolder<SteamChainsawItem> STEAM_CHAINSAW       = create("steam_chainsaw", "Steam Chainsaw", SteamChainsawItem::new, SortOrder.GEAR).tag(ItemTags.AXES).withModel(CommonModelBuilders::handheld).register();
+	public static final ItemHolder<ElectricToolItem>  ELETRIC_CHAINSAW     = create("electric_chainsaw", "Electric Chainsaw", (p) -> new ElectricToolItem(p, true), SortOrder.GEAR).tag(ItemTags.AXES).withCapabilities(CommonCapabilities::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
+	public static final ItemHolder<ElectricToolItem>  ELETRIC_MINING_DRILL = create("electric_mining_drill", "Electric Mining Drill", (p) -> new ElectricToolItem(p, false), SortOrder.GEAR).tag(ItemTags.PICKAXES, ItemTags.SHOVELS).withCapabilities(CommonCapabilities::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
 	
 	public static final ItemHolder<TinCanFoodItem> CANNED_FOOD = create("canned_food", "Canned Food", TinCanFoodItem::new, SortOrder.OTHER_GEAR).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).meat().fast().build())).withModel(CommonModelBuilders::generated).register();
 	public static final ItemHolder<Item>           TIN_CAN     = create("tin_can", "Tin Can", Item::new, SortOrder.OTHER_GEAR).withModel(CommonModelBuilders::generated).register();

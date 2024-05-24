@@ -107,6 +107,16 @@ public final class EITooltips
 				return Optional.empty();
 			});
 	
+	public static final TooltipAttachment STEAM_CHAINSAW = TooltipAttachment.ofMultilines(
+			EIItems.STEAM_CHAINSAW,
+			List.of(
+					EIText.STEAM_CHAINSAW_1.text(),
+					EIText.STEAM_CHAINSAW_2.text(),
+					EIText.STEAM_CHAINSAW_3.text(),
+					EIText.STEAM_CHAINSAW_4.text()
+			)
+	);
+	
 	public static void init()
 	{
 	}
