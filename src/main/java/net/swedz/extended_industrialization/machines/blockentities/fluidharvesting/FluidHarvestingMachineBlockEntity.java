@@ -1,6 +1,5 @@
 package net.swedz.extended_industrialization.machines.blockentities.fluidharvesting;
 
-import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
@@ -12,7 +11,6 @@ import aztech.modern_industrialization.machines.guicomponents.ProgressBar;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.nbt.CompoundTag;
-import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.api.EuConsumerBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehaviorCreator;
@@ -86,28 +84,23 @@ public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEnti
 			return;
 		}
 		
-		ConfigurableFluidStack fluidStack = this.getFluidHarvestingBehavior().getMachineBlockFluidStack();
-		if(fluidStack.getRemainingSpace() < FluidType.BUCKET_VOLUME / 5)
+		boolean active = false;
+		
+		if(this.getFluidHarvestingBehavior().canOperate())
 		{
-			this.updateActive(false);
-			return;
+			long eu = this.getFluidHarvestingBehavior().consumeEu(euCost);
+			active = eu > 0;
+			pumpingTicks += active ? 1 : 0;
+			this.updateActive(active);
+			
+			if(pumpingTicks == this.getFluidHarvestingBehavior().totalPumpingTicks())
+			{
+				this.getFluidHarvestingBehavior().operate();
+				pumpingTicks = 0;
+			}
 		}
-		
-		if(!this.getFluidHarvestingBehavior().canOperate())
+		else
 		{
-			pumpingTicks = 0;
-			this.updateActive(false);
-			return;
-		}
-		
-		long eu = this.getFluidHarvestingBehavior().consumeEu(euCost);
-		boolean active = eu > 0;
-		pumpingTicks += active ? 1 : 0;
-		this.updateActive(active);
-		
-		if(pumpingTicks == this.getFluidHarvestingBehavior().totalPumpingTicks())
-		{
-			this.getFluidHarvestingBehavior().operate();
 			pumpingTicks = 0;
 		}
 		
@@ -115,6 +108,8 @@ public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEnti
 		{
 			this.getInventory().autoExtractFluids(level, worldPosition, orientation.outputDirection);
 		}
+		
+		this.updateActive(active);
 		this.setChanged();
 	}
 	
