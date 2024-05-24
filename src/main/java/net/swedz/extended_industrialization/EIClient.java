@@ -11,11 +11,15 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.swedz.extended_industrialization.machines.renderer.solarpanel.SolarPanelGeometryLoader;
 import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = EI.ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -24,7 +28,10 @@ public final class EIClient
 	@SubscribeEvent
 	private static void init(FMLConstructModEvent __)
 	{
-		// Do nothing for now, but this could be useful
+		IEventBus bus = ModLoadingContext.get().getActiveContainer().getEventBus();
+		
+		bus.addListener(ModelEvent.RegisterGeometryLoaders.class, (event) ->
+				event.register(SolarPanelGeometryLoader.ID, SolarPanelGeometryLoader.INSTANCE));
 	}
 	
 	/**
