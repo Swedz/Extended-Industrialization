@@ -27,6 +27,8 @@ import net.swedz.extended_industrialization.text.EIText;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static aztech.modern_industrialization.MITooltips.*;
+
 public final class ProcessingArrayBlockEntity extends AbstractElectricMultipliedCraftingMultiblockBlockEntity
 {
 	private final ProcessingArrayMachineComponent machines;
@@ -100,7 +102,10 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 	@Override
 	public List<Component> getTooltips()
 	{
-		return List.of();
+		return List.of(
+				DEFAULT_PARSER.parse(EIText.PROCESSING_ARRAY_RECIPE.text()),
+				DEFAULT_PARSER.parse(EIText.PROCESSING_ARRAY_BATCH_SIZE.text())
+		);
 	}
 	
 	private static final int MAX_MACHINES  = 64;
