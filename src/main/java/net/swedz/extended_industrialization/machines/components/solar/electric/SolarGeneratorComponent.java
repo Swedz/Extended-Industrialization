@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
 import net.swedz.extended_industrialization.registry.items.items.PhotovoltaicCellItem;
 
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public final class SolarGeneratorComponent implements IComponent.ServerOnly
@@ -22,16 +23,18 @@ public final class SolarGeneratorComponent implements IComponent.ServerOnly
 	private final EnergyComponent energy;
 	
 	private final Supplier<Float> energyEfficiency;
+	private final Predicate<PhotovoltaicCellItem> photovoltaicCellTest;
 	
 	private int tick;
 	
 	private PhotovoltaicCellItem photovoltaicCell;
 	
-	public SolarGeneratorComponent(MIInventory inventory, EnergyComponent energy, Supplier<Float> energyEfficiency)
+	public SolarGeneratorComponent(MIInventory inventory, EnergyComponent energy, Supplier<Float> energyEfficiency, Predicate<PhotovoltaicCellItem> photovoltaicCellTest)
 	{
 		this.inventory = inventory;
 		this.energy = energy;
 		this.energyEfficiency = energyEfficiency;
+		this.photovoltaicCellTest = photovoltaicCellTest;
 	}
 	
 	private ConfigurableFluidStack getSlotWater()
@@ -84,7 +87,7 @@ public final class SolarGeneratorComponent implements IComponent.ServerOnly
 			tick = 1;
 		}
 		
-		if(this.getSlotPhotovoltaicCell().getResource().getItem() instanceof PhotovoltaicCellItem cellItem)
+		if(this.getSlotPhotovoltaicCell().getResource().getItem() instanceof PhotovoltaicCellItem cellItem && photovoltaicCellTest.test(cellItem))
 		{
 			photovoltaicCell = cellItem;
 			

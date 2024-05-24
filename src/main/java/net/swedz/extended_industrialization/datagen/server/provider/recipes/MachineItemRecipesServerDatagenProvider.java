@@ -445,6 +445,54 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		);
 	}
 	
+	private static void solarPanel(RecipeOutput output)
+	{
+		addBasicCraftingMachineRecipes(
+				"lv_solar_panel",
+				(builder) -> builder
+						.define('R', "modern_industrialization:tin_rod")
+						.define('C', "modern_industrialization:analog_circuit")
+						.define('F', MITags.FLUID_PIPES)
+						.define('H', "modern_industrialization:basic_machine_hull")
+						.define('c', "modern_industrialization:tin_cable")
+						.define('M', "modern_industrialization:motor")
+						.pattern("RCR")
+						.pattern("FHF")
+						.pattern("cMc"),
+				output
+		);
+		
+		addBasicCraftingMachineRecipes(
+				"mv_solar_panel",
+				(builder) -> builder
+						.define('R', "modern_industrialization:aluminum_rod")
+						.define('C', "modern_industrialization:electronic_circuit")
+						.define('F', MITags.FLUID_PIPES)
+						.define('H', "modern_industrialization:advanced_machine_hull")
+						.define('c', "modern_industrialization:electrum_cable")
+						.define('M', "modern_industrialization:large_motor")
+						.pattern("RCR")
+						.pattern("FHF")
+						.pattern("cMc"),
+				output
+		);
+		
+		addBasicCraftingMachineRecipes(
+				"hv_solar_panel",
+				(builder) -> builder
+						.define('R', "modern_industrialization:stainless_steel_rod")
+						.define('C', "modern_industrialization:digital_circuit")
+						.define('F', MITags.FLUID_PIPES)
+						.define('H', "modern_industrialization:turbo_machine_hull")
+						.define('c', "modern_industrialization:aluminum_cable")
+						.define('M', "modern_industrialization:advanced_motor")
+						.pattern("RCR")
+						.pattern("FHF")
+						.pattern("cMc"),
+				output
+		);
+	}
+	
 	@Override
 	protected void buildRecipes(RecipeOutput output)
 	{
@@ -461,5 +509,6 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		largeFurnace(output);
 		largeMacerator(output);
 		universalTransformer(output);
+		solarPanel(output);
 	}
 }

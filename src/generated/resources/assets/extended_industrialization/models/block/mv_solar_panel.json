@@ -1,0 +1,11 @@
+{
+  "casing": "mv",
+  "default_overlays": {
+    "fluid_auto": "modern_industrialization:block/overlays/fluid_auto",
+    "item_auto": "modern_industrialization:block/overlays/item_auto",
+    "output": "modern_industrialization:block/overlays/output",
+    "side": "extended_industrialization:block/machines/solar_panel/mv/overlay_side",
+    "top": "extended_industrialization:block/machines/solar_panel/mv/overlay_top"
+  },
+  "loader": "modern_industrialization:machine"
+}

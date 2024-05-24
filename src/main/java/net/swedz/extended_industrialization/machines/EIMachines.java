@@ -356,13 +356,19 @@ public final class EIMachines
 				UniversalTransformerMachineBlockEntity::registerEnergyApi
 		);
 		
-		MIMachineHookHelper.registerSingleBlockSpecialMachine(
-				"Solar Panel", "solar_panel", "solar_panel",
-				CableTier.LV.casing, false, true, false, false,
-				SolarPanelMachineBlockEntity::new,
-				MachineBlockEntity::registerItemApi,
-				MachineBlockEntity::registerFluidApi,
-				SolarPanelMachineBlockEntity::registerEnergyApi
-		);
+		for(CableTier tier : new CableTier[]{CableTier.LV, CableTier.MV, CableTier.HV})
+		{
+			String name = "%s Solar Panel".formatted(tier.shortEnglishName);
+			String id = "%s_solar_panel".formatted(tier.name);
+			String overlayFolder = "solar_panel/%s".formatted(tier.name);
+			MIMachineHookHelper.registerSingleBlockSpecialMachine(
+					name, id, overlayFolder,
+					tier.casing, false, true, true, false,
+					(bep) -> new SolarPanelMachineBlockEntity(bep, id, tier),
+					MachineBlockEntity::registerItemApi,
+					MachineBlockEntity::registerFluidApi,
+					SolarPanelMachineBlockEntity::registerEnergyApi
+			);
+		}
 	}
 }

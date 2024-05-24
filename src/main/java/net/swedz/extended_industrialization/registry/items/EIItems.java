@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.registry.items;
 
+import aztech.modern_industrialization.api.energy.CableTier;
 import com.google.common.collect.Sets;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.food.FoodProperties;
@@ -52,11 +53,11 @@ public final class EIItems
 	public static final ItemHolder<Item> MULCH          = create("mulch", "Mulch", Item::new, SortOrder.RESOURCES).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).fast().build())).withModel(CommonModelBuilders::generated).register();
 	public static final ItemHolder<Item> NETHERITE_DUST = create("netherite_dust", "Netherite Dust", Item::new, SortOrder.RESOURCES).tag(EITags.itemForge("dusts"), EITags.itemForge("dusts/netherite")).withModel(CommonModelBuilders::generated).register();
 	
-	public static final ItemHolder<PhotovoltaicCellItem> LV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("lv", "LV", 16, 10 * 60 * 20);
-	public static final ItemHolder<PhotovoltaicCellItem> MV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("mv", "MV", 64, 10 * 60 * 20);
-	public static final ItemHolder<PhotovoltaicCellItem> HV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("hv", "HV", 256, 10 * 60 * 20);
-	public static final ItemHolder<PhotovoltaicCellItem> EV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("ev", "EV", 1024, 10 * 60 * 20);
-	public static final ItemHolder<PhotovoltaicCellItem> PERFECTED_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("perfected", "Perfected", 4096, 0);
+	public static final ItemHolder<PhotovoltaicCellItem> LV_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("lv", "LV", CableTier.LV, 16, 10 * 60 * 20);
+	public static final ItemHolder<PhotovoltaicCellItem> MV_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("mv", "MV", CableTier.MV, 64, 10 * 60 * 20);
+	public static final ItemHolder<PhotovoltaicCellItem> HV_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("hv", "HV", CableTier.HV, 256, 10 * 60 * 20);
+	/*public static final ItemHolder<PhotovoltaicCellItem> EV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("ev", "EV", CableTier.EV, 1024, 10 * 60 * 20);
+	public static final ItemHolder<PhotovoltaicCellItem> PERFECTED_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("perfected", "Perfected", CableTier.SUPERCONDUCTOR, 4096, 0);*/
 	
 	public static Set<ItemHolder> values()
 	{
@@ -78,9 +79,9 @@ public final class EIItems
 		return holder;
 	}
 	
-	public static ItemHolder<PhotovoltaicCellItem> createPhotovoltaicCell(String id, String name, int euPerTick, int durationTicks)
+	public static ItemHolder<PhotovoltaicCellItem> createPhotovoltaicCell(String id, String name, CableTier tier, int euPerTick, int durationTicks)
 	{
-		return create("%s_photovoltaic_cell".formatted(id), "%s Photovoltaic Cell".formatted(name), (p) -> new PhotovoltaicCellItem(p, euPerTick, durationTicks), SortOrder.PARTS)
+		return create("%s_photovoltaic_cell".formatted(id), "%s Photovoltaic Cell".formatted(name), (p) -> new PhotovoltaicCellItem(p, tier, euPerTick, durationTicks), SortOrder.PARTS)
 				.withProperties((p) -> p.stacksTo(1))
 				.tag(EITags.item("photovoltaic_cell"))
 				.withModel(CommonModelBuilders::generated)

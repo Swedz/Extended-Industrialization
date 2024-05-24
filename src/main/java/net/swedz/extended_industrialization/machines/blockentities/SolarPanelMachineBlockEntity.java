@@ -2,6 +2,7 @@ package net.swedz.extended_industrialization.machines.blockentities;
 
 import aztech.modern_industrialization.MICapabilities;
 import aztech.modern_industrialization.MITooltips;
+import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import aztech.modern_industrialization.api.machine.component.EnergyAccess;
@@ -12,7 +13,6 @@ import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.inventory.SlotPositions;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
-import aztech.modern_industrialization.machines.components.CasingComponent;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
@@ -51,8 +51,9 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	private static final int SOLAR_EFFICIENCY_X = 38;
 	private static final int SOLAR_EFFICIENCY_Y = 75;
 	
+	private final CableTier tier;
+	
 	private final RedstoneControlComponent redstoneControl;
-	private final CasingComponent          casing;
 	
 	private final MIInventory inventory;
 	
@@ -62,18 +63,19 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	private final SolarSunlightComponent  sunlight;
 	private final SolarGeneratorComponent generator;
 	
-	public SolarPanelMachineBlockEntity(BEP bep)
+	public SolarPanelMachineBlockEntity(BEP bep, String blockName, CableTier tier)
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder("solar_panel", true).backgroundHeight(180).build(),
+				new MachineGuiParameters.Builder(blockName, true).backgroundHeight(180).build(),
 				new OrientationComponent.Params(false, false, false)
 		);
+		
+		this.tier = tier;
 		
 		long capacity = 32 * FluidType.BUCKET_VOLUME;
 		
 		redstoneControl = new RedstoneControlComponent();
-		casing = new CasingComponent();
 		
 		List<ConfigurableItemStack> itemStacks = List.of(
 				ConfigurableItemStack.standardInputSlot()
@@ -85,17 +87,16 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 		SlotPositions fluidPositions = new SlotPositions.Builder().addSlot(WATER_X, WATER_Y).build();
 		inventory = new MIInventory(itemStacks, fluidStacks, itemPositions, fluidPositions);
 		
-		energy = new EnergyComponent(this, casing::getEuCapacity);
-		extractable = energy.buildExtractable(casing::canInsertEu);
+		energy = new EnergyComponent(this, () -> tier.getEu() * 100);
+		extractable = energy.buildExtractable((otherTier) -> otherTier == tier);
 		
 		sunlight = new SolarSunlightComponent(this);
-		generator = new SolarGeneratorComponent(inventory, energy, this::getEfficiency);
+		generator = new SolarGeneratorComponent(inventory, energy, this::getEfficiency, (cell) -> cell.getTier() == tier);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(ENERGY_X, ENERGY_Y), energy::getEu, energy::getCapacity));
 		
 		this.registerGuiComponent(new SlotPanel.Server(this)
-				.withRedstoneControl(redstoneControl)
-				.withCasing(casing));
+				.withRedstoneControl(redstoneControl));
 		
 		this.registerGuiComponent(SolarEfficiencyBar.Server.energyProduced(
 				new SolarEfficiencyBar.Parameters(SOLAR_EFFICIENCY_X, SOLAR_EFFICIENCY_Y),
@@ -104,7 +105,7 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 				generator::getEnergyPerTick
 		));
 		
-		this.registerComponents(inventory, energy, redstoneControl, casing, sunlight, generator);
+		this.registerComponents(inventory, energy, redstoneControl, sunlight, generator);
 	}
 	
 	public float getEfficiency()
@@ -121,7 +122,7 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	@Override
 	protected MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
+		MachineModelClientData data = new MachineModelClientData(tier.casing);
 		orientation.writeModelData(data);
 		return data;
 	}
@@ -154,10 +155,6 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 		{
 			result = redstoneControl.onUse(this, player, hand);
 		}
-		if(!result.consumesAction())
-		{
-			result = casing.onUse(this, player, hand);
-		}
 		return result;
 	}
 	
@@ -165,11 +162,10 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	public List<Component> getTooltips()
 	{
 		List<Component> tooltips = Lists.newArrayList();
+		tooltips.add(MITooltips.DEFAULT_PARSER.parse(EIText.SOLAR_PANEL_PHOTOVOLTAIC_CELL.text()));
+		tooltips.add(MITooltips.DEFAULT_PARSER.parse(EIText.SOLAR_PANEL_SUNLIGHT.text()));
 		tooltips.add(
-				MITooltips.DEFAULT_PARSER.parse(EIText.SOLAR_PANEL_USE_PHOTOVOLTAIC_CELLS.text())
-		);
-		tooltips.add(
-				MITooltips.DEFAULT_PARSER.parse(EIText.SOLAR_PANEL_ACCEPTS_DISTILLED_WATER.text(
+				MITooltips.DEFAULT_PARSER.parse(EIText.SOLAR_PANEL_DISTILLED_WATER.text(
 						MITooltips.FLUID_PARSER.parse(EIFluids.DISTILLED_WATER.asFluid())
 				))
 		);

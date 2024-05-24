@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.registry.items.items;
 
+import aztech.modern_industrialization.api.energy.CableTier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -7,14 +8,21 @@ import net.swedz.extended_industrialization.attachments.EIAttachments;
 
 public final class PhotovoltaicCellItem extends Item
 {
+	private final CableTier tier;
 	private final int euPerTick;
 	private final int durationTicks;
 	
-	public PhotovoltaicCellItem(Properties properties, int euPerTick, int durationTicks)
+	public PhotovoltaicCellItem(Properties properties, CableTier tier, int euPerTick, int durationTicks)
 	{
 		super(properties.stacksTo(1).durability(0));
+		this.tier = tier;
 		this.euPerTick = euPerTick;
 		this.durationTicks = durationTicks;
+	}
+	
+	public CableTier getTier()
+	{
+		return tier;
 	}
 	
 	public int getEuPerTick()

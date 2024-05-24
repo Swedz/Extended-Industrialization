@@ -17,9 +17,7 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
-import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.swedz.extended_industrialization.machines.renderer.solarpanel.SolarPanelGeometryLoader;
 import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = EI.ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -29,9 +27,6 @@ public final class EIClient
 	private static void init(FMLConstructModEvent __)
 	{
 		IEventBus bus = ModLoadingContext.get().getActiveContainer().getEventBus();
-		
-		bus.addListener(ModelEvent.RegisterGeometryLoaders.class, (event) ->
-				event.register(SolarPanelGeometryLoader.ID, SolarPanelGeometryLoader.INSTANCE));
 	}
 	
 	/**

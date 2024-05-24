@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "extended_industrialization:block/lv_solar_panel"
+    }
+  }
+}

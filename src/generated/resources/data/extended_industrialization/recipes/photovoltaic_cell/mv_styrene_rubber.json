@@ -1,0 +1,35 @@
+{
+  "type": "modern_industrialization:assembler",
+  "duration": 800,
+  "eu": 8,
+  "fluid_inputs": [
+    {
+      "amount": 20,
+      "fluid": "modern_industrialization:styrene_butadiene_rubber"
+    }
+  ],
+  "item_inputs": [
+    {
+      "amount": 4,
+      "tag": "forge:glass_panes"
+    },
+    {
+      "amount": 1,
+      "item": "modern_industrialization:silicon_n_doped_plate"
+    },
+    {
+      "amount": 4,
+      "tag": "forge:plates/silver"
+    },
+    {
+      "amount": 1,
+      "item": "modern_industrialization:silicon_p_doped_plate"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "extended_industrialization:mv_photovoltaic_cell"
+    }
+  ]
+}

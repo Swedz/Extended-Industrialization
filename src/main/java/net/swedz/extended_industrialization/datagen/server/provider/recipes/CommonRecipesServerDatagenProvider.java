@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.datagen.server.provider.recipes;
 
+import aztech.modern_industrialization.MIFluids;
 import aztech.modern_industrialization.MIItem;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
 import aztech.modern_industrialization.materials.MIMaterials;
@@ -39,13 +40,83 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 	private static void photovoltaicCells(RecipeOutput output)
 	{
 		addMachineRecipe(
-				"packer/photovoltaic_cell", "lv", MIMachineRecipeTypes.PACKER,
+				"photovoltaic_cell", "lv", MIMachineRecipeTypes.PACKER,
 				4, 40 * 20,
 				(r) -> r
-						.addItemInput(EITags.itemForge("glass_panes"), 1)
+						.addItemInput(EITags.itemForge("glass_panes"), 4)
 						.addItemInput(EITags.itemForge("plates/silver"), 2)
 						.addItemInput("modern_industrialization:rubber_sheet", 4)
 						.addItemOutput(EIItems.LV_PHOTOVOLTAIC_CELL, 1),
+				output
+		);
+		addMachineRecipe(
+				"photovoltaic_cell", "lv_synthetic_rubber", MIMachineRecipeTypes.ASSEMBLER,
+				8, 40 * 20,
+				(r) -> r
+						.addItemInput(EITags.itemForge("glass_panes"), 4)
+						.addItemInput(EITags.itemForge("plates/silver"), 2)
+						.addFluidInput(MIFluids.SYNTHETIC_RUBBER, 20)
+						.addItemOutput(EIItems.LV_PHOTOVOLTAIC_CELL, 1),
+				output
+		);
+		addMachineRecipe(
+				"photovoltaic_cell", "lv_styrene_rubber", MIMachineRecipeTypes.ASSEMBLER,
+				8, 40 * 20,
+				(r) -> r
+						.addItemInput(EITags.itemForge("glass_panes"), 4)
+						.addItemInput(EITags.itemForge("plates/silver"), 2)
+						.addFluidInput(MIFluids.STYRENE_BUTADIENE_RUBBER, 4)
+						.addItemOutput(EIItems.LV_PHOTOVOLTAIC_CELL, 1),
+				output
+		);
+		
+		addMachineRecipe(
+				"photovoltaic_cell", "mv", MIMachineRecipeTypes.ASSEMBLER,
+				8, 40 * 20,
+				(r) -> r
+						.addItemInput(EITags.itemForge("glass_panes"), 4)
+						.addItemInput("modern_industrialization:silicon_n_doped_plate", 1)
+						.addItemInput(EITags.itemForge("plates/silver"), 4)
+						.addItemInput("modern_industrialization:silicon_p_doped_plate", 1)
+						.addFluidInput(MIFluids.SYNTHETIC_RUBBER, 100)
+						.addItemOutput(EIItems.MV_PHOTOVOLTAIC_CELL, 1),
+				output
+		);
+		addMachineRecipe(
+				"photovoltaic_cell", "mv_styrene_rubber", MIMachineRecipeTypes.ASSEMBLER,
+				8, 40 * 20,
+				(r) -> r
+						.addItemInput(EITags.itemForge("glass_panes"), 4)
+						.addItemInput("modern_industrialization:silicon_n_doped_plate", 1)
+						.addItemInput(EITags.itemForge("plates/silver"), 4)
+						.addItemInput("modern_industrialization:silicon_p_doped_plate", 1)
+						.addFluidInput(MIFluids.STYRENE_BUTADIENE_RUBBER, 20)
+						.addItemOutput(EIItems.MV_PHOTOVOLTAIC_CELL, 1),
+				output
+		);
+		
+		addMachineRecipe(
+				"photovoltaic_cell", "hv", MIMachineRecipeTypes.ASSEMBLER,
+				8, 40 * 20,
+				(r) -> r
+						.addItemInput(EITags.itemForge("glass_panes"), 4)
+						.addItemInput("modern_industrialization:silicon_wafer", 4)
+						.addItemInput(EITags.itemForge("plates/silver"), 8)
+						.addFluidInput(MIFluids.SYNTHETIC_RUBBER, 200)
+						.addFluidInput(MIFluids.POLYETHYLENE, 500)
+						.addItemOutput(EIItems.HV_PHOTOVOLTAIC_CELL, 1),
+				output
+		);
+		addMachineRecipe(
+				"photovoltaic_cell", "hv_styrene_rubber", MIMachineRecipeTypes.ASSEMBLER,
+				8, 40 * 20,
+				(r) -> r
+						.addItemInput(EITags.itemForge("glass_panes"), 4)
+						.addItemInput("modern_industrialization:silicon_wafer", 4)
+						.addItemInput(EITags.itemForge("plates/silver"), 8)
+						.addFluidInput(MIFluids.STYRENE_BUTADIENE_RUBBER, 40)
+						.addFluidInput(MIFluids.POLYETHYLENE, 500)
+						.addItemOutput(EIItems.HV_PHOTOVOLTAIC_CELL, 1),
 				output
 		);
 	}
