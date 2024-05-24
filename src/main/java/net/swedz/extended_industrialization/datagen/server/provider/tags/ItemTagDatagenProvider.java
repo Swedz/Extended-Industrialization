@@ -9,6 +9,7 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.registry.items.EIItems;
 import net.swedz.extended_industrialization.registry.items.ItemHolder;
 
+import java.util.Comparator;
 import java.util.concurrent.CompletableFuture;
 
 public final class ItemTagDatagenProvider extends ItemTagsProvider
@@ -21,7 +22,7 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 	@Override
 	protected void addTags(HolderLookup.Provider provider)
 	{
-		for(ItemHolder<?> item : EIItems.values())
+		for(ItemHolder<?> item : EIItems.values().stream().sorted(Comparator.comparing((item) -> item.identifier().id())).toList())
 		{
 			for(TagKey<Item> tag : item.tags())
 			{
