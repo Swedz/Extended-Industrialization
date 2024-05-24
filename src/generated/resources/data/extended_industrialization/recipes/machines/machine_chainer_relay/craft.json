@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "modern_industrialization:cupronickel_coil"
+    },
+    "F": {
+      "tag": "modern_industrialization:fluid_pipes"
+    },
+    "I": {
+      "tag": "modern_industrialization:item_pipes"
+    },
+    "P": {
+      "tag": "forge:plates/iron"
+    }
+  },
+  "pattern": [
+    "PPP",
+    "ICF",
+    "PPP"
+  ],
+  "result": {
+    "item": "extended_industrialization:machine_chainer_relay"
+  }
+}

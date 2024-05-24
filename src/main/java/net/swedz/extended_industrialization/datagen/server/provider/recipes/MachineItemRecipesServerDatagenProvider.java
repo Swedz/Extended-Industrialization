@@ -445,6 +445,37 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		);
 	}
 	
+	private static void machineChainer(RecipeOutput output)
+	{
+		addBasicCraftingMachineRecipes(
+				"machine_chainer",
+				(builder) -> builder
+						.define('M', "modern_industrialization:large_motor")
+						.define('I', MITags.ITEM_PIPES)
+						.define('U', "extended_industrialization:universal_transformer")
+						.define('H', "modern_industrialization:advanced_machine_hull")
+						.define('P', "modern_industrialization:large_pump")
+						.define('F', MITags.FLUID_PIPES)
+						.pattern("MIM")
+						.pattern("UHU")
+						.pattern("PFP"),
+				output
+		);
+		
+		addBasicCraftingMachineRecipes(
+				"machine_chainer_relay",
+				(builder) -> builder
+						.define('P', EITags.itemForge("plates/iron"))
+						.define('I', MITags.ITEM_PIPES)
+						.define('C', "modern_industrialization:cupronickel_coil")
+						.define('F', MITags.FLUID_PIPES)
+						.pattern("PPP")
+						.pattern("ICF")
+						.pattern("PPP"),
+				output
+		);
+	}
+	
 	private static void solarPanel(RecipeOutput output)
 	{
 		addBasicCraftingMachineRecipes(
@@ -509,6 +540,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		largeFurnace(output);
 		largeMacerator(output);
 		universalTransformer(output);
+		machineChainer(output);
 		solarPanel(output);
 	}
 }
