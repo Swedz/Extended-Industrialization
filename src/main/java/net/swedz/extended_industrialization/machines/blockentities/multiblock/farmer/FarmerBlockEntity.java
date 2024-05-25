@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluids;
 import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.components.farmer.PlantingMode;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerProcessRates;
@@ -195,7 +196,12 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 			return new ShapeWrapper(maxHeight);
 		}
 		
-		private static final SimpleMember DIRT = new PredicateSimpleMember((state) -> state.is(BlockTags.DIRT) || state.is(Blocks.FARMLAND), Blocks.DIRT);
+		private static final SimpleMember DIRT = new PredicateSimpleMember(
+				(state) ->
+						state.is(BlockTags.DIRT) || state.is(Blocks.FARMLAND) ||
+						state.getFluidState().is(Fluids.WATER) || state.getFluidState().is(Fluids.FLOWING_WATER),
+				Blocks.DIRT
+		);
 		
 		private final ShapeTemplate[]  shapeTemplates;
 		private final List<BlockPos>[] dirtPositions;
