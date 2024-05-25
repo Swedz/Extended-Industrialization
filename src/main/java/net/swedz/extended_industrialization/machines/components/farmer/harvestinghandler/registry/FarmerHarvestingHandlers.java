@@ -2,6 +2,7 @@ package net.swedz.extended_industrialization.machines.components.farmer.harvesti
 
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.HarvestingHandler;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.handlers.CropBlockHarvestHandler;
+import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.handlers.SimpleTallCropHarvestHandler;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.handlers.TreeBlockHarvestHandler;
 import org.apache.commons.compress.utils.Lists;
 
@@ -25,6 +26,7 @@ public final class FarmerHarvestingHandlers
 	static
 	{
 		register(CropBlockHarvestHandler::new);
+		register(SimpleTallCropHarvestHandler::new);
 		register(TreeBlockHarvestHandler::new);
 	}
 }

@@ -5,9 +5,12 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.datamaps.EIDataMaps;
+import net.swedz.extended_industrialization.datamaps.FarmerSimpleTallCropSize;
 import net.swedz.extended_industrialization.datamaps.FertilizerPotency;
 import net.swedz.extended_industrialization.datamaps.LargeElectricFurnaceTier;
 import net.swedz.extended_industrialization.datamaps.PotionBrewingCosts;
@@ -26,6 +29,9 @@ public final class DataMapDatagenProvider extends DataMapProvider
 	@Override
 	protected void gather()
 	{
+		this.addFarmerSimpleTallCropSize(Blocks.SUGAR_CANE, 3);
+		this.addFarmerSimpleTallCropSize(Blocks.CACTUS, 3);
+		
 		this.addFluidFertilizerPotency(EIFluids.MANURE, 25, 100);
 		this.addFluidFertilizerPotency(EIFluids.COMPOSTED_MANURE, 25, 50);
 		this.addFluidFertilizerPotency(EIFluids.NPK_FERTILIZER, 10, 10);
@@ -37,6 +43,16 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		{
 			this.addPotionBrewing(entry.getKey(), 4, 1000, 1, 10 * 20, 4);
 		}
+	}
+	
+	private void addFarmerSimpleTallCropSize(ResourceLocation block, int maxHeight)
+	{
+		this.builder(EIDataMaps.FARMER_SIMPLE_TALL_CROP_SIZE).add(block, new FarmerSimpleTallCropSize(maxHeight), false);
+	}
+	
+	private void addFarmerSimpleTallCropSize(Block block, int maxHeight)
+	{
+		this.addFarmerSimpleTallCropSize(BuiltInRegistries.BLOCK.getKey(block), maxHeight);
 	}
 	
 	private void addFluidFertilizerPotency(FluidHolder fluid, int tickRate, int mbToConsumePerFertilizerTick)

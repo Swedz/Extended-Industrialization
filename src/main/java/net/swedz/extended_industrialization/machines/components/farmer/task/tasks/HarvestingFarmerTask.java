@@ -34,6 +34,11 @@ public final class HarvestingFarmerTask extends FarmerTask
 	{
 		List<BlockPos> blockPositions = handler.getBlocks(context);
 		
+		if(blockPositions.size() == 0)
+		{
+			return false;
+		}
+		
 		try (Transaction transaction = Transaction.openOuter())
 		{
 			List<ItemStack> items = handler.getDrops(context);

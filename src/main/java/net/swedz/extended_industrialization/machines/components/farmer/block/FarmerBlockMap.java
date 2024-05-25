@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.machines.components.farmer.block;
 
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
-import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -11,14 +10,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public final class FarmerBlockMap implements Iterable<FarmerTile>
 {
 	private List<FarmerTile> tiles         = List.of();
 	private List<BlockPos>   dirtPositions = List.of();
-	
-	private final Map<BlockPos, FarmerTree> trees = Maps.newHashMap();
 	
 	public List<FarmerTile> tiles()
 	{
@@ -34,21 +30,6 @@ public final class FarmerBlockMap implements Iterable<FarmerTile>
 	public boolean containsDirtAt(BlockPos pos)
 	{
 		return dirtPositions.contains(pos);
-	}
-	
-	public Map<BlockPos, FarmerTree> trees()
-	{
-		return Map.copyOf(trees);
-	}
-	
-	public void addTree(BlockPos base, List<BlockPos> blocks)
-	{
-		trees.put(base, new FarmerTree(base, blocks));
-	}
-	
-	public FarmerTree popTree(FarmerBlock crop)
-	{
-		return trees.remove(crop.pos());
 	}
 	
 	public void fromOffsets(Level level, BlockPos controllerPos, Direction controllerDirection, List<BlockPos> offsets)

@@ -1,0 +1,10 @@
+{
+  "values": {
+    "minecraft:cactus": {
+      "max_height": 3
+    },
+    "minecraft:sugar_cane": {
+      "max_height": 3
+    }
+  }
+}
