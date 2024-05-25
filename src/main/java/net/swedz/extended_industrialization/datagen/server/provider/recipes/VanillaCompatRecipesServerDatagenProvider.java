@@ -21,7 +21,7 @@ public final class VanillaCompatRecipesServerDatagenProvider extends RecipesServ
 				"vanilla_recipes/mixer/waxing_with_honey", BuiltInRegistries.ITEM.getKey(from).getPath(), MIMachineRecipeTypes.MIXER,
 				2, 5 * 20,
 				(r) -> r
-						.addFluidInput(EIFluids.HONEY, 200)
+						.addFluidInput(EIFluids.HONEY, 1)
 						.addItemInput(from, 1)
 						.addItemOutput(to, 1),
 				output

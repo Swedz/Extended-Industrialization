@@ -4,7 +4,7 @@
   "eu": 2,
   "fluid_inputs": [
     {
-      "amount": 200,
+      "amount": 1,
       "fluid": "extended_industrialization:honey"
     }
   ],
