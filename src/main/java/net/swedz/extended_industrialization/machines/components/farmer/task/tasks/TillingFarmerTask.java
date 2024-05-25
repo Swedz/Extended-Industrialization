@@ -1,23 +1,21 @@
 package net.swedz.extended_industrialization.machines.components.farmer.task.tasks;
 
-import aztech.modern_industrialization.machines.components.MultiblockInventoryComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponentPlantableStacks;
+import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlock;
-import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlockMap;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerTile;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTaskType;
 
 public final class TillingFarmerTask extends FarmerTask
 {
-	public TillingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations, int processInterval)
+	public TillingFarmerTask(FarmerComponent component)
 	{
-		super(FarmerTaskType.TILLING, inventory, blockMap, plantableStacks, maxOperations, processInterval);
+		super(FarmerTaskType.TILLING, component);
 	}
 	
 	@SuppressWarnings("deprecation")

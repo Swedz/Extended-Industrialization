@@ -1,13 +1,11 @@
 package net.swedz.extended_industrialization.machines.components.farmer.task.tasks;
 
-import aztech.modern_industrialization.machines.components.MultiblockInventoryComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponentPlantableStacks;
+import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.components.farmer.PlantableConfigurableItemStack;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlock;
-import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlockMap;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerTile;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTaskType;
@@ -16,9 +14,9 @@ import java.util.List;
 
 public final class PlantingFarmerTask extends FarmerTask
 {
-	public PlantingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations, int processInterval)
+	public PlantingFarmerTask(FarmerComponent component)
 	{
-		super(FarmerTaskType.PLANTING, inventory, blockMap, plantableStacks, maxOperations, processInterval);
+		super(FarmerTaskType.PLANTING, component);
 	}
 	
 	@Override

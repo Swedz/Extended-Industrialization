@@ -10,19 +10,21 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.bus.api.Event;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.swedz.extended_industrialization.api.MachineInventoryHelper;
 import net.swedz.extended_industrialization.api.event.FarmlandLoseMoistureEvent;
-import net.swedz.extended_industrialization.api.event.TreeGrowthEvent;
-import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListener;
 import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListeners;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlockMap;
-import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerTree;
+import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.HarvestingHandler;
+import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.registry.FarmerHarvestingHandlers;
+import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.registry.FarmerHarvestingHandlersHolder;
+import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.registry.FarmerListener;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerProcessRates;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTaskType;
+import org.apache.commons.compress.utils.Lists;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -34,12 +36,11 @@ public final class FarmerComponent implements IComponent
 	private final PlantingMode                   defaultPlantingMode;
 	private final FarmerProcessRates             processRates;
 	
-	private final FarmerBlockMap   blockMap;
-	private final List<FarmerTask> tasks;
+	private final FarmerBlockMap                 blockMap;
+	private final FarmerHarvestingHandlersHolder harvestingHandlers;
+	private final List<FarmerTask>               tasks;
 	
-	private final IsolatedListener<BlockEvent.FarmlandTrampleEvent> listenerFarmlandTrample;
-	private final IsolatedListener<FarmlandLoseMoistureEvent>       listenerFarmlandLoseMoisture;
-	private final IsolatedListener<TreeGrowthEvent>                 listenerTreeGrowth;
+	private final List<FarmerListener<? extends Event>> listeners = Lists.newArrayList();
 	
 	public PlantingMode plantingMode;
 	public boolean      tilling;
@@ -58,34 +59,54 @@ public final class FarmerComponent implements IComponent
 		this.plantingMode = defaultPlantingMode;
 		this.processRates = processRates;
 		
-		this.blockMap = new FarmerBlockMap();
-		this.tasks = Stream.of(FarmerTaskType.values())
+		blockMap = new FarmerBlockMap();
+		harvestingHandlers = FarmerHarvestingHandlers.create();
+		tasks = Stream.of(FarmerTaskType.values())
 				.filter(processRates::contains)
-				.map((task) -> task.create(inventory, blockMap, plantableStacks, processRates.maxOperations(task), processRates.interval(task)))
+				.map((task) -> task.create(this))
 				.toList();
 		
-		this.listenerFarmlandTrample = (event) ->
+		listeners.add(new FarmerListener<>(BlockEvent.FarmlandTrampleEvent.class, (event) ->
 		{
 			if(tilling && blockMap.containsDirtAt(event.getPos()))
 			{
 				event.setCanceled(true);
 			}
-		};
-		this.listenerFarmlandLoseMoisture = (event) ->
+		}));
+		listeners.add(new FarmerListener<>(FarmlandLoseMoistureEvent.class, (event) ->
 		{
 			if(tilling && blockMap.containsDirtAt(event.getPos()) && consumeWater(inventory, Simulation.SIMULATE))
 			{
 				consumeWater(inventory, Simulation.ACT);
 				event.setCanceled(true);
 			}
-		};
-		this.listenerTreeGrowth = (event) ->
-		{
-			if(blockMap.containsDirtAt(event.getPos().below()))
-			{
-				blockMap.addTree(event.getPos(), event.getPositions());
-			}
-		};
+		}));
+		listeners.addAll(harvestingHandlers.getListeners(blockMap));
+	}
+	
+	public MultiblockInventoryComponent getInventory()
+	{
+		return inventory;
+	}
+	
+	public FarmerBlockMap getBlockMap()
+	{
+		return blockMap;
+	}
+	
+	public FarmerHarvestingHandlersHolder getHarvestingHandlersHolder()
+	{
+		return harvestingHandlers;
+	}
+	
+	public FarmerComponentPlantableStacks getPlantableStacks()
+	{
+		return plantableStacks;
+	}
+	
+	public FarmerProcessRates getProcessRates()
+	{
+		return processRates;
 	}
 	
 	public static boolean consumeWater(MultiblockInventoryComponent inventory, Simulation simulation)
@@ -129,18 +150,24 @@ public final class FarmerComponent implements IComponent
 	
 	public void registerListeners(Level level, ShapeMatcher shapeMatcher)
 	{
+		if(this.shapeMatcher != null)
+		{
+			throw new IllegalStateException("There are already listeners registered on this FarmerComponent");
+		}
 		this.level = level;
 		this.shapeMatcher = shapeMatcher;
-		IsolatedListeners.register(level, shapeMatcher.getSpannedChunks(), BlockEvent.FarmlandTrampleEvent.class, listenerFarmlandTrample);
-		IsolatedListeners.register(level, shapeMatcher.getSpannedChunks(), FarmlandLoseMoistureEvent.class, listenerFarmlandLoseMoisture);
-		IsolatedListeners.register(level, shapeMatcher.getSpannedChunks(), TreeGrowthEvent.class, listenerTreeGrowth);
+		for(FarmerListener listener : listeners)
+		{
+			IsolatedListeners.register(level, shapeMatcher.getSpannedChunks(), listener.eventClass(), listener.listener());
+		}
 	}
 	
 	public void unregisterListeners(Level level, ShapeMatcher shapeMatcher)
 	{
-		IsolatedListeners.unregister(level, shapeMatcher.getSpannedChunks(), BlockEvent.FarmlandTrampleEvent.class, listenerFarmlandTrample);
-		IsolatedListeners.unregister(level, shapeMatcher.getSpannedChunks(), FarmlandLoseMoistureEvent.class, listenerFarmlandLoseMoisture);
-		IsolatedListeners.unregister(level, shapeMatcher.getSpannedChunks(), TreeGrowthEvent.class, listenerTreeGrowth);
+		for(FarmerListener listener : listeners)
+		{
+			IsolatedListeners.unregister(level, shapeMatcher.getSpannedChunks(), listener.eventClass(), listener.listener());
+		}
 		this.shapeMatcher = null;
 	}
 	
@@ -150,15 +177,12 @@ public final class FarmerComponent implements IComponent
 		tag.putBoolean("tilling", tilling);
 		tag.putString("planting_mode", plantingMode.name());
 		
-		CompoundTag cache = new CompoundTag();
-		CompoundTag trees = new CompoundTag();
-		for(FarmerTree tree : blockMap.trees().values())
+		CompoundTag harvestingHandlersCache = new CompoundTag();
+		for(HarvestingHandler harvestingHandler : harvestingHandlers.getHandlers())
 		{
-			long[] list = tree.blocks().stream().mapToLong(BlockPos::asLong).toArray();
-			trees.putLongArray(Long.toString(tree.base().asLong()), list);
+			harvestingHandler.writeNbt(harvestingHandlersCache);
 		}
-		cache.put("trees", trees);
-		tag.put("cache", cache);
+		tag.put("harvesting_handlers", harvestingHandlersCache);
 		
 		CompoundTag tasksTag = new CompoundTag();
 		for(FarmerTask task : tasks)
@@ -186,13 +210,10 @@ public final class FarmerComponent implements IComponent
 			plantingMode = defaultPlantingMode;
 		}
 		
-		CompoundTag cache = tag.getCompound("cache");
-		CompoundTag trees = cache.getCompound("trees");
-		for(String key : trees.getAllKeys())
+		CompoundTag harvestingHandlersCache = tag.getCompound("harvesting_handlers");
+		for(HarvestingHandler harvestingHandler : harvestingHandlers.getHandlers())
 		{
-			BlockPos base = BlockPos.of(Long.parseLong(key));
-			List<BlockPos> blocks = Arrays.stream(trees.getLongArray(key)).mapToObj(BlockPos::of).toList();
-			blockMap.addTree(base, blocks);
+			harvestingHandler.readNbt(harvestingHandlersCache);
 		}
 		
 		CompoundTag tasksTag = tag.getCompound("tasks");

@@ -12,9 +12,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.swedz.extended_industrialization.api.MachineInventoryHelper;
 import net.swedz.extended_industrialization.datamaps.FertilizerPotency;
-import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponentPlantableStacks;
+import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlock;
-import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlockMap;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerTile;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTaskType;
@@ -26,9 +25,9 @@ public final class FertilizingFarmerTask extends FarmerTask
 	private int fertilizerTickRate;
 	private int fertilizerTicks;
 	
-	public FertilizingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations, int processInterval)
+	public FertilizingFarmerTask(FarmerComponent component)
 	{
-		super(FarmerTaskType.FERTLIZING, inventory, blockMap, plantableStacks, maxOperations, processInterval);
+		super(FarmerTaskType.FERTLIZING, component);
 	}
 	
 	private static boolean tryConsume(MultiblockInventoryComponent inventory, Fluid fluid, long amount, Simulation simulation)

@@ -1,23 +1,20 @@
 package net.swedz.extended_industrialization.machines.components.farmer.task.tasks;
 
-import aztech.modern_industrialization.machines.components.MultiblockInventoryComponent;
 import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponent;
-import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponentPlantableStacks;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlock;
-import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlockMap;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerTile;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTaskType;
 
 public final class HydratingFarmerTask extends FarmerTask
 {
-	public HydratingFarmerTask(MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations, int processInterval)
+	public HydratingFarmerTask(FarmerComponent component)
 	{
-		super(FarmerTaskType.HYDRATING, inventory, blockMap, plantableStacks, maxOperations, processInterval);
+		super(FarmerTaskType.HYDRATING, component);
 	}
 	
 	@Override

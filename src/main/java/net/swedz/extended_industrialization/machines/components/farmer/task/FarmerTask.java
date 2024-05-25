@@ -3,6 +3,7 @@ package net.swedz.extended_industrialization.machines.components.farmer.task;
 import aztech.modern_industrialization.machines.components.MultiblockInventoryComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
+import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponentPlantableStacks;
 import net.swedz.extended_industrialization.machines.components.farmer.PlantingMode;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlockMap;
@@ -23,14 +24,14 @@ public abstract class FarmerTask
 	protected int     processTick;
 	protected boolean hasWater;
 	
-	public FarmerTask(FarmerTaskType type, MultiblockInventoryComponent inventory, FarmerBlockMap blockMap, FarmerComponentPlantableStacks plantableStacks, int maxOperations, int processInterval)
+	public FarmerTask(FarmerTaskType type, FarmerComponent component)
 	{
 		this.type = type;
-		this.inventory = inventory;
-		this.blockMap = blockMap;
-		this.plantableStacks = plantableStacks;
-		this.operations = new FarmerTaskOperations(maxOperations);
-		this.processInterval = processInterval;
+		this.inventory = component.getInventory();
+		this.blockMap = component.getBlockMap();
+		this.plantableStacks = component.getPlantableStacks();
+		this.operations = new FarmerTaskOperations(component.getProcessRates().maxOperations(type));
+		this.processInterval = component.getProcessRates().interval(type);
 	}
 	
 	public FarmerTaskType type()

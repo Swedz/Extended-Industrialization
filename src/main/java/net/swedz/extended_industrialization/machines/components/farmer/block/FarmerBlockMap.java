@@ -46,11 +46,6 @@ public final class FarmerBlockMap implements Iterable<FarmerTile>
 		trees.put(base, new FarmerTree(base, blocks));
 	}
 	
-	public boolean containsTree(FarmerBlock crop)
-	{
-		return trees.containsKey(crop.pos());
-	}
-	
 	public FarmerTree popTree(FarmerBlock crop)
 	{
 		return trees.remove(crop.pos());
@@ -67,24 +62,25 @@ public final class FarmerBlockMap implements Iterable<FarmerTile>
 		
 		for(BlockPos offset : offsets)
 		{
-			BlockPos pos = ShapeMatcher.toWorldPos(controllerPos, controllerDirection, offset);
+			BlockPos dirtPos = ShapeMatcher.toWorldPos(controllerPos, controllerDirection, offset);
+			BlockPos cropPos = dirtPos.above();
 			
-			int line = Math.abs(pos.getX() - minX);
+			int line = Math.abs(dirtPos.getX() - minX);
 			
 			int quadrant;
-			if(pos.getX() > centerPos.getX() && pos.getZ() <= centerPos.getZ())
+			if(dirtPos.getX() > centerPos.getX() && dirtPos.getZ() <= centerPos.getZ())
 			{
 				quadrant = 0;
 			}
-			else if(pos.getX() >= centerPos.getX() && pos.getZ() > centerPos.getZ())
+			else if(dirtPos.getX() >= centerPos.getX() && dirtPos.getZ() > centerPos.getZ())
 			{
 				quadrant = 1;
 			}
-			else if(pos.getX() < centerPos.getX() && pos.getZ() >= centerPos.getZ())
+			else if(dirtPos.getX() < centerPos.getX() && dirtPos.getZ() >= centerPos.getZ())
 			{
 				quadrant = 2;
 			}
-			else if(pos.getX() <= centerPos.getX() && pos.getZ() < centerPos.getZ())
+			else if(dirtPos.getX() <= centerPos.getX() && dirtPos.getZ() < centerPos.getZ())
 			{
 				quadrant = 3;
 			}
@@ -93,16 +89,16 @@ public final class FarmerBlockMap implements Iterable<FarmerTile>
 				throw new IllegalStateException("Somehow a position was not in a quadrant");
 			}
 			
-			FarmerBlock dirt = new FarmerBlock(pos);
+			FarmerBlock dirt = new FarmerBlock(dirtPos);
 			dirt.updateState(level);
-			FarmerBlock crop = new FarmerBlock(pos.above());
+			FarmerBlock crop = new FarmerBlock(cropPos);
 			crop.updateState(level);
 			tiles.add(new FarmerTile(dirt, crop, line, quadrant));
-			dirtPositions.add(pos);
+			dirtPositions.add(dirtPos);
 		}
 		
 		this.tiles = Collections.unmodifiableList(tiles);
-		this.dirtPositions = dirtPositions;
+		this.dirtPositions = Collections.unmodifiableList(dirtPositions);
 	}
 	
 	public void markDirty()
