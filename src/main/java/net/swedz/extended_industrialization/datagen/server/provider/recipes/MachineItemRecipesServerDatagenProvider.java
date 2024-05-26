@@ -524,6 +524,51 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		);
 	}
 	
+	private static void wirelessChargingStation(RecipeOutput output)
+	{
+		addBasicCraftingMachineRecipes(
+				"local_wireless_charging_station",
+				(builder) -> builder
+						.define('C', "modern_industrialization:electronic_circuit")
+						.define('c', "modern_industrialization:cupronickel_coil")
+						.define('B', "modern_industrialization:silicon_battery")
+						.define('H', "modern_industrialization:advanced_machine_hull")
+						.define('w', "modern_industrialization:electrum_cable")
+						.pattern("CcC")
+						.pattern("BHB")
+						.pattern("CwC"),
+				output
+		);
+		
+		addBasicCraftingMachineRecipes(
+				"global_wireless_charging_station",
+				(builder) -> builder
+						.define('C', "modern_industrialization:digital_circuit")
+						.define('c', "modern_industrialization:kanthal_coil")
+						.define('B', "modern_industrialization:sodium_battery")
+						.define('H', "modern_industrialization:turbo_machine_hull")
+						.define('w', "modern_industrialization:aluminum_cable")
+						.pattern("CcC")
+						.pattern("BHB")
+						.pattern("CwC"),
+				output
+		);
+		
+		addBasicCraftingMachineRecipes(
+				"interdimensional_wireless_charging_station",
+				(builder) -> builder
+						.define('C', "modern_industrialization:processing_unit")
+						.define('c', "modern_industrialization:superconductor_coil")
+						.define('B', "modern_industrialization:cadmium_battery")
+						.define('H', "modern_industrialization:highly_advanced_machine_hull")
+						.define('w', "modern_industrialization:annealed_copper_cable")
+						.pattern("CcC")
+						.pattern("BHB")
+						.pattern("CwC"),
+				output
+		);
+	}
+	
 	@Override
 	protected void buildRecipes(RecipeOutput output)
 	{
@@ -542,5 +587,6 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		universalTransformer(output);
 		machineChainer(output);
 		solarPanel(output);
+		wirelessChargingStation(output);
 	}
 }

@@ -28,6 +28,7 @@ import net.swedz.extended_industrialization.machines.blockentities.MachineChaine
 import net.swedz.extended_industrialization.machines.blockentities.SolarBoilerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.SolarPanelMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.UniversalTransformerMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentities.WirelessChargerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.brewery.ElectricBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.brewery.SteamBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.fluidharvesting.ElectricFluidHarvestingMachineBlockEntity;
@@ -370,5 +371,24 @@ public final class EIMachines
 					SolarPanelMachineBlockEntity::registerEnergyApi
 			);
 		}
+		
+		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+				"Local Wireless Charging Station", "local_wireless_charging_station", "wireless_charging_station/local",
+				CableTier.MV.casing, false, true, true, false,
+				(bep) -> new WirelessChargerMachineBlockEntity(bep, "local_wireless_charging_station", CableTier.MV, (m, p) -> m.getBlockPos().closerThan(p.blockPosition(), 32)),
+				WirelessChargerMachineBlockEntity::registerEnergyApi
+		);
+		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+				"Global Wireless Charging Station", "global_wireless_charging_station", "wireless_charging_station/global",
+				CableTier.HV.casing, false, true, true, false,
+				(bep) -> new WirelessChargerMachineBlockEntity(bep, "global_wireless_charging_station", CableTier.HV, (m, p) -> m.getLevel() == p.level()),
+				WirelessChargerMachineBlockEntity::registerEnergyApi
+		);
+		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+				"Interdimensional Wireless Charging Station", "interdimensional_wireless_charging_station", "wireless_charging_station/interdimensional",
+				CableTier.EV.casing, false, true, true, false,
+				(bep) -> new WirelessChargerMachineBlockEntity(bep, "interdimensional_wireless_charging_station", CableTier.EV, (m, p) -> true),
+				WirelessChargerMachineBlockEntity::registerEnergyApi
+		);
 	}
 }

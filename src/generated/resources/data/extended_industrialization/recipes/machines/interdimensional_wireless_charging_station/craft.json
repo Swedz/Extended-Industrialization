@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "modern_industrialization:cadmium_battery"
+    },
+    "C": {
+      "item": "modern_industrialization:processing_unit"
+    },
+    "H": {
+      "item": "modern_industrialization:highly_advanced_machine_hull"
+    },
+    "c": {
+      "item": "modern_industrialization:superconductor_coil"
+    },
+    "w": {
+      "item": "modern_industrialization:annealed_copper_cable"
+    }
+  },
+  "pattern": [
+    "CcC",
+    "BHB",
+    "CwC"
+  ],
+  "result": {
+    "item": "extended_industrialization:interdimensional_wireless_charging_station"
+  }
+}
