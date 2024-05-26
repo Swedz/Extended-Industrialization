@@ -11,6 +11,7 @@ import net.swedz.extended_industrialization.datagen.server.provider.recipes.Comp
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.MachineItemRecipesServerDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.NPKProcessingRecipesServerDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.VanillaCompatRecipesServerDatagenProvider;
+import net.swedz.extended_industrialization.datagen.server.provider.tags.BlockTagDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.tags.ItemTagDatagenProvider;
 
 import java.util.function.Function;
@@ -30,6 +31,7 @@ public final class DatagenDelegatorServer
 		add(event, NPKProcessingRecipesServerDatagenProvider::new);
 		add(event, VanillaCompatRecipesServerDatagenProvider::new);
 		
+		add(event, BlockTagDatagenProvider::new);
 		add(event, ItemTagDatagenProvider::new);
 	}
 	
