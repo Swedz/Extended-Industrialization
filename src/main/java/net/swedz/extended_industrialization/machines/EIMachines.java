@@ -23,6 +23,7 @@ import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import com.google.common.collect.Maps;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.config.EIConfig;
 import net.swedz.extended_industrialization.hook.mi.MIMachineHookHelper;
 import net.swedz.extended_industrialization.machines.blockentities.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.SolarBoilerMachineBlockEntity;
@@ -375,7 +376,7 @@ public final class EIMachines
 		MIMachineHookHelper.registerSingleBlockSpecialMachine(
 				"Local Wireless Charging Station", "local_wireless_charging_station", "wireless_charging_station/local",
 				CableTier.MV.casing, false, true, true, false,
-				(bep) -> new WirelessChargerMachineBlockEntity(bep, "local_wireless_charging_station", CableTier.MV, (m, p) -> m.getBlockPos().closerThan(p.blockPosition(), 32)),
+				(bep) -> new WirelessChargerMachineBlockEntity(bep, "local_wireless_charging_station", CableTier.MV, (m, p) -> m.getBlockPos().closerThan(p.blockPosition(), EIConfig.localWirelessChargingStationRange)),
 				WirelessChargerMachineBlockEntity::registerEnergyApi
 		);
 		MIMachineHookHelper.registerSingleBlockSpecialMachine(

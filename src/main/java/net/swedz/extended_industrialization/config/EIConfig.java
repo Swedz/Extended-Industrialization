@@ -15,13 +15,19 @@ public final class EIConfig
 			.comment("Whether water pumps require a water biome (river or ocean) to operate")
 			.define("require_water_biome_for_pump", true);
 	
+	private static final ModConfigSpec.IntValue LOCAL_WIRELESS_CHARGING_STATION_RANGE = BUILDER
+			.comment("The range for the local wireless charging station machine")
+			.defineInRange("local_wireless_charging_station_range", 32, 0, Integer.MAX_VALUE);
+	
 	public static final ModConfigSpec SPEC = BUILDER.build();
 	
 	public static boolean requireWaterBiomeForPump;
+	public static int     localWirelessChargingStationRange;
 	
 	@SubscribeEvent
 	static void onConfigLoad(ModConfigEvent event)
 	{
 		requireWaterBiomeForPump = REQUIRE_WATER_BIOME_FOR_PUMP.get();
+		localWirelessChargingStationRange = LOCAL_WIRELESS_CHARGING_STATION_RANGE.get();
 	}
 }
