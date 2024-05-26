@@ -12,6 +12,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.registry.api.CommonLootTableBuilders;
 import net.swedz.extended_industrialization.registry.api.CommonModelBuilders;
 import net.swedz.extended_industrialization.registry.items.EIItems;
 import net.swedz.extended_industrialization.registry.items.SortOrder;
@@ -45,8 +46,8 @@ public final class EIBlocks
 		Registry.init(bus);
 	}
 	
-	public static final BlockHolder<Block> MACHINE_CHAINER_RELAY = create("machine_chainer_relay", "Machine Chainer Relay", Block::new, BlockItem::new, SortOrder.MACHINES).withProperties((p) -> p.mapColor(MapColor.METAL).destroyTime(4f).requiresCorrectToolForDrops()).withModel(CommonModelBuilders::blockstateOnly).register();
-	public static final BlockHolder<Block> STEEL_PLATED_BRICKS   = create("steel_plated_bricks", "Steel Plated Bricks", Block::new, BlockItem::new, SortOrder.CASINGS).withProperties((p) -> p.destroyTime(5f).explosionResistance(6f)).withModel(CommonModelBuilders::blockCubeAll).tag(TagHelper.getMiningLevelTag(1)).register();
+	public static final BlockHolder<Block> MACHINE_CHAINER_RELAY = create("machine_chainer_relay", "Machine Chainer Relay", Block::new, BlockItem::new, SortOrder.MACHINES).withProperties((p) -> p.mapColor(MapColor.METAL).destroyTime(4f).requiresCorrectToolForDrops()).tag(TagHelper.getMiningLevelTag(1)).withLootTable(CommonLootTableBuilders::self).withModel(CommonModelBuilders::blockstateOnly).register();
+	public static final BlockHolder<Block> STEEL_PLATED_BRICKS   = create("steel_plated_bricks", "Steel Plated Bricks", Block::new, BlockItem::new, SortOrder.CASINGS).withProperties((p) -> p.destroyTime(5f).explosionResistance(6f).requiresCorrectToolForDrops()).tag(TagHelper.getMiningLevelTag(1)).withLootTable(CommonLootTableBuilders::self).withModel(CommonModelBuilders::blockCubeAll).register();
 	
 	public static Set<BlockHolder> values()
 	{
