@@ -134,6 +134,32 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				output
 		);
 		
+		addMachineRecipe(
+				"macerator", "granite_dust", MIMachineRecipeTypes.MACERATOR,
+				2, 5 * 20,
+				(r) -> r
+						.addItemInput(Items.GRANITE, 1)
+						.addItemOutput(EIItems.GRANITE_DUST, 4),
+				output
+		);
+		addBasicCraftingRecipes(
+				"compacting", "granite_from_dust", false,
+				Items.GRANITE, 1,
+				(r) -> r
+						.define('G', EIItems.GRANITE_DUST)
+						.pattern("GG")
+						.pattern("GG"),
+				output
+		);
+		addMachineRecipe(
+				"packer", "granite_from_dust", MIMachineRecipeTypes.PACKER,
+				2, 5 * 20,
+				(r) -> r
+						.addItemInput(EIItems.GRANITE_DUST, 4)
+						.addItemOutput(Items.GRANITE, 1),
+				output
+		);
+		
 		addBasicCraftingRecipes(
 				"casing", "steel_plated_bricks", true,
 				EIBlocks.STEEL_PLATED_BRICKS.get().asItem(), 1,

@@ -1,0 +1,27 @@
+{
+  "type": "modern_industrialization:chemical_reactor",
+  "duration": 100,
+  "eu": 8,
+  "fluid_inputs": [
+    {
+      "amount": 500,
+      "fluid": "minecraft:water"
+    },
+    {
+      "amount": 100,
+      "fluid": "modern_industrialization:hydrochloric_acid"
+    }
+  ],
+  "fluid_outputs": [
+    {
+      "amount": 200,
+      "fluid": "extended_industrialization:potassium_chloride"
+    }
+  ],
+  "item_inputs": [
+    {
+      "amount": 1,
+      "item": "minecraft:potato"
+    }
+  ]
+}

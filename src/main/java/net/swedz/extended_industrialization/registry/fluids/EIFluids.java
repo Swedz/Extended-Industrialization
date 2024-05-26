@@ -41,11 +41,14 @@ public final class EIFluids
 		Registry.init(bus);
 	}
 	
-	public static final FluidHolder HONEY            = create("honey", "Honey", 0xF2AE21, NEAR_OPACITY, FluidTexture.WATER_LIKE, false).register();
-	public static final FluidHolder MANURE           = create("manure", "Manure", 0x211404, FULL_OPACITY, FluidTexture.LAVA_LIKE, false).register();
-	public static final FluidHolder COMPOSTED_MANURE = create("composted_manure", "Composted Manure", 0x301b00, FULL_OPACITY, FluidTexture.LAVA_LIKE, false).register();
-	public static final FluidHolder NPK_FERTILIZER   = create("npk_fertilizer", "NPK Fertilizer", 0x4ABD44, NEAR_OPACITY, FluidTexture.WATER_LIKE, false).register();
-	public static final FluidHolder DISTILLED_WATER  = create("distilled_water", "Distilled Water", 0xADCDFF, LOW_OPACITY, FluidTexture.WATER_LIKE, false).register();
+	public static final FluidHolder HONEY               = create("honey", "Honey", 0xF2AE21, NEAR_OPACITY, FluidTexture.WATER_LIKE, false).register();
+	public static final FluidHolder MANURE              = create("manure", "Manure", 0x211404, FULL_OPACITY, FluidTexture.LAVA_LIKE, false).register();
+	public static final FluidHolder COMPOSTED_MANURE    = create("composted_manure", "Composted Manure", 0x301b00, FULL_OPACITY, FluidTexture.LAVA_LIKE, false).register();
+	public static final FluidHolder PHOSPHORIC_ACID     = create("phosphoric_acid", "Phosphoric Acid", 0x00A000, NEAR_OPACITY, FluidTexture.WATER_LIKE, false).register();
+	public static final FluidHolder POTASSIUM_CHLORIDE  = create("potassium_chloride", "Potassium Chloride", 0xCECECE, NEAR_OPACITY, FluidTexture.WATER_LIKE, false).register();
+	public static final FluidHolder POTASSIUM_HYDROXIDE = create("potassium_hydroxide", "Potassium Hydroxide", 0xD7AF03, LOW_OPACITY, FluidTexture.WATER_LIKE, false).register();
+	public static final FluidHolder NPK_FERTILIZER      = create("npk_fertilizer", "NPK Fertilizer", 0x4ABD44, NEAR_OPACITY, FluidTexture.WATER_LIKE, false).register();
+	public static final FluidHolder DISTILLED_WATER     = create("distilled_water", "Distilled Water", 0xADCDFF, LOW_OPACITY, FluidTexture.WATER_LIKE, false).register();
 	
 	public static Set<FluidHolder> values()
 	{

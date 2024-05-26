@@ -1,0 +1,29 @@
+{
+  "type": "modern_industrialization:chemical_reactor",
+  "duration": 200,
+  "eu": 8,
+  "fluid_inputs": [
+    {
+      "amount": 1000,
+      "fluid": "extended_industrialization:potassium_chloride"
+    },
+    {
+      "amount": 500,
+      "fluid": "modern_industrialization:hydrogen"
+    },
+    {
+      "amount": 500,
+      "fluid": "modern_industrialization:oxygen"
+    }
+  ],
+  "fluid_outputs": [
+    {
+      "amount": 2000,
+      "fluid": "extended_industrialization:potassium_hydroxide"
+    },
+    {
+      "amount": 250,
+      "fluid": "modern_industrialization:chlorine"
+    }
+  ]
+}

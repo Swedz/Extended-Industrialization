@@ -1,0 +1,29 @@
+{
+  "type": "modern_industrialization:chemical_reactor",
+  "duration": 300,
+  "eu": 8,
+  "fluid_inputs": [
+    {
+      "amount": 1000,
+      "fluid": "modern_industrialization:nitrogen"
+    },
+    {
+      "amount": 1000,
+      "fluid": "extended_industrialization:phosphoric_acid"
+    },
+    {
+      "amount": 1000,
+      "fluid": "extended_industrialization:potassium_hydroxide"
+    }
+  ],
+  "fluid_outputs": [
+    {
+      "amount": 2500,
+      "fluid": "extended_industrialization:npk_fertilizer"
+    },
+    {
+      "amount": 500,
+      "fluid": "minecraft:water"
+    }
+  ]
+}
