@@ -8,6 +8,7 @@ import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.biome.Biome;
+import net.swedz.extended_industrialization.config.EIConfig;
 import net.swedz.extended_industrialization.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
@@ -30,10 +31,13 @@ public abstract class MIMakeWaterPumpsRequireWaterBiomeMixin extends MachineBloc
 	)
 	private void init(BEP bep, String blockName, CallbackInfo callback)
 	{
-		this.registerGuiComponent(new WaterPumpEnvironmentGui.Server(
-				new WaterPumpEnvironmentGui.Parameters(57, 29),
-				() -> this.isWaterBiome(level.getBiome(worldPosition))
-		));
+		if(EIConfig.requireWaterBiomeForPump)
+		{
+			this.registerGuiComponent(new WaterPumpEnvironmentGui.Server(
+					new WaterPumpEnvironmentGui.Parameters(57, 29),
+					() -> this.isWaterBiome(level.getBiome(worldPosition))
+			));
+		}
 	}
 	
 	private boolean isWaterBiome(Holder<Biome> biome)
@@ -51,6 +55,6 @@ public abstract class MIMakeWaterPumpsRequireWaterBiomeMixin extends MachineBloc
 	)
 	private long redirectConsumeEu(AbstractWaterPumpBlockEntity instance, long max)
 	{
-		return this.isWaterBiome(level.getBiome(worldPosition)) ? this.invokeConsumeEu(max) : 0;
+		return !EIConfig.requireWaterBiomeForPump || this.isWaterBiome(level.getBiome(worldPosition)) ? this.invokeConsumeEu(max) : 0;
 	}
 }

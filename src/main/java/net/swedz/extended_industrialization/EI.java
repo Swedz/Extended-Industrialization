@@ -4,7 +4,9 @@ import com.google.common.collect.Sets;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -15,6 +17,7 @@ import net.swedz.extended_industrialization.api.MCIdentifiable;
 import net.swedz.extended_industrialization.api.capabilities.CapabilitiesListeners;
 import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListeners;
 import net.swedz.extended_industrialization.attachments.EIAttachments;
+import net.swedz.extended_industrialization.config.EIConfig;
 import net.swedz.extended_industrialization.datagen.DatagenDelegator;
 import net.swedz.extended_industrialization.datamaps.EIDataMaps;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
@@ -57,6 +60,8 @@ public final class EI
 	
 	public EI(IEventBus bus)
 	{
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EIConfig.SPEC);
+		
 		EIItems.init(bus);
 		EIBlocks.init(bus);
 		EIFluids.init(bus);
