@@ -8,8 +8,8 @@ import net.swedz.extended_industrialization.api.event.TreeGrowthEvent;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlockMap;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerTree;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.HarvestingContext;
-import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.registry.FarmerListener;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.LootTableHarvestingHandler;
+import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.registry.FarmerListener;
 
 import java.util.Arrays;
 import java.util.List;

@@ -9,8 +9,8 @@ import net.swedz.extended_industrialization.attachments.EIAttachments;
 public final class PhotovoltaicCellItem extends Item
 {
 	private final CableTier tier;
-	private final int euPerTick;
-	private final int durationTicks;
+	private final int       euPerTick;
+	private final int       durationTicks;
 	
 	public PhotovoltaicCellItem(Properties properties, CableTier tier, int euPerTick, int durationTicks)
 	{

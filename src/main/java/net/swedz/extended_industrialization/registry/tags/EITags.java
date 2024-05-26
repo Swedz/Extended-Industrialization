@@ -18,6 +18,7 @@ public final class EITags
 	{
 		return TagKey.create(BuiltInRegistries.ITEM.key(), new ResourceLocation("forge", path));
 	}
+	
 	public static TagKey<Block> block(String path)
 	{
 		return TagKey.create(BuiltInRegistries.BLOCK.key(), EI.id(path));

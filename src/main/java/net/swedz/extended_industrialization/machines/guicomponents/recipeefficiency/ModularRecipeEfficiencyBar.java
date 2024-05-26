@@ -10,7 +10,7 @@ public final class ModularRecipeEfficiencyBar
 {
 	public static final class Server implements GuiComponent.Server<Data>
 	{
-		private final Parameters params;
+		private final Parameters           params;
 		private final ModularCrafterAccess crafter;
 		
 		public Server(Parameters params, ModularCrafterAccess crafter)

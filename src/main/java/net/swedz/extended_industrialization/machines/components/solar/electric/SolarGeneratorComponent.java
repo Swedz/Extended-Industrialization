@@ -22,7 +22,7 @@ public final class SolarGeneratorComponent implements IComponent.ServerOnly
 	private final MIInventory     inventory;
 	private final EnergyComponent energy;
 	
-	private final Supplier<Float> energyEfficiency;
+	private final Supplier<Float>                 energyEfficiency;
 	private final Predicate<PhotovoltaicCellItem> photovoltaicCellTest;
 	
 	private int tick;
