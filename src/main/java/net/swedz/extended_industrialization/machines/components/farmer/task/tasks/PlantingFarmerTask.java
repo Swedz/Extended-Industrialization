@@ -30,7 +30,6 @@ public final class PlantingFarmerTask extends FarmerTask
 			return false;
 		}
 		
-		int blockIndex = 0;
 		for(FarmerTile tile : blockMap)
 		{
 			FarmerBlock crop = tile.crop();
@@ -58,7 +57,6 @@ public final class PlantingFarmerTask extends FarmerTask
 					}
 				}
 			}
-			blockIndex++;
 		}
 		
 		return operations.didOperate();
