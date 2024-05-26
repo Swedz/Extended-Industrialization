@@ -45,13 +45,16 @@ public final class PlantingFarmerTask extends FarmerTask
 				{
 					BlockState plantState = plantable.getPlant(level, pos);
 					
-					plantable.getStack().decrement(1);
-					
-					crop.setBlock(level, plantState, 1 | 2, GameEvent.BLOCK_PLACE, plantState);
-					
-					if(operations.operate())
+					if(plantState.canSurvive(level, pos))
 					{
-						return true;
+						plantable.getStack().decrement(1);
+						
+						crop.setBlock(level, plantState, 1 | 2, GameEvent.BLOCK_PLACE, plantState);
+						
+						if(operations.operate())
+						{
+							return true;
+						}
 					}
 				}
 			}
