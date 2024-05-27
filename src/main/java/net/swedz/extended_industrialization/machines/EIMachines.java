@@ -353,7 +353,7 @@ public final class EIMachines
 		
 		MIMachineHookHelper.registerSingleBlockSpecialMachine(
 				"Universal Transformer", "universal_transformer", "universal_transformer",
-				CableTier.LV.casing, true, true, true, false,
+				CableTier.LV.casing, false, true, true, false,
 				UniversalTransformerMachineBlockEntity::new,
 				UniversalTransformerMachineBlockEntity::registerEnergyApi
 		);
