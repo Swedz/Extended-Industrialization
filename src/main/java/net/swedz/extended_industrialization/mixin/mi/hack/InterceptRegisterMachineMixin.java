@@ -74,9 +74,6 @@ public class InterceptRegisterMachineMixin
 					})
 					.register();
 			
-			// This is to fix machine screens always using MI's namespace...
-			MIHookTracker.addLanguageEntry((provider) -> provider.add("block.modern_industrialization.%s".formatted(id), englishName));
-			
 			callback.setReturnValue(EIBlocks.Registry.BLOCK_ENTITIES.register(id, () ->
 			{
 				Block block = blockHolder.get();

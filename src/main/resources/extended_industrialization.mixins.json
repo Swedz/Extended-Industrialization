@@ -8,6 +8,7 @@
         "event.FarmlandLoseMoistureEventMixin",
         "event.TreeGrowthEventMixin",
         "mi.AbstractConfigurableStackAccessor",
+        "mi.MakeMachineBlockEntityUseProperBlockIdMixin",
         "mi.MakePlayerLockNotifyListenersMixin",
         "mi.MIAllowFluidBottlesInMachinesMenuMixin",
         "mi.MIMakeWaterPumpsRequireWaterBiomeMixin",
