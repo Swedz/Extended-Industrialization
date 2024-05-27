@@ -1,0 +1,55 @@
+package net.swedz.extended_industrialization.machines.recipe.condition;
+
+import aztech.modern_industrialization.api.energy.CableTier;
+import aztech.modern_industrialization.machines.recipe.MachineRecipe;
+import aztech.modern_industrialization.machines.recipe.condition.MachineProcessCondition;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.StringRepresentable;
+import net.swedz.extended_industrialization.mixinduck.CableTierDuck;
+import net.swedz.extended_industrialization.text.EIText;
+
+import java.util.List;
+
+public record VoltageProcessCondition(CableTier tier) implements MachineProcessCondition
+{
+	public static final Codec<VoltageProcessCondition> CODEC = RecordCodecBuilder.create(
+			(g) -> g.group(
+					StringRepresentable.fromValues(() -> CableTier.allTiers().stream().map(WrappedCableTier::new).toList().toArray(new WrappedCableTier[0]))
+							.fieldOf("voltage")
+							.forGetter((c) -> new WrappedCableTier(c.tier()))
+			).apply(g, (wrappedTier) -> new VoltageProcessCondition(wrappedTier.tier()))
+	);
+	
+	@Override
+	public boolean canProcessRecipe(Context context, MachineRecipe recipe)
+	{
+		if(context.getBlockEntity() instanceof CableTierDuck machine)
+		{
+			return machine.getTier().eu >= tier.eu;
+		}
+		return false;
+	}
+	
+	@Override
+	public void appendDescription(List<Component> list)
+	{
+		list.add(EIText.REQUIRES_VOLTAGE.text(Component.translatable(tier.shortEnglishKey())));
+	}
+	
+	@Override
+	public Codec<? extends MachineProcessCondition> codec(boolean syncToClient)
+	{
+		return CODEC;
+	}
+}
+
+record WrappedCableTier(CableTier tier) implements StringRepresentable
+{
+	@Override
+	public String getSerializedName()
+	{
+		return tier.name;
+	}
+}

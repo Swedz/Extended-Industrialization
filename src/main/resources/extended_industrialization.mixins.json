@@ -19,12 +19,17 @@
         "mi.hack.InterceptRegisterSingleBlockMachineReiTiersMixin",
         "mi.hook.HookBlastFurnaceTierMixin",
         "mi.hook.HookMachineCasingsMixin",
+        "mi.hook.HookMachineProcessConditionsMixin",
         "mi.hook.HookMachineRecipeTypesMixin",
         "mi.hook.HookMultiblockMachinesMixin",
         "mi.hook.HookSingleBlockCraftingMachinesMixin",
         "mi.hook.HookSingleBlockSpecialMachinesMixin",
         "mi.hook.HookTooltipsMixin",
-        "mi.hook.HookViewerSetupMixin"
+        "mi.hook.HookViewerSetupMixin",
+        "mi.machinecabletier.CasingComponentCableTierGetterMixin",
+        "mi.machinecabletier.ElectricCraftingMultiblockCableTierGetterMixin",
+        "mi.machinecabletier.ElectricCraftingSingleblockCableTierGetterMixin",
+        "mi.machinecabletier.EnergyHatchCableTierGetterMixin"
     ],
     "client": [
         "client.mi.MIGuiComponentsClientMixin"

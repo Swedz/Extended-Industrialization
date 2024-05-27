@@ -48,7 +48,8 @@ public enum EIText
 	STEAM_CHAINSAW_1("1) Right click still or flowing water to fill."),
 	STEAM_CHAINSAW_2("2) Place fuel inside the chainsaw (right click)."),
 	STEAM_CHAINSAW_3("3) Enjoy Silk Touch."),
-	STEAM_CHAINSAW_4("4) Toggle Silk Touch with shift-right click.");
+	STEAM_CHAINSAW_4("4) Toggle Silk Touch with shift-right click."),
+	REQUIRES_VOLTAGE("Requires voltage: %s");
 	
 	private final String englishText;
 	

@@ -3,7 +3,9 @@ package net.swedz.extended_industrialization.hook.mi;
 import aztech.modern_industrialization.compat.viewer.abstraction.ViewerCategory;
 import aztech.modern_industrialization.machines.GuiComponentsClient;
 import aztech.modern_industrialization.machines.blockentities.multiblocks.ElectricBlastFurnaceBlockEntity;
+import aztech.modern_industrialization.machines.recipe.condition.MachineProcessConditions;
 import com.google.common.collect.Lists;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.compat.viewer.usage.EIViewerSetup;
 import net.swedz.extended_industrialization.machines.EIMachines;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGui;
@@ -18,6 +20,7 @@ import net.swedz.extended_industrialization.machines.guicomponents.universaltran
 import net.swedz.extended_industrialization.machines.guicomponents.universaltransformer.UniversalTransformerSlotsClient;
 import net.swedz.extended_industrialization.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGui;
 import net.swedz.extended_industrialization.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGuiClient;
+import net.swedz.extended_industrialization.machines.recipe.condition.VoltageProcessCondition;
 import net.swedz.extended_industrialization.tooltips.EITooltips;
 
 import java.util.List;
@@ -34,11 +37,6 @@ public final class MIHookDelegator
 		GuiComponentsClient.register(UniversalTransformerSlots.ID, UniversalTransformerSlotsClient::new);
 	}
 	
-	public static void machineCasings()
-	{
-		EIMachines.casings();
-	}
-	
 	public static List<ElectricBlastFurnaceBlockEntity.Tier> machinesBlastFurnaceTier()
 	{
 		List<ElectricBlastFurnaceBlockEntity.Tier> list = Lists.newArrayList();
@@ -46,14 +44,24 @@ public final class MIHookDelegator
 		return list;
 	}
 	
-	public static void machinesMultiblock()
+	public static void machineCasings()
 	{
-		EIMachines.multiblocks();
+		EIMachines.casings();
+	}
+	
+	public static void machineProcessConditions()
+	{
+		MachineProcessConditions.register(EI.id("voltage"), VoltageProcessCondition.CODEC);
 	}
 	
 	public static void machinesRecipeType()
 	{
 		EIMachines.recipeTypes();
+	}
+	
+	public static void machinesMultiblock()
+	{
+		EIMachines.multiblocks();
 	}
 	
 	public static void machinesSingleBlockCrafting()
