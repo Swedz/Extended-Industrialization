@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Mixin(ConfigurableFluidStack.ConfigurableFluidSlot.class)
-public class MIAllowFluidBottlesInMachinesMenuMixin
+public class AllowFluidBottlesInMachinesMenuMixin
 {
 	@Unique
 	private static final int CAPACITY = 250;

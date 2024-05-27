@@ -18,9 +18,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractWaterPumpBlockEntity.class)
-public abstract class MIMakeWaterPumpsRequireWaterBiomeMixin extends MachineBlockEntity
+public abstract class MakeWaterPumpsRequireWaterBiomeMixin extends MachineBlockEntity
 {
-	public MIMakeWaterPumpsRequireWaterBiomeMixin(BEP bep, MachineGuiParameters guiParams, OrientationComponent.Params orientationParams)
+	public MakeWaterPumpsRequireWaterBiomeMixin(BEP bep, MachineGuiParameters guiParams, OrientationComponent.Params orientationParams)
 	{
 		super(bep, guiParams, orientationParams);
 	}
