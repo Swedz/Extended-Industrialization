@@ -33,7 +33,8 @@
         "mi.machinecabletier.EnergyHatchCableTierGetterMixin"
     ],
     "client": [
-        "client.mi.MIGuiComponentsClientMixin"
+        "client.mi.MIGuiComponentsClientMixin",
+        "client.mi.MachineScreenIncludeCableTierInTitleMixin"
     ],
     "injectors": {
         "defaultRequire": 1

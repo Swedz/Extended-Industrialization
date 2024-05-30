@@ -8,6 +8,8 @@ import com.google.common.collect.Lists;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.compat.viewer.usage.EIViewerSetup;
 import net.swedz.extended_industrialization.machines.EIMachines;
+import net.swedz.extended_industrialization.machines.guicomponents.exposecabletier.ExposeCableTierGui;
+import net.swedz.extended_industrialization.machines.guicomponents.exposecabletier.ExposeCableTierGuiClient;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGui;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGuiClient;
 import net.swedz.extended_industrialization.machines.guicomponents.modularselection.ConfigurationPanel;
@@ -35,6 +37,7 @@ public final class MIHookDelegator
 		GuiComponentsClient.register(ProcessingArrayMachineSlot.ID, ProcessingArrayMachineSlotClient::new);
 		GuiComponentsClient.register(ConfigurationPanel.ID, ConfigurationPanelClient::new);
 		GuiComponentsClient.register(UniversalTransformerSlots.ID, UniversalTransformerSlotsClient::new);
+		GuiComponentsClient.register(ExposeCableTierGui.ID, ExposeCableTierGuiClient::new);
 	}
 	
 	public static List<ElectricBlastFurnaceBlockEntity.Tier> machinesBlastFurnaceTier()

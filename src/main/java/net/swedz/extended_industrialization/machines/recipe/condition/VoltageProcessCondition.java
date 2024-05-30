@@ -7,7 +7,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
-import net.swedz.extended_industrialization.mixinduck.CableTierDuck;
+import net.swedz.extended_industrialization.api.CableTierHolder;
 import net.swedz.extended_industrialization.text.EIText;
 
 import java.util.List;
@@ -25,9 +25,9 @@ public record VoltageProcessCondition(CableTier tier) implements MachineProcessC
 	@Override
 	public boolean canProcessRecipe(Context context, MachineRecipe recipe)
 	{
-		if(context.getBlockEntity() instanceof CableTierDuck machine)
+		if(context.getBlockEntity() instanceof CableTierHolder machine)
 		{
-			return machine.getTier().eu >= tier.eu;
+			return machine.getCableTier().eu >= tier.eu;
 		}
 		return false;
 	}
