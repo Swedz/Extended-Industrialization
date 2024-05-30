@@ -6,6 +6,7 @@ import aztech.modern_industrialization.machines.gui.MachineScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+import net.swedz.extended_industrialization.config.EIConfig;
 import net.swedz.extended_industrialization.machines.guicomponents.exposecabletier.ExposeCableTierGuiClient;
 import net.swedz.extended_industrialization.text.EIText;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,10 +23,13 @@ public abstract class MachineScreenIncludeCableTierInTitleMixin extends MIHandle
 	@Unique
 	private Component getTieredTitle()
 	{
-		ExposeCableTierGuiClient exposeCableTier = menu.getComponent(ExposeCableTierGuiClient.class);
-		if(exposeCableTier != null)
+		if(EIConfig.displayMachineVoltageInUI)
 		{
-			return EIText.MACHINE_VOLTAGE_PREFIX.text(Component.translatable(exposeCableTier.getCableTier().shortEnglishKey())).append(title);
+			ExposeCableTierGuiClient exposeCableTier = menu.getComponent(ExposeCableTierGuiClient.class);
+			if(exposeCableTier != null)
+			{
+				return EIText.MACHINE_VOLTAGE_PREFIX.text(Component.translatable(exposeCableTier.getCableTier().shortEnglishKey())).append(title);
+			}
 		}
 		return title;
 	}
