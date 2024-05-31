@@ -4,7 +4,7 @@ import aztech.modern_industrialization.api.energy.CableTier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.extended_industrialization.attachments.EIAttachments;
+import net.swedz.extended_industrialization.registry.attachments.EIAttachments;
 
 public final class PhotovoltaicCellItem extends Item
 {

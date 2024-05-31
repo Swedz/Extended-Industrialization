@@ -16,7 +16,7 @@ import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.swedz.extended_industrialization.api.MCIdentifiable;
 import net.swedz.extended_industrialization.api.capabilities.CapabilitiesListeners;
 import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListeners;
-import net.swedz.extended_industrialization.attachments.EIAttachments;
+import net.swedz.extended_industrialization.registry.attachments.EIAttachments;
 import net.swedz.extended_industrialization.config.EIConfig;
 import net.swedz.extended_industrialization.datagen.DatagenDelegator;
 import net.swedz.extended_industrialization.datamaps.EIDataMaps;

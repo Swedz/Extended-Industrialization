@@ -11,6 +11,7 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.registry.api.CommonCapabilities;
 import net.swedz.extended_industrialization.registry.api.CommonModelBuilders;
 import net.swedz.extended_industrialization.registry.items.items.ElectricToolItem;
+import net.swedz.extended_industrialization.registry.items.items.MachineConfigCardItem;
 import net.swedz.extended_industrialization.registry.items.items.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.registry.items.items.SteamChainsawItem;
 import net.swedz.extended_industrialization.registry.items.items.TinCanFoodItem;
@@ -48,6 +49,8 @@ public final class EIItems
 	
 	public static final ItemHolder<TinCanFoodItem> CANNED_FOOD = create("canned_food", "Canned Food", TinCanFoodItem::new, SortOrder.OTHER_GEAR).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).meat().fast().build())).withModel(CommonModelBuilders::generated).register();
 	public static final ItemHolder<Item>           TIN_CAN     = create("tin_can", "Tin Can", Item::new, SortOrder.OTHER_GEAR).withModel(CommonModelBuilders::generated).register();
+	
+	public static final ItemHolder<MachineConfigCardItem> MACHINE_CONFIG_CARD = create("machine_config_card", "Machine Config Card", MachineConfigCardItem::new, SortOrder.OTHER_GEAR).withModel(CommonModelBuilders::generated).register();
 	
 	public static final ItemHolder<Item> NETHERITE_ROTARY_BLADE = create("netherite_rotary_blade", "Netherite Rotary Blade", Item::new, SortOrder.PARTS).withModel(CommonModelBuilders::generated).register();
 	public static final ItemHolder<Item> STEEL_COMBINE          = create("steel_combine", "Steel Combine", Item::new, SortOrder.PARTS).withModel(CommonModelBuilders::generated).register();

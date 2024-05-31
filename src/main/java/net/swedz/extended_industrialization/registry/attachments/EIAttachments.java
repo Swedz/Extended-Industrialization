@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.attachments;
+package net.swedz.extended_industrialization.registry.attachments;
 
 import com.mojang.serialization.Codec;
 import net.neoforged.bus.api.IEventBus;
