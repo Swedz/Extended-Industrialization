@@ -40,7 +40,7 @@ public final class MachineConfigCardItem extends Item
 	
 	public MachineConfigCardItem(Properties properties)
 	{
-		super(properties);
+		super(properties.stacksTo(1));
 	}
 	
 	@Override
