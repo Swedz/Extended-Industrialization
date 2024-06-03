@@ -8,6 +8,8 @@ import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -157,11 +159,11 @@ public final class MachineConfigCardItem extends Item
 		List<MachineConfig.Slot> slots = Lists.newArrayList();
 		int itemSlotCount = 0;
 		int fluidSlotCount = 0;
-		CompoundTag slotsTag = tag.getCompound("slots");
-		for(String indexString : slotsTag.getAllKeys())
+		ListTag slotsTag = tag.getList("slots", Tag.TAG_COMPOUND);
+		for(Tag slotTagTag : slotsTag)
 		{
-			CompoundTag slotTag = slotsTag.getCompound(indexString);
-			int index = Integer.parseInt(indexString);
+			CompoundTag slotTag = (CompoundTag) slotTagTag;
+			int index = slotTag.getInt("index");
 			String typeId = slotTag.getString("type");
 			if(typeId.equals("item"))
 			{
@@ -240,10 +242,10 @@ public final class MachineConfigCardItem extends Item
 			
 			tag.putString("machine_block", BuiltInRegistries.BLOCK.getKey(machineBlock).toString());
 			
-			CompoundTag slotsTag = new CompoundTag();
+			ListTag slotsTag = new ListTag();
 			for(Slot slot : slots)
 			{
-				slotsTag.put(Integer.toString(slot.index()), slot.serialize());
+				slotsTag.add(slot.serialize());
 			}
 			tag.put("slots", slotsTag);
 			
@@ -265,6 +267,7 @@ public final class MachineConfigCardItem extends Item
 			{
 				CompoundTag tag = new CompoundTag();
 				
+				tag.putInt("index", index);
 				tag.putString("type", "item");
 				
 				tag.putString("lock", BuiltInRegistries.ITEM.getKey(lock).toString());
@@ -293,6 +296,7 @@ public final class MachineConfigCardItem extends Item
 			{
 				CompoundTag tag = new CompoundTag();
 				
+				tag.putInt("index", index);
 				tag.putString("type", "fluid");
 				
 				tag.putString("lock", BuiltInRegistries.FLUID.getKey(lock).toString());
