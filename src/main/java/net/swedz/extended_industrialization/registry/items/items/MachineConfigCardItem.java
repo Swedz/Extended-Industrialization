@@ -209,8 +209,11 @@ public final class MachineConfigCardItem extends Item
 				ConfigurableItemStack itemStack = (ConfigurableItemStack) stack;
 				if(itemStack.getAmount() <= slot.capacity())
 				{
-					ConfigurableItemStackAccessor capacityAccessor = (ConfigurableItemStackAccessor) stack;
-					capacityAccessor.setAdjustedCapacity(slot.capacity());
+					if(simulation == Simulation.ACT)
+					{
+						ConfigurableItemStackAccessor capacityAccessor = (ConfigurableItemStackAccessor) stack;
+						capacityAccessor.setAdjustedCapacity(slot.capacity());
+					}
 				}
 				else
 				{
