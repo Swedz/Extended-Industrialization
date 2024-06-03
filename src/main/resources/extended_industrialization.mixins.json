@@ -13,6 +13,11 @@
         "mi.MakeWaterPumpsRequireWaterBiomeMixin",
         "mi.accessor.AbstractConfigurableStackAccessor",
         "mi.accessor.ConfigurableItemStackAccessor",
+        "mi.constantefficiency.ConstantEfficiencyCrafterComponentBehaviorMixin",
+        "mi.constantefficiency.ConstantEfficiencyCrafterComponentMixin",
+        "mi.constantefficiency.ConstantEfficiencyEBFMixin",
+        "mi.constantefficiency.ConstantEfficiencyPreventUpgradeInsertionMixin",
+        "mi.constantefficiency.ConstantEfficiencyPreventUpgradeSlotMixin",
         "mi.hack.InterceptRegisterMachineMixin",
         "mi.hack.InterceptRegisterMachineModelMixin",
         "mi.hack.InterceptRegisterMachineRecipeTypeMixin",
@@ -34,6 +39,8 @@
         "mi.machinecabletier.EnergyHatchCableTierGetterMixin"
     ],
     "client": [
+        "client.mi.HideEfficiencyBarClientMixin",
+        "client.mi.HideEfficiencyInMultiblockClientMixin",
         "client.mi.MachineScreenIncludeCableTierInTitleMixin",
         "client.mi.MIGuiComponentsClientMixin"
     ],

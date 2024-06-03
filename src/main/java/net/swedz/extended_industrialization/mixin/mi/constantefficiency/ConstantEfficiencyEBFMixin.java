@@ -1,0 +1,23 @@
+package net.swedz.extended_industrialization.mixin.mi.constantefficiency;
+
+import aztech.modern_industrialization.machines.blockentities.multiblocks.ElectricBlastFurnaceBlockEntity;
+import net.swedz.extended_industrialization.api.ExtendedCableTier;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
+
+@Mixin(ElectricBlastFurnaceBlockEntity.class)
+public class ConstantEfficiencyEBFMixin
+{
+	@Redirect(
+			method = "banRecipe",
+			at = @At(
+					value = "INVOKE",
+					target = "Laztech/modern_industrialization/machines/blockentities/multiblocks/ElectricBlastFurnaceBlockEntity;getMaxRecipeEu()J"
+			)
+	)
+	private long getMaxRecipeEu(ElectricBlastFurnaceBlockEntity behavior)
+	{
+		return ExtendedCableTier.getActualMaxRecipeEu(behavior, behavior);
+	}
+}

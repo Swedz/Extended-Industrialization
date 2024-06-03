@@ -23,11 +23,21 @@ public final class EIConfig
 			.comment("Whether the voltage of a machine should be included in the title")
 			.define("display_machine_voltage_in_ui", false);
 	
+	private static final ModConfigSpec.EnumValue<MachineEfficiencyHack> MACHINE_EFFICIENCY_HACK = BUILDER
+			.comment(
+					"The machine efficiency hack mode to use. Only applies to electric machines",
+					"DISABLED = No change will be made to MI's efficiency behavior",
+					"ALWAYS_MAX = The efficiency bar will always be forced to max",
+					"USE_VOLTAGE = The speed of machines will be determined by their voltage (WARNING! This is designed specifically for pack creators, and existing recipes may not be accessible by all voltages. Use at your own risk. It is recommended when using this mode to modify recipes with higher EU costs to use the voltage recipe condition)"
+			)
+			.defineEnum("machine_efficiency_hack", MachineEfficiencyHack.DISABLED);
+	
 	public static final ModConfigSpec SPEC = BUILDER.build();
 	
-	public static boolean requireWaterBiomeForPump;
-	public static int     localWirelessChargingStationRange;
-	public static boolean displayMachineVoltageInUI;
+	public static boolean               requireWaterBiomeForPump;
+	public static int                   localWirelessChargingStationRange;
+	public static boolean               displayMachineVoltageInUI;
+	public static MachineEfficiencyHack machineEfficiencyHack;
 	
 	@SubscribeEvent
 	static void onConfigLoad(ModConfigEvent event)
@@ -35,5 +45,46 @@ public final class EIConfig
 		requireWaterBiomeForPump = REQUIRE_WATER_BIOME_FOR_PUMP.get();
 		localWirelessChargingStationRange = LOCAL_WIRELESS_CHARGING_STATION_RANGE.get();
 		displayMachineVoltageInUI = DISPLAY_MACHINE_VOLTAGE_IN_UI.get();
+		machineEfficiencyHack = MACHINE_EFFICIENCY_HACK.get();
+	}
+	
+	public enum MachineEfficiencyHack
+	{
+		DISABLED(false, false, false, false),
+		ALWAYS_MAX(true, false, false, false),
+		USE_VOLTAGE(true, true, true, true);
+		
+		private final boolean forceMaxEfficiency;
+		private final boolean useVoltageForEfficiency;
+		private final boolean preventsUpgrades;
+		private final boolean hideEfficiency;
+		
+		MachineEfficiencyHack(boolean forceMaxEfficiency, boolean useVoltageForEfficiency, boolean preventsUpgrades, boolean hideEfficiency)
+		{
+			this.forceMaxEfficiency = forceMaxEfficiency;
+			this.useVoltageForEfficiency = useVoltageForEfficiency;
+			this.preventsUpgrades = preventsUpgrades;
+			this.hideEfficiency = hideEfficiency;
+		}
+		
+		public boolean forceMaxEfficiency()
+		{
+			return forceMaxEfficiency;
+		}
+		
+		public boolean useVoltageForEfficiency()
+		{
+			return useVoltageForEfficiency;
+		}
+		
+		public boolean preventsUpgrades()
+		{
+			return preventsUpgrades;
+		}
+		
+		public boolean hideEfficiency()
+		{
+			return hideEfficiency;
+		}
 	}
 }
