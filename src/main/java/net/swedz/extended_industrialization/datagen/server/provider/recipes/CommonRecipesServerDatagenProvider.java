@@ -173,5 +173,20 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 		);
 		
 		photovoltaicCells(output);
+		
+		addBasicCraftingRecipes(
+				"tool", "machine_config_card", false,
+				EIItems.MACHINE_CONFIG_CARD, 1,
+				(r) -> r
+						.define('G', EITags.itemForge("glass_panes"))
+						.define('I', "modern_industrialization:inductor")
+						.define('C', "modern_industrialization:capacitor")
+						.define('M', "modern_industrialization:motor")
+						.define('A', "modern_industrialization:analog_circuit_board")
+						.pattern("GGG")
+						.pattern("ICI")
+						.pattern("MAM"),
+				output
+		);
 	}
 }
