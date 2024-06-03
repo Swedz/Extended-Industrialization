@@ -50,7 +50,18 @@ public enum EIText
 	STEAM_CHAINSAW_3("3) Enjoy Silk Touch."),
 	STEAM_CHAINSAW_4("4) Toggle Silk Touch with shift-right click."),
 	MACHINE_VOLTAGE_PREFIX("(%s) "),
-	REQUIRES_VOLTAGE("Requires voltage: %s");
+	REQUIRES_VOLTAGE("Requires voltage: %s"),
+	MACHINE_CONFIG_CARD_SAVE("Saved machine configuration to card."),
+	MACHINE_CONFIG_CARD_APPLY_SUCCESS("Applied machine configuration to machine from card."),
+	MACHINE_CONFIG_CARD_APPLY_FAILED("Failed to apply machine configuration to machine."),
+	MACHINE_CONFIG_CARD_CLEAR("Cleared machine configuration from card."),
+	MACHINE_CONFIG_CARD_CONFIGURED("Configured (%s)"),
+	MACHINE_CONFIG_CARD_HELP_1("Machine configuration:"),
+	MACHINE_CONFIG_CARD_HELP_2("- Shift right-click a machine to save its"),
+	MACHINE_CONFIG_CARD_HELP_3("  settings in the card."),
+	MACHINE_CONFIG_CARD_HELP_4("- Right-click a machine to apply the settings"),
+	MACHINE_CONFIG_CARD_HELP_5("  from the card."),
+	MACHINE_CONFIG_CARD_HELP_6("Clear using shift-right click on air.");
 	
 	private final String englishText;
 	

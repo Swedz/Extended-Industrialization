@@ -20,7 +20,9 @@ import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
+import net.swedz.extended_industrialization.registry.items.items.MachineConfigCardItem;
 import net.swedz.extended_industrialization.registry.items.items.SteamChainsawItem;
+import net.swedz.extended_industrialization.registry.items.items.tooltip.MachineConfigCardTooltipComponent;
 import net.swedz.extended_industrialization.registry.items.items.tooltip.SteamChainsawTooltipComponent;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = EI.ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -65,5 +67,6 @@ public final class EIClient
 	private static void registerClientTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event)
 	{
 		event.register(SteamChainsawItem.SteamChainsawTooltipData.class, SteamChainsawTooltipComponent::new);
+		event.register(MachineConfigCardItem.TooltipData.class, MachineConfigCardTooltipComponent::new);
 	}
 }

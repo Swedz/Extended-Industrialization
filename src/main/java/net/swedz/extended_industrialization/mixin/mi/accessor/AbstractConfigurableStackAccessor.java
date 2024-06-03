@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.mixin.mi;
+package net.swedz.extended_industrialization.mixin.mi.accessor;
 
 import aztech.modern_industrialization.inventory.AbstractConfigurableStack;
 import org.spongepowered.asm.mixin.Mixin;

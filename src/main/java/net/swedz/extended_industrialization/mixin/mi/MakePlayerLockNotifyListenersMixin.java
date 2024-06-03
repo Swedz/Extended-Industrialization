@@ -2,6 +2,7 @@ package net.swedz.extended_industrialization.mixin.mi;
 
 import aztech.modern_industrialization.inventory.AbstractConfigurableStack;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.storage.TransferVariant;
+import net.swedz.extended_industrialization.mixin.mi.accessor.AbstractConfigurableStackAccessor;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

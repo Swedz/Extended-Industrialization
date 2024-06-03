@@ -117,6 +117,18 @@ public final class EITooltips
 			)
 	);
 	
+	public static final TooltipAttachment MACHINE_CONFIG_CARD = TooltipAttachment.ofMultilines(
+			EIItems.MACHINE_CONFIG_CARD,
+			List.of(
+					EIText.MACHINE_CONFIG_CARD_HELP_1.text(),
+					EIText.MACHINE_CONFIG_CARD_HELP_2.text(),
+					EIText.MACHINE_CONFIG_CARD_HELP_3.text(),
+					EIText.MACHINE_CONFIG_CARD_HELP_4.text(),
+					EIText.MACHINE_CONFIG_CARD_HELP_5.text(),
+					EIText.MACHINE_CONFIG_CARD_HELP_6.text()
+			)
+	);
+	
 	public static void init()
 	{
 	}

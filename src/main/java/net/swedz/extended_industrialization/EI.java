@@ -16,7 +16,6 @@ import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.swedz.extended_industrialization.api.MCIdentifiable;
 import net.swedz.extended_industrialization.api.capabilities.CapabilitiesListeners;
 import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListeners;
-import net.swedz.extended_industrialization.registry.attachments.EIAttachments;
 import net.swedz.extended_industrialization.config.EIConfig;
 import net.swedz.extended_industrialization.datagen.DatagenDelegator;
 import net.swedz.extended_industrialization.datamaps.EIDataMaps;
@@ -24,6 +23,7 @@ import net.swedz.extended_industrialization.machines.blockentities.multiblock.La
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionRecipe;
 import net.swedz.extended_industrialization.network.EIPackets;
 import net.swedz.extended_industrialization.registry.EIOtherRegistries;
+import net.swedz.extended_industrialization.registry.attachments.EIAttachments;
 import net.swedz.extended_industrialization.registry.blocks.BlockHolder;
 import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
 import net.swedz.extended_industrialization.registry.fluids.EIFluids;
