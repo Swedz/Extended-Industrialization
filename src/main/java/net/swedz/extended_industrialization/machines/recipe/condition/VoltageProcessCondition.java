@@ -43,13 +43,13 @@ public record VoltageProcessCondition(CableTier tier) implements MachineProcessC
 	{
 		return CODEC;
 	}
-}
-
-record WrappedCableTier(CableTier tier) implements StringRepresentable
-{
-	@Override
-	public String getSerializedName()
+	
+	private record WrappedCableTier(CableTier tier) implements StringRepresentable
 	{
-		return tier.name;
+		@Override
+		public String getSerializedName()
+		{
+			return tier.name;
+		}
 	}
 }
