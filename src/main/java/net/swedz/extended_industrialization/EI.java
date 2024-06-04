@@ -1,5 +1,7 @@
 package net.swedz.extended_industrialization;
 
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.io.WritingMode;
 import com.google.common.collect.Sets;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.EventPriority;
@@ -8,6 +10,7 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
@@ -60,7 +63,7 @@ public final class EI
 	
 	public EI(IEventBus bus)
 	{
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EIConfig.SPEC);
+		this.loadConfig();
 		
 		EIItems.init(bus);
 		EIBlocks.init(bus);
@@ -93,5 +96,22 @@ public final class EI
 				LargeElectricFurnaceBlockEntity.initTiers();
 			}
 		});
+	}
+	
+	private void loadConfig()
+	{
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EIConfig.SPEC);
+		
+		CommentedFileConfig configData = CommentedFileConfig.builder(FMLPaths.CONFIGDIR.get().resolve("extended_industrialization-common.toml"))
+				.preserveInsertionOrder()
+				.autoreload()
+				.writingMode(WritingMode.REPLACE)
+				.sync()
+				.build();
+		configData.load();
+		EIConfig.SPEC.setConfig(configData);
+		EIConfig.loadConfig();
+		
+		EI.LOGGER.info("Forcefully early-loaded config");
 	}
 }

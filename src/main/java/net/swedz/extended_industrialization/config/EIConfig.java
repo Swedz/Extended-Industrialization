@@ -39,13 +39,18 @@ public final class EIConfig
 	public static boolean               displayMachineVoltage;
 	public static MachineEfficiencyHack machineEfficiencyHack;
 	
-	@SubscribeEvent
-	static void onConfigLoad(ModConfigEvent event)
+	public static void loadConfig()
 	{
 		requireWaterBiomeForPump = REQUIRE_WATER_BIOME_FOR_PUMP.get();
 		localWirelessChargingStationRange = LOCAL_WIRELESS_CHARGING_STATION_RANGE.get();
 		displayMachineVoltage = DISPLAY_MACHINE_VOLTAGE.get();
 		machineEfficiencyHack = MACHINE_EFFICIENCY_HACK.get();
+	}
+	
+	@SubscribeEvent
+	static void onConfigLoad(ModConfigEvent event)
+	{
+		loadConfig();
 	}
 	
 	public enum MachineEfficiencyHack
