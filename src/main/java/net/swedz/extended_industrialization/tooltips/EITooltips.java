@@ -1,7 +1,11 @@
 package net.swedz.extended_industrialization.tooltips;
 
 import aztech.modern_industrialization.MIText;
+import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
+import aztech.modern_industrialization.machines.MachineBlock;
+import aztech.modern_industrialization.machines.blockentities.hatches.EnergyHatch;
+import aztech.modern_industrialization.machines.components.CasingComponent;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -9,6 +13,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.BlockItem;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.api.CableTierHolder;
+import net.swedz.extended_industrialization.api.ConstantEfficiencyHelper;
+import net.swedz.extended_industrialization.config.EIConfig;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
 import net.swedz.extended_industrialization.registry.items.EIItems;
@@ -127,6 +134,39 @@ public final class EITooltips
 					EIText.MACHINE_CONFIG_CARD_HELP_5.text(),
 					EIText.MACHINE_CONFIG_CARD_HELP_6.text()
 			)
+	);
+	
+	public static final TooltipAttachment MACHINE_HULL_AND_ENERGY_HATCH_VOLTAGE = TooltipAttachment.ofMultilines(
+			(itemStack, item) ->
+			{
+				List<Component> lines = Lists.newArrayList();
+				
+				CableTier tier;
+				if(item instanceof BlockItem blockItem &&
+						blockItem.getBlock() instanceof MachineBlock machineBlock &&
+						machineBlock.getBlockEntityInstance() instanceof EnergyHatch energyHatch)
+				{
+					tier = ((CableTierHolder) energyHatch).getCableTier();
+				}
+				else
+				{
+					tier = CasingComponent.getCasingTier(item);
+				}
+				
+				if(tier != null)
+				{
+					if(EIConfig.displayMachineVoltage)
+					{
+						lines.add(DEFAULT_PARSER.parse(EIText.MACHINE_VOLTAGE_RECIPES.text(Component.translatable(tier.shortEnglishKey()))));
+					}
+					if(EIConfig.machineEfficiencyHack.useVoltageForEfficiency())
+					{
+						lines.add(DEFAULT_PARSER.parse(EIText.MACHINE_VOLTAGE_RUNS_AT.text(EU_PER_TICK_PARSER.parse(ConstantEfficiencyHelper.getRecipeEu(tier)))));
+					}
+				}
+				
+				return lines.isEmpty() ? Optional.empty() : Optional.of(lines);
+			}
 	);
 	
 	public static void init()

@@ -35,7 +35,7 @@ public record VoltageProcessCondition(CableTier tier) implements MachineProcessC
 	@Override
 	public void appendDescription(List<Component> list)
 	{
-		list.add(EIText.REQUIRES_VOLTAGE.text(Component.translatable(tier.shortEnglishKey())));
+		list.add(EIText.RECIPE_REQUIRES_VOLTAGE.text(Component.translatable(tier.shortEnglishKey())));
 	}
 	
 	@Override

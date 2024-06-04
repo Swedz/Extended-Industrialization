@@ -23,12 +23,12 @@ public abstract class MachineScreenIncludeCableTierInTitleMixin extends MIHandle
 	@Unique
 	private Component getTieredTitle()
 	{
-		if(EIConfig.displayMachineVoltageInUI)
+		if(EIConfig.displayMachineVoltage)
 		{
 			ExposeCableTierGuiClient exposeCableTier = menu.getComponent(ExposeCableTierGuiClient.class);
 			if(exposeCableTier != null)
 			{
-				return EIText.MACHINE_VOLTAGE_PREFIX.text(Component.translatable(exposeCableTier.getCableTier().shortEnglishKey())).append(title);
+				return EIText.MACHINE_MENU_VOLTAGE_PREFIX.text(Component.translatable(exposeCableTier.getCableTier().shortEnglishKey())).append(title);
 			}
 		}
 		return title;
