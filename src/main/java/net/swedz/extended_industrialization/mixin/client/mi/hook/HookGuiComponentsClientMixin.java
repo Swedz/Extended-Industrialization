@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.mixin.client.mi;
+package net.swedz.extended_industrialization.mixin.client.mi.hook;
 
 import aztech.modern_industrialization.machines.GuiComponentsClient;
 import net.swedz.extended_industrialization.hook.mi.MIHookDelegator;
@@ -8,11 +8,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GuiComponentsClient.class)
-public class MIGuiComponentsClientMixin
+public class HookGuiComponentsClientMixin
 {
 	@Inject(
 			method = "<clinit>",
-			at = @At("TAIL")
+			at = @At("TAIL"),
+			remap = false
 	)
 	private static void cinit(CallbackInfo callback)
 	{

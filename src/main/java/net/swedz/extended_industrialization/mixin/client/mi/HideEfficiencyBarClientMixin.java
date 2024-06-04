@@ -15,7 +15,8 @@ public class HideEfficiencyBarClientMixin
 	@Inject(
 			method = "createRenderer",
 			at = @At("HEAD"),
-			cancellable = true
+			cancellable = true,
+			remap = false
 	)
 	private void createRenderer(MachineScreen machineScreen, CallbackInfoReturnable<ClientComponentRenderer> callback)
 	{

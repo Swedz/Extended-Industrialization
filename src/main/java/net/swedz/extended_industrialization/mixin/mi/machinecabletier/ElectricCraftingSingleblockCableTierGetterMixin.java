@@ -22,7 +22,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ElectricCraftingMachineBlockEntity.class)
+@Mixin(
+		value = ElectricCraftingMachineBlockEntity.class,
+		remap = false
+)
 public abstract class ElectricCraftingSingleblockCableTierGetterMixin extends AbstractCraftingMachineBlockEntity implements CableTierHolder
 {
 	public ElectricCraftingSingleblockCableTierGetterMixin(BEP bep, MachineRecipeType recipeType, MachineInventoryComponent inventory, MachineGuiParameters guiParams, ProgressBar.Parameters progressBarParams, MachineTier tier)

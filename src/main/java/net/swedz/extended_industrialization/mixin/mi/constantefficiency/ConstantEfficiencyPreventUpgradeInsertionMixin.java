@@ -11,7 +11,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(UpgradeComponent.class)
+@Mixin(
+		value = UpgradeComponent.class,
+		remap = false
+)
 public class ConstantEfficiencyPreventUpgradeInsertionMixin
 {
 	@Inject(

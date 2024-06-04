@@ -6,7 +6,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(CrafterComponent.Behavior.class)
+@Mixin(
+		value = CrafterComponent.Behavior.class,
+		remap = false
+)
 public interface ConstantEfficiencyCrafterComponentBehaviorMixin
 {
 	@Redirect(

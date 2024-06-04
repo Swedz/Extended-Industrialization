@@ -8,7 +8,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(MITooltips.class)
+@Mixin(
+		value = MITooltips.class,
+		remap = false
+)
 public class HookTooltipsMixin
 {
 	@Inject(

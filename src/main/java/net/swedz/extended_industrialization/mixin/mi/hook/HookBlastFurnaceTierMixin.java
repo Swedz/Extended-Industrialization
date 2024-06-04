@@ -9,13 +9,15 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import java.util.List;
 
-@Mixin(ElectricBlastFurnaceBlockEntity.class)
+@Mixin(
+		value = ElectricBlastFurnaceBlockEntity.class,
+		remap = false
+)
 public class HookBlastFurnaceTierMixin
 {
 	@ModifyVariable(
 			method = "<clinit>",
-			at = @At(value = "INVOKE", target = "Ljava/util/List;sort(Ljava/util/Comparator;)V"),
-			remap = false
+			at = @At(value = "INVOKE", target = "Ljava/util/List;sort(Ljava/util/Comparator;)V")
 	)
 	private static List clinit(List value)
 	{

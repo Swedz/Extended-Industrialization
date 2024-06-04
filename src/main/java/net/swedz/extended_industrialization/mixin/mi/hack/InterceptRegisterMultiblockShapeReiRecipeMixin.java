@@ -13,14 +13,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
-@Mixin(targets = {"aztech.modern_industrialization.compat.viewer.usage.MultiblockCategory$Recipe"})
+@Mixin(
+		targets = {"aztech.modern_industrialization.compat.viewer.usage.MultiblockCategory$Recipe"},
+		remap = false
+)
 public abstract class InterceptRegisterMultiblockShapeReiRecipeMixin
 {
 	@Accessor("materials")
 	abstract List<ItemStack> getMaterials();
 	
 	@Mutable
-	@Accessor("controller")
+	@Accessor(value = "controller")
 	abstract void setController(ItemStack controller);
 	
 	@Inject(

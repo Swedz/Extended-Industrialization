@@ -44,7 +44,7 @@
         "client.mi.HideEfficiencyBarClientMixin",
         "client.mi.HideEfficiencyInMultiblockClientMixin",
         "client.mi.MachineScreenIncludeCableTierInTitleMixin",
-        "client.mi.MIGuiComponentsClientMixin"
+        "client.mi.hook.HookGuiComponentsClientMixin"
     ],
     "injectors": {
         "defaultRequire": 1

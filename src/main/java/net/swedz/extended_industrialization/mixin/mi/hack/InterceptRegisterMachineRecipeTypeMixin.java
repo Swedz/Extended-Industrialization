@@ -13,7 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.function.Function;
 
-@Mixin(MIMachineRecipeTypes.class)
+@Mixin(
+		value = MIMachineRecipeTypes.class,
+		remap = false
+)
 public class InterceptRegisterMachineRecipeTypeMixin
 {
 	@Inject(

@@ -18,7 +18,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(AbstractWaterPumpBlockEntity.class)
+@Mixin(
+		value = AbstractWaterPumpBlockEntity.class,
+		remap = false
+)
 public abstract class MakeWaterPumpsRequireWaterBiomeMixin extends MachineBlockEntity
 {
 	public MakeWaterPumpsRequireWaterBiomeMixin(BEP bep, MachineGuiParameters guiParams, OrientationComponent.Params orientationParams)
@@ -52,8 +55,7 @@ public abstract class MakeWaterPumpsRequireWaterBiomeMixin extends MachineBlockE
 	
 	@Redirect(
 			method = "tick",
-			at = @At(value = "INVOKE", target = "Laztech/modern_industrialization/machines/blockentities/AbstractWaterPumpBlockEntity;consumeEu(J)J"),
-			remap = false
+			at = @At(value = "INVOKE", target = "Laztech/modern_industrialization/machines/blockentities/AbstractWaterPumpBlockEntity;consumeEu(J)J")
 	)
 	private long redirectConsumeEu(AbstractWaterPumpBlockEntity instance, long max)
 	{

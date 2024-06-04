@@ -12,14 +12,16 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.List;
 
-@Mixin(ViewerSetup.class)
+@Mixin(
+		value = ViewerSetup.class,
+		remap = false
+)
 public class HookViewerSetupMixin
 {
 	@Inject(
 			method = "setup",
 			at = @At("RETURN"),
-			locals = LocalCapture.CAPTURE_FAILHARD,
-			remap = false
+			locals = LocalCapture.CAPTURE_FAILHARD
 	)
 	private static void clinit(CallbackInfoReturnable<List<ViewerCategory<?>>> callback, List<ViewerCategory<?>> registry)
 	{

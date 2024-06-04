@@ -31,7 +31,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Map;
 import java.util.Optional;
 
-@Mixin(ConfigurableFluidStack.ConfigurableFluidSlot.class)
+@Mixin(
+		value = ConfigurableFluidStack.ConfigurableFluidSlot.class,
+		remap = false
+)
 public class AllowFluidBottlesInMachinesMenuMixin
 {
 	@Unique

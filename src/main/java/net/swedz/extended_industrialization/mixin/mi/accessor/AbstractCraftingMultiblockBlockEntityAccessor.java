@@ -5,7 +5,10 @@ import aztech.modern_industrialization.machines.components.ActiveShapeComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(AbstractCraftingMultiblockBlockEntity.class)
+@Mixin(
+		value = AbstractCraftingMultiblockBlockEntity.class,
+		remap = false
+)
 public interface AbstractCraftingMultiblockBlockEntityAccessor
 {
 	@Accessor

@@ -14,7 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import java.util.Iterator;
 import java.util.List;
 
-@Mixin(AbstractConfigurableStack.class)
+@Mixin(
+		value = AbstractConfigurableStack.class,
+		remap = false
+)
 public class MakePlayerLockNotifyListenersMixin
 {
 	@Inject(

@@ -4,7 +4,10 @@ import aztech.modern_industrialization.inventory.ConfigurableItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(ConfigurableItemStack.class)
+@Mixin(
+		value = ConfigurableItemStack.class,
+		remap = false
+)
 public interface ConfigurableItemStackAccessor
 {
 	@Accessor

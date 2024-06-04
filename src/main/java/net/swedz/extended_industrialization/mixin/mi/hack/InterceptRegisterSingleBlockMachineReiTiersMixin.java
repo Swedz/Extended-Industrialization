@@ -15,7 +15,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mixin(SingleBlockCraftingMachines.class)
+@Mixin(
+		value = SingleBlockCraftingMachines.class,
+		remap = false
+)
 public class InterceptRegisterSingleBlockMachineReiTiersMixin
 {
 	@Inject(

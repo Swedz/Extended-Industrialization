@@ -6,7 +6,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(ElectricBlastFurnaceBlockEntity.class)
+@Mixin(
+		value = ElectricBlastFurnaceBlockEntity.class,
+		remap = false
+)
 public class ConstantEfficiencyEBFMixin
 {
 	@Redirect(

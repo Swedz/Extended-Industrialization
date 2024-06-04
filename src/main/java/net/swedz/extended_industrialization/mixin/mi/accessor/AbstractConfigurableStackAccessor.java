@@ -4,7 +4,10 @@ import aztech.modern_industrialization.inventory.AbstractConfigurableStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(AbstractConfigurableStack.class)
+@Mixin(
+		value = AbstractConfigurableStack.class,
+		remap = false
+)
 public interface AbstractConfigurableStackAccessor
 {
 	@Invoker("notifyListeners")

@@ -29,7 +29,10 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@Mixin(MachineRegistrationHelper.class)
+@Mixin(
+		value = MachineRegistrationHelper.class,
+		remap = false
+)
 public class InterceptRegisterMachineMixin
 {
 	@Inject(

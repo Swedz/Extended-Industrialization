@@ -12,7 +12,10 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-@Mixin(MultiblockMachines.class)
+@Mixin(
+		value = MultiblockMachines.class,
+		remap = false
+)
 public class InterceptRegisterEBFReiCategoriesMixin
 {
 	@ModifyArg(

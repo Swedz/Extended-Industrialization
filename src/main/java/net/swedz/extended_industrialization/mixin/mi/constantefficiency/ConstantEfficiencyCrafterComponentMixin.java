@@ -16,7 +16,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-@Mixin(CrafterComponent.class)
+@Mixin(
+		value = CrafterComponent.class,
+		remap = false
+)
 public class ConstantEfficiencyCrafterComponentMixin
 {
 	@Shadow

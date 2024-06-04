@@ -8,7 +8,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(MIMachineRecipeTypes.class)
+@Mixin(
+		value = MIMachineRecipeTypes.class,
+		remap = false
+)
 public class HookMachineRecipeTypesMixin
 {
 	@Inject(

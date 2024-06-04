@@ -20,7 +20,8 @@ public class HideEfficiencyInMultiblockClientMixin
 	
 	@Inject(
 			method = "readCurrentData",
-			at = @At("RETURN")
+			at = @At("RETURN"),
+			remap = false
 	)
 	private void readCurrentData(FriendlyByteBuf buf, CallbackInfo callback)
 	{

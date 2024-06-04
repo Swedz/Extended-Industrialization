@@ -17,7 +17,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(AbstractElectricCraftingMultiblockBlockEntity.class)
+@Mixin(
+		value = AbstractElectricCraftingMultiblockBlockEntity.class,
+		remap = false
+)
 public abstract class ElectricCraftingMultiblockCableTierGetterMixin extends AbstractCraftingMultiblockBlockEntity implements CableTierHolder
 {
 	public ElectricCraftingMultiblockCableTierGetterMixin(BEP bep, String name, OrientationComponent.Params orientationParams, ShapeTemplate[] shapeTemplates)
