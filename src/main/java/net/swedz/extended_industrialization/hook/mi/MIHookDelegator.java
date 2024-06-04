@@ -22,6 +22,7 @@ import net.swedz.extended_industrialization.machines.guicomponents.universaltran
 import net.swedz.extended_industrialization.machines.guicomponents.universaltransformer.UniversalTransformerSlotsClient;
 import net.swedz.extended_industrialization.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGui;
 import net.swedz.extended_industrialization.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGuiClient;
+import net.swedz.extended_industrialization.machines.recipe.condition.EBFCoilProcessCondition;
 import net.swedz.extended_industrialization.machines.recipe.condition.VoltageProcessCondition;
 import net.swedz.extended_industrialization.tooltips.EITooltips;
 
@@ -55,6 +56,7 @@ public final class MIHookDelegator
 	public static void machineProcessConditions()
 	{
 		MachineProcessConditions.register(EI.id("voltage"), VoltageProcessCondition.CODEC);
+		MachineProcessConditions.register(EI.id("ebf_coil"), EBFCoilProcessCondition.CODEC);
 	}
 	
 	public static void machinesRecipeType()
