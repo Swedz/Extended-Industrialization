@@ -11,6 +11,7 @@ import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import aztech.modern_industrialization.util.TextHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
+import net.swedz.extended_industrialization.config.EIConfig;
 import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.MultipliedCrafterComponent;
@@ -59,7 +60,8 @@ public abstract class AbstractMultipliedCraftingMultiblockBlockEntity extends Ba
 				{
 					text.add(new ModularMultiblockGuiLine(MIText.Progress.text(String.format("%.1f", crafter.getProgress() * 100) + " %")));
 					
-					if(crafter.getEfficiencyTicks() != 0 || crafter.getMaxEfficiencyTicks() != 0)
+					if(!EIConfig.machineEfficiencyHack.hideEfficiency() &&
+							(crafter.getEfficiencyTicks() != 0 || crafter.getMaxEfficiencyTicks() != 0))
 					{
 						text.add(new ModularMultiblockGuiLine(MIText.EfficiencyTicks.text(crafter.getEfficiencyTicks(), crafter.getMaxEfficiencyTicks())));
 					}

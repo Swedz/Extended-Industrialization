@@ -11,6 +11,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.swedz.extended_industrialization.config.EIConfig;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -50,7 +51,11 @@ public final class ModularRecipeEfficiencyBarClient implements GuiComponentClien
 	@Override
 	public ClientComponentRenderer createRenderer(MachineScreen machineScreen)
 	{
-		return new ModularRecipeEfficiencyBarClient.Renderer();
+		return !EIConfig.machineEfficiencyHack.hideEfficiency() ?
+				new ModularRecipeEfficiencyBarClient.Renderer() :
+				(guiGraphics, leftPos, topPos) ->
+				{
+				};
 	}
 	
 	private static final ResourceLocation TEXTURE = new MIIdentifier("textures/gui/efficiency_bar.png");
