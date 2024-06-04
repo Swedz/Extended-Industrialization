@@ -194,7 +194,7 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 		List<StorageView<ItemVariant>> truncatedReagentItems = this.truncate(reagentStorage);
 		
 		List<PotionRecipe> subchain = recipe.subchain(truncatedReagentItems);
-		if(subchain.size() == 0)
+		if(subchain.isEmpty())
 		{
 			return false;
 		}
@@ -237,7 +237,7 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 			// Check that we have enough of this bottle item
 			try (Transaction nested = Transaction.openNested(transaction))
 			{
-				int count = 0;
+				long count = 0;
 				for(StorageView<ItemVariant> otherItem : bottleStorage)
 				{
 					ItemStack otherItemStack = otherItem.getResource().toStack();

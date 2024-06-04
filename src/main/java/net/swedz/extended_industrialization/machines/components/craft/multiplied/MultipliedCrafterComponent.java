@@ -1005,13 +1005,13 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 		}
 		
 		// LOCK ITEMS
-		if(recipe.value().itemInputs.size() > 0 || recipe.value().itemOutputs.size() > 0)
+		if(!recipe.value().itemInputs.isEmpty() || !recipe.value().itemOutputs.isEmpty())
 		{
 			lockAll(this.inventory.getItemInputs());
 			lockAll(this.inventory.getItemOutputs());
 		}
 		// LOCK FLUIDS
-		if(recipe.value().fluidInputs.size() > 0 || recipe.value().fluidOutputs.size() > 0)
+		if(!recipe.value().fluidInputs.isEmpty() || !recipe.value().fluidOutputs.isEmpty())
 		{
 			lockAll(this.inventory.getFluidInputs());
 			lockAll(this.inventory.getFluidOutputs());
