@@ -1,7 +1,7 @@
 package net.swedz.extended_industrialization.mixin.mi.constantefficiency;
 
 import aztech.modern_industrialization.machines.components.CrafterComponent;
-import net.swedz.extended_industrialization.api.ExtendedCableTier;
+import net.swedz.extended_industrialization.api.ConstantEfficiencyHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -18,6 +18,6 @@ public interface ConstantEfficiencyCrafterComponentBehaviorMixin
 	)
 	private long getMaxRecipeEu(CrafterComponent.Behavior behavior)
 	{
-		return ExtendedCableTier.getActualMaxRecipeEu(behavior, behavior);
+		return ConstantEfficiencyHelper.getActualMaxRecipeEu(behavior, behavior);
 	}
 }

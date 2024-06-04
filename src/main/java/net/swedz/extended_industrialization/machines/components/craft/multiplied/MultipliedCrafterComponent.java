@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.material.Fluid;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.config.EIConfig;
 import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccess;
 import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
 
@@ -155,6 +156,11 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 	@Override
 	public void decreaseEfficiencyTicks()
 	{
+		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
+		{
+			return;
+		}
+		
 		efficiencyTicks = Math.max(efficiencyTicks - 1, 0);
 		this.clearActiveRecipeIfPossible();
 	}
@@ -162,6 +168,11 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 	@Override
 	public void increaseEfficiencyTicks(int increment)
 	{
+		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
+		{
+			return;
+		}
+		
 		efficiencyTicks = Math.min(efficiencyTicks + increment, maxEfficiencyTicks);
 	}
 	
@@ -732,6 +743,11 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 			throw new IllegalStateException("May not call client side.");
 		}
 		
+		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
+		{
+			efficiencyTicks = activeRecipe != null ? maxEfficiencyTicks : 0;
+		}
+		
 		boolean active = false;
 		boolean enabled = behavior.isEnabled();
 		
@@ -830,6 +846,11 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 		recipeMultiplier = tag.getInt("recipeMultiplier");
 		efficiencyTicks = tag.getInt("efficiencyTicks");
 		maxEfficiencyTicks = tag.getInt("maxEfficiencyTicks");
+		
+		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
+		{
+			efficiencyTicks = activeRecipe != null ? maxEfficiencyTicks : 0;
+		}
 	}
 	
 	private void clearActiveRecipeIfPossible()

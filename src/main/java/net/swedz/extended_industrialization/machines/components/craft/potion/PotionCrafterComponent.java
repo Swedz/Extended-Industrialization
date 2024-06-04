@@ -22,6 +22,7 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.material.Fluids;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.api.MachineInventoryHelper;
+import net.swedz.extended_industrialization.config.EIConfig;
 import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccess;
 import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
 
@@ -93,6 +94,11 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 	@Override
 	public void decreaseEfficiencyTicks()
 	{
+		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
+		{
+			return;
+		}
+		
 		efficiencyTicks = Math.max(efficiencyTicks - 1, 0);
 		this.clearActiveRecipeIfPossible();
 	}
@@ -100,6 +106,11 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 	@Override
 	public void increaseEfficiencyTicks(int increment)
 	{
+		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
+		{
+			return;
+		}
+		
 		efficiencyTicks = Math.min(efficiencyTicks + increment, maxEfficiencyTicks);
 	}
 	
@@ -352,6 +363,16 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 	
 	public boolean tickRecipe()
 	{
+		if(behavior.getCrafterWorld().isClientSide())
+		{
+			throw new IllegalStateException("May not call client side.");
+		}
+		
+		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
+		{
+			efficiencyTicks = activeRecipe != null ? maxEfficiencyTicks : 0;
+		}
+		
 		this.doBlazeEssenceStuff();
 		
 		boolean active = false;
@@ -461,6 +482,11 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 		}
 		efficiencyTicks = tag.getInt("efficiencyTicks");
 		maxEfficiencyTicks = tag.getInt("maxEfficiencyTicks");
+		
+		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
+		{
+			efficiencyTicks = activeRecipe != null ? maxEfficiencyTicks : 0;
+		}
 	}
 	
 	public record SlotRange<T extends AbstractConfigurableStack>(int start, int end)

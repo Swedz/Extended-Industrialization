@@ -93,7 +93,7 @@ public final class SteamBreweryMachineBlockEntity extends BreweryMachineBlockEnt
 	}
 	
 	@Override
-	public long getMaxRecipeEu()
+	public long getBaseMaxRecipeEu()
 	{
 		return overclockComponent.getRecipeEu(tier.getMaxEu());
 	}

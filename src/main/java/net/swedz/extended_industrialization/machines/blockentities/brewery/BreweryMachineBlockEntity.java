@@ -114,7 +114,7 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 	}
 	
 	@Override
-	public long getMaxRecipeEu()
+	public long getBaseMaxRecipeEu()
 	{
 		return tier.getMaxEu();
 	}

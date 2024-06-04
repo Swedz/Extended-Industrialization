@@ -4,6 +4,7 @@ import aztech.modern_industrialization.stats.PlayerStatistics;
 import aztech.modern_industrialization.stats.PlayerStatisticsData;
 import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.world.level.Level;
+import net.swedz.extended_industrialization.api.ConstantEfficiencyHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -29,7 +30,12 @@ public interface ModularCrafterAccessBehavior
 	
 	long getBaseRecipeEu();
 	
-	long getMaxRecipeEu();
+	long getBaseMaxRecipeEu();
+	
+	default long getMaxRecipeEu()
+	{
+		return ConstantEfficiencyHelper.getActualMaxRecipeEu(this, this);
+	}
 	
 	// can't use getWorld() or the remapping will fail
 	Level getCrafterWorld();

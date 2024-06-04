@@ -3,8 +3,9 @@ package net.swedz.extended_industrialization.api;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.machines.components.CrafterComponent;
 import net.swedz.extended_industrialization.config.EIConfig;
+import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
 
-public final class ExtendedCableTier
+public final class ConstantEfficiencyHelper
 {
 	public static long getRecipeEu(CableTier tier)
 	{
@@ -15,8 +16,17 @@ public final class ExtendedCableTier
 	{
 		if(EIConfig.machineEfficiencyHack.useVoltageForEfficiency() && blockEntity instanceof CableTierHolder machine)
 		{
-			return ExtendedCableTier.getRecipeEu(machine.getCableTier());
+			return ConstantEfficiencyHelper.getRecipeEu(machine.getCableTier());
 		}
 		return behavior.getMaxRecipeEu();
+	}
+	
+	public static long getActualMaxRecipeEu(Object blockEntity, ModularCrafterAccessBehavior behavior)
+	{
+		if(EIConfig.machineEfficiencyHack.useVoltageForEfficiency() && blockEntity instanceof CableTierHolder machine)
+		{
+			return ConstantEfficiencyHelper.getRecipeEu(machine.getCableTier());
+		}
+		return behavior.getBaseMaxRecipeEu();
 	}
 }

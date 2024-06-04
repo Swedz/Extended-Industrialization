@@ -75,7 +75,7 @@ public abstract class AbstractSteamMultipliedCraftingMultiblockBlockEntity exten
 	}
 	
 	@Override
-	public long getMaxRecipeEu()
+	public long getBaseMaxRecipeEu()
 	{
 		return this.getBaseRecipeEu();
 	}

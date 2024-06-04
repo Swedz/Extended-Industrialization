@@ -130,7 +130,7 @@ public abstract class AbstractElectricMultipliedCraftingMultiblockBlockEntity ex
 	}
 	
 	@Override
-	public long getMaxRecipeEu()
+	public long getBaseMaxRecipeEu()
 	{
 		return machineTier.getMaxEu() + upgrades.getAddMaxEUPerTick();
 	}

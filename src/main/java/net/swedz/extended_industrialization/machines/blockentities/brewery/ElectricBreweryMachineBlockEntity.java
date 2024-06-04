@@ -126,7 +126,7 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 	}
 	
 	@Override
-	public long getMaxRecipeEu()
+	public long getBaseMaxRecipeEu()
 	{
 		return tier.getMaxEu() + upgrades.getAddMaxEUPerTick();
 	}

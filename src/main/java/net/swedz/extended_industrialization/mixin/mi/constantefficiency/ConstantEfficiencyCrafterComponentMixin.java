@@ -4,7 +4,7 @@ import aztech.modern_industrialization.machines.components.CrafterComponent;
 import aztech.modern_industrialization.machines.recipe.MachineRecipe;
 import aztech.modern_industrialization.machines.recipe.condition.MachineProcessCondition;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.swedz.extended_industrialization.api.ExtendedCableTier;
+import net.swedz.extended_industrialization.api.ConstantEfficiencyHelper;
 import net.swedz.extended_industrialization.config.EIConfig;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,7 +31,6 @@ public class ConstantEfficiencyCrafterComponentMixin
 	@Shadow
 	private RecipeHolder<MachineRecipe> activeRecipe;
 	
-	// TODO modify my craftercomponents to use this as well
 	@Redirect(
 			method = {"getRecipeMaxEfficiencyTicks", "tickRecipe", "getRecipeMaxEu"},
 			at = @At(
@@ -41,7 +40,7 @@ public class ConstantEfficiencyCrafterComponentMixin
 	)
 	private long getMaxRecipeEu(CrafterComponent.Behavior behavior)
 	{
-		return ExtendedCableTier.getActualMaxRecipeEu(conditionContext.getBlockEntity(), behavior);
+		return ConstantEfficiencyHelper.getActualMaxRecipeEu(conditionContext.getBlockEntity(), behavior);
 	}
 	
 	@Inject(
@@ -84,7 +83,7 @@ public class ConstantEfficiencyCrafterComponentMixin
 	
 	@Inject(
 			method = "readNbt",
-			at = @At("HEAD")
+			at = @At("RETURN")
 	)
 	private void readNbt(net.minecraft.nbt.CompoundTag tag, boolean isUpgradingMachine, CallbackInfo callback)
 	{
