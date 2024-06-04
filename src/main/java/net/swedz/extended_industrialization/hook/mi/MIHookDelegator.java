@@ -7,7 +7,7 @@ import aztech.modern_industrialization.machines.recipe.condition.MachineProcessC
 import com.google.common.collect.Lists;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.compat.viewer.usage.EIViewerSetup;
-import net.swedz.extended_industrialization.machines.EIMachines;
+import net.swedz.extended_industrialization.EIMachines;
 import net.swedz.extended_industrialization.machines.guicomponents.exposecabletier.ExposeCableTierGui;
 import net.swedz.extended_industrialization.machines.guicomponents.exposecabletier.ExposeCableTierGuiClient;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGui;
@@ -24,7 +24,7 @@ import net.swedz.extended_industrialization.machines.guicomponents.waterpumpenvi
 import net.swedz.extended_industrialization.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGuiClient;
 import net.swedz.extended_industrialization.machines.recipe.condition.EBFCoilProcessCondition;
 import net.swedz.extended_industrialization.machines.recipe.condition.VoltageProcessCondition;
-import net.swedz.extended_industrialization.tooltips.EITooltips;
+import net.swedz.extended_industrialization.EITooltips;
 
 import java.util.List;
 

@@ -6,9 +6,9 @@ import aztech.modern_industrialization.machines.gui.MachineScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.swedz.extended_industrialization.config.EIConfig;
+import net.swedz.extended_industrialization.EIConfig;
 import net.swedz.extended_industrialization.machines.guicomponents.exposecabletier.ExposeCableTierGuiClient;
-import net.swedz.extended_industrialization.text.EIText;
+import net.swedz.extended_industrialization.EIText;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 

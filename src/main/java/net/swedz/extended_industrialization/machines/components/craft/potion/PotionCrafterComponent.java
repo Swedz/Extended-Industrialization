@@ -22,7 +22,7 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.material.Fluids;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.api.MachineInventoryHelper;
-import net.swedz.extended_industrialization.config.EIConfig;
+import net.swedz.extended_industrialization.EIConfig;
 import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccess;
 import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
 

@@ -11,7 +11,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.swedz.extended_industrialization.network.packets.ConfigureMachinePacket;
-import net.swedz.extended_industrialization.text.EIText;
+import net.swedz.extended_industrialization.EIText;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -7,9 +7,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.extended_industrialization.machines.EIMachines;
-import net.swedz.extended_industrialization.registry.fluids.EIFluids;
-import net.swedz.extended_industrialization.registry.items.EIItems;
+import net.swedz.extended_industrialization.EIMachines;
+import net.swedz.extended_industrialization.EIFluids;
+import net.swedz.extended_industrialization.EIItems;
 
 public final class ComposterRecipesServerDatagenProvider extends RecipesServerDatagenProvider
 {

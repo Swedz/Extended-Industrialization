@@ -3,7 +3,7 @@ package net.swedz.extended_industrialization.machines.components.farmer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerTile;
-import net.swedz.extended_industrialization.text.EIText;
+import net.swedz.extended_industrialization.EIText;
 
 import java.util.List;
 import java.util.function.BiFunction;

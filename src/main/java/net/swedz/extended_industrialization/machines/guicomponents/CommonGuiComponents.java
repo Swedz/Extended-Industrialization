@@ -7,7 +7,7 @@ import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBlo
 import net.minecraft.network.chat.Component;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGui;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGuiLine;
-import net.swedz.extended_industrialization.text.EIText;
+import net.swedz.extended_industrialization.EIText;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;

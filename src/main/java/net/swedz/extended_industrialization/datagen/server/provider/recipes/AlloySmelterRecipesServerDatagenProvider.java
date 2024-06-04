@@ -4,7 +4,7 @@ import aztech.modern_industrialization.materials.Material;
 import aztech.modern_industrialization.materials.MaterialRegistry;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.extended_industrialization.machines.EIMachines;
+import net.swedz.extended_industrialization.EIMachines;
 
 import static aztech.modern_industrialization.materials.part.MIParts.*;
 

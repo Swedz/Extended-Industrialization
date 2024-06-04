@@ -6,8 +6,8 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.registry.blocks.BlockHolder;
-import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
+import net.swedz.extended_industrialization.api.registry.holder.BlockHolder;
+import net.swedz.extended_industrialization.EIBlocks;
 
 import java.util.Comparator;
 

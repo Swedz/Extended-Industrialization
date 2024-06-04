@@ -11,8 +11,8 @@ import aztech.modern_industrialization.thirdparty.fabrictransfer.api.transaction
 import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.extended_industrialization.registry.fluids.EIFluids;
-import net.swedz.extended_industrialization.registry.items.items.PhotovoltaicCellItem;
+import net.swedz.extended_industrialization.EIFluids;
+import net.swedz.extended_industrialization.items.PhotovoltaicCellItem;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;

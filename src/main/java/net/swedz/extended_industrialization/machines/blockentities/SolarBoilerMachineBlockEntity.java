@@ -23,9 +23,9 @@ import net.swedz.extended_industrialization.machines.components.SteamProductionC
 import net.swedz.extended_industrialization.machines.components.solar.SolarSunlightComponent;
 import net.swedz.extended_industrialization.machines.components.solar.boiler.SolarBoilerCalcificationComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
-import net.swedz.extended_industrialization.registry.fluids.EIFluids;
-import net.swedz.extended_industrialization.text.EIText;
-import net.swedz.extended_industrialization.tooltips.EITooltips;
+import net.swedz.extended_industrialization.EIFluids;
+import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.EITooltips;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;

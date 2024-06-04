@@ -5,7 +5,7 @@ import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.hook.mi.tracker.MIHookTracker;
-import net.swedz.extended_industrialization.registry.EIOtherRegistries;
+import net.swedz.extended_industrialization.EIOtherRegistries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

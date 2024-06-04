@@ -7,8 +7,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.extended_industrialization.registry.fluids.EIFluids;
-import net.swedz.extended_industrialization.registry.items.EIItems;
+import net.swedz.extended_industrialization.EIFluids;
+import net.swedz.extended_industrialization.EIItems;
 
 public final class NPKProcessingRecipesServerDatagenProvider extends RecipesServerDatagenProvider
 {

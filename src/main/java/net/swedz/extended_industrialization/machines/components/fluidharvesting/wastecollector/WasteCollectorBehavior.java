@@ -9,7 +9,7 @@ import net.minecraft.world.phys.AABB;
 import net.swedz.extended_industrialization.api.EuConsumerBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehaviorCreator;
-import net.swedz.extended_industrialization.registry.fluids.EIFluids;
+import net.swedz.extended_industrialization.EIFluids;
 
 public final class WasteCollectorBehavior extends FluidHarvestingBehavior
 {

@@ -9,13 +9,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.extended_industrialization.datamaps.EIDataMaps;
+import net.swedz.extended_industrialization.EIDataMaps;
 import net.swedz.extended_industrialization.datamaps.FarmerSimpleTallCropSize;
 import net.swedz.extended_industrialization.datamaps.FertilizerPotency;
 import net.swedz.extended_industrialization.datamaps.LargeElectricFurnaceTier;
 import net.swedz.extended_industrialization.datamaps.PotionBrewingCosts;
-import net.swedz.extended_industrialization.registry.fluids.EIFluids;
-import net.swedz.extended_industrialization.registry.fluids.FluidHolder;
+import net.swedz.extended_industrialization.EIFluids;
+import net.swedz.extended_industrialization.api.registry.holder.FluidHolder;
 
 import java.util.Map;
 

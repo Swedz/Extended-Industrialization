@@ -7,7 +7,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.datagen.api.recipe.ShapedRecipeBuilder;
 import net.swedz.extended_industrialization.datagen.api.recipe.ShapelessRecipeBuilder;
-import net.swedz.extended_industrialization.registry.tags.EITags;
+import net.swedz.extended_industrialization.EITags;
 
 import java.util.function.Consumer;
 

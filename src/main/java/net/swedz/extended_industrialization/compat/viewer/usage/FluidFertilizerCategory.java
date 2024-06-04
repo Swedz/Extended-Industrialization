@@ -9,9 +9,9 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.material.Fluid;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.datamaps.FertilizerPotency;
-import net.swedz.extended_industrialization.registry.fluids.EIFluids;
-import net.swedz.extended_industrialization.registry.items.EIItems;
-import net.swedz.extended_industrialization.text.EIText;
+import net.swedz.extended_industrialization.EIFluids;
+import net.swedz.extended_industrialization.EIItems;
+import net.swedz.extended_industrialization.EIText;
 
 import java.util.function.Consumer;
 

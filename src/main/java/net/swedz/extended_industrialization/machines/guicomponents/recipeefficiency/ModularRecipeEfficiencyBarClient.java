@@ -11,7 +11,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.swedz.extended_industrialization.config.EIConfig;
+import net.swedz.extended_industrialization.EIConfig;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

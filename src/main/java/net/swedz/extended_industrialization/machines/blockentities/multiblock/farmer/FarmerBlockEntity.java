@@ -21,7 +21,7 @@ import net.swedz.extended_industrialization.machines.components.farmer.task.Farm
 import net.swedz.extended_industrialization.machines.guicomponents.CommonGuiComponents;
 import net.swedz.extended_industrialization.machines.multiblock.BasicMultiblockMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.multiblock.members.PredicateSimpleMember;
-import net.swedz.extended_industrialization.text.EIText;
+import net.swedz.extended_industrialization.EIText;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.Collections;

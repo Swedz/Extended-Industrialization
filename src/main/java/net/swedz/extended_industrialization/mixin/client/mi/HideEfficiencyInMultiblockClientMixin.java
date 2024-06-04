@@ -2,7 +2,7 @@ package net.swedz.extended_industrialization.mixin.client.mi;
 
 import aztech.modern_industrialization.machines.guicomponents.CraftingMultiblockGuiClient;
 import net.minecraft.network.FriendlyByteBuf;
-import net.swedz.extended_industrialization.config.EIConfig;
+import net.swedz.extended_industrialization.EIConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

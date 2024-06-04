@@ -20,7 +20,7 @@ import net.swedz.extended_industrialization.datamaps.LargeElectricFurnaceTier;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.AbstractElectricMultipliedCraftingMultiblockBlockEntity;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformers;
-import net.swedz.extended_industrialization.text.EIText;
+import net.swedz.extended_industrialization.EIText;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.Collections;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 import static aztech.modern_industrialization.MITooltips.*;
 import static aztech.modern_industrialization.machines.models.MachineCasings.*;
-import static net.swedz.extended_industrialization.tooltips.EITooltips.*;
+import static net.swedz.extended_industrialization.EITooltips.*;
 
 public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMultipliedCraftingMultiblockBlockEntity
 {

@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.material.Fluid;
+import net.swedz.extended_industrialization.EIDataMaps;
 
 public record FertilizerPotency(int tickRate, int mbToConsumePerFertilizerTick)
 {

@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.block.Block;
+import net.swedz.extended_industrialization.EIDataMaps;
 
 public record FarmerSimpleTallCropSize(int maxHeight)
 {

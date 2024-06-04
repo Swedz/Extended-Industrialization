@@ -15,8 +15,8 @@ import net.neoforged.neoforge.client.model.generators.ModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.extended_industrialization.machines.EIMachines;
-import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
+import net.swedz.extended_industrialization.EIMachines;
+import net.swedz.extended_industrialization.EIBlocks;
 
 public final class MachineCasingModelsMIHookDatagenProvider extends ModelProvider<BlockModelBuilder>
 {

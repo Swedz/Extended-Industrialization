@@ -2,7 +2,7 @@ package net.swedz.extended_industrialization.api;
 
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.machines.components.CrafterComponent;
-import net.swedz.extended_industrialization.config.EIConfig;
+import net.swedz.extended_industrialization.EIConfig;
 import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
 
 public final class ConstantEfficiencyHelper

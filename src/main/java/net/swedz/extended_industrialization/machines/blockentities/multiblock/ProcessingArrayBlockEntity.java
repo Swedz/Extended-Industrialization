@@ -21,8 +21,8 @@ import net.swedz.extended_industrialization.machines.components.craft.multiplied
 import net.swedz.extended_industrialization.machines.components.craft.processingarray.ProcessingArrayMachineComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot.ProcessingArrayMachineSlot;
 import net.swedz.extended_industrialization.machines.multiblock.members.PredicateSimpleMember;
-import net.swedz.extended_industrialization.registry.tags.EITags;
-import net.swedz.extended_industrialization.text.EIText;
+import net.swedz.extended_industrialization.EITags;
+import net.swedz.extended_industrialization.EIText;
 
 import java.util.List;
 import java.util.stream.IntStream;

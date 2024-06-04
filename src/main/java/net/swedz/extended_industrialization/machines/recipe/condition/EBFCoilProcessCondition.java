@@ -8,7 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
 import net.swedz.extended_industrialization.mixin.mi.accessor.AbstractCraftingMultiblockBlockEntityAccessor;
-import net.swedz.extended_industrialization.text.EIText;
+import net.swedz.extended_industrialization.EIText;
 
 import java.util.List;
 

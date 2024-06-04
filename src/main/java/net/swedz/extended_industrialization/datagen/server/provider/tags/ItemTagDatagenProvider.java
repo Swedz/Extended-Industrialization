@@ -6,8 +6,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.registry.items.EIItems;
-import net.swedz.extended_industrialization.registry.items.ItemHolder;
+import net.swedz.extended_industrialization.EIItems;
+import net.swedz.extended_industrialization.api.registry.holder.ItemHolder;
 
 import java.util.Comparator;
 import java.util.concurrent.CompletableFuture;

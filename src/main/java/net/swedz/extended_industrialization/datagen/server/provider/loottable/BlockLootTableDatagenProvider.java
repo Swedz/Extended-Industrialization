@@ -3,8 +3,8 @@ package net.swedz.extended_industrialization.datagen.server.provider.loottable;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
-import net.swedz.extended_industrialization.registry.blocks.BlockHolder;
-import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
+import net.swedz.extended_industrialization.api.registry.holder.BlockHolder;
+import net.swedz.extended_industrialization.EIBlocks;
 
 import java.util.Set;
 

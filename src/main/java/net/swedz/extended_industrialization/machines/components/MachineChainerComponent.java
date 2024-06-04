@@ -21,7 +21,7 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListener;
 import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListeners;
 import net.swedz.extended_industrialization.machines.blockentities.MachineChainerMachineBlockEntity;
-import net.swedz.extended_industrialization.registry.blocks.EIBlocks;
+import net.swedz.extended_industrialization.EIBlocks;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;
