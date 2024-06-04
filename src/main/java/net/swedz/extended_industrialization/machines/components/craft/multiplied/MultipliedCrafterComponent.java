@@ -745,7 +745,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 		
 		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
 		{
-			efficiencyTicks = activeRecipe != null ? maxEfficiencyTicks : 0;
+			efficiencyTicks = this.hasActiveRecipe() ? maxEfficiencyTicks : 0;
 		}
 		
 		boolean active = false;
@@ -800,6 +800,10 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 		// If we didn't use the max energy this tick and the recipe is still ongoing, remove one efficiency tick
 		else if(eu < recipeMaxEu)
 		{
+			if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
+			{
+				efficiencyTicks = 0;
+			}
 			if(efficiencyTicks > 0)
 			{
 				efficiencyTicks--;
@@ -849,7 +853,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 		
 		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
 		{
-			efficiencyTicks = activeRecipe != null ? maxEfficiencyTicks : 0;
+			efficiencyTicks = this.hasActiveRecipe() ? maxEfficiencyTicks : 0;
 		}
 	}
 	

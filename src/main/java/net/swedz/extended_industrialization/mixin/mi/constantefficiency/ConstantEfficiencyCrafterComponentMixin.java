@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(CrafterComponent.class)
 public class ConstantEfficiencyCrafterComponentMixin
@@ -27,6 +28,9 @@ public class ConstantEfficiencyCrafterComponentMixin
 	
 	@Shadow
 	private int maxEfficiencyTicks;
+	
+	@Shadow
+	private long recipeMaxEu;
 	
 	@Shadow
 	private RecipeHolder<MachineRecipe> activeRecipe;
@@ -78,6 +82,22 @@ public class ConstantEfficiencyCrafterComponentMixin
 		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
 		{
 			efficiencyTicks = activeRecipe != null ? maxEfficiencyTicks : 0;
+		}
+	}
+	
+	@Inject(
+			method = "tickRecipe",
+			at = @At(
+					value = "INVOKE",
+					target = "Laztech/modern_industrialization/machines/components/CrafterComponent;clearActiveRecipeIfPossible()V"
+			),
+			locals = LocalCapture.CAPTURE_FAILHARD
+	)
+	private void tickRecipeReset(CallbackInfoReturnable<Boolean> cir, boolean isActive, boolean isEnabled, boolean recipeStarted, long eu, boolean finishedRecipe)
+	{
+		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency() && eu < recipeMaxEu)
+		{
+			efficiencyTicks = 0;
 		}
 	}
 	
