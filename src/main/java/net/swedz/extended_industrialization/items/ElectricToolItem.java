@@ -47,17 +47,55 @@ import java.util.Map;
 
 public class ElectricToolItem extends Item implements Vanishable, DynamicToolItem, ISimpleEnergyItem
 {
-	private static final long ENERGY_CAPACITY = 60 * 20 * CableTier.HV.getMaxTransfer();
-	private static final long ENERGY_COST     = 2048;
+	public enum Type
+	{
+		DRILL(60 * 20 * CableTier.HV.getMaxTransfer(), 9, 9, false),
+		CHAINSAW(60 * 20 * CableTier.HV.getMaxTransfer(), 9, 15, false),
+		ULTIMATE(60 * 20 * CableTier.EV.getMaxTransfer(), 12, 19, true);
+		
+		private final long    energyCapacity;
+		private final float   speed;
+		private final int     damage;
+		private final boolean worksForAllBlocks;
+		
+		Type(long energyCapacity, float speed, int damage, boolean worksForAllBlocks)
+		{
+			this.energyCapacity = energyCapacity;
+			this.speed = speed;
+			this.damage = damage;
+			this.worksForAllBlocks = worksForAllBlocks;
+		}
+		
+		public long energyCapacity()
+		{
+			return energyCapacity;
+		}
+		
+		public int damage()
+		{
+			return damage;
+		}
+		
+		public boolean worksForAllBlocks()
+		{
+			return worksForAllBlocks;
+		}
+	}
+	
+	private static final long ENERGY_COST = 2048;
+	
+	private final Type type;
 	
 	private final Multimap<Attribute, AttributeModifier> defaultModifiers;
 	
-	public ElectricToolItem(Properties properties, boolean chainsaw)
+	public ElectricToolItem(Properties properties, Type type)
 	{
 		super(properties.stacksTo(1).rarity(Rarity.UNCOMMON));
 		
+		this.type = type;
+		
 		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-		builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", chainsaw ? 15 : 9, AttributeModifier.Operation.ADDITION));
+		builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", type.damage(), AttributeModifier.Operation.ADDITION));
 		this.defaultModifiers = builder.build();
 	}
 	
@@ -71,8 +109,8 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
 	{
 		return enchantment.category.canEnchant(stack.getItem()) ||
-			   (enchantment.category == EnchantmentCategory.DIGGER && enchantment != Enchantments.SILK_TOUCH && enchantment != Enchantments.BLOCK_FORTUNE) ||
-			   (stack.is(ItemTags.AXES) && enchantment.category == EnchantmentCategory.WEAPON && enchantment != Enchantments.SWEEPING_EDGE);
+				(enchantment.category == EnchantmentCategory.DIGGER && enchantment != Enchantments.SILK_TOUCH && enchantment != Enchantments.BLOCK_FORTUNE) ||
+				(stack.is(ItemTags.AXES) && enchantment.category == EnchantmentCategory.WEAPON && enchantment != Enchantments.SWEEPING_EDGE);
 	}
 	
 	@Override
@@ -95,7 +133,8 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	@Override
 	public boolean isCorrectToolForDrops(ItemStack stack, BlockState state)
 	{
-		if(this.isSupportedBlock(stack, state) && this.getStoredEnergy(stack) > 0 && TierSortingRegistry.isCorrectTierForDrops(Tiers.NETHERITE, state))
+		if((type.worksForAllBlocks() || this.isSupportedBlock(stack, state)) &&
+				this.getStoredEnergy(stack) > 0 && TierSortingRegistry.isCorrectTierForDrops(Tiers.NETHERITE, state))
 		{
 			return true;
 		}
@@ -105,7 +144,8 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	@Override
 	public float getDestroySpeed(ItemStack stack, BlockState state)
 	{
-		if(this.isSupportedBlock(stack, state) && this.getStoredEnergy(stack) > 0)
+		if((type.worksForAllBlocks() || this.isSupportedBlock(stack, state)) &&
+				this.getStoredEnergy(stack) > 0)
 		{
 			return Tiers.NETHERITE.getSpeed();
 		}
@@ -129,32 +169,32 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	@Override
 	public int getBarWidth(ItemStack stack)
 	{
-		return (int) Math.round(this.getStoredEnergy(stack) / (double) ENERGY_CAPACITY * 13);
+		return (int) Math.round(this.getStoredEnergy(stack) / (double) type.energyCapacity() * 13);
 	}
 	
 	@Override
 	public int getBarColor(ItemStack stack)
 	{
-		float hue = Math.max(0, (float) this.getStoredEnergy(stack) / ENERGY_CAPACITY);
+		float hue = Math.max(0, (float) this.getStoredEnergy(stack) / type.energyCapacity());
 		return Mth.hsvToRgb(hue / 3, 1, 1);
 	}
 	
 	@Override
 	public long getEnergyCapacity(ItemStack stack)
 	{
-		return ENERGY_CAPACITY;
+		return type.energyCapacity();
 	}
 	
 	@Override
 	public long getEnergyMaxInput(ItemStack stack)
 	{
-		return ENERGY_CAPACITY;
+		return type.energyCapacity();
 	}
 	
 	@Override
 	public long getEnergyMaxOutput(ItemStack stack)
 	{
-		return ENERGY_CAPACITY;
+		return type.energyCapacity();
 	}
 	
 	private static boolean isFortune(ItemStack stack)

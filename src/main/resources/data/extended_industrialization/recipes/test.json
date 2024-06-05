@@ -1,0 +1,23 @@
+{
+    "type": "modern_industrialization:blast_furnace",
+    "duration": 200,
+    "eu": 8,
+    "conditions": [
+        {
+            "type": "extended_industrialization:ebf_coil",
+            "coil": "modern_industrialization:kanthal_coil"
+        }
+    ],
+    "fluid_inputs": [
+        {
+            "amount": 1000,
+            "fluid": "minecraft:lava"
+        }
+    ],
+    "fluid_outputs": [
+        {
+            "amount": 1000,
+            "fluid": "minecraft:water"
+        }
+    ]
+}
