@@ -193,9 +193,9 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				"tool", "ultimate_drill", false,
 				EIItems.ULTIMATE_LASER_DRILL, 1,
 				(r) -> r
-						.define('D', EIItems.ELETRIC_MINING_DRILL)
+						.define('D', EIItems.ELECTRIC_MINING_DRILL)
 						.define('B', EIItems.NETHERITE_ROTARY_BLADE)
-						.define('C', EIItems.ELETRIC_CHAINSAW)
+						.define('C', EIItems.ELECTRIC_CHAINSAW)
 						.define('c', "modern_industrialization:cooling_cell")
 						.define('S', "modern_industrialization:superconductor_coil")
 						.define('U', "modern_industrialization:highly_advanced_upgrade")

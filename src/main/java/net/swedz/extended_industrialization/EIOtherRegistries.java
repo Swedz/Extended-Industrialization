@@ -25,7 +25,7 @@ public final class EIOtherRegistries
 			.title(Component.translatable("itemGroup.%s.%s".formatted(EI.ID, EI.ID)))
 			.icon(() ->
 			{
-				ItemStack stack = EIItems.ELETRIC_MINING_DRILL.asItem().getDefaultInstance();
+				ItemStack stack = EIItems.ELECTRIC_MINING_DRILL.asItem().getDefaultInstance();
 				stack.getOrCreateTag().putBoolean("hide_bar", true);
 				return stack;
 			})
