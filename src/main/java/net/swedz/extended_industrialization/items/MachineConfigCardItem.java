@@ -5,6 +5,7 @@ import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.inventory.ConfigurableItemStack;
 import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBlockEntity;
 import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -52,7 +53,8 @@ public final class MachineConfigCardItem extends Item
 			InteractionHand usedHand = context.getHand();
 			ItemStack itemStack = player.getItemInHand(usedHand);
 			BlockEntity hitBlockEntity = context.getLevel().getBlockEntity(context.getClickedPos());
-			if(hitBlockEntity instanceof MachineBlockEntity machine)
+			if(hitBlockEntity instanceof MachineBlockEntity machine &&
+					!(hitBlockEntity instanceof MultiblockMachineBlockEntity))
 			{
 				if(!context.getLevel().isClientSide())
 				{
