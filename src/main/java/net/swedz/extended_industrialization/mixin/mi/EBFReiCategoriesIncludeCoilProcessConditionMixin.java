@@ -41,7 +41,7 @@ public class EBFReiCategoriesIncludeCoilProcessConditionMixin
 				EBFCoilProcessCondition coilCondition = optionalCoilCondition.get();
 				return coilCondition.coilTier().maxBaseEu() <= tier.maxBaseEu();
 			}
-			return previousMax < recipe.eu && recipe.eu <= currentMax;
+			return extraTest.test(recipe);
 		};
 	}
 }
