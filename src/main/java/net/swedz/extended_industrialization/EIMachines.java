@@ -186,7 +186,7 @@ public final class EIMachines
 					Casings.STEEL_PLATED_BRICKS, true, false, false,
 					(bep) -> new ElectricMultipliedCraftingMultiblockBlockEntity(
 							bep, "large_electric_macerator", new ShapeTemplate[]{shape},
-							MachineTier.MULTIBLOCK,
+							MachineTier.LV,
 							MIMachineRecipeTypes.MACERATOR, 16, EuCostTransformers.percentage(() -> 0.75f)
 					)
 			);

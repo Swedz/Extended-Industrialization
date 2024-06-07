@@ -16,11 +16,11 @@ import com.google.common.collect.Maps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.datamaps.LargeElectricFurnaceTier;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.AbstractElectricMultipliedCraftingMultiblockBlockEntity;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformers;
-import net.swedz.extended_industrialization.EIText;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.Collections;
@@ -38,7 +38,7 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 {
 	public LargeElectricFurnaceBlockEntity(BEP bep)
 	{
-		super(bep, "large_electric_furnace", SHAPE_TEMPLATES, MachineTier.MULTIBLOCK);
+		super(bep, "large_electric_furnace", SHAPE_TEMPLATES, MachineTier.LV);
 		
 		List<Component> tierComponents = TIERS.stream().map(LargeElectricFurnaceBlockEntity.Tier::getDisplayName).toList();
 		
@@ -88,7 +88,7 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 	public List<Component> getTooltips()
 	{
 		return List.of(
-				DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_RECIPE.text(MACHINE_RECIPE_TYPE_PARSER.parse(this.getRecipeType()))),
+				DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_RECIPE.text(MACHINE_RECIPE_TYPE_PARSER.parse(true, this.getRecipeType()))),
 				DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_COILS.text())
 		);
 	}

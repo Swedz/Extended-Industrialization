@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization;
 
+import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
@@ -9,14 +10,15 @@ import aztech.modern_industrialization.machines.components.CasingComponent;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.BlockItem;
 import net.swedz.extended_industrialization.api.CableTierHolder;
 import net.swedz.extended_industrialization.api.ConstantEfficiencyHelper;
+import net.swedz.extended_industrialization.items.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
-import net.swedz.extended_industrialization.items.PhotovoltaicCellItem;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
@@ -32,8 +34,16 @@ public final class EITooltips
 	public static final Parser<Float> RATIO_PERCENTAGE_PARSER = (ratio) ->
 			Component.literal("%d%%".formatted((int) (ratio * 100))).withStyle(NUMBER_TEXT);
 	
-	public static final Parser<MachineRecipeType> MACHINE_RECIPE_TYPE_PARSER = (recipeType) ->
-			Component.translatable("recipe_type.%s.%s".formatted(recipeType.getId().getNamespace(), recipeType.getPath())).withStyle(NUMBER_TEXT);
+	public static final BiParser<Boolean, MachineRecipeType> MACHINE_RECIPE_TYPE_PARSER = (electric, recipeType) ->
+	{
+		String tierString = electric ? "electric" : "bronze";
+		String key = "rei_categories.%s.%s_%s".formatted(MI.ID, tierString, recipeType.getPath());
+		if(!Language.getInstance().has(key))
+		{
+			key = "rei_categories.%s.%s".formatted(MI.ID, recipeType.getPath());
+		}
+		return Component.translatable(key).withStyle(NUMBER_TEXT);
+	};
 	
 	public static final Parser<EuCostTransformer> EU_COST_TRANSFORMER_PARSER = (euCostTransformer) ->
 			euCostTransformer.text().withStyle(NUMBER_TEXT);
@@ -164,6 +174,12 @@ public final class EITooltips
 				return lines.isEmpty() ? Optional.empty() : Optional.of(lines);
 			}
 	);
+	
+	@FunctionalInterface
+	public interface BiParser<T, K>
+	{
+		Component parse(T t, K k);
+	}
 	
 	public static void init()
 	{

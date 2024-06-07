@@ -12,9 +12,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.swedz.extended_industrialization.EIText;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
+
+import static aztech.modern_industrialization.MITooltips.*;
+import static net.swedz.extended_industrialization.EITooltips.*;
 
 public abstract class AbstractSteamMultipliedCraftingMultiblockBlockEntity extends AbstractMultipliedCraftingMultiblockBlockEntity
 {
@@ -47,15 +51,6 @@ public abstract class AbstractSteamMultipliedCraftingMultiblockBlockEntity exten
 	}
 	
 	@Override
-	public List<Component> getTooltips()
-	{
-		List<Component> tooltips = Lists.newArrayList();
-		tooltips.addAll(overclock.getTooltips());
-		tooltips.addAll(super.getTooltips());
-		return tooltips;
-	}
-	
-	@Override
 	protected InteractionResult onUse(Player player, InteractionHand hand, Direction face)
 	{
 		InteractionResult result = super.onUse(player, hand, face);
@@ -78,5 +73,15 @@ public abstract class AbstractSteamMultipliedCraftingMultiblockBlockEntity exten
 	public long getBaseMaxRecipeEu()
 	{
 		return this.getBaseRecipeEu();
+	}
+	
+	@Override
+	public List<Component> getTooltips()
+	{
+		List<Component> tooltips = Lists.newArrayList();
+		tooltips.addAll(overclock.getTooltips());
+		tooltips.add(DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_RECIPE.text(MACHINE_RECIPE_TYPE_PARSER.parse(false, this.getRecipeType()))));
+		tooltips.add(DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_SIZE_AND_COST.text(DEFAULT_PARSER.parse(this.getMaxMultiplier()), EU_COST_TRANSFORMER_PARSER.parse(this.getEuCostTransformer()))));
+		return tooltips;
 	}
 }

@@ -15,15 +15,20 @@ import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.swedz.extended_industrialization.api.EILubricantHelper;
+import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.api.CableTierHolder;
+import net.swedz.extended_industrialization.api.EILubricantHelper;
 import net.swedz.extended_industrialization.machines.guicomponents.exposecabletier.ExposeCableTierGui;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
+
+import static aztech.modern_industrialization.MITooltips.*;
+import static net.swedz.extended_industrialization.EITooltips.*;
 
 public abstract class AbstractElectricMultipliedCraftingMultiblockBlockEntity extends AbstractMultipliedCraftingMultiblockBlockEntity implements EnergyListComponentHolder, CableTierHolder
 {
@@ -133,5 +138,14 @@ public abstract class AbstractElectricMultipliedCraftingMultiblockBlockEntity ex
 	public long getBaseMaxRecipeEu()
 	{
 		return machineTier.getMaxEu() + upgrades.getAddMaxEUPerTick();
+	}
+	
+	@Override
+	public List<Component> getTooltips()
+	{
+		return List.of(
+				DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_RECIPE.text(MACHINE_RECIPE_TYPE_PARSER.parse(true, this.getRecipeType()))),
+				DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_SIZE_AND_COST.text(DEFAULT_PARSER.parse(this.getMaxMultiplier()), EU_COST_TRANSFORMER_PARSER.parse(this.getEuCostTransformer())))
+		);
 	}
 }
