@@ -18,6 +18,8 @@ import aztech.modern_industrialization.machines.multiblocks.HatchType;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
+import aztech.modern_industrialization.materials.MIMaterials;
+import aztech.modern_industrialization.materials.part.MIParts;
 import com.google.common.collect.Maps;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.machines.blockentities.MachineChainerMachineBlockEntity;
@@ -66,9 +68,9 @@ public final class EIMachines
 	
 	public static void casings(MachineCasingsMIHookContext hook)
 	{
-		Casings.BRONZE_PIPE = hook.register("bronze_pipe");
-		Casings.STEEL_PIPE = hook.register("steel_pipe");
-		Casings.STEEL_PLATED_BRICKS = hook.register("steel_plated_bricks");
+		Casings.BRONZE_PIPE = hook.registerImitateBlock("bronze_pipe", () -> MIMaterials.BRONZE.getPart(MIParts.MACHINE_CASING_PIPE).asBlock());
+		Casings.STEEL_PIPE = hook.registerImitateBlock("steel_pipe", () -> MIMaterials.STEEL.getPart(MIParts.MACHINE_CASING_PIPE).asBlock());
+		Casings.STEEL_PLATED_BRICKS = hook.registerImitateBlock("steel_plated_bricks", EIBlocks.STEEL_PLATED_BRICKS);
 	}
 	
 	public static final class RecipeTypes
