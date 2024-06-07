@@ -15,14 +15,14 @@ import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
+import net.swedz.extended_industrialization.EITags;
+import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.AbstractElectricMultipliedCraftingMultiblockBlockEntity;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformers;
 import net.swedz.extended_industrialization.machines.components.craft.processingarray.ProcessingArrayMachineComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot.ProcessingArrayMachineSlot;
 import net.swedz.extended_industrialization.machines.multiblock.members.PredicateSimpleMember;
-import net.swedz.extended_industrialization.EITags;
-import net.swedz.extended_industrialization.EIText;
 
 import java.util.List;
 import java.util.stream.IntStream;

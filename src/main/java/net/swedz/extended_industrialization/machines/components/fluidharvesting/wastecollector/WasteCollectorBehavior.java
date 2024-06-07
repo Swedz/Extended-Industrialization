@@ -6,10 +6,10 @@ import aztech.modern_industrialization.thirdparty.fabrictransfer.api.fluid.Fluid
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
+import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.api.EuConsumerBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehaviorCreator;
-import net.swedz.extended_industrialization.EIFluids;
 
 public final class WasteCollectorBehavior extends FluidHarvestingBehavior
 {

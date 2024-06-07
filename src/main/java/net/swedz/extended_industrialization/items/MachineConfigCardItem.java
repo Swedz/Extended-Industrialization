@@ -26,8 +26,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
-import net.swedz.extended_industrialization.mixin.mi.accessor.ConfigurableItemStackAccessor;
 import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.mixin.mi.accessor.ConfigurableItemStackAccessor;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;

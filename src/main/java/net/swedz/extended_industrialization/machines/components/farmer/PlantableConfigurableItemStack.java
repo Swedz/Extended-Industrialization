@@ -67,7 +67,7 @@ public final class PlantableConfigurableItemStack extends ChangeListener
 		if(lastUpdateItem != item)
 		{
 			plantable = item instanceof BlockItem blockItem &&
-						blockItem.getBlock() instanceof IPlantable;
+					blockItem.getBlock() instanceof IPlantable;
 		}
 		lastUpdateItem = item;
 	}

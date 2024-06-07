@@ -19,8 +19,8 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.machines.components.TransformerTierComponent;
 import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.machines.components.TransformerTierComponent;
 
 import java.util.List;
 

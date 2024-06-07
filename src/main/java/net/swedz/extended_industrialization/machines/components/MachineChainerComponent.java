@@ -18,8 +18,8 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.swedz.extended_industrialization.machines.blockentities.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.EIBlocks;
+import net.swedz.extended_industrialization.machines.blockentities.MachineChainerMachineBlockEntity;
 import net.swedz.tesseract.neoforge.isolatedlistener.IsolatedListener;
 import net.swedz.tesseract.neoforge.isolatedlistener.IsolatedListeners;
 import org.apache.commons.compress.utils.Lists;
@@ -91,7 +91,7 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 			{
 				BlockEntity blockEntity = this.getLevel().getBlockEntity(link);
 				if(blockEntity instanceof MachineChainerMachineBlockEntity chainerBlockEntity &&
-				   chainerBlockEntity.getChainerComponent().containsMachineAt(blockPos, true))
+						chainerBlockEntity.getChainerComponent().containsMachineAt(blockPos, true))
 				{
 					return true;
 				}
@@ -176,7 +176,7 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 			if(blockEntity instanceof MachineChainerMachineBlockEntity chainerBlockEntity)
 			{
 				if(chainerBlockEntity.orientation.facingDirection == machineBlockEntity.orientation.facingDirection ||
-				   chainerBlockEntity.orientation.facingDirection.getOpposite() == machineBlockEntity.orientation.facingDirection)
+						chainerBlockEntity.orientation.facingDirection.getOpposite() == machineBlockEntity.orientation.facingDirection)
 				{
 					break;
 				}

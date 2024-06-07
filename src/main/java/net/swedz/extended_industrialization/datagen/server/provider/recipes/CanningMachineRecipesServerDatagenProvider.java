@@ -13,9 +13,9 @@ import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.swedz.extended_industrialization.EIMachines;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIItems;
+import net.swedz.extended_industrialization.EIMachines;
 
 import java.util.Set;
 

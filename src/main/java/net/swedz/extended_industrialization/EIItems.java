@@ -12,8 +12,8 @@ import net.swedz.extended_industrialization.items.MachineConfigCardItem;
 import net.swedz.extended_industrialization.items.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.items.SteamChainsawItem;
 import net.swedz.extended_industrialization.items.TinCanFoodItem;
-import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
+import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
 import net.swedz.tesseract.neoforge.registry.common.MICommonCapabitilies;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 

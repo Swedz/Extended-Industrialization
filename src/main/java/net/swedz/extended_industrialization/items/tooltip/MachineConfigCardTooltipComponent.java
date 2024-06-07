@@ -6,7 +6,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.swedz.extended_industrialization.items.MachineConfigCardItem;
 
-public record MachineConfigCardTooltipComponent(MachineConfigCardItem.TooltipData data) implements ClientTooltipComponent
+public record MachineConfigCardTooltipComponent(
+		MachineConfigCardItem.TooltipData data
+) implements ClientTooltipComponent
 {
 	@Override
 	public int getHeight()

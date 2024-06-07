@@ -19,13 +19,13 @@ import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
+import net.swedz.extended_industrialization.EIFluids;
+import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.machines.components.SteamProductionComponent;
 import net.swedz.extended_industrialization.machines.components.solar.SolarSunlightComponent;
 import net.swedz.extended_industrialization.machines.components.solar.boiler.SolarBoilerCalcificationComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
-import net.swedz.extended_industrialization.EIFluids;
-import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.EITooltips;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;

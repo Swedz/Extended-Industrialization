@@ -15,13 +15,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
+import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.components.farmer.PlantingMode;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerProcessRates;
 import net.swedz.extended_industrialization.machines.guicomponents.CommonGuiComponents;
 import net.swedz.extended_industrialization.machines.multiblock.BasicMultiblockMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.multiblock.members.PredicateSimpleMember;
-import net.swedz.extended_industrialization.EIText;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.Collections;
@@ -199,7 +199,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		private static final SimpleMember DIRT = new PredicateSimpleMember(
 				(state) ->
 						state.is(BlockTags.DIRT) || state.is(Blocks.FARMLAND) || state.is(Blocks.SAND) ||
-						state.getFluidState().is(Fluids.WATER) || state.getFluidState().is(Fluids.FLOWING_WATER),
+								state.getFluidState().is(Fluids.WATER) || state.getFluidState().is(Fluids.FLOWING_WATER),
 				Blocks.DIRT
 		);
 		

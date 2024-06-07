@@ -294,8 +294,8 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 	private boolean tryStartRecipe(MachineRecipe recipe, int recipeMultiplier)
 	{
 		if(this.takeItemInputs(recipe, recipeMultiplier, true) && this.takeFluidInputs(recipe, recipeMultiplier, true) &&
-		   this.putItemOutputs(recipe, recipeMultiplier, true, false) && this.putFluidOutputs(recipe, recipeMultiplier, true, false) &&
-		   recipe.conditionsMatch(conditionContext))
+				this.putItemOutputs(recipe, recipeMultiplier, true, false) && this.putFluidOutputs(recipe, recipeMultiplier, true, false) &&
+				recipe.conditionsMatch(conditionContext))
 		{
 			this.takeItemInputs(recipe, recipeMultiplier, false);
 			this.takeFluidInputs(recipe, recipeMultiplier, false);
@@ -698,7 +698,7 @@ public final class MultipliedCrafterComponent implements IComponent.ServerOnly, 
 					ConfigurableFluidStack stack = stacks.get(j);
 					FluidVariant outputKey = FluidVariant.of(output.fluid);
 					if(stack.isResourceAllowedByLock(outputKey)
-					   && ((tries == 1 && stack.isResourceBlank()) || stack.getResource().equals(outputKey)))
+							&& ((tries == 1 && stack.isResourceBlank()) || stack.getResource().equals(outputKey)))
 					{
 						long inserted = Math.min(output.amount * recipeMultiplier, stack.getRemainingSpace());
 						if(inserted > 0)

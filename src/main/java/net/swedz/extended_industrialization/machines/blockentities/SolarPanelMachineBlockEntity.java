@@ -28,11 +28,11 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.fluids.FluidType;
+import net.swedz.extended_industrialization.EIFluids;
+import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.components.solar.SolarSunlightComponent;
 import net.swedz.extended_industrialization.machines.components.solar.electric.SolarGeneratorComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
-import net.swedz.extended_industrialization.EIFluids;
-import net.swedz.extended_industrialization.EIText;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;

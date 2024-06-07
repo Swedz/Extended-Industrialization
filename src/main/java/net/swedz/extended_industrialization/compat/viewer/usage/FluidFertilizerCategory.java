@@ -8,10 +8,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.material.Fluid;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.datamaps.FertilizerPotency;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.datamaps.FertilizerPotency;
 
 import java.util.function.Consumer;
 

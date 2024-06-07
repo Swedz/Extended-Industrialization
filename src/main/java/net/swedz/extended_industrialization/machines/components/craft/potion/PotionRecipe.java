@@ -174,8 +174,8 @@ public final class PotionRecipe
 		if(obj == null || obj.getClass() != this.getClass()) return false;
 		PotionRecipe other = (PotionRecipe) obj;
 		return ItemStack.isSameItemSameTags(input, other.input) &&
-			   Objects.equals(reagent, other.reagent) &&
-			   ItemStack.isSameItemSameTags(output, other.output);
+				Objects.equals(reagent, other.reagent) &&
+				ItemStack.isSameItemSameTags(output, other.output);
 	}
 	
 	@Override
