@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.mixin.mi.hack;
+package net.swedz.extended_industrialization.mixin.mi;
 
 import aztech.modern_industrialization.machines.blockentities.multiblocks.ElectricBlastFurnaceBlockEntity;
 import aztech.modern_industrialization.machines.init.MultiblockMachines;
@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 		value = MultiblockMachines.class,
 		remap = false
 )
-public class InterceptRegisterEBFReiCategoriesMixin
+public class EBFReiCategoriesIncludeCoilProcessConditionMixin
 {
 	@ModifyArg(
 			method = "registerEbfReiCategories",

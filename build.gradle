@@ -53,6 +53,8 @@ dependencies {
 	implementation "dev.emi:emi-neoforge:${emi_version}+${minecraft_version}"
 
 	implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:${mixinextras_version}"))
+
+	implementation "net.swedz:tesseract-neoforge:${tesseract_version}"
 }
 
 base {
@@ -115,7 +117,8 @@ tasks.withType(ProcessResources).configureEach {
 			mod_version                     : mod_version,
 			mod_authors                     : mod_authors,
 			mod_description                 : mod_description,
-			modern_industrialization_version: modern_industrialization_version
+			modern_industrialization_version: modern_industrialization_version,
+			tesseract_version               : tesseract_version
 	]
 	inputs.properties replaceProperties
 

@@ -16,16 +16,18 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
-import net.swedz.extended_industrialization.api.MCIdentifiable;
-import net.swedz.extended_industrialization.api.capabilities.CapabilitiesListeners;
-import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListeners;
+import net.swedz.extended_industrialization.compat.mi.EIMIHookListener;
+import net.swedz.extended_industrialization.compat.mi.EIMIHookRegistry;
 import net.swedz.extended_industrialization.datagen.DatagenDelegator;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionRecipe;
 import net.swedz.extended_industrialization.network.EIPackets;
-import net.swedz.extended_industrialization.api.registry.holder.BlockHolder;
-import net.swedz.extended_industrialization.api.registry.holder.FluidHolder;
-import net.swedz.extended_industrialization.api.registry.holder.ItemHolder;
+import net.swedz.tesseract.neoforge.api.MCIdentifiable;
+import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
+import net.swedz.tesseract.neoforge.compat.mi.hook.MIHooks;
+import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
+import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
+import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,13 +60,13 @@ public final class EI
 	{
 		this.loadConfig();
 		
+		MIHooks.register(this, new EIMIHookRegistry(), new EIMIHookListener());
+		
 		EIItems.init(bus);
 		EIBlocks.init(bus);
 		EIFluids.init(bus);
 		EIAttachments.init(bus);
 		EIOtherRegistries.init(bus);
-		
-		IsolatedListeners.init();
 		
 		bus.register(new DatagenDelegator());
 		

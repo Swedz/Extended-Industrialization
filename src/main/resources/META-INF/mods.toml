@@ -28,3 +28,10 @@ type = "required"
 versionRange = "${modern_industrialization_version}"
 ordering = "AFTER"
 side = "BOTH"
+
+[[dependencies.${ mod_id }]]
+modId = "tesseract"
+type = "required"
+versionRange = "${tesseract_version}"
+ordering = "AFTER"
+side = "BOTH"

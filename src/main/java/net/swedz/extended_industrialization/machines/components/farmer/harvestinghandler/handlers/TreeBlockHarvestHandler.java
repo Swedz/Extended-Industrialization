@@ -4,12 +4,12 @@ import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.bus.api.Event;
-import net.swedz.extended_industrialization.api.event.TreeGrowthEvent;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlockMap;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerTree;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.HarvestingContext;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.LootTableHarvestingHandler;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.registry.FarmerListener;
+import net.swedz.tesseract.neoforge.event.TreeGrowthEvent;
 
 import java.util.Arrays;
 import java.util.List;

@@ -5,7 +5,7 @@ import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIItems;
-import net.swedz.extended_industrialization.api.registry.holder.ItemHolder;
+import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 public final class ItemModelsDatagenProvider extends ItemModelProvider
 {

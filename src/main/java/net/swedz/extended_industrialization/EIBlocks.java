@@ -11,11 +11,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.swedz.extended_industrialization.api.registry.CommonLootTableBuilders;
-import net.swedz.extended_industrialization.api.registry.CommonModelBuilders;
-import net.swedz.extended_industrialization.api.registry.SortOrder;
-import net.swedz.extended_industrialization.api.registry.holder.BlockHolder;
-import net.swedz.extended_industrialization.api.registry.holder.BlockWithItemHolder;
+import net.swedz.tesseract.neoforge.registry.common.CommonLootTableBuilders;
+import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
+import net.swedz.tesseract.neoforge.registry.SortOrder;
+import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
+import net.swedz.tesseract.neoforge.registry.holder.BlockWithItemHolder;
 
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -46,8 +46,8 @@ public final class EIBlocks
 		Registry.init(bus);
 	}
 	
-	public static final BlockHolder<Block> MACHINE_CHAINER_RELAY = create("machine_chainer_relay", "Machine Chainer Relay", Block::new, BlockItem::new, SortOrder.MACHINES).withProperties((p) -> p.mapColor(MapColor.METAL).destroyTime(4f).requiresCorrectToolForDrops()).tag(TagHelper.getMiningLevelTag(1)).withLootTable(CommonLootTableBuilders::self).withModel(CommonModelBuilders::blockstateOnly).register();
-	public static final BlockHolder<Block> STEEL_PLATED_BRICKS   = create("steel_plated_bricks", "Steel Plated Bricks", Block::new, BlockItem::new, SortOrder.CASINGS).withProperties((p) -> p.destroyTime(5f).explosionResistance(6f).requiresCorrectToolForDrops()).tag(TagHelper.getMiningLevelTag(1)).withLootTable(CommonLootTableBuilders::self).withModel(CommonModelBuilders::blockCubeAll).register();
+	public static final BlockHolder<Block> MACHINE_CHAINER_RELAY = create("machine_chainer_relay", "Machine Chainer Relay", Block::new, BlockItem::new, EISortOrder.MACHINES).withProperties((p) -> p.mapColor(MapColor.METAL).destroyTime(4f).requiresCorrectToolForDrops()).tag(TagHelper.getMiningLevelTag(1)).withLootTable(CommonLootTableBuilders::self).withModel(CommonModelBuilders::blockstateOnly).register();
+	public static final BlockHolder<Block> STEEL_PLATED_BRICKS   = create("steel_plated_bricks", "Steel Plated Bricks", Block::new, BlockItem::new, EISortOrder.CASINGS).withProperties((p) -> p.destroyTime(5f).explosionResistance(6f).requiresCorrectToolForDrops()).tag(TagHelper.getMiningLevelTag(1)).withLootTable(CommonLootTableBuilders::self).withModel(CommonModelBuilders::blockCubeAll).register();
 	
 	public static Set<BlockHolder> values()
 	{
@@ -70,10 +70,12 @@ public final class EIBlocks
 		return holder;
 	}
 	
-	public static <BlockType extends Block, ItemType extends BlockItem> BlockWithItemHolder<BlockType, ItemType> create(String id, String englishName,
-																														Function<BlockBehaviour.Properties, BlockType> blockCreator,
-																														BiFunction<Block, Item.Properties, ItemType> itemCreator,
-																														SortOrder sortOrder)
+	public static <BlockType extends Block, ItemType extends BlockItem> BlockWithItemHolder<BlockType, ItemType> create(
+			String id, String englishName,
+			Function<BlockBehaviour.Properties, BlockType> blockCreator,
+			BiFunction<Block, Item.Properties, ItemType> itemCreator,
+			SortOrder sortOrder
+	)
 	{
 		BlockWithItemHolder<BlockType, ItemType> holder = new BlockWithItemHolder<>(
 				EI.id(id), englishName,

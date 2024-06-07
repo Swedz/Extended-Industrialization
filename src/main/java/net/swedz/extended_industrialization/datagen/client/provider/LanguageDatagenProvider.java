@@ -7,10 +7,10 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIMachines;
 import net.swedz.extended_industrialization.EIFluids;
-import net.swedz.extended_industrialization.api.registry.holder.FluidHolder;
 import net.swedz.extended_industrialization.EIItems;
-import net.swedz.extended_industrialization.api.registry.holder.ItemHolder;
 import net.swedz.extended_industrialization.EIText;
+import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
+import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.Map;
 

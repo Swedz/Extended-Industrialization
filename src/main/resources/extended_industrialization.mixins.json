@@ -5,8 +5,6 @@
     "compatibilityLevel": "JAVA_17",
     "mixins": [
         "CannedFoodUsedForCatsMixin",
-        "event.FarmlandLoseMoistureEventMixin",
-        "event.TreeGrowthEventMixin",
         "mi.AllowFluidBottlesInMachinesMenuMixin",
         "mi.MakeMachineBlockEntityUseProperTitleMixin",
         "mi.MakePlayerLockNotifyListenersMixin",
@@ -19,22 +17,7 @@
         "mi.constantefficiency.ConstantEfficiencyEBFMixin",
         "mi.constantefficiency.ConstantEfficiencyPreventUpgradeInsertionMixin",
         "mi.constantefficiency.ConstantEfficiencyPreventUpgradeSlotMixin",
-        "mi.hack.InterceptRegisterEBFReiCategoriesMixin",
-        "mi.hack.InterceptRegisterMachineMixin",
-        "mi.hack.InterceptRegisterMachineModelMixin",
-        "mi.hack.InterceptRegisterMachineRecipeTypeMixin",
-        "mi.hack.InterceptRegisterMultiblockShapeReiRecipeMixin",
-        "mi.hack.InterceptRegisterReiMachineRecipeMixin",
-        "mi.hack.InterceptRegisterSingleBlockMachineReiTiersMixin",
-        "mi.hook.HookBlastFurnaceTierMixin",
-        "mi.hook.HookMachineCasingsMixin",
-        "mi.hook.HookMachineProcessConditionsMixin",
-        "mi.hook.HookMachineRecipeTypesMixin",
-        "mi.hook.HookMultiblockMachinesMixin",
-        "mi.hook.HookSingleBlockCraftingMachinesMixin",
-        "mi.hook.HookSingleBlockSpecialMachinesMixin",
-        "mi.hook.HookTooltipsMixin",
-        "mi.hook.HookViewerSetupMixin",
+        "mi.EBFReiCategoriesIncludeCoilProcessConditionMixin",
         "mi.machinecabletier.CasingComponentCableTierGetterMixin",
         "mi.machinecabletier.ElectricCraftingMultiblockCableTierGetterMixin",
         "mi.machinecabletier.ElectricCraftingSingleblockCableTierGetterMixin",
@@ -43,8 +26,7 @@
     "client": [
         "client.mi.HideEfficiencyBarClientMixin",
         "client.mi.HideEfficiencyInMultiblockClientMixin",
-        "client.mi.MachineScreenIncludeCableTierInTitleMixin",
-        "client.mi.hook.HookGuiComponentsClientMixin"
+        "client.mi.MachineScreenIncludeCableTierInTitleMixin"
     ],
     "injectors": {
         "defaultRequire": 1

@@ -18,10 +18,10 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListener;
-import net.swedz.extended_industrialization.api.isolatedlistener.IsolatedListeners;
 import net.swedz.extended_industrialization.machines.blockentities.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.EIBlocks;
+import net.swedz.tesseract.neoforge.isolatedlistener.IsolatedListener;
+import net.swedz.tesseract.neoforge.isolatedlistener.IsolatedListeners;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;

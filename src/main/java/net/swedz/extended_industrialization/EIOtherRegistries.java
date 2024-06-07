@@ -8,7 +8,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.swedz.extended_industrialization.api.registry.holder.ItemHolder;
+import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.Comparator;
 import java.util.function.Supplier;

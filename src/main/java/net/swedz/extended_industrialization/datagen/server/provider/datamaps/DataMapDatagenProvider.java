@@ -15,7 +15,7 @@ import net.swedz.extended_industrialization.datamaps.FertilizerPotency;
 import net.swedz.extended_industrialization.datamaps.LargeElectricFurnaceTier;
 import net.swedz.extended_industrialization.datamaps.PotionBrewingCosts;
 import net.swedz.extended_industrialization.EIFluids;
-import net.swedz.extended_industrialization.api.registry.holder.FluidHolder;
+import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
 
 import java.util.Map;
 

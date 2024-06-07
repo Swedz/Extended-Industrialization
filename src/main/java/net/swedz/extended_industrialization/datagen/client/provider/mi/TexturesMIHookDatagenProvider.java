@@ -25,9 +25,9 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIFluids;
-import net.swedz.extended_industrialization.api.registry.holder.FluidHolder;
-import net.swedz.extended_industrialization.api.registry.FluidProperties;
-import net.swedz.extended_industrialization.api.registry.holder.MIFluidHolder;
+import net.swedz.tesseract.neoforge.registry.MIFluidProperties;
+import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
+import net.swedz.tesseract.neoforge.registry.holder.MIFluidHolder;
 import org.apache.commons.compress.utils.Lists;
 
 import java.io.IOException;
@@ -81,7 +81,7 @@ public final class TexturesMIHookDatagenProvider implements DataProvider
 	
 	private static void registerFluidTextures(TextureManager tm, MIFluidHolder fluid)
 	{
-		FluidProperties properties = fluid.properties();
+		MIFluidProperties properties = fluid.properties();
 		
 		String path = "modern_industrialization:textures/fluid/";
 		String bucket = path + "bucket.png";

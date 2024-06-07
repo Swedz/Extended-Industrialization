@@ -5,14 +5,12 @@ import aztech.modern_industrialization.MIBlock;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.compat.rei.machines.ReiMachineRecipes;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
-import aztech.modern_industrialization.machines.blockentities.multiblocks.ElectricBlastFurnaceBlockEntity;
 import aztech.modern_industrialization.machines.components.OverclockComponent;
 import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.guicomponents.ProgressBar;
 import aztech.modern_industrialization.machines.guicomponents.RecipeEfficiencyBar;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
 import aztech.modern_industrialization.machines.init.MachineTier;
-import aztech.modern_industrialization.machines.init.SingleBlockCraftingMachines;
 import aztech.modern_industrialization.machines.models.MachineCasing;
 import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.multiblocks.HatchFlags;
@@ -22,7 +20,6 @@ import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import com.google.common.collect.Maps;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.swedz.extended_industrialization.hook.mi.MIMachineHookHelper;
 import net.swedz.extended_industrialization.machines.blockentities.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.SolarBoilerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.SolarPanelMachineBlockEntity;
@@ -41,8 +38,13 @@ import net.swedz.extended_industrialization.machines.blockentities.multiblock.mu
 import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformers;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.wastecollector.WasteCollectorBehavior;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.BlastFurnaceTiersMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.MachineCasingsMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.MachineRecipeTypesMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.MultiblockMachinesMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.SingleBlockCraftingMachinesMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.SingleBlockSpecialMachinesMIHookContext;
 
-import java.util.List;
 import java.util.Map;
 
 import static aztech.modern_industrialization.machines.init.SingleBlockCraftingMachines.*;
@@ -50,6 +52,10 @@ import static aztech.modern_industrialization.machines.models.MachineCasings.*;
 
 public final class EIMachines
 {
+	public static void blastFurnaceTiers(BlastFurnaceTiersMIHookContext hook)
+	{
+	}
+	
 	public static final class Casings
 	{
 		public static MachineCasing
@@ -58,108 +64,11 @@ public final class EIMachines
 				STEEL_PLATED_BRICKS;
 	}
 	
-	public static void casings()
+	public static void casings(MachineCasingsMIHookContext hook)
 	{
-		Casings.BRONZE_PIPE = MachineCasings.create("bronze_pipe");
-		Casings.STEEL_PIPE = MachineCasings.create("steel_pipe");
-		Casings.STEEL_PLATED_BRICKS = MachineCasings.create("steel_plated_bricks");
-	}
-	
-	public static void blastFurnaceTiers(List<ElectricBlastFurnaceBlockEntity.Tier> list)
-	{
-	}
-	
-	public static void multiblocks()
-	{
-		MIMachineHookHelper.registerMultiblockMachine(
-				"Steam Farmer", "steam_farmer", "farmer",
-				BRONZE_PLATED_BRICKS, true, true, false,
-				SteamFarmerBlockEntity::new,
-				(__) -> SteamFarmerBlockEntity.registerReiShapes()
-		);
-		
-		MIMachineHookHelper.registerMultiblockMachine(
-				"Electric Farmer", "electric_farmer", "farmer",
-				STEEL, true, true, false,
-				ElectricFarmerBlockEntity::new,
-				(__) -> ElectricFarmerBlockEntity.registerReiShapes()
-		);
-		
-		MIMachineHookHelper.registerMultiblockMachine(
-				"Processing Array", "processing_array", "processing_array",
-				CLEAN_STAINLESS_STEEL, true, false, false,
-				ProcessingArrayBlockEntity::new,
-				(__) -> ProcessingArrayBlockEntity.registerReiShapes()
-		);
-		
-		{
-			SimpleMember fireClayBricks = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("fire_clay_bricks")));
-			SimpleMember bronzePlatedBricks = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("bronze_plated_bricks")));
-			HatchFlags hatches = new HatchFlags.Builder().with(HatchType.ITEM_INPUT, HatchType.ITEM_OUTPUT, HatchType.FLUID_INPUT).build();
-			ShapeTemplate shape = new ShapeTemplate.Builder(BRONZE_PLATED_BRICKS)
-					.add3by3(-1, fireClayBricks, false, hatches)
-					.add3by3(0, bronzePlatedBricks, true, HatchFlags.NO_HATCH)
-					.add3by3(1, bronzePlatedBricks, false, HatchFlags.NO_HATCH)
-					.build();
-			MIMachineHookHelper.registerMultiblockMachine(
-					"Large Steam Furnace", "large_steam_furnace", "large_furnace",
-					BRONZE_PLATED_BRICKS, true, false, false,
-					(bep) -> new SteamMultipliedCraftingMultiblockBlockEntity(
-							bep, "large_steam_furnace", new ShapeTemplate[]{shape},
-							OverclockComponent.getDefaultCatalysts(),
-							MIMachineRecipeTypes.FURNACE, 8, EuCostTransformers.percentage(() -> 0.75f)
-					)
-			);
-			ReiMachineRecipes.registerMultiblockShape("large_steam_furnace", shape);
-			ReiMachineRecipes.registerWorkstation("bronze_furnace", EI.id("large_steam_furnace"));
-			ReiMachineRecipes.registerWorkstation("steel_furnace", EI.id("large_steam_furnace"));
-		}
-		
-		MIMachineHookHelper.registerMultiblockMachine(
-				"Large Electric Furnace", "large_electric_furnace", "large_furnace",
-				HEATPROOF, true, false, false,
-				LargeElectricFurnaceBlockEntity::new
-		);
-		ReiMachineRecipes.registerWorkstation("bronze_furnace", EI.id("large_electric_furnace"));
-		ReiMachineRecipes.registerWorkstation("steel_furnace", EI.id("large_electric_furnace"));
-		ReiMachineRecipes.registerWorkstation("electric_furnace", EI.id("large_electric_furnace"));
-		
-		{
-			SimpleMember bronzePlatedBricks = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("bronze_plated_bricks")));
-			HatchFlags hatches = new HatchFlags.Builder().with(HatchType.ITEM_INPUT, HatchType.ITEM_OUTPUT, HatchType.FLUID_INPUT).build();
-			ShapeTemplate shape = new ShapeTemplate.Builder(BRONZE_PLATED_BRICKS).add3by3LevelsRoofed(-1, 1, bronzePlatedBricks, hatches).build();
-			MIMachineHookHelper.registerMultiblockMachine(
-					"Large Steam Macerator", "large_steam_macerator", "large_macerator",
-					BRONZE_PLATED_BRICKS, true, false, false,
-					(bep) -> new SteamMultipliedCraftingMultiblockBlockEntity(
-							bep, "large_steam_macerator", new ShapeTemplate[]{shape},
-							OverclockComponent.getDefaultCatalysts(),
-							MIMachineRecipeTypes.MACERATOR, 8, EuCostTransformers.percentage(() -> 0.75f)
-					)
-			);
-			ReiMachineRecipes.registerMultiblockShape("large_steam_macerator", shape);
-			ReiMachineRecipes.registerWorkstation("bronze_macerator", EI.id("large_steam_macerator"));
-			ReiMachineRecipes.registerWorkstation("steel_macerator", EI.id("large_steam_macerator"));
-		}
-		
-		{
-			SimpleMember steelPlatedBricks = SimpleMember.forBlock(EIBlocks.STEEL_PLATED_BRICKS);
-			HatchFlags hatches = new HatchFlags.Builder().with(HatchType.ITEM_INPUT, HatchType.ITEM_OUTPUT, HatchType.ENERGY_INPUT).build();
-			ShapeTemplate shape = new ShapeTemplate.Builder(Casings.STEEL_PLATED_BRICKS).add3by3LevelsRoofed(-1, 1, steelPlatedBricks, hatches).build();
-			MIMachineHookHelper.registerMultiblockMachine(
-					"Large Electric Macerator", "large_electric_macerator", "large_macerator",
-					Casings.STEEL_PLATED_BRICKS, true, false, false,
-					(bep) -> new ElectricMultipliedCraftingMultiblockBlockEntity(
-							bep, "large_electric_macerator", new ShapeTemplate[]{shape},
-							MachineTier.MULTIBLOCK,
-							MIMachineRecipeTypes.MACERATOR, 16, EuCostTransformers.percentage(() -> 0.75f)
-					)
-			);
-			ReiMachineRecipes.registerMultiblockShape("large_electric_macerator", shape);
-			ReiMachineRecipes.registerWorkstation("bronze_macerator", EI.id("large_electric_macerator"));
-			ReiMachineRecipes.registerWorkstation("steel_macerator", EI.id("large_electric_macerator"));
-			ReiMachineRecipes.registerWorkstation("electric_macerator", EI.id("large_electric_macerator"));
-		}
+		Casings.BRONZE_PIPE = hook.register("bronze_pipe");
+		Casings.STEEL_PIPE = hook.register("steel_pipe");
+		Casings.STEEL_PLATED_BRICKS = hook.register("steel_plated_bricks");
 	}
 	
 	public static final class RecipeTypes
@@ -177,27 +86,120 @@ public final class EIMachines
 			return RECIPE_TYPE_NAMES;
 		}
 		
-		private static MachineRecipeType create(String englishName, String id)
+		private static MachineRecipeType create(MachineRecipeTypesMIHookContext hook, String englishName, String id)
 		{
-			MachineRecipeType recipeType = MIMachineRecipeTypes.create(id);
+			MachineRecipeType recipeType = hook.create(id);
 			RECIPE_TYPE_NAMES.put(recipeType, englishName);
 			return recipeType;
 		}
 	}
 	
-	public static void recipeTypes()
+	public static void recipeTypes(MachineRecipeTypesMIHookContext hook)
 	{
-		RecipeTypes.BENDING_MACHINE = RecipeTypes.create("Bending Machine", "bending_machine").withItemInputs().withItemOutputs();
-		RecipeTypes.ALLOY_SMELTER = RecipeTypes.create("Alloy Smelter", "alloy_smelter").withItemInputs().withItemOutputs();
-		RecipeTypes.CANNING_MACHINE = RecipeTypes.create("Canning Machine", "canning_machine").withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
-		RecipeTypes.COMPOSTER = RecipeTypes.create("Composter", "composter").withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
+		RecipeTypes.BENDING_MACHINE = RecipeTypes.create(hook, "Bending Machine", "bending_machine").withItemInputs().withItemOutputs();
+		RecipeTypes.ALLOY_SMELTER = RecipeTypes.create(hook, "Alloy Smelter", "alloy_smelter").withItemInputs().withItemOutputs();
+		RecipeTypes.CANNING_MACHINE = RecipeTypes.create(hook, "Canning Machine", "canning_machine").withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
+		RecipeTypes.COMPOSTER = RecipeTypes.create(hook, "Composter", "composter").withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
 	}
 	
-	public static void singleBlockCrafting()
+	public static void multiblocks(MultiblockMachinesMIHookContext hook)
+	{
+		hook.register(
+				"Steam Farmer", "steam_farmer", "farmer",
+				BRONZE_PLATED_BRICKS, true, true, false,
+				SteamFarmerBlockEntity::new,
+				(__) -> SteamFarmerBlockEntity.registerReiShapes()
+		);
+		
+		hook.register(
+				"Electric Farmer", "electric_farmer", "farmer",
+				STEEL, true, true, false,
+				ElectricFarmerBlockEntity::new,
+				(__) -> ElectricFarmerBlockEntity.registerReiShapes()
+		);
+		
+		hook.register(
+				"Processing Array", "processing_array", "processing_array",
+				CLEAN_STAINLESS_STEEL, true, false, false,
+				ProcessingArrayBlockEntity::new,
+				(__) -> ProcessingArrayBlockEntity.registerReiShapes()
+		);
+		
+		{
+			SimpleMember fireClayBricks = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("fire_clay_bricks")));
+			SimpleMember bronzePlatedBricks = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("bronze_plated_bricks")));
+			HatchFlags hatches = new HatchFlags.Builder().with(HatchType.ITEM_INPUT, HatchType.ITEM_OUTPUT, HatchType.FLUID_INPUT).build();
+			ShapeTemplate shape = new ShapeTemplate.Builder(BRONZE_PLATED_BRICKS)
+					.add3by3(-1, fireClayBricks, false, hatches)
+					.add3by3(0, bronzePlatedBricks, true, HatchFlags.NO_HATCH)
+					.add3by3(1, bronzePlatedBricks, false, HatchFlags.NO_HATCH)
+					.build();
+			hook.register(
+					"Large Steam Furnace", "large_steam_furnace", "large_furnace",
+					BRONZE_PLATED_BRICKS, true, false, false,
+					(bep) -> new SteamMultipliedCraftingMultiblockBlockEntity(
+							bep, "large_steam_furnace", new ShapeTemplate[]{shape},
+							OverclockComponent.getDefaultCatalysts(),
+							MIMachineRecipeTypes.FURNACE, 8, EuCostTransformers.percentage(() -> 0.75f)
+					)
+			);
+			ReiMachineRecipes.registerMultiblockShape("large_steam_furnace", shape);
+			ReiMachineRecipes.registerWorkstation("bronze_furnace", EI.id("large_steam_furnace"));
+			ReiMachineRecipes.registerWorkstation("steel_furnace", EI.id("large_steam_furnace"));
+		}
+		
+		hook.register(
+				"Large Electric Furnace", "large_electric_furnace", "large_furnace",
+				HEATPROOF, true, false, false,
+				LargeElectricFurnaceBlockEntity::new
+		);
+		ReiMachineRecipes.registerWorkstation("bronze_furnace", EI.id("large_electric_furnace"));
+		ReiMachineRecipes.registerWorkstation("steel_furnace", EI.id("large_electric_furnace"));
+		ReiMachineRecipes.registerWorkstation("electric_furnace", EI.id("large_electric_furnace"));
+		
+		{
+			SimpleMember bronzePlatedBricks = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("bronze_plated_bricks")));
+			HatchFlags hatches = new HatchFlags.Builder().with(HatchType.ITEM_INPUT, HatchType.ITEM_OUTPUT, HatchType.FLUID_INPUT).build();
+			ShapeTemplate shape = new ShapeTemplate.Builder(BRONZE_PLATED_BRICKS).add3by3LevelsRoofed(-1, 1, bronzePlatedBricks, hatches).build();
+			hook.register(
+					"Large Steam Macerator", "large_steam_macerator", "large_macerator",
+					BRONZE_PLATED_BRICKS, true, false, false,
+					(bep) -> new SteamMultipliedCraftingMultiblockBlockEntity(
+							bep, "large_steam_macerator", new ShapeTemplate[]{shape},
+							OverclockComponent.getDefaultCatalysts(),
+							MIMachineRecipeTypes.MACERATOR, 8, EuCostTransformers.percentage(() -> 0.75f)
+					)
+			);
+			ReiMachineRecipes.registerMultiblockShape("large_steam_macerator", shape);
+			ReiMachineRecipes.registerWorkstation("bronze_macerator", EI.id("large_steam_macerator"));
+			ReiMachineRecipes.registerWorkstation("steel_macerator", EI.id("large_steam_macerator"));
+		}
+		
+		{
+			SimpleMember steelPlatedBricks = SimpleMember.forBlock(EIBlocks.STEEL_PLATED_BRICKS);
+			HatchFlags hatches = new HatchFlags.Builder().with(HatchType.ITEM_INPUT, HatchType.ITEM_OUTPUT, HatchType.ENERGY_INPUT).build();
+			ShapeTemplate shape = new ShapeTemplate.Builder(Casings.STEEL_PLATED_BRICKS).add3by3LevelsRoofed(-1, 1, steelPlatedBricks, hatches).build();
+			hook.register(
+					"Large Electric Macerator", "large_electric_macerator", "large_macerator",
+					Casings.STEEL_PLATED_BRICKS, true, false, false,
+					(bep) -> new ElectricMultipliedCraftingMultiblockBlockEntity(
+							bep, "large_electric_macerator", new ShapeTemplate[]{shape},
+							MachineTier.MULTIBLOCK,
+							MIMachineRecipeTypes.MACERATOR, 16, EuCostTransformers.percentage(() -> 0.75f)
+					)
+			);
+			ReiMachineRecipes.registerMultiblockShape("large_electric_macerator", shape);
+			ReiMachineRecipes.registerWorkstation("bronze_macerator", EI.id("large_electric_macerator"));
+			ReiMachineRecipes.registerWorkstation("steel_macerator", EI.id("large_electric_macerator"));
+			ReiMachineRecipes.registerWorkstation("electric_macerator", EI.id("large_electric_macerator"));
+		}
+	}
+	
+	public static void singleBlockCrafting(SingleBlockCraftingMachinesMIHookContext hook)
 	{
 		// @formatter:off
 		
-		SingleBlockCraftingMachines.registerMachineTiers(
+		hook.register(
 				"Bending Machine", "bending_machine", RecipeTypes.BENDING_MACHINE,
 				1, 1, 0, 0,
 				(params) -> {},
@@ -211,7 +213,7 @@ public final class EIMachines
 				16
 		);
 		
-		SingleBlockCraftingMachines.registerMachineTiers(
+		hook.register(
 				"Alloy Smelter", "alloy_smelter", RecipeTypes.ALLOY_SMELTER,
 				2, 1, 0, 0,
 				(params) -> {},
@@ -225,7 +227,7 @@ public final class EIMachines
 				16
 		);
 		
-		SingleBlockCraftingMachines.registerMachineTiers(
+		hook.register(
 				"Canning Machine", "canning_machine", RecipeTypes.CANNING_MACHINE,
 				2, 2, 1, 1,
 				(params) -> {},
@@ -239,7 +241,7 @@ public final class EIMachines
 				16
 		);
 		
-		SingleBlockCraftingMachines.registerMachineTiers(
+		hook.register(
 				"Composter", "composter", RecipeTypes.COMPOSTER,
 				2, 2, 1, 1,
 				(params) -> {},
@@ -256,22 +258,22 @@ public final class EIMachines
 		// @formatter:on
 	}
 	
-	public static void singleBlockSpecial()
+	public static void singleBlockSpecial(SingleBlockSpecialMachinesMIHookContext hook)
 	{
-		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+		hook.register(
 				"Bronze Solar Boiler", "bronze_solar_boiler", "solar_boiler",
 				MachineCasings.BRICKED_BRONZE, true, true, false,
 				(bep) -> new SolarBoilerMachineBlockEntity(bep, true),
 				MachineBlockEntity::registerFluidApi
 		);
-		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+		hook.register(
 				"Steel Solar Boiler", "steel_solar_boiler", "solar_boiler",
 				MachineCasings.BRICKED_STEEL, true, true, false,
 				(bep) -> new SolarBoilerMachineBlockEntity(bep, false),
 				MachineBlockEntity::registerFluidApi
 		);
 		
-		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+		hook.register(
 				"Steel Honey Extractor", "steel_honey_extractor", "honey_extractor",
 				MachineCasings.STEEL, true, false, true,
 				(bep) -> new SteamFluidHarvestingMachineBlockEntity(
@@ -281,7 +283,7 @@ public final class EIMachines
 				),
 				MachineBlockEntity::registerFluidApi
 		);
-		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+		hook.register(
 				"Electric Honey Extractor", "electric_honey_extractor", "honey_extractor",
 				CableTier.LV.casing, true, false, true,
 				(bep) -> new ElectricFluidHarvestingMachineBlockEntity(
@@ -293,14 +295,14 @@ public final class EIMachines
 				ElectricFluidHarvestingMachineBlockEntity::registerEnergyApi
 		);
 		
-		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+		hook.register(
 				"Steel Brewery", "steel_brewery", "brewery",
 				MachineCasings.STEEL, true, false, true,
 				(bep) -> new SteamBreweryMachineBlockEntity(bep, false),
 				MachineBlockEntity::registerItemApi,
 				MachineBlockEntity::registerFluidApi
 		);
-		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+		hook.register(
 				"Electric Brewery", "electric_brewery", "brewery",
 				CableTier.LV.casing, true, false, true,
 				ElectricBreweryMachineBlockEntity::new,
@@ -309,7 +311,7 @@ public final class EIMachines
 				ElectricBreweryMachineBlockEntity::registerEnergyApi
 		);
 		
-		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+		hook.register(
 				"Bronze Waste Collector", "bronze_waste_collector", "waste_collector",
 				MachineCasings.BRONZE, false, true, false,
 				(bep) -> new SteamFluidHarvestingMachineBlockEntity(
@@ -319,7 +321,7 @@ public final class EIMachines
 				),
 				MachineBlockEntity::registerFluidApi
 		);
-		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+		hook.register(
 				"Steel Waste Collector", "steel_waste_collector", "waste_collector",
 				MachineCasings.STEEL, false, true, false,
 				(bep) -> new SteamFluidHarvestingMachineBlockEntity(
@@ -329,7 +331,7 @@ public final class EIMachines
 				),
 				MachineBlockEntity::registerFluidApi
 		);
-		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+		hook.register(
 				"Electric Waste Collector", "electric_waste_collector", "waste_collector",
 				CableTier.LV.casing, false, true, false,
 				(bep) -> new ElectricFluidHarvestingMachineBlockEntity(
@@ -341,13 +343,13 @@ public final class EIMachines
 				ElectricFluidHarvestingMachineBlockEntity::registerEnergyApi
 		);
 		
-		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+		hook.register(
 				"Machine Chainer", "machine_chainer",
 				MachineChainerMachineBlockEntity::new,
 				MachineChainerMachineBlockEntity::registerCapabilities
 		);
 		
-		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+		hook.register(
 				"Universal Transformer", "universal_transformer", "universal_transformer",
 				CableTier.LV.casing, false, true, true, false,
 				UniversalTransformerMachineBlockEntity::new,
@@ -359,7 +361,7 @@ public final class EIMachines
 			String name = "%s Solar Panel".formatted(tier.shortEnglishName);
 			String id = "%s_solar_panel".formatted(tier.name);
 			String overlayFolder = "solar_panel/%s".formatted(tier.name);
-			MIMachineHookHelper.registerSingleBlockSpecialMachine(
+			hook.register(
 					name, id, overlayFolder,
 					tier.casing, false, true, true, false,
 					(bep) -> new SolarPanelMachineBlockEntity(bep, id, tier),
@@ -369,19 +371,19 @@ public final class EIMachines
 			);
 		}
 		
-		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+		hook.register(
 				"Local Wireless Charging Station", "local_wireless_charging_station", "wireless_charging_station/local",
 				CableTier.MV.casing, false, true, true, false,
 				(bep) -> new WirelessChargerMachineBlockEntity(bep, "local_wireless_charging_station", CableTier.MV, (m, p) -> m.getBlockPos().closerThan(p.blockPosition(), EIConfig.localWirelessChargingStationRange)),
 				WirelessChargerMachineBlockEntity::registerEnergyApi
 		);
-		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+		hook.register(
 				"Global Wireless Charging Station", "global_wireless_charging_station", "wireless_charging_station/global",
 				CableTier.HV.casing, false, true, true, false,
 				(bep) -> new WirelessChargerMachineBlockEntity(bep, "global_wireless_charging_station", CableTier.HV, (m, p) -> m.getLevel() == p.level()),
 				WirelessChargerMachineBlockEntity::registerEnergyApi
 		);
-		MIMachineHookHelper.registerSingleBlockSpecialMachine(
+		hook.register(
 				"Interdimensional Wireless Charging Station", "interdimensional_wireless_charging_station", "wireless_charging_station/interdimensional",
 				CableTier.EV.casing, false, true, true, false,
 				(bep) -> new WirelessChargerMachineBlockEntity(bep, "interdimensional_wireless_charging_station", CableTier.EV, (m, p) -> true),

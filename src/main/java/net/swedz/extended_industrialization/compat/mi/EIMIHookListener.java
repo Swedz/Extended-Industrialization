@@ -1,13 +1,11 @@
-package net.swedz.extended_industrialization.hook.mi;
+package net.swedz.extended_industrialization.compat.mi;
 
-import aztech.modern_industrialization.compat.viewer.abstraction.ViewerCategory;
 import aztech.modern_industrialization.machines.GuiComponentsClient;
-import aztech.modern_industrialization.machines.blockentities.multiblocks.ElectricBlastFurnaceBlockEntity;
 import aztech.modern_industrialization.machines.recipe.condition.MachineProcessConditions;
-import com.google.common.collect.Lists;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.compat.viewer.usage.EIViewerSetup;
 import net.swedz.extended_industrialization.EIMachines;
+import net.swedz.extended_industrialization.EITooltips;
+import net.swedz.extended_industrialization.compat.viewer.usage.FluidFertilizerCategory;
 import net.swedz.extended_industrialization.machines.guicomponents.exposecabletier.ExposeCableTierGui;
 import net.swedz.extended_industrialization.machines.guicomponents.exposecabletier.ExposeCableTierGuiClient;
 import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGui;
@@ -24,13 +22,27 @@ import net.swedz.extended_industrialization.machines.guicomponents.waterpumpenvi
 import net.swedz.extended_industrialization.machines.guicomponents.waterpumpenvironment.WaterPumpEnvironmentGuiClient;
 import net.swedz.extended_industrialization.machines.recipe.condition.EBFCoilProcessCondition;
 import net.swedz.extended_industrialization.machines.recipe.condition.VoltageProcessCondition;
-import net.swedz.extended_industrialization.EITooltips;
+import net.swedz.tesseract.neoforge.compat.mi.hook.MIHookListener;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.BlastFurnaceTiersMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.ClientGuiComponentsMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.MachineCasingsMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.MachineProcessConditionsMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.MachineRecipeTypesMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.MultiblockMachinesMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.SingleBlockCraftingMachinesMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.SingleBlockSpecialMachinesMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.ViewerSetupMIHookContext;
 
-import java.util.List;
-
-public final class MIHookDelegator
+public final class EIMIHookListener implements MIHookListener
 {
-	public static void clientGuiComponents()
+	@Override
+	public void blastFurnaceTiers(BlastFurnaceTiersMIHookContext hook)
+	{
+		EIMachines.blastFurnaceTiers(hook);
+	}
+	
+	@Override
+	public void clientGuiComponents(ClientGuiComponentsMIHookContext hook)
 	{
 		GuiComponentsClient.register(SolarEfficiencyBar.ID, SolarEfficiencyBarClient::new);
 		GuiComponentsClient.register(WaterPumpEnvironmentGui.ID, WaterPumpEnvironmentGuiClient::new);
@@ -41,51 +53,52 @@ public final class MIHookDelegator
 		GuiComponentsClient.register(ExposeCableTierGui.ID, ExposeCableTierGuiClient::new);
 	}
 	
-	public static List<ElectricBlastFurnaceBlockEntity.Tier> machinesBlastFurnaceTier()
+	@Override
+	public void machineCasings(MachineCasingsMIHookContext hook)
 	{
-		List<ElectricBlastFurnaceBlockEntity.Tier> list = Lists.newArrayList();
-		EIMachines.blastFurnaceTiers(list);
-		return list;
+		EIMachines.casings(hook);
 	}
 	
-	public static void machineCasings()
-	{
-		EIMachines.casings();
-	}
-	
-	public static void machineProcessConditions()
+	@Override
+	public void machineProcessConditions(MachineProcessConditionsMIHookContext hook)
 	{
 		MachineProcessConditions.register(EI.id("voltage"), VoltageProcessCondition.CODEC);
 		MachineProcessConditions.register(EI.id("ebf_coil"), EBFCoilProcessCondition.CODEC);
 	}
 	
-	public static void machinesRecipeType()
+	@Override
+	public void machineRecipeTypes(MachineRecipeTypesMIHookContext hook)
 	{
-		EIMachines.recipeTypes();
+		EIMachines.recipeTypes(hook);
 	}
 	
-	public static void machinesMultiblock()
+	@Override
+	public void multiblockMachines(MultiblockMachinesMIHookContext hook)
 	{
-		EIMachines.multiblocks();
+		EIMachines.multiblocks(hook);
 	}
 	
-	public static void machinesSingleBlockCrafting()
+	@Override
+	public void singleBlockCraftingMachines(SingleBlockCraftingMachinesMIHookContext hook)
 	{
-		EIMachines.singleBlockCrafting();
+		EIMachines.singleBlockCrafting(hook);
 	}
 	
-	public static void machinesSingleBlockSpecial()
+	@Override
+	public void singleBlockSpecialMachines(SingleBlockSpecialMachinesMIHookContext hook)
 	{
-		EIMachines.singleBlockSpecial();
+		EIMachines.singleBlockSpecial(hook);
 	}
 	
-	public static void tooltips()
+	@Override
+	public void tooltips()
 	{
 		EITooltips.init();
 	}
 	
-	public static void viewerCategories(List<ViewerCategory<?>> registry)
+	@Override
+	public void viewerSetup(ViewerSetupMIHookContext hook)
 	{
-		EIViewerSetup.setup(registry);
+		hook.register(new FluidFertilizerCategory());
 	}
 }
