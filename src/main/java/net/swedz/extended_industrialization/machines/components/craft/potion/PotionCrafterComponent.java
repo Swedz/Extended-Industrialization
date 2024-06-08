@@ -21,10 +21,9 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.material.Fluids;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIConfig;
-import net.swedz.extended_industrialization.api.MachineInventoryHelper;
-import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccess;
-import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
+import net.swedz.tesseract.neoforge.compat.mi.component.craft.ModularCrafterAccess;
+import net.swedz.tesseract.neoforge.compat.mi.component.craft.ModularCrafterAccessBehavior;
+import net.swedz.tesseract.neoforge.compat.mi.helper.MachineInventoryHelper;
 
 import java.util.List;
 import java.util.Optional;
@@ -94,10 +93,11 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 	@Override
 	public void decreaseEfficiencyTicks()
 	{
-		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
+		// TODO
+		/*if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
 		{
 			return;
-		}
+		}*/
 		
 		efficiencyTicks = Math.max(efficiencyTicks - 1, 0);
 		this.clearActiveRecipeIfPossible();
@@ -106,10 +106,11 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 	@Override
 	public void increaseEfficiencyTicks(int increment)
 	{
-		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
+		// TODO
+		/*if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
 		{
 			return;
-		}
+		}*/
 		
 		efficiencyTicks = Math.min(efficiencyTicks + increment, maxEfficiencyTicks);
 	}
@@ -368,10 +369,11 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 			throw new IllegalStateException("May not call client side.");
 		}
 		
-		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
+		// TODO
+		/*if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
 		{
 			efficiencyTicks = this.hasActiveRecipe() ? maxEfficiencyTicks : 0;
-		}
+		}*/
 		
 		this.doBlazeEssenceStuff();
 		
@@ -425,10 +427,11 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 		// If we didn't use the max energy this tick and the recipe is still ongoing, remove one efficiency tick
 		else if(eu < recipeMaxEu)
 		{
-			if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
+			// TODO
+			/*if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
 			{
 				efficiencyTicks = 0;
-			}
+			}*/
 			if(efficiencyTicks > 0)
 			{
 				efficiencyTicks--;
@@ -487,10 +490,11 @@ public final class PotionCrafterComponent implements IComponent.ServerOnly, Modu
 		efficiencyTicks = tag.getInt("efficiencyTicks");
 		maxEfficiencyTicks = tag.getInt("maxEfficiencyTicks");
 		
-		if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
+		// TODO
+		/*if(EIConfig.machineEfficiencyHack.forceMaxEfficiency())
 		{
 			efficiencyTicks = this.hasActiveRecipe() ? maxEfficiencyTicks : 0;
-		}
+		}*/
 	}
 	
 	public record SlotRange<T extends AbstractConfigurableStack>(int start, int end)

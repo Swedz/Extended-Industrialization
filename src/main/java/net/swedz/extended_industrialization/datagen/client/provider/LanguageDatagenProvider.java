@@ -46,8 +46,6 @@ public final class LanguageDatagenProvider extends LanguageProvider
 		
 		this.add("itemGroup.%s.%s".formatted(EI.ID, EI.ID), EI.NAME);
 		
-		this.add("eu_cost_transformer.%s.%s".formatted(EI.ID, "percentage"), "%d%%");
-		
 		this.add("lef_tier.%s.%s.%s".formatted(EI.ID, MI.ID, "cupronickel_coil"), "Cupronickel");
 		this.add("lef_tier.%s.%s.%s".formatted(EI.ID, MI.ID, "kanthal_coil"), "Kanthal");
 	}

@@ -7,8 +7,6 @@ public enum EIText
 {
 	CALCIFICATION_PERCENTAGE("Calcification : %d %%"),
 	COILS_LEF_TIER("Runs LEF in batches of up to %d at %s the EU cost."),
-	CONFIGURATION_PANEL_DESCRIPTION("Click to open configuration panel."),
-	CONFIGURATION_PANEL_TITLE("Configure Machine"),
 	FARMER_NOT_TILLING("Not Tilling"),
 	FARMER_PLANTING_ALTERNATING_LINES("Alternating Lines"),
 	FARMER_PLANTING_AS_NEEDED("As Needed"),
@@ -19,8 +17,6 @@ public enum EIText
 	FLUID_FERTILIZERS_TIME("Cycle Time : %.1fs"),
 	GENERATING_EU_PER_TICK("Generating : %d EU/t"),
 	MACHINE_BATCHER_COILS("Batch size and cost is determined by coil used."),
-	MACHINE_BATCHER_RECIPE("Can run %s recipes in batches."),
-	MACHINE_BATCHER_SIZE_AND_COST("Runs in batches of up to %d at %s the EU cost."),
 	MACHINE_CHAINER_CONNECTED_MACHINES("Connected Machines : %d / %d"),
 	MACHINE_CONFIG_CARD_APPLY_FAILED("Failed to apply machine configuration to machine."),
 	MACHINE_CONFIG_CARD_APPLY_SUCCESS("Applied machine configuration to machine from card."),
@@ -33,15 +29,8 @@ public enum EIText
 	MACHINE_CONFIG_CARD_HELP_5("  from the card."),
 	MACHINE_CONFIG_CARD_HELP_6("Clear using shift-right click on air."),
 	MACHINE_CONFIG_CARD_SAVE("Saved machine configuration to card."),
-	MACHINE_MENU_VOLTAGE_PREFIX("(%s) "),
-	MACHINE_VOLTAGE_RECIPES("Allows machines to run %s recipes"),
-	MACHINE_VOLTAGE_RUNS_AT("Runs recipes at %s"),
 	MULCH_GANG_FOR_LIFE_0("I love mulch!"),
 	MULCH_GANG_FOR_LIFE_1("Mulch is my favorite food!"),
-	MULTIBLOCK_SHAPE_INVALID("Shape Invalid"),
-	MULTIBLOCK_SHAPE_VALID("Shape Valid"),
-	MULTIBLOCK_STATUS_ACTIVE("Status : Active"),
-	MULTIBLOCK_STATUS_INACTIVE("Status : Inactive"),
 	PHOTOVOLTAIC_CELL_EU("Will produce up to %s when placed in a Solar Panel."),
 	PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME("Remaining Operation Time : %s"),
 	PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_MINUTES("Remaining Operation Time : %s minute(s)"),
@@ -49,8 +38,6 @@ public enum EIText
 	PROCESSING_ARRAY_MACHINE_INPUT("Insert electric crafting machines to run in parallel."),
 	PROCESSING_ARRAY_RECIPE("Can run recipes of any single block electric crafting machine provided to it in batches."),
 	PROCESSING_ARRAY_SIZE("Machines: %d"),
-	RECIPE_REQUIRES_COIL("Requires coil: %s"),
-	RECIPE_REQUIRES_VOLTAGE("Requires voltage: %s"),
 	SOLAR_BOILER_CALCIFICATION("Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Breaking and placing the boiler again will reset calcification."),
 	SOLAR_EFFICIENCY("Solar Efficiency : %d %%"),
 	SOLAR_PANEL_DISTILLED_WATER("By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long!"),
@@ -61,9 +48,7 @@ public enum EIText
 	STEAM_CHAINSAW_3("3) Enjoy Silk Touch."),
 	STEAM_CHAINSAW_4("4) Toggle Silk Touch with shift-right click."),
 	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Casing for cable tier to convert from (LV by default)."),
-	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default)."),
-	WATER_PUMP_ENVIRONMENT_0("Invalid Pump Environment"),
-	WATER_PUMP_ENVIRONMENT_1("Must be in Ocean or River biome.");
+	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default).");
 	
 	private final String englishText;
 	

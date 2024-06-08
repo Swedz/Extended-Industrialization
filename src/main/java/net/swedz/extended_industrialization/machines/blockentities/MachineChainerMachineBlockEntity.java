@@ -16,8 +16,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.components.MachineChainerComponent;
-import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGui;
-import net.swedz.extended_industrialization.machines.guicomponents.modularmultiblock.ModularMultiblockGuiLine;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;

@@ -19,9 +19,9 @@ import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.components.farmer.PlantingMode;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerProcessRates;
-import net.swedz.extended_industrialization.machines.guicomponents.CommonGuiComponents;
-import net.swedz.extended_industrialization.machines.multiblock.BasicMultiblockMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.multiblock.members.PredicateSimpleMember;
+import net.swedz.tesseract.neoforge.compat.mi.helper.CommonGuiComponents;
+import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.BasicMultiblockMachineBlockEntity;
+import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.members.PredicateSimpleMember;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.Collections;

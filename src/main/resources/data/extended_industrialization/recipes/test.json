@@ -4,7 +4,7 @@
     "eu": 8,
     "conditions": [
         {
-            "type": "extended_industrialization:ebf_coil",
+            "type": "mi_tweaks:ebf_coil",
             "coil": "modern_industrialization:kanthal_coil"
         }
     ],

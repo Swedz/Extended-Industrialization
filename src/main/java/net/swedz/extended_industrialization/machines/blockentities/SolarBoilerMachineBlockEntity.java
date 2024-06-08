@@ -22,10 +22,10 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.EITooltips;
-import net.swedz.extended_industrialization.machines.components.SteamProductionComponent;
 import net.swedz.extended_industrialization.machines.components.solar.SolarSunlightComponent;
 import net.swedz.extended_industrialization.machines.components.solar.boiler.SolarBoilerCalcificationComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
+import net.swedz.tesseract.neoforge.compat.mi.component.SteamProductionComponent;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;

@@ -14,14 +14,12 @@ import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.swedz.extended_industrialization.compat.mi.EIMIHookListener;
 import net.swedz.extended_industrialization.compat.mi.EIMIHookRegistry;
 import net.swedz.extended_industrialization.datagen.DatagenDelegator;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionRecipe;
-import net.swedz.extended_industrialization.network.EIPackets;
 import net.swedz.tesseract.neoforge.api.MCIdentifiable;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 import net.swedz.tesseract.neoforge.compat.mi.hook.MIHooks;
@@ -79,8 +77,6 @@ public final class EI
 		});
 		
 		bus.addListener(RegisterCapabilitiesEvent.class, CapabilitiesListeners::triggerAll);
-		
-		bus.addListener(RegisterPayloadHandlerEvent.class, EIPackets::init);
 		
 		bus.addListener(RegisterDataMapTypesEvent.class, EIDataMaps::init);
 		

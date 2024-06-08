@@ -55,6 +55,12 @@ dependencies {
 	implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:${mixinextras_version}"))
 
 	implementation "net.swedz:tesseract-neoforge:${tesseract_version}"
+
+	if (project.runtime_include_mi_tweaks.toBoolean()) {
+		implementation "net.swedz:mi-tweaks:${mi_tweaks_version}"
+	} else {
+		compileOnly "net.swedz:mi-tweaks:${mi_tweaks_version}"
+	}
 }
 
 base {

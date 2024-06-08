@@ -10,9 +10,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.EIFluids;
-import net.swedz.extended_industrialization.api.EuConsumerBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehaviorCreator;
+import net.swedz.tesseract.neoforge.compat.mi.helper.EuConsumerBehavior;
 
 import java.util.Optional;
 

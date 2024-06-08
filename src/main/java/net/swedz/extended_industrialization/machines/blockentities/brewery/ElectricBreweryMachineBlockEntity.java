@@ -27,10 +27,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.swedz.extended_industrialization.api.EILubricantHelper;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent.SlotRange;
-import net.swedz.extended_industrialization.machines.guicomponents.recipeefficiency.ModularRecipeEfficiencyBar;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.recipeefficiency.ModularRecipeEfficiencyBar;
+import net.swedz.tesseract.neoforge.compat.mi.helper.ModularLubricantHelper;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
@@ -155,7 +155,7 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 		}
 		if(!result.consumesAction())
 		{
-			result = EILubricantHelper.onUse(crafter, player, hand);
+			result = ModularLubricantHelper.onUse(crafter, player, hand);
 		}
 		return result;
 	}

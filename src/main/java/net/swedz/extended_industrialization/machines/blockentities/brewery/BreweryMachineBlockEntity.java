@@ -17,8 +17,8 @@ import aztech.modern_industrialization.util.Tickable;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
-import net.swedz.extended_industrialization.machines.components.craft.ModularCrafterAccessBehavior;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent;
+import net.swedz.tesseract.neoforge.compat.mi.component.craft.ModularCrafterAccessBehavior;
 
 import java.util.Collections;
 import java.util.List;

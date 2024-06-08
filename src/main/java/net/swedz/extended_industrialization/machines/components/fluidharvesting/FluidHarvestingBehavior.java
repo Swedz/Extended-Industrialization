@@ -3,7 +3,7 @@ package net.swedz.extended_industrialization.machines.components.fluidharvesting
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.util.Simulation;
-import net.swedz.extended_industrialization.api.EuConsumerBehavior;
+import net.swedz.tesseract.neoforge.compat.mi.helper.EuConsumerBehavior;
 
 import java.util.List;
 

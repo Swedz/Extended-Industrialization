@@ -11,9 +11,9 @@ import aztech.modern_industrialization.machines.guicomponents.ProgressBar;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.nbt.CompoundTag;
-import net.swedz.extended_industrialization.api.EuConsumerBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehaviorCreator;
+import net.swedz.tesseract.neoforge.compat.mi.helper.EuConsumerBehavior;
 
 public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEntity implements Tickable
 {

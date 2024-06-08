@@ -4,7 +4,6 @@ import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.MIBlock;
 import aztech.modern_industrialization.compat.rei.machines.ReiMachineRecipes;
 import aztech.modern_industrialization.machines.BEP;
-import aztech.modern_industrialization.machines.guicomponents.ShapeSelection;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
 import aztech.modern_industrialization.machines.init.MachineTier;
 import aztech.modern_industrialization.machines.multiblocks.HatchFlags;
@@ -18,9 +17,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.datamaps.LargeElectricFurnaceTier;
-import net.swedz.extended_industrialization.machines.blockentities.multiblock.multiplied.AbstractElectricMultipliedCraftingMultiblockBlockEntity;
-import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformer;
-import net.swedz.extended_industrialization.machines.components.craft.multiplied.EuCostTransformers;
+import net.swedz.tesseract.neoforge.TesseractText;
+import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformer;
+import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformers;
+import net.swedz.tesseract.neoforge.compat.mi.helper.CommonGuiComponents;
+import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.multiplied.AbstractElectricMultipliedCraftingMultiblockBlockEntity;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.Collections;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 
 import static aztech.modern_industrialization.MITooltips.*;
 import static aztech.modern_industrialization.machines.models.MachineCasings.*;
-import static net.swedz.extended_industrialization.EITooltips.*;
+import static net.swedz.tesseract.neoforge.compat.mi.builtinhook.TesseractMITooltips.*;
 
 public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMultipliedCraftingMultiblockBlockEntity
 {
@@ -42,23 +43,7 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 		
 		List<Component> tierComponents = TIERS.stream().map(LargeElectricFurnaceBlockEntity.Tier::getDisplayName).toList();
 		
-		this.registerGuiComponent(new ShapeSelection.Server(
-				new ShapeSelection.Behavior()
-				{
-					@Override
-					public void handleClick(int line, int delta)
-					{
-						activeShape.incrementShape(LargeElectricFurnaceBlockEntity.this, delta);
-					}
-					
-					@Override
-					public int getCurrentIndex(int line)
-					{
-						return activeShape.getActiveShapeIndex();
-					}
-				},
-				new ShapeSelection.LineInfo(TIERS.size(), tierComponents, true)
-		));
+		this.registerGuiComponent(CommonGuiComponents.rangedShapeSelection(this, activeShape, tierComponents, true));
 	}
 	
 	public Tier getActiveTier()
@@ -88,7 +73,7 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 	public List<Component> getTooltips()
 	{
 		return List.of(
-				DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_RECIPE.text(MACHINE_RECIPE_TYPE_PARSER.parse(true, this.getRecipeType()))),
+				DEFAULT_PARSER.parse(TesseractText.MI_MACHINE_BATCHER_RECIPE.text(MACHINE_RECIPE_TYPE_PARSER.parse(true, this.getRecipeType()))),
 				DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_COILS.text())
 		);
 	}

@@ -6,28 +6,11 @@
     "mixins": [
         "CannedFoodUsedForCatsMixin",
         "mi.AllowFluidBottlesInMachinesMenuMixin",
-        "mi.MakeMachineBlockEntityUseProperTitleMixin",
         "mi.MakePlayerLockNotifyListenersMixin",
-        "mi.MakeWaterPumpsRequireWaterBiomeMixin",
         "mi.accessor.AbstractConfigurableStackAccessor",
-        "mi.accessor.AbstractCraftingMultiblockBlockEntityAccessor",
-        "mi.accessor.ConfigurableItemStackAccessor",
-        "mi.constantefficiency.ConstantEfficiencyCrafterComponentBehaviorMixin",
-        "mi.constantefficiency.ConstantEfficiencyCrafterComponentMixin",
-        "mi.constantefficiency.ConstantEfficiencyEBFMixin",
-        "mi.constantefficiency.ConstantEfficiencyPreventUpgradeInsertionMixin",
-        "mi.constantefficiency.ConstantEfficiencyPreventUpgradeSlotMixin",
-        "mi.EBFReiCategoriesIncludeCoilProcessConditionMixin",
-        "mi.machinecabletier.CasingComponentCableTierGetterMixin",
-        "mi.machinecabletier.ElectricCraftingMultiblockCableTierGetterMixin",
-        "mi.machinecabletier.ElectricCraftingSingleblockCableTierGetterMixin",
-        "mi.machinecabletier.EnergyHatchCableTierGetterMixin"
+        "mi.accessor.ConfigurableItemStackAccessor"
     ],
-    "client": [
-        "client.mi.HideEfficiencyBarClientMixin",
-        "client.mi.HideEfficiencyInMultiblockClientMixin",
-        "client.mi.MachineScreenIncludeCableTierInTitleMixin"
-    ],
+    "client": [],
     "injectors": {
         "defaultRequire": 1
     }
