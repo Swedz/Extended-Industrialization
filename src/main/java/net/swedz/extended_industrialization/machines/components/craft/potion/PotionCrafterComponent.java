@@ -30,7 +30,7 @@ public final class PotionCrafterComponent extends AbstractModularCrafterComponen
 	
 	private int blazingEssence;
 	
-	private RollingRecipeFlags rollingRecipeFlags;
+	private RollingRecipeFlags tryRollingRecipeFlags;
 	
 	public PotionCrafterComponent(
 			Params params,
@@ -129,9 +129,9 @@ public final class PotionCrafterComponent extends AbstractModularCrafterComponen
 	@Override
 	protected boolean tryStartRecipe(PotionRecipe recipe)
 	{
-		rollingRecipeFlags = new RollingRecipeFlags();
+		tryRollingRecipeFlags = new RollingRecipeFlags();
 		boolean success = super.tryStartRecipe(recipe);
-		rollingRecipeFlags = null;
+		tryRollingRecipeFlags = null;
 		return success;
 	}
 	
@@ -217,7 +217,7 @@ public final class PotionCrafterComponent extends AbstractModularCrafterComponen
 						count += extracted;
 						if(count == recipe.bottles())
 						{
-							rollingRecipeFlags.needsWater = itemStack.is(Items.GLASS_BOTTLE);
+							tryRollingRecipeFlags.needsWater = itemStack.is(Items.GLASS_BOTTLE);
 							nested.commit();
 							return true;
 						}
@@ -252,7 +252,7 @@ public final class PotionCrafterComponent extends AbstractModularCrafterComponen
 	@Override
 	protected boolean takeFluidInputs(PotionRecipe recipe, boolean simulate)
 	{
-		return !rollingRecipeFlags.needsWater || recipe.water() == 0 || MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), Fluids.WATER, recipe.water(), simulate) == recipe.water();
+		return !tryRollingRecipeFlags.needsWater || recipe.water() == 0 || MachineInventoryHelper.consumeFluid(inventory.getFluidInputs(), Fluids.WATER, recipe.water(), simulate) == recipe.water();
 	}
 	
 	private boolean takeBlazingEssenceInputs(PotionRecipe recipe, boolean simulate)
