@@ -68,7 +68,7 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 		
 		Pair<MachineInventoryComponent, PotionCrafterComponent.Params> builtInventory = this.buildInventory();
 		this.inventory = builtInventory.getFirst();
-		this.crafter = new PotionCrafterComponent(builtInventory.getSecond(), inventory, this);
+		this.crafter = new PotionCrafterComponent(builtInventory.getSecond(), this, inventory, this);
 		
 		this.isActiveComponent = new IsActiveComponent();
 		this.registerGuiComponent(new ProgressBar.Server(
