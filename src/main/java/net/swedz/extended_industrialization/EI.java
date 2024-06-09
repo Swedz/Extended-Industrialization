@@ -58,7 +58,7 @@ public final class EI
 	{
 		this.loadConfig();
 		
-		MIHooks.register(this, new EIMIHookRegistry(), new EIMIHookListener());
+		MIHooks.register(ID, new EIMIHookRegistry(), new EIMIHookListener());
 		
 		EIItems.init(bus);
 		EIBlocks.init(bus);
@@ -76,7 +76,7 @@ public final class EI
 			PotionRecipe.init();
 		});
 		
-		bus.addListener(RegisterCapabilitiesEvent.class, CapabilitiesListeners::triggerAll);
+		bus.addListener(RegisterCapabilitiesEvent.class, (event) -> CapabilitiesListeners.triggerAll(ID, event));
 		
 		bus.addListener(RegisterDataMapTypesEvent.class, EIDataMaps::init);
 		
