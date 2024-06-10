@@ -8,6 +8,9 @@ plugins {
 
 version = mod_version
 group = mod_group_id
+base {
+	archivesName = artifact_name
+}
 
 repositories {
 	mavenLocal()
@@ -52,8 +55,6 @@ dependencies {
 
 	implementation "dev.emi:emi-neoforge:${emi_version}+${minecraft_version}"
 
-	implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:${mixinextras_version}"))
-
 	implementation "net.swedz:tesseract-neoforge:${tesseract_version}"
 
 	if (project.runtime_include_mi_tweaks.toBoolean()) {
@@ -63,11 +64,27 @@ dependencies {
 	}
 }
 
-base {
-	archivesName = mod_id
+task sourceJar(type: Jar) {
+	archiveClassifier.set("sources")
+	from sourceSets.main.allJava
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+publishing {
+	publications {
+		register('mavenJava', MavenPublication) {
+			from components.java
+			artifactId = project.artifact_name
+
+			artifact(sourceJar) {
+				classifier "sources"
+			}
+		}
+	}
+
+	repositories {
+		mavenLocal()
+	}
+}
 
 runs {
 	configureEach {
@@ -108,8 +125,6 @@ runs {
 	}
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
 tasks.withType(ProcessResources).configureEach {
 	var replaceProperties = [
 			minecraft_version               : minecraft_version,
@@ -133,18 +148,9 @@ tasks.withType(ProcessResources).configureEach {
 	}
 }
 
-publishing {
-	publications {
-		register('mavenJava', MavenPublication) {
-			from components.java
-		}
-	}
-	repositories {
-		maven {
-			url "file://${project.projectDir}/repo"
-		}
-	}
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
@@ -165,4 +171,6 @@ minecraft {
 
 processResources {
 	duplicatesStrategy = 'exclude'
+
+	exclude(".cache")
 }
