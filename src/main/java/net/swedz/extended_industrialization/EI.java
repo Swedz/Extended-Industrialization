@@ -58,7 +58,7 @@ public final class EI
 	{
 		this.loadConfig();
 		
-		MIHooks.register(ID, new EIMIHookRegistry(), new EIMIHookListener());
+		MIHooks.registerListener(ID, new EIMIHookRegistry(), new EIMIHookListener());
 		
 		EIItems.init(bus);
 		EIBlocks.init(bus);

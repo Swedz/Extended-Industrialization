@@ -1,6 +1,5 @@
 package net.swedz.extended_industrialization.compat.mi;
 
-import aztech.modern_industrialization.machines.GuiComponentsClient;
 import net.swedz.extended_industrialization.EIMachines;
 import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.compat.viewer.usage.FluidFertilizerCategory;
@@ -11,15 +10,15 @@ import net.swedz.extended_industrialization.machines.guicomponents.solarefficien
 import net.swedz.extended_industrialization.machines.guicomponents.universaltransformer.UniversalTransformerSlots;
 import net.swedz.extended_industrialization.machines.guicomponents.universaltransformer.UniversalTransformerSlotsClient;
 import net.swedz.tesseract.neoforge.compat.mi.hook.MIHookListener;
-import net.swedz.tesseract.neoforge.compat.mi.hook.context.BlastFurnaceTiersMIHookContext;
-import net.swedz.tesseract.neoforge.compat.mi.hook.context.ClientGuiComponentsMIHookContext;
-import net.swedz.tesseract.neoforge.compat.mi.hook.context.MachineCasingsMIHookContext;
-import net.swedz.tesseract.neoforge.compat.mi.hook.context.MachineProcessConditionsMIHookContext;
-import net.swedz.tesseract.neoforge.compat.mi.hook.context.MachineRecipeTypesMIHookContext;
-import net.swedz.tesseract.neoforge.compat.mi.hook.context.MultiblockMachinesMIHookContext;
-import net.swedz.tesseract.neoforge.compat.mi.hook.context.SingleBlockCraftingMachinesMIHookContext;
-import net.swedz.tesseract.neoforge.compat.mi.hook.context.SingleBlockSpecialMachinesMIHookContext;
-import net.swedz.tesseract.neoforge.compat.mi.hook.context.ViewerSetupMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.BlastFurnaceTiersMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.ClientGuiComponentsMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.MachineCasingsMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.MachineProcessConditionsMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.MachineRecipeTypesMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.MultiblockMachinesMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.SingleBlockCraftingMachinesMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.SingleBlockSpecialMachinesMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.ViewerSetupMIHookContext;
 
 public final class EIMIHookListener implements MIHookListener
 {
@@ -32,9 +31,9 @@ public final class EIMIHookListener implements MIHookListener
 	@Override
 	public void clientGuiComponents(ClientGuiComponentsMIHookContext hook)
 	{
-		GuiComponentsClient.register(SolarEfficiencyBar.ID, SolarEfficiencyBarClient::new);
-		GuiComponentsClient.register(ProcessingArrayMachineSlot.ID, ProcessingArrayMachineSlotClient::new);
-		GuiComponentsClient.register(UniversalTransformerSlots.ID, UniversalTransformerSlotsClient::new);
+		hook.register(SolarEfficiencyBar.ID, SolarEfficiencyBarClient::new);
+		hook.register(ProcessingArrayMachineSlot.ID, ProcessingArrayMachineSlotClient::new);
+		hook.register(UniversalTransformerSlots.ID, UniversalTransformerSlotsClient::new);
 	}
 	
 	@Override
