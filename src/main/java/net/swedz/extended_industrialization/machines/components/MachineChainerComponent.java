@@ -19,9 +19,9 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.swedz.extended_industrialization.EIBlocks;
+import net.swedz.extended_industrialization.EILocalizedListeners;
 import net.swedz.extended_industrialization.machines.blockentities.MachineChainerMachineBlockEntity;
-import net.swedz.tesseract.neoforge.isolatedlistener.IsolatedListener;
-import net.swedz.tesseract.neoforge.isolatedlistener.IsolatedListeners;
+import net.swedz.tesseract.neoforge.localizedlistener.LocalizedListener;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 	private final MachineChainerMachineBlockEntity machineBlockEntity;
 	private final int                              maxConnectedMachines;
 	
-	private final IsolatedListener<BlockEvent.NeighborNotifyEvent> listenerNeighborNotify;
+	private final LocalizedListener<BlockEvent.NeighborNotifyEvent> listenerNeighborNotify;
 	
 	private List<BlockPos>                        machineLinks          = Lists.newArrayList();
 	private List<StorageWrapper<IItemHandler>>    machineItemWrappers   = Lists.newArrayList();
@@ -129,7 +129,7 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 			throw new IllegalStateException("Cannot register listeners for a chainer that already has listeners registered");
 		}
 		Set<ChunkPos> spannedChunks = this.getSpannedChunks();
-		IsolatedListeners.register(this.getLevel(), spannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
+		EILocalizedListeners.INSTANCE.register(this.getLevel(), spannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
 		previousSpannedChunks = spannedChunks;
 	}
 	
@@ -137,7 +137,7 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 	{
 		if(previousSpannedChunks.size() > 0)
 		{
-			IsolatedListeners.unregister(this.getLevel(), previousSpannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
+			EILocalizedListeners.INSTANCE.unregister(this.getLevel(), previousSpannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
 			previousSpannedChunks = Sets.newHashSet();
 		}
 	}

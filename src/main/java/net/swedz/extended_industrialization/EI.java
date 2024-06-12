@@ -60,6 +60,8 @@ public final class EI
 		
 		MIHooks.registerListener(ID, new EIMIHookRegistry(), new EIMIHookListener());
 		
+		EILocalizedListeners.INSTANCE.init();
+		
 		EIItems.init(bus);
 		EIBlocks.init(bus);
 		EIFluids.init(bus);

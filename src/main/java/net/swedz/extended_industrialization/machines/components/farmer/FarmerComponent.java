@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.bus.api.Event;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.swedz.extended_industrialization.EILocalizedListeners;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlockMap;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.HarvestingHandler;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.registry.FarmerHarvestingHandlers;
@@ -22,7 +23,6 @@ import net.swedz.extended_industrialization.machines.components.farmer.task.Farm
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTaskType;
 import net.swedz.tesseract.neoforge.compat.mi.helper.MachineInventoryHelper;
 import net.swedz.tesseract.neoforge.event.FarmlandLoseMoistureEvent;
-import net.swedz.tesseract.neoforge.isolatedlistener.IsolatedListeners;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
@@ -158,7 +158,7 @@ public final class FarmerComponent implements IComponent
 		this.shapeMatcher = shapeMatcher;
 		for(FarmerListener listener : listeners)
 		{
-			IsolatedListeners.register(level, shapeMatcher.getSpannedChunks(), listener.eventClass(), listener.listener());
+			EILocalizedListeners.INSTANCE.register(level, shapeMatcher.getSpannedChunks(), listener.eventClass(), listener.listener());
 		}
 	}
 	
@@ -166,7 +166,7 @@ public final class FarmerComponent implements IComponent
 	{
 		for(FarmerListener listener : listeners)
 		{
-			IsolatedListeners.unregister(level, shapeMatcher.getSpannedChunks(), listener.eventClass(), listener.listener());
+			EILocalizedListeners.INSTANCE.unregister(level, shapeMatcher.getSpannedChunks(), listener.eventClass(), listener.listener());
 		}
 		this.shapeMatcher = null;
 	}
