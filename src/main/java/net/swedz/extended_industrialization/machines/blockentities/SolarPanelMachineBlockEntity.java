@@ -21,6 +21,7 @@ import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
+import com.google.common.collect.Lists;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -33,7 +34,6 @@ import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.components.solar.SolarSunlightComponent;
 import net.swedz.extended_industrialization.machines.components.solar.electric.SolarGeneratorComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 

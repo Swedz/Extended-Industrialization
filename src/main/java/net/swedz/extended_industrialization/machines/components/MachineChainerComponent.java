@@ -5,6 +5,7 @@ import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -22,7 +23,6 @@ import net.swedz.extended_industrialization.EIBlocks;
 import net.swedz.extended_industrialization.EILocalizedListeners;
 import net.swedz.extended_industrialization.machines.blockentities.MachineChainerMachineBlockEntity;
 import net.swedz.tesseract.neoforge.localizedlistener.LocalizedListener;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -91,7 +91,7 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 			{
 				BlockEntity blockEntity = this.getLevel().getBlockEntity(link);
 				if(blockEntity instanceof MachineChainerMachineBlockEntity chainerBlockEntity &&
-						chainerBlockEntity.getChainerComponent().containsMachineAt(blockPos, true))
+				   chainerBlockEntity.getChainerComponent().containsMachineAt(blockPos, true))
 				{
 					return true;
 				}
@@ -176,7 +176,7 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 			if(blockEntity instanceof MachineChainerMachineBlockEntity chainerBlockEntity)
 			{
 				if(chainerBlockEntity.orientation.facingDirection == machineBlockEntity.orientation.facingDirection ||
-						chainerBlockEntity.orientation.facingDirection.getOpposite() == machineBlockEntity.orientation.facingDirection)
+				   chainerBlockEntity.orientation.facingDirection.getOpposite() == machineBlockEntity.orientation.facingDirection)
 				{
 					break;
 				}

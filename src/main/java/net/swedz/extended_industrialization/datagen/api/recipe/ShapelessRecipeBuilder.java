@@ -3,6 +3,7 @@ package net.swedz.extended_industrialization.datagen.api.recipe;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
+import com.google.common.collect.Lists;
 import net.minecraft.core.NonNullList;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -13,7 +14,6 @@ import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.ItemLike;
 import net.swedz.extended_industrialization.datagen.api.MachineRecipeBuilderWrapper;
 import net.swedz.extended_industrialization.datagen.api.RecipeHelper;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 

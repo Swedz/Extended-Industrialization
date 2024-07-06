@@ -1,11 +1,11 @@
 package net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.handlers;
 
+import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.extended_industrialization.datamaps.FarmerSimpleTallCropSize;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.HarvestingContext;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.LootTableHarvestingHandler;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 

@@ -11,6 +11,7 @@ import aztech.modern_industrialization.machines.guicomponents.GunpowderOverclock
 import aztech.modern_industrialization.machines.helper.SteamHelper;
 import aztech.modern_industrialization.machines.init.MachineTier;
 import aztech.modern_industrialization.util.Simulation;
+import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent.SlotRange;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.Arrays;
 import java.util.List;

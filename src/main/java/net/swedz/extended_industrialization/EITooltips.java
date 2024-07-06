@@ -2,6 +2,7 @@ package net.swedz.extended_industrialization;
 
 import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.EnergyApi;
+import com.google.common.collect.Lists;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -9,7 +10,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.BlockItem;
 import net.swedz.extended_industrialization.items.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 import java.util.Optional;

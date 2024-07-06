@@ -16,6 +16,7 @@ import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.fluid.FluidVariant;
 import aztech.modern_industrialization.util.Tickable;
+import com.google.common.collect.Lists;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -26,7 +27,6 @@ import net.swedz.extended_industrialization.machines.components.solar.SolarSunli
 import net.swedz.extended_industrialization.machines.components.solar.boiler.SolarBoilerCalcificationComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
 import net.swedz.tesseract.neoforge.compat.mi.component.SteamProductionComponent;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 

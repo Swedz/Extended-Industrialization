@@ -10,6 +10,7 @@ import aztech.modern_industrialization.machines.multiblocks.HatchType;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
+import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
@@ -22,7 +23,6 @@ import net.swedz.extended_industrialization.machines.components.farmer.task.Farm
 import net.swedz.tesseract.neoforge.compat.mi.helper.CommonGuiComponents;
 import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.BasicMultiblockMachineBlockEntity;
 import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.members.PredicateSimpleMember;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.Collections;
 import java.util.List;
@@ -199,7 +199,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		private static final SimpleMember DIRT = new PredicateSimpleMember(
 				(state) ->
 						state.is(BlockTags.DIRT) || state.is(Blocks.FARMLAND) || state.is(Blocks.SAND) ||
-								state.getFluidState().is(Fluids.WATER) || state.getFluidState().is(Fluids.FLOWING_WATER),
+						state.getFluidState().is(Fluids.WATER) || state.getFluidState().is(Fluids.FLOWING_WATER),
 				Blocks.DIRT
 		);
 		

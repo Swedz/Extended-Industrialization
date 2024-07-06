@@ -1,10 +1,10 @@
 package net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.registry;
 
+import com.google.common.collect.Lists;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.HarvestingHandler;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.handlers.CropBlockHarvestHandler;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.handlers.SimpleTallCropHarvestHandler;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.handlers.TreeBlockHarvestHandler;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 import java.util.function.Supplier;

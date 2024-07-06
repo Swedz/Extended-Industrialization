@@ -7,6 +7,7 @@ import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBlockEntity;
 import aztech.modern_industrialization.util.Simulation;
+import com.google.common.collect.Lists;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -28,7 +29,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.mixin.mi.accessor.ConfigurableItemStackAccessor;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 import java.util.Optional;
@@ -54,7 +54,7 @@ public final class MachineConfigCardItem extends Item
 			ItemStack itemStack = player.getItemInHand(usedHand);
 			BlockEntity hitBlockEntity = context.getLevel().getBlockEntity(context.getClickedPos());
 			if(hitBlockEntity instanceof MachineBlockEntity machine &&
-					!(hitBlockEntity instanceof MultiblockMachineBlockEntity))
+			   !(hitBlockEntity instanceof MultiblockMachineBlockEntity))
 			{
 				if(!context.getLevel().isClientSide())
 				{
@@ -234,8 +234,8 @@ public final class MachineConfigCardItem extends Item
 		public boolean matches(MachineBlockEntity machine)
 		{
 			return machine.getBlockState().getBlock() == machineBlock &&
-					machine.getInventory().getItemStacks().size() == itemSlotCount &&
-					machine.getInventory().getFluidStacks().size() == fluidSlotCount;
+				   machine.getInventory().getItemStacks().size() == itemSlotCount &&
+				   machine.getInventory().getFluidStacks().size() == fluidSlotCount;
 		}
 		
 		public CompoundTag serialize()

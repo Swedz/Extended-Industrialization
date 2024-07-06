@@ -11,6 +11,7 @@ import aztech.modern_industrialization.machines.multiblocks.HatchType;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +23,6 @@ import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostT
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformers;
 import net.swedz.tesseract.neoforge.compat.mi.helper.CommonGuiComponents;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.multiplied.AbstractElectricMultipliedCraftingMultiblockBlockEntity;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.Collections;
 import java.util.Comparator;

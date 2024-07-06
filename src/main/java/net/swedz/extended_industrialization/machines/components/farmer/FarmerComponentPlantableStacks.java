@@ -1,8 +1,8 @@
 package net.swedz.extended_industrialization.machines.components.farmer;
 
 import aztech.modern_industrialization.inventory.ConfigurableItemStack;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;
 import java.util.List;

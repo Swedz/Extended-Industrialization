@@ -18,6 +18,7 @@ import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.init.MachineTier;
 import aztech.modern_industrialization.util.Simulation;
+import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -31,7 +32,6 @@ import net.swedz.extended_industrialization.machines.components.craft.potion.Pot
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent.SlotRange;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.recipeefficiency.ModularRecipeEfficiencyBar;
 import net.swedz.tesseract.neoforge.compat.mi.helper.ModularLubricantHelper;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 

@@ -5,6 +5,7 @@ import aztech.modern_industrialization.machines.components.IsActiveComponent;
 import aztech.modern_industrialization.machines.components.MultiblockInventoryComponent;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import aztech.modern_industrialization.util.Simulation;
+import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -23,7 +24,6 @@ import net.swedz.extended_industrialization.machines.components.farmer.task.Farm
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTaskType;
 import net.swedz.tesseract.neoforge.compat.mi.helper.MachineInventoryHelper;
 import net.swedz.tesseract.neoforge.event.FarmlandLoseMoistureEvent;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 import java.util.stream.Stream;
