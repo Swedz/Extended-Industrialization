@@ -127,19 +127,19 @@ runs {
 
 tasks.withType(ProcessResources).configureEach {
 	var replaceProperties = [
-			minecraft_version               : minecraft_version,
-			minecraft_version_range         : minecraft_version_range,
-			neoforge_version                : neoforge_version,
-			neoforge_version_range          : neoforge_version_range,
-			loader_version_range            : loader_version_range,
-			mod_id                          : mod_id,
-			mod_name                        : mod_name,
-			mod_license                     : mod_license,
-			mod_version                     : mod_version,
-			mod_authors                     : mod_authors,
-			mod_description                 : mod_description,
-			modern_industrialization_version: modern_industrialization_version,
-			tesseract_version               : tesseract_version
+			minecraft_version                     : minecraft_version,
+			minecraft_version_range               : minecraft_version_range,
+			neoforge_version                      : neoforge_version,
+			neoforge_version_range                : neoforge_version_range,
+			loader_version_range                  : loader_version_range,
+			mod_id                                : mod_id,
+			mod_name                              : mod_name,
+			mod_license                           : mod_license,
+			mod_version                           : mod_version,
+			mod_authors                           : mod_authors,
+			mod_description                       : mod_description,
+			modern_industrialization_version_range: modern_industrialization_version_range,
+			tesseract_version                     : tesseract_version
 	]
 	inputs.properties replaceProperties
 
