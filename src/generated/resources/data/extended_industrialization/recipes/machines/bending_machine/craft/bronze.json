@@ -12,7 +12,7 @@
       "tag": "modern_industrialization:fluid_pipes"
     },
     "R": {
-      "item": "modern_industrialization:copper_rod"
+      "tag": "forge:rods/copper"
     }
   },
   "pattern": [

@@ -13,7 +13,7 @@
             "item": "modern_industrialization:steel_bolt"
         },
         "R": {
-            "item": "modern_industrialization:steel_rod"
+            "tag": "forge:rods/steel"
         }
     },
     "result": {

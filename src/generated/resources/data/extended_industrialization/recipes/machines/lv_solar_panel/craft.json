@@ -15,7 +15,7 @@
       "item": "modern_industrialization:motor"
     },
     "R": {
-      "item": "modern_industrialization:tin_rod"
+      "tag": "forge:rods/tin"
     },
     "c": {
       "item": "modern_industrialization:tin_cable"

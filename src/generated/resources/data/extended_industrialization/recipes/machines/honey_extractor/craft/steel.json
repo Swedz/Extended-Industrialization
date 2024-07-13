@@ -9,7 +9,7 @@
       "tag": "modern_industrialization:fluid_pipes"
     },
     "R": {
-      "item": "modern_industrialization:bronze_rod"
+      "tag": "forge:rods/bronze"
     },
     "T": {
       "item": "modern_industrialization:steel_tank"

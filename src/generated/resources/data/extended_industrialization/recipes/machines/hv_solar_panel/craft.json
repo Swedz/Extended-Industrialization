@@ -15,7 +15,7 @@
       "item": "modern_industrialization:advanced_motor"
     },
     "R": {
-      "item": "modern_industrialization:stainless_steel_rod"
+      "tag": "forge:rods/stainless_steel"
     },
     "c": {
       "item": "modern_industrialization:aluminum_cable"

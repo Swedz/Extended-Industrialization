@@ -90,7 +90,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 				"bending_machine",
 				(builder) -> builder
 						.define('G', "modern_industrialization:copper_gear")
-						.define('R', "modern_industrialization:copper_rod")
+						.define('R', EITags.itemForge("rods/copper"))
 						.define('C', "modern_industrialization:bronze_machine_casing")
 						.define('P', MITags.FLUID_PIPES)
 						.pattern("GRG")
@@ -236,7 +236,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addSteelMachineRecipes(
 				"honey_extractor",
 				(builder) -> builder
-						.define('R', "modern_industrialization:bronze_rod")
+						.define('R', EITags.itemForge("rods/bronze"))
 						.define('r', "modern_industrialization:bronze_rotor")
 						.define('T', "modern_industrialization:steel_tank")
 						.define('C', "modern_industrialization:steel_machine_casing")
@@ -481,7 +481,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addBasicCraftingMachineRecipes(
 				"lv_solar_panel",
 				(builder) -> builder
-						.define('R', "modern_industrialization:tin_rod")
+						.define('R', EITags.itemForge("rods/tin"))
 						.define('C', "modern_industrialization:analog_circuit")
 						.define('F', MITags.FLUID_PIPES)
 						.define('H', "modern_industrialization:basic_machine_hull")
@@ -496,7 +496,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addBasicCraftingMachineRecipes(
 				"mv_solar_panel",
 				(builder) -> builder
-						.define('R', "modern_industrialization:aluminum_rod")
+						.define('R', EITags.itemForge("rods/aluminum"))
 						.define('C', "modern_industrialization:electronic_circuit")
 						.define('F', MITags.FLUID_PIPES)
 						.define('H', "modern_industrialization:advanced_machine_hull")
@@ -511,7 +511,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addBasicCraftingMachineRecipes(
 				"hv_solar_panel",
 				(builder) -> builder
-						.define('R', "modern_industrialization:stainless_steel_rod")
+						.define('R', EITags.itemForge("rods/stainless_steel"))
 						.define('C', "modern_industrialization:digital_circuit")
 						.define('F', MITags.FLUID_PIPES)
 						.define('H', "modern_industrialization:turbo_machine_hull")
