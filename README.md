@@ -1,6 +1,8 @@
 # Extended Industrialization
 This mod is an addon for [Modern Industrialization](https://modrinth.com/mod/modern-industrialization) that adds a bunch of new machines, power sources, tools, resources, and more!
 
+For any questions, please ask in the `#extended-industrialization` channel on [my discord](https://discord.gg/vNaqDzSNaB).
+
 ## Features
 - Machines
   - Alloy Smelter
