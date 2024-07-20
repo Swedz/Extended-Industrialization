@@ -50,13 +50,13 @@ public final class PotionCrafterComponent extends AbstractModularCrafterComponen
 	}
 	
 	@Override
-	protected long getRecipeEuCost(PotionRecipe recipe)
+	public long getRecipeEuCost(PotionRecipe recipe)
 	{
 		return recipe.euCost();
 	}
 	
 	@Override
-	protected long getRecipeTotalEuCost(PotionRecipe recipe)
+	public long getRecipeTotalEuCost(PotionRecipe recipe)
 	{
 		return recipe.totalEuCost();
 	}
@@ -80,7 +80,7 @@ public final class PotionCrafterComponent extends AbstractModularCrafterComponen
 	}
 	
 	@Override
-	protected boolean doConditionsMatchForRecipe(PotionRecipe recipe)
+	public boolean doConditionsMatchForRecipe(PotionRecipe recipe)
 	{
 		return true;
 	}
