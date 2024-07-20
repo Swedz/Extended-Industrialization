@@ -6,6 +6,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.extended_industrialization.items.ElectricToolItem;
 import net.swedz.extended_industrialization.items.MachineConfigCardItem;
@@ -43,10 +44,10 @@ public final class EIItems
 		Registry.init(bus);
 	}
 	
-	public static final ItemHolder<SteamChainsawItem> STEAM_CHAINSAW        = create("steam_chainsaw", "Steam Chainsaw", SteamChainsawItem::new, EISortOrder.GEAR).tag(ItemTags.AXES).withModel(CommonModelBuilders::handheld).register();
-	public static final ItemHolder<ElectricToolItem>  ELECTRIC_CHAINSAW     = create("electric_chainsaw", "Electric Chainsaw", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.CHAINSAW), EISortOrder.GEAR).tag(ItemTags.AXES).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
+	public static final ItemHolder<SteamChainsawItem> STEAM_CHAINSAW        = create("steam_chainsaw", "Steam Chainsaw", SteamChainsawItem::new, EISortOrder.GEAR).tag(ItemTags.AXES, ItemTags.HOES, ItemTags.SWORDS, Tags.Items.SHEARS).withModel(CommonModelBuilders::handheld).register();
+	public static final ItemHolder<ElectricToolItem>  ELECTRIC_CHAINSAW     = create("electric_chainsaw", "Electric Chainsaw", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.CHAINSAW), EISortOrder.GEAR).tag(ItemTags.AXES, ItemTags.HOES, ItemTags.SWORDS, Tags.Items.SHEARS).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
 	public static final ItemHolder<ElectricToolItem>  ELECTRIC_MINING_DRILL = create("electric_mining_drill", "Electric Mining Drill", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.DRILL), EISortOrder.GEAR).tag(ItemTags.PICKAXES, ItemTags.SHOVELS).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
-	public static final ItemHolder<ElectricToolItem>  ULTIMATE_LASER_DRILL  = create("ultimate_laser_drill", "Ultimate Laser Drill", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.ULTIMATE), EISortOrder.GEAR).tag(ItemTags.PICKAXES, ItemTags.SHOVELS, ItemTags.AXES, ItemTags.HOES).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
+	public static final ItemHolder<ElectricToolItem>  ULTIMATE_LASER_DRILL  = create("ultimate_laser_drill", "Ultimate Laser Drill", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.ULTIMATE), EISortOrder.GEAR).tag(ItemTags.PICKAXES, ItemTags.SHOVELS, ItemTags.AXES, ItemTags.HOES, ItemTags.SWORDS, Tags.Items.SHEARS).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
 	
 	public static final ItemHolder<TinCanFoodItem> CANNED_FOOD = create("canned_food", "Canned Food", TinCanFoodItem::new, EISortOrder.OTHER_GEAR).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).meat().fast().build())).withModel(CommonModelBuilders::generated).register();
 	public static final ItemHolder<Item>           TIN_CAN     = create("tin_can", "Tin Can", Item::new, EISortOrder.OTHER_GEAR).withModel(CommonModelBuilders::generated).register();

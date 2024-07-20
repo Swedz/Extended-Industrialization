@@ -40,6 +40,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.neoforged.neoforge.common.IShearable;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.TierSortingRegistry;
 
 import java.util.List;
@@ -109,8 +112,8 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
 	{
 		return enchantment.category.canEnchant(stack.getItem()) ||
-				(enchantment.category == EnchantmentCategory.DIGGER && enchantment != Enchantments.SILK_TOUCH && enchantment != Enchantments.BLOCK_FORTUNE) ||
-				(stack.is(ItemTags.AXES) && enchantment.category == EnchantmentCategory.WEAPON && enchantment != Enchantments.SWEEPING_EDGE);
+			   (enchantment.category == EnchantmentCategory.DIGGER && enchantment != Enchantments.SILK_TOUCH && enchantment != Enchantments.BLOCK_FORTUNE) ||
+			   (stack.is(ItemTags.AXES) && enchantment.category == EnchantmentCategory.WEAPON && enchantment != Enchantments.SWEEPING_EDGE);
 	}
 	
 	@Override
@@ -134,7 +137,7 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	public boolean isCorrectToolForDrops(ItemStack stack, BlockState state)
 	{
 		if((type.worksForAllBlocks() || this.isSupportedBlock(stack, state)) &&
-				this.getStoredEnergy(stack) > 0 && TierSortingRegistry.isCorrectTierForDrops(Tiers.NETHERITE, state))
+		   this.getStoredEnergy(stack) > 0 && TierSortingRegistry.isCorrectTierForDrops(Tiers.NETHERITE, state))
 		{
 			return true;
 		}
@@ -145,7 +148,7 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	public float getDestroySpeed(ItemStack stack, BlockState state)
 	{
 		if((type.worksForAllBlocks() || this.isSupportedBlock(stack, state)) &&
-				this.getStoredEnergy(stack) > 0)
+		   this.getStoredEnergy(stack) > 0)
 		{
 			return Tiers.NETHERITE.getSpeed();
 		}
@@ -284,6 +287,30 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 			}
 		}
 		return super.useOn(context);
+	}
+	
+	@Override
+	public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity interactionTarget, InteractionHand usedHand)
+	{
+		Level level = interactionTarget.level();
+		BlockPos blockPos = interactionTarget.blockPosition();
+		if(this.getStoredEnergy(stack) > 0 &&
+		   stack.is(Tags.Items.SHEARS) && interactionTarget instanceof IShearable shearable)
+		{
+			if(!level.isClientSide && shearable.isShearable(stack, level, blockPos))
+			{
+				this.tryUseEnergy(stack, ENERGY_COST);
+				shearable.onSheared(player, stack, level, blockPos, isFortune(stack) ? Enchantments.BLOCK_FORTUNE.getMaxLevel() : 0)
+						.forEach((drop) -> shearable.spawnShearedDrop(level, blockPos, drop));
+				interactionTarget.gameEvent(GameEvent.SHEAR, player);
+				return InteractionResult.SUCCESS;
+			}
+			else
+			{
+				return InteractionResult.CONSUME;
+			}
+		}
+		return InteractionResult.PASS;
 	}
 	
 	@Override

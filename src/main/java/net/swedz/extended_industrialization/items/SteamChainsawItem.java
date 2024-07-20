@@ -52,12 +52,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.common.IShearable;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.TierSortingRegistry;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
@@ -231,6 +234,30 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 		}
 		
 		return super.use(level, user, hand);
+	}
+	
+	@Override
+	public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity interactionTarget, InteractionHand usedHand)
+	{
+		Level level = interactionTarget.level();
+		BlockPos blockPos = interactionTarget.blockPosition();
+		if(this.canUse(stack) &&
+		   stack.is(Tags.Items.SHEARS) && interactionTarget instanceof IShearable shearable)
+		{
+			if(!level.isClientSide && shearable.isShearable(stack, level, blockPos))
+			{
+				this.useFuel(stack, player);
+				shearable.onSheared(player, stack, level, blockPos, 0)
+						.forEach((drop) -> shearable.spawnShearedDrop(level, blockPos, drop));
+				interactionTarget.gameEvent(GameEvent.SHEAR, player);
+				return InteractionResult.SUCCESS;
+			}
+			else
+			{
+				return InteractionResult.CONSUME;
+			}
+		}
+		return InteractionResult.PASS;
 	}
 	
 	private void fillWater(Player player, ItemStack stack)
