@@ -1,5 +1,5 @@
 # Extended Industrialization
-This mod is an addon for [Modern Industrialization](https://github.com/AztechMC/Modern-Industrialization) that adds a bunch of new machines, power sources, tools, resources, and more!
+This mod is an addon for [Modern Industrialization](https://modrinth.com/mod/modern-industrialization) that adds a bunch of new machines, power sources, tools, resources, and more!
 
 ## Features
 - Machines
