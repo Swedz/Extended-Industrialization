@@ -64,9 +64,14 @@ dependencies {
 	}
 }
 
+tasks.named('jar') {
+	from "LICENSE"
+}
+
 task sourceJar(type: Jar) {
 	archiveClassifier.set("sources")
 	from sourceSets.main.allJava
+	from "LICENSE"
 }
 
 publishing {
