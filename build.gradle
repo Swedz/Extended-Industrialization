@@ -13,8 +13,6 @@ base {
 }
 
 repositories {
-	mavenLocal()
-	mavenCentral()
 	maven {
 		name = "Modrinth"
 		url = "https://api.modrinth.com/maven"
@@ -25,6 +23,8 @@ repositories {
 		content {
 			// GrandPower
 			includeGroup "dev.technici4n"
+			// Tesseract
+			includeGroup "net.swedz"
 		}
 	}
 	maven {
@@ -42,6 +42,8 @@ repositories {
 			includeGroup "dev.emi"
 		}
 	}
+	mavenLocal()
+	mavenCentral()
 }
 
 dependencies {
@@ -88,6 +90,15 @@ publishing {
 
 	repositories {
 		mavenLocal()
+
+		maven {
+			credentials {
+				username = System.getenv("MODMAVEN_USERNAME")
+				password = System.getenv("MODMAVEN_PASSWORD")
+			}
+			name = "modmaven"
+			url = "https://modmaven.dev/artifactory/local-releases/"
+		}
 	}
 }
 
