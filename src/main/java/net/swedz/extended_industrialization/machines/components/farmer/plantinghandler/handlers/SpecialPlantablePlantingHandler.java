@@ -18,13 +18,13 @@ public final class SpecialPlantablePlantingHandler implements PlantingHandler
 	public boolean canPlant(PlantingContext context)
 	{
 		SpecialPlantable plantable = (SpecialPlantable) context.stack().getItem();
-		return plantable.canPlacePlantAtPosition(context.stack(), context.level(), context.pos(), Direction.DOWN);
+		return plantable.canPlacePlantAtPosition(context.stack(), context.level(), context.tile().crop().pos(), Direction.DOWN);
 	}
 	
 	@Override
 	public void plant(PlantingContext context)
 	{
 		SpecialPlantable plantable = (SpecialPlantable) context.stack().getItem();
-		plantable.spawnPlantAtPosition(context.stack(), context.level(), context.pos(), Direction.DOWN);
+		plantable.spawnPlantAtPosition(context.stack(), context.level(), context.tile().crop().pos(), Direction.DOWN);
 	}
 }

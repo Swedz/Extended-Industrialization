@@ -1,12 +1,14 @@
 package net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.handlers;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.neoforged.neoforge.common.util.TriState;
+import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlock;
 import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.PlantingContext;
 import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.PlantingHandler;
 
@@ -23,17 +25,20 @@ public final class VanillaPlantingHandler implements PlantingHandler
 	@Override
 	public boolean canPlant(PlantingContext context)
 	{
-		BlockPos farmlandPos = context.pos().below();
-		BlockState farmland = context.level().getBlockState(farmlandPos);
-		BlockState crop = ((BlockItem) context.stack().getItem()).getBlock().defaultBlockState();
-		return farmland.canSustainPlant(context.level(), farmlandPos, Direction.UP, crop).isTrue();
+		Level level = context.level();
+		FarmerBlock dirt = context.tile().dirt();
+		FarmerBlock crop = context.tile().crop();
+		
+		BlockState farmland = dirt.state(level);
+		BlockState cropState = ((BlockItem) context.stack().getItem()).getBlock().defaultBlockState();
+		TriState soilDecision = farmland.canSustainPlant(level, dirt.pos(), Direction.UP, cropState);
+		return soilDecision.isDefault() ? cropState.canSurvive(level, crop.pos()) : soilDecision.isTrue();
 	}
 	
 	@Override
 	public void plant(PlantingContext context)
 	{
 		BlockState crop = ((BlockItem) context.stack().getItem()).getBlock().defaultBlockState();
-		context.level().setBlockAndUpdate(context.pos(), crop);
-		context.level().gameEvent(GameEvent.BLOCK_PLACE, context.pos(), GameEvent.Context.of(crop));
+		context.tile().crop().setBlock(context.level(), crop, 3, GameEvent.BLOCK_PLACE, crop);
 	}
 }
