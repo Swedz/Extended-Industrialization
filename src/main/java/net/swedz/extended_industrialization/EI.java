@@ -57,6 +57,7 @@ public final class EI
 		
 		EILocalizedListeners.INSTANCE.init();
 		
+		EIDataComponents.init(bus);
 		EIItems.init(bus);
 		EIBlocks.init(bus);
 		EIFluids.init(bus);
