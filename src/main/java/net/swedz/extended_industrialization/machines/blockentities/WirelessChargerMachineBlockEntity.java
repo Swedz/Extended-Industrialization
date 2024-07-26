@@ -19,7 +19,7 @@ import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.extended_industrialization.machines.components.WirelessChargingComponent;
@@ -93,9 +93,9 @@ public final class WirelessChargerMachineBlockEntity extends MachineBlockEntity 
 	}
 	
 	@Override
-	protected InteractionResult onUse(Player player, InteractionHand hand, Direction face)
+	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
-		InteractionResult result = super.onUse(player, hand, face);
+		ItemInteractionResult result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction())
 		{
 			result = redstoneControl.onUse(this, player, hand);

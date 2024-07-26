@@ -7,7 +7,7 @@ import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.blockentities.ElectricCraftingMachineBlockEntity;
 import aztech.modern_industrialization.machines.gui.GuiComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -70,13 +70,13 @@ public final class ProcessingArrayMachineSlot
 		}
 		
 		@Override
-		public void writeInitialData(FriendlyByteBuf buf)
+		public void writeInitialData(RegistryFriendlyByteBuf buf)
 		{
 			this.writeCurrentData(buf);
 		}
 		
 		@Override
-		public void writeCurrentData(FriendlyByteBuf buf)
+		public void writeCurrentData(RegistryFriendlyByteBuf buf)
 		{
 			buf.writeInt(getMaxMachines.get());
 		}

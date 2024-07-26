@@ -1,12 +1,12 @@
 package net.swedz.extended_industrialization.machines.components.farmer.task.tasks;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.components.farmer.PlantableConfigurableItemStack;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlock;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerTile;
+import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.PlantingContext;
+import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.registry.FarmerPlantingHandlersHolder;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTaskType;
 
@@ -14,9 +14,12 @@ import java.util.List;
 
 public final class PlantingFarmerTask extends FarmerTask
 {
+	private final FarmerPlantingHandlersHolder plantingHandlers;
+	
 	public PlantingFarmerTask(FarmerComponent component)
 	{
 		super(FarmerTaskType.PLANTING, component);
+		plantingHandlers = component.getPlantingHandlersHolder();
 	}
 	
 	@Override
@@ -25,7 +28,7 @@ public final class PlantingFarmerTask extends FarmerTask
 		List<PlantableConfigurableItemStack> plantables = plantableStacks.getItems();
 		plantables.removeIf((plantable) -> !plantable.isPlantable() || (!plantingMode.includeEmptyStacks() && plantable.getStack().isEmpty()));
 		
-		if(plantables.size() == 0)
+		if(plantables.isEmpty())
 		{
 			return false;
 		}
@@ -36,24 +39,25 @@ public final class PlantingFarmerTask extends FarmerTask
 			
 			int index = plantingMode.index(tile, plantables);
 			PlantableConfigurableItemStack plantable = plantables.get(index);
-			if(tile.canBePlantedOnBy(level, plantable.asPlantable()) && !plantable.getStack().isEmpty())
+			
+			if(plantable.getStack().isEmpty())
 			{
-				BlockPos pos = crop.pos();
+				continue;
+			}
+			
+			PlantingContext plantingContext = new PlantingContext(level, crop.pos(), plantable.getStack().toStack());
+			if(plantable.asPlantable().canPlant(plantingContext))
+			{
 				BlockState state = crop.state(level);
 				if(state.isAir())
 				{
-					BlockState plantState = plantable.getPlant(level, pos);
+					plantable.getStack().decrement(1);
 					
-					if(plantState.canSurvive(level, pos))
+					plantable.asPlantable().plant(plantingContext);
+					
+					if(operations.operate())
 					{
-						plantable.getStack().decrement(1);
-						
-						crop.setBlock(level, plantState, 1 | 2, GameEvent.BLOCK_PLACE, plantState);
-						
-						if(operations.operate())
-						{
-							return true;
-						}
+						return true;
 					}
 				}
 			}

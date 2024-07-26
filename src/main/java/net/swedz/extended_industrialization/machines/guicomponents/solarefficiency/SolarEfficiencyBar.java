@@ -1,7 +1,7 @@
 package net.swedz.extended_industrialization.machines.guicomponents.solarefficiency;
 
 import aztech.modern_industrialization.machines.gui.GuiComponent;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
 
@@ -52,7 +52,7 @@ public final class SolarEfficiencyBar
 		}
 		
 		@Override
-		public void writeInitialData(FriendlyByteBuf buf)
+		public void writeInitialData(RegistryFriendlyByteBuf buf)
 		{
 			buf.writeInt(params.renderX);
 			buf.writeInt(params.renderY);
@@ -60,7 +60,7 @@ public final class SolarEfficiencyBar
 		}
 		
 		@Override
-		public void writeCurrentData(FriendlyByteBuf buf)
+		public void writeCurrentData(RegistryFriendlyByteBuf buf)
 		{
 			buf.writeBoolean(workingSupplier.get());
 			buf.writeInt(efficiencySupplier.get());

@@ -2,7 +2,7 @@ package net.swedz.extended_industrialization.machines.components.farmer.harvesti
 
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -17,8 +17,8 @@ public interface LootTableHarvestingHandler extends HarvestingHandler
 {
 	default LootTable getLootTable(HarvestingContext context)
 	{
-		ResourceLocation lootTableId = context.state().getBlock().getLootTable();
-		return context.level().getServer().getLootData().getLootTable(lootTableId);
+		ResourceKey<LootTable> lootTableId = context.state().getBlock().getLootTable();
+		return context.level().getServer().reloadableRegistries().getLootTable(lootTableId);
 	}
 	
 	@Override

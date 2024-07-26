@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.machines.components.solar.boiler;
 
 import aztech.modern_industrialization.machines.IComponent;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 
 public final class SolarBoilerCalcificationComponent implements IComponent.ServerOnly
@@ -38,13 +39,13 @@ public final class SolarBoilerCalcificationComponent implements IComponent.Serve
 	}
 	
 	@Override
-	public void writeNbt(CompoundTag tag)
+	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{
 		tag.putLong("calcification_ticks", ticks);
 	}
 	
 	@Override
-	public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
+	public void readNbt(CompoundTag tag, HolderLookup.Provider registries, boolean isUpgradingMachine)
 	{
 		ticks = tag.getLong("calcification_ticks");
 	}

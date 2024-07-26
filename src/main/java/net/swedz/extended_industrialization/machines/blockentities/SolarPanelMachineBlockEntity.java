@@ -25,7 +25,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -148,9 +148,9 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	}
 	
 	@Override
-	protected InteractionResult onUse(Player player, InteractionHand hand, Direction face)
+	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
-		InteractionResult result = super.onUse(player, hand, face);
+		ItemInteractionResult result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction())
 		{
 			result = redstoneControl.onUse(this, player, hand);

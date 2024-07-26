@@ -9,7 +9,7 @@ import aztech.modern_industrialization.machines.gui.MachineScreen;
 import aztech.modern_industrialization.util.Rectangle;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -26,12 +26,12 @@ import java.util.List;
 
 public final class UniversalTransformerSlotsClient implements GuiComponentClient
 {
-	public UniversalTransformerSlotsClient(FriendlyByteBuf buf)
+	public UniversalTransformerSlotsClient(RegistryFriendlyByteBuf buf)
 	{
 	}
 	
 	@Override
-	public void readCurrentData(FriendlyByteBuf buf)
+	public void readCurrentData(RegistryFriendlyByteBuf buf)
 	{
 	}
 	

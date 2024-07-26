@@ -2,6 +2,7 @@ package net.swedz.extended_industrialization.machines.components.solar;
 
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 
@@ -63,12 +64,12 @@ public final class SolarSunlightComponent implements IComponent.ServerOnly
 	}
 	
 	@Override
-	public void writeNbt(CompoundTag tag)
+	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{
 	}
 	
 	@Override
-	public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
+	public void readNbt(CompoundTag tag, HolderLookup.Provider registries, boolean isUpgradingMachine)
 	{
 	}
 }

@@ -3,7 +3,7 @@ plugins {
 	id 'eclipse'
 	id 'idea'
 	id 'maven-publish'
-	id 'net.neoforged.gradle.userdev' version '7.0.97'
+	id 'net.neoforged.moddev' version '1.0.14'
 }
 
 version = "${mod_version}+${minecraft_version}"
@@ -47,8 +47,6 @@ repositories {
 }
 
 dependencies {
-	implementation "net.neoforged:neoforge:${neoforge_version}"
-
 	implementation "maven.modrinth:modern-industrialization:${modern_industrialization_version}"
 
 	implementation "dev.technici4n:GrandPower:${grandpower_version}"
@@ -102,42 +100,61 @@ publishing {
 	}
 }
 
-runs {
-	configureEach {
-		systemProperty 'forge.logging.markers', 'REGISTRIES'
+neoForge {
+	version = neoforge_version
 
-		systemProperty 'forge.logging.console.level', 'debug'
-
-		modSource project.sourceSets.main
+	mods {
+		"${mod_id}" {
+			sourceSet sourceSets.main
+		}
 	}
 
-	client {
-		programArguments.addAll '--username', 'Swedz', '--uuid', 'a2dca537-693e-4ded-ac4b-c4006dd4d382'
+	validateAccessTransformers = true
+	accessTransformers = [
+			"/src/main/resources/${mod_id}.accesstransformer.cfg"
+	]
 
-		systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+	runs {
+		configureEach {
+			mods = [neoForge.mods."${mod_id}"]
 
-		systemProperty 'mixin.env.remapRefMap', 'true'
-		systemProperty 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
-		systemProperty 'mixin.debug.export', 'true'
-		systemProperty 'mixin.debug.verbose', 'true'
-	}
+			systemProperty 'forge.logging.markers', 'REGISTRIES'
 
-	server {
-		systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-		programArgument '--nogui'
-	}
+			systemProperty 'forge.logging.console.level', 'debug'
 
-	gameTestServer {
-		systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-	}
+			sourceSet = project.sourceSets.main
+		}
 
-	data {
-		programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+		client {
+			client()
 
-		systemProperty 'mixin.env.remapRefMap', 'true'
-		systemProperty 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
-		systemProperty 'mixin.debug.export', 'true'
-		systemProperty 'mixin.debug.verbose', 'true'
+			programArguments.addAll '--username', 'Swedz', '--uuid', 'a2dca537-693e-4ded-ac4b-c4006dd4d382'
+
+			systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+
+			systemProperty 'mixin.env.remapRefMap', 'true'
+			systemProperty 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+			systemProperty 'mixin.debug.export', 'true'
+			systemProperty 'mixin.debug.verbose', 'true'
+		}
+
+		server {
+			server()
+
+			systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+			programArgument '--nogui'
+		}
+
+		data {
+			data()
+
+			programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+
+			systemProperty 'mixin.env.remapRefMap', 'true'
+			systemProperty 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+			systemProperty 'mixin.debug.export', 'true'
+			systemProperty 'mixin.debug.verbose', 'true'
+		}
 	}
 }
 
@@ -155,16 +172,17 @@ tasks.withType(ProcessResources).configureEach {
 			mod_authors                           : mod_authors,
 			mod_description                       : mod_description,
 			modern_industrialization_version_range: modern_industrialization_version_range,
-			tesseract_version                     : tesseract_version
+			tesseract_version                     : tesseract_version,
+			emi_version_range                     : emi_version_range
 	]
 	inputs.properties replaceProperties
 
-	filesMatching(['META-INF/mods.toml']) {
+	filesMatching(['META-INF/neoforge.mods.toml']) {
 		expand replaceProperties
 	}
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
@@ -176,12 +194,6 @@ idea {
 	module {
 		downloadSources = true
 		downloadJavadoc = true
-	}
-}
-
-minecraft {
-	accessTransformers {
-		file("src/main/resources/${mod_id}.accesstransformer.cfg")
 	}
 }
 

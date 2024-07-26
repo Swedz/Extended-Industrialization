@@ -18,7 +18,6 @@ public final class TillingFarmerTask extends FarmerTask
 		super(FarmerTaskType.TILLING, component);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	protected boolean run()
 	{
@@ -35,7 +34,7 @@ public final class TillingFarmerTask extends FarmerTask
 			if(state.is(BlockTags.DIRT))
 			{
 				BlockState newState = Blocks.FARMLAND.defaultBlockState();
-				if(Blocks.FARMLAND.canSurvive(newState, level, pos))
+				if(newState.canSurvive(level, pos))
 				{
 					dirt.setBlock(level, newState, 1 | 2 | 8, GameEvent.BLOCK_CHANGE, newState);
 					

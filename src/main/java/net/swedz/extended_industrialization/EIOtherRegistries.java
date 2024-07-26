@@ -26,7 +26,7 @@ public final class EIOtherRegistries
 			.icon(() ->
 			{
 				ItemStack stack = EIItems.ELECTRIC_MINING_DRILL.asItem().getDefaultInstance();
-				stack.getOrCreateTag().putBoolean("hide_bar", true);
+				stack.set(EIDataComponents.HIDE_BAR, true);
 				return stack;
 			})
 			.displayItems((params, output) ->

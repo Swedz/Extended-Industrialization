@@ -1,19 +1,17 @@
 package net.swedz.extended_industrialization;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.io.WritingMode;
 import com.google.common.collect.Sets;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.swedz.extended_industrialization.compat.mi.EIMIHookListener;
 import net.swedz.extended_industrialization.compat.mi.EIMIHookRegistry;
@@ -39,7 +37,7 @@ public final class EI
 	
 	public static ResourceLocation id(String name)
 	{
-		return new ResourceLocation(ID, name);
+		return ResourceLocation.fromNamespaceAndPath(ID, name);
 	}
 	
 	public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
@@ -54,9 +52,11 @@ public final class EI
 		return identifiables;
 	}
 	
-	public EI(IEventBus bus)
+	public EI(IEventBus bus, ModContainer container)
 	{
-		this.loadConfig();
+		container.registerConfig(ModConfig.Type.STARTUP, EIConfig.SPEC);
+		EIConfig.loadConfig();
+		bus.addListener(FMLCommonSetupEvent.class, (event) -> EIConfig.loadConfig());
 		
 		MIHooks.registerListener(ID, new EIMIHookRegistry(), new EIMIHookListener());
 		
@@ -65,7 +65,6 @@ public final class EI
 		EIItems.init(bus);
 		EIBlocks.init(bus);
 		EIFluids.init(bus);
-		EIAttachments.init(bus);
 		EIOtherRegistries.init(bus);
 		
 		bus.register(new DatagenDelegator());
@@ -75,8 +74,11 @@ public final class EI
 			EIItems.values().forEach(ItemHolder::triggerRegistrationListener);
 			EIBlocks.values().forEach(BlockHolder::triggerRegistrationListener);
 			EIFluids.values().forEach(FluidHolder::triggerRegistrationListener);
-			PotionRecipe.init();
 		});
+		
+		// TODO started or starting?
+		bus.addListener(ServerStartedEvent.class, (event) ->
+				PotionRecipe.init(event.getServer()));
 		
 		bus.addListener(RegisterCapabilitiesEvent.class, (event) -> CapabilitiesListeners.triggerAll(ID, event));
 		
@@ -89,22 +91,5 @@ public final class EI
 				LargeElectricFurnaceBlockEntity.initTiers();
 			}
 		});
-	}
-	
-	private void loadConfig()
-	{
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EIConfig.SPEC);
-		
-		CommentedFileConfig configData = CommentedFileConfig.builder(FMLPaths.CONFIGDIR.get().resolve("extended_industrialization-common.toml"))
-				.preserveInsertionOrder()
-				.autoreload()
-				.writingMode(WritingMode.REPLACE)
-				.sync()
-				.build();
-		configData.load();
-		EIConfig.SPEC.setConfig(configData);
-		EIConfig.loadConfig();
-		
-		EI.LOGGER.info("Forcefully early-loaded config");
 	}
 }

@@ -1,11 +1,7 @@
 package net.swedz.extended_industrialization;
 
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-@Mod.EventBusSubscriber(modid = EI.ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class EIConfig
 {
 	private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
@@ -21,11 +17,5 @@ public final class EIConfig
 	public static void loadConfig()
 	{
 		localWirelessChargingStationRange = LOCAL_WIRELESS_CHARGING_STATION_RANGE.get();
-	}
-	
-	@SubscribeEvent
-	static void onConfigLoad(ModConfigEvent event)
-	{
-		loadConfig();
 	}
 }

@@ -9,7 +9,7 @@ import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -42,7 +42,7 @@ public class AllowFluidBottlesInMachinesMenuMixin
 	
 	@Unique
 	private static final Map<Fluid, ItemStack> BOTTLE_ITEMS = Map.of(
-			Fluids.WATER, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER),
+			Fluids.WATER, PotionContents.createItemStack(Items.POTION, Potions.WATER),
 			EIFluids.HONEY.asFluid(), new ItemStack(Items.HONEY_BOTTLE)
 	);
 	
@@ -53,7 +53,7 @@ public class AllowFluidBottlesInMachinesMenuMixin
 		if(!item.is(Items.GLASS_BOTTLE))
 		{
 			Optional<Fluid> optionalFluid = BOTTLE_ITEMS.entrySet().stream()
-					.filter((entry) -> ItemStack.isSameItemSameTags(item, entry.getValue()))
+					.filter((entry) -> ItemStack.isSameItemSameComponents(item, entry.getValue()))
 					.map(Map.Entry::getKey)
 					.findFirst();
 			optionalFluid.ifPresent((fluid) -> tank.setFluid(new FluidStack(fluid, tank.getCapacity())));

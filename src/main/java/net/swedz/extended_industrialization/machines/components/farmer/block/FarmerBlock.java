@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.machines.components.farmer.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -46,7 +47,7 @@ public final class FarmerBlock
 		this.updateState(state);
 	}
 	
-	public void setBlock(Level level, BlockState state, int flags, GameEvent gameEvent, BlockState affectedState)
+	public void setBlock(Level level, BlockState state, int flags, Holder.Reference<GameEvent> gameEvent, BlockState affectedState)
 	{
 		this.setBlock(level, state, flags);
 		level.gameEvent(gameEvent, pos, GameEvent.Context.of(affectedState));

@@ -19,7 +19,7 @@ public abstract class RecipesServerDatagenProvider extends RecipeProvider
 {
 	protected RecipesServerDatagenProvider(GatherDataEvent event)
 	{
-		super(event.getGenerator().getPackOutput());
+		super(event.getGenerator().getPackOutput(), event.getLookupProvider());
 	}
 	
 	protected static Ingredient ingredient(String maybeTag)

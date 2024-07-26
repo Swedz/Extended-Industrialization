@@ -16,22 +16,22 @@ public record MachineRecipeBuilderWrapper(MachineRecipeBuilder recipe)
 		
 		for(MachineRecipe.ItemInput itemInput : actualRecipe.itemInputs)
 		{
-			inversedRecipe.addItemOutput(itemInput.ingredient.getItems()[0].getItem(), itemInput.amount, itemInput.probability);
+			inversedRecipe.addItemOutput(itemInput.ingredient().getItems()[0].getItem(), itemInput.amount(), itemInput.probability());
 		}
 		
 		for(MachineRecipe.FluidInput fluidInput : actualRecipe.fluidInputs)
 		{
-			inversedRecipe.addFluidOutput(fluidInput.fluid, (int) fluidInput.amount, fluidInput.probability);
+			inversedRecipe.addFluidOutput(fluidInput.fluid(), (int) fluidInput.amount(), fluidInput.probability());
 		}
 		
 		for(MachineRecipe.ItemOutput itemOutput : actualRecipe.itemOutputs)
 		{
-			inversedRecipe.addItemInput(itemOutput.item, itemOutput.amount, itemOutput.probability);
+			inversedRecipe.addItemInput(itemOutput.variant().getItem(), itemOutput.amount(), itemOutput.probability());
 		}
 		
 		for(MachineRecipe.FluidOutput fluidOutput : actualRecipe.fluidOutputs)
 		{
-			inversedRecipe.addFluidInput(fluidOutput.fluid, (int) fluidOutput.amount, fluidOutput.probability);
+			inversedRecipe.addFluidInput(fluidOutput.fluid(), (int) fluidOutput.amount(), fluidOutput.probability());
 		}
 		
 		return new MachineRecipeBuilderWrapper(inversedRecipe);

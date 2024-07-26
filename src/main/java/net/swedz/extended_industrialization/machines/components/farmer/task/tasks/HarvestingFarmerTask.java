@@ -22,19 +22,19 @@ import java.util.Optional;
 
 public final class HarvestingFarmerTask extends FarmerTask
 {
-	private final FarmerHarvestingHandlersHolder harvestingHandlersHolder;
+	private final FarmerHarvestingHandlersHolder harvestingHandlers;
 	
 	public HarvestingFarmerTask(FarmerComponent component)
 	{
 		super(FarmerTaskType.HARVESTING, component);
-		harvestingHandlersHolder = component.getHarvestingHandlersHolder();
+		harvestingHandlers = component.getHarvestingHandlersHolder();
 	}
 	
 	private boolean harvestBlocks(FarmerBlock cropBlockEntry, HarvestingContext context, HarvestingHandler handler)
 	{
 		List<BlockPos> blockPositions = handler.getBlocks(context);
 		
-		if(blockPositions.size() == 0)
+		if(blockPositions.isEmpty())
 		{
 			return false;
 		}
@@ -43,7 +43,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 		{
 			List<ItemStack> items = handler.getDrops(context);
 			
-			if(items.size() == 0)
+			if(items.isEmpty())
 			{
 				return false;
 			}
@@ -93,7 +93,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 			BlockState state = crop.state(level);
 			
 			HarvestingContext context = new HarvestingContext(level, pos, state);
-			Optional<HarvestingHandler> handlerOptional = harvestingHandlersHolder.getHandler(context);
+			Optional<HarvestingHandler> handlerOptional = harvestingHandlers.getHandler(context);
 			
 			if(handlerOptional.isPresent())
 			{

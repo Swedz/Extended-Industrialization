@@ -8,6 +8,7 @@ import aztech.modern_industrialization.machines.MachineBlockEntity;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
@@ -44,9 +45,9 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 	private int machineItemSlots;
 	private int machineFluidSlots;
 	
-	public final ItemHandler   itemHandler   = new ItemHandler();
-	public final FluidHandler  fluidHandler  = new FluidHandler();
-	public final EnergyHandler energyHandler = new EnergyHandler();
+	public final IItemHandler    itemHandler   = new ItemHandler();
+	public final IFluidHandler   fluidHandler  = new FluidHandler();
+	public final MIEnergyStorage energyHandler = new EnergyHandler();
 	
 	private int tick;
 	
@@ -124,7 +125,7 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 	
 	public void registerListeners()
 	{
-		if(previousSpannedChunks.size() > 0)
+		if(!previousSpannedChunks.isEmpty())
 		{
 			throw new IllegalStateException("Cannot register listeners for a chainer that already has listeners registered");
 		}
@@ -135,7 +136,7 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 	
 	public void unregisterListeners()
 	{
-		if(previousSpannedChunks.size() > 0)
+		if(!previousSpannedChunks.isEmpty())
 		{
 			EILocalizedListeners.INSTANCE.unregister(this.getLevel(), previousSpannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
 			previousSpannedChunks = Sets.newHashSet();
@@ -453,12 +454,12 @@ public final class MachineChainerComponent implements IComponent.ServerOnly
 	}
 	
 	@Override
-	public void writeNbt(CompoundTag tag)
+	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{
 	}
 	
 	@Override
-	public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
+	public void readNbt(CompoundTag tag, HolderLookup.Provider registries, boolean isUpgradingMachine)
 	{
 	}
 }

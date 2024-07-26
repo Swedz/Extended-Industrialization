@@ -5,18 +5,19 @@ import aztech.modern_industrialization.thirdparty.fabrictransfer.api.storage.Sto
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.brewing.BrewingRecipe;
-import net.neoforged.neoforge.common.brewing.BrewingRecipeRegistry;
 import net.neoforged.neoforge.common.brewing.IBrewingRecipe;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.datamaps.PotionBrewingCosts;
@@ -25,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -34,12 +36,12 @@ public final class PotionRecipe
 	private final ItemStack        input;
 	private final Ingredient       reagent;
 	private final ItemStack        output;
-	private final Potion           potion;
+	private final Holder<Potion>   potion;
 	
 	private PotionBrewingCosts costs;
 	private List<PotionRecipe> chain;
 	
-	public PotionRecipe(ResourceLocation id, ItemStack input, Ingredient reagent, ItemStack output, Potion potion)
+	public PotionRecipe(ResourceLocation id, ItemStack input, Ingredient reagent, ItemStack output, Holder<Potion> potion)
 	{
 		this.id = id;
 		this.input = input;
@@ -70,14 +72,14 @@ public final class PotionRecipe
 	
 	public Potion potion()
 	{
-		return potion;
+		return potion.value();
 	}
 	
 	private PotionBrewingCosts costs()
 	{
 		if(costs == null)
 		{
-			costs = PotionBrewingCosts.getFor(potion);
+			costs = PotionBrewingCosts.getFor(this.potion());
 		}
 		return costs;
 	}
@@ -117,7 +119,7 @@ public final class PotionRecipe
 		recipes.add(0, this);
 		for(PotionRecipe parent : getRecipes())
 		{
-			if(ItemStack.isSameItemSameTags(input, parent.output))
+			if(ItemStack.isSameItemSameComponents(input, parent.output))
 			{
 				return parent.generateChain(recipes);
 			}
@@ -173,9 +175,9 @@ public final class PotionRecipe
 		if(obj == this) return true;
 		if(obj == null || obj.getClass() != this.getClass()) return false;
 		PotionRecipe other = (PotionRecipe) obj;
-		return ItemStack.isSameItemSameTags(input, other.input) &&
-				Objects.equals(reagent, other.reagent) &&
-				ItemStack.isSameItemSameTags(output, other.output);
+		return ItemStack.isSameItemSameComponents(input, other.input) &&
+			   Objects.equals(reagent, other.reagent) &&
+			   ItemStack.isSameItemSameComponents(output, other.output);
 	}
 	
 	@Override
@@ -197,6 +199,11 @@ public final class PotionRecipe
 		return subId(BuiltInRegistries.ITEM.getKey(item));
 	}
 	
+	private static String subIdItem(Holder<Item> item)
+	{
+		return subId(item.value());
+	}
+	
 	private static String subId(ItemStack stack)
 	{
 		return subId(stack.getItem());
@@ -207,64 +214,70 @@ public final class PotionRecipe
 		return subId(ingredient.getItems()[0]);
 	}
 	
-	private static String subId(Potion potion)
+	private static String subIdPotion(Holder<Potion> potion)
 	{
-		return subId(BuiltInRegistries.POTION.getKey(potion));
+		return subId(potion.getKey().location());
 	}
 	
-	private static Map<ResourceLocation, PotionRecipe> fetchRecipes()
+	private static Map<ResourceLocation, PotionRecipe> fetchRecipes(MinecraftServer server)
 	{
+		PotionBrewing potionBrewing = server.potionBrewing();
+		
 		Map<ResourceLocation, PotionRecipe> recipes = Maps.newHashMap();
 		
 		// Vanilla potion recipes
-		for(Ingredient allowedContainer : PotionBrewing.ALLOWED_CONTAINERS)
+		for(Ingredient allowedContainer : potionBrewing.containers)
 		{
 			for(ItemStack stack : allowedContainer.getItems())
 			{
 				String stackId = subId(stack);
-				for(PotionBrewing.Mix<Potion> mix : PotionBrewing.POTION_MIXES)
+				for(PotionBrewing.Mix<Potion> mix : potionBrewing.potionMixes)
 				{
-					if(mix.ingredient.getItems().length == 0)
+					if(mix.ingredient().getItems().length == 0)
 					{
 						continue;
 					}
 					
-					String reagentId = subId(mix.ingredient);
-					String inputId = subId(mix.from);
-					String outputId = subId(mix.to);
+					String reagentId = subId(mix.ingredient());
+					String inputId = subIdPotion(mix.from());
+					String outputId = subIdPotion(mix.to());
 					
 					ResourceLocation id = EI.id("brewing/container/%s/%s/%s/%s".formatted(stackId, reagentId, inputId, outputId));
 					if(recipes.containsKey(id))
 					{
 						throw new IllegalStateException("Generated duplicate potion recipe id %s".formatted(id));
 					}
+					ItemStack fromItem = stack.copy();
+					fromItem.set(DataComponents.POTION_CONTENTS, new PotionContents(mix.from()));
+					ItemStack toItem = stack.copy();
+					fromItem.set(DataComponents.POTION_CONTENTS, new PotionContents(mix.to()));
 					recipes.put(id, new PotionRecipe(
 							id,
-							PotionUtils.setPotion(stack.copy(), mix.from),
-							mix.ingredient,
-							PotionUtils.setPotion(stack.copy(), mix.to),
-							mix.to
+							fromItem,
+							mix.ingredient(),
+							toItem,
+							mix.to()
 					));
 				}
 			}
 		}
 		
 		// Vanilla container (like splash, lingering, etc.) recipes
-		for(PotionBrewing.Mix<Item> mix : PotionBrewing.CONTAINER_MIXES)
+		for(PotionBrewing.Mix<Item> mix : potionBrewing.containerMixes)
 		{
-			if(mix.ingredient.getItems().length == 0)
+			if(mix.ingredient().getItems().length == 0)
 			{
 				continue;
 			}
 			
-			String reagentId = subId(mix.ingredient);
-			String inputId = subId(mix.from);
-			String outputId = subId(mix.to);
+			String reagentId = subId(mix.ingredient());
+			String inputId = subIdItem(mix.from());
+			String outputId = subIdItem(mix.to());
 			
 			Consumer<Holder<Potion>> recipeGen = (entry) ->
 			{
 				Potion potion = entry.value();
-				if(potion == Potions.EMPTY || !PotionBrewing.isBrewablePotion(potion))
+				if(potion == null || !potionBrewing.isBrewablePotion(entry))
 				{
 					return;
 				}
@@ -273,27 +286,31 @@ public final class PotionRecipe
 				{
 					throw new IllegalStateException("Generated duplicate potion recipe id %s".formatted(id));
 				}
+				ItemStack fromItem = new ItemStack(mix.from().value());
+				fromItem.set(DataComponents.POTION_CONTENTS, new PotionContents(entry));
+				ItemStack toItem = new ItemStack(mix.to().value());
+				fromItem.set(DataComponents.POTION_CONTENTS, new PotionContents(entry));
 				recipes.put(id, new PotionRecipe(
 						id,
-						PotionUtils.setPotion(new ItemStack(mix.from), potion),
-						mix.ingredient,
-						PotionUtils.setPotion(new ItemStack(mix.to), potion),
-						potion
+						fromItem,
+						mix.ingredient(),
+						toItem,
+						entry
 				));
 			};
 			
-			if(mix.from instanceof PotionItem)
+			if(mix.from().value() instanceof PotionItem)
 			{
 				BuiltInRegistries.POTION.holders().forEach(recipeGen);
 			}
 			else
 			{
-				recipeGen.accept(BuiltInRegistries.POTION.wrapAsHolder(Potions.AWKWARD));
+				recipeGen.accept(BuiltInRegistries.POTION.wrapAsHolder(Potions.AWKWARD.value()));
 			}
 		}
 		
 		// Modded recipes
-		for(IBrewingRecipe brewingRecipe : BrewingRecipeRegistry.getRecipes())
+		for(IBrewingRecipe brewingRecipe : potionBrewing.getRecipes())
 		{
 			if(!(brewingRecipe instanceof BrewingRecipe recipe))
 			{
@@ -303,8 +320,9 @@ public final class PotionRecipe
 			for(ItemStack stack : recipe.getInput().getItems())
 			{
 				ItemStack output = recipe.getOutput(stack, recipe.getIngredient().getItems()[0]);
-				Potion potion = PotionUtils.getPotion(output);
-				if(potion == Potions.EMPTY)
+				PotionContents potionContents = output.get(DataComponents.POTION_CONTENTS);
+				Optional<Holder<Potion>> potionOptional = potionContents.potion();
+				if(potionOptional.isEmpty())
 				{
 					EI.LOGGER.warn("Found modded potion recipe with invalid potion output");
 					continue;
@@ -324,7 +342,7 @@ public final class PotionRecipe
 						stack.copy(),
 						recipe.getIngredient(),
 						output,
-						potion
+						potionOptional.get()
 				));
 			}
 		}
@@ -342,9 +360,9 @@ public final class PotionRecipe
 		return RECIPE_MAP.get(id);
 	}
 	
-	public static void init()
+	public static void init(MinecraftServer server)
 	{
-		RECIPE_MAP = fetchRecipes();
+		RECIPE_MAP = fetchRecipes(server);
 		RECIPES = Collections.unmodifiableList(Lists.newArrayList(RECIPE_MAP.values()));
 		
 		EI.LOGGER.info("Generated {} potion recipes with their chains successfully", getRecipes().size());
@@ -361,9 +379,9 @@ public final class PotionRecipe
 			EI.LOGGER.info(
 					"- {}: input=({}), reagent=({}), output=({}), chain={}",
 					potionId.apply(recipe.potion()),
-					potionId.apply(PotionUtils.getPotion(recipe.input())),
+					recipe.input().get(DataComponents.POTION_CONTENTS).potion().orElseThrow().getKey().location(),
 					recipe.reagent().getItems()[0],
-					potionId.apply(PotionUtils.getPotion(recipe.output())),
+					recipe.output().get(DataComponents.POTION_CONTENTS).potion().orElseThrow().getKey().location(),
 					recipe.chain().size()
 			);
 		}

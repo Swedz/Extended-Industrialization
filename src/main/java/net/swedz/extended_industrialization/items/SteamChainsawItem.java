@@ -1,22 +1,23 @@
 package net.swedz.extended_industrialization.items;
 
+import aztech.modern_industrialization.MIComponents;
 import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.blocks.storage.StorageBehaviour;
 import aztech.modern_industrialization.items.ContainerItem;
 import aztech.modern_industrialization.items.DynamicToolItem;
 import aztech.modern_industrialization.items.ItemContainingItemHelper;
 import aztech.modern_industrialization.items.ItemHelper;
+import aztech.modern_industrialization.items.SteamDrillFuel;
+import aztech.modern_industrialization.items.SteamDrillItem;
 import aztech.modern_industrialization.proxy.CommonProxy;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
-import aztech.modern_industrialization.util.NbtHelper;
 import aztech.modern_industrialization.util.Simulation;
 import aztech.modern_industrialization.util.TextHelper;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
-import it.unimi.dsi.fastutil.objects.Reference2IntMap;
-import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -27,11 +28,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -44,9 +42,11 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -58,10 +58,8 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.IShearable;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.TierSortingRegistry;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import org.apache.commons.lang3.mutable.Mutable;
@@ -77,17 +75,15 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 {
 	public static final StorageBehaviour<ItemVariant> BEHAVIOR = new StorageBehaviour<>()
 	{
-		@SuppressWarnings("deprecation")
 		@Override
 		public long getCapacityForResource(ItemVariant resource)
 		{
-			return resource.getItem().getMaxStackSize();
+			return resource.getMaxStackSize();
 		}
 		
 		public boolean canInsert(ItemVariant item)
 		{
-			int burnTicks = CommonHooks.getBurnTime(item.toStack(), null);
-			return burnTicks > 0;
+			return item.toStack().getBurnTime(null) > 0;
 		}
 	};
 	
@@ -100,20 +96,12 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	
 	private static boolean isNotSilkTouch(ItemStack stack)
 	{
-		CompoundTag tag = stack.getTag();
-		return tag != null && tag.getBoolean("nosilk");
+		return !stack.getOrDefault(MIComponents.SILK_TOUCH, true);
 	}
 	
 	private static void setSilkTouch(ItemStack stack, boolean silkTouch)
 	{
-		if(silkTouch)
-		{
-			stack.removeTagKey("nosilk");
-		}
-		else
-		{
-			stack.getOrCreateTag().putBoolean("nosilk", true);
-		}
+		stack.set(MIComponents.SILK_TOUCH, silkTouch);
 	}
 	
 	@Override
@@ -131,7 +119,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	@Override
 	public boolean isCorrectToolForDrops(ItemStack stack, BlockState state)
 	{
-		if(isSupportedBlock(stack, state) && this.canUse(stack) && TierSortingRegistry.isCorrectTierForDrops(Tiers.NETHERITE, state))
+		if(this.isSupportedBlock(stack, state) && this.canUse(stack) && !state.is(Tiers.NETHERITE.getIncorrectBlocksForDrops()))
 		{
 			return true;
 		}
@@ -159,13 +147,9 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	}
 	
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack)
+	public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack)
 	{
-		if(slot == EquipmentSlot.MAINHAND && this.canUse(stack))
-		{
-			return ItemHelper.createToolModifiers(9);
-		}
-		return ImmutableMultimap.of();
+		return this.canUse(stack) ? ItemHelper.getToolModifiers(9) : ItemAttributeModifiers.EMPTY;
 	}
 	
 	@Override
@@ -184,23 +168,21 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	
 	private void useFuel(ItemStack stack, LivingEntity entity)
 	{
-		CompoundTag tag = stack.getTag();
-		if(tag != null && tag.getInt("water") > 0)
+		if(stack.getOrDefault(MIComponents.WATER, 0) > 0 &&
+		   stack.getOrDefault(MIComponents.STEAM_DRILL_FUEL, SteamDrillFuel.EMPTY).burnTicks() == 0)
 		{
-			if(tag.getInt("burnTicks") == 0)
+			int burnTicks = this.consumeFuel(stack, Simulation.ACT);
+			
+			stack.set(MIComponents.STEAM_DRILL_FUEL, new SteamDrillFuel(burnTicks, burnTicks));
+			
+			if(burnTicks > 0 && entity != null)
 			{
-				int burnTicks = this.consumeFuel(stack, Simulation.ACT);
-				tag = stack.getOrCreateTag(); // consumeFuel might cause the tag to change
-				tag.putInt("burnTicks", burnTicks);
-				tag.putInt("maxBurnTicks", burnTicks);
-				
-				if(burnTicks > 0 && entity != null)
-				{
-					// Play cool sound
-					entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.FIRE_AMBIENT, SoundSource.PLAYERS, 1.0f,
-							1.0f
-					);
-				}
+				entity.level().playSound(
+						null,
+						entity.getX(), entity.getY(), entity.getZ(),
+						SoundEvents.FIRE_AMBIENT, SoundSource.PLAYERS,
+						1f, 1f
+				);
 			}
 		}
 	}
@@ -242,12 +224,12 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 		Level level = interactionTarget.level();
 		BlockPos blockPos = interactionTarget.blockPosition();
 		if(this.canUse(stack) &&
-		   stack.is(Tags.Items.SHEARS) && interactionTarget instanceof IShearable shearable)
+		   stack.is(Tags.Items.TOOLS_SHEAR) && interactionTarget instanceof IShearable shearable)
 		{
-			if(!level.isClientSide && shearable.isShearable(stack, level, blockPos))
+			if(!level.isClientSide && shearable.isShearable(player, stack, level, blockPos))
 			{
 				this.useFuel(stack, player);
-				shearable.onSheared(player, stack, level, blockPos, 0)
+				shearable.onSheared(player, stack, level, blockPos)
 						.forEach((drop) -> shearable.spawnShearedDrop(level, blockPos, drop));
 				interactionTarget.gameEvent(GameEvent.SHEAR, player);
 				return InteractionResult.SUCCESS;
@@ -262,39 +244,35 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	
 	private void fillWater(Player player, ItemStack stack)
 	{
-		CompoundTag tag = stack.getOrCreateTag();
-		if(tag.getInt("water") != FULL_WATER)
+		if(stack.getOrDefault(MIComponents.WATER, 0) != FULL_WATER)
 		{
-			tag.putInt("water", FULL_WATER);
-			player.playNotifySound(SoundEvents.BUCKET_FILL, SoundSource.PLAYERS, 1, 1);
+			stack.set(MIComponents.WATER, FULL_WATER);
+			player.playNotifySound(SoundEvents.BUCKET_FILL, SoundSource.PLAYERS, 1f, 1f);
 		}
 	}
 	
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected)
 	{
-		CompoundTag tag = stack.getOrCreateTag();
-		int burnTicks = tag.getInt("burnTicks");
-		if(burnTicks > 0)
+		SteamDrillFuel fuel = stack.getOrDefault(MIComponents.STEAM_DRILL_FUEL, SteamDrillFuel.EMPTY);
+		if(fuel.burnTicks() > 0)
 		{
-			NbtHelper.putNonzeroInt(tag, "burnTicks", Math.max(0, burnTicks - 5));
-			NbtHelper.putNonzeroInt(tag, "water", Math.max(0, tag.getInt("water") - 5));
+			stack.set(MIComponents.STEAM_DRILL_FUEL, new SteamDrillFuel(Math.max(0, fuel.burnTicks() - 5), fuel.maxBurnTicks()));
+			stack.update(MIComponents.WATER, 0, (water) -> Math.max(0, water - 5));
 		}
-		if(tag.getInt("burnTicks") == 0)
+		if(fuel.burnTicks() == 0)
 		{
-			tag.remove("maxBurnTicks");
+			stack.remove(MIComponents.STEAM_DRILL_FUEL);
 		}
-		if(tag.getInt("water") == 0)
+		if(stack.getOrDefault(MIComponents.WATER, 0) == 0 &&
+		   entity instanceof Player player)
 		{
-			if(entity instanceof Player player)
+			Inventory inv = player.getInventory();
+			for(int i = 0; i < inv.getContainerSize(); ++i)
 			{
-				Inventory inv = player.getInventory();
-				for(int i = 0; i < inv.getContainerSize(); ++i)
+				if(this.tryFillWater(player, stack, inv.getItem(i)))
 				{
-					if(this.tryFillWater(player, stack, inv.getItem(i)))
-					{
-						break;
-					}
+					break;
 				}
 			}
 		}
@@ -302,17 +280,17 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	
 	public boolean canUse(ItemStack stack)
 	{
-		CompoundTag tag = stack.getTag();
-		if(tag == null || tag.getInt("water") == 0)
+		if(stack.getOrDefault(MIComponents.WATER, 0) == 0)
 		{
 			return false;
 		}
-		return tag.getInt("burnTicks") > 0 || this.consumeFuel(stack, Simulation.SIMULATE) > 0;
+		return stack.getOrDefault(MIComponents.STEAM_DRILL_FUEL, SteamDrillFuel.EMPTY).burnTicks() > 0 ||
+			   this.consumeFuel(stack, Simulation.SIMULATE) > 0;
 	}
 	
 	private int consumeFuel(ItemStack stack, Simulation simulation)
 	{
-		int burnTicks = CommonHooks.getBurnTime(getResource(stack).toStack(), null);
+		int burnTicks = this.getResource(stack).toStack().getBurnTime(null);
 		if(burnTicks > 0)
 		{
 			if(simulation.isActing())
@@ -332,26 +310,26 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	}
 	
 	@Override
-	public int getEnchantmentLevel(ItemStack stack, Enchantment enchantment)
+	public int getEnchantmentLevel(ItemStack stack, Holder<Enchantment> enchantment)
 	{
-		return this.getAllEnchantments(stack).getOrDefault(enchantment, 0);
+		return this.getAllEnchantments(stack, enchantment.unwrapLookup()).getLevel(enchantment);
 	}
 	
 	@Override
-	public Map<Enchantment, Integer> getAllEnchantments(ItemStack stack)
+	public ItemEnchantments getAllEnchantments(ItemStack stack, HolderLookup.RegistryLookup<Enchantment> lookup)
 	{
-		Reference2IntMap<Enchantment> map = new Reference2IntOpenHashMap<>();
+		ItemEnchantments.Mutable map = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
 		if(!isNotSilkTouch(stack))
 		{
-			map.put(Enchantments.SILK_TOUCH, 1);
+			lookup.get(Enchantments.SILK_TOUCH).ifPresent((enchantment) -> map.set(enchantment, 1));
 		}
-		return map;
+		return map.toImmutable();
 	}
 	
 	@Override
-	public boolean isFoil(ItemStack pStack)
+	public boolean isFoil(ItemStack stack)
 	{
-		return !this.getAllEnchantments(pStack).isEmpty();
+		return !isNotSilkTouch(stack);
 	}
 	
 	@Override
@@ -384,20 +362,14 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	
 	public Optional<TooltipComponent> getTooltipImage(ItemStack stack)
 	{
-		CompoundTag tag = stack.getTag();
-		if(tag != null)
-		{
-			return Optional.of(new SteamChainsawTooltipData(
-					tag.getInt("water") * 100 / FULL_WATER,
-					tag.getInt("burnTicks"),
-					tag.getInt("maxBurnTicks"),
-					getResource(stack), getAmount(stack)
-			));
-		}
-		else
-		{
-			return Optional.of(new SteamChainsawTooltipData(0, 0, 1, ItemVariant.blank(), 0));
-		}
+		SteamDrillFuel fuel = stack.getOrDefault(MIComponents.STEAM_DRILL_FUEL, SteamDrillFuel.EMPTY);
+		return Optional.of(new SteamDrillItem.SteamDrillTooltipData(
+				stack.getOrDefault(MIComponents.WATER, 0) * 100 / 18000,
+				fuel.burnTicks(),
+				Math.max(1, fuel.maxBurnTicks()),
+				this.getResource(stack),
+				this.getAmount(stack)
+		));
 	}
 	
 	@Override
@@ -451,9 +423,9 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag context)
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag)
 	{
-		SteamChainsawTooltipData data = (SteamChainsawTooltipData) getTooltipImage(stack).orElseThrow();
+		SteamChainsawTooltipData data = (SteamChainsawTooltipData) this.getTooltipImage(stack).orElseThrow();
 		
 		// Water %
 		tooltip.add(MIText.WaterPercent.text(data.waterLevel).setStyle(TextHelper.WATER_TEXT));
@@ -468,9 +440,13 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 			tooltip.add(MIText.SecondsLeft.text(data.burnTicks / 100).setStyle(TextHelper.GRAY_TEXT));
 		}
 		
-		if(!isNotSilkTouch(stack))
+		// Enchantments
+		if(context.registries() != null)
 		{
-			tooltip.add(Enchantments.SILK_TOUCH.getFullname(1));
+			for(Object2IntMap.Entry<Holder<Enchantment>> entry : this.getAllEnchantments(stack, context.registries().lookupOrThrow(Registries.ENCHANTMENT)).entrySet())
+			{
+				tooltip.add(Enchantment.getFullname(entry.getKey(), entry.getIntValue()));
+			}
 		}
 	}
 	
@@ -489,9 +465,9 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	
 	private static class StrippingAccess extends AxeItem
 	{
-		private StrippingAccess(Tier material, float attackDamage, float attackSpeed, Properties settings)
+		private StrippingAccess(Tier material, Properties properties)
 		{
-			super(material, attackDamage, attackSpeed, settings);
+			super(material, properties);
 		}
 		
 		public static Map<Block, Block> getStrippedBlocks()

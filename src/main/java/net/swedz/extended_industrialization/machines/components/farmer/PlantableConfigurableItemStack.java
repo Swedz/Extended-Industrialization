@@ -3,23 +3,23 @@ package net.swedz.extended_industrialization.machines.components.farmer;
 import aztech.modern_industrialization.inventory.ChangeListener;
 import aztech.modern_industrialization.inventory.ConfigurableItemStack;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.IPlantable;
+import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.PlantingHandler;
+
+import java.util.Optional;
 
 public final class PlantableConfigurableItemStack extends ChangeListener
 {
-	private final ConfigurableItemStack stack;
+	private final FarmerComponentPlantableStacks parent;
+	private final ConfigurableItemStack          stack;
 	
 	private Item lastUpdateItem;
 	
-	private boolean plantable;
+	private Optional<PlantingHandler> plantingHandler = Optional.empty();
 	
-	PlantableConfigurableItemStack(ConfigurableItemStack stack)
+	PlantableConfigurableItemStack(FarmerComponentPlantableStacks parent, ConfigurableItemStack stack)
 	{
+		this.parent = parent;
 		this.stack = stack;
 	}
 	
@@ -42,21 +42,12 @@ public final class PlantableConfigurableItemStack extends ChangeListener
 	
 	public boolean isPlantable()
 	{
-		return plantable;
+		return plantingHandler.isPresent();
 	}
 	
-	public IPlantable asPlantable()
+	public PlantingHandler asPlantable()
 	{
-		if(!plantable)
-		{
-			throw new IllegalStateException("Tried to get plantable of non-plantable stack");
-		}
-		return (IPlantable) ((BlockItem) this.getItem()).getBlock();
-	}
-	
-	public BlockState getPlant(Level level, BlockPos pos)
-	{
-		return this.asPlantable().getPlant(level, pos);
+		return plantingHandler.orElseThrow(() -> new IllegalStateException("Tried to get plantable of non-plantable stack"));
 	}
 	
 	@Override
@@ -66,8 +57,7 @@ public final class PlantableConfigurableItemStack extends ChangeListener
 		Item item = itemVariant.getItem();
 		if(lastUpdateItem != item)
 		{
-			plantable = item instanceof BlockItem blockItem &&
-					blockItem.getBlock() instanceof IPlantable;
+			plantingHandler = parent.getFarmer().getPlantingHandlersHolder().getHandler(stack.toStack());
 		}
 		lastUpdateItem = item;
 	}

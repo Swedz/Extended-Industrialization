@@ -14,17 +14,17 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.swedz.extended_industrialization.items.MachineConfigCardItem;
+import net.swedz.extended_industrialization.items.machineconfig.MachineConfigCardItem;
 import net.swedz.extended_industrialization.items.SteamChainsawItem;
 import net.swedz.extended_industrialization.items.tooltip.MachineConfigCardTooltipComponent;
 import net.swedz.extended_industrialization.items.tooltip.SteamChainsawTooltipComponent;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = EI.ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, modid = EI.ID, bus = EventBusSubscriber.Bus.MOD)
 public final class EIClient
 {
 	@SubscribeEvent

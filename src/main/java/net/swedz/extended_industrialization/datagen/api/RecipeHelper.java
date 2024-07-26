@@ -32,11 +32,11 @@ public final class RecipeHelper
 	{
 		if(maybeTag.startsWith("#"))
 		{
-			return Ingredient.of(ItemTags.create(new ResourceLocation(maybeTag.substring(1))));
+			return Ingredient.of(ItemTags.create(ResourceLocation.parse(maybeTag.substring(1))));
 		}
 		else
 		{
-			return Ingredient.of(BuiltInRegistries.ITEM.get(new ResourceLocation(maybeTag)));
+			return Ingredient.of(BuiltInRegistries.ITEM.get(ResourceLocation.parse(maybeTag)));
 		}
 	}
 }

@@ -19,7 +19,7 @@ import aztech.modern_industrialization.thirdparty.fabrictransfer.api.transaction
 import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.extended_industrialization.machines.components.TransformerTierComponent;
@@ -90,7 +90,7 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 	}
 	
 	@Override
-	protected InteractionResult onUse(Player player, InteractionHand hand, Direction face)
+	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
 		var energyItem = player.getItemInHand(hand).getCapability(EnergyApi.ITEM);
 		int stackSize = player.getItemInHand(hand).getCount();
@@ -141,9 +141,9 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 					}
 				}
 			}
-			return InteractionResult.sidedSuccess(player.level().isClientSide());
+			return ItemInteractionResult.sidedSuccess(player.level().isClientSide());
 		}
-		return super.onUse(player, hand, face);
+		return super.useItemOn(player, hand, face);
 	}
 	
 	public static void registerEnergyApi(BlockEntityType<?> bet)

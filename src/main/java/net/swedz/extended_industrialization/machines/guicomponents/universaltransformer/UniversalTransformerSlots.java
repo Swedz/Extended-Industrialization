@@ -4,7 +4,7 @@ import aztech.modern_industrialization.inventory.HackySlot;
 import aztech.modern_industrialization.inventory.SlotGroup;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.gui.GuiComponent;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
@@ -42,7 +42,7 @@ public final class UniversalTransformerSlots
 		}
 		
 		@Override
-		public void writeInitialData(FriendlyByteBuf buf)
+		public void writeInitialData(RegistryFriendlyByteBuf buf)
 		{
 		}
 		

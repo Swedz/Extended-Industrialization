@@ -4,6 +4,7 @@ import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.DropableComponent;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -47,15 +48,15 @@ public final class ProcessingArrayMachineComponent implements IComponent.ServerO
 	}
 	
 	@Override
-	public void writeNbt(CompoundTag tag)
+	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{
-		tag.put("machinesStack", machines.save(new CompoundTag()));
+		tag.put("machinesStack", machines.saveOptional(registries));
 	}
 	
 	@Override
-	public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
+	public void readNbt(CompoundTag tag, HolderLookup.Provider registries, boolean isUpgradingMachine)
 	{
-		machines = ItemStack.of(tag.getCompound("machinesStack"));
+		machines = ItemStack.parseOptional(registries, tag.getCompound("machinesStack"));
 		if(!machines.isEmpty())
 		{
 			machineRecipeType = ProcessingArrayMachineSlot.getMachine(machines).recipeType();

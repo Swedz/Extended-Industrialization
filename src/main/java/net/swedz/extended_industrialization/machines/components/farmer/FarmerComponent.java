@@ -8,6 +8,7 @@ import aztech.modern_industrialization.util.Simulation;
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluids;
@@ -19,6 +20,8 @@ import net.swedz.extended_industrialization.machines.components.farmer.harvestin
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.registry.FarmerHarvestingHandlers;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.registry.FarmerHarvestingHandlersHolder;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.registry.FarmerListener;
+import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.registry.FarmerPlantingHandlers;
+import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.registry.FarmerPlantingHandlersHolder;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerProcessRates;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTaskType;
@@ -37,6 +40,7 @@ public final class FarmerComponent implements IComponent
 	private final FarmerProcessRates             processRates;
 	
 	private final FarmerBlockMap                 blockMap;
+	private final FarmerPlantingHandlersHolder   plantingHandlers;
 	private final FarmerHarvestingHandlersHolder harvestingHandlers;
 	private final List<FarmerTask>               tasks;
 	
@@ -60,6 +64,7 @@ public final class FarmerComponent implements IComponent
 		this.processRates = processRates;
 		
 		blockMap = new FarmerBlockMap();
+		plantingHandlers = FarmerPlantingHandlers.create();
 		harvestingHandlers = FarmerHarvestingHandlers.create();
 		tasks = Stream.of(FarmerTaskType.values())
 				.filter(processRates::contains)
@@ -92,6 +97,11 @@ public final class FarmerComponent implements IComponent
 	public FarmerBlockMap getBlockMap()
 	{
 		return blockMap;
+	}
+	
+	public FarmerPlantingHandlersHolder getPlantingHandlersHolder()
+	{
+		return plantingHandlers;
 	}
 	
 	public FarmerHarvestingHandlersHolder getHarvestingHandlersHolder()
@@ -172,7 +182,7 @@ public final class FarmerComponent implements IComponent
 	}
 	
 	@Override
-	public void writeNbt(CompoundTag tag)
+	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{
 		tag.putBoolean("tilling", tilling);
 		tag.putString("planting_mode", plantingMode.name());
@@ -201,7 +211,7 @@ public final class FarmerComponent implements IComponent
 	}
 	
 	@Override
-	public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
+	public void readNbt(CompoundTag tag, HolderLookup.Provider registries, boolean isUpgradingMachine)
 	{
 		tilling = tag.getBoolean("tilling");
 		plantingMode = PlantingMode.fromName(tag.getString("planting_mode"));

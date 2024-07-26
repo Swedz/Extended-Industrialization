@@ -1,14 +1,18 @@
 package net.swedz.extended_industrialization.items;
 
+import aztech.modern_industrialization.MIComponents;
 import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.items.DynamicToolItem;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
+import aztech.modern_industrialization.items.ItemHelper;
 import dev.technici4n.grandpower.api.ISimpleEnergyItem;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
@@ -16,11 +20,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
@@ -30,25 +30,25 @@ import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Vanishable;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.IShearable;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.TierSortingRegistry;
+import net.swedz.extended_industrialization.EIDataComponents;
 
 import java.util.List;
 import java.util.Map;
 
-public class ElectricToolItem extends Item implements Vanishable, DynamicToolItem, ISimpleEnergyItem
+public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEnergyItem
 {
 	public enum Type
 	{
@@ -89,31 +89,16 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	
 	private final Type type;
 	
-	private final Multimap<Attribute, AttributeModifier> defaultModifiers;
-	
 	public ElectricToolItem(Properties properties, Type type)
 	{
 		super(properties.stacksTo(1).rarity(Rarity.UNCOMMON));
-		
 		this.type = type;
-		
-		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-		builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", type.damage(), AttributeModifier.Operation.ADDITION));
-		this.defaultModifiers = builder.build();
 	}
 	
 	@Override
 	public boolean isEnchantable(ItemStack stack)
 	{
 		return true;
-	}
-	
-	@Override
-	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
-	{
-		return enchantment.category.canEnchant(stack.getItem()) ||
-			   (enchantment.category == EnchantmentCategory.DIGGER && enchantment != Enchantments.SILK_TOUCH && enchantment != Enchantments.BLOCK_FORTUNE) ||
-			   (stack.is(ItemTags.AXES) && enchantment.category == EnchantmentCategory.WEAPON && enchantment != Enchantments.SWEEPING_EDGE);
 	}
 	
 	@Override
@@ -137,7 +122,7 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	public boolean isCorrectToolForDrops(ItemStack stack, BlockState state)
 	{
 		if((type.worksForAllBlocks() || this.isSupportedBlock(stack, state)) &&
-		   this.getStoredEnergy(stack) > 0 && TierSortingRegistry.isCorrectTierForDrops(Tiers.NETHERITE, state))
+		   this.getStoredEnergy(stack) > 0 && !state.is(Tiers.NETHERITE.getIncorrectBlocksForDrops()))
 		{
 			return true;
 		}
@@ -155,18 +140,16 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 		return 1;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot slot)
+	public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack)
 	{
-		return slot == EquipmentSlot.MAINHAND ? defaultModifiers : super.getDefaultAttributeModifiers(slot);
+		return this.getStoredEnergy(stack) > 0 ? ItemHelper.getToolModifiers(type.damage()) : ItemAttributeModifiers.EMPTY;
 	}
 	
 	@Override
 	public boolean isBarVisible(ItemStack stack)
 	{
-		CompoundTag tag = stack.getTag();
-		return tag == null || !tag.getBoolean("hide_bar");
+		return !stack.getOrDefault(EIDataComponents.HIDE_BAR, false);
 	}
 	
 	@Override
@@ -202,29 +185,23 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	
 	private static boolean isFortune(ItemStack stack)
 	{
-		CompoundTag tag = stack.getTag();
-		return tag != null && tag.getBoolean("fortune");
+		return stack.getOrDefault(MIComponents.SILK_TOUCH, false);
 	}
 	
 	private static void setFortune(ItemStack stack, boolean fortune)
 	{
-		if(fortune)
-		{
-			stack.getOrCreateTag().putBoolean("fortune", true);
-		}
-		else
-		{
-			stack.removeTagKey("fortune");
-		}
+		stack.set(MIComponents.SILK_TOUCH, !fortune);
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag context)
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag)
 	{
 		if(this.getStoredEnergy(stack) > 0)
 		{
-			Enchantment enchantment = isFortune(stack) ? Enchantments.BLOCK_FORTUNE : Enchantments.SILK_TOUCH;
-			tooltip.add(enchantment.getFullname(enchantment.getMaxLevel()));
+			HolderLookup.RegistryLookup<Enchantment> enchantmentRegistry = context.registries().lookupOrThrow(Registries.ENCHANTMENT);
+			ResourceKey<Enchantment> enchantmentKey = isFortune(stack) ? Enchantments.FORTUNE : Enchantments.SILK_TOUCH;
+			Holder.Reference<Enchantment> enchantment = enchantmentRegistry.getOrThrow(enchantmentKey);
+			tooltip.add(Enchantment.getFullname(enchantment, enchantment.value().getMaxLevel()));
 		}
 	}
 	
@@ -295,12 +272,12 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 		Level level = interactionTarget.level();
 		BlockPos blockPos = interactionTarget.blockPosition();
 		if(this.getStoredEnergy(stack) > 0 &&
-		   stack.is(Tags.Items.SHEARS) && interactionTarget instanceof IShearable shearable)
+		   stack.is(Tags.Items.TOOLS_SHEAR) && interactionTarget instanceof IShearable shearable)
 		{
-			if(!level.isClientSide && shearable.isShearable(stack, level, blockPos))
+			if(!level.isClientSide && shearable.isShearable(player, stack, level, blockPos))
 			{
 				this.tryUseEnergy(stack, ENERGY_COST);
-				shearable.onSheared(player, stack, level, blockPos, isFortune(stack) ? Enchantments.BLOCK_FORTUNE.getMaxLevel() : 0)
+				shearable.onSheared(player, stack, level, blockPos)
 						.forEach((drop) -> shearable.spawnShearedDrop(level, blockPos, drop));
 				interactionTarget.gameEvent(GameEvent.SHEAR, player);
 				return InteractionResult.SUCCESS;
@@ -314,40 +291,40 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	}
 	
 	@Override
-	public int getEnchantmentLevel(ItemStack stack, Enchantment enchantment)
+	public int getEnchantmentLevel(ItemStack stack, Holder<Enchantment> enchantment)
 	{
-		return this.getAllEnchantments(stack).getOrDefault(enchantment, 0);
+		return this.getAllEnchantments(stack, enchantment.unwrapLookup()).getLevel(enchantment);
 	}
 	
 	@Override
-	public Map<Enchantment, Integer> getAllEnchantments(ItemStack stack)
+	public ItemEnchantments getAllEnchantments(ItemStack stack, HolderLookup.RegistryLookup<Enchantment> lookup)
 	{
-		Map<Enchantment, Integer> map = EnchantmentHelper.deserializeEnchantments(stack.getEnchantmentTags());
+		ItemEnchantments.Mutable enchantments = new ItemEnchantments.Mutable(super.getAllEnchantments(stack, lookup));
 		if(this.getStoredEnergy(stack) > 0)
 		{
-			if(!isFortune(stack))
-			{
-				map.put(Enchantments.SILK_TOUCH, Enchantments.SILK_TOUCH.getMaxLevel());
-			}
-			else
-			{
-				map.put(Enchantments.BLOCK_FORTUNE, Enchantments.BLOCK_FORTUNE.getMaxLevel());
-			}
+			lookup.get(isFortune(stack) ? Enchantments.FORTUNE : Enchantments.SILK_TOUCH)
+					.ifPresent((enchantment) -> enchantments.set(enchantment, enchantment.value().getMaxLevel()));
 		}
-		return map;
+		return enchantments.toImmutable();
 	}
 	
 	@Override
 	public boolean isFoil(ItemStack stack)
 	{
-		return this.getAllEnchantments(stack).size() > (this.getStoredEnergy(stack) > 0 ? 1 : 0);
+		return this.getAllEnchantments(stack, CommonHooks.resolveLookup(Registries.ENCHANTMENT)).size() > (this.getStoredEnergy(stack) > 0 ? 1 : 0);
+	}
+	
+	@Override
+	public DataComponentType<Long> getEnergyComponent()
+	{
+		return MIComponents.ENERGY.get();
 	}
 	
 	private static class StrippingAccess extends AxeItem
 	{
-		private StrippingAccess(Tier material, float attackDamage, float attackSpeed, Properties settings)
+		private StrippingAccess(Tier material, Properties properties)
 		{
-			super(material, attackDamage, attackSpeed, settings);
+			super(material, properties);
 		}
 		
 		public static Map<Block, Block> getStrippedBlocks()
@@ -358,9 +335,9 @@ public class ElectricToolItem extends Item implements Vanishable, DynamicToolIte
 	
 	private static class PathingAccess extends ShovelItem
 	{
-		private PathingAccess(Tier material, float attackDamage, float attackSpeed, Properties settings)
+		private PathingAccess(Tier material, Properties properties)
 		{
-			super(material, attackDamage, attackSpeed, settings);
+			super(material, properties);
 		}
 		
 		public static Map<Block, BlockState> getPathStates()

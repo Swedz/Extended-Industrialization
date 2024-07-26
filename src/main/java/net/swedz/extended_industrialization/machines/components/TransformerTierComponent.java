@@ -4,6 +4,7 @@ import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.DropableComponent;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -57,15 +58,15 @@ public final class TransformerTierComponent implements IComponent.ServerOnly, Dr
 	}
 	
 	@Override
-	public void writeNbt(CompoundTag tag)
+	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{
-		tag.put(this.nbtKey(), stack.save(new CompoundTag()));
+		tag.put(this.nbtKey(), stack.saveOptional(registries));
 	}
 	
 	@Override
-	public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
+	public void readNbt(CompoundTag tag, HolderLookup.Provider registries, boolean isUpgradingMachine)
 	{
-		this.setCasingInternal(ItemStack.of(tag.getCompound(this.nbtKey())));
+		this.setCasingInternal(ItemStack.parseOptional(registries, tag.getCompound(this.nbtKey())));
 	}
 	
 	@Override
@@ -74,6 +75,7 @@ public final class TransformerTierComponent implements IComponent.ServerOnly, Dr
 		return this.getStack();
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void playCasingPlaceSound(MachineBlockEntity blockEntity)
 	{
 		ResourceLocation blockKey = tier.itemKey;

@@ -9,7 +9,7 @@ import aztech.modern_industrialization.machines.gui.MachineScreen;
 import aztech.modern_industrialization.util.Rectangle;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -25,13 +25,13 @@ public final class ProcessingArrayMachineSlotClient implements GuiComponentClien
 {
 	private int maxMachines;
 	
-	public ProcessingArrayMachineSlotClient(FriendlyByteBuf buf)
+	public ProcessingArrayMachineSlotClient(RegistryFriendlyByteBuf buf)
 	{
 		this.readCurrentData(buf);
 	}
 	
 	@Override
-	public void readCurrentData(FriendlyByteBuf buf)
+	public void readCurrentData(RegistryFriendlyByteBuf buf)
 	{
 		maxMachines = buf.readInt();
 	}

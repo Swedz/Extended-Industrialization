@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.datagen.server;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.loot.LootTableSubProvider;
@@ -21,7 +22,6 @@ import net.swedz.extended_industrialization.datagen.server.provider.tags.ItemTag
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public final class DatagenDelegatorServer
 {
@@ -49,14 +49,15 @@ public final class DatagenDelegatorServer
 		event.getGenerator().addProvider(event.includeServer(), providerCreator.apply(event));
 	}
 	
-	private static void addLootTable(GatherDataEvent event, Supplier<LootTableSubProvider> providerCreator)
+	private static void addLootTable(GatherDataEvent event, Function<HolderLookup.Provider, LootTableSubProvider> providerCreator)
 	{
 		event.getGenerator().addProvider(
 				event.includeServer(),
 				new LootTableProvider(
 						event.getGenerator().getPackOutput(),
 						Set.of(),
-						List.of(new LootTableProvider.SubProviderEntry(providerCreator, LootContextParamSets.BLOCK))
+						List.of(new LootTableProvider.SubProviderEntry(providerCreator, LootContextParamSets.BLOCK)),
+						event.getLookupProvider()
 				)
 		);
 	}

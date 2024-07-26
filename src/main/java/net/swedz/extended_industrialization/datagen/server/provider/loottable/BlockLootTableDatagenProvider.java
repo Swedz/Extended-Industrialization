@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.datagen.server.provider.loottable;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
@@ -10,9 +11,9 @@ import java.util.Set;
 
 public final class BlockLootTableDatagenProvider extends BlockLootSubProvider
 {
-	public BlockLootTableDatagenProvider()
+	public BlockLootTableDatagenProvider(HolderLookup.Provider registries)
 	{
-		super(Set.of(), FeatureFlags.VANILLA_SET);
+		super(Set.of(), FeatureFlags.VANILLA_SET, registries);
 	}
 	
 	@Override

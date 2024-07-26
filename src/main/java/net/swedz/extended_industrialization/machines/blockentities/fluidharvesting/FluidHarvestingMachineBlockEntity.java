@@ -10,6 +10,7 @@ import aztech.modern_industrialization.machines.guicomponents.AutoExtract;
 import aztech.modern_industrialization.machines.guicomponents.ProgressBar;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.FluidHarvestingBehaviorCreator;
@@ -52,13 +53,13 @@ public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEnti
 		this.registerComponents(isActiveComponent, new IComponent()
 		{
 			@Override
-			public void writeNbt(CompoundTag tag)
+			public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 			{
 				tag.putInt("pumpingTicks", pumpingTicks);
 			}
 			
 			@Override
-			public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
+			public void readNbt(CompoundTag tag, HolderLookup.Provider registries, boolean isUpgradingMachine)
 			{
 				pumpingTicks = tag.getInt("pumpingTicks");
 			}

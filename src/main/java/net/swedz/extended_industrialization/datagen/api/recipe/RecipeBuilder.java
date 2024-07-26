@@ -22,7 +22,7 @@ public abstract class RecipeBuilder<T extends RecipeBuilder<T>>
 	
 	public T setOutput(String result, int count)
 	{
-		return this.setOutput(BuiltInRegistries.ITEM.get(new ResourceLocation(result)), count);
+		return this.setOutput(BuiltInRegistries.ITEM.get(ResourceLocation.parse(result)), count);
 	}
 	
 	public abstract MachineRecipeBuilderWrapper exportToMachine(MachineRecipeType machine, int eu, int duration, int division);

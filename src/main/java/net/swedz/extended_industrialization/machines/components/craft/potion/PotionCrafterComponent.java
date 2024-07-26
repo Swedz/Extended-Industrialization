@@ -10,12 +10,13 @@ import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVa
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.storage.StorageView;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.transaction.Transaction;
 import com.google.common.collect.Lists;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.material.Fluids;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.AbstractModularCrafterComponent;
@@ -139,7 +140,7 @@ public final class PotionCrafterComponent extends AbstractModularCrafterComponen
 	{
 		if(stack.is(Items.GLASS_BOTTLE))
 		{
-			return PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
+			return PotionContents.createItemStack(Items.POTION, Potions.WATER);
 		}
 		return stack;
 	}
@@ -199,7 +200,7 @@ public final class PotionCrafterComponent extends AbstractModularCrafterComponen
 			ItemStack itemStack = item.getResource().toStack();
 			
 			// Make sure this bottle can be used at the starting point of this recipe chain
-			if(!ItemStack.isSameItemSameTags(this.transform(itemStack), startRecipe.input()))
+			if(!ItemStack.isSameItemSameComponents(this.transform(itemStack), startRecipe.input()))
 			{
 				continue;
 			}
@@ -211,7 +212,7 @@ public final class PotionCrafterComponent extends AbstractModularCrafterComponen
 				for(StorageView<ItemVariant> otherItem : bottleStorage)
 				{
 					ItemStack otherItemStack = otherItem.getResource().toStack();
-					if(ItemStack.isSameItemSameTags(itemStack, otherItemStack))
+					if(ItemStack.isSameItemSameComponents(itemStack, otherItemStack))
 					{
 						long extracted = bottleStorage.extractAllSlot(otherItem.getResource(), recipe.bottles() - count, nested);
 						count += extracted;
@@ -296,16 +297,16 @@ public final class PotionCrafterComponent extends AbstractModularCrafterComponen
 	}
 	
 	@Override
-	public void writeNbt(CompoundTag tag)
+	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{
-		super.writeNbt(tag);
+		super.writeNbt(tag, registries);
 		tag.putInt("blazingEssence", blazingEssence);
 	}
 	
 	@Override
-	public void readNbt(CompoundTag tag, boolean isUpgradingMachine)
+	public void readNbt(CompoundTag tag, HolderLookup.Provider registries, boolean isUpgradingMachine)
 	{
-		super.readNbt(tag, isUpgradingMachine);
+		super.readNbt(tag, registries, isUpgradingMachine);
 		blazingEssence = tag.getInt("blazingEssence");
 	}
 	

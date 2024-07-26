@@ -16,7 +16,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluids;
@@ -118,9 +118,9 @@ public final class SteamBreweryMachineBlockEntity extends BreweryMachineBlockEnt
 	}
 	
 	@Override
-	protected InteractionResult onUse(Player player, InteractionHand hand, Direction face)
+	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
-		InteractionResult result = super.onUse(player, hand, face);
+		ItemInteractionResult result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction())
 		{
 			return overclockComponent.onUse(this, player, hand);

@@ -69,7 +69,7 @@ public final class FertilizingFarmerTask extends FarmerTask
 					.filter((cropBlock) -> cropBlock.state(level).getBlock() instanceof BonemealableBlock)
 					.toList();
 			
-			if(crops.size() == 0)
+			if(crops.isEmpty())
 			{
 				return false;
 			}

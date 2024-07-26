@@ -45,7 +45,7 @@ public final class FarmerComponentPlantableStacks
 		items.clear();
 		for(ConfigurableItemStack stack : stacks)
 		{
-			PlantableConfigurableItemStack listener = new PlantableConfigurableItemStack(stack);
+			PlantableConfigurableItemStack listener = new PlantableConfigurableItemStack(this, stack);
 			listener.listenAll(List.of(stack), null);
 			listeners.put(stack, listener);
 			items.add(listener);

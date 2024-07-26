@@ -1,7 +1,7 @@
 package net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer;
 
+import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.MIBlock;
-import aztech.modern_industrialization.MIIdentifier;
 import aztech.modern_industrialization.compat.rei.machines.ReiMachineRecipes;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.helper.SteamHelper;
@@ -17,8 +17,8 @@ public final class SteamFarmerBlockEntity extends FarmerBlockEntity
 {
 	private static final ShapeWrapper SHAPES = new ShapeWrapper(2)
 			.withCasing(
-					SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(new MIIdentifier("bronze_plated_bricks"))),
-					SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(new MIIdentifier("bronze_machine_casing_pipe"))),
+					SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("bronze_plated_bricks"))),
+					SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("bronze_machine_casing_pipe"))),
 					EIMachines.Casings.BRONZE_PIPE
 			)
 			.complete();

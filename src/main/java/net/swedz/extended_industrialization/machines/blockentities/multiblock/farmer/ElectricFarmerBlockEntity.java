@@ -18,7 +18,7 @@ import aztech.modern_industrialization.util.Simulation;
 import com.google.common.collect.Lists;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.swedz.extended_industrialization.EIMachines;
 import net.swedz.extended_industrialization.machines.components.farmer.PlantingMode;
@@ -97,9 +97,9 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 	}
 	
 	@Override
-	protected InteractionResult onUse(Player player, InteractionHand hand, Direction face)
+	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
-		InteractionResult result = super.onUse(player, hand, face);
+		ItemInteractionResult result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction())
 		{
 			result = this.mapComponentOrDefault(UpgradeComponent.class, (upgrade) -> upgrade.onUse(this, player, hand), result);
