@@ -1,0 +1,17 @@
+{
+  "type": "extended_industrialization:bending_machine",
+  "duration": 50,
+  "eu": 2,
+  "item_inputs": [
+    {
+      "amount": 1,
+      "tag": "c:plates/bronze"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "modern_industrialization:bronze_curved_plate"
+    }
+  ]
+}

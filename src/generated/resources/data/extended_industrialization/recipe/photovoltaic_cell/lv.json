@@ -1,0 +1,25 @@
+{
+  "type": "modern_industrialization:packer",
+  "duration": 800,
+  "eu": 4,
+  "item_inputs": [
+    {
+      "amount": 4,
+      "tag": "c:glass_panes"
+    },
+    {
+      "amount": 2,
+      "tag": "c:plates/silver"
+    },
+    {
+      "amount": 4,
+      "item": "modern_industrialization:rubber_sheet"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "extended_industrialization:lv_photovoltaic_cell"
+    }
+  ]
+}

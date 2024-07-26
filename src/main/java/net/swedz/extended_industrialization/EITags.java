@@ -13,9 +13,9 @@ public final class EITags
 		return TagKey.create(BuiltInRegistries.ITEM.key(), EI.id(path));
 	}
 	
-	public static TagKey<Item> itemForge(String path)
+	public static TagKey<Item> itemCommon(String path)
 	{
-		return TagKey.create(BuiltInRegistries.ITEM.key(), ResourceLocation.fromNamespaceAndPath("forge", path));
+		return TagKey.create(BuiltInRegistries.ITEM.key(), ResourceLocation.fromNamespaceAndPath("c", path));
 	}
 	
 	public static TagKey<Block> block(String path)
@@ -23,8 +23,8 @@ public final class EITags
 		return TagKey.create(BuiltInRegistries.BLOCK.key(), EI.id(path));
 	}
 	
-	public static TagKey<Block> blockForge(String path)
+	public static TagKey<Block> blockCommon(String path)
 	{
-		return TagKey.create(BuiltInRegistries.BLOCK.key(), ResourceLocation.fromNamespaceAndPath("forge", path));
+		return TagKey.create(BuiltInRegistries.BLOCK.key(), ResourceLocation.fromNamespaceAndPath("c", path));
 	}
 }

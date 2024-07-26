@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "modern_industrialization:analog_circuit"
+    },
+    "C": {
+      "item": "modern_industrialization:basic_machine_hull"
+    },
+    "P": {
+      "tag": "modern_industrialization:fluid_pipes"
+    },
+    "R": {
+      "item": "modern_industrialization:tin_rotor"
+    },
+    "c": {
+      "item": "modern_industrialization:conveyor"
+    },
+    "p": {
+      "item": "modern_industrialization:pump"
+    }
+  },
+  "pattern": [
+    "PRP",
+    "pCp",
+    "AcA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:electric_canning_machine"
+  }
+}

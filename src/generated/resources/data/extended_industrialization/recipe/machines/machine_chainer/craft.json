@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "tag": "modern_industrialization:fluid_pipes"
+    },
+    "H": {
+      "item": "modern_industrialization:advanced_machine_hull"
+    },
+    "I": {
+      "tag": "modern_industrialization:item_pipes"
+    },
+    "M": {
+      "item": "modern_industrialization:large_motor"
+    },
+    "P": {
+      "item": "modern_industrialization:large_pump"
+    },
+    "U": {
+      "item": "extended_industrialization:universal_transformer"
+    }
+  },
+  "pattern": [
+    "MIM",
+    "UHU",
+    "PFP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:machine_chainer"
+  }
+}

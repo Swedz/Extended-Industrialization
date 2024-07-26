@@ -90,7 +90,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 				"bending_machine",
 				(builder) -> builder
 						.define('G', "modern_industrialization:copper_gear")
-						.define('R', EITags.itemForge("rods/copper"))
+						.define('R', EITags.itemCommon("rods/copper"))
 						.define('C', "modern_industrialization:bronze_machine_casing")
 						.define('P', MITags.FLUID_PIPES)
 						.pattern("GRG")
@@ -149,8 +149,8 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addBronzeAndSteelMachineRecipes(
 				"solar_boiler",
 				(builder) -> builder
-						.define('G', EITags.itemForge("glass"))
-						.define('S', EITags.itemForge("plates/silver"))
+						.define('G', EITags.itemCommon("glass_blocks"))
+						.define('S', EITags.itemCommon("plates/silver"))
 						.define('B', "modern_industrialization:fire_clay_bricks")
 						.define('C', "modern_industrialization:bronze_boiler")
 						.pattern("GGG")
@@ -161,8 +161,8 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addSteelMachineRecipes(
 				"solar_boiler",
 				(builder) -> builder
-						.define('G', EITags.itemForge("glass"))
-						.define('S', EITags.itemForge("plates/silver"))
+						.define('G', EITags.itemCommon("glass_blocks"))
+						.define('S', EITags.itemCommon("plates/silver"))
 						.define('B', "modern_industrialization:fire_clay_bricks")
 						.define('C', "modern_industrialization:steel_boiler")
 						.pattern("GGG")
@@ -177,7 +177,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addSteelMachineRecipes(
 				"alloy_smelter",
 				(builder) -> builder
-						.define('I', EITags.itemForge("plates/invar"))
+						.define('I', EITags.itemCommon("plates/invar"))
 						.define('R', "modern_industrialization:bronze_rotor")
 						.define('C', "modern_industrialization:steel_machine_casing")
 						.define('P', MITags.FLUID_PIPES)
@@ -236,7 +236,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addSteelMachineRecipes(
 				"honey_extractor",
 				(builder) -> builder
-						.define('R', EITags.itemForge("rods/bronze"))
+						.define('R', EITags.itemCommon("rods/bronze"))
 						.define('r', "modern_industrialization:bronze_rotor")
 						.define('T', "modern_industrialization:steel_tank")
 						.define('C', "modern_industrialization:steel_machine_casing")
@@ -251,7 +251,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 				(builder) -> builder
 						.define('A', "modern_industrialization:analog_circuit")
 						.define('R', "modern_industrialization:tin_rotor")
-						.define('G', EITags.itemForge("glass"))
+						.define('G', EITags.itemCommon("glass_blocks"))
 						.define('C', "modern_industrialization:basic_machine_hull")
 						.define('c', "modern_industrialization:tin_cable")
 						.define('P', "modern_industrialization:pump")
@@ -465,7 +465,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addBasicCraftingMachineRecipes(
 				"machine_chainer_relay",
 				(builder) -> builder
-						.define('P', EITags.itemForge("plates/iron"))
+						.define('P', EITags.itemCommon("plates/iron"))
 						.define('I', MITags.ITEM_PIPES)
 						.define('C', "modern_industrialization:cupronickel_coil")
 						.define('F', MITags.FLUID_PIPES)
@@ -481,7 +481,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addBasicCraftingMachineRecipes(
 				"lv_solar_panel",
 				(builder) -> builder
-						.define('R', EITags.itemForge("rods/tin"))
+						.define('R', EITags.itemCommon("rods/tin"))
 						.define('C', "modern_industrialization:analog_circuit")
 						.define('F', MITags.FLUID_PIPES)
 						.define('H', "modern_industrialization:basic_machine_hull")
@@ -496,7 +496,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addBasicCraftingMachineRecipes(
 				"mv_solar_panel",
 				(builder) -> builder
-						.define('R', EITags.itemForge("rods/aluminum"))
+						.define('R', EITags.itemCommon("rods/aluminum"))
 						.define('C', "modern_industrialization:electronic_circuit")
 						.define('F', MITags.FLUID_PIPES)
 						.define('H', "modern_industrialization:advanced_machine_hull")
@@ -511,7 +511,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		addBasicCraftingMachineRecipes(
 				"hv_solar_panel",
 				(builder) -> builder
-						.define('R', EITags.itemForge("rods/stainless_steel"))
+						.define('R', EITags.itemCommon("rods/stainless_steel"))
 						.define('C', "modern_industrialization:digital_circuit")
 						.define('F', MITags.FLUID_PIPES)
 						.define('H', "modern_industrialization:turbo_machine_hull")

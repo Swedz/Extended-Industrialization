@@ -1,0 +1,17 @@
+{
+    "type": "modern_industrialization:blast_furnace",
+    "eu": 32,
+    "duration": 800,
+    "item_inputs": [
+        {
+            "tag": "c:dusts/netherite",
+            "amount": 1
+        }
+    ],
+    "item_outputs": [
+        {
+            "item": "minecraft:netherite_ingot",
+            "amount": 1
+        }
+    ]
+}

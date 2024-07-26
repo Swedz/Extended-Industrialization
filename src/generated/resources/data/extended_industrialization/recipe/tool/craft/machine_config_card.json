@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "modern_industrialization:analog_circuit_board"
+    },
+    "C": {
+      "item": "modern_industrialization:capacitor"
+    },
+    "G": {
+      "tag": "c:glass_panes"
+    },
+    "I": {
+      "item": "modern_industrialization:inductor"
+    },
+    "M": {
+      "item": "modern_industrialization:motor"
+    }
+  },
+  "pattern": [
+    "GGG",
+    "ICI",
+    "MAM"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:machine_config_card"
+  }
+}

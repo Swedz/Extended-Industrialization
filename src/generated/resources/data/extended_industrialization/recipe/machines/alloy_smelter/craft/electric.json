@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "modern_industrialization:analog_circuit"
+    },
+    "C": {
+      "item": "modern_industrialization:basic_machine_hull"
+    },
+    "R": {
+      "item": "modern_industrialization:tin_rotor"
+    },
+    "W": {
+      "item": "modern_industrialization:cupronickel_wire_magnetic"
+    },
+    "c": {
+      "item": "modern_industrialization:tin_cable"
+    }
+  },
+  "pattern": [
+    "WRW",
+    "ACA",
+    "cWc"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:electric_alloy_smelter"
+  }
+}

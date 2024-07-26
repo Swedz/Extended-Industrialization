@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " d ",
+        "dGd",
+        " d "
+    ],
+    "key": {
+        "d": {
+            "tag": "c:dusts/netherite"
+        },
+        "G": {
+            "tag": "c:gears/stainless_steel"
+        }
+    },
+    "result": {
+        "id": "extended_industrialization:netherite_rotary_blade"
+    }
+}

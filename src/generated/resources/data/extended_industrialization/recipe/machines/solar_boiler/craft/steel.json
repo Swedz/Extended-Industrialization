@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "modern_industrialization:fire_clay_bricks"
+    },
+    "C": {
+      "item": "modern_industrialization:steel_boiler"
+    },
+    "G": {
+      "tag": "c:glass_blocks"
+    },
+    "S": {
+      "tag": "c:plates/silver"
+    }
+  },
+  "pattern": [
+    "GGG",
+    "SSS",
+    "BCB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:steel_solar_boiler"
+  }
+}

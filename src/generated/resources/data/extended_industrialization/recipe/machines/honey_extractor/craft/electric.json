@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "modern_industrialization:analog_circuit"
+    },
+    "C": {
+      "item": "modern_industrialization:basic_machine_hull"
+    },
+    "G": {
+      "tag": "c:glass_blocks"
+    },
+    "P": {
+      "item": "modern_industrialization:pump"
+    },
+    "R": {
+      "item": "modern_industrialization:tin_rotor"
+    },
+    "c": {
+      "item": "modern_industrialization:tin_cable"
+    }
+  },
+  "pattern": [
+    "ARA",
+    "GCG",
+    "cPc"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:electric_honey_extractor"
+  }
+}

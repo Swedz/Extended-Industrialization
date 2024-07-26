@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "modern_industrialization:robot_arm"
+    },
+    "C": {
+      "item": "modern_industrialization:clean_stainless_steel_machine_casing"
+    },
+    "D": {
+      "item": "modern_industrialization:digital_circuit"
+    },
+    "S": {
+      "item": "modern_industrialization:assembler"
+    }
+  },
+  "pattern": [
+    "ADA",
+    "CSC",
+    "ADA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:processing_array"
+  }
+}

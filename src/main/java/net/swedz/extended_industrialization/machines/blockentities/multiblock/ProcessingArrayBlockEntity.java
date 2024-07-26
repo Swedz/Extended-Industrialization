@@ -121,7 +121,7 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 		
 		SimpleMember casing = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("clean_stainless_steel_machine_casing")));
 		SimpleMember pipe = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("stainless_steel_machine_casing_pipe")));
-		SimpleMember glass = new PredicateSimpleMember((state) -> state.is(EITags.blockForge("glass")), Blocks.GLASS);
+		SimpleMember glass = new PredicateSimpleMember((state) -> state.is(EITags.blockCommon("glass")), Blocks.GLASS);
 		HatchFlags front = new HatchFlags.Builder().with(HatchType.ENERGY_INPUT).build();
 		HatchFlags top = new HatchFlags.Builder().with(HatchType.ITEM_INPUT, HatchType.FLUID_INPUT).build();
 		HatchFlags bottom = new HatchFlags.Builder().with(HatchType.ITEM_OUTPUT, HatchType.FLUID_OUTPUT).build();

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:blaze_rod"
+    },
+    "C": {
+      "item": "modern_industrialization:steel_machine_casing"
+    },
+    "P": {
+      "tag": "modern_industrialization:fluid_pipes"
+    },
+    "R": {
+      "item": "modern_industrialization:bronze_rotor"
+    },
+    "T": {
+      "item": "modern_industrialization:steel_tank"
+    }
+  },
+  "pattern": [
+    "RTR",
+    "BCB",
+    "PPP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:steel_brewery"
+  }
+}

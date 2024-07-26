@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "modern_industrialization:steel_machine_casing"
+    },
+    "I": {
+      "tag": "c:plates/invar"
+    },
+    "P": {
+      "tag": "modern_industrialization:fluid_pipes"
+    },
+    "R": {
+      "item": "modern_industrialization:bronze_rotor"
+    }
+  },
+  "pattern": [
+    "IRI",
+    "ICI",
+    "PPP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:steel_alloy_smelter"
+  }
+}
