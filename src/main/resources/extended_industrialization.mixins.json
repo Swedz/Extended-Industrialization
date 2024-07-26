@@ -6,8 +6,6 @@
     "mixins": [
         "CannedFoodUsedForCatsMixin",
         "mi.AllowFluidBottlesInMachinesMenuMixin",
-        "mi.MakePlayerLockNotifyListenersMixin",
-        "mi.accessor.AbstractConfigurableStackAccessor",
         "mi.accessor.ConfigurableItemStackAccessor"
     ],
     "client": [],
