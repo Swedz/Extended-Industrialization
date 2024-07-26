@@ -42,7 +42,7 @@ public final class PhotovoltaicCellItem extends Item
 	
 	public int getSolarTicks(ItemStack stack)
 	{
-		return stack.get(EIDataComponents.SOLAR_TICKS);
+		return stack.getOrDefault(EIDataComponents.SOLAR_TICKS, 0);
 	}
 	
 	public int getSolarTicksRemaining(ItemStack stack)
