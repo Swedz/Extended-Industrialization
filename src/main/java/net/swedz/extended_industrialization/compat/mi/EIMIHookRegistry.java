@@ -10,10 +10,12 @@ import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.EIOtherRegistries;
 import net.swedz.extended_industrialization.EISortOrder;
 import net.swedz.tesseract.neoforge.compat.mi.hook.MIHookRegistry;
+import net.swedz.tesseract.neoforge.compat.mi.hook.TesseractMIHookEntrypoint;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
+@TesseractMIHookEntrypoint
 public final class EIMIHookRegistry implements MIHookRegistry
 {
 	@Override
