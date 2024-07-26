@@ -250,7 +250,7 @@ public final class PotionRecipe
 					ItemStack fromItem = stack.copy();
 					fromItem.set(DataComponents.POTION_CONTENTS, new PotionContents(mix.from()));
 					ItemStack toItem = stack.copy();
-					fromItem.set(DataComponents.POTION_CONTENTS, new PotionContents(mix.to()));
+					toItem.set(DataComponents.POTION_CONTENTS, new PotionContents(mix.to()));
 					recipes.put(id, new PotionRecipe(
 							id,
 							fromItem,
@@ -289,7 +289,7 @@ public final class PotionRecipe
 				ItemStack fromItem = new ItemStack(mix.from().value());
 				fromItem.set(DataComponents.POTION_CONTENTS, new PotionContents(entry));
 				ItemStack toItem = new ItemStack(mix.to().value());
-				fromItem.set(DataComponents.POTION_CONTENTS, new PotionContents(entry));
+				toItem.set(DataComponents.POTION_CONTENTS, new PotionContents(entry));
 				recipes.put(id, new PotionRecipe(
 						id,
 						fromItem,
