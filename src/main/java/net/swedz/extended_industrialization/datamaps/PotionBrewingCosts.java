@@ -2,7 +2,7 @@ package net.swedz.extended_industrialization.datamaps;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Holder;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.alchemy.Potion;
 import net.swedz.extended_industrialization.EIDataMaps;
@@ -20,9 +20,9 @@ public record PotionBrewingCosts(int bottles, int water, int blazingEssence, int
 			.apply(instance, PotionBrewingCosts::new)
 	);
 	
-	public static PotionBrewingCosts getFor(Potion potion)
+	public static PotionBrewingCosts getFor(Holder<Potion> potion)
 	{
-		return BuiltInRegistries.POTION.createIntrusiveHolder(potion).getData(EIDataMaps.POTION_BREWING);
+		return potion.getData(EIDataMaps.POTION_BREWING);
 	}
 	
 	public PotionBrewingCosts(int bottles, int water, int blazingEssence, int time, int euCost)

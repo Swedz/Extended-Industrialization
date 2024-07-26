@@ -79,7 +79,7 @@ public final class PotionRecipe
 	{
 		if(costs == null)
 		{
-			costs = PotionBrewingCosts.getFor(this.potion());
+			costs = PotionBrewingCosts.getFor(potion);
 		}
 		return costs;
 	}
