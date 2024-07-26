@@ -8,7 +8,6 @@ import aztech.modern_industrialization.items.DynamicToolItem;
 import aztech.modern_industrialization.items.ItemContainingItemHelper;
 import aztech.modern_industrialization.items.ItemHelper;
 import aztech.modern_industrialization.items.SteamDrillFuel;
-import aztech.modern_industrialization.items.SteamDrillItem;
 import aztech.modern_industrialization.proxy.CommonProxy;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import aztech.modern_industrialization.util.Simulation;
@@ -363,7 +362,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	public Optional<TooltipComponent> getTooltipImage(ItemStack stack)
 	{
 		SteamDrillFuel fuel = stack.getOrDefault(MIComponents.STEAM_DRILL_FUEL, SteamDrillFuel.EMPTY);
-		return Optional.of(new SteamDrillItem.SteamDrillTooltipData(
+		return Optional.of(new SteamChainsawTooltipData(
 				stack.getOrDefault(MIComponents.WATER, 0) * 100 / 18000,
 				fuel.burnTicks(),
 				Math.max(1, fuel.maxBurnTicks()),
