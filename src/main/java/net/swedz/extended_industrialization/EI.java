@@ -76,10 +76,6 @@ public final class EI
 			EIFluids.values().forEach(FluidHolder::triggerRegistrationListener);
 		});
 		
-		// TODO started or starting?
-		bus.addListener(ServerStartedEvent.class, (event) ->
-				PotionRecipe.init(event.getServer()));
-		
 		bus.addListener(RegisterCapabilitiesEvent.class, (event) -> CapabilitiesListeners.triggerAll(ID, event));
 		
 		bus.addListener(RegisterDataMapTypesEvent.class, EIDataMaps::init);
@@ -91,5 +87,9 @@ public final class EI
 				LargeElectricFurnaceBlockEntity.initTiers();
 			}
 		});
+		
+		// TODO started or starting?
+		NeoForge.EVENT_BUS.addListener(ServerStartedEvent.class, (event) ->
+				PotionRecipe.init(event.getServer()));
 	}
 }
