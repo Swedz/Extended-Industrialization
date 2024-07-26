@@ -10,6 +10,7 @@ import net.swedz.extended_industrialization.machines.guicomponents.solarefficien
 import net.swedz.extended_industrialization.machines.guicomponents.universaltransformer.UniversalTransformerSlots;
 import net.swedz.extended_industrialization.machines.guicomponents.universaltransformer.UniversalTransformerSlotsClient;
 import net.swedz.tesseract.neoforge.compat.mi.hook.MIHookListener;
+import net.swedz.tesseract.neoforge.compat.mi.hook.TesseractMIHookEntrypoint;
 import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.BlastFurnaceTiersMIHookContext;
 import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.ClientGuiComponentsMIHookContext;
 import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.MachineCasingsMIHookContext;
@@ -20,6 +21,7 @@ import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.SingleBlockC
 import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.SingleBlockSpecialMachinesMIHookContext;
 import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.ViewerSetupMIHookContext;
 
+@TesseractMIHookEntrypoint
 public final class EIMIHookListener implements MIHookListener
 {
 	@Override

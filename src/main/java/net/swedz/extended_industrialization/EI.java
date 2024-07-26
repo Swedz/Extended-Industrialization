@@ -15,14 +15,11 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
-import net.swedz.extended_industrialization.compat.mi.EIMIHookListener;
-import net.swedz.extended_industrialization.compat.mi.EIMIHookRegistry;
 import net.swedz.extended_industrialization.datagen.DatagenDelegator;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.machines.components.craft.potion.PotionRecipe;
 import net.swedz.tesseract.neoforge.api.MCIdentifiable;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
-import net.swedz.tesseract.neoforge.compat.mi.hook.MIHooks;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
@@ -57,8 +54,6 @@ public final class EI
 	public EI(IEventBus bus)
 	{
 		this.loadConfig();
-		
-		MIHooks.registerListener(ID, new EIMIHookRegistry(), new EIMIHookListener());
 		
 		EILocalizedListeners.INSTANCE.init();
 		
