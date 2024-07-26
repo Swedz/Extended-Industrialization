@@ -14,11 +14,11 @@ public final class EIDataComponents
 {
 	private static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(EI.ID);
 	
-	public static final Supplier<DataComponentType<Boolean>> HIDE_BAR = COMPONENTS.registerComponentType(
+	public static final Supplier<DataComponentType<Boolean>>       HIDE_BAR       = COMPONENTS.registerComponentType(
 			"hide_bar",
 			(b) -> b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL)
 	);
-	public static final Supplier<DataComponentType<Integer>> SOLAR_TICKS = COMPONENTS.registerComponentType(
+	public static final Supplier<DataComponentType<Integer>>       SOLAR_TICKS    = COMPONENTS.registerComponentType(
 			"solar_ticks",
 			(b) -> b.persistent(ExtraCodecs.POSITIVE_INT).networkSynchronized(ByteBufCodecs.VAR_INT)
 	);

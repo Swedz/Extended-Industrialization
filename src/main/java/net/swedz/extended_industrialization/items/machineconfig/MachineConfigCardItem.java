@@ -87,8 +87,6 @@ public final class MachineConfigCardItem extends Item
 		return super.use(level, player, usedHand);
 	}
 	
-	
-	
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag isAdvanced)
 	{

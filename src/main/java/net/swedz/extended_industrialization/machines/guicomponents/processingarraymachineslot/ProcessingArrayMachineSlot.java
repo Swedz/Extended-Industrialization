@@ -33,8 +33,8 @@ public final class ProcessingArrayMachineSlot
 	public static boolean isMachine(ItemStack itemStack)
 	{
 		return itemStack.getItem() instanceof BlockItem blockItem &&
-				blockItem.getBlock() instanceof MachineBlock machineBlock &&
-				machineBlock.getBlockEntityInstance() instanceof ElectricCraftingMachineBlockEntity;
+			   blockItem.getBlock() instanceof MachineBlock machineBlock &&
+			   machineBlock.getBlockEntityInstance() instanceof ElectricCraftingMachineBlockEntity;
 	}
 	
 	public static ElectricCraftingMachineBlockEntity getMachine(ItemStack itemStack)

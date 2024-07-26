@@ -19,8 +19,8 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.swedz.extended_industrialization.items.machineconfig.MachineConfigCardItem;
 import net.swedz.extended_industrialization.items.SteamChainsawItem;
+import net.swedz.extended_industrialization.items.machineconfig.MachineConfigCardItem;
 import net.swedz.extended_industrialization.items.tooltip.MachineConfigCardTooltipComponent;
 import net.swedz.extended_industrialization.items.tooltip.SteamChainsawTooltipComponent;
 
