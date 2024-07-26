@@ -52,9 +52,9 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 {
 	public enum Type
 	{
-		DRILL(60 * 20 * CableTier.HV.getMaxTransfer(), 9, 9, false),
-		CHAINSAW(60 * 20 * CableTier.HV.getMaxTransfer(), 9, 15, false),
-		ULTIMATE(60 * 20 * CableTier.EV.getMaxTransfer(), 12, 19, true);
+		DRILL(60 * 20 * CableTier.HV.getMaxTransfer(), 9, 10, false),
+		CHAINSAW(60 * 20 * CableTier.HV.getMaxTransfer(), 9, 16, false),
+		ULTIMATE(60 * 20 * CableTier.EV.getMaxTransfer(), 12, 20, true);
 		
 		private final long    energyCapacity;
 		private final float   speed;
@@ -185,7 +185,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	
 	private static boolean isFortune(ItemStack stack)
 	{
-		return stack.getOrDefault(MIComponents.SILK_TOUCH, false);
+		return !stack.getOrDefault(MIComponents.SILK_TOUCH, false);
 	}
 	
 	private static void setFortune(ItemStack stack, boolean fortune)
