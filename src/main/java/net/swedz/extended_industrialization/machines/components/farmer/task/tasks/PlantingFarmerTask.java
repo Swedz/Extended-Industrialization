@@ -5,6 +5,7 @@ import net.swedz.extended_industrialization.machines.components.farmer.FarmerCom
 import net.swedz.extended_industrialization.machines.components.farmer.PlantableConfigurableItemStack;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerTile;
 import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.PlantingContext;
+import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.PlantingHandler;
 import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.registry.FarmerPlantingHandlersHolder;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTaskType;
@@ -42,17 +43,21 @@ public final class PlantingFarmerTask extends FarmerTask
 				continue;
 			}
 			
-			PlantingContext plantingContext = new PlantingContext(level, tile, plantable.getStack().toStack());
 			BlockState state = tile.crop().state(level);
-			if(state.isAir() && plantable.asPlantable().canPlant(plantingContext))
+			if(state.isAir())
 			{
-				plantable.getStack().decrement(1);
-				
-				plantable.asPlantable().plant(plantingContext);
-				
-				if(operations.operate())
+				PlantingContext plantingContext = new PlantingContext(level, tile, plantable.getStack().toStack());
+				PlantingHandler plantingHandler = plantable.asPlantable();
+				if(plantingHandler.canPlant(plantingContext))
 				{
-					return true;
+					plantable.getStack().decrement(1);
+					
+					plantingHandler.plant(plantingContext);
+					
+					if(operations.operate())
+					{
+						return true;
+					}
 				}
 			}
 		}
