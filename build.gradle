@@ -1,6 +1,5 @@
 plugins {
 	id 'java-library'
-	id 'eclipse'
 	id 'idea'
 	id 'maven-publish'
 	id 'net.neoforged.moddev' version '1.0.14'
