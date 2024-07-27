@@ -167,12 +167,13 @@ tasks.withType(ProcessResources).configureEach {
 			loader_version_range                  : loader_version_range,
 			mod_id                                : mod_id,
 			mod_name                              : mod_name,
-			mod_license                           : mod_license,
 			mod_version                           : version,
 			mod_authors                           : mod_authors,
 			mod_description                       : mod_description,
+			mod_github                            : mod_github,
 			modern_industrialization_version_range: modern_industrialization_version_range,
 			tesseract_version                     : tesseract_version,
+			mi_tweaks_version                     : mi_tweaks_version,
 			emi_version_range                     : emi_version_range
 	]
 	inputs.properties replaceProperties
