@@ -2,6 +2,7 @@ package net.swedz.extended_industrialization.machines.components.farmer.harvesti
 
 import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.bus.api.Event;
 import net.swedz.extended_industrialization.machines.components.farmer.block.FarmerBlockMap;
@@ -12,6 +13,8 @@ import net.swedz.extended_industrialization.machines.components.farmer.harvestin
 import net.swedz.tesseract.neoforge.event.TreeGrowthEvent;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +55,10 @@ public final class TreeBlockHarvestHandler implements LootTableHarvestingHandler
 					BlockPos base = event.getPos();
 					if(farmerBlockMap.containsDirtAt(base.below()))
 					{
-						trees.put(base, new FarmerTree(base, event.getPositions()));
+						List<BlockPos> blocks = event.getPositions();
+						blocks.removeIf(farmerBlockMap::containsDirtAt);
+						blocks.sort(Collections.reverseOrder(Comparator.comparingInt(Vec3i::getY)));
+						trees.put(base, new FarmerTree(base, blocks));
 					}
 				})
 		);
