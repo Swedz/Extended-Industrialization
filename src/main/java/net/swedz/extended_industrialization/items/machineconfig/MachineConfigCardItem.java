@@ -47,7 +47,7 @@ public final class MachineConfigCardItem extends Item
 				{
 					if(player.isShiftKeyDown())
 					{
-						MachineConfig config = MachineConfig.fromMachine(machine);
+						MachineConfig config = MachineConfig.from(machine);
 						itemStack.set(EIDataComponents.MACHINE_CONFIG, config);
 						player.displayClientMessage(EIText.MACHINE_CONFIG_CARD_SAVE.text(), true);
 					}
@@ -57,9 +57,9 @@ public final class MachineConfigCardItem extends Item
 						{
 							MachineConfig config = itemStack.get(EIDataComponents.MACHINE_CONFIG);
 							
-							if(config.writeToMachine(machine, Simulation.SIMULATE))
+							if(config.apply(machine, Simulation.SIMULATE))
 							{
-								config.writeToMachine(machine, Simulation.ACT);
+								config.apply(machine, Simulation.ACT);
 								player.displayClientMessage(EIText.MACHINE_CONFIG_CARD_APPLY_SUCCESS.text(), true);
 							}
 							else
