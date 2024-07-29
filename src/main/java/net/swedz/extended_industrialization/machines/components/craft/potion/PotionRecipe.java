@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -221,9 +222,13 @@ public final class PotionRecipe
 	
 	private static Map<ResourceLocation, PotionRecipe> fetchRecipes(MinecraftServer server)
 	{
+		Consumer<Holder<Potion>> noBrewingCostWarning = (potion) -> EI.LOGGER.warn("No potion brewing cost set for potion {}", potion.unwrapKey().orElseThrow().location());
+		
 		PotionBrewing potionBrewing = server.potionBrewing();
 		
 		Map<ResourceLocation, PotionRecipe> recipes = Maps.newHashMap();
+		
+		final AtomicInteger index = new AtomicInteger();
 		
 		// Vanilla potion recipes
 		for(Ingredient allowedContainer : potionBrewing.containers)
@@ -237,16 +242,17 @@ public final class PotionRecipe
 					{
 						continue;
 					}
+					if(PotionBrewingCosts.getFor(mix.to()) == null)
+					{
+						noBrewingCostWarning.accept(mix.to());
+						continue;
+					}
 					
 					String reagentId = subId(mix.ingredient());
 					String inputId = subIdPotion(mix.from());
 					String outputId = subIdPotion(mix.to());
 					
-					ResourceLocation id = EI.id("brewing/container/%s/%s/%s/%s".formatted(stackId, reagentId, inputId, outputId));
-					if(recipes.containsKey(id))
-					{
-						throw new IllegalStateException("Generated duplicate potion recipe id %s".formatted(id));
-					}
+					ResourceLocation id = EI.id("brewing/container/%s/%s/%s/%s/%d".formatted(stackId, reagentId, inputId, outputId, index.getAndIncrement()));
 					ItemStack fromItem = stack.copy();
 					fromItem.set(DataComponents.POTION_CONTENTS, new PotionContents(mix.from()));
 					ItemStack toItem = stack.copy();
@@ -263,6 +269,7 @@ public final class PotionRecipe
 		}
 		
 		// Vanilla container (like splash, lingering, etc.) recipes
+		index.set(0);
 		for(PotionBrewing.Mix<Item> mix : potionBrewing.containerMixes)
 		{
 			if(mix.ingredient().getItems().length == 0)
@@ -281,11 +288,13 @@ public final class PotionRecipe
 				{
 					return;
 				}
-				ResourceLocation id = EI.id("brewing/item/%s/%s/%s/%s".formatted(subId(entry.unwrapKey().orElseThrow().location()), reagentId, inputId, outputId));
-				if(recipes.containsKey(id))
+				if(PotionBrewingCosts.getFor(entry) == null)
 				{
-					throw new IllegalStateException("Generated duplicate potion recipe id %s".formatted(id));
+					noBrewingCostWarning.accept(entry);
+					return;
 				}
+				
+				ResourceLocation id = EI.id("brewing/item/%s/%s/%s/%s/%d".formatted(subId(entry.unwrapKey().orElseThrow().location()), reagentId, inputId, outputId, index.getAndIncrement()));
 				ItemStack fromItem = new ItemStack(mix.from().value());
 				fromItem.set(DataComponents.POTION_CONTENTS, new PotionContents(entry));
 				ItemStack toItem = new ItemStack(mix.to().value());
@@ -310,6 +319,7 @@ public final class PotionRecipe
 		}
 		
 		// Modded recipes
+		index.set(0);
 		for(IBrewingRecipe brewingRecipe : potionBrewing.getRecipes())
 		{
 			if(!(brewingRecipe instanceof BrewingRecipe recipe))
@@ -327,16 +337,17 @@ public final class PotionRecipe
 					EI.LOGGER.warn("Found modded potion recipe with invalid potion output");
 					continue;
 				}
+				if(PotionBrewingCosts.getFor(potionOptional.get()) == null)
+				{
+					noBrewingCostWarning.accept(potionOptional.get());
+					continue;
+				}
 				
 				String reagentId = subId(recipe.getIngredient());
 				String inputId = subId(stack);
 				String outputId = subId(output);
 				
-				ResourceLocation id = EI.id("brewing/neoforge/%s/%s/%s".formatted(inputId, reagentId, outputId));
-				if(recipes.containsKey(id))
-				{
-					throw new IllegalStateException("Generated duplicate potion recipe id %s".formatted(id));
-				}
+				ResourceLocation id = EI.id("brewing/neoforge/%s/%s/%s/%d".formatted(inputId, reagentId, outputId, index.getAndIncrement()));
 				recipes.put(id, new PotionRecipe(
 						id,
 						stack.copy(),
