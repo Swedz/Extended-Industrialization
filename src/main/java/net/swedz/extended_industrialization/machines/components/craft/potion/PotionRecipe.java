@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -228,8 +227,6 @@ public final class PotionRecipe
 		
 		Map<ResourceLocation, PotionRecipe> recipes = Maps.newHashMap();
 		
-		final AtomicInteger index = new AtomicInteger();
-		
 		// Vanilla potion recipes
 		for(Ingredient allowedContainer : potionBrewing.containers)
 		{
@@ -252,7 +249,7 @@ public final class PotionRecipe
 					String inputId = subIdPotion(mix.from());
 					String outputId = subIdPotion(mix.to());
 					
-					ResourceLocation id = EI.id("brewing/container/%s/%s/%s/%s/%d".formatted(stackId, reagentId, inputId, outputId, index.getAndIncrement()));
+					ResourceLocation id = EI.id("brewing/container/%s/%s/%s/%s".formatted(stackId, reagentId, inputId, outputId));
 					ItemStack fromItem = stack.copy();
 					fromItem.set(DataComponents.POTION_CONTENTS, new PotionContents(mix.from()));
 					ItemStack toItem = stack.copy();
@@ -269,7 +266,6 @@ public final class PotionRecipe
 		}
 		
 		// Vanilla container (like splash, lingering, etc.) recipes
-		index.set(0);
 		for(PotionBrewing.Mix<Item> mix : potionBrewing.containerMixes)
 		{
 			if(mix.ingredient().getItems().length == 0)
@@ -294,7 +290,7 @@ public final class PotionRecipe
 					return;
 				}
 				
-				ResourceLocation id = EI.id("brewing/item/%s/%s/%s/%s/%d".formatted(subId(entry.unwrapKey().orElseThrow().location()), reagentId, inputId, outputId, index.getAndIncrement()));
+				ResourceLocation id = EI.id("brewing/item/%s/%s/%s/%s".formatted(subId(entry.unwrapKey().orElseThrow().location()), reagentId, inputId, outputId));
 				ItemStack fromItem = new ItemStack(mix.from().value());
 				fromItem.set(DataComponents.POTION_CONTENTS, new PotionContents(entry));
 				ItemStack toItem = new ItemStack(mix.to().value());
@@ -319,7 +315,6 @@ public final class PotionRecipe
 		}
 		
 		// Modded recipes
-		index.set(0);
 		for(IBrewingRecipe brewingRecipe : potionBrewing.getRecipes())
 		{
 			if(!(brewingRecipe instanceof BrewingRecipe recipe))
@@ -327,33 +322,38 @@ public final class PotionRecipe
 				continue;
 			}
 			
-			for(ItemStack stack : recipe.getInput().getItems())
+			for(ItemStack input : recipe.getInput().getItems())
 			{
-				ItemStack output = recipe.getOutput(stack, recipe.getIngredient().getItems()[0]);
-				PotionContents potionContents = output.get(DataComponents.POTION_CONTENTS);
-				Optional<Holder<Potion>> potionOptional = potionContents.potion();
-				if(potionOptional.isEmpty())
+				Optional<Holder<Potion>> inputPotion = input.get(DataComponents.POTION_CONTENTS).potion();
+				if(inputPotion.isEmpty())
+				{
+					EI.LOGGER.warn("Found modded potion recipe with invalid potion input");
+					continue;
+				}
+				ItemStack output = recipe.getOutput(input, recipe.getIngredient().getItems()[0]);
+				Optional<Holder<Potion>> outputPotion = output.get(DataComponents.POTION_CONTENTS).potion();
+				if(outputPotion.isEmpty())
 				{
 					EI.LOGGER.warn("Found modded potion recipe with invalid potion output");
 					continue;
 				}
-				if(PotionBrewingCosts.getFor(potionOptional.get()) == null)
+				if(PotionBrewingCosts.getFor(outputPotion.get()) == null)
 				{
-					noBrewingCostWarning.accept(potionOptional.get());
+					noBrewingCostWarning.accept(outputPotion.get());
 					continue;
 				}
 				
 				String reagentId = subId(recipe.getIngredient());
-				String inputId = subId(stack);
-				String outputId = subId(output);
+				String inputId = subIdPotion(inputPotion.get());
+				String outputId = subIdPotion(outputPotion.get());
 				
-				ResourceLocation id = EI.id("brewing/neoforge/%s/%s/%s/%d".formatted(inputId, reagentId, outputId, index.getAndIncrement()));
+				ResourceLocation id = EI.id("brewing/neoforge/%s/%s/%s".formatted(inputId, reagentId, outputId));
 				recipes.put(id, new PotionRecipe(
 						id,
-						stack.copy(),
+						input.copy(),
 						recipe.getIngredient(),
 						output,
-						potionOptional.get()
+						outputPotion.get()
 				));
 			}
 		}
