@@ -5,6 +5,7 @@ import aztech.modern_industrialization.MIBlock;
 import aztech.modern_industrialization.compat.rei.machines.ReiMachineRecipes;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.guicomponents.ShapeSelection;
+import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.init.MachineTier;
 import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.multiblocks.HatchFlags;
@@ -15,6 +16,7 @@ import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
+import net.swedz.extended_industrialization.EIConfig;
 import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.components.craft.processingarray.ProcessingArrayMachineComponent;
@@ -36,6 +38,13 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 	public ProcessingArrayBlockEntity(BEP bep)
 	{
 		super(bep, "processing_array", SHAPE_TEMPLATES, MachineTier.LV);
+		
+		if(!EIConfig.allowUpgradesInProcessingArray)
+		{
+			guiComponents.removeIf((component) -> component instanceof SlotPanel.Server);
+			this.registerGuiComponent(new SlotPanel.Server(this)
+					.withRedstoneControl(redstoneControl));
+		}
 		
 		this.machines = new ProcessingArrayMachineComponent();
 		
