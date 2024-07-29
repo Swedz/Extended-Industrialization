@@ -15,15 +15,13 @@ base {
 
 repositories {
 	maven {
-		name = "Modrinth"
-		url = "https://api.modrinth.com/maven"
-	}
-	maven {
 		name "Modmaven"
 		url "https://modmaven.dev"
 		content {
 			// GrandPower
 			includeGroup "dev.technici4n"
+			// Modern Industrialization
+			includeGroup "aztech"
 			// Tesseract
 			includeGroup "net.swedz"
 		}
@@ -48,7 +46,7 @@ repositories {
 }
 
 dependencies {
-	implementation "maven.modrinth:modern-industrialization:${modern_industrialization_version}"
+	implementation "aztech:Modern-Industrialization:${modern_industrialization_version}"
 
 	implementation "dev.technici4n:GrandPower:${grandpower_version}"
 
