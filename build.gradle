@@ -107,7 +107,7 @@ if (System.getenv("CURSEFORGE_API_KEY")) {
 
 		project {
 			id = project.curseforge_project
-			releaseType = "release" // TODO
+			releaseType = project.release_type
 			changelogType = "markdown"
 			delegate.changelog = System.getenv("EI_CHANGELOG")
 
@@ -140,7 +140,7 @@ if (System.getenv("MODRINTH_API_KEY")) {
 		projectId = project.modrinth_project
 		versionNumber = project.mod_version
 		versionName = "${project.mod_name} ${version}"
-		versionType = "release" // TODO
+		versionType = project.release_type
 		delegate.changelog = System.getenv("EI_CHANGELOG")
 
 		gameVersions = [project.minecraft_version]
