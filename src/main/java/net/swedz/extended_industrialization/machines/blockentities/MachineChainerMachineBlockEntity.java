@@ -10,8 +10,6 @@ import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -78,19 +76,6 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		if(!level.isClientSide())
 		{
 			needsRebuild = true;
-		}
-	}
-	
-	@Override
-	public void onPlaced(LivingEntity placer, ItemStack itemStack)
-	{
-		super.onPlaced(placer, itemStack);
-		
-		if(!level.isClientSide())
-		{
-			needsRebuild = false;
-			chainer.buildLinks();
-			chainer.registerListeners();
 		}
 	}
 	
