@@ -324,17 +324,27 @@ public final class PotionRecipe
 			
 			for(ItemStack input : recipe.getInput().getItems())
 			{
+				if(!input.has(DataComponents.POTION_CONTENTS))
+				{
+					EI.LOGGER.warn("Found modded potion recipe with invalid potion input: no potion data component attached");
+					continue;
+				}
 				Optional<Holder<Potion>> inputPotion = input.get(DataComponents.POTION_CONTENTS).potion();
 				if(inputPotion.isEmpty())
 				{
-					EI.LOGGER.warn("Found modded potion recipe with invalid potion input");
+					EI.LOGGER.warn("Found modded potion recipe with invalid potion input: potion data component attached but has no potion");
 					continue;
 				}
 				ItemStack output = recipe.getOutput(input, recipe.getIngredient().getItems()[0]);
+				if(!output.has(DataComponents.POTION_CONTENTS))
+				{
+					EI.LOGGER.warn("Found modded potion recipe with invalid potion output: no potion data component attached");
+					continue;
+				}
 				Optional<Holder<Potion>> outputPotion = output.get(DataComponents.POTION_CONTENTS).potion();
 				if(outputPotion.isEmpty())
 				{
-					EI.LOGGER.warn("Found modded potion recipe with invalid potion output");
+					EI.LOGGER.warn("Found modded potion recipe with invalid potion output: potion data component attached but has no potion");
 					continue;
 				}
 				if(PotionBrewingCosts.getFor(outputPotion.get()) == null)
