@@ -57,7 +57,7 @@ public final class PlantableConfigurableItemStack extends ChangeListener
 		Item item = itemVariant.getItem();
 		if(lastUpdateItem != item)
 		{
-			plantingHandler = parent.getFarmer().getPlantingHandlersHolder().getHandler(stack.toStack());
+			plantingHandler = parent.getFarmer().getPlantingHandlersHolder().getHandler(itemVariant.toStack());
 		}
 		lastUpdateItem = item;
 	}
