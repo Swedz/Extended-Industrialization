@@ -74,7 +74,7 @@ public final class FertilizingFarmerTask extends FarmerTask
 				return false;
 			}
 			
-			FarmerBlock crop = crops.get(level.getRandom().nextInt(crops.size() - 1));
+			FarmerBlock crop = crops.get(level.getRandom().nextInt(crops.size()));
 			BlockPos pos = crop.pos();
 			BlockState state = crop.state(level);
 			BonemealableBlock bonemealable = (BonemealableBlock) state.getBlock();
