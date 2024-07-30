@@ -13,6 +13,7 @@ import aztech.modern_industrialization.machines.multiblocks.HatchType;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
+import com.google.common.collect.Lists;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static aztech.modern_industrialization.MITooltips.*;
+import static net.swedz.tesseract.neoforge.compat.mi.builtinhook.TesseractMITooltips.*;
 
 public final class ProcessingArrayBlockEntity extends AbstractElectricMultipliedCraftingMultiblockBlockEntity
 {
@@ -100,7 +102,7 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 	@Override
 	public EuCostTransformer getEuCostTransformer()
 	{
-		return EuCostTransformers.FULL_COST;
+		return EuCostTransformers.percentage(() -> (float) EIConfig.processingArrayEuCostMultiplier);
 	}
 	
 	private int getMachineStackSize(int sizeIndex)
@@ -111,10 +113,14 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 	@Override
 	public List<Component> getTooltips()
 	{
-		return List.of(
-				DEFAULT_PARSER.parse(EIText.PROCESSING_ARRAY_RECIPE.text()),
-				DEFAULT_PARSER.parse(EIText.PROCESSING_ARRAY_BATCH_SIZE.text())
-		);
+		List<Component> lines = Lists.newArrayList();
+		lines.add(DEFAULT_PARSER.parse(EIText.PROCESSING_ARRAY_RECIPE.text()));
+		lines.add(DEFAULT_PARSER.parse(EIText.PROCESSING_ARRAY_BATCH_SIZE.text()));
+		if(EIConfig.processingArrayEuCostMultiplier != 1)
+		{
+			lines.add(DEFAULT_PARSER.parse(EIText.PROCESSING_ARRAY_EU_COST_MULTIPLIER.text(EU_COST_TRANSFORMER_PARSER.parse(this.getEuCostTransformer()))));
+		}
+		return lines;
 	}
 	
 	private static final int MAX_MACHINES  = 64;

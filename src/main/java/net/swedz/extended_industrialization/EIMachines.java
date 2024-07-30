@@ -142,7 +142,9 @@ public final class EIMachines
 					(bep) -> new SteamMultipliedCraftingMultiblockBlockEntity(
 							bep, "large_steam_furnace", new ShapeTemplate[]{shape},
 							OverclockComponent.getDefaultCatalysts(),
-							MIMachineRecipeTypes.FURNACE, 8, EuCostTransformers.percentage(() -> 0.75f)
+							MIMachineRecipeTypes.FURNACE,
+							EIConfig.largeSteamFurnaceBatchSize,
+							EuCostTransformers.percentage(() -> (float) EIConfig.largeSteamFurnaceEuCostMultiplier)
 					)
 			);
 			ReiMachineRecipes.registerMultiblockShape("large_steam_furnace", shape);
@@ -169,7 +171,9 @@ public final class EIMachines
 					(bep) -> new SteamMultipliedCraftingMultiblockBlockEntity(
 							bep, "large_steam_macerator", new ShapeTemplate[]{shape},
 							OverclockComponent.getDefaultCatalysts(),
-							MIMachineRecipeTypes.MACERATOR, 8, EuCostTransformers.percentage(() -> 0.75f)
+							MIMachineRecipeTypes.MACERATOR,
+							EIConfig.largeSteamMaceratorBatchSize,
+							EuCostTransformers.percentage(() -> (float) EIConfig.largeSteamMaceratorEuCostMultiplier)
 					)
 			);
 			ReiMachineRecipes.registerMultiblockShape("large_steam_macerator", shape);
@@ -187,7 +191,9 @@ public final class EIMachines
 					(bep) -> new ElectricMultipliedCraftingMultiblockBlockEntity(
 							bep, "large_electric_macerator", new ShapeTemplate[]{shape},
 							MachineTier.LV,
-							MIMachineRecipeTypes.MACERATOR, 16, EuCostTransformers.percentage(() -> 0.75f)
+							MIMachineRecipeTypes.MACERATOR,
+							EIConfig.largeElectricMaceratorBatchSize,
+							EuCostTransformers.percentage(() -> (float) EIConfig.largeElectricMaceratorEuCostMultiplier)
 					)
 			);
 			ReiMachineRecipes.registerMultiblockShape("large_electric_macerator", shape);

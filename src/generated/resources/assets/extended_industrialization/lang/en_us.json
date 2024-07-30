@@ -104,6 +104,7 @@
   "text.extended_industrialization.photovoltaic_cell_remaining_operation_time": "Remaining Operation Time : %s",
   "text.extended_industrialization.photovoltaic_cell_remaining_operation_time_minutes": "Remaining Operation Time : %s minute(s)",
   "text.extended_industrialization.processing_array_batch_size": "Batch size is determined by the amount of machines provided to it.",
+  "text.extended_industrialization.processing_array_eu_cost_multiplier": "Runs at %s the EU cost.",
   "text.extended_industrialization.processing_array_machine_input": "Insert electric crafting machines to run in parallel.",
   "text.extended_industrialization.processing_array_recipe": "Can run recipes of any single block electric crafting machine provided to it in batches.",
   "text.extended_industrialization.processing_array_size": "Machines: %d",

@@ -35,6 +35,7 @@ public enum EIText
 	PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME("Remaining Operation Time : %s"),
 	PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_MINUTES("Remaining Operation Time : %s minute(s)"),
 	PROCESSING_ARRAY_BATCH_SIZE("Batch size is determined by the amount of machines provided to it."),
+	PROCESSING_ARRAY_EU_COST_MULTIPLIER("Runs at %s the EU cost."),
 	PROCESSING_ARRAY_MACHINE_INPUT("Insert electric crafting machines to run in parallel."),
 	PROCESSING_ARRAY_RECIPE("Can run recipes of any single block electric crafting machine provided to it in batches."),
 	PROCESSING_ARRAY_SIZE("Machines: %d"),
