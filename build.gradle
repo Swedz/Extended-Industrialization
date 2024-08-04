@@ -90,8 +90,11 @@ task sourceJar(type: Jar) {
 publishing {
 	publications {
 		register('mavenJava', MavenPublication) {
-			from components.java
 			artifactId = project.artifact_name
+
+			artifact("$buildDir/libs/${project.artifact_name}-${project.version}.jar") {
+				builtBy build
+			}
 
 			artifact(sourceJar) {
 				classifier "sources"
