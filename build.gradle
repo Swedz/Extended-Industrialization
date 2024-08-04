@@ -4,6 +4,8 @@ plugins {
 	id 'idea'
 	id 'maven-publish'
 	id 'net.neoforged.gradle.userdev' version '7.0.97'
+	id 'com.matthewprenger.cursegradle' version '1.4.0'
+	id 'com.modrinth.minotaur' version '2.+'
 }
 
 version = "${mod_version}+${minecraft_version}"
@@ -99,6 +101,60 @@ publishing {
 			name = "modmaven"
 			url = "https://modmaven.dev/artifactory/local-releases/"
 		}
+	}
+}
+
+if (System.getenv("CURSEFORGE_API_KEY")) {
+	curseforge {
+		apiKey = System.getenv("CURSEFORGE_API_KEY")
+
+		project {
+			id = project.curseforge_project
+			releaseType = project.release_type
+			changelogType = "markdown"
+			delegate.changelog = System.getenv("EI_CHANGELOG")
+
+			addGameVersion project.minecraft_version
+			addGameVersion "NeoForge"
+			addGameVersion "Java 17"
+
+			relations {
+				requiredDependency "modern-industrialization"
+				requiredDependency "tesseract-api-neoforge"
+			}
+
+			mainArtifact(tasks.named("jar").flatMap { it.archiveFile })
+		}
+
+		options {
+			forgeGradleIntegration = false
+		}
+
+		afterEvaluate {
+			tasks.getByName("curseforge${project.curseforge_project}").dependsOn tasks.jar
+		}
+	}
+}
+
+if (System.getenv("MODRINTH_API_KEY")) {
+	modrinth {
+		token = System.getenv("MODRINTH_API_KEY")
+
+		projectId = project.modrinth_project
+		versionNumber = project.mod_version
+		versionName = "${project.mod_name} ${version}"
+		versionType = project.release_type
+		delegate.changelog = System.getenv("EI_CHANGELOG")
+
+		gameVersions = [project.minecraft_version]
+		loaders = ["neoforge"]
+
+		dependencies {
+			required.project "modern-industrialization"
+			required.project "tesseract-api"
+		}
+
+		uploadFile = tasks.jar
 	}
 }
 

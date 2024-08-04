@@ -1,0 +1,37 @@
+name: 'Release'
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 21
+        uses: actions/setup-java@v1
+        with:
+          java-version: 21
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Publish to ModMaven
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: publishMavenJavaPublicationToModmavenRepository
+        env:
+          MODMAVEN_USERNAME: ${{ secrets.MODMAVEN_USERNAME }}
+          MODMAVEN_PASSWORD: ${{ secrets.MODMAVEN_PASSWORD }}
+      - name: Upload to Curseforge
+        env:
+          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+          EI_CHANGELOG: ${{ github.event.release.body }}
+        run: ./gradlew curseforge1068418
+      - name: Upload to Modrinth
+        env:
+          MODRINTH_API_KEY: ${{ secrets.MODRINTH_API_KEY }}
+          EI_CHANGELOG: ${{ github.event.release.body }}
+        run: ./gradlew modrinth
