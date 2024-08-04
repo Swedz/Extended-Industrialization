@@ -66,9 +66,18 @@ dependencies {
 	} else {
 		compileOnly "net.swedz:mi-tweaks:${mi_tweaks_version}"
 	}
+
+	implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:${mixinextras_version}")) {
+		jarJar.ranged(it, "[${mixinextras_version},)")
+	}
 }
 
 tasks.named('jar') {
+	enabled = false
+}
+
+tasks.named('jarJar') {
+	archiveClassifier.set('')
 	from "LICENSE"
 }
 
@@ -123,7 +132,7 @@ if (System.getenv("CURSEFORGE_API_KEY")) {
 				requiredDependency "tesseract-api-neoforge"
 			}
 
-			mainArtifact(tasks.named("jar").flatMap { it.archiveFile })
+			mainArtifact(tasks.named("jarJar").flatMap { it.archiveFile })
 		}
 
 		options {
@@ -154,7 +163,7 @@ if (System.getenv("MODRINTH_API_KEY")) {
 			required.project "tesseract-api"
 		}
 
-		uploadFile = tasks.jar
+		uploadFile = tasks.jarJar
 	}
 }
 

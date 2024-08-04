@@ -5,10 +5,13 @@
     "compatibilityLevel": "JAVA_17",
     "mixins": [
         "CannedFoodUsedForCatsMixin",
+        "datamapeventworkaround.DataMapLoaderMixin",
         "mi.AllowFluidBottlesInMachinesMenuMixin",
         "mi.accessor.ConfigurableItemStackAccessor"
     ],
-    "client": [],
+    "client": [
+        "datamapeventworkaround.ClientRegistryManagerMixin"
+    ],
     "injectors": {
         "defaultRequire": 1
     }
