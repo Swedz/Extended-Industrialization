@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization;
 
 import com.google.common.collect.Sets;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -10,8 +11,8 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.registries.datamaps.DataMapsUpdatedEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.swedz.extended_industrialization.datagen.DatagenDelegator;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
@@ -76,13 +77,8 @@ public final class EI
 		
 		bus.addListener(RegisterDataMapTypesEvent.class, EIDataMaps::init);
 		
-		NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, TagsUpdatedEvent.class, (event) ->
-		{
-			if(event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.SERVER_DATA_LOAD)
-			{
-				LargeElectricFurnaceBlockEntity.initTiers();
-			}
-		});
+		NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, DataMapsUpdatedEvent.class, (event) ->
+				event.ifRegistry(Registries.BLOCK, (registry) -> LargeElectricFurnaceBlockEntity.initTiers()));
 		
 		// TODO started or starting?
 		NeoForge.EVENT_BUS.addListener(ServerStartedEvent.class, (event) ->
