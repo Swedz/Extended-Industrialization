@@ -181,6 +181,8 @@ neoForge {
 		client {
 			client()
 
+			gameDirectory.set(project.getLayout().getProjectDirectory().dir('runs/client'))
+
 			programArguments.addAll '--username', 'Swedz', '--uuid', 'a2dca537-693e-4ded-ac4b-c4006dd4d382'
 
 			systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
@@ -194,12 +196,16 @@ neoForge {
 		server {
 			server()
 
+			gameDirectory.set(project.getLayout().getProjectDirectory().dir('runs/server'))
+
 			systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
 			programArgument '--nogui'
 		}
 
 		data {
 			data()
+
+			gameDirectory.set(project.getLayout().getProjectDirectory().dir('runs/data'))
 
 			programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
 
