@@ -21,6 +21,7 @@ import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import aztech.modern_industrialization.materials.MIMaterials;
 import aztech.modern_industrialization.materials.part.MIParts;
 import com.google.common.collect.Maps;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.machines.blockentities.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentities.SolarBoilerMachineBlockEntity;
@@ -37,6 +38,9 @@ import net.swedz.extended_industrialization.machines.blockentities.multiblock.fa
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.farmer.SteamFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
 import net.swedz.extended_industrialization.machines.components.fluidharvesting.wastecollector.WasteCollectorBehavior;
+import net.swedz.extended_industrialization.machines.recipe.BreweryMachineRecipeType;
+import net.swedz.extended_industrialization.machines.recipe.CanningMachineRecipeType;
+import net.swedz.extended_industrialization.machines.recipe.ComposterMachineRecipeType;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformers;
 import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.BlastFurnaceTiersMIHookContext;
 import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.MachineCasingsMIHookContext;
@@ -48,6 +52,7 @@ import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.mul
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.multiplied.SteamMultipliedCraftingMultiblockBlockEntity;
 
 import java.util.Map;
+import java.util.function.Function;
 
 import static aztech.modern_industrialization.machines.init.SingleBlockCraftingMachines.*;
 import static aztech.modern_industrialization.machines.models.MachineCasings.*;
@@ -79,7 +84,8 @@ public final class EIMachines
 				BENDING_MACHINE,
 				ALLOY_SMELTER,
 				CANNING_MACHINE,
-				COMPOSTER;
+				COMPOSTER,
+				BREWERY;
 		
 		private static final Map<MachineRecipeType, String> RECIPE_TYPE_NAMES = Maps.newHashMap();
 		
@@ -88,11 +94,16 @@ public final class EIMachines
 			return RECIPE_TYPE_NAMES;
 		}
 		
-		private static MachineRecipeType create(MachineRecipeTypesMIHookContext hook, String englishName, String id)
+		private static MachineRecipeType create(MachineRecipeTypesMIHookContext hook, String englishName, String id, Function<ResourceLocation, MachineRecipeType> creator)
 		{
-			MachineRecipeType recipeType = hook.create(id);
+			MachineRecipeType recipeType = hook.create(id, creator);
 			RECIPE_TYPE_NAMES.put(recipeType, englishName);
 			return recipeType;
+		}
+		
+		private static MachineRecipeType create(MachineRecipeTypesMIHookContext hook, String englishName, String id)
+		{
+			return create(hook, englishName, id, MachineRecipeType::new);
 		}
 	}
 	
@@ -100,8 +111,9 @@ public final class EIMachines
 	{
 		RecipeTypes.BENDING_MACHINE = RecipeTypes.create(hook, "Bending Machine", "bending_machine").withItemInputs().withItemOutputs();
 		RecipeTypes.ALLOY_SMELTER = RecipeTypes.create(hook, "Alloy Smelter", "alloy_smelter").withItemInputs().withItemOutputs();
-		RecipeTypes.CANNING_MACHINE = RecipeTypes.create(hook, "Canning Machine", "canning_machine").withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
-		RecipeTypes.COMPOSTER = RecipeTypes.create(hook, "Composter", "composter").withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
+		RecipeTypes.CANNING_MACHINE = RecipeTypes.create(hook, "Canning Machine", "canning_machine", CanningMachineRecipeType::new).withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
+		RecipeTypes.COMPOSTER = RecipeTypes.create(hook, "Composter", "composter", ComposterMachineRecipeType::new).withItemInputs().withFluidInputs().withItemOutputs().withFluidOutputs();
+		RecipeTypes.BREWERY = RecipeTypes.create(hook, "Brewery", "brewery", BreweryMachineRecipeType::new).withItemInputs().withFluidInputs().withItemOutputs();
 	}
 	
 	public static void multiblocks(MultiblockMachinesMIHookContext hook)

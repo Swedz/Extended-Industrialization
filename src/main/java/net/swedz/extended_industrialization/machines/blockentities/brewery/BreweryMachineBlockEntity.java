@@ -5,6 +5,7 @@ import aztech.modern_industrialization.api.machine.holder.CrafterComponentHolder
 import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.machines.components.CrafterComponent;
 import aztech.modern_industrialization.machines.components.IsActiveComponent;
 import aztech.modern_industrialization.machines.components.MachineInventoryComponent;
 import aztech.modern_industrialization.machines.components.OrientationComponent;
@@ -13,45 +14,38 @@ import aztech.modern_industrialization.machines.guicomponents.AutoExtract;
 import aztech.modern_industrialization.machines.guicomponents.ProgressBar;
 import aztech.modern_industrialization.machines.init.MachineTier;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
+import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import aztech.modern_industrialization.util.Tickable;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
-import net.swedz.extended_industrialization.machines.components.craft.potion.PotionCrafterComponent;
-import net.swedz.tesseract.neoforge.compat.mi.component.craft.ModularCrafterAccessBehavior;
+import net.swedz.extended_industrialization.EIMachines;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class BreweryMachineBlockEntity extends MachineBlockEntity implements Tickable, CrafterComponentHolder, ModularCrafterAccessBehavior
+public abstract class BreweryMachineBlockEntity extends MachineBlockEntity implements Tickable, CrafterComponentHolder, CrafterComponent.Behavior
 {
-	protected static final int STEAM_SLOT_X = 143;
-	protected static final int STEAM_SLOT_Y = 27;
+	protected static final int STEAM_SLOT_X = 5;
+	protected static final int STEAM_SLOT_Y = 45;
 	
-	protected static final int BLAZING_ESSENCE_SLOT_X = 8;
-	protected static final int BLAZING_ESSENCE_SLOT_Y = 27;
+	protected static final int BLAZING_ESSENCE_SLOT_X = 24;
+	protected static final int BLAZING_ESSENCE_SLOT_Y = 45;
 	
-	protected static final int WATER_SLOT_X = 26;
-	protected static final int WATER_SLOT_Y = 27;
+	protected static final int INPUT_SLOTS_X = 43;
+	protected static final int INPUT_SLOTS_Y = 27;
 	
-	protected static final int INPUT_BOTTLE_SLOTS_X = 8;
-	protected static final int INPUT_BOTTLE_SLOTS_Y = 47;
+	protected static final int OUTPUT_SLOTS_X = 119;
+	protected static final int OUTPUT_SLOTS_Y = 27;
 	
-	protected static final int INPUT_REAGENT_SLOTS_X = 53;
-	protected static final int INPUT_REAGENT_SLOTS_Y = 27;
-	
-	protected static final int OUTPUT_SLOTS_X = 116;
-	protected static final int OUTPUT_SLOTS_Y = 47;
-	
-	protected static final int PROGRESS_BAR_X = 78;
-	protected static final int PROGRESS_BAR_Y = 63;
+	protected static final int PROGRESS_BAR_X = 97;
+	protected static final int PROGRESS_BAR_Y = 43;
 	
 	protected final MachineTier tier;
 	protected final int         capacity;
 	
 	protected final MachineInventoryComponent inventory;
-	protected final PotionCrafterComponent    crafter;
+	protected final CrafterComponent          crafter;
 	
 	protected IsActiveComponent isActiveComponent;
 	
@@ -59,16 +53,15 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder(blockName, true).backgroundHeight(206).build(),
+				new MachineGuiParameters.Builder(blockName, true).backgroundHeight(186).build(),
 				new OrientationComponent.Params(true, true, false)
 		);
 		
 		this.tier = tier;
 		this.capacity = capacity;
 		
-		Pair<MachineInventoryComponent, PotionCrafterComponent.Params> builtInventory = this.buildInventory();
-		this.inventory = builtInventory.getFirst();
-		this.crafter = new PotionCrafterComponent(builtInventory.getSecond(), this, inventory, this);
+		this.inventory = this.buildInventory();
+		this.crafter = new CrafterComponent(this, inventory, this);
 		
 		this.isActiveComponent = new IsActiveComponent();
 		this.registerGuiComponent(new ProgressBar.Server(
@@ -81,7 +74,7 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 		this.registerGuiComponent(new AutoExtract.Server(orientation));
 	}
 	
-	protected abstract Pair<MachineInventoryComponent, PotionCrafterComponent.Params> buildInventory();
+	protected abstract MachineInventoryComponent buildInventory();
 	
 	@Override
 	public MIInventory getInventory()
@@ -93,6 +86,12 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 	public CrafterAccess getCrafterComponent()
 	{
 		return crafter;
+	}
+	
+	@Override
+	public MachineRecipeType recipeType()
+	{
+		return EIMachines.RecipeTypes.BREWERY;
 	}
 	
 	@Override
@@ -114,7 +113,7 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 	}
 	
 	@Override
-	public long getBaseMaxRecipeEu()
+	public long getMaxRecipeEu()
 	{
 		return tier.getMaxEu();
 	}

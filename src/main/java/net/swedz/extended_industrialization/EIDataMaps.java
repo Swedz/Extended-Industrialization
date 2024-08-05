@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
@@ -9,7 +8,6 @@ import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.swedz.extended_industrialization.datamaps.FarmerSimpleTallCropSize;
 import net.swedz.extended_industrialization.datamaps.FertilizerPotency;
 import net.swedz.extended_industrialization.datamaps.LargeElectricFurnaceTier;
-import net.swedz.extended_industrialization.datamaps.PotionBrewingCosts;
 
 public final class EIDataMaps
 {
@@ -28,16 +26,10 @@ public final class EIDataMaps
 			.synced(LargeElectricFurnaceTier.CODEC, true)
 			.build();
 	
-	public static final DataMapType<Potion, PotionBrewingCosts> POTION_BREWING = DataMapType
-			.builder(EI.id("potion_brewing"), Registries.POTION, PotionBrewingCosts.CODEC)
-			.synced(PotionBrewingCosts.CODEC, true)
-			.build();
-	
 	public static void init(RegisterDataMapTypesEvent event)
 	{
 		event.register(FARMER_SIMPLE_TALL_CROP_SIZE);
 		event.register(FERTILIZER_POTENCY);
 		event.register(LARGE_ELECTRIC_FURNACE_TIER);
-		event.register(POTION_BREWING);
 	}
 }

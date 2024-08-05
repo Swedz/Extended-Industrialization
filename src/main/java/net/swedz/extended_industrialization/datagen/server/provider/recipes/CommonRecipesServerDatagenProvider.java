@@ -11,6 +11,7 @@ import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIBlocks;
+import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.datagen.api.recipe.ShapedRecipeBuilder;
@@ -203,6 +204,15 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 						.pattern("DBC")
 						.pattern("cSc")
 						.pattern("UsU"),
+				output
+		);
+		
+		addMachineRecipe(
+				"blast_furnace", "blazing_essence", MIMachineRecipeTypes.BLAST_FURNACE,
+				2, 10 * 20,
+				(r) -> r
+						.addItemInput(Items.BLAZE_POWDER, 1)
+						.addFluidOutput(EIFluids.BLAZING_ESSENCE, 20),
 				output
 		);
 	}

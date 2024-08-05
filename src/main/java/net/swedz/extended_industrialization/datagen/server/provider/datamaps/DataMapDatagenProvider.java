@@ -2,9 +2,7 @@ package net.swedz.extended_industrialization.datagen.server.provider.datamaps;
 
 import aztech.modern_industrialization.MI;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.DataMapProvider;
@@ -14,10 +12,7 @@ import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.datamaps.FarmerSimpleTallCropSize;
 import net.swedz.extended_industrialization.datamaps.FertilizerPotency;
 import net.swedz.extended_industrialization.datamaps.LargeElectricFurnaceTier;
-import net.swedz.extended_industrialization.datamaps.PotionBrewingCosts;
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
-
-import java.util.Map;
 
 public final class DataMapDatagenProvider extends DataMapProvider
 {
@@ -38,11 +33,6 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		
 		this.addLargeElectricFurnaceTier(MI.id("cupronickel_coil"), 8, 0.75f);
 		this.addLargeElectricFurnaceTier(MI.id("kanthal_coil"), 32, 0.75f);
-		
-		for(Map.Entry<ResourceKey<Potion>, Potion> entry : BuiltInRegistries.POTION.entrySet())
-		{
-			this.addPotionBrewing(entry.getKey(), 4, 1000, 1, 10 * 20, 4);
-		}
 	}
 	
 	private void addFarmerSimpleTallCropSize(ResourceLocation block, int maxHeight)
@@ -63,11 +53,6 @@ public final class DataMapDatagenProvider extends DataMapProvider
 	private void addLargeElectricFurnaceTier(ResourceLocation block, int batchSize, float euCostMultiplier)
 	{
 		this.builder(EIDataMaps.LARGE_ELECTRIC_FURNACE_TIER).add(block, new LargeElectricFurnaceTier(batchSize, euCostMultiplier), false);
-	}
-	
-	private void addPotionBrewing(ResourceKey<Potion> potion, int bottles, int water, int blazingEssence, int time, int euCost)
-	{
-		this.builder(EIDataMaps.POTION_BREWING).add(potion, new PotionBrewingCosts(bottles, water, blazingEssence, time, euCost), false);
 	}
 	
 	@Override

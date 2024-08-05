@@ -49,6 +49,7 @@ public final class EIFluids
 	public static final MIFluidHolder POTASSIUM_HYDROXIDE = create("potassium_hydroxide", "Potassium Hydroxide", 0xD7AF03, LOW_OPACITY, FluidTexture.WATER_LIKE, false).register();
 	public static final MIFluidHolder NPK_FERTILIZER      = create("npk_fertilizer", "NPK Fertilizer", 0x4ABD44, NEAR_OPACITY, FluidTexture.WATER_LIKE, false).register();
 	public static final MIFluidHolder DISTILLED_WATER     = create("distilled_water", "Distilled Water", 0xADCDFF, LOW_OPACITY, FluidTexture.WATER_LIKE, false).register();
+	public static final MIFluidHolder BLAZING_ESSENCE     = create("blazing_essence", "Blazing Essence", 0xFFD942, NEAR_OPACITY, FluidTexture.LAVA_LIKE, true).register();
 	
 	public static Set<FluidHolder> values()
 	{

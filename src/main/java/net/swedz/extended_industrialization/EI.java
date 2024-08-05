@@ -11,12 +11,10 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.registries.datamaps.DataMapsUpdatedEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.swedz.extended_industrialization.datagen.DatagenDelegator;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
-import net.swedz.extended_industrialization.machines.components.craft.potion.PotionRecipe;
 import net.swedz.tesseract.neoforge.api.MCIdentifiable;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
@@ -79,9 +77,5 @@ public final class EI
 		
 		NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, DataMapsUpdatedEvent.class, (event) ->
 				event.ifRegistry(Registries.BLOCK, (registry) -> LargeElectricFurnaceBlockEntity.initTiers()));
-		
-		// TODO started or starting?
-		NeoForge.EVENT_BUS.addListener(ServerStartedEvent.class, (event) ->
-				PotionRecipe.init(event.getServer()));
 	}
 }
