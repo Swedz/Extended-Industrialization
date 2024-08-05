@@ -2,8 +2,8 @@ package net.swedz.extended_industrialization.machines.components.farmer.planting
 
 import com.google.common.collect.Lists;
 import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.PlantingHandler;
-import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.handlers.SpecialPlantablePlantingHandler;
-import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.handlers.VanillaPlantingHandler;
+import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.handlers.SpecialPlantingHandler;
+import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.handlers.StandardPlantingHandler;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -24,7 +24,7 @@ public final class FarmerPlantingHandlers
 	
 	static
 	{
-		register(VanillaPlantingHandler::new);
-		register(SpecialPlantablePlantingHandler::new);
+		register(StandardPlantingHandler::new);
+		register(SpecialPlantingHandler::new);
 	}
 }

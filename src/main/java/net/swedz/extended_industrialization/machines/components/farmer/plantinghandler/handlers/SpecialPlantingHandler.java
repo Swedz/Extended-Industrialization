@@ -6,7 +6,7 @@ import net.neoforged.neoforge.common.SpecialPlantable;
 import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.PlantingContext;
 import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.PlantingHandler;
 
-public final class SpecialPlantablePlantingHandler implements PlantingHandler
+public final class SpecialPlantingHandler implements PlantingHandler
 {
 	@Override
 	public boolean matches(ItemStack stack)

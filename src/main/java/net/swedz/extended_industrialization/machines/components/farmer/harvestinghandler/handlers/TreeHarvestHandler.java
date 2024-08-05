@@ -18,7 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public final class TreeBlockHarvestHandler implements LootTableHarvestingHandler
+public final class TreeHarvestHandler implements LootTableHarvestingHandler
 {
 	private final Map<BlockPos, FarmerTree> trees = Maps.newHashMap();
 	

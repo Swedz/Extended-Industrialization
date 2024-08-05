@@ -12,13 +12,13 @@ import net.swedz.extended_industrialization.machines.components.farmer.block.Far
 import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.PlantingContext;
 import net.swedz.extended_industrialization.machines.components.farmer.plantinghandler.PlantingHandler;
 
-public final class VanillaPlantingHandler implements PlantingHandler
+public final class StandardPlantingHandler implements PlantingHandler
 {
 	@Override
 	public boolean matches(ItemStack stack)
 	{
 		return !stack.isEmpty() &&
-			   stack.is(ItemTags.VILLAGER_PLANTABLE_SEEDS) &&
+			   (stack.is(ItemTags.VILLAGER_PLANTABLE_SEEDS) || stack.is(ItemTags.SAPLINGS)) &&
 			   stack.getItem() instanceof BlockItem;
 	}
 	

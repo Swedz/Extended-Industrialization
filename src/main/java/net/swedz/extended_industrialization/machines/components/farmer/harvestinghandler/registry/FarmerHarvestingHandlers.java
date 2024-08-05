@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.HarvestingHandler;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.handlers.CropBlockHarvestHandler;
 import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.handlers.SimpleTallCropHarvestHandler;
-import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.handlers.TreeBlockHarvestHandler;
+import net.swedz.extended_industrialization.machines.components.farmer.harvestinghandler.handlers.TreeHarvestHandler;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -27,6 +27,6 @@ public final class FarmerHarvestingHandlers
 	{
 		register(CropBlockHarvestHandler::new);
 		register(SimpleTallCropHarvestHandler::new);
-		register(TreeBlockHarvestHandler::new);
+		register(TreeHarvestHandler::new);
 	}
 }
