@@ -1,0 +1,29 @@
+{
+  "type": "extended_industrialization:canning_machine",
+  "duration": 100,
+  "eu": 2,
+  "fluid_outputs": [
+    {
+      "amount": 350,
+      "fluid": "minecraft:water"
+    }
+  ],
+  "item_inputs": [
+    {
+      "type": "neoforge:components",
+      "amount": 1,
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "minecraft:water"
+        }
+      },
+      "items": "minecraft:potion"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "minecraft:glass_bottle"
+    }
+  ]
+}
