@@ -34,6 +34,7 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 				{
 					r.addFluidInput(fluidStack.getFluid(), fluidStack.getAmount());
 					r.addItemInput(emptyItem, 1);
+					// TODO use proper method when its added
 					((MIRecipeAccessor) r).recipe().itemOutputs.add(new MachineRecipe.ItemOutput(ItemVariant.of(fullItemAsOutput), 1, 1f));
 				},
 				output
