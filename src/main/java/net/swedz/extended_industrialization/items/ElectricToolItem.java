@@ -52,8 +52,8 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 {
 	public enum Type
 	{
-		DRILL(60 * 20 * CableTier.HV.getMaxTransfer(), 9, 10, false),
-		CHAINSAW(60 * 20 * CableTier.HV.getMaxTransfer(), 9, 16, false),
+		DRILL(60 * 20 * CableTier.HV.getMaxTransfer(), 9, 8, false),
+		CHAINSAW(60 * 20 * CableTier.HV.getMaxTransfer(), 9, 10, false),
 		ULTIMATE(60 * 20 * CableTier.EV.getMaxTransfer(), 12, 20, true);
 		
 		private final long    energyCapacity;

@@ -132,7 +132,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 		{
 			if(isCorrectToolForDrops(stack, state))
 			{
-				return 16;
+				return Tiers.DIAMOND.getSpeed();
 			}
 			else
 			{
@@ -148,7 +148,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	@Override
 	public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack)
 	{
-		return this.canUse(stack) ? ItemHelper.getToolModifiers(9) : ItemAttributeModifiers.EMPTY;
+		return this.canUse(stack) ? ItemHelper.getToolModifiers(7) : ItemAttributeModifiers.EMPTY;
 	}
 	
 	@Override
