@@ -25,14 +25,9 @@ jobs:
           echo "Set up for ${{ env.PROJECT_ARTIFACT_NAME }} version ${{ env.MOD_VERSION }}+${{ env.MINECRAFT_VERSION }}"
           echo "CurseForge project: ${{ env.CURSEFORGE_PROJECT }}"
           echo "Modrinth project: ${{ env.MODRINTH_PROJECT_SLUG }} (${{ env.MODRINTH_PROJECT }})"
-      - name: Prepare Discord embed json file
+      - name: Prepare JSON payload for Discord webhook
         run: |
-          cp .github/workflows/release_published.json release_published.json
-      - name: Print Discord embed json file
+          envsubst < .github/workflows/release_published.json > prepared_release_published.json
+      - name: Post to Discord webhook
         run: |
-          cat release_published.json
-      - name: Post to Discord
-        uses: tsickert/discord-webhook@v6.0.0
-        with:
-          webhook-url: ${{ secrets.RELEASE_WEBHOOK_URL }}
-          raw-data: release_published.json
+          curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data @prepared_release_published.json ${{ secrets.RELEASE_WEBHOOK_URL }}
