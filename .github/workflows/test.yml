@@ -20,6 +20,8 @@ jobs:
           echo "CURSEFORGE_PROJECT=$(grep '^curseforge_project=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
           echo "MODRINTH_PROJECT=$(grep '^modrinth_project=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
           echo "MODRINTH_PROJECT_SLUG=$(grep '^modrinth_project_slug=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+      - name: Print setup information
+        run: |
           echo "Set up for ${{ env.PROJECT_ARTIFACT_NAME }} version ${{ env.MOD_VERSION }}+${{ env.MINECRAFT_VERSION }}"
           echo "CurseForge project: ${{ env.CURSEFORGE_PROJECT }}"
           echo "Modrinth project: ${{ env.MODRINTH_PROJECT_SLUG }} (${{ env.MODRINTH_PROJECT }})"
