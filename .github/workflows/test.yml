@@ -28,6 +28,9 @@ jobs:
       - name: Prepare JSON payload for Discord webhook
         run: |
           envsubst < .github/workflows/release_published.json > prepared_release_published.json
+      - name: Test JSON payload before sending
+        run: |
+          echo @prepared_release_published.json
       - name: Post to Discord webhook
         run: |
           curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data @prepared_release_published.json ${{ secrets.RELEASE_WEBHOOK_URL }}
