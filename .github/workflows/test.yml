@@ -28,6 +28,9 @@ jobs:
       - name: Prepare Discord embed json file
         run: |
           cp .github/workflows/release_published.json release_published.json
+      - name: Print Discord embed json file
+        run: |
+          cat release_published.json
       - name: Post to Discord
         uses: tsickert/discord-webhook@v6.0.0
         with:
