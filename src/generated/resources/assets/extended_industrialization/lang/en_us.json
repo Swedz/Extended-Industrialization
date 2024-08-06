@@ -1,4 +1,5 @@
 {
+  "block.extended_industrialization.blazing_essence": "Blazing Essence",
   "block.extended_industrialization.bronze_bending_machine": "Bronze Bending Machine",
   "block.extended_industrialization.bronze_composter": "Bronze Composter",
   "block.extended_industrialization.bronze_solar_boiler": "Bronze Solar Boiler",
@@ -43,6 +44,7 @@
   "block.extended_industrialization.steel_solar_boiler": "Steel Solar Boiler",
   "block.extended_industrialization.steel_waste_collector": "Steel Waste Collector",
   "block.extended_industrialization.universal_transformer": "Universal Transformer",
+  "item.extended_industrialization.blazing_essence_bucket": "Blazing Essence Bucket",
   "item.extended_industrialization.canned_food": "Canned Food",
   "item.extended_industrialization.composted_manure_bucket": "Composted Manure Bucket",
   "item.extended_industrialization.crystallized_honey": "Crystallized Honey",
@@ -72,6 +74,7 @@
   "lef_tier.extended_industrialization.modern_industrialization.kanthal_coil": "Kanthal",
   "recipe_type.extended_industrialization.alloy_smelter": "Alloy Smelter",
   "recipe_type.extended_industrialization.bending_machine": "Bending Machine",
+  "recipe_type.extended_industrialization.brewery": "Brewery",
   "recipe_type.extended_industrialization.canning_machine": "Canning Machine",
   "recipe_type.extended_industrialization.composter": "Composter",
   "text.extended_industrialization.calcification_percentage": "Calcification : %d %%",
