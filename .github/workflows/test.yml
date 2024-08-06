@@ -20,16 +20,13 @@ jobs:
           echo "CURSEFORGE_PROJECT=$(grep '^curseforge_project=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
           echo "MODRINTH_PROJECT=$(grep '^modrinth_project=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
           echo "MODRINTH_PROJECT_SLUG=$(grep '^modrinth_project_slug=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          envsubst < .github/workflows/release_published.json > prepared_release_published.json
       - name: Print setup information
         run: |
           echo "Set up for ${{ env.PROJECT_ARTIFACT_NAME }} version ${{ env.MOD_VERSION }}+${{ env.MINECRAFT_VERSION }}"
           echo "CurseForge project: ${{ env.CURSEFORGE_PROJECT }}"
           echo "Modrinth project: ${{ env.MODRINTH_PROJECT_SLUG }} (${{ env.MODRINTH_PROJECT }})"
-      - name: Prepare JSON payload for Discord webhook
-        run: |
-          envsubst < .github/workflows/release_published.json > prepared_release_published.json
-      - name: Test JSON payload before sending
-        run: |
+          echo "Raw Discord webhook JSON:"
           cat prepared_release_published.json
       - name: Post to Discord webhook
         run: |
