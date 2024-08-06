@@ -143,7 +143,7 @@ if (System.getenv("CURSEFORGE_API_KEY")) {
 		}
 
 		afterEvaluate {
-			tasks.getByName("curseforge${project.curseforge_project}").dependsOn tasks.jar
+			tasks.getByName("curseforge${project.curseforge_project}").dependsOn tasks.jarJar
 		}
 	}
 }
