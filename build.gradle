@@ -107,7 +107,7 @@ if (System.getenv("CURSEFORGE_API_KEY")) {
 			id = project.curseforge_project
 			releaseType = project.release_type
 			changelogType = "markdown"
-			delegate.changelog = System.getenv("EI_CHANGELOG")
+			delegate.changelog = System.getenv("MOD_CHANGELOG")
 
 			addGameVersion project.minecraft_version
 			addGameVersion "NeoForge"
@@ -124,10 +124,6 @@ if (System.getenv("CURSEFORGE_API_KEY")) {
 		options {
 			forgeGradleIntegration = false
 		}
-
-		afterEvaluate {
-			tasks.getByName("curseforge${project.curseforge_project}").dependsOn tasks.jar
-		}
 	}
 }
 
@@ -139,7 +135,7 @@ if (System.getenv("MODRINTH_API_KEY")) {
 		versionNumber = project.mod_version
 		versionName = "${project.mod_name} ${version}"
 		versionType = project.release_type
-		delegate.changelog = System.getenv("EI_CHANGELOG")
+		delegate.changelog = System.getenv("MOD_CHANGELOG")
 
 		gameVersions = [project.minecraft_version]
 		loaders = ["neoforge"]

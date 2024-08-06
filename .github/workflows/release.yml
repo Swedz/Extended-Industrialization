@@ -10,6 +10,32 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Set up version variables
+        run: |
+          echo "PROJECT_ARTIFACT_NAME=$(grep '^artifact_name=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "MINECRAFT_VERSION=$(grep '^minecraft_version=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "MOD_NAME=$(grep '^mod_name=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "MOD_VERSION=$(grep '^mod_version=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "MOD_DISCORD_ICON=$(grep '^mod_discord_icon=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "MOD_GITHUB=$(grep '^mod_github=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "CURSEFORGE_PROJECT=$(grep '^curseforge_project=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "MODRINTH_PROJECT=$(grep '^modrinth_project=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "MODRINTH_PROJECT_SLUG=$(grep '^modrinth_project_slug=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "GITHUB_REPOSITORY=${{ github.repository }}" >> $GITHUB_ENV
+          echo "GITHUB_RELEASE_TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          MOD_CHANGELOG=$(echo "${{ github.event.release.body }}" | sed -E '/^\s*$/d; s#Full Changelog: (https?://[^\ ]+)#\[Full Changelog\](\1)#g')
+          echo "MOD_CHANGELOG=$MOD_CHANGELOG" >> $GITHUB_ENV
+      - name: Prepare Discord webhook JSON file
+        run: |
+          envsubst < .github/workflows/release_published.json > prepared_release_published.json
+      - name: Print setup information
+        run: |
+          echo "Set up for ${{ env.PROJECT_ARTIFACT_NAME }} version ${{ env.MOD_VERSION }}+${{ env.MINECRAFT_VERSION }}"
+          echo "CurseForge project: ${{ env.CURSEFORGE_PROJECT }}"
+          echo "Modrinth project: ${{ env.MODRINTH_PROJECT_SLUG }} (${{ env.MODRINTH_PROJECT }})"
+          echo ""
+          echo "Raw Discord webhook JSON:"
+          cat prepared_release_published.json
       - name: Set up JDK 21
         uses: actions/setup-java@v1
         with:
@@ -28,10 +54,13 @@ jobs:
       - name: Upload to Curseforge
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
-          EI_CHANGELOG: ${{ github.event.release.body }}
-        run: ./gradlew curseforge1068418
+          MOD_CHANGELOG: ${{ github.event.release.body }}
+        run: ./gradlew curseforge
       - name: Upload to Modrinth
         env:
           MODRINTH_API_KEY: ${{ secrets.MODRINTH_API_KEY }}
-          EI_CHANGELOG: ${{ github.event.release.body }}
+          MOD_CHANGELOG: ${{ github.event.release.body }}
         run: ./gradlew modrinth
+      - name: Post to Discord webhook
+        run: |
+          curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data @prepared_release_published.json ${{ secrets.RELEASE_WEBHOOK_URL }}
