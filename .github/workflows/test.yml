@@ -32,7 +32,7 @@ jobs:
           echo "MODRINTH_PROJECT_SLUG=$(grep '^modrinth_project_slug=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
           echo "GITHUB_REPOSITORY=${{ github.repository }}" >> $GITHUB_ENV
           echo "GITHUB_RELEASE_TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-          MOD_CHANGELOG=$(echo "${{ github.event.inputs.test_release_body }}" | sed -E 's#Full Changelog: (https?://[^\ ]+)#\[Full Changelog\](\1)#g'
+          MOD_CHANGELOG=$(echo "${{ github.event.inputs.test_release_body }}" | sed -E 's#Full Changelog: (https?://[^\ ]+)#\[Full Changelog\](\1)#g')
           echo "MOD_CHANGELOG=$MOD_CHANGELOG" >> $GITHUB_ENV
       - name: Prepare Discord webhook JSON file
         run: |
