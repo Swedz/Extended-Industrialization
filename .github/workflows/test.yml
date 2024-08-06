@@ -2,16 +2,6 @@ name: 'Test'
 
 on:
   workflow_dispatch:
-    inputs:
-      test_release_body:
-        description: 'Test release body'
-        required: true
-        default: |
-          - This is a test changelog\n
-          - here is another line\n
-          - and another\n
-          \n
-          Full Changelog: https://github.com/Swedz/Extended-Industrialization/compare/1.5.1+1.21...1.5.2+1.21
 
 jobs:
   build:
@@ -32,7 +22,7 @@ jobs:
           echo "MODRINTH_PROJECT_SLUG=$(grep '^modrinth_project_slug=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
           echo "GITHUB_REPOSITORY=${{ github.repository }}" >> $GITHUB_ENV
           echo "GITHUB_RELEASE_TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-          MOD_CHANGELOG=$(echo "${{ github.event.inputs.test_release_body }}" | sed -E '/^\s*$/d; s#Full Changelog: (https?://[^\ ]+)#\[Full Changelog\](\1)#g')
+          MOD_CHANGELOG=$(echo "${{ github.event.release.body }}" | sed -E '/^\s*$/d; s#Full Changelog: (https?://[^\ ]+)#\[Full Changelog\](\1)#g')
           echo "MOD_CHANGELOG=$MOD_CHANGELOG" >> $GITHUB_ENV
       - name: Prepare Discord webhook JSON file
         run: |
@@ -42,6 +32,7 @@ jobs:
           echo "Set up for ${{ env.PROJECT_ARTIFACT_NAME }} version ${{ env.MOD_VERSION }}+${{ env.MINECRAFT_VERSION }}"
           echo "CurseForge project: ${{ env.CURSEFORGE_PROJECT }}"
           echo "Modrinth project: ${{ env.MODRINTH_PROJECT_SLUG }} (${{ env.MODRINTH_PROJECT }})"
+          echo ""
           echo "Raw Discord webhook JSON:"
           cat prepared_release_published.json
       - name: Post to Discord webhook
