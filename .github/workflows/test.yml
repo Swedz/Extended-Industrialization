@@ -11,17 +11,15 @@ jobs:
       - uses: actions/checkout@v2
       - name: Set up version variables
         run: |
-          set -e
-          export $(grep -v '^#' gradle.properties | xargs -d '\n' -I {} echo {})
-          echo "PROJECT_ARTIFACT_NAME=${artifact_name}" >> $GITHUB_ENV
-          echo "MINECRAFT_VERSION=${minecraft_version}" >> $GITHUB_ENV
-          echo "MOD_NAME=${mod_name}" >> $GITHUB_ENV
-          echo "MOD_VERSION=${mod_version}" >> $GITHUB_ENV
-          echo "MOD_DISCORD_ICON=${mod_discord_icon}" >> $GITHUB_ENV
-          echo "MOD_GITHUB=${mod_github}" >> $GITHUB_ENV
-          echo "CURSEFORGE_PROJECT=${curseforge_project}" >> $GITHUB_ENV
-          echo "MODRINTH_PROJECT=${modrinth_project}" >> $GITHUB_ENV
-          echo "MODRINTH_PROJECT_SLUG=${modrinth_project_slug}" >> $GITHUB_ENV
+          echo "PROJECT_ARTIFACT_NAME=$(grep '^artifact_name=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "MINECRAFT_VERSION=$(grep '^minecraft_version=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "MOD_NAME=$(grep '^mod_name=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "MOD_VERSION=$(grep '^mod_version=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "MOD_DISCORD_ICON=$(grep '^mod_discord_icon=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "MOD_GITHUB=$(grep '^mod_github=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "CURSEFORGE_PROJECT=$(grep '^curseforge_project=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "MODRINTH_PROJECT=$(grep '^modrinth_project=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          echo "MODRINTH_PROJECT_SLUG=$(grep '^modrinth_project_slug=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
           echo "Set up for ${{ env.PROJECT_ARTIFACT_NAME }} version ${{ env.MOD_VERSION }}+${{ env.MINECRAFT_VERSION }}"
           echo "CurseForge project: ${{ env.CURSEFORGE_PROJECT }}"
           echo "Modrinth project: ${{ env.MODRINTH_PROJECT_SLUG }} (${{ env.MODRINTH_PROJECT }})"
