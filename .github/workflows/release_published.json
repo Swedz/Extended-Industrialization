@@ -12,7 +12,7 @@
                 {
                     "id": 205983055,
                     "name": "Changelog",
-                    "value": "$GITHUB_RELEASE_BODY",
+                    "value": "$MOD_CHANGELOG",
                     "inline": false
                 },
                 {
