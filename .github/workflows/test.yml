@@ -11,15 +11,17 @@ jobs:
       - uses: actions/checkout@v2
       - name: Set up version variables
         run: |
-          echo "PROJECT_ARTIFACT_NAME=$(grep '^artifact_name=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
-          echo "MINECRAFT_VERSION=$(grep '^minecraft_version=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
-          echo "MOD_NAME=$(grep '^mod_name=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
-          echo "MOD_VERSION=$(grep '^mod_version=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
-          echo "MOD_DISCORD_ICON=$(grep '^mod_discord_icon=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
-          echo "MOD_GITHUB=$(grep '^mod_github=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
-          echo "CURSEFORGE_PROJECT=$(grep '^curseforge_project=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
-          echo "MODRINTH_PROJECT=$(grep '^modrinth_project=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
-          echo "MODRINTH_PROJECT_SLUG=$(grep '^modrinth_project_slug=' gradle.properties | awk -F'=' '{print $2}')" >> $GITHUB_ENV
+          awk -F'=' '
+            /^artifact_name=/ {print "PROJECT_ARTIFACT_NAME=" $2}
+            /^minecraft_version=/ {print "MINECRAFT_VERSION=" $2}
+            /^mod_name=/ {print "MOD_NAME=" $2}
+            /^mod_version=/ {print "MOD_VERSION=" $2}
+            /^mod_discord_icon=/ {print "MOD_DISCORD_ICON=" $2}
+            /^mod_github=/ {print "MOD_GITHUB=" $2}
+            /^curseforge_project=/ {print "CURSEFORGE_PROJECT=" $2}
+            /^modrinth_project=/ {print "MODRINTH_PROJECT=" $2}
+            /^modrinth_project_slug=/ {print "MODRINTH_PROJECT_SLUG=" $2}
+          ' gradle.properties >> $GITHUB_ENV
           echo "GITHUB_REPOSITORY=${{ github.repository }}" >> $GITHUB_ENV
           echo "GITHUB_RELEASE_TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
           MOD_CHANGELOG=$(echo "${{ github.event.release.body }}" | sed -E '/^\s*$/d; s#Full Changelog: (https?://[^\ ]+)#\[Full Changelog\](\1)#g')
