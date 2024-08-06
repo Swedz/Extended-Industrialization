@@ -6,7 +6,12 @@ on:
       test_release_body:
         description: 'Test release body'
         required: true
-        default: 'Full Changelog: https://github.com/Swedz/Extended-Industrialization/compare/1.5.1+1.21...1.5.2+1.21'
+        default: |
+          - This is a test changelog
+          - here is another line
+          - and another
+          
+          Full Changelog: https://github.com/Swedz/Extended-Industrialization/compare/1.5.1+1.21...1.5.2+1.21
 
 jobs:
   build:
