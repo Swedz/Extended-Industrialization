@@ -1,0 +1,31 @@
+name: 'Test'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up version variables
+        run: |
+          source gradle.properties
+          echo "PROJECT_ARTIFACT_NAME=$artifact_name" >> $GITHUB_ENV
+          echo "MINECRAFT_VERSION=$minecraft_version" >> $GITHUB_ENV
+          echo "MOD_NAME=$mod_name" >> $GITHUB_ENV
+          echo "MOD_VERSION=$mod_version" >> $GITHUB_ENV
+          echo "MOD_DISCORD_ICON=$mod_discord_icon" >> $GITHUB_ENV
+          echo "MOD_GITHUB=$mod_github" >> $GITHUB_ENV
+          echo "CURSEFORGE_PROJECT=$curseforge_project" >> $GITHUB_ENV
+          echo "MODRINTH_PROJECT=$modrinth_project" >> $GITHUB_ENV
+          echo "MODRINTH_PROJECT_SLUG=$modrinth_project_slug" >> $GITHUB_ENV
+          echo "Set up for ${{ env.PROJECT_ARTIFACT_NAME }} version ${{ env.MOD_VERSION }}+${{ env.MINECRAFT_VERSION }}"
+          echo "CurseForge project: ${{ env.CURSEFORGE_PROJECT }}"
+          echo "Modrinth project: ${{ env.MODRINTH_PROJECT_SLUG }} (${{ env.MODRINTH_PROJECT }})"
+      - name: Post to Discord
+        uses: tsickert/discord-webhook@v6.0.0
+        with:
+          webhook-url: ${{ secrets.RELEASE_WEBHOOK_URL }}
+          raw-data: .github/workflows/release_published.json

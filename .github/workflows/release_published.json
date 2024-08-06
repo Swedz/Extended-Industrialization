@@ -1,0 +1,46 @@
+{
+    "content": "",
+    "tts": false,
+    "embeds": [
+        {
+            "id": 722295639,
+            "title": "Release Published",
+            "description": "",
+            "url": "https://github.com/${{ github.repository }}/releases/tag/${{ github.event.release.tag_name }}",
+            "color": 2336090,
+            "fields": [
+                {
+                    "id": 205983055,
+                    "name": "Changelog",
+                    "value": "${{ github.event.release.body }}"
+                },
+                {
+                    "id": 488008850,
+                    "name": "Version",
+                    "value": "${{ env.MOD_VERSION }}",
+                    "inline": false
+                },
+                {
+                    "id": 166449711,
+                    "name": "Minecraft Version",
+                    "value": "${{ env.MINECRAFT_VERSION }}",
+                    "inline": false
+                },
+                {
+                    "id": 742525752,
+                    "name": "Download",
+                    "value": "[${{ env.PROJECT_ARTIFACT_NAME }}-${{ github.event.release.tag_name }}.jar](https://modrinth.com/mod/${{ env.MODRINTH_PROJECT_SLUG }}/version/${{ env.MOD_VERSION }})"
+                }
+            ],
+            "author": {
+                "name": "${{ env.MOD_NAME }}",
+                "icon_url": "${{ env.DISCORD_MOD_ICON }}",
+                "url": "${{ env.MOD_GITHUB }}"
+            }
+        }
+    ],
+    "components": [],
+    "actions": {},
+    "username": "GitHub",
+    "avatar_url": "https://cdn.discordapp.com/avatars/988943967250944000/df91181b3f1cf0ef1592fbe18e0962d7.webp"
+}
