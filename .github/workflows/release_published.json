@@ -6,36 +6,38 @@
             "id": 722295639,
             "title": "Release Published",
             "description": "",
-            "url": "https://github.com/${{ github.repository }}/releases/tag/${{ github.event.release.tag_name }}",
+            "url": "https://github.com/$GITHUB_REPOSITORY/releases/tag/$GITHUB_RELEASE_TAG_NAME",
             "color": 2336090,
             "fields": [
                 {
                     "id": 205983055,
                     "name": "Changelog",
-                    "value": "${{ github.event.release.body }}"
+                    "value": "$GITHUB_RELEASE_BODY",
+                    "inline": false
                 },
                 {
                     "id": 488008850,
                     "name": "Version",
-                    "value": "${{ env.MOD_VERSION }}",
+                    "value": "$MOD_VERSION",
                     "inline": false
                 },
                 {
                     "id": 166449711,
                     "name": "Minecraft Version",
-                    "value": "${{ env.MINECRAFT_VERSION }}",
+                    "value": "$MINECRAFT_VERSION",
                     "inline": false
                 },
                 {
                     "id": 742525752,
                     "name": "Download",
-                    "value": "[${{ env.PROJECT_ARTIFACT_NAME }}-${{ github.event.release.tag_name }}.jar](https://modrinth.com/mod/${{ env.MODRINTH_PROJECT_SLUG }}/version/${{ env.MOD_VERSION }})"
+                    "value": "[$PROJECT_ARTIFACT_NAME-$GITHUB_RELEASE_TAG_NAME.jar](https://modrinth.com/mod/$MODRINTH_PROJECT_SLUG/version/$MOD_VERSION)",
+                    "inline": false
                 }
             ],
             "author": {
-                "name": "${{ env.MOD_NAME }}",
-                "icon_url": "${{ env.DISCORD_MOD_ICON }}",
-                "url": "${{ env.MOD_GITHUB }}"
+                "name": "$MOD_NAME",
+                "icon_url": "$MOD_DISCORD_ICON",
+                "url": "$MOD_GITHUB"
             }
         }
     ],
