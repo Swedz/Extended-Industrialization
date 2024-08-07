@@ -10,12 +10,6 @@
             "color": $EMBED_COLOR,
             "fields": [
                 {
-                    "id": 205983055,
-                    "name": "Changelog",
-                    "value": "$MOD_CHANGELOG_TRIMMED",
-                    "inline": false
-                },
-                {
                     "id": 488008850,
                     "name": "Version",
                     "value": "$MOD_VERSION",
@@ -25,6 +19,12 @@
                     "id": 166449711,
                     "name": "Minecraft Version",
                     "value": "$MINECRAFT_VERSION",
+                    "inline": false
+                },
+                {
+                    "id": 205983055,
+                    "name": "Changelog",
+                    "value": "$MOD_CHANGELOG_TRIMMED",
                     "inline": false
                 },
                 {
