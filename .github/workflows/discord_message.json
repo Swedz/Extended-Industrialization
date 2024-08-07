@@ -4,7 +4,7 @@
     "embeds": [
         {
             "id": 722295639,
-            "title": "Release Published",
+            "title": "$RELEASE_TYPE_DISPLAY Published",
             "description": "",
             "url": "https://github.com/$GITHUB_REPOSITORY/releases/tag/$GITHUB_RELEASE_TAG_NAME",
             "color": $EMBED_COLOR,

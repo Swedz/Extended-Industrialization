@@ -31,9 +31,10 @@ jobs:
         run: |
           {
             echo "MOD_CHANGELOG_TRIMMED<<EOF"
-            echo "$(echo "$MOD_CHANGELOG" | sed -E '/^\s*$/d; s#Full Changelog: (https?://[^\ ]+)#\[Full Changelog\](\1)#g')"
+            echo "$(echo "$MOD_CHANGELOG" | sed -E '/^\s*$/d; s#\*\*Full Changelog\*\*: (https?://[^\ ]+)#\[Full Changelog\](\1)#g' | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')"
             echo "EOF"
           } >> $GITHUB_ENV
+          echo "RELEASE_TYPE_DISPLAY=${RELEASE_TYPE^}" >> $GITHUB_ENV
           echo "EMBED_COLOR=$(if [ $RELEASE_TYPE == "release" ]; then echo 2336090; elif [ $RELEASE_TYPE == "beta" ]; then echo 15774258; else echo 15875907; fi)" >> $GITHUB_ENV
       - name: Prepare Discord webhook JSON file
         run: |
