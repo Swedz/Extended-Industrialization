@@ -8,7 +8,6 @@ import aztech.modern_industrialization.items.DynamicToolItem;
 import aztech.modern_industrialization.items.ItemContainingItemHelper;
 import aztech.modern_industrialization.items.ItemHelper;
 import aztech.modern_industrialization.items.SteamDrillFuel;
-import aztech.modern_industrialization.proxy.CommonProxy;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import aztech.modern_industrialization.util.Simulation;
 import aztech.modern_industrialization.util.TextHelper;
@@ -112,7 +111,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	@Override
 	public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack)
 	{
-		return !newStack.is(this) || !this.canUse(newStack) || CommonProxy.INSTANCE.shouldSteamDrillForceBreakReset();
+		return !newStack.is(this) || !this.canUse(newStack);
 	}
 	
 	@Override
