@@ -29,14 +29,10 @@ jobs:
           echo "GITHUB_RELEASE_TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
           echo "MOD_CHANGELOG=${{ github.event.release.body }}" >> $GITHUB_ENV
           echo "MOD_CHANGELOG_TRIMMED=$(echo "$MOD_CHANGELOG" | sed -E '/^\s*$/d; s#Full Changelog: (https?://[^\ ]+)#\[Full Changelog\](\1)#g')" >> $GITHUB_ENV
+          EMBED_COLOR=$(if [ "${{ env.RELEASE_TYPE }}" == "release" ]; then echo 2336090; elif [ "${{ env.RELEASE_TYPE }}" == "beta" ]; then echo 15774258; else echo 15875907; fi)
+          echo "EMBED_COLOR=$EMBED_COLOR" >> $GITHUB_ENV
       - name: Print setup information
         run: |
           echo "Set up for ${{ env.ARTIFACT_NAME }} version ${{ env.MOD_VERSION }}+${{ env.MINECRAFT_VERSION }}"
           echo "CurseForge project: ${{ env.CURSEFORGE_PROJECT }}"
           echo "Modrinth project: ${{ env.MODRINTH_PROJECT_SLUG }} (${{ env.MODRINTH_PROJECT }})"
-          echo ""
-          echo "Changelog:"
-          echo "${{ env.MOD_CHANGELOG }}"
-          echo ""
-          echo "Changelog (trimmed):"
-          echo "${{ env.MOD_CHANGELOG_TRIMMED }}"
