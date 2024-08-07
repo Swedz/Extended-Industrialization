@@ -39,7 +39,7 @@ jobs:
           name: env_vars
           path: env_vars
 
-  build:
+  test:
     runs-on: ubuntu-latest
     needs: load-env
     steps:
