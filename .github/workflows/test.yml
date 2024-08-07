@@ -29,7 +29,7 @@ jobs:
           echo "GITHUB_RELEASE_TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
           echo "MOD_CHANGELOG=${{ github.event.release.body }}" >> $GITHUB_ENV
           echo "MOD_CHANGELOG_TRIMMED=$(echo "$MOD_CHANGELOG" | sed -E '/^\s*$/d; s#Full Changelog: (https?://[^\ ]+)#\[Full Changelog\](\1)#g')" >> $GITHUB_ENV
-          EMBED_COLOR=$(if [ "${{ env.RELEASE_TYPE }}" == "release" ]; then echo 2336090; elif [ "${{ env.RELEASE_TYPE }}" == "beta" ]; then echo 15774258; else echo 15875907; fi)
+          EMBED_COLOR=$(if [ "$RELEASE_TYPE" == "release" ]; then echo 2336090; elif [ "$RELEASE_TYPE" == "beta" ]; then echo 15774258; else echo 15875907; fi)
           echo "EMBED_COLOR=$EMBED_COLOR" >> $GITHUB_ENV
       - name: Print setup information
         run: |
