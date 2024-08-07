@@ -7,7 +7,7 @@
             "title": "Release Published",
             "description": "",
             "url": "https://github.com/$GITHUB_REPOSITORY/releases/tag/$GITHUB_RELEASE_TAG_NAME",
-            "color": 2336090,
+            "color": $EMBED_COLOR,
             "fields": [
                 {
                     "id": 205983055,
