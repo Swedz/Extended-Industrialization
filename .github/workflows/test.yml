@@ -18,15 +18,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Read gradle.properties
+      - name: Read gradle.properties into the environment
         run: |
           while IFS='=' read -r key value; do
             [[ -z "$key" || "$key" =~ ^#.* ]] && continue
             env_key=$(echo "$key" | tr '[:lower:]' '[:upper:]' | tr '.' '_')
-            echo "${env_key}=${value}" >> $GITHUB_ENV
+            echo "project.${env_key}=${value}" >> $GITHUB_ENV
           done < gradle.properties
       - name: Print setup information
         run: |
-          echo "Set up for ${{ env.ARTIFACT_NAME }} version ${{ env.MOD_VERSION }}+${{ env.MINECRAFT_VERSION }}"
-          echo "CurseForge project: ${{ env.CURSEFORGE_PROJECT }}"
-          echo "Modrinth project: ${{ env.MODRINTH_PROJECT_SLUG }} (${{ env.MODRINTH_PROJECT }})"
+          echo "Set up for ${{ env.project.ARTIFACT_NAME }} version ${{ env.project.MOD_VERSION }}+${{ env.project.MINECRAFT_VERSION }}"
+          echo "CurseForge project: ${{ env.project.CURSEFORGE_PROJECT }}"
+          echo "Modrinth project: ${{ env.project.MODRINTH_PROJECT_SLUG }} (${{ env.project.MODRINTH_PROJECT }})"
