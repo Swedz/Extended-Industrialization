@@ -33,11 +33,14 @@ jobs:
         run: |
           echo "MOD_CHANGELOG_TRIMMED=$(echo "$MOD_CHANGELOG" | sed -E '/^\s*$/d; s#Full Changelog: (https?://[^\ ]+)#\[Full Changelog\](\1)#g')" >> $GITHUB_ENV
           echo "EMBED_COLOR=$(if [ $RELEASE_TYPE == "release" ]; then echo 2336090; elif [ $RELEASE_TYPE == "beta" ]; then echo 15774258; else echo 15875907; fi)" >> $GITHUB_ENV
+      - name: Create environment variables file
+        run: |
+          touch env_vars
       - name: Save environment variables
         uses: actions/upload-artifact@v2
         with:
-          name: envfile
-          path: envfile
+          name: env_vars
+          path: .
 
   build:
     runs-on: ubuntu-latest
@@ -47,11 +50,11 @@ jobs:
       - name: Download environment variables
         uses: actions/download-artifact@v2
         with:
-          name: envfile
+          name: env_vars
           path: .
       - name: Set environment variables
         run: |
-          cat envfile >> $GITHUB_ENV
+          cat env_vars >> $GITHUB_ENV
       - name: Print setup information
         run: |
           echo "Set up for ${{ env.ARTIFACT_NAME }} version ${{ env.MOD_VERSION }}+${{ env.MINECRAFT_VERSION }}"
