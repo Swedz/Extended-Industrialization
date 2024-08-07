@@ -35,7 +35,7 @@ jobs:
           echo "EMBED_COLOR=$(if [ $RELEASE_TYPE == "release" ]; then echo 2336090; elif [ $RELEASE_TYPE == "beta" ]; then echo 15774258; else echo 15875907; fi)" >> $GITHUB_ENV
       - name: Create environment variables file
         run: |
-          touch env_vars
+          echo $GITHUB_ENV >> env_vars
       - name: Save environment variables
         uses: actions/upload-artifact@v2
         with:
