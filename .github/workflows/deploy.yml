@@ -22,7 +22,11 @@ jobs:
         run: |
           echo "GITHUB_REPOSITORY=${{ github.repository }}" >> $GITHUB_ENV
           echo "GITHUB_RELEASE_TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-          echo "MOD_CHANGELOG=${{ github.event.release.body }}" >> $GITHUB_ENV
+          {
+            echo "MOD_CHANGELOG<<EOF"
+            echo "${{ github.event.release.body }}"
+            echo "EOF"
+          } >> $GITHUB_ENV
       - name: Generate additional variables into the environment
         run: |
           echo "MOD_CHANGELOG_TRIMMED=$(echo "$MOD_CHANGELOG" | sed -E '/^\s*$/d; s#Full Changelog: (https?://[^\ ]+)#\[Full Changelog\](\1)#g')" >> $GITHUB_ENV
