@@ -25,8 +25,18 @@ jobs:
             env_key=$(echo "$key" | tr '[:lower:]' '[:upper:]' | tr '.' '_')
             echo "${env_key}=${value}" >> $GITHUB_ENV
           done < gradle.properties
+          echo "GITHUB_REPOSITORY=${{ github.repository }}" >> $GITHUB_ENV
+          echo "GITHUB_RELEASE_TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          echo "MOD_CHANGELOG=${{ github.event.release.body }}" >> $GITHUB_ENV
+          echo "MOD_CHANGELOG_TRIMMED=$(echo "$MOD_CHANGELOG" | sed -E '/^\s*$/d; s#Full Changelog: (https?://[^\ ]+)#\[Full Changelog\](\1)#g')" >> $GITHUB_ENV
       - name: Print setup information
         run: |
           echo "Set up for ${{ env.ARTIFACT_NAME }} version ${{ env.MOD_VERSION }}+${{ env.MINECRAFT_VERSION }}"
           echo "CurseForge project: ${{ env.CURSEFORGE_PROJECT }}"
           echo "Modrinth project: ${{ env.MODRINTH_PROJECT_SLUG }} (${{ env.MODRINTH_PROJECT }})"
+          echo ""
+          echo "Changelog:"
+          echo "${{ env.MOD_CHANGELOG }}"
+          echo ""
+          echo "Changelog (trimmed):"
+          echo "${{ env.MOD_CHANGELOG_TRIMMED }}"
