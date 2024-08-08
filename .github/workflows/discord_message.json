@@ -30,7 +30,7 @@
                 {
                     "id": 742525752,
                     "name": "Download",
-                    "value": "[$ARTIFACT_NAME-$GITHUB_RELEASE_TAG_NAME.jar](https://modrinth.com/mod/$MODRINTH_PROJECT_SLUG/version/$MOD_VERSION)",
+                    "value": "[$ARTIFACT_NAME-$GITHUB_RELEASE_TAG_NAME.jar](https://modrinth.com/mod/$MODRINTH_PROJECT_SLUG/version/$GITHUB_RELEASE_TAG_NAME)",
                     "inline": false
                 }
             ],

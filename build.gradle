@@ -132,7 +132,7 @@ if (System.getenv("MODRINTH_API_KEY")) {
 		token = System.getenv("MODRINTH_API_KEY")
 
 		projectId = project.modrinth_project
-		versionNumber = project.mod_version
+		versionNumber = "${project.version}"
 		versionName = "${project.mod_name} ${version}"
 		versionType = project.release_type
 		delegate.changelog = System.getenv("MOD_CHANGELOG")
