@@ -1,10 +1,11 @@
 package net.swedz.extended_industrialization.items.machineconfig;
 
 import aztech.modern_industrialization.util.Simulation;
+import net.minecraft.world.entity.player.Player;
 
 public interface MachineConfigApplicable<T>
 {
 	boolean matches(T target);
 	
-	boolean apply(T target, Simulation simulation);
+	boolean apply(Player player, T target, Simulation simulation);
 }

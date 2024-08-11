@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.material.Fluid;
 import net.swedz.extended_industrialization.mixin.mi.accessor.ConfigurableItemStackAccessor;
@@ -88,7 +89,7 @@ public record MachineConfigSlots(
 	}
 	
 	@Override
-	public boolean apply(MachineBlockEntity target, Simulation simulation)
+	public boolean apply(Player player, MachineBlockEntity target, Simulation simulation)
 	{
 		if(!this.matches(target))
 		{

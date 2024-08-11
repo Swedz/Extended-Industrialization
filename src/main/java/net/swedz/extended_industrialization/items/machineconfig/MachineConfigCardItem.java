@@ -57,9 +57,9 @@ public final class MachineConfigCardItem extends Item
 						{
 							MachineConfig config = itemStack.get(EIDataComponents.MACHINE_CONFIG);
 							
-							if(config.apply(machine, Simulation.SIMULATE))
+							if(config.apply(player, machine, Simulation.SIMULATE))
 							{
-								config.apply(machine, Simulation.ACT);
+								config.apply(player, machine, Simulation.ACT);
 								player.displayClientMessage(EIText.MACHINE_CONFIG_CARD_APPLY_SUCCESS.text(), true);
 							}
 							else

@@ -4,19 +4,22 @@ import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.util.Simulation;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 public record MachineConfig(
 		Block machineBlock,
 		MachineConfigSlots slots,
-		MachineConfigOrientation orientation
+		MachineConfigOrientation orientation,
+		MachineConfigPanel upgrades
 ) implements MachineConfigSerializable, MachineConfigApplicable<MachineBlockEntity>
 {
 	public static final Codec<MachineConfig>                CODEC        = Codec
@@ -30,7 +33,8 @@ public record MachineConfig(
 		return new MachineConfig(
 				machine.getBlockState().getBlock(),
 				MachineConfigSlots.from(machine),
-				MachineConfigOrientation.from(machine.orientation)
+				MachineConfigOrientation.from(machine.orientation),
+				MachineConfigPanel.from(machine)
 		);
 	}
 	
@@ -39,7 +43,8 @@ public record MachineConfig(
 		return new MachineConfig(
 				BuiltInRegistries.BLOCK.get(ResourceLocation.parse(tag.getString("machine_block"))),
 				MachineConfigSlots.deserialize(tag.getCompound("slots")),
-				MachineConfigOrientation.deserialize(tag.getCompound("orientation"))
+				MachineConfigOrientation.deserialize(tag.getCompound("orientation")),
+				MachineConfigPanel.deserialize(tag.getCompound("panel"))
 		);
 	}
 	
@@ -50,16 +55,17 @@ public record MachineConfig(
 	}
 	
 	@Override
-	public boolean apply(MachineBlockEntity target, Simulation simulation)
+	public boolean apply(Player player, MachineBlockEntity target, Simulation simulation)
 	{
 		if(!this.matches(target))
 		{
 			return false;
 		}
 		
-		if(slots.apply(target, simulation) &&
-		   orientation.apply(target.orientation, simulation))
+		if(slots.apply(player, target, simulation) &&
+		   orientation.apply(player, target.orientation, simulation))
 		{
+			upgrades.apply(player, target, simulation);
 			if(simulation.isActing())
 			{
 				target.invalidateCapabilities();

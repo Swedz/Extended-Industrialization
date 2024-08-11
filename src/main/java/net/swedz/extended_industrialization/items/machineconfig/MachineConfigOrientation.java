@@ -3,7 +3,9 @@ package net.swedz.extended_industrialization.items.machineconfig;
 import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 
 record MachineConfigOrientation(
 		Direction facingDirection, boolean hasOutput, Direction outputDirection, boolean extractItems,
@@ -48,7 +50,7 @@ record MachineConfigOrientation(
 	}
 	
 	@Override
-	public boolean apply(OrientationComponent target, Simulation simulation)
+	public boolean apply(Player player, OrientationComponent target, Simulation simulation)
 	{
 		if(!this.matches(target))
 		{
