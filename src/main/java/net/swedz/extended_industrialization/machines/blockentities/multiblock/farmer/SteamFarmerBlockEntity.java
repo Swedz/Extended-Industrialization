@@ -8,6 +8,7 @@ import aztech.modern_industrialization.machines.helper.SteamHelper;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.util.Simulation;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIMachines;
 import net.swedz.extended_industrialization.machines.components.farmer.PlantingMode;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerProcessRates;
@@ -31,7 +32,7 @@ public final class SteamFarmerBlockEntity extends FarmerBlockEntity
 	
 	public SteamFarmerBlockEntity(BEP bep)
 	{
-		super(bep, "steam_farmer", 8, PlantingMode.AS_NEEDED, false, PROCESS_RATES, SHAPES);
+		super(bep, EI.id("steam_farmer"), 8, PlantingMode.AS_NEEDED, false, PROCESS_RATES, SHAPES);
 	}
 	
 	public static void registerReiShapes()
@@ -39,7 +40,7 @@ public final class SteamFarmerBlockEntity extends FarmerBlockEntity
 		int index = 0;
 		for(ShapeTemplate shapeTemplate : SHAPES.shapeTemplates())
 		{
-			ReiMachineRecipes.registerMultiblockShape("steam_farmer", shapeTemplate, "" + index);
+			ReiMachineRecipes.registerMultiblockShape(EI.id("steam_farmer"), shapeTemplate, "" + index);
 			index++;
 		}
 	}

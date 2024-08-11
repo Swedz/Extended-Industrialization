@@ -22,6 +22,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.machines.components.TransformerTierComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.universaltransformer.UniversalTransformerSlots;
 
@@ -40,7 +41,7 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder("universal_transformer", false).build(),
+				new MachineGuiParameters.Builder(EI.id("universal_transformer"), false).build(),
 				new OrientationComponent.Params(true, false, false)
 		);
 		

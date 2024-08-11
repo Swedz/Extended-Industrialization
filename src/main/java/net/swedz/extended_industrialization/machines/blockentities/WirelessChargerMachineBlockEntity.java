@@ -18,6 +18,7 @@ import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -35,11 +36,11 @@ public final class WirelessChargerMachineBlockEntity extends MachineBlockEntity 
 	
 	private final WirelessChargingComponent wirelessCharging;
 	
-	public WirelessChargerMachineBlockEntity(BEP bep, String blockName, CableTier tier, BiPredicate<MachineBlockEntity, Player> filter)
+	public WirelessChargerMachineBlockEntity(BEP bep, ResourceLocation blockId, CableTier tier, BiPredicate<MachineBlockEntity, Player> filter)
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder(blockName, false).build(),
+				new MachineGuiParameters.Builder(blockId, false).build(),
 				new OrientationComponent.Params(false, false, false)
 		);
 		

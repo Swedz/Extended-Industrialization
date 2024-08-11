@@ -20,6 +20,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIMachines;
 import net.swedz.extended_industrialization.machines.components.farmer.PlantingMode;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerProcessRates;
@@ -50,7 +51,7 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 	
 	public ElectricFarmerBlockEntity(BEP bep)
 	{
-		super(bep, "electric_farmer", 16, PlantingMode.ALTERNATING_LINES, true, PROCESS_RATES, SHAPES);
+		super(bep, EI.id("electric_farmer"), 16, PlantingMode.ALTERNATING_LINES, true, PROCESS_RATES, SHAPES);
 		
 		this.redstoneControl = new RedstoneControlComponent();
 		this.registerComponents(redstoneControl);
@@ -64,7 +65,7 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 		int index = 0;
 		for(ShapeTemplate shapeTemplate : SHAPES.shapeTemplates())
 		{
-			ReiMachineRecipes.registerMultiblockShape("electric_farmer", shapeTemplate, "" + index);
+			ReiMachineRecipes.registerMultiblockShape(EI.id("electric_farmer"), shapeTemplate, "" + index);
 			index++;
 		}
 	}

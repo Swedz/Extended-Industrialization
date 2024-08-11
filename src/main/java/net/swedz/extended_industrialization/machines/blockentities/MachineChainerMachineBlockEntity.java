@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.components.MachineChainerComponent;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
@@ -31,7 +32,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder("machine_chainer", false).backgroundHeight(180).build(),
+				new MachineGuiParameters.Builder(EI.id("machine_chainer"), false).backgroundHeight(180).build(),
 				new OrientationComponent.Params(false, false, false)
 		);
 		

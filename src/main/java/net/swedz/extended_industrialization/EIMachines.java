@@ -152,14 +152,14 @@ public final class EIMachines
 					"Large Steam Furnace", "large_steam_furnace", "large_furnace",
 					BRONZE_PLATED_BRICKS, true, false, false,
 					(bep) -> new SteamMultipliedCraftingMultiblockBlockEntity(
-							bep, "large_steam_furnace", new ShapeTemplate[]{shape},
+							bep, EI.id("large_steam_furnace"), new ShapeTemplate[]{shape},
 							OverclockComponent.getDefaultCatalysts(),
 							MIMachineRecipeTypes.FURNACE,
 							EIConfig.largeSteamFurnaceBatchSize,
 							EuCostTransformers.percentage(() -> (float) EIConfig.largeSteamFurnaceEuCostMultiplier)
 					)
 			);
-			ReiMachineRecipes.registerMultiblockShape("large_steam_furnace", shape);
+			ReiMachineRecipes.registerMultiblockShape(EI.id("large_steam_furnace"), shape);
 			ReiMachineRecipes.registerWorkstation("bronze_furnace", EI.id("large_steam_furnace"));
 			ReiMachineRecipes.registerWorkstation("steel_furnace", EI.id("large_steam_furnace"));
 		}
@@ -181,14 +181,14 @@ public final class EIMachines
 					"Large Steam Macerator", "large_steam_macerator", "large_macerator",
 					BRONZE_PLATED_BRICKS, true, false, false,
 					(bep) -> new SteamMultipliedCraftingMultiblockBlockEntity(
-							bep, "large_steam_macerator", new ShapeTemplate[]{shape},
+							bep, EI.id("large_steam_macerator"), new ShapeTemplate[]{shape},
 							OverclockComponent.getDefaultCatalysts(),
 							MIMachineRecipeTypes.MACERATOR,
 							EIConfig.largeSteamMaceratorBatchSize,
 							EuCostTransformers.percentage(() -> (float) EIConfig.largeSteamMaceratorEuCostMultiplier)
 					)
 			);
-			ReiMachineRecipes.registerMultiblockShape("large_steam_macerator", shape);
+			ReiMachineRecipes.registerMultiblockShape(EI.id("large_steam_macerator"), shape);
 			ReiMachineRecipes.registerWorkstation("bronze_macerator", EI.id("large_steam_macerator"));
 			ReiMachineRecipes.registerWorkstation("steel_macerator", EI.id("large_steam_macerator"));
 		}
@@ -201,14 +201,14 @@ public final class EIMachines
 					"Large Electric Macerator", "large_electric_macerator", "large_macerator",
 					Casings.STEEL_PLATED_BRICKS, true, false, false,
 					(bep) -> new ElectricMultipliedCraftingMultiblockBlockEntity(
-							bep, "large_electric_macerator", new ShapeTemplate[]{shape},
+							bep, EI.id("large_electric_macerator"), new ShapeTemplate[]{shape},
 							MachineTier.LV,
 							MIMachineRecipeTypes.MACERATOR,
 							EIConfig.largeElectricMaceratorBatchSize,
 							EuCostTransformers.percentage(() -> (float) EIConfig.largeElectricMaceratorEuCostMultiplier)
 					)
 			);
-			ReiMachineRecipes.registerMultiblockShape("large_electric_macerator", shape);
+			ReiMachineRecipes.registerMultiblockShape(EI.id("large_electric_macerator"), shape);
 			ReiMachineRecipes.registerWorkstation("bronze_macerator", EI.id("large_electric_macerator"));
 			ReiMachineRecipes.registerWorkstation("steel_macerator", EI.id("large_electric_macerator"));
 			ReiMachineRecipes.registerWorkstation("electric_macerator", EI.id("large_electric_macerator"));
@@ -384,7 +384,7 @@ public final class EIMachines
 			hook.register(
 					name, id, overlayFolder,
 					tier.casing, false, true, true, false,
-					(bep) -> new SolarPanelMachineBlockEntity(bep, id, tier),
+					(bep) -> new SolarPanelMachineBlockEntity(bep, EI.id(id), tier),
 					MachineBlockEntity::registerItemApi,
 					MachineBlockEntity::registerFluidApi,
 					SolarPanelMachineBlockEntity::registerEnergyApi
@@ -394,19 +394,19 @@ public final class EIMachines
 		hook.register(
 				"Local Wireless Charging Station", "local_wireless_charging_station", "wireless_charging_station/local",
 				CableTier.MV.casing, false, true, true, false,
-				(bep) -> new WirelessChargerMachineBlockEntity(bep, "local_wireless_charging_station", CableTier.MV, (m, p) -> m.getBlockPos().closerThan(p.blockPosition(), EIConfig.localWirelessChargingStationRange)),
+				(bep) -> new WirelessChargerMachineBlockEntity(bep, EI.id("local_wireless_charging_station"), CableTier.MV, (m, p) -> m.getBlockPos().closerThan(p.blockPosition(), EIConfig.localWirelessChargingStationRange)),
 				WirelessChargerMachineBlockEntity::registerEnergyApi
 		);
 		hook.register(
 				"Global Wireless Charging Station", "global_wireless_charging_station", "wireless_charging_station/global",
 				CableTier.HV.casing, false, true, true, false,
-				(bep) -> new WirelessChargerMachineBlockEntity(bep, "global_wireless_charging_station", CableTier.HV, (m, p) -> m.getLevel() == p.level()),
+				(bep) -> new WirelessChargerMachineBlockEntity(bep, EI.id("global_wireless_charging_station"), CableTier.HV, (m, p) -> m.getLevel() == p.level()),
 				WirelessChargerMachineBlockEntity::registerEnergyApi
 		);
 		hook.register(
 				"Interdimensional Wireless Charging Station", "interdimensional_wireless_charging_station", "wireless_charging_station/interdimensional",
 				CableTier.EV.casing, false, true, true, false,
-				(bep) -> new WirelessChargerMachineBlockEntity(bep, "interdimensional_wireless_charging_station", CableTier.EV, (m, p) -> true),
+				(bep) -> new WirelessChargerMachineBlockEntity(bep, EI.id("interdimensional_wireless_charging_station"), CableTier.EV, (m, p) -> true),
 				WirelessChargerMachineBlockEntity::registerEnergyApi
 		);
 	}

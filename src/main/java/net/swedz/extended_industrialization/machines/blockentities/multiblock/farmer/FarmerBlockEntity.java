@@ -13,6 +13,7 @@ import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
@@ -49,7 +50,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	
 	protected final FarmerComponent farmer;
 	
-	public FarmerBlockEntity(BEP bep, String blockId, long euCost, PlantingMode defaultPlantingMode, boolean canChoosePlantingMode, FarmerProcessRates processRates, ShapeWrapper shapes)
+	public FarmerBlockEntity(BEP bep, ResourceLocation blockId, long euCost, PlantingMode defaultPlantingMode, boolean canChoosePlantingMode, FarmerProcessRates processRates, ShapeWrapper shapes)
 	{
 		super(
 				bep,

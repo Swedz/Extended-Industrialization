@@ -18,7 +18,6 @@ public final class DatagenDelegatorClient
 		MIDatagenHooks.Client.includeMISprites(event);
 		
 		MIDatagenHooks.Client.addTexturesHook(event, EI.ID, EIFluids.values());
-		MIDatagenHooks.Client.addLanguageHook(event, EI.ID);
 		MIDatagenHooks.Client.addMachineCasingModelsHook(event, EI.ID);
 		
 		add(event, BlockModelsDatagenProvider::new);

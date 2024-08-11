@@ -23,6 +23,7 @@ import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -63,11 +64,11 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	private final SolarSunlightComponent  sunlight;
 	private final SolarGeneratorComponent generator;
 	
-	public SolarPanelMachineBlockEntity(BEP bep, String blockName, CableTier tier)
+	public SolarPanelMachineBlockEntity(BEP bep, ResourceLocation blockId, CableTier tier)
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder(blockName, true).backgroundHeight(180).build(),
+				new MachineGuiParameters.Builder(blockId, true).backgroundHeight(180).build(),
 				new OrientationComponent.Params(false, false, false)
 		);
 		

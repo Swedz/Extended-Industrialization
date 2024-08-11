@@ -17,6 +17,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIConfig;
 import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.EIText;
@@ -39,7 +40,7 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 	
 	public ProcessingArrayBlockEntity(BEP bep)
 	{
-		super(bep, "processing_array", SHAPE_TEMPLATES, MachineTier.LV);
+		super(bep, EI.id("processing_array"), SHAPE_TEMPLATES, MachineTier.LV);
 		
 		if(!EIConfig.allowUpgradesInProcessingArray)
 		{
@@ -171,7 +172,7 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 		int index = 0;
 		for(ShapeTemplate shapeTemplate : SHAPE_TEMPLATES)
 		{
-			ReiMachineRecipes.registerMultiblockShape("processing_array", shapeTemplate, "" + index);
+			ReiMachineRecipes.registerMultiblockShape(EI.id("processing_array"), shapeTemplate, "" + index);
 			index++;
 		}
 	}

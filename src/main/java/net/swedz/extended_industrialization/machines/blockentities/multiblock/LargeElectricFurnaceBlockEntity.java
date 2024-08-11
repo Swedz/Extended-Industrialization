@@ -40,7 +40,7 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 {
 	public LargeElectricFurnaceBlockEntity(BEP bep)
 	{
-		super(bep, "large_electric_furnace", SHAPE_TEMPLATES, MachineTier.LV);
+		super(bep, EI.id("large_electric_furnace"), SHAPE_TEMPLATES, MachineTier.LV);
 		
 		List<Component> tierComponents = TIERS.stream().map(LargeElectricFurnaceBlockEntity.Tier::getDisplayName).toList();
 		
@@ -142,7 +142,7 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 		int index = 0;
 		for(ShapeTemplate shapeTemplate : SHAPE_TEMPLATES)
 		{
-			ReiMachineRecipes.registerMultiblockShape("large_electric_furnace", shapeTemplate, "" + index);
+			ReiMachineRecipes.registerMultiblockShape(EI.id("large_electric_furnace"), shapeTemplate, "" + index);
 			index++;
 		}
 	}

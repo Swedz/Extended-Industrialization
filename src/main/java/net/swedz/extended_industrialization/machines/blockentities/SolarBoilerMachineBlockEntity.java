@@ -32,6 +32,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.EITooltips;
@@ -74,7 +75,7 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder(bronze ? "bronze_solar_boiler" : "steel_solar_boiler", true).backgroundHeight(180).build(),
+				new MachineGuiParameters.Builder(EI.id(bronze ? "bronze_solar_boiler" : "steel_solar_boiler"), true).backgroundHeight(180).build(),
 				new OrientationComponent.Params(false, false, false)
 		);
 		
