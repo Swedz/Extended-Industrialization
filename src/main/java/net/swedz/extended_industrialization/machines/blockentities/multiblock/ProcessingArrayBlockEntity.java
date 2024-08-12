@@ -168,9 +168,11 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 	
 	public static void registerReiShapes()
 	{
+		int index = 0;
 		for(ShapeTemplate shapeTemplate : SHAPE_TEMPLATES)
 		{
-			ReiMachineRecipes.registerMultiblockShape("processing_array", shapeTemplate);
+			ReiMachineRecipes.registerMultiblockShape("processing_array", shapeTemplate, "" + index);
+			index++;
 		}
 	}
 }

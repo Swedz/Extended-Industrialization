@@ -3,8 +3,10 @@ package net.swedz.extended_industrialization.compat.viewer.common;
 import aztech.modern_industrialization.compat.viewer.abstraction.ViewerCategory;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.fluid.FluidVariant;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.material.Fluid;
 import net.swedz.extended_industrialization.EI;
@@ -20,6 +22,13 @@ public final class FluidFertilizerCategory extends ViewerCategory<Fluid>
 	public FluidFertilizerCategory()
 	{
 		super(Fluid.class, EI.id("fluid_fertilizers"), EIText.FLUID_FERTILIZERS.text(), EIFluids.NPK_FERTILIZER.asFluid().getBucket().getDefaultInstance(), 150, 45);
+	}
+	
+	@Override
+	public ResourceLocation getRecipeId(Fluid fluid)
+	{
+		ResourceLocation key = BuiltInRegistries.FLUID.getKey(fluid);
+		return EI.id("fluid_fertilizer/%s/%s".formatted(key.getNamespace(), key.getPath()));
 	}
 	
 	@Override
