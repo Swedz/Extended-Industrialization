@@ -17,6 +17,11 @@ public final class SolarBoilerCalcificationComponent implements IComponent.Serve
 		ticks = Math.min(++ticks, START_AFTER_TICKS + CALCIFICATION_DURATION);
 	}
 	
+	public void reset()
+	{
+		ticks = 0;
+	}
+	
 	public float getCalcification()
 	{
 		if(ticks <= START_AFTER_TICKS)

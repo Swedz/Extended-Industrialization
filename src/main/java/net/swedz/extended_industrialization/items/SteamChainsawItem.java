@@ -164,7 +164,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 		return true;
 	}
 	
-	private void useFuel(ItemStack stack, LivingEntity entity)
+	public void useFuel(ItemStack stack, LivingEntity entity)
 	{
 		if(stack.getOrDefault(MIComponents.WATER, 0) > 0 &&
 		   stack.getOrDefault(MIComponents.STEAM_DRILL_FUEL, SteamDrillFuel.EMPTY).burnTicks() == 0)

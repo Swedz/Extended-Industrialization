@@ -6,6 +6,8 @@ import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.inventory.SlotPositions;
+import aztech.modern_industrialization.items.FluidFuelItemHelper;
+import aztech.modern_industrialization.items.diesel_tools.DieselToolItem;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.IsActiveComponent;
@@ -19,11 +21,22 @@ import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.EITooltips;
+import net.swedz.extended_industrialization.items.ElectricToolItem;
+import net.swedz.extended_industrialization.items.SteamChainsawItem;
 import net.swedz.extended_industrialization.machines.components.solar.SolarSunlightComponent;
 import net.swedz.extended_industrialization.machines.components.solar.boiler.SolarBoilerCalcificationComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
@@ -159,6 +172,64 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 		isActiveComponent.updateActive(active, this);
 		
 		this.setChanged();
+	}
+	
+	@Override
+	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
+	{
+		ItemInteractionResult result = super.useItemOn(player, hand, face);
+		if(!result.consumesAction() && player != null)
+		{
+			ItemStack stack = player.getItemInHand(hand);
+			if(stack.is(ItemTags.AXES))
+			{
+				boolean canUse;
+				
+				switch (stack.getItem())
+				{
+					case SteamChainsawItem steamChainsaw ->
+					{
+						canUse = steamChainsaw.canUse(stack);
+						if(canUse)
+						{
+							steamChainsaw.useFuel(stack, player);
+						}
+					}
+					case DieselToolItem dieselToolItem ->
+					{
+						canUse = FluidFuelItemHelper.getAmount(stack) > 0;
+						if(canUse)
+						{
+							FluidFuelItemHelper.decrement(stack);
+						}
+					}
+					case ElectricToolItem electricTool ->
+					{
+						canUse = electricTool.getStoredEnergy(stack) > 0;
+						if(canUse)
+						{
+							electricTool.tryUseEnergy(stack, ElectricToolItem.ENERGY_COST);
+						}
+					}
+					default ->
+					{
+						stack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+						canUse = true;
+					}
+				}
+				
+				if(canUse)
+				{
+					calcification.reset();
+					
+					level.playSound(null, worldPosition, SoundEvents.AXE_SCRAPE, SoundSource.BLOCKS, 1f, 1f);
+					level.levelEvent(null, LevelEvent.PARTICLES_SCRAPE, worldPosition, 0);
+					
+					result = ItemInteractionResult.CONSUME;
+				}
+			}
+		}
+		return result;
 	}
 	
 	@Override
