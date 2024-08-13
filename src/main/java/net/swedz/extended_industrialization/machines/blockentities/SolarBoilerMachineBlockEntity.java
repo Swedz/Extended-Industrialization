@@ -17,6 +17,7 @@ import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.fluid.FluidVariant;
 import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -150,7 +151,14 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 			active = false;
 		}
 		
+		for(Direction direction : Direction.values())
+		{
+			this.getInventory().autoExtractFluids(level, worldPosition, direction);
+		}
+		
 		isActiveComponent.updateActive(active, this);
+		
+		this.setChanged();
 	}
 	
 	@Override
