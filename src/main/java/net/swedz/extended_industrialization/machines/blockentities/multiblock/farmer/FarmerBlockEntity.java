@@ -28,6 +28,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static aztech.modern_industrialization.MITooltips.*;
+
 public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntity
 {
 	private static final int         SHAPE_RADIUS_START            = 3;
@@ -187,6 +189,15 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		{
 			this.updateActive(false);
 		}
+	}
+	
+	@Override
+	public List<Component> getTooltips()
+	{
+		List<Component> lines = Lists.newArrayList();
+		lines.add(DEFAULT_PARSER.parse(EIText.FARMER_TASK_TOOLTIP.text(EU_PER_TICK_PARSER.parse(euCost))));
+		lines.addAll(farmer.getTaskTooltipLines());
+		return lines;
 	}
 	
 	public static final class ShapeWrapper
