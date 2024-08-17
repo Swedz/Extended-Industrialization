@@ -39,7 +39,7 @@ public enum EIText
 	PROCESSING_ARRAY_MACHINE_INPUT("Insert electric crafting machines to run in parallel."),
 	PROCESSING_ARRAY_RECIPE("Can run recipes of any single block electric crafting machine provided to it in batches."),
 	PROCESSING_ARRAY_SIZE("Machines: %d"),
-	SOLAR_BOILER_CALCIFICATION("Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Breaking and placing the boiler again will reset calcification."),
+	SOLAR_BOILER_CALCIFICATION("Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Using an axe on the boiler will reset its calcification."),
 	SOLAR_EFFICIENCY("Solar Efficiency : %d %%"),
 	SOLAR_PANEL_DISTILLED_WATER("By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long!"),
 	SOLAR_PANEL_PHOTOVOLTAIC_CELL("To produce energy, the Solar Panel needs a matching tier Photovoltaic Cell in its inventory."),

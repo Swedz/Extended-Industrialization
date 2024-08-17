@@ -111,7 +111,7 @@
   "text.extended_industrialization.processing_array_machine_input": "Insert electric crafting machines to run in parallel.",
   "text.extended_industrialization.processing_array_recipe": "Can run recipes of any single block electric crafting machine provided to it in batches.",
   "text.extended_industrialization.processing_array_size": "Machines: %d",
-  "text.extended_industrialization.solar_boiler_calcification": "Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Breaking and placing the boiler again will reset calcification.",
+  "text.extended_industrialization.solar_boiler_calcification": "Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Using an axe on the boiler will reset its calcification.",
   "text.extended_industrialization.solar_efficiency": "Solar Efficiency : %d %%",
   "text.extended_industrialization.solar_panel_distilled_water": "By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long!",
   "text.extended_industrialization.solar_panel_photovoltaic_cell": "To produce energy, the Solar Panel needs a matching tier Photovoltaic Cell in its inventory.",
