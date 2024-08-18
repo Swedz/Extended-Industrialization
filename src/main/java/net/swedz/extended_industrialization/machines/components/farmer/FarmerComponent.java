@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.bus.api.Event;
@@ -29,6 +30,7 @@ import net.swedz.tesseract.neoforge.compat.mi.helper.MachineInventoryHelper;
 import net.swedz.tesseract.neoforge.event.FarmlandLoseMoistureEvent;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public final class FarmerComponent implements IComponent
@@ -132,6 +134,14 @@ public final class FarmerComponent implements IComponent
 	public void updateStackListeners()
 	{
 		plantableStacks.update(inventory.getItemInputs());
+	}
+	
+	public List<Component> getTaskTooltipLines()
+	{
+		return tasks.stream()
+				.map((task) -> task.type().tooltip())
+				.filter(Objects::nonNull)
+				.toList();
 	}
 	
 	public void tick()

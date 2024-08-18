@@ -56,10 +56,14 @@ public final class WirelessChargingComponent implements IComponent.ServerOnly
 			ILongEnergyStorage energy = armor.getCapability(EnergyApi.ITEM);
 			if(energy != null)
 			{
-				eu += energy.receive(Math.max(0, maxEu - eu), false);
-				if(eu == maxEu)
+				long received = energy.receive(Math.max(0, maxEu - eu), false);
+				if(received > 0)
 				{
-					return eu;
+					eu += received;
+					if(eu == maxEu)
+					{
+						return eu;
+					}
 				}
 			}
 		}
@@ -69,10 +73,14 @@ public final class WirelessChargingComponent implements IComponent.ServerOnly
 			ILongEnergyStorage energy = item.getCapability(EnergyApi.ITEM);
 			if(energy != null)
 			{
-				eu += energy.receive(Math.max(0, maxEu - eu), false);
-				if(eu == maxEu)
+				long received = energy.receive(Math.max(0, maxEu - eu), false);
+				if(received > 0)
 				{
-					return eu;
+					eu += received;
+					if(eu == maxEu)
+					{
+						return eu;
+					}
 				}
 			}
 		}

@@ -36,9 +36,11 @@ public final class SteamFarmerBlockEntity extends FarmerBlockEntity
 	
 	public static void registerReiShapes()
 	{
+		int index = 0;
 		for(ShapeTemplate shapeTemplate : SHAPES.shapeTemplates())
 		{
-			ReiMachineRecipes.registerMultiblockShape("steam_farmer", shapeTemplate);
+			ReiMachineRecipes.registerMultiblockShape("steam_farmer", shapeTemplate, "" + index);
+			index++;
 		}
 	}
 	

@@ -3,6 +3,7 @@ package net.swedz.extended_industrialization.machines.components.farmer.task.tas
 import aztech.modern_industrialization.inventory.MIItemStorage;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.transaction.Transaction;
+import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
@@ -18,11 +19,14 @@ import net.swedz.extended_industrialization.machines.components.farmer.task.Farm
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerTaskType;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public final class HarvestingFarmerTask extends FarmerTask
 {
 	private final FarmerHarvestingHandlersHolder harvestingHandlers;
+	
+	private final Map<BlockPos, List<ItemStack>> cachedDrops = Maps.newHashMap();
 	
 	public HarvestingFarmerTask(FarmerComponent component)
 	{
@@ -30,28 +34,14 @@ public final class HarvestingFarmerTask extends FarmerTask
 		harvestingHandlers = component.getHarvestingHandlersHolder();
 	}
 	
-	private boolean harvestBlocks(FarmerBlock cropBlockEntry, HarvestingContext context, HarvestingHandler handler)
+	private boolean insertDrops(List<ItemStack> drops, boolean simulate)
 	{
-		List<BlockPos> blockPositions = handler.getBlocks(context);
-		
-		if(blockPositions.isEmpty())
-		{
-			return false;
-		}
-		
 		try (Transaction transaction = Transaction.openOuter())
 		{
-			List<ItemStack> items = handler.getDrops(context);
-			
-			if(items.isEmpty())
-			{
-				return false;
-			}
-			
 			MIItemStorage itemOutput = new MIItemStorage(inventory.getItemOutputs());
 			
 			boolean success = true;
-			for(ItemStack item : items)
+			for(ItemStack item : drops)
 			{
 				long inserted = itemOutput.insertAllSlot(ItemVariant.of(item), item.getCount(), transaction);
 				if(inserted != item.getCount())
@@ -60,25 +50,75 @@ public final class HarvestingFarmerTask extends FarmerTask
 					break;
 				}
 			}
-			if(!success)
+			
+			if(!simulate)
 			{
-				return false;
+				transaction.commit();
 			}
 			
-			BlockState newState = Blocks.AIR.defaultBlockState();
-			int i = 0;
-			for(BlockPos blockPosition : blockPositions)
-			{
-				level.setBlock(blockPosition, newState, 1 | 2);
-				level.gameEvent(GameEvent.BLOCK_DESTROY, blockPosition, GameEvent.Context.of(level.getBlockState(blockPosition)));
-				i++;
-			}
-			cropBlockEntry.updateState(newState);
-			
-			transaction.commit();
-			
-			handler.harvested(context);
+			return success;
 		}
+	}
+	
+	private List<ItemStack> getDrops(HarvestingContext context, HarvestingHandler handler)
+	{
+		BlockPos origin = context.pos();
+		List<ItemStack> drops;
+		if(cachedDrops.containsKey(origin))
+		{
+			drops = cachedDrops.get(origin);
+			if(!this.insertDrops(drops, true))
+			{
+				return List.of();
+			}
+			cachedDrops.remove(origin);
+			return handler.getDrops(context);
+		}
+		else
+		{
+			drops = handler.getDrops(context);
+			if(drops.isEmpty())
+			{
+				return drops;
+			}
+			if(!this.insertDrops(drops, true))
+			{
+				cachedDrops.put(origin, drops);
+				return List.of();
+			}
+		}
+		return drops;
+	}
+	
+	private boolean harvestBlocks(FarmerBlock cropBlockEntry, HarvestingContext context, HarvestingHandler handler)
+	{
+		BlockPos origin = context.pos();
+		List<BlockPos> blockPositions = handler.getBlocks(context);
+		
+		if(blockPositions.isEmpty())
+		{
+			return false;
+		}
+		
+		List<ItemStack> drops = this.getDrops(context, handler);
+		if(drops.isEmpty())
+		{
+			return false;
+		}
+		
+		this.insertDrops(drops, false);
+		
+		BlockState newState = Blocks.AIR.defaultBlockState();
+		int i = 0;
+		for(BlockPos blockPosition : blockPositions)
+		{
+			level.setBlock(blockPosition, newState, 1 | 2);
+			level.gameEvent(GameEvent.BLOCK_DESTROY, blockPosition, GameEvent.Context.of(level.getBlockState(blockPosition)));
+			i++;
+		}
+		cropBlockEntry.updateState(newState);
+		
+		handler.harvested(context);
 		
 		return true;
 	}

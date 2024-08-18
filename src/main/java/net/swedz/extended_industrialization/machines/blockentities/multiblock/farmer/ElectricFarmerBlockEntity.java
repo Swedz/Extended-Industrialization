@@ -61,9 +61,11 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 	
 	public static void registerReiShapes()
 	{
+		int index = 0;
 		for(ShapeTemplate shapeTemplate : SHAPES.shapeTemplates())
 		{
-			ReiMachineRecipes.registerMultiblockShape("electric_farmer", shapeTemplate);
+			ReiMachineRecipes.registerMultiblockShape("electric_farmer", shapeTemplate, "" + index);
+			index++;
 		}
 	}
 	

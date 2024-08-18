@@ -85,7 +85,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		}
 	}
 	
-	private static final long ENERGY_COST = 2048;
+	public static final long ENERGY_COST = 2048;
 	
 	private final Type type;
 	
