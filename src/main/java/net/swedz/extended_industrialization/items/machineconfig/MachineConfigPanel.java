@@ -8,8 +8,9 @@ import aztech.modern_industrialization.machines.components.UpgradeComponent;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.util.Simulation;
 import com.google.common.collect.Maps;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -18,13 +19,22 @@ import java.util.function.BiConsumer;
 
 public record MachineConfigPanel(
 		Map<SlotPanel.SlotType, ItemStack> slotItems
-) implements MachineConfigSerializable, MachineConfigApplicable<MachineBlockEntity>
+) implements MachineConfigApplicable<MachineBlockEntity>
 {
+	public static final Codec<MachineConfigPanel> CODEC = RecordCodecBuilder.create((instance) -> instance
+			.group(
+					Codec.unboundedMap(
+							ExtraCodecs.idResolverCodec(Enum::ordinal, (i) -> SlotPanel.SlotType.values()[i], -1),
+							ItemStack.CODEC
+					).fieldOf("items").forGetter(MachineConfigPanel::slotItems)
+			)
+			.apply(instance, MachineConfigPanel::new));
+	
 	public static MachineConfigPanel from(MachineBlockEntity machine)
 	{
 		Map<SlotPanel.SlotType, ItemStack> slotItems = Maps.newHashMap();
 		
-		BiConsumer<SlotPanel.SlotType, DropableComponent > action = (slotType, component) ->
+		BiConsumer<SlotPanel.SlotType, DropableComponent> action = (slotType, component) ->
 		{
 			if(!component.getDrop().isEmpty())
 			{
@@ -39,22 +49,6 @@ public record MachineConfigPanel(
 		return new MachineConfigPanel(slotItems);
 	}
 	
-	public static MachineConfigPanel deserialize(CompoundTag tag)
-	{
-		Map<SlotPanel.SlotType, ItemStack> slotItems = Maps.newHashMap();
-		
-		for(SlotPanel.SlotType slotType : SlotPanel.SlotType.values())
-		{
-			if(tag.contains(slotType.name()))
-			{
-				// TODO get registry access
-				//slotItems.put(slotType, ItemStack.parseOptional(null, tag.getCompound(slotType.name())));
-			}
-		}
-		
-		return new MachineConfigPanel(slotItems);
-	}
-	
 	@Override
 	public boolean matches(MachineBlockEntity target)
 	{
@@ -64,20 +58,7 @@ public record MachineConfigPanel(
 	@Override
 	public boolean apply(Player player, MachineBlockEntity target, Simulation simulation)
 	{
+		// TODO
 		return false;
-	}
-	
-	@Override
-	public Tag serialize()
-	{
-		CompoundTag tag = new CompoundTag();
-		
-		slotItems.forEach((slotType, itemStack) ->
-		{
-			// TODO get registry access
-			//tag.put(slotType.name(), itemStack.saveOptional(null));
-		});
-		
-		return tag;
 	}
 }
