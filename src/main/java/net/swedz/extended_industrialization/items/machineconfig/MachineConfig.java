@@ -16,7 +16,7 @@ public record MachineConfig(
 		Block machineBlock,
 		MachineConfigSlots slots,
 		MachineConfigOrientation orientation,
-		MachineConfigPanel upgrades
+		MachineConfigPanel panel
 ) implements MachineConfigApplicable<MachineBlockEntity>
 {
 	public static final Codec<MachineConfig> CODEC = RecordCodecBuilder.create((instance) -> instance
@@ -24,7 +24,7 @@ public record MachineConfig(
 					BuiltInRegistries.BLOCK.byNameCodec().fieldOf("machine_block").forGetter(MachineConfig::machineBlock),
 					MachineConfigSlots.CODEC.fieldOf("slots").forGetter(MachineConfig::slots),
 					MachineConfigOrientation.CODEC.fieldOf("orientation").forGetter(MachineConfig::orientation),
-					MachineConfigPanel.CODEC.fieldOf("panel").forGetter(MachineConfig::upgrades)
+					MachineConfigPanel.CODEC.fieldOf("panel").forGetter(MachineConfig::panel)
 			)
 			.apply(instance, MachineConfig::new));
 	
@@ -57,7 +57,7 @@ public record MachineConfig(
 		if(slots.apply(player, target, simulation) &&
 		   orientation.apply(player, target.orientation, simulation))
 		{
-			upgrades.apply(player, target, simulation);
+			panel.apply(player, target, simulation);
 			if(simulation.isActing())
 			{
 				target.invalidateCapabilities();

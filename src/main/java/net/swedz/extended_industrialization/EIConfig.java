@@ -27,7 +27,7 @@ public final class EIConfig
 				.defineInRange("local_wireless_charging_station_range", 32, 0, Integer.MAX_VALUE);
 		
 		ALLOW_UPGRADES_IN_PROCESSING_ARRAY = BUILDER
-				.comment("Whether upgrades should be allowed in the Processing Array")
+				.comment("Whether panel should be allowed in the Processing Array")
 				.define("allow_upgrades_in_processing_array", true);
 		
 		{
