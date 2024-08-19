@@ -114,7 +114,9 @@ public final class EITooltips
 					EIText.MACHINE_CONFIG_CARD_HELP_3.text(),
 					EIText.MACHINE_CONFIG_CARD_HELP_4.text(),
 					EIText.MACHINE_CONFIG_CARD_HELP_5.text(),
-					EIText.MACHINE_CONFIG_CARD_HELP_6.text()
+					EIText.MACHINE_CONFIG_CARD_HELP_6.text(),
+					EIText.MACHINE_CONFIG_CARD_HELP_7.text(),
+					EIText.MACHINE_CONFIG_CARD_HELP_8.text()
 			)
 	);
 	
