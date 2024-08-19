@@ -16,6 +16,11 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIDataComponents;
 import net.swedz.extended_industrialization.EIText;
 
@@ -24,11 +29,40 @@ import java.util.Optional;
 
 import static aztech.modern_industrialization.MITooltips.*;
 
+@EventBusSubscriber(modid = EI.ID)
 public final class MachineConfigCardItem extends Item
 {
 	public MachineConfigCardItem(Properties properties)
 	{
 		super(properties.stacksTo(1));
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	private static void onPlaceMachineWithConfig(BlockEvent.EntityPlaceEvent event)
+	{
+		if(event.getEntity() instanceof Player player)
+		{
+			ItemStack offhand = player.getItemInHand(InteractionHand.OFF_HAND);
+			if(offhand.has(EIDataComponents.MACHINE_CONFIG))
+			{
+				MachineConfig config = offhand.get(EIDataComponents.MACHINE_CONFIG);
+				
+				BlockEntity blockEntity = event.getLevel().getBlockEntity(event.getPos());
+				if(blockEntity instanceof MachineBlockEntity machine &&
+				   !(blockEntity instanceof MultiblockMachineBlockEntity))
+				{
+					if(config.apply(player, machine, Simulation.SIMULATE))
+					{
+						config.apply(player, machine, Simulation.ACT);
+						player.displayClientMessage(EIText.MACHINE_CONFIG_CARD_APPLY_SUCCESS.text(), true);
+					}
+					else
+					{
+						player.displayClientMessage(EIText.MACHINE_CONFIG_CARD_APPLY_FAILED.text(), true);
+					}
+				}
+			}
+		}
 	}
 	
 	@Override
