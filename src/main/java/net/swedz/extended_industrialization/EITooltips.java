@@ -1,12 +1,12 @@
 package net.swedz.extended_industrialization;
 
 import aztech.modern_industrialization.MIText;
+import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import com.google.common.collect.Lists;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.BlockItem;
 import net.swedz.extended_industrialization.items.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
@@ -18,9 +18,6 @@ import static aztech.modern_industrialization.MITooltips.*;
 
 public final class EITooltips
 {
-	public static final Parser<MutableComponent> MULCH_GANG_FOR_LIFE_PARSER = (component) ->
-			component.withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.GRAY);
-	
 	public static final Parser<Float> RATIO_PERCENTAGE_PARSER = (ratio) ->
 			Component.literal("%d%%".formatted((int) (ratio * 100))).withStyle(NUMBER_TEXT);
 	
@@ -29,6 +26,13 @@ public final class EITooltips
 		float minutes = (float) ticks / (60 * 20);
 		return Component.literal("%.2f".formatted(minutes)).withStyle(NUMBER_TEXT);
 	};
+	
+	public static final Parser<Integer> NUMBERED_LIST_BULLET_PARSER = (number) ->
+			Component.literal("%d)".formatted(number)).withStyle(NUMBER_TEXT);
+	
+	// TODO remove this in favor of the parser i will be adding in MITooltips
+	public static final Parser<String> KEYBIND = (keybind) ->
+			Component.keybind("key.%s".formatted(keybind)).withStyle(NUMBER_TEXT);
 	
 	public static final TooltipAttachment ENERGY_STORED_ITEM = TooltipAttachment.of(
 			(itemStack, item) ->
@@ -41,8 +45,11 @@ public final class EITooltips
 						long capacity = energyStorage.getCapacity();
 						if(capacity > 0)
 						{
-							return Optional.of(new Line(MIText.EnergyStored)
-									.arg(new NumberWithMax(energyStorage.getAmount(), capacity), EU_MAXED_PARSER).build());
+							return Optional.of(
+									MITooltips.line(MIText.EnergyStored)
+											.arg(new NumberWithMax(energyStorage.getAmount(), capacity), EU_MAXED_PARSER)
+											.build()
+							);
 						}
 					}
 				}
@@ -52,8 +59,8 @@ public final class EITooltips
 	public static final TooltipAttachment MULCH_GANG_FOR_LIFE = TooltipAttachment.ofMultilines(
 			EIItems.MULCH,
 			List.of(
-					MULCH_GANG_FOR_LIFE_PARSER.parse(EIText.MULCH_GANG_FOR_LIFE_0.text()),
-					MULCH_GANG_FOR_LIFE_PARSER.parse(EIText.MULCH_GANG_FOR_LIFE_1.text())
+					Line.of(EIText.MULCH_GANG_FOR_LIFE_0, DEFAULT_STYLE.withItalic(true)).build(),
+					Line.of(EIText.MULCH_GANG_FOR_LIFE_1, DEFAULT_STYLE.withItalic(true)).build()
 			)
 	).noShiftRequired();
 	
@@ -99,26 +106,62 @@ public final class EITooltips
 	public static final TooltipAttachment STEAM_CHAINSAW = TooltipAttachment.ofMultilines(
 			EIItems.STEAM_CHAINSAW,
 			List.of(
-					EIText.STEAM_CHAINSAW_1.text(),
-					EIText.STEAM_CHAINSAW_2.text(),
-					EIText.STEAM_CHAINSAW_3.text(),
-					EIText.STEAM_CHAINSAW_4.text()
+					Line.of(EIText.STEAM_CHAINSAW_1).arg("use", KEYBIND).build(),
+					Line.of(EIText.STEAM_CHAINSAW_2).arg("use", KEYBIND).build(),
+					Line.of(EIText.STEAM_CHAINSAW_3).build(),
+					Line.of(EIText.STEAM_CHAINSAW_4).arg("sneak", KEYBIND).arg("use", KEYBIND).build()
 			)
 	);
 	
 	public static final TooltipAttachment MACHINE_CONFIG_CARD = TooltipAttachment.ofMultilines(
 			EIItems.MACHINE_CONFIG_CARD,
 			List.of(
-					EIText.MACHINE_CONFIG_CARD_HELP_1.text(),
-					EIText.MACHINE_CONFIG_CARD_HELP_2.text(),
-					EIText.MACHINE_CONFIG_CARD_HELP_3.text(),
-					EIText.MACHINE_CONFIG_CARD_HELP_4.text(),
-					EIText.MACHINE_CONFIG_CARD_HELP_5.text(),
-					EIText.MACHINE_CONFIG_CARD_HELP_6.text(),
-					EIText.MACHINE_CONFIG_CARD_HELP_7.text(),
-					EIText.MACHINE_CONFIG_CARD_HELP_8.text()
+					Line.of(EIText.MACHINE_CONFIG_CARD_HELP_1).arg("sneak", KEYBIND).arg("use", KEYBIND).build(),
+					Line.of(EIText.MACHINE_CONFIG_CARD_HELP_2).arg("use", KEYBIND).build(),
+					Line.of(EIText.MACHINE_CONFIG_CARD_HELP_3).build(),
+					Line.of(EIText.MACHINE_CONFIG_CARD_HELP_4).arg("sneak", KEYBIND).arg("use", KEYBIND).build()
 			)
 	);
+	
+	public static final class Line
+	{
+		private final EIText text;
+		private final Style  style;
+		
+		private final List<Component> arguments = Lists.newArrayList();
+		
+		private Line(EIText text, Style style)
+		{
+			this.text = text;
+			this.style = style;
+		}
+		
+		public static Line of(EIText text, Style style)
+		{
+			return new Line(text, style);
+		}
+		
+		public static Line of(EIText text)
+		{
+			return of(text, DEFAULT_STYLE);
+		}
+		
+		public <T> Line arg(T arg, Parser<T> parser)
+		{
+			arguments.add(parser.parse(arg));
+			return this;
+		}
+		
+		public Line arg(Object arg)
+		{
+			return this.arg(arg, DEFAULT_PARSER);
+		}
+		
+		public Component build()
+		{
+			return text.text(arguments.toArray()).withStyle(style);
+		}
+	}
 	
 	public static void init()
 	{
