@@ -146,4 +146,10 @@ public final class MachineConfigCardItem extends Item
 	public record TooltipData(ItemStack machineItemStack) implements TooltipComponent
 	{
 	}
+	
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
+	{
+		return !newStack.is(oldStack.getItem());
+	}
 }
