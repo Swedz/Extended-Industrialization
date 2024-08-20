@@ -2,6 +2,7 @@ package net.swedz.extended_industrialization.machines.components.farmer.task;
 
 import net.minecraft.network.chat.Component;
 import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.components.farmer.task.tasks.FertilizingFarmerTask;
 import net.swedz.extended_industrialization.machines.components.farmer.task.tasks.HarvestingFarmerTask;
@@ -42,6 +43,9 @@ public enum FarmerTaskType
 	public Component tooltip()
 	{
 		return tooltipName == null || tooltipDescription == null ? null :
-				DEFAULT_PARSER.parse(EIText.FARMER_TASK.text(tooltipName.text().setStyle(NUMBER_TEXT), tooltipDescription.text()));
+				EITooltips.line(EIText.FARMER_TASK)
+						.arg(tooltipName.text().setStyle(NUMBER_TEXT))
+						.arg(tooltipDescription.text())
+						.build();
 	}
 }

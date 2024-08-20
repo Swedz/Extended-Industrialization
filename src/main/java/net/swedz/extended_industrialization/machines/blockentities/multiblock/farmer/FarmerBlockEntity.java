@@ -17,6 +17,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
 import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.machines.components.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.components.farmer.PlantingMode;
 import net.swedz.extended_industrialization.machines.components.farmer.task.FarmerProcessRates;
@@ -195,7 +196,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	public List<Component> getTooltips()
 	{
 		List<Component> lines = Lists.newArrayList();
-		lines.add(DEFAULT_PARSER.parse(EIText.FARMER_TASK_TOOLTIP.text(EU_PER_TICK_PARSER.parse(euCost))));
+		lines.add(EITooltips.line(EIText.FARMER_TASK_TOOLTIP).arg(euCost, EU_PER_TICK_PARSER).build());
 		lines.addAll(farmer.getTaskTooltipLines());
 		return lines;
 	}

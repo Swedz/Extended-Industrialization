@@ -59,8 +59,8 @@ public final class EITooltips
 	public static final TooltipAttachment MULCH_GANG_FOR_LIFE = TooltipAttachment.ofMultilines(
 			EIItems.MULCH,
 			List.of(
-					Line.of(EIText.MULCH_GANG_FOR_LIFE_0, DEFAULT_STYLE.withItalic(true)).build(),
-					Line.of(EIText.MULCH_GANG_FOR_LIFE_1, DEFAULT_STYLE.withItalic(true)).build()
+					line(EIText.MULCH_GANG_FOR_LIFE_0, DEFAULT_STYLE.withItalic(true)).build(),
+					line(EIText.MULCH_GANG_FOR_LIFE_1, DEFAULT_STYLE.withItalic(true)).build()
 			)
 	).noShiftRequired();
 	
@@ -73,7 +73,7 @@ public final class EITooltips
 							.get(BuiltInRegistries.BLOCK.getKey(((BlockItem) itemStack.getItem()).getBlock()));
 					int batchSize = tier.batchSize();
 					float euCostMultiplier = tier.euCostMultiplier();
-					return Optional.of(DEFAULT_PARSER.parse(EIText.COILS_LEF_TIER.text(DEFAULT_PARSER.parse(batchSize), RATIO_PERCENTAGE_PARSER.parse(euCostMultiplier))));
+					return Optional.of(line(EIText.COILS_LEF_TIER).arg(batchSize).arg(euCostMultiplier, RATIO_PERCENTAGE_PARSER).build());
 				}
 				else
 				{
@@ -88,15 +88,15 @@ public final class EITooltips
 				{
 					int euPerTick = photovoltaicCell.getEuPerTick();
 					List<Component> lines = Lists.newArrayList();
-					lines.add(DEFAULT_PARSER.parse(EIText.PHOTOVOLTAIC_CELL_EU.text(EU_PER_TICK_PARSER.parse(euPerTick))));
+					lines.add(line(EIText.PHOTOVOLTAIC_CELL_EU).arg(euPerTick, EU_PER_TICK_PARSER).build());
 					if(!photovoltaicCell.lastsForever())
 					{
 						int solarTicksRemaining = photovoltaicCell.getSolarTicksRemaining(itemStack);
-						lines.add(DEFAULT_PARSER.parse(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_MINUTES.text(TICKS_TO_MINUTES_PARSER.parse((long) solarTicksRemaining))));
+						lines.add(line(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_MINUTES).arg((long) solarTicksRemaining, TICKS_TO_MINUTES_PARSER).build());
 					}
 					else
 					{
-						lines.add(DEFAULT_PARSER.parse(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME.text(Component.literal("\u221E").withStyle(NUMBER_TEXT))));
+						lines.add(line(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME).arg(Component.literal("\u221E").withStyle(NUMBER_TEXT)).build());
 					}
 					return Optional.of(lines);
 				}
@@ -106,22 +106,32 @@ public final class EITooltips
 	public static final TooltipAttachment STEAM_CHAINSAW = TooltipAttachment.ofMultilines(
 			EIItems.STEAM_CHAINSAW,
 			List.of(
-					Line.of(EIText.STEAM_CHAINSAW_1).arg("use", KEYBIND).build(),
-					Line.of(EIText.STEAM_CHAINSAW_2).arg("use", KEYBIND).build(),
-					Line.of(EIText.STEAM_CHAINSAW_3).build(),
-					Line.of(EIText.STEAM_CHAINSAW_4).arg("sneak", KEYBIND).arg("use", KEYBIND).build()
+					line(EIText.STEAM_CHAINSAW_1).arg("use", KEYBIND).build(),
+					line(EIText.STEAM_CHAINSAW_2).arg("use", KEYBIND).build(),
+					line(EIText.STEAM_CHAINSAW_3).build(),
+					line(EIText.STEAM_CHAINSAW_4).arg("sneak", KEYBIND).arg("use", KEYBIND).build()
 			)
 	);
 	
 	public static final TooltipAttachment MACHINE_CONFIG_CARD = TooltipAttachment.ofMultilines(
 			EIItems.MACHINE_CONFIG_CARD,
 			List.of(
-					Line.of(EIText.MACHINE_CONFIG_CARD_HELP_1).arg("sneak", KEYBIND).arg("use", KEYBIND).build(),
-					Line.of(EIText.MACHINE_CONFIG_CARD_HELP_2).arg("use", KEYBIND).build(),
-					Line.of(EIText.MACHINE_CONFIG_CARD_HELP_3).build(),
-					Line.of(EIText.MACHINE_CONFIG_CARD_HELP_4).arg("sneak", KEYBIND).arg("use", KEYBIND).build()
+					line(EIText.MACHINE_CONFIG_CARD_HELP_1).arg("sneak", KEYBIND).arg("use", KEYBIND).build(),
+					line(EIText.MACHINE_CONFIG_CARD_HELP_2).arg("use", KEYBIND).build(),
+					line(EIText.MACHINE_CONFIG_CARD_HELP_3).build(),
+					line(EIText.MACHINE_CONFIG_CARD_HELP_4).arg("sneak", KEYBIND).arg("use", KEYBIND).build()
 			)
 	);
+	
+	public static Line line(EIText text, Style style)
+	{
+		return new Line(text, style);
+	}
+	
+	public static Line line(EIText text)
+	{
+		return line(text, DEFAULT_STYLE);
+	}
 	
 	public static final class Line
 	{
@@ -134,16 +144,6 @@ public final class EITooltips
 		{
 			this.text = text;
 			this.style = style;
-		}
-		
-		public static Line of(EIText text, Style style)
-		{
-			return new Line(text, style);
-		}
-		
-		public static Line of(EIText text)
-		{
-			return of(text, DEFAULT_STYLE);
 		}
 		
 		public <T> Line arg(T arg, Parser<T> parser)
