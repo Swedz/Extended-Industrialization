@@ -5,7 +5,7 @@
   "item_inputs": [
     {
       "amount": 4,
-      "item": "extended_industrialization:granite_dust"
+      "tag": "c:dusts/granite"
     }
   ],
   "item_outputs": [

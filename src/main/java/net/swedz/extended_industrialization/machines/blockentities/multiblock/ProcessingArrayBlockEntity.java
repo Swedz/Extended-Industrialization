@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.swedz.extended_industrialization.EIConfig;
 import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.machines.components.craft.processingarray.ProcessingArrayMachineComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.processingarraymachineslot.ProcessingArrayMachineSlot;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformer;
@@ -30,7 +31,6 @@ import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.members.Predica
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static aztech.modern_industrialization.MITooltips.*;
 import static net.swedz.tesseract.neoforge.compat.mi.builtinhook.TesseractMITooltips.*;
 
 public final class ProcessingArrayBlockEntity extends AbstractElectricMultipliedCraftingMultiblockBlockEntity
@@ -114,11 +114,11 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 	public List<Component> getTooltips()
 	{
 		List<Component> lines = Lists.newArrayList();
-		lines.add(DEFAULT_PARSER.parse(EIText.PROCESSING_ARRAY_RECIPE.text()));
-		lines.add(DEFAULT_PARSER.parse(EIText.PROCESSING_ARRAY_BATCH_SIZE.text()));
+		lines.add(EITooltips.line(EIText.PROCESSING_ARRAY_RECIPE).build());
+		lines.add(EITooltips.line(EIText.PROCESSING_ARRAY_BATCH_SIZE).build());
 		if(EIConfig.processingArrayEuCostMultiplier != 1)
 		{
-			lines.add(DEFAULT_PARSER.parse(EIText.PROCESSING_ARRAY_EU_COST_MULTIPLIER.text(EU_COST_TRANSFORMER_PARSER.parse(this.getEuCostTransformer()))));
+			lines.add(EITooltips.line(EIText.PROCESSING_ARRAY_EU_COST_MULTIPLIER).arg(this.getEuCostTransformer(), EU_COST_TRANSFORMER_PARSER).build());
 		}
 		return lines;
 	}

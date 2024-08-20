@@ -237,16 +237,16 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 	{
 		List<Component> tooltips = Lists.newArrayList();
 		tooltips.add(
-				new MITooltips.Line(MIText.MaxEuProductionSteam)
+				MITooltips.line(MIText.MaxEuProductionSteam)
 						.arg(maxEuProduction, MITooltips.EU_PER_TICK_PARSER)
 						.arg(MIFluids.STEAM)
 						.build()
 		);
 		tooltips.add(
-				MITooltips.DEFAULT_PARSER.parse(EIText.SOLAR_BOILER_CALCIFICATION.text(
-						EITooltips.RATIO_PERCENTAGE_PARSER.parse(SolarBoilerCalcificationComponent.MINIMUM_EFFICIENCY),
-						MITooltips.FLUID_PARSER.parse(EIFluids.DISTILLED_WATER.asFluid())
-				))
+				EITooltips.line(EIText.SOLAR_BOILER_CALCIFICATION)
+						.arg(SolarBoilerCalcificationComponent.MINIMUM_EFFICIENCY, EITooltips.RATIO_PERCENTAGE_PARSER)
+						.arg(EIFluids.DISTILLED_WATER.asFluid())
+						.build()
 		);
 		return tooltips;
 	}

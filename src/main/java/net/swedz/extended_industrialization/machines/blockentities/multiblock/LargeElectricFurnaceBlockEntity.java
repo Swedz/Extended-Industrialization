@@ -17,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.datamaps.LargeElectricFurnaceTier;
 import net.swedz.tesseract.neoforge.TesseractText;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformer;
@@ -74,7 +75,7 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 	{
 		return List.of(
 				DEFAULT_PARSER.parse(TesseractText.MI_MACHINE_BATCHER_RECIPE.text(MACHINE_RECIPE_TYPE_PARSER.parse(true, this.getRecipeType()))),
-				DEFAULT_PARSER.parse(EIText.MACHINE_BATCHER_COILS.text())
+				EITooltips.line(EIText.MACHINE_BATCHER_COILS).build()
 		);
 	}
 	

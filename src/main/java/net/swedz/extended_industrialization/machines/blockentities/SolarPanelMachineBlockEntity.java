@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.machines.blockentities;
 
 import aztech.modern_industrialization.MICapabilities;
-import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
@@ -31,6 +30,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.machines.components.solar.SolarSunlightComponent;
 import net.swedz.extended_industrialization.machines.components.solar.electric.SolarGeneratorComponent;
 import net.swedz.extended_industrialization.machines.guicomponents.solarefficiency.SolarEfficiencyBar;
@@ -162,13 +162,9 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	public List<Component> getTooltips()
 	{
 		List<Component> tooltips = Lists.newArrayList();
-		tooltips.add(MITooltips.DEFAULT_PARSER.parse(EIText.SOLAR_PANEL_PHOTOVOLTAIC_CELL.text()));
-		tooltips.add(MITooltips.DEFAULT_PARSER.parse(EIText.SOLAR_PANEL_SUNLIGHT.text()));
-		tooltips.add(
-				MITooltips.DEFAULT_PARSER.parse(EIText.SOLAR_PANEL_DISTILLED_WATER.text(
-						MITooltips.FLUID_PARSER.parse(EIFluids.DISTILLED_WATER.asFluid())
-				))
-		);
+		tooltips.add(EITooltips.line(EIText.SOLAR_PANEL_PHOTOVOLTAIC_CELL).build());
+		tooltips.add(EITooltips.line(EIText.SOLAR_PANEL_SUNLIGHT).build());
+		tooltips.add(EITooltips.line(EIText.SOLAR_PANEL_DISTILLED_WATER).arg(EIFluids.DISTILLED_WATER.asFluid()).build());
 		return tooltips;
 	}
 	

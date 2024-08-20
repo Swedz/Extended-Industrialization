@@ -2,14 +2,26 @@ package net.swedz.extended_industrialization.items.machineconfig;
 
 import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.util.Simulation;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 
 record MachineConfigOrientation(
 		Direction facingDirection, boolean hasOutput, Direction outputDirection, boolean extractItems,
 		boolean extractFluids
-) implements MachineConfigSerializable, MachineConfigApplicable<OrientationComponent>
+) implements MachineConfigApplicable<OrientationComponent>
 {
+	public static final Codec<MachineConfigOrientation> CODEC = RecordCodecBuilder.create((instance) -> instance
+			.group(
+					Direction.CODEC.fieldOf("facing_direction").forGetter(MachineConfigOrientation::facingDirection),
+					Codec.BOOL.fieldOf("has_output").forGetter(MachineConfigOrientation::hasOutput),
+					Direction.CODEC.fieldOf("output_direction").forGetter(MachineConfigOrientation::outputDirection),
+					Codec.BOOL.fieldOf("extract_items").forGetter(MachineConfigOrientation::extractItems),
+					Codec.BOOL.fieldOf("extract_fluids").forGetter(MachineConfigOrientation::extractFluids)
+			)
+			.apply(instance, MachineConfigOrientation::new));
+	
 	public static MachineConfigOrientation from(OrientationComponent component)
 	{
 		return new MachineConfigOrientation(
@@ -21,26 +33,6 @@ record MachineConfigOrientation(
 		);
 	}
 	
-	public static MachineConfigOrientation deserialize(CompoundTag tag)
-	{
-		Direction facingDirection = Direction.from3DDataValue(tag.getInt("facingDirection"));
-		boolean hasOutput = tag.getBoolean("hasOutput");
-		Direction outputDirection = null;
-		if(hasOutput)
-		{
-			outputDirection = Direction.from3DDataValue(tag.getInt("outputDirection"));
-		}
-		boolean extractItems = tag.getBoolean("extractItems");
-		boolean extractFluids = tag.getBoolean("extractFluids");
-		return new MachineConfigOrientation(
-				facingDirection,
-				hasOutput,
-				outputDirection,
-				extractItems,
-				extractFluids
-		);
-	}
-	
 	@Override
 	public boolean matches(OrientationComponent target)
 	{
@@ -48,7 +40,7 @@ record MachineConfigOrientation(
 	}
 	
 	@Override
-	public boolean apply(OrientationComponent target, Simulation simulation)
+	public boolean apply(Player player, OrientationComponent target, Simulation simulation)
 	{
 		if(!this.matches(target))
 		{
@@ -67,20 +59,5 @@ record MachineConfigOrientation(
 		}
 		
 		return true;
-	}
-	
-	@Override
-	public CompoundTag serialize()
-	{
-		CompoundTag tag = new CompoundTag();
-		tag.putInt("facingDirection", facingDirection.get3DDataValue());
-		tag.putBoolean("hasOutput", hasOutput);
-		if(hasOutput)
-		{
-			tag.putInt("outputDirection", outputDirection.get3DDataValue());
-			tag.putBoolean("extractItems", extractItems);
-			tag.putBoolean("extractFluids", extractFluids);
-		}
-		return tag;
 	}
 }
