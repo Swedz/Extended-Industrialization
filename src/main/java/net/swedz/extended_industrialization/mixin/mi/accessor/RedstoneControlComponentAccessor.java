@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.mixin.mi.accessor;
 
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
-import aztech.modern_industrialization.machines.components.UpgradeComponent;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.api.ComponentStackHolder;
 import org.spongepowered.asm.mixin.Mixin;

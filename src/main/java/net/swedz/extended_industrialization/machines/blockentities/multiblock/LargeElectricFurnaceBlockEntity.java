@@ -138,7 +138,7 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 	
 	private static void registerReiShapes()
 	{
-		ReiMachineRecipes.multiblockShapes.removeIf((e) -> e.machine().equals("large_electric_furnace"));
+		ReiMachineRecipes.multiblockShapes.removeIf((e) -> e.machine().equals(EI.id("large_electric_furnace")));
 		int index = 0;
 		for(ShapeTemplate shapeTemplate : SHAPE_TEMPLATES)
 		{
