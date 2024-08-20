@@ -156,7 +156,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				"packer", "granite_from_dust", MIMachineRecipeTypes.PACKER,
 				2, 5 * 20,
 				(r) -> r
-						.addItemInput(EIItems.GRANITE_DUST, 4)
+						.addItemInput(EITags.itemCommon("dusts/granite"), 4)
 						.addItemOutput(Items.GRANITE, 1),
 				output
 		);

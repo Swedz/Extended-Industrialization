@@ -21,7 +21,7 @@
   "item_inputs": [
     {
       "amount": 32,
-      "item": "extended_industrialization:granite_dust"
+      "tag": "c:dusts/granite"
     }
   ]
 }
