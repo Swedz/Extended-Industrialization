@@ -5,6 +5,8 @@ import net.minecraft.network.chat.MutableComponent;
 
 public enum EIText
 {
+	BREWERY_BREWS_MULTIPLE("Brews %s potions at a time."),
+	BREWERY_REQUIRES_BLAZING_ESSENCE("Requires %s to brew potions."),
 	CALCIFICATION_PERCENTAGE("Calcification : %d %%"),
 	COILS_LEF_TIER("Runs LEF in batches of up to %d at %s the EU cost."),
 	FARMER_NOT_TILLING("Not Tilling"),

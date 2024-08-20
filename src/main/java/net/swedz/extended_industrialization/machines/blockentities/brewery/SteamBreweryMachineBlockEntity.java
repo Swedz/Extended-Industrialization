@@ -88,7 +88,10 @@ public final class SteamBreweryMachineBlockEntity extends BreweryMachineBlockEnt
 	@Override
 	public List<Component> getTooltips()
 	{
-		return overclockComponent.getTooltips();
+		List<Component> tooltips = Lists.newArrayList();
+		tooltips.addAll(overclockComponent.getTooltips());
+		tooltips.addAll(super.getTooltips());
+		return tooltips;
 	}
 	
 	@Override

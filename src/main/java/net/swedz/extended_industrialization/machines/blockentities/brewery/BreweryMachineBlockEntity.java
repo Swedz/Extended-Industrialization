@@ -18,9 +18,11 @@ import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
+import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIMachines;
+import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.EITooltips;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -152,6 +154,9 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 	@Override
 	public List<Component> getTooltips()
 	{
-		return Collections.emptyList();
+		return List.of(
+				EITooltips.line(EIText.BREWERY_REQUIRES_BLAZING_ESSENCE).arg(EIFluids.BLAZING_ESSENCE.asFluid()).build(),
+				EITooltips.line(EIText.BREWERY_BREWS_MULTIPLE).arg(4).build()
+		);
 	}
 }
