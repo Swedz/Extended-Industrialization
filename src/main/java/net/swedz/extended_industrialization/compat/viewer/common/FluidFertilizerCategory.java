@@ -64,11 +64,4 @@ public final class FluidFertilizerCategory extends ViewerCategory<Fluid>
 		Component cost = EIText.FLUID_FERTILIZERS_CONSUMES.text(fertilizerPotency.mbToConsumePerFertilizerTick());
 		widgets.secondaryText(cost, 40, 24);
 	}
-	
-	@Override
-	public ResourceLocation getRecipeId(Fluid fluid)
-	{
-		ResourceLocation fluidId = BuiltInRegistries.FLUID.getKey(fluid);
-		return EI.id("fluid_fertilizers/%s/%s".formatted(fluidId.getNamespace(), fluidId.getPath()));
-	}
 }
