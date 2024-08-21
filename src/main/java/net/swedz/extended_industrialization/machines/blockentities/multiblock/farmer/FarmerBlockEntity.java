@@ -197,7 +197,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	public List<Component> getTooltips()
 	{
 		List<Component> lines = Lists.newArrayList();
-		lines.add(EITooltips.line(EIText.FARMER_TASK_TOOLTIP).arg(euCost, EU_PER_TICK_PARSER).build());
+		lines.add(EITooltips.line(EIText.FARMER_TASK_TOOLTIP).arg(euCost, EU_PER_TICK_PARSER));
 		lines.addAll(farmer.getTaskTooltipLines());
 		return lines;
 	}

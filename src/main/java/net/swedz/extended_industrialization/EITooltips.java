@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization;
 
 import aztech.modern_industrialization.MIText;
-import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import com.google.common.collect.Lists;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -10,6 +9,10 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.BlockItem;
 import net.swedz.extended_industrialization.items.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
+import net.swedz.tesseract.neoforge.compat.mi.tooltips.MICompatibleTextLine;
+import net.swedz.tesseract.neoforge.tooltips.Parser;
+import net.swedz.tesseract.neoforge.tooltips.TooltipAttachment;
+import net.swedz.tesseract.neoforge.tooltips.TranslatableTextEnum;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,9 +33,7 @@ public final class EITooltips
 	public static final Parser<Integer> NUMBERED_LIST_BULLET_PARSER = (number) ->
 			Component.literal("%d)".formatted(number)).withStyle(NUMBER_TEXT);
 	
-	// TODO remove this in favor of the parser i will be adding in MITooltips
-	public static final Parser<String> KEYBIND = (keybind) ->
-			Component.keybind("key.%s".formatted(keybind)).withStyle(NUMBER_TEXT);
+	public static final Parser<String> KEYBIND_PARSER = Parser.KEYBIND.withStyle(NUMBER_TEXT);
 	
 	public static final TooltipAttachment ENERGY_STORED_ITEM = TooltipAttachment.of(
 			(itemStack, item) ->
@@ -46,9 +47,8 @@ public final class EITooltips
 						if(capacity > 0)
 						{
 							return Optional.of(
-									MITooltips.line(MIText.EnergyStored)
+									line(MIText.EnergyStored)
 											.arg(new NumberWithMax(energyStorage.getAmount(), capacity), EU_MAXED_PARSER)
-											.build()
 							);
 						}
 					}
@@ -59,8 +59,8 @@ public final class EITooltips
 	public static final TooltipAttachment MULCH_GANG_FOR_LIFE = TooltipAttachment.ofMultilines(
 			EIItems.MULCH,
 			List.of(
-					line(EIText.MULCH_GANG_FOR_LIFE_0, DEFAULT_STYLE.withItalic(true)).build(),
-					line(EIText.MULCH_GANG_FOR_LIFE_1, DEFAULT_STYLE.withItalic(true)).build()
+					line(EIText.MULCH_GANG_FOR_LIFE_0, DEFAULT_STYLE.withItalic(true)),
+					line(EIText.MULCH_GANG_FOR_LIFE_1, DEFAULT_STYLE.withItalic(true))
 			)
 	).noShiftRequired();
 	
@@ -73,7 +73,7 @@ public final class EITooltips
 							.get(BuiltInRegistries.BLOCK.getKey(((BlockItem) itemStack.getItem()).getBlock()));
 					int batchSize = tier.batchSize();
 					float euCostMultiplier = tier.euCostMultiplier();
-					return Optional.of(line(EIText.COILS_LEF_TIER).arg(batchSize).arg(euCostMultiplier, RATIO_PERCENTAGE_PARSER).build());
+					return Optional.of(line(EIText.COILS_LEF_TIER).arg(batchSize).arg(euCostMultiplier, RATIO_PERCENTAGE_PARSER));
 				}
 				else
 				{
@@ -88,15 +88,15 @@ public final class EITooltips
 				{
 					int euPerTick = photovoltaicCell.getEuPerTick();
 					List<Component> lines = Lists.newArrayList();
-					lines.add(line(EIText.PHOTOVOLTAIC_CELL_EU).arg(euPerTick, EU_PER_TICK_PARSER).build());
+					lines.add(line(EIText.PHOTOVOLTAIC_CELL_EU).arg(euPerTick, EU_PER_TICK_PARSER));
 					if(!photovoltaicCell.lastsForever())
 					{
 						int solarTicksRemaining = photovoltaicCell.getSolarTicksRemaining(itemStack);
-						lines.add(line(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_MINUTES).arg((long) solarTicksRemaining, TICKS_TO_MINUTES_PARSER).build());
+						lines.add(line(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_MINUTES).arg((long) solarTicksRemaining, TICKS_TO_MINUTES_PARSER));
 					}
 					else
 					{
-						lines.add(line(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME).arg(Component.literal("\u221E").withStyle(NUMBER_TEXT)).build());
+						lines.add(line(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME).arg(Component.literal("\u221E").withStyle(NUMBER_TEXT)));
 					}
 					return Optional.of(lines);
 				}
@@ -106,61 +106,41 @@ public final class EITooltips
 	public static final TooltipAttachment STEAM_CHAINSAW = TooltipAttachment.ofMultilines(
 			EIItems.STEAM_CHAINSAW,
 			List.of(
-					line(EIText.STEAM_CHAINSAW_1).arg("use", KEYBIND).build(),
-					line(EIText.STEAM_CHAINSAW_2).arg("use", KEYBIND).build(),
-					line(EIText.STEAM_CHAINSAW_3).build(),
-					line(EIText.STEAM_CHAINSAW_4).arg("sneak", KEYBIND).arg("use", KEYBIND).build()
+					line(EIText.STEAM_CHAINSAW_1).arg("use", KEYBIND_PARSER),
+					line(EIText.STEAM_CHAINSAW_2).arg("use", KEYBIND_PARSER),
+					line(EIText.STEAM_CHAINSAW_3),
+					line(EIText.STEAM_CHAINSAW_4).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
 			)
 	);
 	
 	public static final TooltipAttachment MACHINE_CONFIG_CARD = TooltipAttachment.ofMultilines(
 			EIItems.MACHINE_CONFIG_CARD,
 			List.of(
-					line(EIText.MACHINE_CONFIG_CARD_HELP_1).arg("sneak", KEYBIND).arg("use", KEYBIND).build(),
-					line(EIText.MACHINE_CONFIG_CARD_HELP_2).arg("use", KEYBIND).build(),
-					line(EIText.MACHINE_CONFIG_CARD_HELP_3).build(),
-					line(EIText.MACHINE_CONFIG_CARD_HELP_4).arg("sneak", KEYBIND).arg("use", KEYBIND).build()
+					line(EIText.MACHINE_CONFIG_CARD_HELP_1).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER),
+					line(EIText.MACHINE_CONFIG_CARD_HELP_2).arg("use", KEYBIND_PARSER),
+					line(EIText.MACHINE_CONFIG_CARD_HELP_3),
+					line(EIText.MACHINE_CONFIG_CARD_HELP_4).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
 			)
 	);
 	
-	public static Line line(EIText text, Style style)
+	public static MICompatibleTextLine line(TranslatableTextEnum text, Style style)
 	{
-		return new Line(text, style);
+		return new MICompatibleTextLine(text, style);
 	}
 	
-	public static Line line(EIText text)
+	public static MICompatibleTextLine line(MIText text, Style style)
 	{
-		return line(text, DEFAULT_STYLE);
+		return new MICompatibleTextLine(text, style);
 	}
 	
-	public static final class Line
+	public static MICompatibleTextLine line(TranslatableTextEnum text)
 	{
-		private final EIText text;
-		private final Style  style;
-		
-		private final List<Component> arguments = Lists.newArrayList();
-		
-		private Line(EIText text, Style style)
-		{
-			this.text = text;
-			this.style = style;
-		}
-		
-		public <T> Line arg(T arg, Parser<T> parser)
-		{
-			arguments.add(parser.parse(arg));
-			return this;
-		}
-		
-		public Line arg(Object arg)
-		{
-			return this.arg(arg, DEFAULT_PARSER);
-		}
-		
-		public Component build()
-		{
-			return text.text(arguments.toArray()).withStyle(style);
-		}
+		return new MICompatibleTextLine(text, DEFAULT_STYLE);
+	}
+	
+	public static MICompatibleTextLine line(MIText text)
+	{
+		return new MICompatibleTextLine(text);
 	}
 	
 	public static void init()

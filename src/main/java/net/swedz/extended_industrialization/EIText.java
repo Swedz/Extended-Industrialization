@@ -1,9 +1,8 @@
 package net.swedz.extended_industrialization;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.swedz.tesseract.neoforge.tooltips.TranslatableTextEnum;
 
-public enum EIText
+public enum EIText implements TranslatableTextEnum
 {
 	BREWERY_BREWS_MULTIPLE("Brews %s potions at a time."),
 	BREWERY_REQUIRES_BLAZING_ESSENCE("Requires %s to brew potions."),
@@ -70,23 +69,15 @@ public enum EIText
 		this.englishText = englishText;
 	}
 	
+	@Override
 	public String englishText()
 	{
 		return englishText;
 	}
 	
+	@Override
 	public String getTranslationKey()
 	{
 		return "text.%s.%s".formatted(EI.ID, this.name().toLowerCase());
-	}
-	
-	public MutableComponent text()
-	{
-		return Component.translatable(this.getTranslationKey());
-	}
-	
-	public MutableComponent text(Object... args)
-	{
-		return Component.translatable(this.getTranslationKey(), args);
 	}
 }

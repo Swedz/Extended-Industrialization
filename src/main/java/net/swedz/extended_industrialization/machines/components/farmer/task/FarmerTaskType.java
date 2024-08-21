@@ -45,7 +45,6 @@ public enum FarmerTaskType
 		return tooltipName == null || tooltipDescription == null ? null :
 				EITooltips.line(EIText.FARMER_TASK)
 						.arg(tooltipName.text().setStyle(NUMBER_TEXT))
-						.arg(tooltipDescription.text())
-						.build();
+						.arg(tooltipDescription.text());
 	}
 }

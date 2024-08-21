@@ -155,8 +155,8 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 	public List<Component> getTooltips()
 	{
 		return List.of(
-				EITooltips.line(EIText.BREWERY_REQUIRES_BLAZING_ESSENCE).arg(EIFluids.BLAZING_ESSENCE.asFluid()).build(),
-				EITooltips.line(EIText.BREWERY_BREWS_MULTIPLE).arg(4).build()
+				EITooltips.line(EIText.BREWERY_REQUIRES_BLAZING_ESSENCE).arg(EIFluids.BLAZING_ESSENCE.asFluid()),
+				EITooltips.line(EIText.BREWERY_BREWS_MULTIPLE).arg(4)
 		);
 	}
 }

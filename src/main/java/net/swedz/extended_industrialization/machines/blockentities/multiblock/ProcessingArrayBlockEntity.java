@@ -115,11 +115,11 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 	public List<Component> getTooltips()
 	{
 		List<Component> lines = Lists.newArrayList();
-		lines.add(EITooltips.line(EIText.PROCESSING_ARRAY_RECIPE).build());
-		lines.add(EITooltips.line(EIText.PROCESSING_ARRAY_BATCH_SIZE).build());
+		lines.add(EITooltips.line(EIText.PROCESSING_ARRAY_RECIPE));
+		lines.add(EITooltips.line(EIText.PROCESSING_ARRAY_BATCH_SIZE));
 		if(EIConfig.processingArrayEuCostMultiplier != 1)
 		{
-			lines.add(EITooltips.line(EIText.PROCESSING_ARRAY_EU_COST_MULTIPLIER).arg(this.getEuCostTransformer(), EU_COST_TRANSFORMER_PARSER).build());
+			lines.add(EITooltips.line(EIText.PROCESSING_ARRAY_EU_COST_MULTIPLIER).arg(this.getEuCostTransformer(), EU_COST_TRANSFORMER_PARSER));
 		}
 		return lines;
 	}

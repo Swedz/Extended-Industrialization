@@ -163,9 +163,9 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	public List<Component> getTooltips()
 	{
 		List<Component> tooltips = Lists.newArrayList();
-		tooltips.add(EITooltips.line(EIText.SOLAR_PANEL_PHOTOVOLTAIC_CELL).build());
-		tooltips.add(EITooltips.line(EIText.SOLAR_PANEL_SUNLIGHT).build());
-		tooltips.add(EITooltips.line(EIText.SOLAR_PANEL_DISTILLED_WATER).arg(EIFluids.DISTILLED_WATER.asFluid()).build());
+		tooltips.add(EITooltips.line(EIText.SOLAR_PANEL_PHOTOVOLTAIC_CELL));
+		tooltips.add(EITooltips.line(EIText.SOLAR_PANEL_SUNLIGHT));
+		tooltips.add(EITooltips.line(EIText.SOLAR_PANEL_DISTILLED_WATER).arg(EIFluids.DISTILLED_WATER.asFluid()));
 		return tooltips;
 	}
 	

@@ -75,7 +75,7 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 	{
 		return List.of(
 				DEFAULT_PARSER.parse(TesseractText.MI_MACHINE_BATCHER_RECIPE.text(MACHINE_RECIPE_TYPE_PARSER.parse(true, this.getRecipeType()))),
-				EITooltips.line(EIText.MACHINE_BATCHER_COILS).build()
+				EITooltips.line(EIText.MACHINE_BATCHER_COILS)
 		);
 	}
 	
