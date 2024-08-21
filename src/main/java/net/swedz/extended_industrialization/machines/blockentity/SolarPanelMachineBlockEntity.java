@@ -31,10 +31,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.machines.component.solar.SolarSunlightComponent;
 import net.swedz.extended_industrialization.machines.component.solar.electric.SolarGeneratorComponent;
 import net.swedz.extended_industrialization.machines.guicomponent.solarefficiency.SolarEfficiencyBar;
+import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
 
 import java.util.List;
 
@@ -163,9 +163,9 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	public List<Component> getTooltips()
 	{
 		List<Component> tooltips = Lists.newArrayList();
-		tooltips.add(EITooltips.line(EIText.SOLAR_PANEL_PHOTOVOLTAIC_CELL));
-		tooltips.add(EITooltips.line(EIText.SOLAR_PANEL_SUNLIGHT));
-		tooltips.add(EITooltips.line(EIText.SOLAR_PANEL_DISTILLED_WATER).arg(EIFluids.DISTILLED_WATER.asFluid()));
+		tooltips.add(MICompatibleTextLine.line(EIText.SOLAR_PANEL_PHOTOVOLTAIC_CELL));
+		tooltips.add(MICompatibleTextLine.line(EIText.SOLAR_PANEL_SUNLIGHT));
+		tooltips.add(MICompatibleTextLine.line(EIText.SOLAR_PANEL_DISTILLED_WATER).arg(EIFluids.DISTILLED_WATER.asFluid()));
 		return tooltips;
 	}
 	

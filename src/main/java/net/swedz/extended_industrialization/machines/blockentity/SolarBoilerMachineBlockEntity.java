@@ -42,6 +42,7 @@ import net.swedz.extended_industrialization.machines.component.solar.SolarSunlig
 import net.swedz.extended_industrialization.machines.component.solar.boiler.SolarBoilerCalcificationComponent;
 import net.swedz.extended_industrialization.machines.guicomponent.solarefficiency.SolarEfficiencyBar;
 import net.swedz.tesseract.neoforge.compat.mi.component.SteamProductionComponent;
+import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
 
 import java.util.List;
 
@@ -238,12 +239,12 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 	{
 		List<Component> tooltips = Lists.newArrayList();
 		tooltips.add(
-				EITooltips.line(MIText.MaxEuProductionSteam)
+				MICompatibleTextLine.line(MIText.MaxEuProductionSteam)
 						.arg(maxEuProduction, MITooltips.EU_PER_TICK_PARSER)
 						.arg(MIFluids.STEAM)
 		);
 		tooltips.add(
-				EITooltips.line(EIText.SOLAR_BOILER_CALCIFICATION)
+				MICompatibleTextLine.line(EIText.SOLAR_BOILER_CALCIFICATION)
 						.arg(SolarBoilerCalcificationComponent.MINIMUM_EFFICIENCY, EITooltips.RATIO_PERCENTAGE_PARSER)
 						.arg(EIFluids.DISTILLED_WATER.asFluid())
 		);

@@ -2,13 +2,13 @@ package net.swedz.extended_industrialization.machines.component.farmer.task;
 
 import net.minecraft.network.chat.Component;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.machines.component.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.component.farmer.task.tasks.FertilizingFarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.tasks.HarvestingFarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.tasks.HydratingFarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.tasks.PlantingFarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.tasks.TillingFarmerTask;
+import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
 
 import static aztech.modern_industrialization.MITooltips.*;
 
@@ -43,7 +43,7 @@ public enum FarmerTaskType
 	public Component tooltip()
 	{
 		return tooltipName == null || tooltipDescription == null ? null :
-				EITooltips.line(EIText.FARMER_TASK)
+				MICompatibleTextLine.line(EIText.FARMER_TASK)
 						.arg(tooltipName.text().setStyle(NUMBER_TEXT))
 						.arg(tooltipDescription.text());
 	}

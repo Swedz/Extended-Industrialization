@@ -5,19 +5,17 @@ import aztech.modern_industrialization.api.energy.EnergyApi;
 import com.google.common.collect.Lists;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.BlockItem;
 import net.swedz.extended_industrialization.items.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
-import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 import net.swedz.tesseract.neoforge.tooltip.TooltipAttachment;
-import net.swedz.tesseract.neoforge.tooltip.TranslatableTextEnum;
 
 import java.util.List;
 import java.util.Optional;
 
 import static aztech.modern_industrialization.MITooltips.*;
+import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.line;
 
 public final class EITooltips
 {
@@ -122,26 +120,6 @@ public final class EITooltips
 					line(EIText.MACHINE_CONFIG_CARD_HELP_4).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
 			)
 	);
-	
-	public static MICompatibleTextLine line(TranslatableTextEnum text, Style style)
-	{
-		return new MICompatibleTextLine(text, style);
-	}
-	
-	public static MICompatibleTextLine line(MIText text, Style style)
-	{
-		return new MICompatibleTextLine(text, style);
-	}
-	
-	public static MICompatibleTextLine line(TranslatableTextEnum text)
-	{
-		return new MICompatibleTextLine(text, DEFAULT_STYLE);
-	}
-	
-	public static MICompatibleTextLine line(MIText text)
-	{
-		return new MICompatibleTextLine(text);
-	}
 	
 	public static void init()
 	{

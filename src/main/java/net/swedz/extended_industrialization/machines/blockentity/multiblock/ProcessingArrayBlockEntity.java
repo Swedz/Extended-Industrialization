@@ -21,13 +21,13 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIConfig;
 import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.machines.component.craft.processingarray.ProcessingArrayMachineComponent;
 import net.swedz.extended_industrialization.machines.guicomponent.processingarraymachineslot.ProcessingArrayMachineSlot;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformer;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformers;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.multiplied.AbstractElectricMultipliedCraftingMultiblockBlockEntity;
 import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.member.PredicateSimpleMember;
+import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -115,11 +115,11 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 	public List<Component> getTooltips()
 	{
 		List<Component> lines = Lists.newArrayList();
-		lines.add(EITooltips.line(EIText.PROCESSING_ARRAY_RECIPE));
-		lines.add(EITooltips.line(EIText.PROCESSING_ARRAY_BATCH_SIZE));
+		lines.add(MICompatibleTextLine.line(EIText.PROCESSING_ARRAY_RECIPE));
+		lines.add(MICompatibleTextLine.line(EIText.PROCESSING_ARRAY_BATCH_SIZE));
 		if(EIConfig.processingArrayEuCostMultiplier != 1)
 		{
-			lines.add(EITooltips.line(EIText.PROCESSING_ARRAY_EU_COST_MULTIPLIER).arg(this.getEuCostTransformer(), EU_COST_TRANSFORMER_PARSER));
+			lines.add(MICompatibleTextLine.line(EIText.PROCESSING_ARRAY_EU_COST_MULTIPLIER).arg(this.getEuCostTransformer(), EU_COST_TRANSFORMER_PARSER));
 		}
 		return lines;
 	}

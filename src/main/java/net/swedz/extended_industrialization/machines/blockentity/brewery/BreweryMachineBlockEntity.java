@@ -21,7 +21,7 @@ import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIMachines;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.EITooltips;
+import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
 
 import java.util.List;
 import java.util.UUID;
@@ -155,8 +155,8 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 	public List<Component> getTooltips()
 	{
 		return List.of(
-				EITooltips.line(EIText.BREWERY_REQUIRES_BLAZING_ESSENCE).arg(EIFluids.BLAZING_ESSENCE.asFluid()),
-				EITooltips.line(EIText.BREWERY_BREWS_MULTIPLE).arg(4)
+				MICompatibleTextLine.line(EIText.BREWERY_REQUIRES_BLAZING_ESSENCE).arg(EIFluids.BLAZING_ESSENCE.asFluid()),
+				MICompatibleTextLine.line(EIText.BREWERY_BREWS_MULTIPLE).arg(4)
 		);
 	}
 }

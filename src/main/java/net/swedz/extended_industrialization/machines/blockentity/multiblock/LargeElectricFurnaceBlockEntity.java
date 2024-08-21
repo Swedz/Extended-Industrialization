@@ -17,13 +17,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.datamap.LargeElectricFurnaceTier;
 import net.swedz.tesseract.neoforge.TesseractText;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformer;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformers;
 import net.swedz.tesseract.neoforge.compat.mi.helper.CommonGuiComponents;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.multiplied.AbstractElectricMultipliedCraftingMultiblockBlockEntity;
+import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -75,7 +75,7 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 	{
 		return List.of(
 				DEFAULT_PARSER.parse(TesseractText.MI_MACHINE_BATCHER_RECIPE.text(MACHINE_RECIPE_TYPE_PARSER.parse(true, this.getRecipeType()))),
-				EITooltips.line(EIText.MACHINE_BATCHER_COILS)
+				MICompatibleTextLine.line(EIText.MACHINE_BATCHER_COILS)
 		);
 	}
 	
