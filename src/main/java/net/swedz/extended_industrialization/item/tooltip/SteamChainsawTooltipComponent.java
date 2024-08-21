@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.items.tooltip;
+package net.swedz.extended_industrialization.item.tooltip;
 
 import aztech.modern_industrialization.machines.gui.MachineScreen;
 import aztech.modern_industrialization.machines.guicomponents.ProgressBar;
@@ -7,7 +7,7 @@ import aztech.modern_industrialization.util.RenderHelper;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.swedz.extended_industrialization.items.SteamChainsawItem;
+import net.swedz.extended_industrialization.item.SteamChainsawItem;
 
 public final class SteamChainsawTooltipComponent implements ClientTooltipComponent
 {

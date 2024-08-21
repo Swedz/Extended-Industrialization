@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.items;
+package net.swedz.extended_industrialization.item;
 
 import aztech.modern_industrialization.api.energy.CableTier;
 import net.minecraft.util.Mth;

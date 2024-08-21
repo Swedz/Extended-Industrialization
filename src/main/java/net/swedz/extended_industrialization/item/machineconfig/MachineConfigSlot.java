@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.items.machineconfig;
+package net.swedz.extended_industrialization.item.machineconfig;
 
 import aztech.modern_industrialization.inventory.AbstractConfigurableStack;
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;

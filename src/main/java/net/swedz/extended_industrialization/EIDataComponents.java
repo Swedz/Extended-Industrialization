@@ -6,7 +6,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.util.ExtraCodecs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.swedz.extended_industrialization.items.machineconfig.MachineConfig;
+import net.swedz.extended_industrialization.item.machineconfig.MachineConfig;
 
 import java.util.function.Supplier;
 

@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.items.machineconfig;
+package net.swedz.extended_industrialization.item.machineconfig;
 
 import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.world.entity.player.Player;

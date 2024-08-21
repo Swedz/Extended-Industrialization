@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.items;
+package net.swedz.extended_industrialization.item;
 
 import aztech.modern_industrialization.MIComponents;
 import aztech.modern_industrialization.MIText;
