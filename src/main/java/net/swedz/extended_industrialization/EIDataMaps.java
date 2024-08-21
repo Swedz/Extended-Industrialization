@@ -5,9 +5,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
-import net.swedz.extended_industrialization.datamaps.FarmerSimpleTallCropSize;
-import net.swedz.extended_industrialization.datamaps.FertilizerPotency;
-import net.swedz.extended_industrialization.datamaps.LargeElectricFurnaceTier;
+import net.swedz.extended_industrialization.datamap.FarmerSimpleTallCropSize;
+import net.swedz.extended_industrialization.datamap.FertilizerPotency;
+import net.swedz.extended_industrialization.datamap.LargeElectricFurnaceTier;
 
 public final class EIDataMaps
 {

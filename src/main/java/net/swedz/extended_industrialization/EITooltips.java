@@ -8,11 +8,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.BlockItem;
 import net.swedz.extended_industrialization.items.PhotovoltaicCellItem;
-import net.swedz.extended_industrialization.machines.blockentities.multiblock.LargeElectricFurnaceBlockEntity;
-import net.swedz.tesseract.neoforge.compat.mi.tooltips.MICompatibleTextLine;
-import net.swedz.tesseract.neoforge.tooltips.Parser;
-import net.swedz.tesseract.neoforge.tooltips.TooltipAttachment;
-import net.swedz.tesseract.neoforge.tooltips.TranslatableTextEnum;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
+import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
+import net.swedz.tesseract.neoforge.tooltip.Parser;
+import net.swedz.tesseract.neoforge.tooltip.TooltipAttachment;
+import net.swedz.tesseract.neoforge.tooltip.TranslatableTextEnum;
 
 import java.util.List;
 import java.util.Optional;

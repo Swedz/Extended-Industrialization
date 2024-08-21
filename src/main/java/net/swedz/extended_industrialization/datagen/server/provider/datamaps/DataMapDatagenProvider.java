@@ -9,9 +9,9 @@ import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EIDataMaps;
 import net.swedz.extended_industrialization.EIFluids;
-import net.swedz.extended_industrialization.datamaps.FarmerSimpleTallCropSize;
-import net.swedz.extended_industrialization.datamaps.FertilizerPotency;
-import net.swedz.extended_industrialization.datamaps.LargeElectricFurnaceTier;
+import net.swedz.extended_industrialization.datamap.FarmerSimpleTallCropSize;
+import net.swedz.extended_industrialization.datamap.FertilizerPotency;
+import net.swedz.extended_industrialization.datamap.LargeElectricFurnaceTier;
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
 
 public final class DataMapDatagenProvider extends DataMapProvider

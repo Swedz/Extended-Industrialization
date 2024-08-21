@@ -1,6 +1,6 @@
 package net.swedz.extended_industrialization;
 
-import net.swedz.tesseract.neoforge.tooltips.TranslatableTextEnum;
+import net.swedz.tesseract.neoforge.tooltip.TranslatableTextEnum;
 
 public enum EIText implements TranslatableTextEnum
 {
