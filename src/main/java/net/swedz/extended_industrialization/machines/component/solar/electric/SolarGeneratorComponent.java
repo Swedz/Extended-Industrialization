@@ -40,12 +40,12 @@ public final class SolarGeneratorComponent implements IComponent.ServerOnly
 	
 	private ConfigurableFluidStack getSlotWater()
 	{
-		return inventory.getFluidStacks().get(0);
+		return inventory.getFluidStacks().getFirst();
 	}
 	
 	private ConfigurableItemStack getSlotPhotovoltaicCell()
 	{
-		return inventory.getItemStacks().get(0);
+		return inventory.getItemStacks().getFirst();
 	}
 	
 	public long getEnergyPerTick()

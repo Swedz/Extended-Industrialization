@@ -32,7 +32,7 @@ public abstract class FluidHarvestingBehavior
 	public ConfigurableFluidStack getMachineBlockFluidStack()
 	{
 		List<ConfigurableFluidStack> fluidStacks = this.getMachineBlockEntity().getInventory().getFluidStacks();
-		return fluidStacks.get(fluidStacks.size() - 1);
+		return fluidStacks.getLast();
 	}
 	
 	public int totalPumpingTicks()
