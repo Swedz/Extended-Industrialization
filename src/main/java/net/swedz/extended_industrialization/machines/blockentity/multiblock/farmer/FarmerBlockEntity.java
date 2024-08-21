@@ -24,7 +24,7 @@ import net.swedz.extended_industrialization.machines.component.farmer.PlantingMo
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerProcessRates;
 import net.swedz.tesseract.neoforge.compat.mi.helper.CommonGuiComponents;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.BasicMultiblockMachineBlockEntity;
-import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.members.PredicateSimpleMember;
+import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.member.PredicateSimpleMember;
 
 import java.util.Collections;
 import java.util.List;

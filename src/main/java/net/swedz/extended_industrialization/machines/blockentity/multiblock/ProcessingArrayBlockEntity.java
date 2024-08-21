@@ -27,7 +27,7 @@ import net.swedz.extended_industrialization.machines.guicomponent.processingarra
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformer;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformers;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.multiplied.AbstractElectricMultipliedCraftingMultiblockBlockEntity;
-import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.members.PredicateSimpleMember;
+import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.member.PredicateSimpleMember;
 
 import java.util.List;
 import java.util.stream.IntStream;
