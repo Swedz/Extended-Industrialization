@@ -14,6 +14,8 @@ base {
 }
 
 repositories {
+	mavenLocal()
+	mavenCentral()
 	maven {
 		name "Modmaven"
 		url "https://modmaven.dev"
@@ -41,8 +43,6 @@ repositories {
 			includeGroup "dev.emi"
 		}
 	}
-	mavenLocal()
-	mavenCentral()
 }
 
 dependencies {
