@@ -13,10 +13,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
@@ -24,13 +23,12 @@ import net.swedz.extended_industrialization.item.machineconfig.MachineConfigCard
 import net.swedz.extended_industrialization.item.tooltip.MachineConfigCardTooltipComponent;
 import net.swedz.extended_industrialization.item.tooltip.SteamChainsawTooltipComponent;
 
+@Mod(value = EI.ID, dist = Dist.CLIENT)
 @EventBusSubscriber(value = Dist.CLIENT, modid = EI.ID, bus = EventBusSubscriber.Bus.MOD)
 public final class EIClient
 {
-	@SubscribeEvent
-	private static void init(FMLConstructModEvent __)
+	public EIClient(IEventBus bus)
 	{
-		IEventBus bus = ModLoadingContext.get().getActiveContainer().getEventBus();
 	}
 	
 	/**
@@ -56,7 +54,7 @@ public final class EIClient
 				}
 				else
 				{
-					BlockEntityRenderers.register(type, (c) -> new MachineBlockEntityRenderer(c));
+					BlockEntityRenderers.register(type, (c) -> new MachineBlockEntityRenderer<>(c));
 				}
 			}
 		}
