@@ -111,6 +111,7 @@
   "text.extended_industrialization.fluid_fertilizers_consumes": "Consumes : %dmb",
   "text.extended_industrialization.fluid_fertilizers_time": "Cycle Time : %.1fs",
   "text.extended_industrialization.generating_eu_per_tick": "Generating : %d EU/t",
+  "text.extended_industrialization.honey_extractor_help": "When placed facing into a beehive, honey will be extracted in fluid form.",
   "text.extended_industrialization.key_alt": "Alt",
   "text.extended_industrialization.key_mouse_scroll": "Mouse Scroll",
   "text.extended_industrialization.machine_batcher_coils": "Batch size and cost is determined by coil used.",
@@ -145,5 +146,6 @@
   "text.extended_industrialization.steam_chainsaw_3": "3) Enjoy Silk Touch.",
   "text.extended_industrialization.steam_chainsaw_4": "4) Toggle Silk Touch with %s + %s.",
   "text.extended_industrialization.universal_transformer_from_tier_input": "Casing for cable tier to convert from (LV by default).",
-  "text.extended_industrialization.universal_transformer_to_tier_input": "Casing for cable tier to convert to (LV by default)."
+  "text.extended_industrialization.universal_transformer_to_tier_input": "Casing for cable tier to convert to (LV by default).",
+  "text.extended_industrialization.waste_collector_help": "When placed underneath animals, manure will be collected."
 }

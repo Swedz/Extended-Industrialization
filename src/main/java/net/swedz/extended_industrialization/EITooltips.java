@@ -152,6 +152,23 @@ public final class EITooltips
 									.arg(EIText.KEY_MOUSE_SCROLL.text().withStyle(NUMBER_TEXT))
 					)) : Optional.empty());
 	
+	public static final TooltipAttachment HONEY_EXTRACTOR = TooltipAttachment.of(
+			List.of(
+					EI.id("steel_honey_extractor"),
+					EI.id("electric_honey_extractor")
+			),
+			line(EIText.HONEY_EXTRACTOR_HELP)
+	);
+	
+	public static final TooltipAttachment WASTE_COLLECTOR = TooltipAttachment.of(
+			List.of(
+					EI.id("bronze_waste_collector"),
+					EI.id("steel_waste_collector"),
+					EI.id("electric_waste_collector")
+			),
+			line(EIText.WASTE_COLLECTOR_HELP)
+	);
+	
 	public static void init()
 	{
 	}

@@ -33,6 +33,7 @@ public enum EIText implements TranslatableTextEnum
 	FLUID_FERTILIZERS_CONSUMES("Consumes : %dmb"),
 	FLUID_FERTILIZERS_TIME("Cycle Time : %.1fs"),
 	GENERATING_EU_PER_TICK("Generating : %d EU/t"),
+	HONEY_EXTRACTOR_HELP("When placed facing into a beehive, honey will be extracted in fluid form."),
 	KEY_ALT("Alt"),
 	KEY_MOUSE_SCROLL("Mouse Scroll"),
 	MACHINE_BATCHER_COILS("Batch size and cost is determined by coil used."),
@@ -67,7 +68,8 @@ public enum EIText implements TranslatableTextEnum
 	STEAM_CHAINSAW_3("3) Enjoy Silk Touch."),
 	STEAM_CHAINSAW_4("4) Toggle Silk Touch with %s + %s."),
 	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Casing for cable tier to convert from (LV by default)."),
-	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default).");
+	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default)."),
+	WASTE_COLLECTOR_HELP("When placed underneath animals, manure will be collected.");
 	
 	private final String englishText;
 	
