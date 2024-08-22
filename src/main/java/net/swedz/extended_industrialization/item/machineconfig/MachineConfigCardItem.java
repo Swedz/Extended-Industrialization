@@ -21,7 +21,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIDataComponents;
+import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIText;
 
 import java.util.List;
@@ -43,9 +43,9 @@ public final class MachineConfigCardItem extends Item
 		if(event.getEntity() instanceof Player player)
 		{
 			ItemStack offhand = player.getItemInHand(InteractionHand.OFF_HAND);
-			if(offhand.has(EIDataComponents.MACHINE_CONFIG))
+			if(offhand.has(EIComponents.MACHINE_CONFIG))
 			{
-				MachineConfig config = offhand.get(EIDataComponents.MACHINE_CONFIG);
+				MachineConfig config = offhand.get(EIComponents.MACHINE_CONFIG);
 				
 				BlockEntity blockEntity = event.getLevel().getBlockEntity(event.getPos());
 				if(blockEntity instanceof MachineBlockEntity machine &&
@@ -82,14 +82,14 @@ public final class MachineConfigCardItem extends Item
 					if(player.isShiftKeyDown())
 					{
 						MachineConfig config = MachineConfig.from(machine);
-						itemStack.set(EIDataComponents.MACHINE_CONFIG, config);
+						itemStack.set(EIComponents.MACHINE_CONFIG, config);
 						player.displayClientMessage(EIText.MACHINE_CONFIG_CARD_SAVE.text(), true);
 					}
 					else
 					{
-						if(itemStack.has(EIDataComponents.MACHINE_CONFIG))
+						if(itemStack.has(EIComponents.MACHINE_CONFIG))
 						{
-							MachineConfig config = itemStack.get(EIDataComponents.MACHINE_CONFIG);
+							MachineConfig config = itemStack.get(EIComponents.MACHINE_CONFIG);
 							
 							if(config.apply(player, machine, Simulation.SIMULATE))
 							{
@@ -114,7 +114,7 @@ public final class MachineConfigCardItem extends Item
 	{
 		if(player.isShiftKeyDown())
 		{
-			player.getItemInHand(usedHand).remove(EIDataComponents.MACHINE_CONFIG);
+			player.getItemInHand(usedHand).remove(EIComponents.MACHINE_CONFIG);
 			player.displayClientMessage(EIText.MACHINE_CONFIG_CARD_CLEAR.text(), true);
 			return InteractionResultHolder.sidedSuccess(player.getItemInHand(usedHand), level.isClientSide());
 		}
@@ -124,9 +124,9 @@ public final class MachineConfigCardItem extends Item
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag isAdvanced)
 	{
-		if(stack.has(EIDataComponents.MACHINE_CONFIG))
+		if(stack.has(EIComponents.MACHINE_CONFIG))
 		{
-			Block machineBlock = stack.get(EIDataComponents.MACHINE_CONFIG).machineBlock();
+			Block machineBlock = stack.get(EIComponents.MACHINE_CONFIG).machineBlock();
 			tooltipComponents.add(EIText.MACHINE_CONFIG_CARD_CONFIGURED.text(ITEM_PARSER.parse(machineBlock.asItem())));
 		}
 	}
@@ -134,9 +134,9 @@ public final class MachineConfigCardItem extends Item
 	@Override
 	public Optional<TooltipComponent> getTooltipImage(ItemStack stack)
 	{
-		if(stack.has(EIDataComponents.MACHINE_CONFIG))
+		if(stack.has(EIComponents.MACHINE_CONFIG))
 		{
-			Block machineBlock = stack.get(EIDataComponents.MACHINE_CONFIG).machineBlock();
+			Block machineBlock = stack.get(EIComponents.MACHINE_CONFIG).machineBlock();
 			Item item = machineBlock.asItem();
 			return Optional.of(new TooltipData(item.getDefaultInstance()));
 		}

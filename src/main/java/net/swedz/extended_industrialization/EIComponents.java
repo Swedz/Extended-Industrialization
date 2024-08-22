@@ -11,7 +11,7 @@ import net.swedz.extended_industrialization.item.machineconfig.MachineConfig;
 
 import java.util.function.Supplier;
 
-public final class EIDataComponents
+public final class EIComponents
 {
 	private static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(EI.ID);
 	

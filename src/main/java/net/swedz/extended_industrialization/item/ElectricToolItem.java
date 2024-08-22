@@ -42,7 +42,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.neoforged.neoforge.common.IShearable;
 import net.neoforged.neoforge.common.Tags;
-import net.swedz.extended_industrialization.EIDataComponents;
+import net.swedz.extended_industrialization.EIComponents;
 
 import java.util.List;
 import java.util.Map;
@@ -114,13 +114,13 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		{
 			throw new IllegalArgumentException("Cannot get tool speed for a non electric tool item");
 		}
-		return stack.getOrDefault(EIDataComponents.ELECTRIC_TOOL_SPEED, SPEED_MAX);
+		return stack.getOrDefault(EIComponents.ELECTRIC_TOOL_SPEED, SPEED_MAX);
 	}
 	
 	public static void setToolSpeed(ItemStack stack, int speed)
 	{
 		speed = Mth.clamp(speed, SPEED_MIN, SPEED_MAX);
-		stack.set(EIDataComponents.ELECTRIC_TOOL_SPEED, speed);
+		stack.set(EIComponents.ELECTRIC_TOOL_SPEED, speed);
 	}
 	
 	public static boolean isFortune(ItemStack stack)
@@ -187,7 +187,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public boolean isBarVisible(ItemStack stack)
 	{
-		return !stack.getOrDefault(EIDataComponents.HIDE_BAR, false);
+		return !stack.getOrDefault(EIComponents.HIDE_BAR, false);
 	}
 	
 	@Override

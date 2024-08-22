@@ -4,7 +4,7 @@ import aztech.modern_industrialization.api.energy.CableTier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.extended_industrialization.EIDataComponents;
+import net.swedz.extended_industrialization.EIComponents;
 
 public final class PhotovoltaicCellItem extends Item
 {
@@ -42,7 +42,7 @@ public final class PhotovoltaicCellItem extends Item
 	
 	public int getSolarTicks(ItemStack stack)
 	{
-		return stack.getOrDefault(EIDataComponents.SOLAR_TICKS, 0);
+		return stack.getOrDefault(EIComponents.SOLAR_TICKS, 0);
 	}
 	
 	public int getSolarTicksRemaining(ItemStack stack)
@@ -57,7 +57,7 @@ public final class PhotovoltaicCellItem extends Item
 		{
 			return;
 		}
-		stack.set(EIDataComponents.SOLAR_TICKS, solarTicks);
+		stack.set(EIComponents.SOLAR_TICKS, solarTicks);
 	}
 	
 	@Override
