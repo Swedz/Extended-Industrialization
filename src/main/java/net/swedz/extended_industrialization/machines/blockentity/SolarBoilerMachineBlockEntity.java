@@ -245,7 +245,7 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 		);
 		tooltips.add(
 				MICompatibleTextLine.line(EIText.SOLAR_BOILER_CALCIFICATION)
-						.arg(SolarBoilerCalcificationComponent.MINIMUM_EFFICIENCY, EITooltips.RATIO_PERCENTAGE_PARSER)
+						.arg(SolarBoilerCalcificationComponent.MINIMUM_EFFICIENCY, EITooltips.PERCENTAGE_PARSER)
 						.arg(EIFluids.DISTILLED_WATER.asFluid())
 		);
 		return tooltips;

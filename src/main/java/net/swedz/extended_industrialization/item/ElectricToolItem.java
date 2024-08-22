@@ -40,7 +40,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.IShearable;
 import net.neoforged.neoforge.common.Tags;
 import net.swedz.extended_industrialization.EIDataComponents;
@@ -50,22 +49,28 @@ import java.util.Map;
 
 public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEnergyItem
 {
+	public static final  int SPEED_MIN        = 1;
+	public static final  int SPEED_MAX        = 10;
+	private static final int SPEED_MULTIPLIER = 10;
+	
+	public static final long ENERGY_COST = 2048;
+	
 	public enum Type
 	{
-		DRILL(60 * 20 * CableTier.HV.getMaxTransfer(), 9, 8, false),
-		CHAINSAW(60 * 20 * CableTier.HV.getMaxTransfer(), 9, 10, false),
-		ULTIMATE(60 * 20 * CableTier.EV.getMaxTransfer(), 12, 20, true);
+		DRILL(60 * 20 * CableTier.HV.getMaxTransfer(), 8, false, false),
+		CHAINSAW(60 * 20 * CableTier.HV.getMaxTransfer(), 10, true, false),
+		ULTIMATE(60 * 20 * CableTier.EV.getMaxTransfer(), 20, true, true);
 		
 		private final long    energyCapacity;
-		private final float   speed;
 		private final int     damage;
+		private final boolean includeLooting;
 		private final boolean worksForAllBlocks;
 		
-		Type(long energyCapacity, float speed, int damage, boolean worksForAllBlocks)
+		Type(long energyCapacity, int damage, boolean includeLooting, boolean worksForAllBlocks)
 		{
 			this.energyCapacity = energyCapacity;
-			this.speed = speed;
 			this.damage = damage;
+			this.includeLooting = includeLooting;
 			this.worksForAllBlocks = worksForAllBlocks;
 		}
 		
@@ -79,26 +84,59 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			return damage;
 		}
 		
+		public boolean includeLooting()
+		{
+			return includeLooting;
+		}
+		
 		public boolean worksForAllBlocks()
 		{
 			return worksForAllBlocks;
 		}
 	}
 	
-	public static final long ENERGY_COST = 2048;
+	private final Type toolType;
 	
-	private final Type type;
-	
-	public ElectricToolItem(Properties properties, Type type)
+	public ElectricToolItem(Properties properties, Type toolType)
 	{
 		super(properties.stacksTo(1).rarity(Rarity.UNCOMMON));
-		this.type = type;
+		this.toolType = toolType;
+	}
+	
+	public Type getToolType()
+	{
+		return toolType;
+	}
+	
+	public static int getToolSpeed(ItemStack stack)
+	{
+		if(!(stack.getItem() instanceof ElectricToolItem item))
+		{
+			throw new IllegalArgumentException("Cannot get tool speed for a non electric tool item");
+		}
+		return stack.getOrDefault(EIDataComponents.ELECTRIC_TOOL_SPEED, SPEED_MAX);
+	}
+	
+	public static void setToolSpeed(ItemStack stack, int speed)
+	{
+		speed = Mth.clamp(speed, SPEED_MIN, SPEED_MAX);
+		stack.set(EIDataComponents.ELECTRIC_TOOL_SPEED, speed);
+	}
+	
+	public static boolean isFortune(ItemStack stack)
+	{
+		return !stack.getOrDefault(MIComponents.SILK_TOUCH, false);
+	}
+	
+	public static void setFortune(ItemStack stack, boolean fortune)
+	{
+		stack.set(MIComponents.SILK_TOUCH, !fortune);
 	}
 	
 	@Override
 	public boolean isEnchantable(ItemStack stack)
 	{
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -121,7 +159,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public boolean isCorrectToolForDrops(ItemStack stack, BlockState state)
 	{
-		if((type.worksForAllBlocks() || this.isSupportedBlock(stack, state)) &&
+		if((toolType.worksForAllBlocks() || this.isSupportedBlock(stack, state)) &&
 		   this.getStoredEnergy(stack) > 0 && !state.is(Tiers.NETHERITE.getIncorrectBlocksForDrops()))
 		{
 			return true;
@@ -132,10 +170,10 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public float getDestroySpeed(ItemStack stack, BlockState state)
 	{
-		if((type.worksForAllBlocks() || this.isSupportedBlock(stack, state)) &&
+		if((toolType.worksForAllBlocks() || this.isSupportedBlock(stack, state)) &&
 		   this.getStoredEnergy(stack) > 0)
 		{
-			return Tiers.NETHERITE.getSpeed();
+			return getToolSpeed(stack) * SPEED_MULTIPLIER;
 		}
 		return 1;
 	}
@@ -143,7 +181,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack)
 	{
-		return this.getStoredEnergy(stack) > 0 ? ItemHelper.getToolModifiers(type.damage()) : ItemAttributeModifiers.EMPTY;
+		return this.getStoredEnergy(stack) > 0 ? ItemHelper.getToolModifiers(toolType.damage()) : ItemAttributeModifiers.EMPTY;
 	}
 	
 	@Override
@@ -155,42 +193,39 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public int getBarWidth(ItemStack stack)
 	{
-		return (int) Math.round(this.getStoredEnergy(stack) / (double) type.energyCapacity() * 13);
+		return (int) Math.round(this.getStoredEnergy(stack) / (double) toolType.energyCapacity() * 13);
 	}
 	
 	@Override
 	public int getBarColor(ItemStack stack)
 	{
-		float hue = Math.max(0, (float) this.getStoredEnergy(stack) / type.energyCapacity());
+		float hue = Math.max(0, (float) this.getStoredEnergy(stack) / toolType.energyCapacity());
 		return Mth.hsvToRgb(hue / 3, 1, 1);
 	}
 	
 	@Override
 	public long getEnergyCapacity(ItemStack stack)
 	{
-		return type.energyCapacity();
+		return toolType.energyCapacity();
 	}
 	
 	@Override
 	public long getEnergyMaxInput(ItemStack stack)
 	{
-		return type.energyCapacity();
+		return toolType.energyCapacity();
 	}
 	
 	@Override
 	public long getEnergyMaxOutput(ItemStack stack)
 	{
-		return type.energyCapacity();
+		return toolType.energyCapacity();
 	}
 	
-	private static boolean isFortune(ItemStack stack)
+	private static Component enchantmentFullNameComponent(HolderLookup.RegistryLookup<Enchantment> enchantmentRegistry,
+														  ResourceKey<Enchantment> enchantment)
 	{
-		return !stack.getOrDefault(MIComponents.SILK_TOUCH, false);
-	}
-	
-	private static void setFortune(ItemStack stack, boolean fortune)
-	{
-		stack.set(MIComponents.SILK_TOUCH, !fortune);
+		Holder.Reference<Enchantment> fortune = enchantmentRegistry.getOrThrow(enchantment);
+		return Enchantment.getFullname(fortune, fortune.value().getMaxLevel());
 	}
 	
 	@Override
@@ -199,9 +234,18 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		if(this.getStoredEnergy(stack) > 0)
 		{
 			HolderLookup.RegistryLookup<Enchantment> enchantmentRegistry = context.registries().lookupOrThrow(Registries.ENCHANTMENT);
-			ResourceKey<Enchantment> enchantmentKey = isFortune(stack) ? Enchantments.FORTUNE : Enchantments.SILK_TOUCH;
-			Holder.Reference<Enchantment> enchantment = enchantmentRegistry.getOrThrow(enchantmentKey);
-			tooltip.add(Enchantment.getFullname(enchantment, enchantment.value().getMaxLevel()));
+			if(isFortune(stack))
+			{
+				tooltip.add(enchantmentFullNameComponent(enchantmentRegistry, Enchantments.FORTUNE));
+				if(toolType.includeLooting())
+				{
+					tooltip.add(enchantmentFullNameComponent(enchantmentRegistry, Enchantments.LOOTING));
+				}
+			}
+			else
+			{
+				tooltip.add(enchantmentFullNameComponent(enchantmentRegistry, Enchantments.SILK_TOUCH));
+			}
 		}
 	}
 	
@@ -296,14 +340,31 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		return this.getAllEnchantments(stack, enchantment.unwrapLookup()).getLevel(enchantment);
 	}
 	
+	private static void includeEnchantment(HolderLookup.RegistryLookup<Enchantment> lookup,
+										   ItemEnchantments.Mutable enchantments,
+										   ResourceKey<Enchantment> enchantment)
+	{
+		lookup.get(enchantment).ifPresent((ench) -> enchantments.set(ench, ench.value().getMaxLevel()));
+	}
+	
 	@Override
 	public ItemEnchantments getAllEnchantments(ItemStack stack, HolderLookup.RegistryLookup<Enchantment> lookup)
 	{
 		ItemEnchantments.Mutable enchantments = new ItemEnchantments.Mutable(super.getAllEnchantments(stack, lookup));
 		if(this.getStoredEnergy(stack) > 0)
 		{
-			lookup.get(isFortune(stack) ? Enchantments.FORTUNE : Enchantments.SILK_TOUCH)
-					.ifPresent((enchantment) -> enchantments.set(enchantment, enchantment.value().getMaxLevel()));
+			if(isFortune(stack))
+			{
+				includeEnchantment(lookup, enchantments, Enchantments.FORTUNE);
+				if(toolType.includeLooting())
+				{
+					includeEnchantment(lookup, enchantments, Enchantments.LOOTING);
+				}
+			}
+			else
+			{
+				includeEnchantment(lookup, enchantments, Enchantments.SILK_TOUCH);
+			}
 		}
 		return enchantments.toImmutable();
 	}
@@ -311,7 +372,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public boolean isFoil(ItemStack stack)
 	{
-		return this.getAllEnchantments(stack, CommonHooks.resolveLookup(Registries.ENCHANTMENT)).size() > (this.getStoredEnergy(stack) > 0 ? 1 : 0);
+		return this.getStoredEnergy(stack) > 0;
 	}
 	
 	@Override

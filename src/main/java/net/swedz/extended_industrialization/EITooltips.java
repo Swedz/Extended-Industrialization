@@ -6,8 +6,10 @@ import com.google.common.collect.Lists;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
+import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
+import net.swedz.tesseract.neoforge.tooltip.BiParser;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 import net.swedz.tesseract.neoforge.tooltip.TooltipAttachment;
 
@@ -19,8 +21,12 @@ import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLin
 
 public final class EITooltips
 {
-	public static final Parser<Float> RATIO_PERCENTAGE_PARSER = (ratio) ->
-			Component.literal("%d%%".formatted((int) (ratio * 100))).withStyle(NUMBER_TEXT);
+	private static final BiParser<Boolean, Float> MAYBE_SPACED_PERCENTAGE_PARSER = (space, ratio) ->
+			Component.literal("%d%s%%".formatted((int) (ratio * 100), space ? " " : "")).withStyle(NUMBER_TEXT);
+	
+	public static final Parser<Float> PERCENTAGE_PARSER = (ratio) -> MAYBE_SPACED_PERCENTAGE_PARSER.parse(false, ratio);
+	
+	public static final Parser<Float> SPACED_PERCENTAGE_PARSER = (ratio) -> MAYBE_SPACED_PERCENTAGE_PARSER.parse(true, ratio);
 	
 	public static final Parser<Long> TICKS_TO_MINUTES_PARSER = (ticks) ->
 	{
@@ -71,7 +77,7 @@ public final class EITooltips
 							.get(BuiltInRegistries.BLOCK.getKey(((BlockItem) itemStack.getItem()).getBlock()));
 					int batchSize = tier.batchSize();
 					float euCostMultiplier = tier.euCostMultiplier();
-					return Optional.of(line(EIText.COILS_LEF_TIER).arg(batchSize).arg(euCostMultiplier, RATIO_PERCENTAGE_PARSER));
+					return Optional.of(line(EIText.COILS_LEF_TIER).arg(batchSize).arg(euCostMultiplier, PERCENTAGE_PARSER));
 				}
 				else
 				{
@@ -120,6 +126,31 @@ public final class EITooltips
 					line(EIText.MACHINE_CONFIG_CARD_HELP_4).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
 			)
 	);
+	
+	public static final TooltipAttachment ELECTRIC_TOOL_SPEED = TooltipAttachment.of(
+			(itemStack, item) ->
+			{
+				if(item instanceof ElectricToolItem)
+				{
+					int speed = ElectricToolItem.getToolSpeed(itemStack);
+					return Optional.of(
+							line(EIText.MINING_SPEED)
+									.arg((float) speed / ElectricToolItem.SPEED_MAX, SPACED_PERCENTAGE_PARSER)
+					);
+				}
+				return Optional.empty();
+			}).noShiftRequired();
+	
+	public static final TooltipAttachment ELECTRIC_TOOL_CONTROLS = TooltipAttachment.ofMultilines(
+			(itemStack, item) -> item instanceof ElectricToolItem tool ?
+					Optional.of(List.of(
+							line(EIText.ELECTRIC_TOOL_HELP_1),
+							line(tool.getToolType().includeLooting() ? EIText.ELECTRIC_TOOL_HELP_2_LOOTING : EIText.ELECTRIC_TOOL_HELP_2)
+									.arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER),
+							line(EIText.ELECTRIC_TOOL_HELP_3)
+									.arg(EIText.KEY_ALT.text().withStyle(NUMBER_TEXT))
+									.arg(EIText.KEY_MOUSE_SCROLL.text().withStyle(NUMBER_TEXT))
+					)) : Optional.empty());
 	
 	public static void init()
 	{

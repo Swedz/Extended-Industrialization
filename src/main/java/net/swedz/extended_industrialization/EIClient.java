@@ -7,7 +7,12 @@ import aztech.modern_industrialization.machines.blockentities.multiblocks.LargeT
 import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBER;
 import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.MultiblockTankBER;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
@@ -16,12 +21,16 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.machineconfig.MachineConfigCardItem;
 import net.swedz.extended_industrialization.item.tooltip.MachineConfigCardTooltipComponent;
 import net.swedz.extended_industrialization.item.tooltip.SteamChainsawTooltipComponent;
+import net.swedz.extended_industrialization.network.packet.ModifyElectricToolSpeedPacket;
 
 @Mod(value = EI.ID, dist = Dist.CLIENT)
 @EventBusSubscriber(value = Dist.CLIENT, modid = EI.ID, bus = EventBusSubscriber.Bus.MOD)
@@ -29,6 +38,24 @@ public final class EIClient
 {
 	public EIClient(IEventBus bus)
 	{
+		NeoForge.EVENT_BUS.addListener(InputEvent.MouseScrollingEvent.class, (event) ->
+		{
+			if(Screen.hasAltDown())
+			{
+				Player player = Minecraft.getInstance().player;
+				ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
+				if(stack.getItem() instanceof ElectricToolItem)
+				{
+					boolean increase = event.getScrollDeltaY() > 0;
+					int speed = ElectricToolItem.getToolSpeed(stack);
+					if(increase ? speed < ElectricToolItem.SPEED_MAX : speed > ElectricToolItem.SPEED_MIN)
+					{
+						new ModifyElectricToolSpeedPacket(increase).sendToServer();
+					}
+					event.setCanceled(true);
+				}
+			}
+		});
 	}
 	
 	/**
