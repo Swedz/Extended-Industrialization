@@ -39,11 +39,11 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 	private static final int EFFICIENCY_BAR_X = 57;
 	private static final int EFFICIENCY_BAR_Y = 86;
 	
-	private final EnergyComponent energy;
-	private final MIEnergyStorage insertable;
+	private final EnergyComponent          energy;
+	private final MIEnergyStorage          insertable;
 	private final RedstoneControlComponent redstoneControl;
-	private final CasingComponent casing;
-	private final UpgradeComponent upgrades;
+	private final CasingComponent          casing;
+	private final UpgradeComponent         upgrades;
 	
 	public ElectricBreweryMachineBlockEntity(BEP bep)
 	{

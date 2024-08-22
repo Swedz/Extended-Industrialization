@@ -212,9 +212,12 @@ public record MachineConfigPanel(
 	{
 		return switch (component)
 		{
-			case RedstoneControlComponent redstoneComponent -> this.insertItemToRedstoneComponent(player, target, redstoneComponent, componentStackHolder, item, simulation);
-			case UpgradeComponent upgradeComponent -> this.insertItemToUpgradeComponent(player, target, upgradeComponent, componentStackHolder, item, simulation);
-			case CasingComponent casingComponent -> this.insertItemToCasingComponent(player, target, casingComponent, componentStackHolder, item, simulation);
+			case RedstoneControlComponent redstoneComponent ->
+					this.insertItemToRedstoneComponent(player, target, redstoneComponent, componentStackHolder, item, simulation);
+			case UpgradeComponent upgradeComponent ->
+					this.insertItemToUpgradeComponent(player, target, upgradeComponent, componentStackHolder, item, simulation);
+			case CasingComponent casingComponent ->
+					this.insertItemToCasingComponent(player, target, casingComponent, componentStackHolder, item, simulation);
 			default -> false;
 		};
 	}
