@@ -42,9 +42,9 @@ public final class EITooltips
 	
 	public static final TooltipAttachment ENERGY_STORED_ITEM = TooltipAttachment.singleLineOptional(
 			(stack, item) -> BuiltInRegistries.ITEM.getKey(item).getNamespace().equals(EI.ID),
-			(itemStack, item) ->
+			(stack, item) ->
 			{
-				ILongEnergyStorage energyStorage = itemStack.getCapability(EnergyApi.ITEM);
+				ILongEnergyStorage energyStorage = stack.getCapability(EnergyApi.ITEM);
 				if(energyStorage != null)
 				{
 					long capacity = energyStorage.getCapacity();
@@ -72,10 +72,10 @@ public final class EITooltips
 			(stack, item) ->
 					item instanceof BlockItem blockItem &&
 					LargeElectricFurnaceBlockEntity.getTiersByCoil().containsKey(BuiltInRegistries.BLOCK.getKey(blockItem.getBlock())),
-			(itemStack, item) ->
+			(stack, item) ->
 			{
 				LargeElectricFurnaceBlockEntity.Tier tier = LargeElectricFurnaceBlockEntity.getTiersByCoil()
-						.get(BuiltInRegistries.BLOCK.getKey(((BlockItem) itemStack.getItem()).getBlock()));
+						.get(BuiltInRegistries.BLOCK.getKey(((BlockItem) stack.getItem()).getBlock()));
 				int batchSize = tier.batchSize();
 				float euCostMultiplier = tier.euCostMultiplier();
 				return line(EIText.COILS_LEF_TIER).arg(batchSize).arg(euCostMultiplier, PERCENTAGE_PARSER);
@@ -84,14 +84,14 @@ public final class EITooltips
 	
 	public static final TooltipAttachment PHOTOVOLTAIC_CELLS = TooltipAttachment.multilines(
 			PhotovoltaicCellItem.class,
-			(itemStack, item) ->
+			(stack, item) ->
 			{
 				int euPerTick = item.getEuPerTick();
 				List<Component> lines = Lists.newArrayList();
 				lines.add(line(EIText.PHOTOVOLTAIC_CELL_EU).arg(euPerTick, EU_PER_TICK_PARSER));
 				if(!item.lastsForever())
 				{
-					int solarTicksRemaining = item.getSolarTicksRemaining(itemStack);
+					int solarTicksRemaining = item.getSolarTicksRemaining(stack);
 					lines.add(line(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_MINUTES).arg((long) solarTicksRemaining, TICKS_TO_MINUTES_PARSER));
 				}
 				else
@@ -124,9 +124,9 @@ public final class EITooltips
 	
 	public static final TooltipAttachment ELECTRIC_TOOL_SPEED = TooltipAttachment.singleLine(
 			ElectricToolItem.class,
-			(itemStack, item) ->
+			(stack, item) ->
 			{
-				int speed = ElectricToolItem.getToolSpeed(itemStack);
+				int speed = ElectricToolItem.getToolSpeed(stack);
 				return line(EIText.MINING_SPEED)
 						.arg((float) speed / ElectricToolItem.SPEED_MAX, SPACED_PERCENTAGE_PARSER);
 			}
@@ -134,9 +134,9 @@ public final class EITooltips
 	
 	public static final TooltipAttachment ELECTRIC_TOOL_CONTROLS = TooltipAttachment.multilines(
 			ElectricToolItem.class,
-			(stack, tool) -> List.of(
+			(stack, item) -> List.of(
 					line(EIText.ELECTRIC_TOOL_HELP_1),
-					line(tool.getToolType().includeLooting() ? EIText.ELECTRIC_TOOL_HELP_2_LOOTING : EIText.ELECTRIC_TOOL_HELP_2)
+					line(item.getToolType().includeLooting() ? EIText.ELECTRIC_TOOL_HELP_2_LOOTING : EIText.ELECTRIC_TOOL_HELP_2)
 							.arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER),
 					line(EIText.ELECTRIC_TOOL_HELP_3)
 							.arg(EIText.KEY_ALT.text().withStyle(NUMBER_TEXT))
