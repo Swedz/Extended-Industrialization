@@ -101,7 +101,6 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 			{
 				boolean insertedSomething = false;
 				
-				// Try up to 10000 times to bypass I/O limits
 				for(int i = 0; i < 10000; ++i)
 				{
 					try (Transaction transaction = Transaction.openOuter())
@@ -124,7 +123,6 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 				
 				if(!insertedSomething)
 				{
-					// Try up to 10000 times to bypass I/O limits
 					for(int i = 0; i < 10000; ++i)
 					{
 						try (Transaction transaction = Transaction.openOuter())

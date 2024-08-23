@@ -33,11 +33,10 @@ public final class SteamChainsawTooltipComponent implements ClientTooltipCompone
 	@Override
 	public void renderImage(Font font, int x, int y, GuiGraphics guiGraphics)
 	{
-		// Slot background
 		guiGraphics.blit(MachineScreen.SLOT_ATLAS, x, y, 0, 0, 18, 18, 256, 256);
-		// Stack itself
+		
 		RenderHelper.renderAndDecorateItem(guiGraphics, font, data.variant().toStack((int) data.amount()), x + 1, y + 1);
-		// Burning flame next to the stack
+		
 		ProgressBar.Parameters progressParams = new ProgressBar.Parameters(0, 0, "furnace", true);
 		ProgressBarClient.renderProgress(guiGraphics, x + 20, y, progressParams, (float) data.burnTicks() / data.maxBurnTicks());
 	}

@@ -64,8 +64,6 @@ public final class EIItems
 	public static final ItemHolder<PhotovoltaicCellItem> LV_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("lv", "LV", CableTier.LV, 16, 10 * 60 * 20);
 	public static final ItemHolder<PhotovoltaicCellItem> MV_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("mv", "MV", CableTier.MV, 64, 10 * 60 * 20);
 	public static final ItemHolder<PhotovoltaicCellItem> HV_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("hv", "HV", CableTier.HV, 256, 10 * 60 * 20);
-	/*public static final ItemHolder<PhotovoltaicCellItem> EV_PHOTOVOLTAIC_CELL        = createPhotovoltaicCell("ev", "EV", CableTier.EV, 1024, 10 * 60 * 20);
-	public static final ItemHolder<PhotovoltaicCellItem> PERFECTED_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("perfected", "Perfected", CableTier.SUPERCONDUCTOR, 4096, 0);*/
 	
 	public static Set<ItemHolder> values()
 	{

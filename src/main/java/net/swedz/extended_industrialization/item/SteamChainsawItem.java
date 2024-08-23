@@ -188,7 +188,6 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player user, InteractionHand hand)
 	{
-		// Enable or disable silk touch
 		if(hand == InteractionHand.MAIN_HAND && user.isShiftKeyDown())
 		{
 			ItemStack stack = user.getItemInHand(hand);
@@ -201,7 +200,6 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 			return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
 		}
 		
-		// Refill water
 		ItemStack itemStack = user.getItemInHand(hand);
 		BlockHitResult hitResult = getPlayerPOVHitResult(level, user, ClipContext.Fluid.ANY);
 		if(hitResult.getType() != HitResult.Type.BLOCK)
@@ -394,12 +392,10 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	@Override
 	public boolean handleClick(Player player, ItemStack barrelLike, Mutable<ItemStack> otherStack)
 	{
-		// Try to refill water first if it's contained in the other stack
 		if(this.tryFillWater(player, barrelLike, otherStack.getValue()))
 		{
 			return true;
 		}
-		
 		return ItemContainingItemHelper.super.handleClick(player, barrelLike, otherStack);
 	}
 	
@@ -433,20 +429,17 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	{
 		SteamChainsawTooltipData data = (SteamChainsawTooltipData) this.getTooltipImage(stack).orElseThrow();
 		
-		// Water %
 		tooltip.add(MIText.WaterPercent.text(data.waterLevel).setStyle(TextHelper.WATER_TEXT));
 		int barWater = (int) Math.ceil(data.waterLevel / 5d);
 		int barVoid = 20 - barWater;
-		// Water bar
 		tooltip.add(Component.literal("|".repeat(barWater)).setStyle(TextHelper.WATER_TEXT)
 				.append(Component.literal("|".repeat(barVoid)).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x6b6b6b)))));
-		// Fuel left
+		
 		if(data.burnTicks > 0)
 		{
 			tooltip.add(MIText.SecondsLeft.text(data.burnTicks / 100).setStyle(TextHelper.GRAY_TEXT));
 		}
 		
-		// Enchantments
 		if(context.registries() != null)
 		{
 			for(Object2IntMap.Entry<Holder<Enchantment>> entry : this.getAllEnchantments(stack, context.registries().lookupOrThrow(Registries.ENCHANTMENT)).entrySet())
