@@ -2,11 +2,14 @@ package net.swedz.extended_industrialization.datagen.server.provider.tags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIItems;
+import net.swedz.extended_industrialization.EITags;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.Comparator;
@@ -19,6 +22,20 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 		super(event.getGenerator().getPackOutput(), event.getLookupProvider(), CompletableFuture.completedFuture(TagLookup.empty()), EI.ID, event.getExistingFileHelper());
 	}
 	
+	private void addFarmerVoidableDropTag()
+	{
+		this.tag(EITags.FARMER_VOIDABLE_DROP)
+				.add(
+						Items.STICK,
+						Items.APPLE,
+						Items.MOSS_CARPET,
+						Items.MANGROVE_ROOTS
+				)
+				.addTags(
+						ItemTags.SAPLINGS
+				);
+	}
+	
 	@Override
 	protected void addTags(HolderLookup.Provider provider)
 	{
@@ -29,6 +46,8 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 				this.tag(tag).add(item.asItem());
 			}
 		}
+		
+		this.addFarmerVoidableDropTag();
 	}
 	
 	@Override

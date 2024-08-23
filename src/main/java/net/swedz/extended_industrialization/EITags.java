@@ -8,6 +8,9 @@ import net.minecraft.world.level.block.Block;
 
 public final class EITags
 {
+	public static final TagKey<Item> PHOTOVOLTAIC_CELL    = item("photovoltaic_cell");
+	public static final TagKey<Item> FARMER_VOIDABLE_DROP = item("farmer_voidable_drop");
+	
 	public static TagKey<Item> item(String path)
 	{
 		return TagKey.create(BuiltInRegistries.ITEM.key(), EI.id(path));

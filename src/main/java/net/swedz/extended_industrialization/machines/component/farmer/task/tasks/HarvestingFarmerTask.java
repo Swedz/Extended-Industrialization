@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.machines.component.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlock;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerTile;
@@ -18,6 +19,7 @@ import net.swedz.extended_industrialization.machines.component.farmer.harvesting
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTaskType;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -44,7 +46,8 @@ public final class HarvestingFarmerTask extends FarmerTask
 			for(ItemStack item : drops)
 			{
 				long inserted = itemOutput.insertAllSlot(ItemVariant.of(item), item.getCount(), transaction);
-				if(inserted != item.getCount())
+				if(inserted != item.getCount() &&
+				   !item.is(EITags.FARMER_VOIDABLE_DROP))
 				{
 					success = false;
 					break;
@@ -60,23 +63,29 @@ public final class HarvestingFarmerTask extends FarmerTask
 		}
 	}
 	
+	private List<ItemStack> sortDrops(List<ItemStack> drops)
+	{
+		drops.sort(Comparator.comparing((item) -> item.is(EITags.FARMER_VOIDABLE_DROP)));
+		return drops;
+	}
+	
 	private List<ItemStack> getDrops(HarvestingContext context, HarvestingHandler handler)
 	{
 		BlockPos origin = context.pos();
 		List<ItemStack> drops;
 		if(cachedDrops.containsKey(origin))
 		{
-			drops = cachedDrops.get(origin);
+			drops = List.copyOf(cachedDrops.get(origin));
 			if(!this.insertDrops(drops, true))
 			{
 				return List.of();
 			}
 			cachedDrops.remove(origin);
-			return handler.getDrops(context);
+			return this.sortDrops(handler.getDrops(context));
 		}
 		else
 		{
-			drops = handler.getDrops(context);
+			drops = this.sortDrops(handler.getDrops(context));
 			if(drops.isEmpty())
 			{
 				return drops;
