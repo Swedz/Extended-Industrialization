@@ -3,6 +3,7 @@ package net.swedz.extended_industrialization;
 import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import com.google.common.collect.Lists;
+import dev.technici4n.grandpower.api.ILongEnergyStorage;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
@@ -39,28 +40,27 @@ public final class EITooltips
 	
 	public static final Parser<String> KEYBIND_PARSER = Parser.KEYBIND.withStyle(NUMBER_TEXT);
 	
-	public static final TooltipAttachment ENERGY_STORED_ITEM = TooltipAttachment.of(
+	public static final TooltipAttachment ENERGY_STORED_ITEM = TooltipAttachment.singleLineOptional(
+			(stack, item) -> BuiltInRegistries.ITEM.getKey(item).getNamespace().equals(EI.ID),
 			(itemStack, item) ->
 			{
-				if(BuiltInRegistries.ITEM.getKey(item).getNamespace().equals(EI.ID))
+				ILongEnergyStorage energyStorage = itemStack.getCapability(EnergyApi.ITEM);
+				if(energyStorage != null)
 				{
-					var energyStorage = itemStack.getCapability(EnergyApi.ITEM);
-					if(energyStorage != null)
+					long capacity = energyStorage.getCapacity();
+					if(capacity > 0)
 					{
-						long capacity = energyStorage.getCapacity();
-						if(capacity > 0)
-						{
-							return Optional.of(
-									line(MIText.EnergyStored)
-											.arg(new NumberWithMax(energyStorage.getAmount(), capacity), EU_MAXED_PARSER)
-							);
-						}
+						return Optional.of(
+								line(MIText.EnergyStored)
+										.arg(new NumberWithMax(energyStorage.getAmount(), capacity), EU_MAXED_PARSER)
+						);
 					}
 				}
 				return Optional.empty();
-			}).noShiftRequired();
+			}
+	).noShiftRequired();
 	
-	public static final TooltipAttachment MULCH_GANG_FOR_LIFE = TooltipAttachment.ofMultilines(
+	public static final TooltipAttachment MULCH_GANG_FOR_LIFE = TooltipAttachment.multilines(
 			EIItems.MULCH,
 			List.of(
 					line(EIText.MULCH_GANG_FOR_LIFE_0, DEFAULT_STYLE.withItalic(true)),
@@ -68,46 +68,41 @@ public final class EITooltips
 			)
 	).noShiftRequired();
 	
-	public static final TooltipAttachment COILS = TooltipAttachment.of(
+	public static final TooltipAttachment COILS = TooltipAttachment.singleLine(
+			(stack, item) ->
+					item instanceof BlockItem blockItem &&
+					LargeElectricFurnaceBlockEntity.getTiersByCoil().containsKey(BuiltInRegistries.BLOCK.getKey(blockItem.getBlock())),
 			(itemStack, item) ->
 			{
-				if(item instanceof BlockItem blockItem && LargeElectricFurnaceBlockEntity.getTiersByCoil().containsKey(BuiltInRegistries.BLOCK.getKey(blockItem.getBlock())))
+				LargeElectricFurnaceBlockEntity.Tier tier = LargeElectricFurnaceBlockEntity.getTiersByCoil()
+						.get(BuiltInRegistries.BLOCK.getKey(((BlockItem) itemStack.getItem()).getBlock()));
+				int batchSize = tier.batchSize();
+				float euCostMultiplier = tier.euCostMultiplier();
+				return line(EIText.COILS_LEF_TIER).arg(batchSize).arg(euCostMultiplier, PERCENTAGE_PARSER);
+			}
+	);
+	
+	public static final TooltipAttachment PHOTOVOLTAIC_CELLS = TooltipAttachment.multilines(
+			PhotovoltaicCellItem.class,
+			(itemStack, item) ->
+			{
+				int euPerTick = item.getEuPerTick();
+				List<Component> lines = Lists.newArrayList();
+				lines.add(line(EIText.PHOTOVOLTAIC_CELL_EU).arg(euPerTick, EU_PER_TICK_PARSER));
+				if(!item.lastsForever())
 				{
-					LargeElectricFurnaceBlockEntity.Tier tier = LargeElectricFurnaceBlockEntity.getTiersByCoil()
-							.get(BuiltInRegistries.BLOCK.getKey(((BlockItem) itemStack.getItem()).getBlock()));
-					int batchSize = tier.batchSize();
-					float euCostMultiplier = tier.euCostMultiplier();
-					return Optional.of(line(EIText.COILS_LEF_TIER).arg(batchSize).arg(euCostMultiplier, PERCENTAGE_PARSER));
+					int solarTicksRemaining = item.getSolarTicksRemaining(itemStack);
+					lines.add(line(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_MINUTES).arg((long) solarTicksRemaining, TICKS_TO_MINUTES_PARSER));
 				}
 				else
 				{
-					return Optional.empty();
+					lines.add(line(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME).arg(Component.literal("\u221E").withStyle(NUMBER_TEXT)));
 				}
-			});
+				return lines;
+			}
+	);
 	
-	public static final TooltipAttachment PHOTOVOLTAIC_CELLS = TooltipAttachment.ofMultilines(
-			(itemStack, item) ->
-			{
-				if(item instanceof PhotovoltaicCellItem photovoltaicCell)
-				{
-					int euPerTick = photovoltaicCell.getEuPerTick();
-					List<Component> lines = Lists.newArrayList();
-					lines.add(line(EIText.PHOTOVOLTAIC_CELL_EU).arg(euPerTick, EU_PER_TICK_PARSER));
-					if(!photovoltaicCell.lastsForever())
-					{
-						int solarTicksRemaining = photovoltaicCell.getSolarTicksRemaining(itemStack);
-						lines.add(line(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_MINUTES).arg((long) solarTicksRemaining, TICKS_TO_MINUTES_PARSER));
-					}
-					else
-					{
-						lines.add(line(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME).arg(Component.literal("\u221E").withStyle(NUMBER_TEXT)));
-					}
-					return Optional.of(lines);
-				}
-				return Optional.empty();
-			});
-	
-	public static final TooltipAttachment STEAM_CHAINSAW = TooltipAttachment.ofMultilines(
+	public static final TooltipAttachment STEAM_CHAINSAW = TooltipAttachment.multilines(
 			EIItems.STEAM_CHAINSAW,
 			List.of(
 					line(EIText.STEAM_CHAINSAW_1).arg("use", KEYBIND_PARSER),
@@ -117,7 +112,7 @@ public final class EITooltips
 			)
 	);
 	
-	public static final TooltipAttachment MACHINE_CONFIG_CARD = TooltipAttachment.ofMultilines(
+	public static final TooltipAttachment MACHINE_CONFIG_CARD = TooltipAttachment.multilines(
 			EIItems.MACHINE_CONFIG_CARD,
 			List.of(
 					line(EIText.MACHINE_CONFIG_CARD_HELP_1).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER),
@@ -127,32 +122,29 @@ public final class EITooltips
 			)
 	);
 	
-	public static final TooltipAttachment ELECTRIC_TOOL_SPEED = TooltipAttachment.of(
+	public static final TooltipAttachment ELECTRIC_TOOL_SPEED = TooltipAttachment.singleLine(
+			ElectricToolItem.class,
 			(itemStack, item) ->
 			{
-				if(item instanceof ElectricToolItem)
-				{
-					int speed = ElectricToolItem.getToolSpeed(itemStack);
-					return Optional.of(
-							line(EIText.MINING_SPEED)
-									.arg((float) speed / ElectricToolItem.SPEED_MAX, SPACED_PERCENTAGE_PARSER)
-					);
-				}
-				return Optional.empty();
-			}).noShiftRequired();
+				int speed = ElectricToolItem.getToolSpeed(itemStack);
+				return line(EIText.MINING_SPEED)
+						.arg((float) speed / ElectricToolItem.SPEED_MAX, SPACED_PERCENTAGE_PARSER);
+			}
+	).noShiftRequired();
 	
-	public static final TooltipAttachment ELECTRIC_TOOL_CONTROLS = TooltipAttachment.ofMultilines(
-			(itemStack, item) -> item instanceof ElectricToolItem tool ?
-					Optional.of(List.of(
-							line(EIText.ELECTRIC_TOOL_HELP_1),
-							line(tool.getToolType().includeLooting() ? EIText.ELECTRIC_TOOL_HELP_2_LOOTING : EIText.ELECTRIC_TOOL_HELP_2)
-									.arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER),
-							line(EIText.ELECTRIC_TOOL_HELP_3)
-									.arg(EIText.KEY_ALT.text().withStyle(NUMBER_TEXT))
-									.arg(EIText.KEY_MOUSE_SCROLL.text().withStyle(NUMBER_TEXT))
-					)) : Optional.empty());
+	public static final TooltipAttachment ELECTRIC_TOOL_CONTROLS = TooltipAttachment.multilines(
+			ElectricToolItem.class,
+			(stack, tool) -> List.of(
+					line(EIText.ELECTRIC_TOOL_HELP_1),
+					line(tool.getToolType().includeLooting() ? EIText.ELECTRIC_TOOL_HELP_2_LOOTING : EIText.ELECTRIC_TOOL_HELP_2)
+							.arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER),
+					line(EIText.ELECTRIC_TOOL_HELP_3)
+							.arg(EIText.KEY_ALT.text().withStyle(NUMBER_TEXT))
+							.arg(EIText.KEY_MOUSE_SCROLL.text().withStyle(NUMBER_TEXT))
+			)
+	);
 	
-	public static final TooltipAttachment HONEY_EXTRACTOR = TooltipAttachment.of(
+	public static final TooltipAttachment HONEY_EXTRACTOR = TooltipAttachment.singleLine(
 			List.of(
 					EI.id("steel_honey_extractor"),
 					EI.id("electric_honey_extractor")
@@ -160,7 +152,7 @@ public final class EITooltips
 			line(EIText.HONEY_EXTRACTOR_HELP)
 	);
 	
-	public static final TooltipAttachment WASTE_COLLECTOR = TooltipAttachment.of(
+	public static final TooltipAttachment WASTE_COLLECTOR = TooltipAttachment.singleLine(
 			List.of(
 					EI.id("bronze_waste_collector"),
 					EI.id("steel_waste_collector"),
