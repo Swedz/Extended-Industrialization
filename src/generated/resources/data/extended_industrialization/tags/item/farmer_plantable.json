@@ -6,6 +6,7 @@
   "values": [
     "#c:seeds",
     "#c:crops",
+    "#minecraft:villager_plantable_seeds",
     "#minecraft:saplings"
   ]
 }

@@ -43,6 +43,7 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 				.addTags(
 						Tags.Items.SEEDS,
 						Tags.Items.CROPS,
+						ItemTags.VILLAGER_PLANTABLE_SEEDS,
 						ItemTags.SAPLINGS
 				)
 				.remove(
