@@ -23,7 +23,7 @@ public final class EIArmorMaterials
 	public static final Holder<ArmorMaterial> NANO = create(
 			"nano",
 			(id) -> new ArmorMaterial(
-					Util.make(new EnumMap<>(ArmorItem.Type.class), map ->
+					Util.make(new EnumMap<>(ArmorItem.Type.class), (map) ->
 					{
 						for(ArmorItem.Type type : ArmorItem.Type.values())
 						{

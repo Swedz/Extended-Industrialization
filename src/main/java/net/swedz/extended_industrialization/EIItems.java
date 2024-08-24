@@ -102,7 +102,8 @@ public final class EIItems
 			case CHESTPLATE -> ItemTags.CHEST_ARMOR;
 			case LEGGINGS -> ItemTags.LEG_ARMOR;
 			case BOOTS -> ItemTags.FOOT_ARMOR;
-			default -> throw new IllegalArgumentException("Cannot get tag for armor type %s".formatted(armorType.name()));
+			default ->
+					throw new IllegalArgumentException("Cannot get tag for armor type %s".formatted(armorType.name()));
 		};
 		long capacity = 60 * 20 * CableTier.MV.getMaxTransfer();
 		return create(id, englishName, (p) -> new NanoSuitArmorItem(EIArmorMaterials.NANO, armorType, p.rarity(Rarity.UNCOMMON), capacity), EISortOrder.GEAR)
