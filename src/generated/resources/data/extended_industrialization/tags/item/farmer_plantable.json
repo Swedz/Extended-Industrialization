@@ -1,0 +1,11 @@
+{
+  "remove": [
+    "minecraft:beetroot",
+    "minecraft:wheat"
+  ],
+  "values": [
+    "#c:seeds",
+    "#c:crops",
+    "#minecraft:saplings"
+  ]
+}

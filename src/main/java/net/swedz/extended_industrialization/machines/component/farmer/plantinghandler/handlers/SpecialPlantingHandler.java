@@ -3,6 +3,7 @@ package net.swedz.extended_industrialization.machines.component.farmer.plantingh
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.SpecialPlantable;
+import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.machines.component.farmer.plantinghandler.PlantingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.plantinghandler.PlantingHandler;
 
@@ -11,7 +12,9 @@ public final class SpecialPlantingHandler implements PlantingHandler
 	@Override
 	public boolean matches(ItemStack stack)
 	{
-		return stack.getItem() instanceof SpecialPlantable;
+		return !stack.isEmpty() &&
+			   stack.is(EITags.FARMER_PLANTABLE) &&
+			   stack.getItem() instanceof SpecialPlantable;
 	}
 	
 	@Override

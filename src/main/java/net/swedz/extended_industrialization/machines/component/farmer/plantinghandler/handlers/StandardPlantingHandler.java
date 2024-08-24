@@ -1,13 +1,13 @@
 package net.swedz.extended_industrialization.machines.component.farmer.plantinghandler.handlers;
 
 import net.minecraft.core.Direction;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.neoforged.neoforge.common.util.TriState;
+import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlock;
 import net.swedz.extended_industrialization.machines.component.farmer.plantinghandler.PlantingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.plantinghandler.PlantingHandler;
@@ -18,7 +18,7 @@ public final class StandardPlantingHandler implements PlantingHandler
 	public boolean matches(ItemStack stack)
 	{
 		return !stack.isEmpty() &&
-			   (stack.is(ItemTags.VILLAGER_PLANTABLE_SEEDS) || stack.is(ItemTags.SAPLINGS)) &&
+			   stack.is(EITags.FARMER_PLANTABLE) &&
 			   stack.getItem() instanceof BlockItem;
 	}
 	

@@ -1,0 +1,8 @@
+{
+  "values": [
+    "minecraft:soul_sand",
+    "#minecraft:dirt",
+    "#c:sands",
+    "#neoforge:villager_farmlands"
+  ]
+}

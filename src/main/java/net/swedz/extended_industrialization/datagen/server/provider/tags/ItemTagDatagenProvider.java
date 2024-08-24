@@ -6,6 +6,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIItems;
@@ -24,7 +25,7 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 	
 	private void addFarmerVoidableDropTag()
 	{
-		this.tag(EITags.FARMER_VOIDABLE_DROP)
+		this.tag(EITags.FARMER_VOIDABLE)
 				.add(
 						Items.STICK,
 						Items.APPLE,
@@ -33,6 +34,20 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 				)
 				.addTags(
 						ItemTags.SAPLINGS
+				);
+	}
+	
+	private void addFarmerStandardPlantableTag()
+	{
+		this.tag(EITags.FARMER_PLANTABLE)
+				.addTags(
+						Tags.Items.SEEDS,
+						Tags.Items.CROPS,
+						ItemTags.SAPLINGS
+				)
+				.remove(
+						Items.BEETROOT,
+						Items.WHEAT
 				);
 	}
 	
@@ -48,6 +63,7 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 		}
 		
 		this.addFarmerVoidableDropTag();
+		this.addFarmerStandardPlantableTag();
 	}
 	
 	@Override
