@@ -10,6 +10,7 @@ public final class EITags
 {
 	public static final TagKey<Item> PHOTOVOLTAIC_CELL    = item("photovoltaic_cell");
 	public static final TagKey<Item> FARMER_VOIDABLE_DROP = item("farmer_voidable_drop");
+	public static final TagKey<Item> NANO_ARMOR           = item("nano_armor");
 	
 	public static TagKey<Item> item(String path)
 	{

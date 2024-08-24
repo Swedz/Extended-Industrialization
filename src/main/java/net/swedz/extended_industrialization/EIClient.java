@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
@@ -23,6 +24,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
@@ -56,6 +58,18 @@ public final class EIClient
 				}
 			}
 		});
+	}
+	
+	@SubscribeEvent
+	private static void onRegisterColorItems(RegisterColorHandlersEvent.Item event)
+	{
+		event.register(
+				(stack, color) -> color > 0 ? -1 : DyedItemColor.getOrDefault(stack, EIArmorMaterials.NANO_COLOR),
+				EIItems.NANO_HELMET,
+				EIItems.NANO_CHESTPLATE,
+				EIItems.NANO_LEGGINGS,
+				EIItems.NANO_BOOTS
+		);
 	}
 	
 	/**

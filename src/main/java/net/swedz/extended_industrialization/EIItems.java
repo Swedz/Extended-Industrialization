@@ -3,17 +3,22 @@ package net.swedz.extended_industrialization;
 import aztech.modern_industrialization.api.energy.CableTier;
 import com.google.common.collect.Sets;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
+import net.swedz.extended_industrialization.item.NanoSuitArmorItem;
 import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.machineconfig.MachineConfigCardItem;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
 import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
+import net.swedz.tesseract.neoforge.registry.common.CommonRegistrations;
 import net.swedz.tesseract.neoforge.registry.common.MICommonCapabitilies;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
@@ -47,6 +52,10 @@ public final class EIItems
 	public static final ItemHolder<ElectricToolItem>  ELECTRIC_CHAINSAW     = create("electric_chainsaw", "Electric Chainsaw", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.CHAINSAW), EISortOrder.GEAR).tag(ItemTags.AXES, ItemTags.HOES, ItemTags.SWORDS, Tags.Items.TOOLS_SHEAR).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
 	public static final ItemHolder<ElectricToolItem>  ELECTRIC_MINING_DRILL = create("electric_mining_drill", "Electric Mining Drill", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.DRILL), EISortOrder.GEAR).tag(ItemTags.PICKAXES, ItemTags.SHOVELS).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
 	public static final ItemHolder<ElectricToolItem>  ULTIMATE_LASER_DRILL  = create("ultimate_laser_drill", "Ultimate Laser Drill", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.ULTIMATE), EISortOrder.GEAR).tag(ItemTags.PICKAXES, ItemTags.SHOVELS, ItemTags.AXES, ItemTags.HOES, ItemTags.SWORDS, Tags.Items.TOOLS_SHEAR).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
+	public static final ItemHolder<NanoSuitArmorItem> NANO_HELMET           = createNanosuitArmor("nano_helmet", "Nano Helmet", ArmorItem.Type.HELMET);
+	public static final ItemHolder<NanoSuitArmorItem> NANO_CHESTPLATE       = createNanosuitArmor("nano_chestplate", "Nano Chestplate", ArmorItem.Type.CHESTPLATE);
+	public static final ItemHolder<NanoSuitArmorItem> NANO_LEGGINGS         = createNanosuitArmor("nano_leggings", "Nano Leggings", ArmorItem.Type.LEGGINGS);
+	public static final ItemHolder<NanoSuitArmorItem> NANO_BOOTS            = createNanosuitArmor("nano_boots", "Nano Boots", ArmorItem.Type.BOOTS);
 	
 	public static final ItemHolder<Item> TIN_CAN     = create("tin_can", "Tin Can", Item::new, EISortOrder.OTHER_GEAR).withModel(CommonModelBuilders::generated).register();
 	public static final ItemHolder<Item> CANNED_FOOD = create("canned_food", "Canned Food", Item::new, EISortOrder.OTHER_GEAR).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3f).fast().usingConvertsTo(TIN_CAN).build())).tag(ItemTags.WOLF_FOOD, ItemTags.CAT_FOOD).withModel(CommonModelBuilders::generated).register();
@@ -83,6 +92,25 @@ public final class EIItems
 		ItemHolder<Type> holder = new ItemHolder<>(EI.id(id), englishName, Registry.ITEMS, creator).sorted(sortOrder);
 		Registry.include(holder);
 		return holder;
+	}
+	
+	public static ItemHolder<NanoSuitArmorItem> createNanosuitArmor(String id, String englishName, ArmorItem.Type armorType)
+	{
+		TagKey<Item> armorTag = switch (armorType)
+		{
+			case HELMET -> ItemTags.HEAD_ARMOR;
+			case CHESTPLATE -> ItemTags.CHEST_ARMOR;
+			case LEGGINGS -> ItemTags.LEG_ARMOR;
+			case BOOTS -> ItemTags.FOOT_ARMOR;
+			default -> throw new IllegalArgumentException("Cannot get tag for armor type %s".formatted(armorType.name()));
+		};
+		long capacity = 60 * 20 * CableTier.MV.getMaxTransfer();
+		return create(id, englishName, (p) -> new NanoSuitArmorItem(EIArmorMaterials.NANO, armorType, p.rarity(Rarity.UNCOMMON), capacity), EISortOrder.GEAR)
+				.tag(armorTag, Tags.Items.ARMORS, ItemTags.TRIMMABLE_ARMOR, ItemTags.DYEABLE, EITags.NANO_ARMOR)
+				.withRegistrationListener(CommonRegistrations::cauldronClearDye)
+				.withCapabilities(MICommonCapabitilies::simpleEnergyItem)
+				.withModel(CommonModelBuilders::generatedOverlayed)
+				.register();
 	}
 	
 	public static ItemHolder<PhotovoltaicCellItem> createPhotovoltaicCell(String id, String name, CableTier tier, int euPerTick, int durationTicks)

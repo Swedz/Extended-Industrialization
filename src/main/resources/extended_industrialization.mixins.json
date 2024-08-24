@@ -4,12 +4,15 @@
     "package": "net.swedz.extended_industrialization.mixin",
     "compatibilityLevel": "JAVA_21",
     "mixins": [
+        "NanoArmorApplyDyeColorMixin",
         "mi.accessor.CasingComponentAccessor",
         "mi.accessor.ConfigurableItemStackAccessor",
         "mi.accessor.RedstoneControlComponentAccessor",
         "mi.accessor.UpgradeComponentAccessor"
     ],
-    "client": [],
+    "client": [
+        "client.NanoArmorRenderLayerColorMixin"
+    ],
     "injectors": {
         "defaultRequire": 1
     }
