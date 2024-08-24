@@ -61,6 +61,13 @@ dependencies {
 	} else {
 		compileOnly "net.swedz:mi-tweaks:${mi_tweaks_version}"
 	}
+
+	jarJar(implementation("io.github.llamalad7:mixinextras-neoforge:${mixinextras_version}")) {
+		version {
+			strictly "[${mixinextras_version},)"
+			prefer mixinextras_version
+		}
+	}
 }
 
 tasks.named('jar') {
