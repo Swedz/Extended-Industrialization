@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.item;
 
+import aztech.modern_industrialization.api.energy.CableTier;
 import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -13,12 +14,13 @@ import net.swedz.tesseract.neoforge.item.ItemHurtHandler;
 
 public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorTickHandler, ArmorUnequippedHandler, ItemHurtHandler
 {
+	private static final long ENERGY_CAPACITY     = 60 * 20 * CableTier.MV.getMaxTransfer();
 	private static final long DAMAGE_ENERGY       = 1024;
 	private static final long NIGHT_VISION_ENERGY = 4;
 	
-	public NanoSuitArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties, long energyCapacity)
+	public NanoSuitArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties)
 	{
-		super(material, type, properties, energyCapacity);
+		super(material, type, properties, ENERGY_CAPACITY, DAMAGE_ENERGY);
 	}
 	
 	private boolean hasNightVision(LivingEntity entity)
@@ -70,15 +72,6 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 		if(!ItemStack.isSameItem(fromStack, toStack))
 		{
 			this.maybeRemoveNightVision(entity);
-		}
-	}
-	
-	@Override
-	public void onHurt(LivingEntity entity, ItemStack stack, int damageAmount)
-	{
-		if(this.getStoredEnergy(stack) > 0)
-		{
-			this.tryUseEnergy(stack, DAMAGE_ENERGY);
 		}
 	}
 }

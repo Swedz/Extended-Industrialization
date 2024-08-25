@@ -105,8 +105,7 @@ public final class EIItems
 			default ->
 					throw new IllegalArgumentException("Cannot get tag for armor type %s".formatted(armorType.name()));
 		};
-		long capacity = 60 * 20 * CableTier.MV.getMaxTransfer();
-		return create(id, englishName, (p) -> new NanoSuitArmorItem(EIArmorMaterials.NANO, armorType, p.rarity(Rarity.UNCOMMON), capacity), EISortOrder.GEAR)
+		return create(id, englishName, (p) -> new NanoSuitArmorItem(EIArmorMaterials.NANO, armorType, p.rarity(Rarity.UNCOMMON)), EISortOrder.GEAR)
 				.tag(armorTag, Tags.Items.ARMORS, ItemTags.TRIMMABLE_ARMOR, ItemTags.DYEABLE, EITags.NANO_ARMOR)
 				.withRegistrationListener(CommonRegistrations::cauldronClearDye)
 				.withCapabilities(MICommonCapabitilies::simpleEnergyItem)

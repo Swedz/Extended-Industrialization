@@ -5,21 +5,25 @@ import dev.technici4n.grandpower.api.ISimpleEnergyItem;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.swedz.extended_industrialization.EIComponents;
+import net.swedz.tesseract.neoforge.item.ItemHurtHandler;
 
-// TODO cost energy when taking damage
-public class ElectricArmorItem extends ArmorItem implements ISimpleEnergyItem
+public class ElectricArmorItem extends ArmorItem implements ISimpleEnergyItem, ItemHurtHandler
 {
 	private final long energyCapacity;
+	private final long damageCostEnergy;
 	
-	public ElectricArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties, long energyCapacity)
+	public ElectricArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties,
+							 long energyCapacity, long damageCostEnergy)
 	{
 		super(material, type, properties.stacksTo(1));
 		this.energyCapacity = energyCapacity;
+		this.damageCostEnergy = damageCostEnergy;
 	}
 	
 	@Override
@@ -75,5 +79,14 @@ public class ElectricArmorItem extends ArmorItem implements ISimpleEnergyItem
 	{
 		float hue = Math.max(0, (float) this.getStoredEnergy(stack) / energyCapacity);
 		return Mth.hsvToRgb(hue / 3, 1, 1);
+	}
+	
+	@Override
+	public void onHurt(LivingEntity entity, ItemStack stack, int damageAmount)
+	{
+		if(this.getStoredEnergy(stack) > 0)
+		{
+			this.tryUseEnergy(stack, damageCostEnergy);
+		}
 	}
 }
