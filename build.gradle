@@ -170,6 +170,11 @@ neoForge {
 			"src/main/resources/${mod_id}.accesstransformer.cfg"
 	]
 
+	parchment {
+		mappingsVersion = project.parchment_mappings_version
+		minecraftVersion = project.minecraft_version
+	}
+
 	runs {
 		configureEach {
 			mods = [neoForge.mods."${mod_id}"]
