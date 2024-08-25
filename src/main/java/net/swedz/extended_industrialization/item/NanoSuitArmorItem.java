@@ -9,9 +9,11 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.tesseract.neoforge.item.ArmorTickHandler;
 import net.swedz.tesseract.neoforge.item.ArmorUnequippedHandler;
+import net.swedz.tesseract.neoforge.item.ItemHurtHandler;
 
-public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorTickHandler, ArmorUnequippedHandler
+public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorTickHandler, ArmorUnequippedHandler, ItemHurtHandler
 {
+	private static final long DAMAGE_ENERGY       = 1024;
 	private static final long NIGHT_VISION_ENERGY = 4;
 	
 	public NanoSuitArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties, long energyCapacity)
@@ -50,7 +52,7 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 		}
 		if(slot == EquipmentSlot.HEAD && type == Type.HELMET)
 		{
-			if(this.getStoredEnergy(stack) >= NIGHT_VISION_ENERGY)
+			if(this.getStoredEnergy(stack) > 0)
 			{
 				this.tryUseEnergy(stack, NIGHT_VISION_ENERGY);
 				this.maybeAddNightVision(entity);
@@ -68,6 +70,15 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 		if(!ItemStack.isSameItem(fromStack, toStack))
 		{
 			this.maybeRemoveNightVision(entity);
+		}
+	}
+	
+	@Override
+	public void onHurt(LivingEntity entity, ItemStack stack, int damageAmount)
+	{
+		if(this.getStoredEnergy(stack) > 0)
+		{
+			this.tryUseEnergy(stack, DAMAGE_ENERGY);
 		}
 	}
 }
