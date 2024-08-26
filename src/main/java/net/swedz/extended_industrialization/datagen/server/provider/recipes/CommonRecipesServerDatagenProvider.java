@@ -3,6 +3,7 @@ package net.swedz.extended_industrialization.datagen.server.provider.recipes;
 import aztech.modern_industrialization.MIFluids;
 import aztech.modern_industrialization.MIItem;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
+import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
 import aztech.modern_industrialization.materials.MIMaterials;
 import aztech.modern_industrialization.materials.part.MIParts;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -122,6 +123,61 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 		);
 	}
 	
+	private static void nanoSuitPiece(String id, ItemLike baseArmor, int pieces, ItemLike result, Consumer<MachineRecipeBuilder> recipeBuilder, RecipeOutput output)
+	{
+		addMachineRecipe(
+				"tool", id, MIMachineRecipeTypes.ASSEMBLER,
+				8, 10 * 20,
+				(builder) ->
+				{
+					builder
+							.addItemInput(baseArmor, 1)
+							.addItemInput(EITags.itemCommon("plates/carbon"), 4 * pieces)
+							.addItemInput(MIItem.ELECTRONIC_CIRCUIT, 4)
+							.addItemInput("modern_industrialization:silicon_battery", 2)
+							.addItemInput(MIItem.LARGE_MOTOR, 4)
+							.addFluidInput(MIFluids.POLYETHYLENE, 4000)
+							.addFluidInput(MIFluids.NYLON, 2000)
+							.addItemOutput(result, 1);
+					if(recipeBuilder != null)
+					{
+						recipeBuilder.accept(builder);
+					}
+				},
+				output
+		);
+	}
+	
+	private static void nanoSuit(RecipeOutput output)
+	{
+		nanoSuitPiece(
+				"nano_suit_helmet",
+				Items.NETHERITE_HELMET, 5, EIItems.NANO_HELMET,
+				(r) -> r
+						.addItemInput(EITags.itemCommon("glass_panes"), 4)
+						.addItemInput(MIItem.REDSTONE_CONTROL_MODULE, 1),
+				output
+		);
+		nanoSuitPiece(
+				"nano_suit_chestplate",
+				Items.NETHERITE_CHESTPLATE, 8, EIItems.NANO_CHESTPLATE,
+				null,
+				output
+		);
+		nanoSuitPiece(
+				"nano_suit_leggings",
+				Items.NETHERITE_LEGGINGS, 7, EIItems.NANO_LEGGINGS,
+				null,
+				output
+		);
+		nanoSuitPiece(
+				"nano_suit_boots",
+				Items.NETHERITE_BOOTS, 4, EIItems.NANO_BOOTS,
+				null,
+				output
+		);
+	}
+	
 	@Override
 	protected void buildRecipes(RecipeOutput output)
 	{
@@ -215,5 +271,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 						.addFluidOutput(EIFluids.BLAZING_ESSENCE, 20),
 				output
 		);
+		
+		nanoSuit(output);
 	}
 }

@@ -1,0 +1,43 @@
+{
+  "type": "modern_industrialization:assembler",
+  "duration": 200,
+  "eu": 8,
+  "fluid_inputs": [
+    {
+      "amount": 4000,
+      "fluid": "modern_industrialization:polyethylene"
+    },
+    {
+      "amount": 2000,
+      "fluid": "modern_industrialization:nylon"
+    }
+  ],
+  "item_inputs": [
+    {
+      "amount": 1,
+      "item": "minecraft:netherite_chestplate"
+    },
+    {
+      "amount": 32,
+      "tag": "c:plates/carbon"
+    },
+    {
+      "amount": 4,
+      "item": "modern_industrialization:electronic_circuit"
+    },
+    {
+      "amount": 2,
+      "item": "modern_industrialization:silicon_battery"
+    },
+    {
+      "amount": 4,
+      "item": "modern_industrialization:large_motor"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "extended_industrialization:nano_chestplate"
+    }
+  ]
+}
