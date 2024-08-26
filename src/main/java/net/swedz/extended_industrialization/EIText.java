@@ -4,10 +4,12 @@ import net.swedz.tesseract.neoforge.tooltip.TranslatableTextEnum;
 
 public enum EIText implements TranslatableTextEnum
 {
+	ACTIVATED("Activated"),
 	BREWERY_BREWS_MULTIPLE("Brews %s potions at a time."),
 	BREWERY_REQUIRES_BLAZING_ESSENCE("Requires %s to brew potions."),
 	CALCIFICATION_PERCENTAGE("Calcification : %d %%"),
 	COILS_LEF_TIER("Runs LEF in batches of up to %d at %s the EU cost."),
+	DEACTIVATED("Deactivated"),
 	ELECTRIC_TOOL_HELP_1("Tool configuration:"),
 	ELECTRIC_TOOL_HELP_2("- Press %s + %s to swap between Fortune and Silk Touch."),
 	ELECTRIC_TOOL_HELP_2_LOOTING("- Press %s + %s to swap between Fortune/Looting and Silk Touch."),
@@ -50,6 +52,9 @@ public enum EIText implements TranslatableTextEnum
 	MINING_SPEED("Mining Speed : %s"),
 	MULCH_GANG_FOR_LIFE_0("I love mulch!"),
 	MULCH_GANG_FOR_LIFE_1("Mulch is my favorite food!"),
+	NANO_SUIT_NIGHT_VISION("Night Vision : %s"),
+	NANO_SUIT_NIGHT_VISION_TOGGLED_OFF("Disabled Night Vision"),
+	NANO_SUIT_NIGHT_VISION_TOGGLED_ON("Enabled Night Vision"),
 	PHOTOVOLTAIC_CELL_EU("Will produce up to %s when placed in a Solar Panel."),
 	PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME("Remaining Operation Time : %s"),
 	PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_MINUTES("Remaining Operation Time : %s minute(s)"),

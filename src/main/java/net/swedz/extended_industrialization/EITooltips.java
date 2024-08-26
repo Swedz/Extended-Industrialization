@@ -4,10 +4,13 @@ import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import com.google.common.collect.Lists;
 import dev.technici4n.grandpower.api.ILongEnergyStorage;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
+import net.swedz.extended_industrialization.item.NanoSuitArmorItem;
 import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.tesseract.neoforge.tooltip.BiParser;
@@ -37,6 +40,9 @@ public final class EITooltips
 	
 	public static final Parser<Integer> NUMBERED_LIST_BULLET_PARSER = (number) ->
 			Component.literal("%d)".formatted(number)).withStyle(NUMBER_TEXT);
+	
+	public static final Parser<Boolean> ACTIVATED_BOOLEAN_PARSER = (value) ->
+			value ? EIText.ACTIVATED.text().withStyle(ChatFormatting.GREEN) : EIText.DEACTIVATED.text().withStyle(ChatFormatting.RED);
 	
 	public static final Parser<String> KEYBIND_PARSER = Parser.KEYBIND.withStyle(NUMBER_TEXT);
 	
@@ -143,6 +149,20 @@ public final class EITooltips
 							.arg(EIText.KEY_MOUSE_SCROLL.text().withStyle(NUMBER_TEXT))
 			)
 	);
+	
+	public static final TooltipAttachment NANO_SUIT = TooltipAttachment.multilinesOptional(
+			NanoSuitArmorItem.class,
+			(stack, item) ->
+			{
+				if(item.getType() == ArmorItem.Type.HELMET)
+				{
+					return Optional.of(List.of(
+							line(EIText.NANO_SUIT_NIGHT_VISION).arg(item.isActivated(stack), EITooltips.ACTIVATED_BOOLEAN_PARSER)
+					));
+				}
+				return Optional.empty();
+			}
+	).noShiftRequired();
 	
 	public static final TooltipAttachment HONEY_EXTRACTOR = TooltipAttachment.singleLine(
 			List.of(

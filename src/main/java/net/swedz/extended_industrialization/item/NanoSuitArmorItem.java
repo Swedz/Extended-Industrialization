@@ -6,13 +6,15 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
+import net.swedz.extended_industrialization.EIText;
 import net.swedz.tesseract.neoforge.item.ArmorTickHandler;
 import net.swedz.tesseract.neoforge.item.ArmorUnequippedHandler;
 import net.swedz.tesseract.neoforge.item.ItemHurtHandler;
 
-public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorTickHandler, ArmorUnequippedHandler, ItemHurtHandler
+public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorTickHandler, ArmorUnequippedHandler, ItemHurtHandler, ToggleableItem
 {
 	private static final long ENERGY_CAPACITY     = 60 * 20 * CableTier.MV.getMaxTransfer();
 	private static final long DAMAGE_ENERGY       = 1024;
@@ -21,6 +23,23 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	public NanoSuitArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties)
 	{
 		super(material, type, properties, ENERGY_CAPACITY, DAMAGE_ENERGY);
+	}
+	
+	@Override
+	public boolean getDefaultActivatedState()
+	{
+		return true;
+	}
+	
+	@Override
+	public void setActivated(Player player, ItemStack stack, boolean activated)
+	{
+		ToggleableItem.super.setActivated(player, stack, activated);
+		
+		if(!player.level().isClientSide())
+		{
+			player.displayClientMessage((activated ? EIText.NANO_SUIT_NIGHT_VISION_TOGGLED_ON : EIText.NANO_SUIT_NIGHT_VISION_TOGGLED_OFF).text(), true);
+		}
 	}
 	
 	private boolean hasNightVision(LivingEntity entity)
@@ -54,10 +73,17 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 		}
 		if(slot == EquipmentSlot.HEAD && type == Type.HELMET)
 		{
-			if(this.getStoredEnergy(stack) > 0)
+			if(this.isActivated(stack))
 			{
-				this.tryUseEnergy(stack, NIGHT_VISION_ENERGY);
-				this.maybeAddNightVision(entity);
+				if(this.getStoredEnergy(stack) > 0)
+				{
+					this.tryUseEnergy(stack, NIGHT_VISION_ENERGY);
+					this.maybeAddNightVision(entity);
+				}
+				else
+				{
+					this.maybeRemoveNightVision(entity);
+				}
 			}
 			else
 			{

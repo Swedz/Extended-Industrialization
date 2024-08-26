@@ -22,6 +22,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
@@ -40,6 +41,19 @@ public final class EIClient
 {
 	public EIClient(IEventBus bus)
 	{
+		EIKeybinds.init(bus);
+		
+		NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, (event) ->
+		{
+			for(EIKeybinds.Keybind keybind : EIKeybinds.Registry.getMappings())
+			{
+				while(keybind.holder().get().consumeClick())
+				{
+					keybind.action().run();
+				}
+			}
+		});
+		
 		NeoForge.EVENT_BUS.addListener(InputEvent.MouseScrollingEvent.class, (event) ->
 		{
 			if(Screen.hasAltDown())

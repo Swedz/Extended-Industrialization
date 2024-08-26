@@ -9,6 +9,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.network.packet.ModifyElectricToolSpeedPacket;
+import net.swedz.extended_industrialization.network.packet.ToggleToggleableItemPacket;
 
 import java.util.Map;
 import java.util.Set;
@@ -53,6 +54,7 @@ public final class EIPackets
 	static
 	{
 		register("modify_electric_tool_speed", ModifyElectricToolSpeedPacket.class, ModifyElectricToolSpeedPacket.STREAM_CODEC);
+		register("toggle_nano_suit_ability", ToggleToggleableItemPacket.class, ToggleToggleableItemPacket.STREAM_CODEC);
 	}
 	
 	private static <P extends EIBasePacket> void register(String path, Class<P> packetClass, StreamCodec<? super RegistryFriendlyByteBuf, P> packetCodec)

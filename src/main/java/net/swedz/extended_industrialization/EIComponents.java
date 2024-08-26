@@ -33,6 +33,10 @@ public final class EIComponents
 			"electric_tool_speed",
 			(b) -> b.persistent(ExtraCodecs.intRange(ElectricToolItem.SPEED_MIN, ElectricToolItem.SPEED_MAX)).networkSynchronized(ByteBufCodecs.VAR_INT)
 	);
+	public static final Supplier<DataComponentType<Boolean>>       ACTIVATED           = create(
+			"activated",
+			(b) -> b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL)
+	);
 	
 	public static void init(IEventBus bus)
 	{
