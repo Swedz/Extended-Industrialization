@@ -106,7 +106,7 @@ public final class EIItems
 					throw new IllegalArgumentException("Cannot get tag for armor type %s".formatted(armorType.name()));
 		};
 		return create(id, englishName, (p) -> new NanoSuitArmorItem(EIArmorMaterials.NANO, armorType, p.rarity(Rarity.UNCOMMON)), EISortOrder.GEAR)
-				.tag(armorTag, Tags.Items.ARMORS, ItemTags.TRIMMABLE_ARMOR, ItemTags.DYEABLE, EITags.NANO_ARMOR)
+				.tag(armorTag, Tags.Items.ARMORS, ItemTags.TRIMMABLE_ARMOR, ItemTags.DYEABLE)
 				.withRegistrationListener(CommonRegistrations::cauldronClearDye)
 				.withCapabilities(MICommonCapabitilies::simpleEnergyItem)
 				.withModel(CommonModelBuilders::generatedOverlayed)

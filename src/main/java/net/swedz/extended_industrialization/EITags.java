@@ -11,7 +11,6 @@ public final class EITags
 	public static final TagKey<Item> PHOTOVOLTAIC_CELL = item("photovoltaic_cell");
 	public static final TagKey<Item> FARMER_VOIDABLE   = item("farmer_voidable");
 	public static final TagKey<Item> FARMER_PLANTABLE  = item("farmer_plantable");
-	public static final TagKey<Item> NANO_ARMOR        = item("nano_armor");
 	
 	public static final TagKey<Block> FARMER_DIRT = block("farmer_dirt");
 	

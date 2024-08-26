@@ -10,8 +10,8 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.DyeColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.swedz.tesseract.neoforge.helper.ColorHelper;
 
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.function.Function;
@@ -45,34 +45,7 @@ public final class EIArmorMaterials
 			)
 	);
 	
-	public static final int NANO_COLOR = getNanoColor(DyeColor.LIME);
-	
-	public static int getNanoColor(DyeColor dyeColor)
-	{
-		if(!Arrays.asList(DyeColor.values()).contains(dyeColor))
-		{
-			return dyeColor.getTextColor();
-		}
-		return 0xFF000000 ^ switch (dyeColor)
-		{
-			case WHITE -> 0xFFFFFF;
-			case ORANGE -> 0xFF7F00;
-			case MAGENTA -> 0xFF00FF;
-			case LIGHT_BLUE -> 0x00FFFF;
-			case YELLOW -> 0xFFFF00;
-			case LIME -> 0x00FF00;
-			case PINK -> 0xFFB4FF;
-			case GRAY -> 0x555555;
-			case LIGHT_GRAY -> 0xAAAAAA;
-			case CYAN -> 0x00AAAA;
-			case PURPLE -> 0xAA00AA;
-			case BLUE -> 0x0000FF;
-			case BROWN -> 0x8B4513;
-			case GREEN -> 0x00AA00;
-			case RED -> 0xFF0000;
-			case BLACK -> 0x000000;
-		};
-	}
+	public static final int NANO_COLOR = ColorHelper.getVibrantColor(DyeColor.LIME);
 	
 	public static void init(IEventBus bus)
 	{
