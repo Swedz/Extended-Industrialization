@@ -27,7 +27,7 @@ public final class EIArmorMaterials
 					{
 						for(ArmorItem.Type type : ArmorItem.Type.values())
 						{
-							map.put(type, 8);
+							map.put(type, 6);
 						}
 					}),
 					0,
@@ -40,7 +40,7 @@ public final class EIArmorMaterials
 							new ArmorMaterial.Layer(id, "", true),
 							new ArmorMaterial.Layer(id, "_overlay", false)
 					),
-					2,
+					3,
 					0.1f
 			)
 	);
