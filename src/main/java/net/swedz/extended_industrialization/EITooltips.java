@@ -7,11 +7,10 @@ import dev.technici4n.grandpower.api.ILongEnergyStorage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
-import net.swedz.extended_industrialization.item.NanoSuitArmorItem;
 import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
+import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.tesseract.neoforge.tooltip.BiParser;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
@@ -150,18 +149,9 @@ public final class EITooltips
 			)
 	);
 	
-	public static final TooltipAttachment NANO_SUIT = TooltipAttachment.multilinesOptional(
+	public static final TooltipAttachment NANO_SUIT_ABILITY = TooltipAttachment.multilinesOptional(
 			NanoSuitArmorItem.class,
-			(stack, item) ->
-			{
-				if(item.getType() == ArmorItem.Type.HELMET)
-				{
-					return Optional.of(List.of(
-							line(EIText.NANO_SUIT_NIGHT_VISION).arg(item.isActivated(stack), EITooltips.ACTIVATED_BOOLEAN_PARSER)
-					));
-				}
-				return Optional.empty();
-			}
+			(stack, item) -> item.ability().flatMap((a) -> a.getTooltips(item, stack))
 	).noShiftRequired();
 	
 	public static final TooltipAttachment HONEY_EXTRACTOR = TooltipAttachment.singleLine(
