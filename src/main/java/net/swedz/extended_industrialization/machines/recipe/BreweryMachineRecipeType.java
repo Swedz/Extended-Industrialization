@@ -5,7 +5,6 @@ import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
 import aztech.modern_industrialization.machines.recipe.ProxyableMachineRecipeType;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -29,7 +28,6 @@ import net.swedz.extended_industrialization.datagen.api.RecipeHelper;
 import net.swedz.tesseract.neoforge.compat.mi.mixin.accessor.MIRecipeAccessor;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 
 public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
@@ -64,19 +62,9 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 		return id(potion.getKey().location());
 	}
 	
-	private final Set<ItemStack> loggedItems = Sets.newHashSet();
-	
 	public BreweryMachineRecipeType(ResourceLocation id)
 	{
 		super(id);
-	}
-	
-	private void log(ItemStack stack, String message, Object... arguments)
-	{
-		if(loggedItems.add(stack))
-		{
-			EI.LOGGER.warn(message, arguments);
-		}
 	}
 	
 	private RecipeHolder<MachineRecipe> generate(ResourceLocation id, Ingredient inputIngredient, Ingredient reagentIngredient, ItemStack outputStack)
