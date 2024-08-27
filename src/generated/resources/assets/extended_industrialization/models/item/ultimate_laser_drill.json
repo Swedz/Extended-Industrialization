@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "extended_industrialization:item/ultimate_laser_drill"
+    "layer0": "extended_industrialization:item/ultimate_laser_drill",
+    "layer1": "extended_industrialization:item/ultimate_laser_drill_overlay"
   }
 }

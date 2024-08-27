@@ -23,6 +23,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -43,11 +44,13 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.neoforged.neoforge.common.IShearable;
 import net.neoforged.neoforge.common.Tags;
 import net.swedz.extended_industrialization.EIComponents;
+import net.swedz.tesseract.neoforge.helper.ColorHelper;
+import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 
 import java.util.List;
 import java.util.Map;
 
-public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEnergyItem
+public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEnergyItem, DynamicDyedItem
 {
 	public static final  int SPEED_MIN        = 1;
 	public static final  int SPEED_MAX        = 10;
@@ -131,6 +134,32 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	public static void setFortune(ItemStack stack, boolean fortune)
 	{
 		stack.set(MIComponents.SILK_TOUCH, !fortune);
+	}
+	
+	@Override
+	public int getDyeColor(DyeColor dyeColor)
+	{
+		if(toolType == Type.ULTIMATE)
+		{
+			return ColorHelper.getVibrantColor(dyeColor);
+		}
+		else
+		{
+			throw new UnsupportedOperationException();
+		}
+	}
+	
+	@Override
+	public int getDefaultDyeColor()
+	{
+		if(toolType == Type.ULTIMATE)
+		{
+			return 0xFFFF0000;
+		}
+		else
+		{
+			throw new UnsupportedOperationException();
+		}
 	}
 	
 	@Override

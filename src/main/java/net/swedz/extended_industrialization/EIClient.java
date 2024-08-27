@@ -78,6 +78,10 @@ public final class EIClient
 	private static void onRegisterColorItems(RegisterColorHandlersEvent.Item event)
 	{
 		event.register(
+				(stack, color) -> color > 0 ? -1 : DyedItemColor.getOrDefault(stack, 0xFFFF0000),
+				EIItems.ULTIMATE_LASER_DRILL
+		);
+		event.register(
 				(stack, color) -> color > 0 ? -1 : DyedItemColor.getOrDefault(stack, EIArmorMaterials.NANO_COLOR),
 				EIItems.NANO_HELMET,
 				EIItems.NANO_CHESTPLATE,
