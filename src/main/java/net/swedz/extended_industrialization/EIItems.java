@@ -2,10 +2,12 @@ package net.swedz.extended_industrialization;
 
 import aztech.modern_industrialization.api.energy.CableTier;
 import com.google.common.collect.Sets;
+import net.minecraft.core.Holder;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.neoforged.bus.api.IEventBus;
@@ -56,6 +58,7 @@ public final class EIItems
 	public static final ItemHolder<ElectricToolItem>  ULTIMATE_LASER_DRILL  = create("ultimate_laser_drill", "Ultimate Laser Drill", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.ULTIMATE), EISortOrder.GEAR).tag(ItemTags.DYEABLE, ItemTags.PICKAXES, ItemTags.SHOVELS, ItemTags.AXES, ItemTags.HOES, ItemTags.SWORDS, Tags.Items.TOOLS_SHEAR).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModel(CommonModelBuilders::handheldOverlayed).register();
 	public static final ItemHolder<NanoSuitArmorItem> NANO_HELMET           = createNanosuitArmor("nano_helmet", "Nano Helmet", ArmorItem.Type.HELMET, NanoSuitAbility.NIGHT_VISION);
 	public static final ItemHolder<NanoSuitArmorItem> NANO_CHESTPLATE       = createNanosuitArmor("nano_chestplate", "Nano Chestplate", ArmorItem.Type.CHESTPLATE);
+	public static final ItemHolder<NanoSuitArmorItem> NANO_GRAVICHESTPLATE  = createNanosuitArmor("nano_gravichestplate", "Nano Gravichestplate", ArmorItem.Type.CHESTPLATE, EIArmorMaterials.NANO_GRAVICHESTPLATE, NanoSuitAbility.GRAVICHESTPLATE);
 	public static final ItemHolder<NanoSuitArmorItem> NANO_LEGGINGS         = createNanosuitArmor("nano_leggings", "Nano Leggings", ArmorItem.Type.LEGGINGS);
 	public static final ItemHolder<NanoSuitArmorItem> NANO_BOOTS            = createNanosuitArmor("nano_boots", "Nano Boots", ArmorItem.Type.BOOTS);
 	
@@ -96,7 +99,7 @@ public final class EIItems
 		return holder;
 	}
 	
-	public static ItemHolder<NanoSuitArmorItem> createNanosuitArmor(String id, String englishName, ArmorItem.Type armorType, Optional<NanoSuitAbility> ability)
+	public static ItemHolder<NanoSuitArmorItem> createNanosuitArmor(String id, String englishName, ArmorItem.Type armorType, Holder<ArmorMaterial> material, Optional<NanoSuitAbility> ability)
 	{
 		TagKey<Item> armorTag = switch (armorType)
 		{
@@ -107,7 +110,7 @@ public final class EIItems
 			default ->
 					throw new IllegalArgumentException("Cannot get tag for armor type %s".formatted(armorType.name()));
 		};
-		return create(id, englishName, (p) -> new NanoSuitArmorItem(EIArmorMaterials.NANO, armorType, p.rarity(ability.map(NanoSuitAbility::rarity).orElse(Rarity.UNCOMMON)), ability), EISortOrder.GEAR)
+		return create(id, englishName, (p) -> new NanoSuitArmorItem(material, armorType, p.rarity(ability.map(NanoSuitAbility::rarity).orElse(Rarity.UNCOMMON)), ability), EISortOrder.GEAR)
 				.tag(armorTag, Tags.Items.ARMORS, ItemTags.TRIMMABLE_ARMOR, ItemTags.DYEABLE)
 				.withRegistrationListener(CommonRegistrations::cauldronClearDye)
 				.withCapabilities(MICommonCapabitilies::simpleEnergyItem)
@@ -115,14 +118,24 @@ public final class EIItems
 				.register();
 	}
 	
+	public static ItemHolder<NanoSuitArmorItem> createNanosuitArmor(String id, String englishName, ArmorItem.Type armorType, Holder<ArmorMaterial> material, NanoSuitAbility ability)
+	{
+		return createNanosuitArmor(id, englishName, armorType, material, Optional.of(ability));
+	}
+	
 	public static ItemHolder<NanoSuitArmorItem> createNanosuitArmor(String id, String englishName, ArmorItem.Type armorType, NanoSuitAbility ability)
 	{
-		return createNanosuitArmor(id, englishName, armorType, Optional.of(ability));
+		return createNanosuitArmor(id, englishName, armorType, EIArmorMaterials.NANO, Optional.of(ability));
+	}
+	
+	public static ItemHolder<NanoSuitArmorItem> createNanosuitArmor(String id, String englishName, ArmorItem.Type armorType, Holder<ArmorMaterial> material)
+	{
+		return createNanosuitArmor(id, englishName, armorType, material, Optional.empty());
 	}
 	
 	public static ItemHolder<NanoSuitArmorItem> createNanosuitArmor(String id, String englishName, ArmorItem.Type armorType)
 	{
-		return createNanosuitArmor(id, englishName, armorType, Optional.empty());
+		return createNanosuitArmor(id, englishName, armorType, EIArmorMaterials.NANO, Optional.empty());
 	}
 	
 	public static ItemHolder<PhotovoltaicCellItem> createPhotovoltaicCell(String id, String name, CableTier tier, int euPerTick, int durationTicks)

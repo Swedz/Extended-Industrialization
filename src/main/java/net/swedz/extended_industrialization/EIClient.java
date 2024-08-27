@@ -26,14 +26,18 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.swedz.extended_industrialization.client.NanoGravichestplateHudRenderer;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.machineconfig.MachineConfigCardItem;
 import net.swedz.extended_industrialization.item.tooltip.MachineConfigCardTooltipComponent;
 import net.swedz.extended_industrialization.item.tooltip.SteamChainsawTooltipComponent;
 import net.swedz.extended_industrialization.network.packet.ModifyElectricToolSpeedPacket;
+import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 
 @Mod(value = EI.ID, dist = Dist.CLIENT)
 @EventBusSubscriber(value = Dist.CLIENT, modid = EI.ID, bus = EventBusSubscriber.Bus.MOD)
@@ -78,13 +82,11 @@ public final class EIClient
 	private static void onRegisterColorItems(RegisterColorHandlersEvent.Item event)
 	{
 		event.register(
-				(stack, color) -> color > 0 ? -1 : DyedItemColor.getOrDefault(stack, 0xFFFF0000),
-				EIItems.ULTIMATE_LASER_DRILL
-		);
-		event.register(
-				(stack, color) -> color > 0 ? -1 : DyedItemColor.getOrDefault(stack, EIArmorMaterials.NANO_COLOR),
+				(stack, color) -> color > 0 ? -1 : DyedItemColor.getOrDefault(stack, ((DynamicDyedItem) stack.getItem()).getDefaultDyeColor()),
+				EIItems.ULTIMATE_LASER_DRILL,
 				EIItems.NANO_HELMET,
 				EIItems.NANO_CHESTPLATE,
+				EIItems.NANO_GRAVICHESTPLATE,
 				EIItems.NANO_LEGGINGS,
 				EIItems.NANO_BOOTS
 		);
@@ -124,5 +126,11 @@ public final class EIClient
 	{
 		event.register(SteamChainsawItem.SteamChainsawTooltipData.class, SteamChainsawTooltipComponent::new);
 		event.register(MachineConfigCardItem.TooltipData.class, MachineConfigCardTooltipComponent::new);
+	}
+	
+	@SubscribeEvent
+	private static void registerGuiLayers(RegisterGuiLayersEvent event)
+	{
+		event.registerAbove(VanillaGuiLayers.SELECTED_ITEM_NAME, EI.id("nano_gravichestplate_activation_status"), NanoGravichestplateHudRenderer::render);
 	}
 }

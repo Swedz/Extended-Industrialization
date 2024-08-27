@@ -228,8 +228,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public int getBarColor(ItemStack stack)
 	{
-		float hue = Math.max(0, (float) this.getStoredEnergy(stack) / toolType.energyCapacity());
-		return Mth.hsvToRgb(hue / 3, 1, 1);
+		return 0xFF0000;
 	}
 	
 	@Override

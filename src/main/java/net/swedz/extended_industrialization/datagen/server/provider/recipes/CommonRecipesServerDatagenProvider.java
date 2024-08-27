@@ -176,6 +176,25 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				null,
 				output
 		);
+		
+		addMachineRecipe(
+				"tool", "nano_suit_gravichestplate_upgrade", MIMachineRecipeTypes.PACKER,
+				32, 10 * 20,
+				(b) -> b
+						.addItemInput(EIItems.NANO_CHESTPLATE, 1)
+						.addItemInput(MIItem.GRAVICHESTPLATE, 1)
+						.addItemOutput(EIItems.NANO_GRAVICHESTPLATE, 1),
+				output
+		);
+		addMachineRecipe(
+				"tool", "nano_suit_gravichestplate_downgrade", MIMachineRecipeTypes.UNPACKER,
+				32, 10 * 20,
+				(b) -> b
+						.addItemInput(EIItems.NANO_GRAVICHESTPLATE, 1)
+						.addItemOutput(EIItems.NANO_CHESTPLATE, 1)
+						.addItemOutput(MIItem.GRAVICHESTPLATE, 1),
+				output
+		);
 	}
 	
 	@Override

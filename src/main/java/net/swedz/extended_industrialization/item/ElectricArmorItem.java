@@ -29,7 +29,12 @@ public class ElectricArmorItem extends ArmorItem implements ISimpleEnergyItem, I
 	@Override
 	public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack)
 	{
-		return this.getStoredEnergy(stack) > 0 ? defaultModifiers.get() : ItemAttributeModifiers.EMPTY;
+		return this.getModifiedDefaultAttributeModifiers(stack, this.getStoredEnergy(stack) > 0 ? defaultModifiers.get() : ItemAttributeModifiers.EMPTY);
+	}
+	
+	public ItemAttributeModifiers getModifiedDefaultAttributeModifiers(ItemStack stack, ItemAttributeModifiers modifiers)
+	{
+		return modifiers;
 	}
 	
 	@Override
@@ -77,8 +82,7 @@ public class ElectricArmorItem extends ArmorItem implements ISimpleEnergyItem, I
 	@Override
 	public int getBarColor(ItemStack stack)
 	{
-		float hue = Math.max(0, (float) this.getStoredEnergy(stack) / energyCapacity);
-		return Mth.hsvToRgb(hue / 3, 1, 1);
+		return 0xFF0000;
 	}
 	
 	@Override

@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.swedz.extended_industrialization.EIArmorMaterials;
 import net.swedz.extended_industrialization.item.ElectricArmorItem;
 import net.swedz.extended_industrialization.item.ToggleableItem;
@@ -21,14 +22,18 @@ import java.util.Optional;
 
 public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorTickHandler, ArmorUnequippedHandler, ItemHurtHandler, ToggleableItem, DynamicDyedItem
 {
-	private static final long ENERGY_CAPACITY = 60 * 20 * CableTier.MV.getMaxTransfer();
-	private static final long DAMAGE_ENERGY   = 1024;
+	private static final long DEFAULT_ENERGY_CAPACITY = 60 * 20 * CableTier.MV.getMaxTransfer();
+	private static final long DAMAGE_ENERGY           = 1024;
 	
 	private final Optional<NanoSuitAbility> ability;
 	
 	public NanoSuitArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties, Optional<NanoSuitAbility> ability)
 	{
-		super(material, type, properties, ENERGY_CAPACITY, DAMAGE_ENERGY);
+		super(
+				material, type, properties,
+				ability.map(NanoSuitAbility::overrideEnergyCapacity).filter((e) -> e > 0).orElse(DEFAULT_ENERGY_CAPACITY),
+				DAMAGE_ENERGY
+		);
 		if(ability.isPresent() && type != ability.get().armorType())
 		{
 			throw new IllegalArgumentException("Mismatching armor type for item and ability");
@@ -41,6 +46,22 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 		return ability;
 	}
 	
+	public boolean hasAbility(Class<? extends NanoSuitAbility> abilityClass)
+	{
+		return ability.filter((a) -> abilityClass.isAssignableFrom(a.getClass())).isPresent();
+	}
+	
+	@Override
+	public ItemAttributeModifiers getModifiedDefaultAttributeModifiers(ItemStack stack, ItemAttributeModifiers modifiers)
+	{
+		if(ability.isPresent())
+		{
+			NanoSuitAbility ability = this.ability.get();
+			modifiers = ability.getModifiedDefaultAttributeModifiers(this, stack, modifiers);
+		}
+		return modifiers;
+	}
+	
 	@Override
 	public int getDyeColor(DyeColor dyeColor)
 	{
@@ -50,7 +71,7 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	@Override
 	public int getDefaultDyeColor()
 	{
-		return EIArmorMaterials.NANO_COLOR;
+		return ability.map(NanoSuitAbility::overrideDefaultColor).orElse(EIArmorMaterials.NANO_COLOR);
 	}
 	
 	@Override

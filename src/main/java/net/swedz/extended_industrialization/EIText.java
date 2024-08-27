@@ -52,6 +52,7 @@ public enum EIText implements TranslatableTextEnum
 	MINING_SPEED("Mining Speed : %s"),
 	MULCH_GANG_FOR_LIFE_0("I love mulch!"),
 	MULCH_GANG_FOR_LIFE_1("Mulch is my favorite food!"),
+	NANO_SUIT_CREATIVE_FLIGHT("Creative Flight : %s"),
 	NANO_SUIT_NIGHT_VISION("Night Vision : %s"),
 	NANO_SUIT_NIGHT_VISION_TOGGLED_OFF("Disabled Night Vision"),
 	NANO_SUIT_NIGHT_VISION_TOGGLED_ON("Enabled Night Vision"),

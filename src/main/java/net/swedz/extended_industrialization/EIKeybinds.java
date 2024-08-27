@@ -53,7 +53,7 @@ public final class EIKeybinds
 	
 	public static final String CATEGORY = Util.makeDescriptionId("key.categories", EI.id(EI.ID));
 	
-	public static final Keybind TOGGLE_HELMET_ABILITY = create(
+	public static final Keybind TOGGLE_HELMET_ABILITY     = create(
 			"toggle_helmet_ability",
 			"Toggle Helmet Ability",
 			(id) -> new KeyMapping(
@@ -63,6 +63,17 @@ public final class EIKeybinds
 					CATEGORY
 			),
 			toggleableItemAction(EquipmentSlot.HEAD)
+	);
+	public static final Keybind TOGGLE_CHESTPLATE_ABILITY = create(
+			"toggle_chestplate_ability",
+			"Toggle Chestplate Ability",
+			(id) -> new KeyMapping(
+					id,
+					InputConstants.Type.KEYSYM,
+					GLFW.GLFW_KEY_N,
+					CATEGORY
+			),
+			toggleableItemAction(EquipmentSlot.CHEST)
 	);
 	
 	private static Keybind create(String id, String englishName, Function<String, KeyMapping> creator, Runnable action)

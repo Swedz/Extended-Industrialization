@@ -20,32 +20,11 @@ public final class EIArmorMaterials
 {
 	private static final DeferredRegister<ArmorMaterial> MATERIALS = DeferredRegister.create(Registries.ARMOR_MATERIAL, EI.ID);
 	
-	public static final Holder<ArmorMaterial> NANO = create(
-			"nano",
-			(id) -> new ArmorMaterial(
-					Util.make(new EnumMap<>(ArmorItem.Type.class), (map) ->
-					{
-						for(ArmorItem.Type type : ArmorItem.Type.values())
-						{
-							map.put(type, 6);
-						}
-					}),
-					0,
-					SoundEvents.ARMOR_EQUIP_NETHERITE,
-					() ->
-					{
-						throw new UnsupportedOperationException("Cannot repair nano armor");
-					},
-					List.of(
-							new ArmorMaterial.Layer(id, "", true),
-							new ArmorMaterial.Layer(id, "_overlay", false)
-					),
-					3,
-					0.1f
-			)
-	);
+	public static final Holder<ArmorMaterial> NANO                 = createNanoMaterial("nano");
+	public static final Holder<ArmorMaterial> NANO_GRAVICHESTPLATE = createNanoMaterial("nano_gravichestplate");
 	
-	public static final int NANO_COLOR = ColorHelper.getVibrantColor(DyeColor.LIME);
+	public static final int NANO_COLOR                 = ColorHelper.getVibrantColor(DyeColor.LIME);
+	public static final int NANO_GRAVICHESTPLATE_COLOR = ColorHelper.getVibrantColor(DyeColor.LIGHT_BLUE);
 	
 	public static void init(IEventBus bus)
 	{
@@ -55,5 +34,33 @@ public final class EIArmorMaterials
 	private static Holder<ArmorMaterial> create(String name, Function<ResourceLocation, ArmorMaterial> creator)
 	{
 		return MATERIALS.register(name, creator);
+	}
+	
+	private static Holder<ArmorMaterial> createNanoMaterial(String name)
+	{
+		return create(
+				name,
+				(id) -> new ArmorMaterial(
+						Util.make(new EnumMap<>(ArmorItem.Type.class), (map) ->
+						{
+							for(ArmorItem.Type type : ArmorItem.Type.values())
+							{
+								map.put(type, 6);
+							}
+						}),
+						0,
+						SoundEvents.ARMOR_EQUIP_NETHERITE,
+						() ->
+						{
+							throw new UnsupportedOperationException("Cannot repair nano armor");
+						},
+						List.of(
+								new ArmorMaterial.Layer(id, "", true),
+								new ArmorMaterial.Layer(id, "_overlay", false)
+						),
+						3,
+						0.1f
+				)
+		);
 	}
 }
