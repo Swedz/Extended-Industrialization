@@ -5,6 +5,7 @@ import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
 import aztech.modern_industrialization.machines.recipe.ProxyableMachineRecipeType;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -28,16 +29,11 @@ import net.swedz.extended_industrialization.datagen.api.RecipeHelper;
 import net.swedz.tesseract.neoforge.compat.mi.mixin.accessor.MIRecipeAccessor;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 {
-	public BreweryMachineRecipeType(ResourceLocation id)
-	{
-		super(id);
-	}
-	
 	private static String id(ResourceLocation location)
 	{
 		return "%s/%s".formatted(location.getNamespace(), location.getPath());
@@ -66,6 +62,21 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 	private static String idPotion(Holder<Potion> potion)
 	{
 		return id(potion.getKey().location());
+	}
+	
+	private final Set<ItemStack> loggedItems = Sets.newHashSet();
+	
+	public BreweryMachineRecipeType(ResourceLocation id)
+	{
+		super(id);
+	}
+	
+	private void log(ItemStack stack, String message, Object... arguments)
+	{
+		if(loggedItems.add(stack))
+		{
+			EI.LOGGER.warn(message, arguments);
+		}
 	}
 	
 	private RecipeHolder<MachineRecipe> generate(ResourceLocation id, Ingredient inputIngredient, Ingredient reagentIngredient, ItemStack outputStack)
@@ -175,12 +186,12 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 		return recipes;
 	}
 	
-	private RecipeHolder<MachineRecipe> generateModded(ItemStack inputStack, Holder<Potion> inputPotion, Ingredient reagentIngredient, ItemStack outputStack, Holder<Potion> outputPotion)
+	private RecipeHolder<MachineRecipe> generateModded(ItemStack inputStack, Ingredient reagentIngredient, ItemStack outputStack)
 	{
 		ResourceLocation id = EI.id("brewery/generated/modded/%s/%s/%s".formatted(
-				idPotion(inputPotion),
+				id(inputStack),
 				id(reagentIngredient),
-				idPotion(outputPotion)
+				id(outputStack)
 		));
 		
 		return this.generate(id, inputStack, reagentIngredient, outputStack);
@@ -192,32 +203,9 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 		
 		for(ItemStack inputStack : brewingRecipe.getInput().getItems())
 		{
-			if(!inputStack.has(DataComponents.POTION_CONTENTS))
-			{
-				EI.LOGGER.warn("Found modded potion recipe with invalid potion input: no potion data component attached");
-				continue;
-			}
-			Optional<Holder<Potion>> inputPotion = inputStack.get(DataComponents.POTION_CONTENTS).potion();
-			if(inputPotion.isEmpty())
-			{
-				EI.LOGGER.warn("Found modded potion recipe with invalid potion input: potion data component attached but has no potion");
-				continue;
-			}
 			Ingredient reagentIngredient = brewingRecipe.getIngredient();
 			ItemStack outputStack = brewingRecipe.getOutput(inputStack, reagentIngredient.getItems()[0]);
-			if(!outputStack.has(DataComponents.POTION_CONTENTS))
-			{
-				EI.LOGGER.warn("Found modded potion recipe with invalid potion output: no potion data component attached");
-				continue;
-			}
-			Optional<Holder<Potion>> outputPotion = outputStack.get(DataComponents.POTION_CONTENTS).potion();
-			if(outputPotion.isEmpty())
-			{
-				EI.LOGGER.warn("Found modded potion recipe with invalid potion output: potion data component attached but has no potion");
-				continue;
-			}
-			
-			recipes.add(this.generateModded(inputStack, inputPotion.get(), reagentIngredient, outputStack, outputPotion.get()));
+			recipes.add(this.generateModded(inputStack, reagentIngredient, outputStack));
 		}
 		
 		return recipes;
