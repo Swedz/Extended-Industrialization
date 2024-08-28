@@ -13,12 +13,13 @@ import net.minecraft.world.item.Rarity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.swedz.extended_industrialization.component.RainbowDataComponent;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
-import net.swedz.extended_industrialization.item.nanosuit.NanoSuitAbility;
-import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.machineconfig.MachineConfigCardItem;
+import net.swedz.extended_industrialization.item.nanosuit.NanoSuitAbility;
+import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
 import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
 import net.swedz.tesseract.neoforge.registry.common.CommonRegistrations;
@@ -55,7 +56,7 @@ public final class EIItems
 	public static final ItemHolder<SteamChainsawItem> STEAM_CHAINSAW        = create("steam_chainsaw", "Steam Chainsaw", SteamChainsawItem::new, EISortOrder.GEAR).tag(ItemTags.AXES, ItemTags.HOES, ItemTags.SWORDS, Tags.Items.TOOLS_SHEAR).withModel(CommonModelBuilders::handheld).register();
 	public static final ItemHolder<ElectricToolItem>  ELECTRIC_CHAINSAW     = create("electric_chainsaw", "Electric Chainsaw", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.CHAINSAW), EISortOrder.GEAR).tag(ItemTags.AXES, ItemTags.HOES, ItemTags.SWORDS, Tags.Items.TOOLS_SHEAR).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
 	public static final ItemHolder<ElectricToolItem>  ELECTRIC_MINING_DRILL = create("electric_mining_drill", "Electric Mining Drill", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.DRILL), EISortOrder.GEAR).tag(ItemTags.PICKAXES, ItemTags.SHOVELS).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModel(CommonModelBuilders::handheld).register();
-	public static final ItemHolder<ElectricToolItem>  ULTIMATE_LASER_DRILL  = create("ultimate_laser_drill", "Ultimate Laser Drill", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.ULTIMATE), EISortOrder.GEAR).tag(ItemTags.DYEABLE, ItemTags.PICKAXES, ItemTags.SHOVELS, ItemTags.AXES, ItemTags.HOES, ItemTags.SWORDS, Tags.Items.TOOLS_SHEAR).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModel(CommonModelBuilders::handheldOverlayed).register();
+	public static final ItemHolder<ElectricToolItem>  ULTIMATE_LASER_DRILL  = create("ultimate_laser_drill", "Ultimate Laser Drill", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.ULTIMATE), EISortOrder.GEAR).tag(ItemTags.DYEABLE, EITags.RAINBOW_DYEABLE, ItemTags.PICKAXES, ItemTags.SHOVELS, ItemTags.AXES, ItemTags.HOES, ItemTags.SWORDS, Tags.Items.TOOLS_SHEAR).withRegistrationListener(CommonRegistrations::cauldronClearDye).withRegistrationListener(RainbowDataComponent::cauldronClearDyeAndRainbow).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModel(CommonModelBuilders::handheldOverlayed).register();
 	public static final ItemHolder<NanoSuitArmorItem> NANO_HELMET           = createNanosuitArmor("nano_helmet", "Nano Helmet", ArmorItem.Type.HELMET, NanoSuitAbility.NIGHT_VISION);
 	public static final ItemHolder<NanoSuitArmorItem> NANO_CHESTPLATE       = createNanosuitArmor("nano_chestplate", "Nano Chestplate", ArmorItem.Type.CHESTPLATE);
 	public static final ItemHolder<NanoSuitArmorItem> NANO_GRAVICHESTPLATE  = createNanosuitArmor("nano_gravichestplate", "Nano Gravichestplate", ArmorItem.Type.CHESTPLATE, EIArmorMaterials.NANO_GRAVICHESTPLATE, NanoSuitAbility.GRAVICHESTPLATE);
@@ -111,8 +112,9 @@ public final class EIItems
 					throw new IllegalArgumentException("Cannot get tag for armor type %s".formatted(armorType.name()));
 		};
 		return create(id, englishName, (p) -> new NanoSuitArmorItem(material, armorType, p.rarity(ability.map(NanoSuitAbility::rarity).orElse(Rarity.UNCOMMON)), ability), EISortOrder.GEAR)
-				.tag(armorTag, Tags.Items.ARMORS, ItemTags.TRIMMABLE_ARMOR, ItemTags.DYEABLE)
+				.tag(armorTag, Tags.Items.ARMORS, ItemTags.TRIMMABLE_ARMOR, ItemTags.DYEABLE, EITags.RAINBOW_DYEABLE)
 				.withRegistrationListener(CommonRegistrations::cauldronClearDye)
+				.withRegistrationListener(RainbowDataComponent::cauldronClearDyeAndRainbow)
 				.withCapabilities(MICommonCapabitilies::simpleEnergyItem)
 				.withModel(CommonModelBuilders::generatedOverlayed)
 				.register();

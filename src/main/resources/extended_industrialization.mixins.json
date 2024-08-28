@@ -4,6 +4,9 @@
     "package": "net.swedz.extended_industrialization.mixin",
     "compatibilityLevel": "JAVA_21",
     "mixins": [
+        "ArmorDyeRecipeIgnoreRainbowItemsMixin",
+        "RainbowDyedItemColorMixin",
+        "RemoveRainbowWhenDyeingMixin",
         "mi.accessor.CasingComponentAccessor",
         "mi.accessor.ConfigurableItemStackAccessor",
         "mi.accessor.RedstoneControlComponentAccessor",
