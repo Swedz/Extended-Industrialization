@@ -154,6 +154,11 @@ public final class EITooltips
 			(stack, item) -> item.ability().flatMap((a) -> a.getTooltips(item, stack))
 	).noShiftRequired();
 	
+	public static final TooltipAttachment NANO_SUIT_INFO = TooltipAttachment.multilinesOptional(
+			NanoSuitArmorItem.class,
+			(stack, item) -> item.ability().flatMap((a) -> a.getShiftTooltips(item, stack))
+	);
+	
 	public static final TooltipAttachment HONEY_EXTRACTOR = TooltipAttachment.singleLine(
 			List.of(
 					EI.id("steel_honey_extractor"),

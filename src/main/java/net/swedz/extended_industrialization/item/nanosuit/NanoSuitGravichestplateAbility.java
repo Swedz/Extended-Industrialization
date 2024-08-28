@@ -19,6 +19,7 @@ import net.swedz.extended_industrialization.EITooltips;
 import java.util.List;
 import java.util.Optional;
 
+import static net.swedz.extended_industrialization.EITooltips.*;
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
 public final class NanoSuitGravichestplateAbility implements NanoSuitAbility
@@ -72,6 +73,14 @@ public final class NanoSuitGravichestplateAbility implements NanoSuitAbility
 	{
 		return Optional.of(List.of(
 				line(EIText.NANO_SUIT_CREATIVE_FLIGHT).arg(item.isActivated(stack), EITooltips.ACTIVATED_BOOLEAN_PARSER)
+		));
+	}
+	
+	@Override
+	public Optional<List<Component>> getShiftTooltips(NanoSuitArmorItem item, ItemStack stack)
+	{
+		return Optional.of(List.of(
+				line(EIText.NANO_SUIT_INFO_CREATIVE_FLIGHT).arg("%s.toggle_chestplate_ability".formatted(EI.ID), KEYBIND_PARSER)
 		));
 	}
 	

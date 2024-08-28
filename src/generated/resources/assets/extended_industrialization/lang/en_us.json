@@ -139,6 +139,8 @@
   "text.extended_industrialization.mulch_gang_for_life_0": "I love mulch!",
   "text.extended_industrialization.mulch_gang_for_life_1": "Mulch is my favorite food!",
   "text.extended_industrialization.nano_suit_creative_flight": "Creative Flight : %s",
+  "text.extended_industrialization.nano_suit_info_creative_flight": "- Press %s while equipped to toggle Creative Flight.",
+  "text.extended_industrialization.nano_suit_info_night_vision": "- Press %s while equipped to toggle Night Vision.",
   "text.extended_industrialization.nano_suit_night_vision": "Night Vision : %s",
   "text.extended_industrialization.nano_suit_night_vision_toggled_off": "Disabled Night Vision",
   "text.extended_industrialization.nano_suit_night_vision_toggled_on": "Enabled Night Vision",

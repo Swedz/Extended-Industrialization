@@ -8,12 +8,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.EITooltips;
 
 import java.util.List;
 import java.util.Optional;
 
+import static net.swedz.extended_industrialization.EITooltips.*;
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
 public final class NanoSuitNightVisionAbility implements NanoSuitAbility
@@ -31,6 +33,14 @@ public final class NanoSuitNightVisionAbility implements NanoSuitAbility
 	{
 		return Optional.of(List.of(
 				line(EIText.NANO_SUIT_NIGHT_VISION).arg(item.isActivated(stack), EITooltips.ACTIVATED_BOOLEAN_PARSER)
+		));
+	}
+	
+	@Override
+	public Optional<List<Component>> getShiftTooltips(NanoSuitArmorItem item, ItemStack stack)
+	{
+		return Optional.of(List.of(
+				line(EIText.NANO_SUIT_INFO_NIGHT_VISION).arg("%s.toggle_helmet_ability".formatted(EI.ID), KEYBIND_PARSER)
 		));
 	}
 	

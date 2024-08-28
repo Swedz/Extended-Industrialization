@@ -56,6 +56,11 @@ public interface NanoSuitAbility
 		return Optional.empty();
 	}
 	
+	default Optional<List<Component>> getShiftTooltips(NanoSuitArmorItem item, ItemStack stack)
+	{
+		return Optional.empty();
+	}
+	
 	default void onActivationChange(NanoSuitArmorItem item, Player player, ItemStack stack, boolean activated)
 	{
 	}
