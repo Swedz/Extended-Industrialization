@@ -160,8 +160,8 @@ public final class EIMachines
 					)
 			);
 			ReiMachineRecipes.registerMultiblockShape(EI.id("large_steam_furnace"), shape);
-			ReiMachineRecipes.registerWorkstation("bronze_furnace", EI.id("large_steam_furnace"));
-			ReiMachineRecipes.registerWorkstation("steel_furnace", EI.id("large_steam_furnace"));
+			ReiMachineRecipes.registerWorkstation(MI.id("bronze_furnace"), EI.id("large_steam_furnace"));
+			ReiMachineRecipes.registerWorkstation(MI.id("steel_furnace"), EI.id("large_steam_furnace"));
 		}
 		
 		hook.register(
@@ -169,9 +169,9 @@ public final class EIMachines
 				HEATPROOF, true, false, false,
 				LargeElectricFurnaceBlockEntity::new
 		);
-		ReiMachineRecipes.registerWorkstation("bronze_furnace", EI.id("large_electric_furnace"));
-		ReiMachineRecipes.registerWorkstation("steel_furnace", EI.id("large_electric_furnace"));
-		ReiMachineRecipes.registerWorkstation("electric_furnace", EI.id("large_electric_furnace"));
+		ReiMachineRecipes.registerWorkstation(MI.id("bronze_furnace"), EI.id("large_electric_furnace"));
+		ReiMachineRecipes.registerWorkstation(MI.id("steel_furnace"), EI.id("large_electric_furnace"));
+		ReiMachineRecipes.registerWorkstation(MI.id("electric_furnace"), EI.id("large_electric_furnace"));
 		
 		{
 			SimpleMember bronzePlatedBricks = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("bronze_plated_bricks")));
@@ -189,8 +189,8 @@ public final class EIMachines
 					)
 			);
 			ReiMachineRecipes.registerMultiblockShape(EI.id("large_steam_macerator"), shape);
-			ReiMachineRecipes.registerWorkstation("bronze_macerator", EI.id("large_steam_macerator"));
-			ReiMachineRecipes.registerWorkstation("steel_macerator", EI.id("large_steam_macerator"));
+			ReiMachineRecipes.registerWorkstation(MI.id("bronze_macerator"), EI.id("large_steam_macerator"));
+			ReiMachineRecipes.registerWorkstation(MI.id("steel_macerator"), EI.id("large_steam_macerator"));
 		}
 		
 		{
@@ -209,9 +209,9 @@ public final class EIMachines
 					)
 			);
 			ReiMachineRecipes.registerMultiblockShape(EI.id("large_electric_macerator"), shape);
-			ReiMachineRecipes.registerWorkstation("bronze_macerator", EI.id("large_electric_macerator"));
-			ReiMachineRecipes.registerWorkstation("steel_macerator", EI.id("large_electric_macerator"));
-			ReiMachineRecipes.registerWorkstation("electric_macerator", EI.id("large_electric_macerator"));
+			ReiMachineRecipes.registerWorkstation(MI.id("bronze_macerator"), EI.id("large_electric_macerator"));
+			ReiMachineRecipes.registerWorkstation(MI.id("steel_macerator"), EI.id("large_electric_macerator"));
+			ReiMachineRecipes.registerWorkstation(MI.id("electric_macerator"), EI.id("large_electric_macerator"));
 		}
 	}
 	
