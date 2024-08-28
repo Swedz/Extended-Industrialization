@@ -29,7 +29,7 @@ public final class NanoSuitNightVisionAbility implements NanoSuitAbility
 	}
 	
 	@Override
-	public Optional<List<Component>> getTooltips(NanoSuitArmorItem item, ItemStack stack)
+	public Optional<List<Component>> getTooltipLines(NanoSuitArmorItem item, ItemStack stack)
 	{
 		return Optional.of(List.of(
 				line(EIText.NANO_SUIT_NIGHT_VISION).arg(item.isActivated(stack), EITooltips.ACTIVATED_BOOLEAN_PARSER)
@@ -37,11 +37,11 @@ public final class NanoSuitNightVisionAbility implements NanoSuitAbility
 	}
 	
 	@Override
-	public Optional<List<Component>> getShiftTooltips(NanoSuitArmorItem item, ItemStack stack)
+	public List<Component> getHelpTooltipLines(NanoSuitArmorItem item, ItemStack stack)
 	{
-		return Optional.of(List.of(
-				line(EIText.NANO_SUIT_INFO_NIGHT_VISION).arg("%s.toggle_helmet_ability".formatted(EI.ID), KEYBIND_PARSER)
-		));
+		return List.of(
+				line(EIText.NANO_SUIT_HELP_NIGHT_VISION).arg("%s.toggle_helmet_ability".formatted(EI.ID), KEYBIND_PARSER)
+		);
 	}
 	
 	@Override

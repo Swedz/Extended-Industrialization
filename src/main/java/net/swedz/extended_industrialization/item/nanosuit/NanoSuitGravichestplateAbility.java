@@ -69,7 +69,7 @@ public final class NanoSuitGravichestplateAbility implements NanoSuitAbility
 	}
 	
 	@Override
-	public Optional<List<Component>> getTooltips(NanoSuitArmorItem item, ItemStack stack)
+	public Optional<List<Component>> getTooltipLines(NanoSuitArmorItem item, ItemStack stack)
 	{
 		return Optional.of(List.of(
 				line(EIText.NANO_SUIT_CREATIVE_FLIGHT).arg(item.isActivated(stack), EITooltips.ACTIVATED_BOOLEAN_PARSER)
@@ -77,11 +77,11 @@ public final class NanoSuitGravichestplateAbility implements NanoSuitAbility
 	}
 	
 	@Override
-	public Optional<List<Component>> getShiftTooltips(NanoSuitArmorItem item, ItemStack stack)
+	public List<Component> getHelpTooltipLines(NanoSuitArmorItem item, ItemStack stack)
 	{
-		return Optional.of(List.of(
-				line(EIText.NANO_SUIT_INFO_CREATIVE_FLIGHT).arg("%s.toggle_chestplate_ability".formatted(EI.ID), KEYBIND_PARSER)
-		));
+		return List.of(
+				line(EIText.NANO_SUIT_HELP_CREATIVE_FLIGHT).arg("%s.toggle_chestplate_ability".formatted(EI.ID), KEYBIND_PARSER)
+		);
 	}
 	
 	@Override

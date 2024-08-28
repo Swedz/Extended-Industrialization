@@ -151,12 +151,19 @@ public final class EITooltips
 	
 	public static final TooltipAttachment NANO_SUIT_ABILITY = TooltipAttachment.multilinesOptional(
 			NanoSuitArmorItem.class,
-			(stack, item) -> item.ability().flatMap((a) -> a.getTooltips(item, stack))
+			(stack, item) -> item.ability().flatMap((a) -> a.getTooltipLines(item, stack))
 	).noShiftRequired();
 	
-	public static final TooltipAttachment NANO_SUIT_INFO = TooltipAttachment.multilinesOptional(
+	public static final TooltipAttachment NANO_SUIT_HELP = TooltipAttachment.multilinesOptional(
 			NanoSuitArmorItem.class,
-			(stack, item) -> item.ability().flatMap((a) -> a.getShiftTooltips(item, stack))
+			(stack, item) ->
+			{
+				List<Component> lines = Lists.newArrayList();
+				lines.add(line(EIText.NANO_SUIT_HELP_1));
+				lines.add(line(EIText.NANO_SUIT_HELP_2));
+				item.ability().ifPresent((ability) -> lines.addAll(ability.getHelpTooltipLines(item, stack)));
+				return Optional.of(lines);
+			}
 	);
 	
 	public static final TooltipAttachment HONEY_EXTRACTOR = TooltipAttachment.singleLine(

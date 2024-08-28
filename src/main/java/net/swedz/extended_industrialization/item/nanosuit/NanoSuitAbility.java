@@ -51,14 +51,14 @@ public interface NanoSuitAbility
 		return modifiers;
 	}
 	
-	default Optional<List<Component>> getTooltips(NanoSuitArmorItem item, ItemStack stack)
+	default Optional<List<Component>> getTooltipLines(NanoSuitArmorItem item, ItemStack stack)
 	{
 		return Optional.empty();
 	}
 	
-	default Optional<List<Component>> getShiftTooltips(NanoSuitArmorItem item, ItemStack stack)
+	default List<Component> getHelpTooltipLines(NanoSuitArmorItem item, ItemStack stack)
 	{
-		return Optional.empty();
+		return List.of();
 	}
 	
 	default void onActivationChange(NanoSuitArmorItem item, Player player, ItemStack stack, boolean activated)
