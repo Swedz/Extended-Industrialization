@@ -9,6 +9,7 @@ import aztech.modern_industrialization.materials.part.MIParts;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIBlocks;
@@ -37,6 +38,54 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 		{
 			shapedRecipeBuilder.exportToAssembler().offerTo(output, EI.id(path + "/assembler/" + name));
 		}
+	}
+	
+	private static void components(RecipeOutput output)
+	{
+		addBasicCraftingRecipes(
+				"component", "netherite_rotary_blade", true,
+				EIItems.NETHERITE_ROTARY_BLADE, 1,
+				(r) -> r
+						.define('N', EITags.itemCommon("dusts/netherite"))
+						.define('R', EITags.itemCommon("gears/stainless_steel"))
+						.pattern(" N ")
+						.pattern("NRN")
+						.pattern(" N "),
+				output
+		);
+		
+		addBasicCraftingRecipes(
+				"component", "steel_combine", false,
+				EIItems.STEEL_COMBINE, 1,
+				(r) -> r
+						.define('C', "modern_industrialization:steel_curved_plate")
+						.define('B', "modern_industrialization:steel_bolt")
+						.define('R', EITags.itemCommon("rods/steel"))
+						.pattern("CCC")
+						.pattern("BRB")
+						.pattern("CCC"),
+				output
+		);
+		addMachineRecipe(
+				"component/assembler", "steel_combine", MIMachineRecipeTypes.ASSEMBLER,
+				8, 10 * 20,
+				(b) -> b
+						.addItemInput("modern_industrialization:steel_curved_plate", 6)
+						.addItemInput(EITags.itemCommon("rods/steel"), 1)
+						.addFluidInput(MIFluids.SOLDERING_ALLOY, 50)
+						.addItemOutput(EIItems.STEEL_COMBINE, 1),
+				output
+		);
+		
+		addBasicCraftingRecipes(
+				"component", "tin_can", true,
+				EIItems.TIN_CAN, 2,
+				(r) -> r
+						.define('T', "modern_industrialization:tin_curved_plate")
+						.pattern("T")
+						.pattern("T"),
+				output
+		);
 	}
 	
 	private static void photovoltaicCells(RecipeOutput output)
@@ -248,7 +297,64 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				output
 		);
 		
+		components(output);
+		
+		addMachineRecipe(
+				"distillery", "distilled_water_from_water", MIMachineRecipeTypes.DISTILLERY,
+				8, 10 * 20,
+				(r) -> r
+						.addFluidInput(Fluids.WATER, 1000)
+						.addFluidOutput(EIFluids.DISTILLED_WATER, 500),
+				output
+		);
+		
 		photovoltaicCells(output);
+		
+		addBasicCraftingRecipes(
+				"tool", "steam_chainsaw", false,
+				EIItems.STEAM_CHAINSAW, 1,
+				(r) -> r
+						.define('F', Items.FURNACE)
+						.define('D', Items.DIAMOND)
+						.define('P', "modern_industrialization:iron_large_plate")
+						.define('C', EITags.itemCommon("gears/copper"))
+						.define('B', Items.BUCKET)
+						.pattern("FDD")
+						.pattern("PCD")
+						.pattern("BPF"),
+				output
+		);
+		
+		addBasicCraftingRecipes(
+				"tool", "electric_chainsaw", false,
+				EIItems.ELECTRIC_CHAINSAW, 1,
+				(r) -> r
+						.define('U', MIItem.ADVANCED_UPGRADE)
+						.define('R', MIItem.RUBBER_SHEET)
+						.define('B', EIItems.NETHERITE_ROTARY_BLADE)
+						.define('M', MIItem.ADVANCED_MOTOR)
+						.define('C', "modern_industrialization:aluminum_cable")
+						.pattern("URB")
+						.pattern("MBR")
+						.pattern("CMU"),
+				output
+		);
+		
+		addBasicCraftingRecipes(
+				"tool", "electric_mining_drill", false,
+				EIItems.ELECTRIC_MINING_DRILL, 1,
+				(r) -> r
+						.define('U', MIItem.ADVANCED_UPGRADE)
+						.define('R', EIItems.NETHERITE_ROTARY_BLADE)
+						.define('D', "modern_industrialization:stainless_steel_drill_head")
+						.define('M', MIItem.ADVANCED_MOTOR)
+						.define('L', MIItem.LARGE_MOTOR)
+						.define('C', "modern_industrialization:aluminum_cable")
+						.pattern("URD")
+						.pattern("MLR")
+						.pattern("CMU"),
+				output
+		);
 		
 		addBasicCraftingRecipes(
 				"tool", "machine_config_card", false,
@@ -279,15 +385,6 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 						.pattern("DBC")
 						.pattern("cSc")
 						.pattern("UsU"),
-				output
-		);
-		
-		addMachineRecipe(
-				"blast_furnace", "blazing_essence", MIMachineRecipeTypes.BLAST_FURNACE,
-				2, 10 * 20,
-				(r) -> r
-						.addItemInput(Items.BLAZE_POWDER, 1)
-						.addFluidOutput(EIFluids.BLAZING_ESSENCE, 20),
 				output
 		);
 		

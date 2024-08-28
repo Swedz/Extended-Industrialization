@@ -1,0 +1,17 @@
+{
+  "type": "modern_industrialization:blast_furnace",
+  "duration": 200,
+  "eu": 2,
+  "fluid_inputs": [
+    {
+      "amount": 250,
+      "fluid": "extended_industrialization:honey"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 3,
+      "item": "extended_industrialization:crystallized_honey"
+    }
+  ]
+}

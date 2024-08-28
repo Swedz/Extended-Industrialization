@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:bucket"
+    },
+    "C": {
+      "tag": "c:gears/copper"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    },
+    "P": {
+      "item": "modern_industrialization:iron_large_plate"
+    }
+  },
+  "pattern": [
+    "FDD",
+    "PCD",
+    "BPF"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:steam_chainsaw"
+  }
+}

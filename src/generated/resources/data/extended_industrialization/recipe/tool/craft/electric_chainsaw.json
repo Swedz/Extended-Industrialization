@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "extended_industrialization:netherite_rotary_blade"
+    },
+    "C": {
+      "item": "modern_industrialization:aluminum_cable"
+    },
+    "M": {
+      "item": "modern_industrialization:advanced_motor"
+    },
+    "R": {
+      "item": "modern_industrialization:rubber_sheet"
+    },
+    "U": {
+      "item": "modern_industrialization:advanced_upgrade"
+    }
+  },
+  "pattern": [
+    "URB",
+    "MBR",
+    "CMU"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:electric_chainsaw"
+  }
+}

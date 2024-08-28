@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "modern_industrialization:aluminum_cable"
+    },
+    "D": {
+      "item": "modern_industrialization:stainless_steel_drill_head"
+    },
+    "L": {
+      "item": "modern_industrialization:large_motor"
+    },
+    "M": {
+      "item": "modern_industrialization:advanced_motor"
+    },
+    "R": {
+      "item": "extended_industrialization:netherite_rotary_blade"
+    },
+    "U": {
+      "item": "modern_industrialization:advanced_upgrade"
+    }
+  },
+  "pattern": [
+    "URD",
+    "MLR",
+    "CMU"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:electric_mining_drill"
+  }
+}
