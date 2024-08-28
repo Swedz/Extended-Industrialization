@@ -145,7 +145,7 @@ if (System.getenv("MODRINTH_API_KEY")) {
 		versionType = project.release_type
 		delegate.changelog = System.getenv("MOD_CHANGELOG")
 
-		gameVersions = project.compatible_minecraft_versions.split(",")
+		gameVersions = project.compatible_minecraft_versions.split(",").collect { it }
 		loaders = ["neoforge"]
 
 		dependencies {
