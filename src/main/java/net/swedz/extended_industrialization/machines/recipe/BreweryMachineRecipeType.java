@@ -28,6 +28,7 @@ import net.swedz.extended_industrialization.datagen.api.RecipeHelper;
 import net.swedz.tesseract.neoforge.compat.mi.mixin.accessor.MIRecipeAccessor;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
@@ -176,11 +177,25 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 	
 	private RecipeHolder<MachineRecipe> generateModded(ItemStack inputStack, Ingredient reagentIngredient, ItemStack outputStack)
 	{
-		ResourceLocation id = EI.id("brewery/generated/modded/%s/%s/%s".formatted(
+		ResourceLocation id = EI.id("brewery/generated/modded_improper/%s/%s/%s".formatted(
 				id(inputStack),
 				id(reagentIngredient),
 				id(outputStack)
 		));
+		
+		if(inputStack.has(DataComponents.POTION_CONTENTS) && outputStack.has(DataComponents.POTION_CONTENTS))
+		{
+			Optional<Holder<Potion>> inputPotion = inputStack.get(DataComponents.POTION_CONTENTS).potion();
+			Optional<Holder<Potion>> outputPotion = outputStack.get(DataComponents.POTION_CONTENTS).potion();
+			if(inputPotion.isPresent() && outputPotion.isPresent())
+			{
+				id = EI.id("brewery/generated/modded/%s/%s/%s".formatted(
+						idPotion(inputPotion.get()),
+						id(reagentIngredient),
+						idPotion(outputPotion.get())
+				));
+			}
+		}
 		
 		return this.generate(id, inputStack, reagentIngredient, outputStack);
 	}
