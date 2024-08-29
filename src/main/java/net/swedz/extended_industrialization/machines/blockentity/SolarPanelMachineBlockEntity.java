@@ -12,12 +12,14 @@ import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.inventory.SlotPositions;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.machines.MachineOverlay;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
+import aztech.modern_industrialization.machines.helper.EnergyHelper;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
@@ -26,8 +28,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIText;
@@ -69,7 +75,7 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 		super(
 				bep,
 				new MachineGuiParameters.Builder(blockId, true).backgroundHeight(180).build(),
-				new OrientationComponent.Params(false, false, false)
+				new OrientationComponent.Params(true, false, false)
 		);
 		
 		this.tier = tier;
@@ -135,6 +141,34 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	}
 	
 	@Override
+	public void onPlaced(LivingEntity placer, ItemStack itemStack)
+	{
+		super.onPlaced(placer, itemStack);
+		
+		if(orientation.params.hasOutput)
+		{
+			orientation.outputDirection = Direction.DOWN;
+		}
+	}
+	
+	@Override
+	public boolean useWrench(Player player, InteractionHand hand, BlockHitResult hitResult)
+	{
+		Direction face = MachineOverlay.findHitSide(hitResult);
+		if(face != Direction.UP && orientation.useWrench(player, hand, face))
+		{
+			level.blockUpdated(getBlockPos(), Blocks.AIR);
+			this.setChanged();
+			if(!level.isClientSide())
+			{
+				this.sync();
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public void tick()
 	{
 		if(level.isClientSide())
@@ -146,6 +180,8 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 		{
 			generator.tick();
 		}
+		
+		EnergyHelper.autoOutput(this, orientation, tier, extractable);
 	}
 	
 	@Override
