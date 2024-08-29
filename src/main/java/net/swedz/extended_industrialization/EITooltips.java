@@ -7,6 +7,7 @@ import dev.technici4n.grandpower.api.ILongEnergyStorage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
@@ -137,16 +138,23 @@ public final class EITooltips
 			}
 	).noShiftRequired();
 	
-	public static final TooltipAttachment ELECTRIC_TOOL_CONTROLS = TooltipAttachment.multilines(
+	public static final TooltipAttachment ELECTRIC_TOOL_HELP = TooltipAttachment.multilines(
 			ElectricToolItem.class,
-			(stack, item) -> List.of(
-					line(EIText.ELECTRIC_TOOL_HELP_1),
-					line(item.getToolType().includeLooting() ? EIText.ELECTRIC_TOOL_HELP_2_LOOTING : EIText.ELECTRIC_TOOL_HELP_2)
-							.arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER),
-					line(EIText.ELECTRIC_TOOL_HELP_3)
-							.arg(EIText.KEY_ALT.text().withStyle(NUMBER_TEXT))
-							.arg(EIText.KEY_MOUSE_SCROLL.text().withStyle(NUMBER_TEXT))
-			)
+			(stack, item) ->
+			{
+				List<Component> lines = Lists.newArrayList();
+				lines.add(line(EIText.ELECTRIC_TOOL_HELP_1));
+				if(stack.is(ItemTags.DYEABLE))
+				{
+					lines.add(line(EIText.DYEABLE_HELP));
+				}
+				lines.add(line(item.getToolType().includeLooting() ? EIText.ELECTRIC_TOOL_HELP_2_LOOTING : EIText.ELECTRIC_TOOL_HELP_2)
+						.arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER));
+				lines.add(line(EIText.ELECTRIC_TOOL_HELP_3)
+						.arg(EIText.KEY_ALT.text().withStyle(NUMBER_TEXT))
+						.arg(EIText.KEY_MOUSE_SCROLL.text().withStyle(NUMBER_TEXT)));
+				return lines;
+			}
 	);
 	
 	public static final TooltipAttachment NANO_SUIT_ABILITY = TooltipAttachment.multilinesOptional(
@@ -160,7 +168,7 @@ public final class EITooltips
 			{
 				List<Component> lines = Lists.newArrayList();
 				lines.add(line(EIText.NANO_SUIT_HELP_1));
-				lines.add(line(EIText.NANO_SUIT_HELP_2));
+				lines.add(line(EIText.DYEABLE_AND_TRIMMABLE_HELP));
 				item.ability().ifPresent((ability) -> lines.addAll(ability.getHelpTooltipLines(item, stack)));
 				return Optional.of(lines);
 			}
