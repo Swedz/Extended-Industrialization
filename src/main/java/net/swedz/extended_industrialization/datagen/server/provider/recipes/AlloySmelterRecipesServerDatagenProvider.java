@@ -44,6 +44,15 @@ public final class AlloySmelterRecipesServerDatagenProvider extends RecipesServe
 						.addItemOutput(result.getPart(INGOT), amountResult),
 				output
 		);
+		addMaterialMachineRecipe(
+				result, "block", EIMachines.RecipeTypes.ALLOY_SMELTER,
+				4, 10 * 20 * 9,
+				(r) -> r
+						.addItemInput(componentA.getPart(BLOCK).getTaggedIngredient(), amountA, 1)
+						.addItemInput(componentB.getPart(BLOCK).getTaggedIngredient(), amountB, 1)
+						.addItemOutput(result.getPart(BLOCK), amountResult),
+				output
+		);
 	}
 	
 	@Override

@@ -1,0 +1,21 @@
+{
+  "type": "extended_industrialization:alloy_smelter",
+  "duration": 1800,
+  "eu": 4,
+  "item_inputs": [
+    {
+      "amount": 2,
+      "tag": "c:storage_blocks/iron"
+    },
+    {
+      "amount": 1,
+      "tag": "c:storage_blocks/nickel"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 3,
+      "item": "modern_industrialization:invar_block"
+    }
+  ]
+}
