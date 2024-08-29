@@ -5,14 +5,18 @@ import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.items.DynamicToolItem;
 import aztech.modern_industrialization.items.ItemHelper;
+import aztech.modern_industrialization.util.GeometryHelper;
+import com.google.common.collect.Lists;
 import dev.technici4n.grandpower.api.ISimpleEnergyItem;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
@@ -20,7 +24,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.DyeColor;
@@ -36,21 +43,41 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.IShearable;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.level.BlockDropsEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
+import net.swedz.extended_industrialization.EIText;
 import net.swedz.tesseract.neoforge.helper.ColorHelper;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
+import net.swedz.tesseract.neoforge.proxy.ProxyManager;
+import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiConsumer;
 
-public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEnergyItem, DynamicDyedItem
+@EventBusSubscriber(modid = EI.ID)
+public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEnergyItem, DynamicDyedItem, ToggleableItem
 {
 	public static final  int SPEED_MIN        = 1;
 	public static final  int SPEED_MAX        = 10;
@@ -60,21 +87,21 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	
 	public enum Type
 	{
-		DRILL(60 * 20 * CableTier.HV.getMaxTransfer(), 8, false, false),
+		DRILL(60 * 20 * CableTier.HV.getMaxTransfer(), 8, false, true),
 		CHAINSAW(60 * 20 * CableTier.HV.getMaxTransfer(), 10, true, false),
 		ULTIMATE(60 * 20 * CableTier.EV.getMaxTransfer(), 20, true, true);
 		
 		private final long    energyCapacity;
 		private final int     damage;
 		private final boolean includeLooting;
-		private final boolean worksForAllBlocks;
+		private final boolean canDo3by3;
 		
-		Type(long energyCapacity, int damage, boolean includeLooting, boolean worksForAllBlocks)
+		Type(long energyCapacity, int damage, boolean includeLooting, boolean canDo3by3)
 		{
 			this.energyCapacity = energyCapacity;
 			this.damage = damage;
 			this.includeLooting = includeLooting;
-			this.worksForAllBlocks = worksForAllBlocks;
+			this.canDo3by3 = canDo3by3;
 		}
 		
 		public long energyCapacity()
@@ -92,9 +119,9 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			return includeLooting;
 		}
 		
-		public boolean worksForAllBlocks()
+		public boolean canDo3by3()
 		{
-			return worksForAllBlocks;
+			return canDo3by3;
 		}
 	}
 	
@@ -163,19 +190,205 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	}
 	
 	@Override
+	public void setActivated(Player player, ItemStack stack, boolean activated)
+	{
+		if(toolType.canDo3by3())
+		{
+			ToggleableItem.super.setActivated(player, stack, activated);
+			
+			if(!player.level().isClientSide())
+			{
+				player.displayClientMessage((activated ? EIText.ELECTRIC_TOOL_3_BY_3_TOGGLED_ON : EIText.ELECTRIC_TOOL_3_BY_3_TOGGLED_OFF).text(), true);
+			}
+		}
+	}
+	
+	public boolean should3By3(ItemStack stack, Player player)
+	{
+		return toolType.canDo3by3() && this.isActivated(stack) && !player.isShiftKeyDown();
+	}
+	
+	@Override
 	public boolean isEnchantable(ItemStack stack)
 	{
 		return false;
 	}
 	
+	private static MergedDrops mergedDrops = null;
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	private static void mergeDrops(BlockDropsEvent event)
+	{
+		if(mergedDrops == null)
+		{
+			return;
+		}
+		mergedDrops.addAll(event.getDrops(), event.getDroppedExperience());
+		event.getDrops().clear();
+	}
+	
+	private record MergedDrops(List<ItemStack> totalDrops)
+	{
+		private MergedDrops()
+		{
+			this(Lists.newArrayList());
+		}
+		
+		private void addAll(List<ItemEntity> droppedItems, int droppedExperience)
+		{
+			outer:
+			for(ItemEntity drop : droppedItems)
+			{
+				ItemStack dropItem = drop.getItem();
+				for(ItemStack totalDrop : totalDrops)
+				{
+					if(ItemStack.isSameItemSameComponents(dropItem, totalDrop))
+					{
+						totalDrop.grow(dropItem.getCount());
+						continue outer;
+					}
+				}
+				totalDrops.add(dropItem);
+			}
+		}
+		
+		public void drop(Level level, BlockPos pos, Area area)
+		{
+			totalDrops.forEach((drop) -> Block.popResource(level, pos, drop));
+			
+			level.getEntitiesOfClass(
+							ExperienceOrb.class,
+							new AABB(Vec3.atLowerCornerOf(area.cornerFirst()), Vec3.atLowerCornerOf(area.cornerSecond())).inflate(1)
+					)
+					.forEach((orb) -> orb.teleportTo(pos.getX(), pos.getY(), pos.getZ()));
+		}
+	}
+	
 	@Override
 	public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miner)
 	{
-		if(state.getDestroySpeed(level, pos) != 0)
+		if(state.getDestroySpeed(level, pos) > 0)
 		{
-			this.tryUseEnergy(stack, ENERGY_COST);
+			if(miner instanceof Player player)
+			{
+				Optional<Area> optionalArea = this.getArea(level, player, stack);
+				if(optionalArea.isEmpty())
+				{
+					this.tryUseEnergy(stack, ENERGY_COST);
+					return true;
+				}
+				Area area = optionalArea.get();
+				
+				mergedDrops = new MergedDrops();
+				forEachMineableBlock(level, area, player, (minedPos, minedState) ->
+				{
+					Block minedBlock = minedState.getBlock();
+					BlockEntity minedBlockEntity = level.getBlockEntity(minedPos);
+					BlockEvent.BreakEvent event = CommonHooks.fireBlockBreak(
+							level,
+							((ServerPlayer) player).gameMode.getGameModeForPlayer(),
+							(ServerPlayer) player,
+							minedPos, minedState
+					);
+					if(!event.isCanceled() && minedBlock.onDestroyedByPlayer(minedState, level, minedPos, player, true, minedState.getFluidState()))
+					{
+						minedBlock.destroy(level, minedPos, minedState);
+						Block.dropResources(minedState, level, minedPos, minedBlockEntity, miner, stack);
+					}
+				});
+				mergedDrops.drop(level, miner.blockPosition(), area);
+				mergedDrops = null;
+				
+				this.tryUseEnergy(stack, ENERGY_COST * 3);
+			}
+			else
+			{
+				this.tryUseEnergy(stack, ENERGY_COST);
+			}
 		}
 		return true;
+	}
+	
+	private static HitResult rayTraceSimple(BlockGetter level, Player player, float partialTicks)
+	{
+		double blockReachDistance = player.blockInteractionRange();
+		Vec3 eyePos = player.getEyePosition(partialTicks);
+		Vec3 viewVector = player.getViewVector(partialTicks);
+		Vec3 target = eyePos.add(viewVector.x * blockReachDistance, viewVector.y * blockReachDistance, viewVector.z * blockReachDistance);
+		return level.clip(new ClipContext(eyePos, target, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
+	}
+	
+	public record Area(BlockPos center, BlockPos cornerFirst, BlockPos cornerSecond)
+	{
+		public static Area of(BlockPos pos, Direction hitFace)
+		{
+			int face = hitFace.get3DDataValue();
+			Vec3 right = GeometryHelper.FACE_RIGHT[face];
+			int rightX = (int) right.x();
+			int rightY = (int) right.y();
+			int rightZ = (int) right.z();
+			Vec3 up = GeometryHelper.FACE_UP[face];
+			int upX = (int) up.x();
+			int upY = (int) up.y();
+			int upZ = (int) up.z();
+			return new Area(
+					pos,
+					pos.offset(rightX + upX, rightY + upY, rightZ + upZ),
+					pos.offset(-rightX - upX, -rightY - upY, -rightZ - upZ)
+			);
+		}
+	}
+	
+	public Optional<Area> getArea(BlockGetter level, Player player, ItemStack stack)
+	{
+		if(!this.should3By3(stack, player))
+		{
+			return Optional.empty();
+		}
+		HitResult rayTraceResult = rayTraceSimple(level, player, 0);
+		if(rayTraceResult.getType() == HitResult.Type.BLOCK)
+		{
+			BlockHitResult blockResult = (BlockHitResult) rayTraceResult;
+			Direction facing = blockResult.getDirection();
+			return Optional.of(Area.of(blockResult.getBlockPos(), facing));
+		}
+		return Optional.empty();
+	}
+	
+	private boolean isMineableBlock(ItemStack stack, BlockState state, BlockGetter level, BlockPos pos)
+	{
+		return !state.isAir() &&
+			   state.getDestroySpeed(level, pos) > 0 &&
+			   this.isValidForBlock(stack, state);
+	}
+	
+	public static void forEachMineableBlock(BlockGetter level, Area area, LivingEntity miner, BiConsumer<BlockPos, BlockState> callback)
+	{
+		if(miner instanceof Player player)
+		{
+			ItemStack stack = player.getMainHandItem();
+			if(stack.getItem() instanceof ElectricToolItem tool)
+			{
+				BlockState centerState = level.getBlockState(area.center());
+				if(!tool.isMineableBlock(stack, centerState, level, area.center()))
+				{
+					return;
+				}
+				callback.accept(area.center(), centerState);
+				
+				BlockPos.betweenClosed(area.cornerFirst(), area.cornerSecond()).forEach((pos) ->
+				{
+					if(level.getBlockEntity(pos) == null && !area.center().equals(pos))
+					{
+						BlockState state = level.getBlockState(pos);
+						if(tool.isMineableBlock(stack, state, level, pos))
+						{
+							callback.accept(pos, state);
+						}
+					}
+				});
+			}
+		}
 	}
 	
 	@Override
@@ -185,26 +398,42 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		return true;
 	}
 	
+	private boolean isValidForBlock(ItemStack stack, BlockState state)
+	{
+		return this.isSupportedBlock(stack, state) &&
+			   !state.is(Tiers.NETHERITE.getIncorrectBlocksForDrops());
+	}
+	
 	@Override
 	public boolean isCorrectToolForDrops(ItemStack stack, BlockState state)
 	{
-		if((toolType.worksForAllBlocks() || this.isSupportedBlock(stack, state)) &&
-		   this.getStoredEnergy(stack) > 0 && !state.is(Tiers.NETHERITE.getIncorrectBlocksForDrops()))
-		{
-			return true;
-		}
-		return super.isCorrectToolForDrops(stack, state);
+		return (this.getStoredEnergy(stack) > 0 && this.isValidForBlock(stack, state)) ||
+			   super.isCorrectToolForDrops(stack, state);
 	}
 	
 	@Override
 	public float getDestroySpeed(ItemStack stack, BlockState state)
 	{
-		if((toolType.worksForAllBlocks() || this.isSupportedBlock(stack, state)) &&
-		   this.getStoredEnergy(stack) > 0)
+		if(this.getStoredEnergy(stack) > 0)
 		{
-			return getToolSpeed(stack) * SPEED_MULTIPLIER;
+			if(this.isValidForBlock(stack, state))
+			{
+				float speed = getToolSpeed(stack) * SPEED_MULTIPLIER;
+				
+				Optional<Player> player = ProxyManager.get(TesseractProxy.class).findUserWithItem(EquipmentSlot.MAINHAND, stack);
+				if(player.isPresent() && this.should3By3(stack, player.get()))
+				{
+					speed /= 4;
+				}
+				
+				return speed;
+			}
+			else
+			{
+				return 1;
+			}
 		}
-		return 1;
+		return 0;
 	}
 	
 	@Override

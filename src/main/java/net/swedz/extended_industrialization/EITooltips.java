@@ -128,13 +128,20 @@ public final class EITooltips
 			)
 	);
 	
-	public static final TooltipAttachment ELECTRIC_TOOL_SPEED = TooltipAttachment.singleLine(
+	public static final TooltipAttachment ELECTRIC_TOOL_SETTINGS = TooltipAttachment.multilines(
 			ElectricToolItem.class,
 			(stack, item) ->
 			{
 				int speed = ElectricToolItem.getToolSpeed(stack);
-				return line(EIText.MINING_SPEED)
-						.arg((float) speed / ElectricToolItem.SPEED_MAX, SPACED_PERCENTAGE_PARSER);
+				List<Component> lines = Lists.newArrayList();
+				lines.add(line(EIText.MINING_SPEED)
+						.arg((float) speed / ElectricToolItem.SPEED_MAX, SPACED_PERCENTAGE_PARSER));
+				if(item.getToolType().canDo3by3())
+				{
+					lines.add(line(EIText.MINING_AREA)
+							.arg((item.isActivated(stack) ? EIText.MINING_AREA_3_BY_3 : EIText.MINING_AREA_1_BY_1).text().withStyle(NUMBER_TEXT)));
+				}
+				return lines;
 			}
 	).noShiftRequired();
 	
@@ -153,6 +160,10 @@ public final class EITooltips
 				lines.add(line(EIText.ELECTRIC_TOOL_HELP_3)
 						.arg(EIText.KEY_ALT.text().withStyle(NUMBER_TEXT))
 						.arg(EIText.KEY_MOUSE_SCROLL.text().withStyle(NUMBER_TEXT)));
+				if(item.getToolType().canDo3by3())
+				{
+					lines.add(line(EIText.ELECTRIC_TOOL_HELP_4).arg("%s.toggle_main_hand_ability".formatted(EI.ID), KEYBIND_PARSER));
+				}
 				return lines;
 			}
 	);
@@ -162,7 +173,7 @@ public final class EITooltips
 			(stack, item) -> item.ability().flatMap((a) -> a.getTooltipLines(item, stack))
 	).noShiftRequired();
 	
-	public static final TooltipAttachment NANO_SUIT_HELP = TooltipAttachment.multilinesOptional(
+	public static final TooltipAttachment NANO_SUIT_HELP = TooltipAttachment.multilines(
 			NanoSuitArmorItem.class,
 			(stack, item) ->
 			{
@@ -170,7 +181,7 @@ public final class EITooltips
 				lines.add(line(EIText.NANO_SUIT_HELP_1));
 				lines.add(line(EIText.DYEABLE_AND_TRIMMABLE_HELP));
 				item.ability().ifPresent((ability) -> lines.addAll(ability.getHelpTooltipLines(item, stack)));
-				return Optional.of(lines);
+				return lines;
 			}
 	);
 	
