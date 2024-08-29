@@ -22,12 +22,13 @@ For any questions, please ask in the `#extended-industrialization` channel on [m
 - Generators
   - Solar Boiler
   - Solar Panel
-- Tools
+- Tools & Equipment
   - Canned Food
   - Machine Config Card
   - Steam Chainsaw
   - Electric Drill & Chainsaw
   - Ultimate Laser Drill
+  - Nano Suit
 - Resources
   - Mulch
   - Manure
