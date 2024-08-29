@@ -29,7 +29,7 @@ public final class ComposterMachineRecipeType extends ProxyableMachineRecipeType
 		
 		int amountNeeded = Math.max(1, (int) Math.floor((8 / chance) / 2));
 		recipe.addItemInput(item, amountNeeded);
-		recipe.addItemOutput(Items.BONE_MEAL, 1);
+		recipe.addItemOutput(Items.BONE_MEAL, 2);
 		
 		return new RecipeHolder<>(id, RecipeHelper.getActualRecipe(recipe));
 	}
