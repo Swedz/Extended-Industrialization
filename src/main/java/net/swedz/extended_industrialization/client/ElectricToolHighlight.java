@@ -32,7 +32,7 @@ public final class ElectricToolHighlight
 		ItemStack stack = player.getMainHandItem();
 		if(stack.getItem() instanceof ElectricToolItem tool)
 		{
-			Optional<ElectricToolItem.Area> optionalArea = tool.getArea(level, player, stack);
+			Optional<ElectricToolItem.Area> optionalArea = tool.getArea(level, player, stack, true);
 			if(optionalArea.isPresent())
 			{
 				ElectricToolItem.Area area = optionalArea.get();

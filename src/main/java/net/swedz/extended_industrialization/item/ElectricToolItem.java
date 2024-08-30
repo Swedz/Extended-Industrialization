@@ -61,6 +61,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.IShearable;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.swedz.extended_industrialization.EI;
@@ -74,6 +75,7 @@ import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.WeakHashMap;
 import java.util.function.BiConsumer;
 
 @EventBusSubscriber(modid = EI.ID)
@@ -214,16 +216,16 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		return false;
 	}
 	
-	private static MergedDrops mergedDrops = null;
+	private static MergedDrops MERGED_DROPS = null;
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	private static void mergeDrops(BlockDropsEvent event)
 	{
-		if(mergedDrops == null)
+		if(MERGED_DROPS == null)
 		{
 			return;
 		}
-		mergedDrops.addAll(event.getDrops(), event.getDroppedExperience());
+		MERGED_DROPS.addAll(event.getDrops(), event.getDroppedExperience());
 		event.getDrops().clear();
 	}
 	
@@ -264,6 +266,31 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		}
 	}
 	
+	private static final WeakHashMap<Player, ClickedBlock> LAST_CLICKED_FACE = new WeakHashMap<>();
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	private static void onLeftClick(PlayerInteractEvent.LeftClickBlock event)
+	{
+		Player player = event.getEntity();
+		if(!player.level().isClientSide())
+		{
+			PlayerInteractEvent.LeftClickBlock.Action action = event.getAction();
+			if(action == PlayerInteractEvent.LeftClickBlock.Action.START ||
+			   action == PlayerInteractEvent.LeftClickBlock.Action.STOP)
+			{
+				LAST_CLICKED_FACE.put(player, new ClickedBlock(event.getPos(), event.getFace()));
+			}
+			else if(action == PlayerInteractEvent.LeftClickBlock.Action.ABORT)
+			{
+				LAST_CLICKED_FACE.remove(player);
+			}
+		}
+	}
+	
+	private record ClickedBlock(BlockPos pos, Direction face)
+	{
+	}
+	
 	@Override
 	public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miner)
 	{
@@ -271,15 +298,16 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		{
 			if(miner instanceof Player player)
 			{
-				Optional<Area> optionalArea = this.getArea(level, player, stack);
+				Optional<Area> optionalArea = this.getArea(level, player, stack, false);
 				if(optionalArea.isEmpty())
 				{
 					this.tryUseEnergy(stack, ENERGY_COST);
 					return true;
 				}
+				LAST_CLICKED_FACE.remove(player);
 				Area area = optionalArea.get();
 				
-				mergedDrops = new MergedDrops();
+				MERGED_DROPS = new MergedDrops();
 				forEachMineableBlock(level, area, player, (minedPos, minedState) ->
 				{
 					Block minedBlock = minedState.getBlock();
@@ -296,8 +324,8 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 						Block.dropResources(minedState, level, minedPos, minedBlockEntity, miner, stack);
 					}
 				});
-				mergedDrops.drop(level, miner.blockPosition(), area);
-				mergedDrops = null;
+				MERGED_DROPS.drop(level, miner.blockPosition(), area);
+				MERGED_DROPS = null;
 				
 				this.tryUseEnergy(stack, ENERGY_COST * 3);
 			}
@@ -339,11 +367,19 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		}
 	}
 	
-	public Optional<Area> getArea(BlockGetter level, Player player, ItemStack stack)
+	public Optional<Area> getArea(BlockGetter level, Player player, ItemStack stack, boolean rayTraceOnly)
 	{
 		if(!this.should3By3(stack, player))
 		{
 			return Optional.empty();
+		}
+		if(!rayTraceOnly)
+		{
+			ClickedBlock clickedBlock = LAST_CLICKED_FACE.get(player);
+			if(clickedBlock != null)
+			{
+				return Optional.of(Area.of(clickedBlock.pos(), clickedBlock.face()));
+			}
 		}
 		HitResult rayTraceResult = rayTraceSimple(level, player, 0);
 		if(rayTraceResult.getType() == HitResult.Type.BLOCK)
