@@ -64,6 +64,7 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIText;
@@ -254,9 +255,11 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			}
 		}
 		
-		public void drop(Level level, BlockPos pos, Area area)
+		public void drop(Level level, Player player, Area area)
 		{
-			totalDrops.forEach((drop) -> Block.popResource(level, pos, drop));
+			BlockPos pos = player.blockPosition();
+			
+			totalDrops.forEach((drop) -> ItemHandlerHelper.giveItemToPlayer(player, drop));
 			
 			level.getEntitiesOfClass(
 							ExperienceOrb.class,
@@ -324,7 +327,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 						Block.dropResources(minedState, level, minedPos, minedBlockEntity, miner, stack);
 					}
 				});
-				MERGED_DROPS.drop(level, miner.blockPosition(), area);
+				MERGED_DROPS.drop(level, player, area);
 				MERGED_DROPS = null;
 				
 				this.tryUseEnergy(stack, ENERGY_COST * 3);
