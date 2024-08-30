@@ -113,8 +113,7 @@ public final class EITooltips
 			List.of(
 					line(EIText.STEAM_CHAINSAW_1).arg("use", KEYBIND_PARSER),
 					line(EIText.STEAM_CHAINSAW_2).arg("use", KEYBIND_PARSER),
-					line(EIText.STEAM_CHAINSAW_3),
-					line(EIText.STEAM_CHAINSAW_4).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
+					line(EIText.STEAM_CHAINSAW_3).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
 			)
 	);
 	

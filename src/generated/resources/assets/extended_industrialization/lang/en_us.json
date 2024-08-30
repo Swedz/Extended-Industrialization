@@ -168,10 +168,9 @@
   "text.extended_industrialization.solar_panel_distilled_water": "By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long!",
   "text.extended_industrialization.solar_panel_photovoltaic_cell": "To produce energy, the Solar Panel needs a matching tier Photovoltaic Cell in its inventory.",
   "text.extended_industrialization.solar_panel_sunlight": "Energy generation rates are determined by how high the sun is in the sky and if the sky is visible.",
-  "text.extended_industrialization.steam_chainsaw_1": "1) Press %s on still or flowing water to fill.",
-  "text.extended_industrialization.steam_chainsaw_2": "2) Place fuel inside the chainsaw using %s.",
-  "text.extended_industrialization.steam_chainsaw_3": "3) Enjoy Silk Touch.",
-  "text.extended_industrialization.steam_chainsaw_4": "4) Toggle Silk Touch with %s + %s.",
+  "text.extended_industrialization.steam_chainsaw_1": "- Press %s on still or flowing water to fill.",
+  "text.extended_industrialization.steam_chainsaw_2": "- Place fuel inside the chainsaw using %s.",
+  "text.extended_industrialization.steam_chainsaw_3": "- Toggle Silk Touch with %s + %s.",
   "text.extended_industrialization.universal_transformer_from_tier_input": "Casing for cable tier to convert from (LV by default).",
   "text.extended_industrialization.universal_transformer_to_tier_input": "Casing for cable tier to convert to (LV by default).",
   "text.extended_industrialization.waste_collector_help": "When placed underneath animals, manure will be collected."
