@@ -53,7 +53,7 @@ public final class EIKeybinds
 	
 	public static final String CATEGORY = Util.makeDescriptionId("key.categories", EI.id(EI.ID));
 	
-	public static final Keybind TOGGLE_MAIN_HAND_ABILITY = create(
+	public static final Keybind TOGGLE_MAIN_HAND_ABILITY  = create(
 			"toggle_main_hand_ability",
 			"Toggle Main Hand Ability",
 			(id) -> new KeyMapping(

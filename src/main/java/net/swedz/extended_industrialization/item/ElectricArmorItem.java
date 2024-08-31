@@ -4,7 +4,6 @@ import aztech.modern_industrialization.MIComponents;
 import dev.technici4n.grandpower.api.ISimpleEnergyItem;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
