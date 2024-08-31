@@ -2,12 +2,14 @@ package net.swedz.extended_industrialization.item.nanosuit;
 
 import aztech.modern_industrialization.api.energy.CableTier;
 import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.swedz.extended_industrialization.EIArmorMaterials;
 import net.swedz.extended_industrialization.item.ElectricArmorItem;
@@ -18,6 +20,7 @@ import net.swedz.tesseract.neoforge.item.ArmorUnequippedHandler;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 import net.swedz.tesseract.neoforge.item.ItemHurtHandler;
 
+import java.util.List;
 import java.util.Optional;
 
 public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorTickHandler, ArmorUnequippedHandler, ItemHurtHandler, ToggleableItem, DynamicDyedItem
@@ -114,5 +117,12 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 			ability.ifPresent((ability) ->
 					ability.onUnequip(this, entity, slot, fromStack, toStack));
 		}
+	}
+	
+	@Override
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag)
+	{
+		ability.flatMap((a) -> a.getTooltipLines(this, stack))
+				.ifPresent(tooltip::addAll);
 	}
 }

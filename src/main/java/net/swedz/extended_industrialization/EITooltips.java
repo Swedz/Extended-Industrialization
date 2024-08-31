@@ -127,23 +127,6 @@ public final class EITooltips
 			)
 	);
 	
-	public static final TooltipAttachment ELECTRIC_TOOL_SETTINGS = TooltipAttachment.multilines(
-			ElectricToolItem.class,
-			(stack, item) ->
-			{
-				int speed = ElectricToolItem.getToolSpeed(stack);
-				List<Component> lines = Lists.newArrayList();
-				lines.add(line(EIText.MINING_SPEED)
-						.arg((float) speed / ElectricToolItem.SPEED_MAX, SPACED_PERCENTAGE_PARSER));
-				if(item.getToolType().canDo3by3())
-				{
-					lines.add(line(EIText.MINING_AREA)
-							.arg((item.isActivated(stack) ? EIText.MINING_AREA_3_BY_3 : EIText.MINING_AREA_1_BY_1).text().withStyle(NUMBER_TEXT)));
-				}
-				return lines;
-			}
-	).noShiftRequired();
-	
 	public static final TooltipAttachment ELECTRIC_TOOL_HELP = TooltipAttachment.multilines(
 			ElectricToolItem.class,
 			(stack, item) ->
@@ -166,11 +149,6 @@ public final class EITooltips
 				return lines;
 			}
 	);
-	
-	public static final TooltipAttachment NANO_SUIT_ABILITY = TooltipAttachment.multilinesOptional(
-			NanoSuitArmorItem.class,
-			(stack, item) -> item.ability().flatMap((a) -> a.getTooltipLines(item, stack))
-	).noShiftRequired();
 	
 	public static final TooltipAttachment NANO_SUIT_HELP = TooltipAttachment.multilines(
 			NanoSuitArmorItem.class,

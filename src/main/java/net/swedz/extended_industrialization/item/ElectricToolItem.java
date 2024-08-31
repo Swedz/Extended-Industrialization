@@ -72,12 +72,17 @@ import net.swedz.tesseract.neoforge.helper.ColorHelper;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 import net.swedz.tesseract.neoforge.proxy.ProxyManager;
 import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
+import net.swedz.tesseract.neoforge.tooltip.Parser;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.WeakHashMap;
 import java.util.function.BiConsumer;
+
+import static aztech.modern_industrialization.MITooltips.*;
+import static net.swedz.extended_industrialization.EITooltips.*;
+import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.line;
 
 @EventBusSubscriber(modid = EI.ID)
 public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEnergyItem, DynamicDyedItem, ToggleableItem
@@ -527,20 +532,28 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag)
 	{
-		if(this.getStoredEnergy(stack) > 0)
+		tooltip.add(line(EIText.MINING_SPEED)
+				.arg((float) ElectricToolItem.getToolSpeed(stack) / ElectricToolItem.SPEED_MAX, SPACED_PERCENTAGE_PARSER));
+		
+		if(toolType.canDo3by3())
 		{
-			HolderLookup.RegistryLookup<Enchantment> enchantmentRegistry = context.registries().lookupOrThrow(Registries.ENCHANTMENT);
-			if(isFortune(stack))
+			tooltip.add(line(EIText.MINING_AREA)
+					.arg((this.isActivated(stack) ? EIText.MINING_AREA_3_BY_3 : EIText.MINING_AREA_1_BY_1).text().withStyle(NUMBER_TEXT)));
+		}
+		
+		if(context.registries() != null)
+		{
+			tooltip.add(line(EIText.MINING_MODE)
+					.arg(context.registries(), isFortune(stack) ? Enchantments.FORTUNE : Enchantments.SILK_TOUCH, Parser.ENCHANTMENT.withStyle(NUMBER_TEXT)));
+			
+			for(var entry : this.getAllEnchantments(stack, context.registries().lookupOrThrow(Registries.ENCHANTMENT)).entrySet())
 			{
-				tooltip.add(enchantmentFullNameComponent(enchantmentRegistry, Enchantments.FORTUNE));
-				if(toolType.includeLooting())
+				if(!entry.getKey().is(Enchantments.FORTUNE) &&
+				   !entry.getKey().is(Enchantments.LOOTING) &&
+				   !entry.getKey().is(Enchantments.SILK_TOUCH))
 				{
-					tooltip.add(enchantmentFullNameComponent(enchantmentRegistry, Enchantments.LOOTING));
+					tooltip.add(Enchantment.getFullname(entry.getKey(), entry.getIntValue()));
 				}
-			}
-			else
-			{
-				tooltip.add(enchantmentFullNameComponent(enchantmentRegistry, Enchantments.SILK_TOUCH));
 			}
 		}
 	}
