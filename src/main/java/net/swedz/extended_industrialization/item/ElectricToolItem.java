@@ -13,7 +13,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -545,16 +544,6 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		{
 			tooltip.add(line(EIText.MINING_MODE)
 					.arg(context.registries(), isFortune(stack) ? Enchantments.FORTUNE : Enchantments.SILK_TOUCH, Parser.ENCHANTMENT.withStyle(NUMBER_TEXT)));
-			
-			for(var entry : this.getAllEnchantments(stack, context.registries().lookupOrThrow(Registries.ENCHANTMENT)).entrySet())
-			{
-				if(!entry.getKey().is(Enchantments.FORTUNE) &&
-				   !entry.getKey().is(Enchantments.LOOTING) &&
-				   !entry.getKey().is(Enchantments.SILK_TOUCH))
-				{
-					tooltip.add(Enchantment.getFullname(entry.getKey(), entry.getIntValue()));
-				}
-			}
 		}
 	}
 	
