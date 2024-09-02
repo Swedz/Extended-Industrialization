@@ -59,8 +59,6 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	
 	public void buildLinks(boolean updateBlock)
 	{
-		EI.LOGGER.info("buildLinks at {} : {}", worldPosition.toShortString(), updateBlock);
-		
 		if(!level.isClientSide())
 		{
 			tick = 0;
