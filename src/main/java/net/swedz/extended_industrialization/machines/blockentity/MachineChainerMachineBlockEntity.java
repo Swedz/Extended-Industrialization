@@ -65,12 +65,10 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		if(!level.isClientSide())
 		{
 			tick = 0;
-			EI.LOGGER.info("start buildLinks: ({})", worldPosition.toShortString());
 			needsRebuild = false;
 			chainer.unregisterListeners();
 			chainer.invalidate();
 			chainer.registerListeners();
-			EI.LOGGER.info("end buildLinks: ({})", worldPosition.toShortString());
 		}
 	}
 	
