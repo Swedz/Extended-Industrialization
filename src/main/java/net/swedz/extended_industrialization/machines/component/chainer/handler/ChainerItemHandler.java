@@ -19,17 +19,17 @@ public final class ChainerItemHandler extends SlotChainerHandler<IItemHandler> i
 	@Override
 	public void invalidate()
 	{
-		List<SlotInventoryWrapper<IItemHandler>> handlers = Lists.newArrayList();
+		List<SlotInventoryWrapper<IItemHandler>> wrappers = Lists.newArrayList();
 		int slots = 0;
 		
 		for(IItemHandler handler : this.getMachineLinks().itemHandlers())
 		{
 			int handlerSlots = handler.getSlots();
-			handlers.add(new SlotInventoryWrapper<>(handler, slots, handlerSlots));
+			wrappers.add(new SlotInventoryWrapper<>(handler, slots, handlerSlots));
 			slots += handlerSlots;
 		}
 		
-		this.wrappers = Collections.unmodifiableList(handlers);
+		this.wrappers = Collections.unmodifiableList(wrappers);
 		this.slots = slots;
 	}
 	

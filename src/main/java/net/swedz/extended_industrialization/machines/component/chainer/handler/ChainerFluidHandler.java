@@ -20,17 +20,17 @@ public final class ChainerFluidHandler extends SlotChainerHandler<IFluidHandler>
 	@Override
 	public void invalidate()
 	{
-		List<SlotInventoryWrapper<IFluidHandler>> handlers = Lists.newArrayList();
+		List<SlotInventoryWrapper<IFluidHandler>> wrappers = Lists.newArrayList();
 		int slots = 0;
 		
 		for(IFluidHandler handler : this.getMachineLinks().fluidHandlers())
 		{
 			int handlerSlots = handler.getTanks();
-			handlers.add(new SlotInventoryWrapper<>(handler, slots, handlerSlots));
+			wrappers.add(new SlotInventoryWrapper<>(handler, slots, handlerSlots));
 			slots += handlerSlots;
 		}
 		
-		this.wrappers = Collections.unmodifiableList(handlers);
+		this.wrappers = Collections.unmodifiableList(wrappers);
 		this.slots = slots;
 	}
 	
