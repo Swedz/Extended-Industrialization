@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-public final class MachineLinks implements ClearableInvalidatable
+public final class MachineLinks implements ChainerElement
 {
 	private final Supplier<Level>     level;
 	private final BlockPos            origin;

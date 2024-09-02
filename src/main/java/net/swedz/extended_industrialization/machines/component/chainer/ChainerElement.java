@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.machines.component.chainer;
 
-// TODO rename this
-public interface ClearableInvalidatable
+public interface ChainerElement
 {
 	void clear();
 	

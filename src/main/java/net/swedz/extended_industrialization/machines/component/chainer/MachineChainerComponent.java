@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public final class MachineChainerComponent implements IComponent, ClearableInvalidatable
+public final class MachineChainerComponent implements IComponent, ChainerElement
 {
 	private final MachineChainerMachineBlockEntity machine;
 	
@@ -110,8 +110,7 @@ public final class MachineChainerComponent implements IComponent, ClearableInval
 		}
 	}
 	
-	// TODO rename this
-	private void forEachThing(Consumer<ClearableInvalidatable> action)
+	private void forEachElement(Consumer<ChainerElement> action)
 	{
 		List.of(
 				machineLinks,
@@ -124,13 +123,13 @@ public final class MachineChainerComponent implements IComponent, ClearableInval
 	@Override
 	public void clear()
 	{
-		this.forEachThing(ClearableInvalidatable::clear);
+		this.forEachElement(ChainerElement::clear);
 	}
 	
 	@Override
 	public void invalidate()
 	{
-		this.forEachThing(ClearableInvalidatable::invalidate);
+		this.forEachElement(ChainerElement::invalidate);
 	}
 	
 	@Override
