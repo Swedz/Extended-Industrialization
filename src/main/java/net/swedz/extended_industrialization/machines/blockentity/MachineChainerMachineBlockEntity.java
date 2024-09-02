@@ -1,21 +1,25 @@
 package net.swedz.extended_industrialization.machines.blockentity;
 
 import aztech.modern_industrialization.MICapabilities;
-import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.machines.MachineOverlay;
 import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.machines.component.MachineChainerComponent;
+import net.swedz.extended_industrialization.machines.component.chainer.MachineChainerComponent;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine;
 
@@ -26,7 +30,9 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	private final MachineChainerComponent chainer;
 	
 	private int tick;
+	
 	private boolean needsRebuild;
+	private boolean skipRebuild;
 	
 	public MachineChainerMachineBlockEntity(BEP bep)
 	{
@@ -55,6 +61,36 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		return chainer;
 	}
 	
+	private void buildLinks()
+	{
+		if(!level.isClientSide())
+		{
+			tick = 0;
+			if(!skipRebuild)
+			{
+				needsRebuild = false;
+				chainer.unregisterListeners();
+				chainer.invalidate();
+				chainer.registerListeners();
+				EI.LOGGER.info("buildLinks: ({})", worldPosition.toShortString());
+			}
+			skipRebuild = false;
+		}
+	}
+	
+	public void buildLinksAndUpdate()
+	{
+		skipRebuild = false;
+		this.buildLinks();
+		skipRebuild = true;
+		this.invalidateCapabilities();
+		this.setChanged();
+		if(!level.isClientSide())
+		{
+			this.sync();
+		}
+	}
+	
 	@Override
 	public MIInventory getInventory()
 	{
@@ -77,21 +113,25 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		if(!level.isClientSide())
 		{
 			needsRebuild = true;
+			
+			skipRebuild = true;
+			((ServerLevel) level).registerCapabilityListener(worldPosition, () ->
+			{
+				this.buildLinks();
+				return true;
+			});
 		}
 	}
 	
 	@Override
-	public void setChanged()
+	public boolean useWrench(Player player, InteractionHand hand, BlockHitResult hitResult)
 	{
-		super.setChanged();
-		
-		if(!level.isClientSide())
+		if(orientation.useWrench(player, hand, MachineOverlay.findHitSide(hitResult)))
 		{
-			needsRebuild = false;
-			chainer.unregisterListeners();
-			chainer.buildLinks();
-			chainer.registerListeners();
+			this.buildLinksAndUpdate();
+			return true;
 		}
+		return false;
 	}
 	
 	@Override
@@ -101,9 +141,8 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		
 		if(!level.isClientSide())
 		{
-			needsRebuild = false;
 			chainer.unregisterListeners();
-			chainer.clearLinks();
+			chainer.clear();
 		}
 	}
 	
@@ -115,18 +154,16 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			return;
 		}
 		
-		if(++tick == 5 * 20)
+		if(++tick == 10 * 20)
 		{
 			tick = 0;
 			needsRebuild = true;
-			chainer.unregisterListeners();
 		}
 		
 		if(needsRebuild)
 		{
-			needsRebuild = false;
-			chainer.buildLinks();
-			chainer.registerListeners();
+			skipRebuild = false;
+			this.buildLinksAndUpdate();
 		}
 	}
 	
@@ -135,6 +172,14 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		MICapabilities.onEvent((event) ->
 		{
 			event.registerBlockEntity(
+					Capabilities.ItemHandler.BLOCK, bet,
+					(be, direction) -> ((MachineChainerMachineBlockEntity) be).getChainerComponent().itemHandler()
+			);
+			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, bet,
+					(be, direction) -> ((MachineChainerMachineBlockEntity) be).getChainerComponent().fluidHandler()
+			);
+			
+			/*event.registerBlockEntity(
 					Capabilities.ItemHandler.BLOCK, bet,
 					(be, direction) -> ((MachineChainerMachineBlockEntity) be).chainer.itemHandler
 			);
@@ -145,7 +190,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			event.registerBlockEntity(
 					EnergyApi.SIDED, bet,
 					(be, direction) -> ((MachineChainerMachineBlockEntity) be).chainer.energyHandler
-			);
+			);*/
 		});
 	}
 }

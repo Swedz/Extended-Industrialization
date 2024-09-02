@@ -13,7 +13,8 @@ public final class EITags
 	public static final TagKey<Item> PHOTOVOLTAIC_CELL = item("photovoltaic_cell");
 	public static final TagKey<Item> RAINBOW_DYEABLE   = item("rainbow_dyeable");
 	
-	public static final TagKey<Block> FARMER_DIRT = block("farmer_dirt");
+	public static final TagKey<Block> FARMER_DIRT           = block("farmer_dirt");
+	public static final TagKey<Block> MACHINE_CHAINER_RELAY = block("machine_chainer_relay");
 	
 	public static TagKey<Item> item(String path)
 	{
