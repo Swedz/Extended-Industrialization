@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.machines.blockentity;
 
 import aztech.modern_industrialization.MICapabilities;
+import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
@@ -10,7 +11,6 @@ import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -32,7 +32,6 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	private int tick;
 	
 	private boolean needsRebuild;
-	private boolean skipRebuild;
 	
 	public MachineChainerMachineBlockEntity(BEP bep)
 	{
@@ -66,23 +65,18 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		if(!level.isClientSide())
 		{
 			tick = 0;
-			if(!skipRebuild)
-			{
-				needsRebuild = false;
-				chainer.unregisterListeners();
-				chainer.invalidate();
-				chainer.registerListeners();
-				EI.LOGGER.info("buildLinks: ({})", worldPosition.toShortString());
-			}
-			skipRebuild = false;
+			EI.LOGGER.info("start buildLinks: ({})", worldPosition.toShortString());
+			needsRebuild = false;
+			chainer.unregisterListeners();
+			chainer.invalidate();
+			chainer.registerListeners();
+			EI.LOGGER.info("end buildLinks: ({})", worldPosition.toShortString());
 		}
 	}
 	
 	public void buildLinksAndUpdate()
 	{
-		skipRebuild = false;
 		this.buildLinks();
-		skipRebuild = true;
 		this.invalidateCapabilities();
 		this.setChanged();
 		if(!level.isClientSide())
@@ -113,13 +107,6 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		if(!level.isClientSide())
 		{
 			needsRebuild = true;
-			
-			skipRebuild = true;
-			((ServerLevel) level).registerCapabilityListener(worldPosition, () ->
-			{
-				this.buildLinks();
-				return true;
-			});
 		}
 	}
 	
@@ -162,7 +149,6 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		
 		if(needsRebuild)
 		{
-			skipRebuild = false;
 			this.buildLinksAndUpdate();
 		}
 	}
@@ -178,19 +164,10 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, bet,
 					(be, direction) -> ((MachineChainerMachineBlockEntity) be).getChainerComponent().fluidHandler()
 			);
-			
-			/*event.registerBlockEntity(
-					Capabilities.ItemHandler.BLOCK, bet,
-					(be, direction) -> ((MachineChainerMachineBlockEntity) be).chainer.itemHandler
-			);
-			event.registerBlockEntity(
-					Capabilities.FluidHandler.BLOCK, bet,
-					(be, direction) -> ((MachineChainerMachineBlockEntity) be).chainer.fluidHandler
-			);
 			event.registerBlockEntity(
 					EnergyApi.SIDED, bet,
-					(be, direction) -> ((MachineChainerMachineBlockEntity) be).chainer.energyHandler
-			);*/
+					(be, direction) -> ((MachineChainerMachineBlockEntity) be).getChainerComponent().energyHandler()
+			);
 		});
 	}
 }

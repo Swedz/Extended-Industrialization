@@ -1,5 +1,7 @@
 package net.swedz.extended_industrialization.machines.component.chainer;
 
+import aztech.modern_industrialization.api.energy.EnergyApi;
+import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -28,8 +30,9 @@ public final class MachineLinks implements ClearableInvalidatable
 	
 	private List<BlockPos> positions = List.of();
 	
-	private List<IItemHandler>  itemHandlers  = List.of();
-	private List<IFluidHandler> fluidHandlers = List.of();
+	private List<IItemHandler>    itemHandlers   = List.of();
+	private List<IFluidHandler>   fluidHandlers  = List.of();
+	private List<MIEnergyStorage> energyHandlers = List.of();
 	
 	public MachineLinks(Supplier<Level> level, BlockPos origin, Supplier<Direction> direction, int maxConnections)
 	{
@@ -130,12 +133,18 @@ public final class MachineLinks implements ClearableInvalidatable
 		return fluidHandlers;
 	}
 	
+	public List<MIEnergyStorage> energyHandlers()
+	{
+		return energyHandlers;
+	}
+	
 	@Override
 	public void clear()
 	{
 		positions = List.of();
 		itemHandlers = List.of();
 		fluidHandlers = List.of();
+		energyHandlers = List.of();
 	}
 	
 	@Override
@@ -144,6 +153,7 @@ public final class MachineLinks implements ClearableInvalidatable
 		List<BlockPos> machinesFound = Lists.newArrayList();
 		List<IItemHandler> itemHandlers = Lists.newArrayList();
 		List<IFluidHandler> fluidHandlers = Lists.newArrayList();
+		List<MIEnergyStorage> energyHandlers = Lists.newArrayList();
 		
 		for(BlockPos pos : this.getSpannedBlocks())
 		{
@@ -163,6 +173,8 @@ public final class MachineLinks implements ClearableInvalidatable
 				break;
 			}
 			
+			// TODO listen for invalidated capabilities on the capabilities below
+			
 			boolean isMachine = false;
 			
 			IItemHandler itemHandler = this.level().getCapability(Capabilities.ItemHandler.BLOCK, pos, null);
@@ -179,7 +191,12 @@ public final class MachineLinks implements ClearableInvalidatable
 				isMachine = true;
 			}
 			
-			// TODO energy
+			MIEnergyStorage energyHandler = this.level().getCapability(EnergyApi.SIDED, pos, null);
+			if(energyHandler != null)
+			{
+				energyHandlers.add(energyHandler);
+				isMachine = true;
+			}
 			
 			if(!isMachine)
 			{
@@ -192,5 +209,6 @@ public final class MachineLinks implements ClearableInvalidatable
 		this.positions = Collections.unmodifiableList(machinesFound);
 		this.itemHandlers = Collections.unmodifiableList(itemHandlers);
 		this.fluidHandlers = Collections.unmodifiableList(fluidHandlers);
+		this.energyHandlers = Collections.unmodifiableList(energyHandlers);
 	}
 }

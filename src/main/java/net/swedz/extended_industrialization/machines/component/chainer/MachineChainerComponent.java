@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.machines.component.chainer;
 
 import aztech.modern_industrialization.machines.IComponent;
-import com.google.common.collect.Sets;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ChunkPos;
@@ -9,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.swedz.extended_industrialization.EILocalizedListeners;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.component.chainer.handler.ChainerEnergyHandler;
 import net.swedz.extended_industrialization.machines.component.chainer.handler.ChainerFluidHandler;
 import net.swedz.extended_industrialization.machines.component.chainer.handler.ChainerItemHandler;
 import net.swedz.tesseract.neoforge.localizedlistener.LocalizedListener;
@@ -19,41 +19,43 @@ import java.util.function.Consumer;
 
 public final class MachineChainerComponent implements IComponent, ClearableInvalidatable
 {
-	private final MachineChainerMachineBlockEntity machineBlockEntity;
+	private final MachineChainerMachineBlockEntity machine;
 	
 	private final LocalizedListener<BlockEvent.NeighborNotifyEvent> listenerNeighborNotify;
 	
 	private final MachineLinks machineLinks;
 	
-	private final ChainerItemHandler  itemHandler;
-	private final ChainerFluidHandler fluidHandler;
+	private final ChainerItemHandler   itemHandler;
+	private final ChainerFluidHandler  fluidHandler;
+	private final ChainerEnergyHandler energyHandler;
 	
-	public MachineChainerComponent(MachineChainerMachineBlockEntity machineBlockEntity, int maxConnectedMachines)
+	public MachineChainerComponent(MachineChainerMachineBlockEntity machine, int maxConnectedMachines)
 	{
-		this.machineBlockEntity = machineBlockEntity;
+		this.machine = machine;
 		
 		this.machineLinks = new MachineLinks(
-				machineBlockEntity::getLevel,
-				machineBlockEntity.getBlockPos(),
-				() -> machineBlockEntity.orientation.facingDirection,
+				machine::getLevel,
+				machine.getBlockPos(),
+				() -> machine.orientation.facingDirection,
 				maxConnectedMachines
 		);
 		
 		this.itemHandler = new ChainerItemHandler(machineLinks);
 		this.fluidHandler = new ChainerFluidHandler(machineLinks);
+		this.energyHandler = new ChainerEnergyHandler(machineLinks);
 		
 		this.listenerNeighborNotify = (event) ->
 		{
 			if(machineLinks.contains(event.getPos()) || machineLinks.isJustOutside(event.getPos()))
 			{
-				machineBlockEntity.buildLinksAndUpdate();
+				machine.buildLinksAndUpdate();
 			}
 		};
 	}
 	
-	public Level getLevel()
+	public Level level()
 	{
-		return machineBlockEntity.getLevel();
+		return machine.getLevel();
 	}
 	
 	public MachineLinks links()
@@ -81,7 +83,12 @@ public final class MachineChainerComponent implements IComponent, ClearableInval
 		return fluidHandler;
 	}
 	
-	private Set<ChunkPos> previousSpannedChunks = Sets.newHashSet();
+	public ChainerEnergyHandler energyHandler()
+	{
+		return energyHandler;
+	}
+	
+	private Set<ChunkPos> previousSpannedChunks = Set.of();
 	
 	public void registerListeners()
 	{
@@ -90,7 +97,7 @@ public final class MachineChainerComponent implements IComponent, ClearableInval
 			throw new IllegalStateException("Cannot register listeners for a chainer that already has listeners registered");
 		}
 		Set<ChunkPos> spannedChunks = machineLinks.getSpannedChunks();
-		EILocalizedListeners.INSTANCE.register(this.getLevel(), spannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
+		EILocalizedListeners.INSTANCE.register(this.level(), spannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
 		previousSpannedChunks = spannedChunks;
 	}
 	
@@ -98,8 +105,8 @@ public final class MachineChainerComponent implements IComponent, ClearableInval
 	{
 		if(!previousSpannedChunks.isEmpty())
 		{
-			EILocalizedListeners.INSTANCE.unregister(this.getLevel(), previousSpannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
-			previousSpannedChunks = Sets.newHashSet();
+			EILocalizedListeners.INSTANCE.unregister(this.level(), previousSpannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
+			previousSpannedChunks = Set.of();
 		}
 	}
 	
@@ -109,7 +116,8 @@ public final class MachineChainerComponent implements IComponent, ClearableInval
 		List.of(
 				machineLinks,
 				itemHandler,
-				fluidHandler
+				fluidHandler,
+				energyHandler
 		).forEach(action);
 	}
 	
