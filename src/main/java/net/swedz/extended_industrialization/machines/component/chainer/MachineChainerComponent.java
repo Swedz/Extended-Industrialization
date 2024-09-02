@@ -9,6 +9,8 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.swedz.extended_industrialization.EILocalizedListeners;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.component.chainer.handler.ChainerFluidHandler;
+import net.swedz.extended_industrialization.machines.component.chainer.handler.ChainerItemHandler;
 import net.swedz.tesseract.neoforge.localizedlistener.LocalizedListener;
 
 import java.util.List;
