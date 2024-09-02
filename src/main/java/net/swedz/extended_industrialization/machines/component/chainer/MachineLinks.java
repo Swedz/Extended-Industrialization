@@ -34,11 +34,11 @@ public final class MachineLinks implements ClearableInvalidatable
 	private List<IFluidHandler>   fluidHandlers  = List.of();
 	private List<MIEnergyStorage> energyHandlers = List.of();
 	
-	public MachineLinks(Supplier<Level> level, BlockPos origin, Supplier<Direction> direction, int maxConnections)
+	public MachineLinks(MachineChainerMachineBlockEntity machine, int maxConnections)
 	{
-		this.level = level;
-		this.origin = origin;
-		this.direction = direction;
+		this.level = machine::getLevel;
+		this.origin = machine.getBlockPos();
+		this.direction = () -> machine.orientation.facingDirection;
 		this.maxConnections = maxConnections;
 	}
 	
@@ -171,13 +171,18 @@ public final class MachineLinks implements ClearableInvalidatable
 			{
 				break;
 			}
-			if(blockEntity instanceof MachineChainerMachineBlockEntity)
+			if(blockEntity instanceof MachineChainerMachineBlockEntity chainerBlockEntity)
 			{
-				// TODO allow chaining chainers again
-				break;
+				if(chainerBlockEntity.orientation.facingDirection == this.direction() ||
+				   chainerBlockEntity.orientation.facingDirection.getOpposite() == this.direction())
+				{
+					break;
+				}
+				if(chainerBlockEntity.getChainerComponent().links().contains(origin, true))
+				{
+					break;
+				}
 			}
-			
-			// TODO listen for invalidated capabilities on the capabilities below
 			
 			boolean isMachine = false;
 			

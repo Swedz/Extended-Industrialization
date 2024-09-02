@@ -33,12 +33,7 @@ public final class MachineChainerComponent implements IComponent, ClearableInval
 	{
 		this.machine = machine;
 		
-		this.machineLinks = new MachineLinks(
-				machine::getLevel,
-				machine.getBlockPos(),
-				() -> machine.orientation.facingDirection,
-				maxConnectedMachines
-		);
+		this.machineLinks = new MachineLinks(machine, maxConnectedMachines);
 		
 		this.itemHandler = new ChainerItemHandler(machineLinks);
 		this.fluidHandler = new ChainerFluidHandler(machineLinks);
