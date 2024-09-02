@@ -108,6 +108,8 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		}
 	}
 	
+	// TODO account for other arbitrary changes
+	
 	@Override
 	public boolean useWrench(Player player, InteractionHand hand, BlockHitResult hitResult)
 	{
