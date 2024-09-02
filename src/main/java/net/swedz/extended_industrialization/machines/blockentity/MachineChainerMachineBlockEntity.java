@@ -5,17 +5,14 @@ import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
-import aztech.modern_industrialization.machines.MachineOverlay;
 import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
@@ -60,8 +57,10 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		return chainer;
 	}
 	
-	private void buildLinks()
+	public void buildLinks(boolean updateBlock)
 	{
+		EI.LOGGER.info("buildLinks at {} : {}", worldPosition.toShortString(), updateBlock);
+		
 		if(!level.isClientSide())
 		{
 			tick = 0;
@@ -70,16 +69,17 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			chainer.invalidate();
 			chainer.registerListeners();
 		}
-	}
-	
-	public void buildLinksAndUpdate()
-	{
-		this.buildLinks();
+		
 		this.invalidateCapabilities();
-		this.setChanged();
-		if(!level.isClientSide())
+		
+		if(updateBlock)
 		{
-			this.sync();
+			level.blockUpdated(worldPosition, Blocks.AIR);
+			this.setChanged();
+			if(!level.isClientSide())
+			{
+				this.sync();
+			}
 		}
 	}
 	
@@ -108,19 +108,6 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		}
 	}
 	
-	// TODO account for other arbitrary changes
-	
-	@Override
-	public boolean useWrench(Player player, InteractionHand hand, BlockHitResult hitResult)
-	{
-		if(orientation.useWrench(player, hand, MachineOverlay.findHitSide(hitResult)))
-		{
-			this.buildLinksAndUpdate();
-			return true;
-		}
-		return false;
-	}
-	
 	@Override
 	public void setRemoved()
 	{
@@ -144,12 +131,13 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		if(++tick == 10 * 20)
 		{
 			tick = 0;
-			needsRebuild = true;
+			this.buildLinks(false);
 		}
 		
 		if(needsRebuild)
 		{
-			this.buildLinksAndUpdate();
+			needsRebuild = false;
+			this.buildLinks(false);
 		}
 	}
 	

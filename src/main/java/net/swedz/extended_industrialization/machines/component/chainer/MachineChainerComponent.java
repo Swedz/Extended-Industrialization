@@ -46,9 +46,14 @@ public final class MachineChainerComponent implements IComponent, ClearableInval
 		
 		this.listenerNeighborNotify = (event) ->
 		{
-			if(machineLinks.contains(event.getPos()) || machineLinks.isJustOutside(event.getPos()))
+			if(machineLinks.origin().equals(event.getPos()))
 			{
-				machine.buildLinksAndUpdate();
+				machine.buildLinks(false);
+			}
+			else if(machineLinks.contains(event.getPos()) ||
+					machineLinks.isJustOutside(event.getPos()))
+			{
+				machine.buildLinks(false);
 			}
 		};
 	}
@@ -96,7 +101,7 @@ public final class MachineChainerComponent implements IComponent, ClearableInval
 		{
 			throw new IllegalStateException("Cannot register listeners for a chainer that already has listeners registered");
 		}
-		Set<ChunkPos> spannedChunks = machineLinks.getSpannedChunks();
+		Set<ChunkPos> spannedChunks = machineLinks.getSpannedChunks(true);
 		EILocalizedListeners.INSTANCE.register(this.level(), spannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
 		previousSpannedChunks = spannedChunks;
 	}

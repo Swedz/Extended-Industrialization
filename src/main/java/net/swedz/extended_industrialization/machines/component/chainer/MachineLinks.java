@@ -103,9 +103,13 @@ public final class MachineLinks implements ClearableInvalidatable
 		return maxConnections;
 	}
 	
-	List<BlockPos> getSpannedBlocks()
+	List<BlockPos> getSpannedBlocks(boolean includeOrigin)
 	{
 		List<BlockPos> blocks = Lists.newArrayList();
+		if(includeOrigin)
+		{
+			blocks.add(origin);
+		}
 		for(int i = 1; i <= maxConnections; i++)
 		{
 			blocks.add(origin.relative(this.direction(), i));
@@ -113,10 +117,10 @@ public final class MachineLinks implements ClearableInvalidatable
 		return Collections.unmodifiableList(blocks);
 	}
 	
-	Set<ChunkPos> getSpannedChunks()
+	Set<ChunkPos> getSpannedChunks(boolean includeOrigin)
 	{
 		Set<ChunkPos> chunks = Sets.newHashSet();
-		for(BlockPos block : this.getSpannedBlocks())
+		for(BlockPos block : this.getSpannedBlocks(includeOrigin))
 		{
 			chunks.add(new ChunkPos(block));
 		}
@@ -155,7 +159,7 @@ public final class MachineLinks implements ClearableInvalidatable
 		List<IFluidHandler> fluidHandlers = Lists.newArrayList();
 		List<MIEnergyStorage> energyHandlers = Lists.newArrayList();
 		
-		for(BlockPos pos : this.getSpannedBlocks())
+		for(BlockPos pos : this.getSpannedBlocks(false))
 		{
 			if(this.level().getBlockState(pos).is(EITags.MACHINE_CHAINER_RELAY))
 			{
