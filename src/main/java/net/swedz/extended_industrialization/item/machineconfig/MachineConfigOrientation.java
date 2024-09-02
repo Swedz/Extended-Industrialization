@@ -7,20 +7,24 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 
+import java.util.Optional;
+
 record MachineConfigOrientation(
-		Direction facingDirection, boolean hasOutput, Direction outputDirection, boolean extractItems,
-		boolean extractFluids
+		Direction facingDirection,
+		boolean hasOutput, Direction outputDirection,
+		boolean extractItems, boolean extractFluids
 ) implements MachineConfigApplicable<OrientationComponent>
 {
 	public static final Codec<MachineConfigOrientation> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
 					Direction.CODEC.fieldOf("facing_direction").forGetter(MachineConfigOrientation::facingDirection),
 					Codec.BOOL.fieldOf("has_output").forGetter(MachineConfigOrientation::hasOutput),
-					Direction.CODEC.fieldOf("output_direction").forGetter(MachineConfigOrientation::outputDirection),
+					Direction.CODEC.optionalFieldOf("output_direction").forGetter((o) -> Optional.ofNullable(o.outputDirection())),
 					Codec.BOOL.fieldOf("extract_items").forGetter(MachineConfigOrientation::extractItems),
 					Codec.BOOL.fieldOf("extract_fluids").forGetter(MachineConfigOrientation::extractFluids)
 			)
-			.apply(instance, MachineConfigOrientation::new));
+			.apply(instance, (facingDirection, hasOutput, outputDirection, extractItems, extractFluids) ->
+					new MachineConfigOrientation(facingDirection, hasOutput, outputDirection.orElse(null), extractItems, extractFluids)));
 	
 	public static MachineConfigOrientation from(OrientationComponent component)
 	{

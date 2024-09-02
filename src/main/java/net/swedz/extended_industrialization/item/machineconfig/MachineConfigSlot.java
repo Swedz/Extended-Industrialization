@@ -11,6 +11,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.material.Fluid;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public interface MachineConfigSlot<T, S extends AbstractConfigurableStack>
@@ -47,9 +48,9 @@ public interface MachineConfigSlot<T, S extends AbstractConfigurableStack>
 				.group(
 						Codec.INT.fieldOf("index").forGetter(ItemSlot::index),
 						Codec.INT.fieldOf("capacity").forGetter(ItemSlot::capacity),
-						BuiltInRegistries.ITEM.byNameCodec().fieldOf("item_lock").forGetter(ItemSlot::lock)
+						BuiltInRegistries.ITEM.byNameCodec().optionalFieldOf("item_lock").forGetter((s) -> Optional.ofNullable(s.lock()))
 				)
-				.apply(instance, ItemSlot::new));
+				.apply(instance, (index, capacity, lock) -> new ItemSlot(index, capacity, lock.orElse(null))));
 		
 		@Override
 		public ConfigurableItemStack stack(MIInventory inventory)
@@ -63,9 +64,9 @@ public interface MachineConfigSlot<T, S extends AbstractConfigurableStack>
 		private static final Codec<FluidSlot> CODEC = RecordCodecBuilder.create((instance) -> instance
 				.group(
 						Codec.INT.fieldOf("index").forGetter(FluidSlot::index),
-						BuiltInRegistries.FLUID.byNameCodec().fieldOf("fluid_lock").forGetter(FluidSlot::lock)
+						BuiltInRegistries.FLUID.byNameCodec().optionalFieldOf("fluid_lock").forGetter((s) -> Optional.ofNullable(s.lock()))
 				)
-				.apply(instance, FluidSlot::new));
+				.apply(instance, (index, lock) -> new FluidSlot(index, lock.orElse(null))));
 		
 		@Override
 		public ConfigurableFluidStack stack(MIInventory inventory)
