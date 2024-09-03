@@ -15,10 +15,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.component.chainer.MachineChainerComponent;
+import net.swedz.extended_industrialization.machines.component.chainer.MachineLinks;
 
 public final class MachineChainerHighlightRenderer extends MachineBlockEntityRenderer<MachineChainerMachineBlockEntity>
 {
+	private static final int COLOR_SUCCESS = 0x6FFF6F;
+	private static final int COLOR_FAILURE = 0xFF6F6F;
+	
 	public MachineChainerHighlightRenderer(BlockEntityRendererProvider.Context ctx)
 	{
 		super(ctx);
@@ -33,12 +36,23 @@ public final class MachineChainerHighlightRenderer extends MachineBlockEntityRen
 	@Override
 	public AABB getRenderBoundingBox(MachineChainerMachineBlockEntity machine)
 	{
-		MachineChainerComponent component = machine.getChainerComponent();
-		BlockPos endPos = component.links().position(component.getConnectedMachineCount() + 1);
-		return new AABB(
-				Vec3.atLowerCornerOf(machine.getBlockPos()),
-				Vec3.atLowerCornerOf(endPos).add(1, 1, 1)
-		);
+		MachineLinks links = machine.getChainerComponent().links();
+		boolean hasConnections = links.hasConnections();
+		boolean hasFailure = links.failPosition().isPresent();
+		if(hasConnections || hasFailure)
+		{
+			BlockPos endPos = hasFailure ?
+					links.failPosition().get() :
+					links.position(links.count() + 1);
+			return new AABB(
+					Vec3.atLowerCornerOf(machine.getBlockPos()),
+					Vec3.atLowerCornerOf(endPos).add(1, 1, 1)
+			);
+		}
+		else
+		{
+			return super.getRenderBoundingBox(machine);
+		}
 	}
 	
 	@Override
@@ -46,46 +60,85 @@ public final class MachineChainerHighlightRenderer extends MachineBlockEntityRen
 	{
 		super.render(machine, tickDelta, matrices, buffer, light, overlay);
 		
-		if(isHoldingMachine(machine))
-		{
-			this.renderPositionAfter(machine, tickDelta, matrices, buffer, light, overlay);
-		}
-		
-		if(isHoldingWrench())
-		{
-			this.renderNumbers(machine, tickDelta, matrices, buffer, light, overlay);
-		}
-	}
-	
-	private void renderPositionAfter(MachineChainerMachineBlockEntity machine, float tickDelta, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
-	{
 		BlockPos originPos = machine.getBlockPos();
-		MachineChainerComponent component = machine.getChainerComponent();
+		MachineLinks links = machine.getChainerComponent().links();
 		
-		if(component.getMaxConnectedMachinesCount() > component.getConnectedMachineCount())
+		boolean holdingWrench = isHoldingWrench();
+		boolean holdingMachine = isHoldingMachine(machine);
+		
+		if(holdingWrench || holdingMachine)
 		{
-			BlockPos pos = component.links().positionAfter();
-			BlockPos offset = pos.subtract(originPos);
+			if(links.hasFailure())
+			{
+				if(holdingWrench)
+				{
+					this.renderPosition(
+							machine, tickDelta, matrices, buffer, light, overlay,
+							links.failPosition().orElseThrow(),
+							1f, 111f / 256, 111f / 256
+					);
+				}
+			}
+			else if(links.maxConnections() > links.count())
+			{
+				if(holdingMachine)
+				{
+					this.renderPosition(
+							machine, tickDelta, matrices, buffer, light, overlay,
+							links.positionAfter(),
+							111f / 256, 1f, 111f / 256
+					);
+				}
+			}
+		}
+		
+		if(holdingWrench)
+		{
+			int count = links.count();
+			int color = COLOR_SUCCESS;
+			if(links.hasFailure())
+			{
+				count = links.failPositionOffset();
+				color = COLOR_FAILURE;
+			}
 			
-			matrices.pushPose();
-			matrices.translate((float) offset.getX(), (float) offset.getY(), (float) offset.getZ());
-			matrices.translate(-0.005, -0.005, -0.005);
-			matrices.scale(1.01f, 1.01f, 1.01f);
-			RenderHelper.drawOverlay(matrices, buffer, 111f / 256, 1f, 111f / 256, RenderHelper.FULL_LIGHT, overlay);
-			matrices.popPose();
+			this.renderNumbers(
+					machine, tickDelta, matrices, buffer, light, overlay,
+					count, color
+			);
 		}
 	}
 	
-	private void renderNumbers(MachineChainerMachineBlockEntity machine, float tickDelta, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
+	private void renderPosition(MachineChainerMachineBlockEntity machine, float tickDelta, PoseStack matrices, MultiBufferSource buffer, int light, int overlay,
+								BlockPos pos, float red, float green, float blue)
 	{
 		BlockPos originPos = machine.getBlockPos();
-		MachineChainerComponent component = machine.getChainerComponent();
+		BlockPos offset = pos.subtract(originPos);
+		
+		matrices.pushPose();
+		matrices.translate((float) offset.getX(), (float) offset.getY(), (float) offset.getZ());
+		matrices.translate(-0.005, -0.005, -0.005);
+		matrices.scale(1.01f, 1.01f, 1.01f);
+		RenderHelper.drawOverlay(matrices, buffer, red, green, blue, RenderHelper.FULL_LIGHT, overlay);
+		matrices.popPose();
+	}
+	
+	private void renderNumbers(MachineChainerMachineBlockEntity machine, float tickDelta, PoseStack matrices, MultiBufferSource buffer, int light, int overlay,
+							   int count, int color)
+	{
+		if(count <= 0)
+		{
+			return;
+		}
+		
+		BlockPos originPos = machine.getBlockPos();
+		MachineLinks links = machine.getChainerComponent().links();
 		
 		Direction facing = Direction.fromYRot(Minecraft.getInstance().player.yHeadRot);
 		
-		for(int i = 1; i <= component.links().count(); i++)
+		for(int i = 1; i <= count; i++)
 		{
-			BlockPos pos = component.links().position(i);
+			BlockPos pos = links.position(i);
 			BlockPos offset = pos.subtract(originPos);
 			
 			String text = Integer.toString(i);
@@ -114,7 +167,7 @@ public final class MachineChainerHighlightRenderer extends MachineBlockEntityRen
 			
 			Minecraft.getInstance().font.drawInBatch(
 					text, -textX, -textY,
-					0x6FFF6F, false,
+					color, false,
 					matrices.last().pose(), buffer,
 					Font.DisplayMode.NORMAL, 0x000000,
 					RenderHelper.FULL_LIGHT

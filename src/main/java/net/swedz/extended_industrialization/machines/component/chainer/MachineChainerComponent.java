@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.machines.component.chainer;
 
 import aztech.modern_industrialization.machines.IComponent;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ChunkPos;
@@ -136,11 +137,20 @@ public final class MachineChainerComponent implements IComponent, ChainerElement
 	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{
 		tag.putInt("connected_machines", this.getConnectedMachineCount());
+		machineLinks.failPosition().ifPresent((pos) -> tag.putLong("fail_position", pos.asLong()));
 	}
 	
 	@Override
 	public void readNbt(CompoundTag tag, HolderLookup.Provider registries, boolean isUpgradingMachine)
 	{
 		machineLinks.count(tag.getInt("connected_machines"));
+		if(tag.contains("fail_position", CompoundTag.TAG_LONG))
+		{
+			machineLinks.failPosition(BlockPos.of(tag.getLong("fail_position")));
+		}
+		else
+		{
+			machineLinks.failPosition(null);
+		}
 	}
 }

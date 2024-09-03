@@ -132,6 +132,7 @@
   "text.extended_industrialization.key_mouse_scroll": "Mouse Scroll",
   "text.extended_industrialization.machine_batcher_coils": "Batch size and cost is determined by coil used.",
   "text.extended_industrialization.machine_chainer_connected_machines": "Connected Machines: %d / %d",
+  "text.extended_industrialization.machine_chainer_problem_at": "Problem at: %s",
   "text.extended_industrialization.machine_config_card_apply_failed": "Failed to apply machine configuration to machine.",
   "text.extended_industrialization.machine_config_card_apply_success": "Applied machine configuration to machine from card.",
   "text.extended_industrialization.machine_config_card_clear": "Cleared machine configuration from card.",

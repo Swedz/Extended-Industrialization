@@ -16,6 +16,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.chainer.MachineChainerComponent;
+import net.swedz.extended_industrialization.machines.component.chainer.MachineLinks;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine;
 
@@ -44,9 +45,18 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		
 		this.registerGuiComponent(new ModularMultiblockGui.Server(60, () ->
 		{
+			MachineLinks links = chainer.links();
+			
 			List<ModularMultiblockGuiLine> text = Lists.newArrayList();
 			
-			text.add(new ModularMultiblockGuiLine(EIText.MACHINE_CHAINER_CONNECTED_MACHINES.text(chainer.getConnectedMachineCount(), chainer.getMaxConnectedMachinesCount())));
+			if(!links.hasConnections() && links.failPosition().isPresent())
+			{
+				text.add(new ModularMultiblockGuiLine(EIText.MACHINE_CHAINER_PROBLEM_AT.text(links.failPosition().get().toShortString()), 0xFF0000));
+			}
+			else
+			{
+				text.add(new ModularMultiblockGuiLine(EIText.MACHINE_CHAINER_CONNECTED_MACHINES.text(links.count(), links.maxConnections())));
+			}
 			
 			return text;
 		}));

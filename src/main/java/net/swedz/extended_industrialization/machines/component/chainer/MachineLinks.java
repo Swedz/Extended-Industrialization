@@ -41,6 +41,8 @@ public final class MachineLinks implements ChainerElement
 	private List<IFluidHandler>   fluidHandlers  = List.of();
 	private List<MIEnergyStorage> energyHandlers = List.of();
 	
+	private Optional<BlockPos> failPosition = Optional.empty();
+	
 	public MachineLinks(MachineChainerMachineBlockEntity machine, int maxConnections)
 	{
 		this.level = machine::getLevel;
@@ -89,7 +91,12 @@ public final class MachineLinks implements ChainerElement
 		return linkCount;
 	}
 	
-	public void count(int count)
+	public boolean hasConnections()
+	{
+		return this.count() > 0;
+	}
+	
+	void count(int count)
 	{
 		this.linkCount = count;
 	}
@@ -164,6 +171,26 @@ public final class MachineLinks implements ChainerElement
 		return energyHandlers;
 	}
 	
+	public Optional<BlockPos> failPosition()
+	{
+		return failPosition;
+	}
+	
+	public boolean hasFailure()
+	{
+		return failPosition.isPresent();
+	}
+	
+	public int failPositionOffset()
+	{
+		return failPosition.map((fail) -> fail.distManhattan(origin)).orElseThrow();
+	}
+	
+	void failPosition(BlockPos pos)
+	{
+		failPosition = Optional.ofNullable(pos);
+	}
+	
 	@Override
 	public void clear()
 	{
@@ -172,26 +199,27 @@ public final class MachineLinks implements ChainerElement
 		itemHandlers = List.of();
 		fluidHandlers = List.of();
 		energyHandlers = List.of();
+		failPosition = Optional.empty();
 	}
 	
-	private Optional<TestResult> test(BlockPos pos, BlockState blockState, BlockEntity blockEntity)
+	private Optional<Result> test(BlockPos pos, BlockState blockState, BlockEntity blockEntity)
 	{
 		IItemHandler itemHandler = this.level().getCapability(Capabilities.ItemHandler.BLOCK, pos, blockState, blockEntity, null);
 		IFluidHandler fluidHandler = this.level().getCapability(Capabilities.FluidHandler.BLOCK, pos, blockState, blockEntity, null);
 		MIEnergyStorage energyHandler = this.level().getCapability(EnergyApi.SIDED, pos, blockState, blockEntity, null);
 		if(itemHandler != null || fluidHandler != null || energyHandler != null)
 		{
-			return Optional.of(TestResult.success(itemHandler, fluidHandler, energyHandler));
+			return Optional.of(Result.success(itemHandler, fluidHandler, energyHandler));
 		}
 		return Optional.empty();
 	}
 	
-	public TestResult test(BlockPos pos)
+	public Result test(BlockPos pos)
 	{
 		BlockState blockState = this.level().getBlockState(pos);
 		if(blockState.is(EITags.MACHINE_CHAINER_RELAY))
 		{
-			return TestResult.success();
+			return Result.success();
 		}
 		
 		BlockEntity blockEntity = this.level().getBlockEntity(pos);
@@ -202,74 +230,90 @@ public final class MachineLinks implements ChainerElement
 				if(chainerBlockEntity.orientation.facingDirection == this.direction() ||
 				   chainerBlockEntity.orientation.facingDirection.getOpposite() == this.direction())
 				{
-					return TestResult.fail();
+					return Result.fail(true, pos);
 				}
 				if(chainerBlockEntity.getChainerComponent().links().contains(origin, true))
 				{
-					return TestResult.fail();
+					return Result.fail(true, pos);
 				}
 			}
 			
-			Optional<TestResult> result = this.test(pos, blockState, blockEntity);
+			Optional<Result> result = this.test(pos, blockState, blockEntity);
 			if(result.isPresent())
 			{
 				return result.get();
 			}
 		}
 		
-		return TestResult.fail();
+		if(!blockState.isAir())
+		{
+			return Result.fail(false, pos);
+		}
+		
+		return Result.fail(false);
 	}
 	
-	public TestResult test(ItemStack stack)
+	public Result test(ItemStack stack)
 	{
 		if(stack.getItem() instanceof BlockItem blockItem)
 		{
 			Block block = blockItem.getBlock();
 			if(block.defaultBlockState().is(EITags.MACHINE_CHAINER_RELAY))
 			{
-				return TestResult.success();
+				return Result.success();
 			}
 			
 			if(block instanceof MachineBlock machineBlock)
 			{
-				Optional<TestResult> result = this.test(BlockPos.ZERO, machineBlock.defaultBlockState(), machineBlock.getBlockEntityInstance());
+				Optional<Result> result = this.test(BlockPos.ZERO, machineBlock.defaultBlockState(), machineBlock.getBlockEntityInstance());
 				if(result.isPresent())
 				{
 					return result.get();
 				}
 			}
 		}
-		return TestResult.fail();
+		return Result.fail(false);
 	}
 	
-	public record TestResult(
+	public record Result(
 			boolean isSuccess,
 			Optional<IItemHandler> itemHandler,
 			Optional<IFluidHandler> fluidHandler,
-			Optional<MIEnergyStorage> energyHandler
+			Optional<MIEnergyStorage> energyHandler,
+			boolean invalidatesEverything,
+			Optional<BlockPos> failPosition
 	)
 	{
-		public static TestResult fail()
+		public static Result fail(boolean invalidatesEverything, BlockPos failPosition)
 		{
-			return new TestResult(
+			return new Result(
 					false,
 					Optional.empty(),
 					Optional.empty(),
+					Optional.empty(),
+					invalidatesEverything,
+					Optional.ofNullable(failPosition)
+			);
+		}
+		
+		public static Result fail(boolean invalidatesEverything)
+		{
+			return fail(invalidatesEverything, null);
+		}
+		
+		public static Result success(IItemHandler itemHandler, IFluidHandler fluidHandler, MIEnergyStorage energyHandler)
+		{
+			return new Result(
+					true,
+					Optional.ofNullable(itemHandler),
+					Optional.ofNullable(fluidHandler),
+					Optional.ofNullable(energyHandler),
+					false,
 					Optional.empty()
 			);
 		}
 		
-		public static TestResult success(IItemHandler itemHandler, IFluidHandler fluidHandler, MIEnergyStorage energyHandler)
-		{
-			return new TestResult(
-					true,
-					Optional.ofNullable(itemHandler),
-					Optional.ofNullable(fluidHandler),
-					Optional.ofNullable(energyHandler)
-			);
-		}
-		
-		public static TestResult success()
+		public static Result success()
 		{
 			return success(null, null, null);
 		}
@@ -283,15 +327,22 @@ public final class MachineLinks implements ChainerElement
 		List<IFluidHandler> fluidHandlers = Lists.newArrayList();
 		List<MIEnergyStorage> energyHandlers = Lists.newArrayList();
 		
+		Result result = null;
 		for(BlockPos pos : this.getSpannedBlocks(false))
 		{
-			TestResult result = this.test(pos);
+			result = this.test(pos);
 			if(result.isSuccess())
 			{
 				machinesFound.add(pos);
 				result.itemHandler().ifPresent(itemHandlers::add);
 				result.fluidHandler().ifPresent(fluidHandlers::add);
 				result.energyHandler().ifPresent(energyHandlers::add);
+			}
+			else if(result.invalidatesEverything())
+			{
+				this.clear();
+				this.failPosition = result.failPosition();
+				return;
 			}
 			else
 			{
@@ -304,5 +355,6 @@ public final class MachineLinks implements ChainerElement
 		this.itemHandlers = Collections.unmodifiableList(itemHandlers);
 		this.fluidHandlers = Collections.unmodifiableList(fluidHandlers);
 		this.energyHandlers = Collections.unmodifiableList(energyHandlers);
+		this.failPosition = result == null ? Optional.empty() : result.failPosition();
 	}
 }

@@ -45,6 +45,7 @@ public enum EIText implements TranslatableTextEnum
 	KEY_MOUSE_SCROLL("Mouse Scroll"),
 	MACHINE_BATCHER_COILS("Batch size and cost is determined by coil used."),
 	MACHINE_CHAINER_CONNECTED_MACHINES("Connected Machines: %d / %d"),
+	MACHINE_CHAINER_PROBLEM_AT("Problem at: %s"),
 	MACHINE_CONFIG_CARD_APPLY_FAILED("Failed to apply machine configuration to machine."),
 	MACHINE_CONFIG_CARD_APPLY_SUCCESS("Applied machine configuration to machine from card."),
 	MACHINE_CONFIG_CARD_CLEAR("Cleared machine configuration from card."),
