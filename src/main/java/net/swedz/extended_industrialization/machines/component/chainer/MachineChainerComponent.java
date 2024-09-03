@@ -64,16 +64,6 @@ public final class MachineChainerComponent implements IComponent, ChainerElement
 		return machineLinks;
 	}
 	
-	public int getMaxConnectedMachinesCount()
-	{
-		return machineLinks.maxConnections();
-	}
-	
-	public int getConnectedMachineCount()
-	{
-		return machineLinks.count();
-	}
-	
 	public ChainerItemHandler itemHandler()
 	{
 		return itemHandler;
@@ -136,7 +126,7 @@ public final class MachineChainerComponent implements IComponent, ChainerElement
 	@Override
 	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{
-		tag.putInt("connected_machines", this.getConnectedMachineCount());
+		tag.putInt("connected_machines", machineLinks.count());
 		machineLinks.failPosition().ifPresent((pos) -> tag.putLong("fail_position", pos.asLong()));
 	}
 	
