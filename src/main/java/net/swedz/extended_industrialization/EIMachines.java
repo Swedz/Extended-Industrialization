@@ -143,7 +143,7 @@ public final class EIMachines
 			SimpleMember fireClayBricks = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("fire_clay_bricks")));
 			SimpleMember bronzePlatedBricks = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("bronze_plated_bricks")));
 			HatchFlags hatches = new HatchFlags.Builder().with(HatchType.ITEM_INPUT, HatchType.ITEM_OUTPUT, HatchType.FLUID_INPUT).build();
-			ShapeTemplate shape = new ShapeTemplate.Builder(BRONZE_PLATED_BRICKS)
+			ShapeTemplate shape = new ShapeTemplate.Builder(FIREBRICKS)
 					.add3by3(-1, fireClayBricks, false, hatches)
 					.add3by3(0, bronzePlatedBricks, true, HatchFlags.NO_HATCH)
 					.add3by3(1, bronzePlatedBricks, false, HatchFlags.NO_HATCH)
