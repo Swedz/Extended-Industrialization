@@ -7,6 +7,7 @@ public final class EIConfig
 	private static final ModConfigSpec.Builder BUILDER;
 	
 	private static final ModConfigSpec.IntValue     LOCAL_WIRELESS_CHARGING_STATION_RANGE;
+	private static final ModConfigSpec.IntValue     MACHINE_CHAINER_MAX_CONNECTIONS;
 	private static final ModConfigSpec.BooleanValue ALLOW_UPGRADES_IN_PROCESSING_ARRAY;
 	private static final ModConfigSpec.IntValue     LARGE_STEAM_MACERATOR_SIZE;
 	private static final ModConfigSpec.DoubleValue  LARGE_STEAM_MACERATOR_EU;
@@ -25,6 +26,10 @@ public final class EIConfig
 		LOCAL_WIRELESS_CHARGING_STATION_RANGE = BUILDER
 				.comment("The range for the local wireless charging station machine")
 				.defineInRange("local_wireless_charging_station_range", 32, 0, Integer.MAX_VALUE);
+		
+		MACHINE_CHAINER_MAX_CONNECTIONS = BUILDER
+				.comment("The maximum amount of connections a machine chainer can have")
+				.defineInRange("machine_chainer_max_connections", 64, 1, 128);
 		
 		ALLOW_UPGRADES_IN_PROCESSING_ARRAY = BUILDER
 				.comment("Whether upgrades should be allowed in the Processing Array")
@@ -65,6 +70,7 @@ public final class EIConfig
 	}
 	
 	public static int     localWirelessChargingStationRange;
+	public static int     machineChainerMaxConnections;
 	public static boolean allowUpgradesInProcessingArray;
 	public static int     largeSteamMaceratorBatchSize;
 	public static double  largeSteamMaceratorEuCostMultiplier;
@@ -77,6 +83,7 @@ public final class EIConfig
 	public static void loadConfig()
 	{
 		localWirelessChargingStationRange = LOCAL_WIRELESS_CHARGING_STATION_RANGE.get();
+		machineChainerMaxConnections = MACHINE_CHAINER_MAX_CONNECTIONS.get();
 		allowUpgradesInProcessingArray = ALLOW_UPGRADES_IN_PROCESSING_ARRAY.get();
 		largeSteamMaceratorBatchSize = LARGE_STEAM_MACERATOR_SIZE.get();
 		largeSteamMaceratorEuCostMultiplier = LARGE_STEAM_MACERATOR_EU.get();

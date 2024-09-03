@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EIConfig;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.chainer.MachineChainerComponent;
 import net.swedz.extended_industrialization.machines.component.chainer.MachineLinks;
@@ -39,7 +40,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 				new OrientationComponent.Params(false, false, false)
 		);
 		
-		chainer = new MachineChainerComponent(this, 64);
+		chainer = new MachineChainerComponent(this, EIConfig.machineChainerMaxConnections);
 		
 		this.registerComponents(chainer);
 		
