@@ -69,6 +69,21 @@ public final class MachineLinks implements ChainerElement
 		return positions;
 	}
 	
+	public BlockPos position(int offset)
+	{
+		return origin.relative(this.direction(), offset);
+	}
+	
+	public BlockPos positionAfter()
+	{
+		return this.position(this.count() + 1);
+	}
+	
+	public boolean isAfter(BlockPos pos)
+	{
+		return pos.equals(this.positionAfter());
+	}
+	
 	public int count()
 	{
 		return linkCount;
@@ -103,16 +118,6 @@ public final class MachineLinks implements ChainerElement
 	public boolean contains(BlockPos pos)
 	{
 		return this.contains(pos, false);
-	}
-	
-	public BlockPos getJustOutside()
-	{
-		return origin.relative(this.direction(), this.count() + 1);
-	}
-	
-	public boolean isJustOutside(BlockPos pos)
-	{
-		return pos.equals(this.getJustOutside());
 	}
 	
 	public int maxConnections()

@@ -46,7 +46,7 @@ public final class MachineChainerComponent implements IComponent, ChainerElement
 				machine.buildLinks();
 			}
 			else if(machineLinks.contains(event.getPos()) ||
-					machineLinks.isJustOutside(event.getPos()))
+					machineLinks.isAfter(event.getPos()))
 			{
 				machine.buildLinks();
 			}
