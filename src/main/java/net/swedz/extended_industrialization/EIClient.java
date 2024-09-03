@@ -30,12 +30,14 @@ import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.swedz.extended_industrialization.client.MachineChainerHighlightRenderer;
 import net.swedz.extended_industrialization.client.NanoGravichestplateHudRenderer;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.machineconfig.MachineConfigCardItem;
 import net.swedz.extended_industrialization.item.tooltip.MachineConfigCardTooltipComponent;
 import net.swedz.extended_industrialization.item.tooltip.SteamChainsawTooltipComponent;
+import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.network.packet.ModifyElectricToolSpeedPacket;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 
@@ -112,6 +114,10 @@ public final class EIClient
 				else if(blockEntity instanceof MultiblockMachineBlockEntity)
 				{
 					BlockEntityRenderers.register(type, MultiblockMachineBER::new);
+				}
+				else if(blockEntity instanceof MachineChainerMachineBlockEntity)
+				{
+					BlockEntityRenderers.register(type, MachineChainerHighlightRenderer::new);
 				}
 				else
 				{

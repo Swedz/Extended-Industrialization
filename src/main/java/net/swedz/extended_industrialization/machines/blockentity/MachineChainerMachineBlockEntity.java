@@ -11,7 +11,6 @@ import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.swedz.extended_industrialization.EI;
@@ -57,7 +56,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		return chainer;
 	}
 	
-	public void buildLinks(boolean updateBlock)
+	public void buildLinks()
 	{
 		if(!level.isClientSide())
 		{
@@ -70,14 +69,11 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		
 		this.invalidateCapabilities();
 		
-		if(updateBlock)
+		//level.blockUpdated(worldPosition, Blocks.AIR);
+		this.setChanged();
+		if(!level.isClientSide())
 		{
-			level.blockUpdated(worldPosition, Blocks.AIR);
-			this.setChanged();
-			if(!level.isClientSide())
-			{
-				this.sync();
-			}
+			this.sync();
 		}
 	}
 	
@@ -129,13 +125,13 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		if(++tick == 10 * 20)
 		{
 			tick = 0;
-			this.buildLinks(false);
+			this.buildLinks();
 		}
 		
 		if(needsRebuild)
 		{
 			needsRebuild = false;
-			this.buildLinks(false);
+			this.buildLinks();
 		}
 	}
 	
@@ -147,7 +143,8 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 					Capabilities.ItemHandler.BLOCK, bet,
 					(be, direction) -> ((MachineChainerMachineBlockEntity) be).getChainerComponent().itemHandler()
 			);
-			event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, bet,
+			event.registerBlockEntity(
+					Capabilities.FluidHandler.BLOCK, bet,
 					(be, direction) -> ((MachineChainerMachineBlockEntity) be).getChainerComponent().fluidHandler()
 			);
 			event.registerBlockEntity(

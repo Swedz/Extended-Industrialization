@@ -43,12 +43,12 @@ public final class MachineChainerComponent implements IComponent, ChainerElement
 		{
 			if(machineLinks.origin().equals(event.getPos()))
 			{
-				machine.buildLinks(false);
+				machine.buildLinks();
 			}
 			else if(machineLinks.contains(event.getPos()) ||
 					machineLinks.isJustOutside(event.getPos()))
 			{
-				machine.buildLinks(false);
+				machine.buildLinks();
 			}
 		};
 	}
@@ -135,10 +135,12 @@ public final class MachineChainerComponent implements IComponent, ChainerElement
 	@Override
 	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{
+		tag.putInt("connected_machines", this.getConnectedMachineCount());
 	}
 	
 	@Override
 	public void readNbt(CompoundTag tag, HolderLookup.Provider registries, boolean isUpgradingMachine)
 	{
+		machineLinks.count(tag.getInt("connected_machines"));
 	}
 }
