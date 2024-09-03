@@ -4,7 +4,6 @@ import aztech.modern_industrialization.MITags;
 import aztech.modern_industrialization.machines.MachineBlockEntityRenderer;
 import aztech.modern_industrialization.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -151,8 +150,7 @@ public final class MachineChainerHighlightRenderer extends MachineBlockEntityRen
 			matrices.translate(-0.005, -0.005, -0.005);
 			matrices.translate(0.5, 0, 0.5);
 			matrices.scale(0.03f, 0.03f, 0.03f);
-			matrices.mulPose(Axis.YP.rotationDegrees(180));
-			matrices.mulPose(facing.getRotation());
+			matrices.mulPose(facing.getOpposite().getRotation());
 			
 			matrices.pushPose();
 			matrices.translate(1, 1, 0.01);
