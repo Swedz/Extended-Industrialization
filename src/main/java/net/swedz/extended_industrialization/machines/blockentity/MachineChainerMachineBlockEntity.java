@@ -26,6 +26,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	private final MachineChainerComponent chainer;
 	
 	private int tick;
+	private int lastRebuildTick = -1;
 	
 	private boolean needsRebuild;
 	
@@ -58,10 +59,16 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	
 	public void buildLinks()
 	{
+		if(tick == lastRebuildTick)
+		{
+			EI.LOGGER.warn("Prevented Machine Chainer in dimension '{}' at ({}) from rebuilding links more than once in the same tick!", level.dimension().location(), worldPosition.toShortString());
+			return;
+		}
+		
+		needsRebuild = false;
+		
 		if(!level.isClientSide())
 		{
-			tick = 0;
-			needsRebuild = false;
 			chainer.unregisterListeners();
 			chainer.invalidate();
 			chainer.registerListeners();
@@ -75,6 +82,8 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		{
 			this.sync();
 		}
+		
+		lastRebuildTick = tick;
 	}
 	
 	@Override
@@ -122,15 +131,15 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			return;
 		}
 		
-		if(++tick == 10 * 20)
+		tick++;
+		
+		if(tick % 10 * 20 == 0)
 		{
-			tick = 0;
-			this.buildLinks();
+			needsRebuild = true;
 		}
 		
 		if(needsRebuild)
 		{
-			needsRebuild = false;
 			this.buildLinks();
 		}
 	}
