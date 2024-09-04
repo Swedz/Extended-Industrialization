@@ -4,6 +4,7 @@ import aztech.modern_industrialization.MITags;
 import aztech.modern_industrialization.machines.MachineBlockEntityRenderer;
 import aztech.modern_industrialization.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -20,6 +21,11 @@ public final class MachineChainerHighlightRenderer extends MachineBlockEntityRen
 {
 	private static final int COLOR_SUCCESS = 0x6FFF6F;
 	private static final int COLOR_FAILURE = 0xFF6F6F;
+	
+	private static final String ARROW_LEFT = "\u2190";
+	private static final String ARROW_UP = "\u2191";
+	private static final String ARROW_RIGHT = "\u2192";
+	private static final String ARROW_DOWN = "\u2193";
 	
 	public MachineChainerHighlightRenderer(BlockEntityRendererProvider.Context ctx)
 	{
@@ -122,6 +128,54 @@ public final class MachineChainerHighlightRenderer extends MachineBlockEntityRen
 		matrices.popPose();
 	}
 	
+	private Direction pickNumberRenderFace(MachineChainerMachineBlockEntity machine)
+	{
+		int playerY = Minecraft.getInstance().player.blockPosition().getY();
+		int machineY = machine.getBlockPos().getY();
+		
+		if(playerY == machineY || playerY == machineY - 1)
+		{
+			return Direction.fromYRot(Minecraft.getInstance().player.yHeadRot).getOpposite();
+		}
+		else if(playerY < machineY)
+		{
+			return Direction.DOWN;
+		}
+		else
+		{
+			return Direction.UP;
+		}
+	}
+	
+	private String pickArrowSymbol(MachineChainerMachineBlockEntity machine,
+								   Direction playerDirection, Direction renderDirection)
+	{
+		MachineLinks links = machine.getChainerComponent().links();
+		Direction machineDirection = links.direction();
+		
+		Direction playerDirectionLeft = playerDirection.getCounterClockWise();
+		Direction playerDirectionRight = playerDirection.getClockWise();
+		
+		String arrow = "";
+		if(playerDirection == machineDirection)
+		{
+			arrow = renderDirection == Direction.DOWN ? ARROW_DOWN : ARROW_UP;
+		}
+		else if(playerDirection == machineDirection.getOpposite())
+		{
+			arrow = renderDirection == Direction.DOWN ? ARROW_UP : ARROW_DOWN;
+		}
+		else if(playerDirectionLeft == machineDirection)
+		{
+			arrow = ARROW_LEFT;
+		}
+		else if(playerDirectionRight == machineDirection)
+		{
+			arrow = ARROW_RIGHT;
+		}
+		return arrow;
+	}
+	
 	private void renderNumbers(MachineChainerMachineBlockEntity machine, float tickDelta, PoseStack matrices, MultiBufferSource buffer, int light, int overlay,
 							   int count, int color)
 	{
@@ -133,46 +187,80 @@ public final class MachineChainerHighlightRenderer extends MachineBlockEntityRen
 		BlockPos originPos = machine.getBlockPos();
 		MachineLinks links = machine.getChainerComponent().links();
 		
-		Direction facing = Direction.fromYRot(Minecraft.getInstance().player.yHeadRot);
+		Direction playerDirection = Direction.fromYRot(Minecraft.getInstance().player.yHeadRot);
+		Direction renderDirection = this.pickNumberRenderFace(machine);
+		String arrow = this.pickArrowSymbol(machine, playerDirection, renderDirection);
 		
 		for(int i = 1; i <= count; i++)
 		{
 			BlockPos pos = links.position(i);
 			BlockPos offset = pos.subtract(originPos);
-			
-			String text = Integer.toString(i);
-			float textX = Minecraft.getInstance().font.width(text) / 2f;
-			float textY = Minecraft.getInstance().font.lineHeight / 2f;
+			Vec3 center = Vec3.atCenterOf(offset);
 			
 			matrices.pushPose();
 			
-			matrices.translate((float) offset.getX(), (float) offset.getY() + 1.01, (float) offset.getZ());
+			matrices.translate(
+					(float) center.x() + (renderDirection.getStepX() * 0.51f),
+					(float) center.y() + (renderDirection.getStepY() * 0.51f),
+					(float) center.z() + (renderDirection.getStepZ() * 0.51f)
+			);
 			matrices.translate(-0.005, -0.005, -0.005);
-			matrices.translate(0.5, 0, 0.5);
 			matrices.scale(0.03f, 0.03f, 0.03f);
-			matrices.mulPose(facing.getOpposite().getRotation());
+			matrices.mulPose(playerDirection.getOpposite().getRotation());
+			matrices.mulPose(renderDirection.getRotation());
+			if(renderDirection == Direction.NORTH)
+			{
+				matrices.mulPose(Axis.ZP.rotationDegrees(180));
+			}
+			else if(renderDirection == Direction.WEST)
+			{
+				matrices.mulPose(Axis.ZN.rotationDegrees(90));
+			}
+			else if(renderDirection == Direction.EAST)
+			{
+				matrices.mulPose(Axis.ZP.rotationDegrees(90));
+			}
 			
-			matrices.pushPose();
-			matrices.translate(1, 1, 0.01);
-			Minecraft.getInstance().font.drawInBatch(
-					text, -textX, -textY,
-					0x000000, false,
-					matrices.last().pose(), buffer,
-					Font.DisplayMode.NORMAL, 0x000000,
-					RenderHelper.FULL_LIGHT
-			);
-			matrices.popPose();
+			this.renderCenteredText(Integer.toString(i), color, 0, 0, matrices, buffer);
 			
-			Minecraft.getInstance().font.drawInBatch(
-					text, -textX, -textY,
-					color, false,
-					matrices.last().pose(), buffer,
-					Font.DisplayMode.NORMAL, 0x000000,
-					RenderHelper.FULL_LIGHT
-			);
+			float arrowTextXOffset = 10;
+			float arrowTextYOffset = 10;
+			switch (arrow)
+			{
+				case ARROW_LEFT -> this.renderCenteredText(arrow, color, -arrowTextXOffset, 0, matrices, buffer);
+				case ARROW_UP -> this.renderCenteredText(arrow, color, 0, -arrowTextYOffset, matrices, buffer);
+				case ARROW_RIGHT -> this.renderCenteredText(arrow, color, arrowTextXOffset, 0, matrices, buffer);
+				case ARROW_DOWN -> this.renderCenteredText(arrow, color, 0, arrowTextYOffset, matrices, buffer);
+			}
 			
 			matrices.popPose();
 		}
+	}
+	
+	private void renderCenteredText(String text, int color, float x, float y,
+									PoseStack matrices, MultiBufferSource buffer)
+	{
+		float textX = Minecraft.getInstance().font.width(text) / 2f;
+		float textY = Minecraft.getInstance().font.lineHeight / 2f;
+		
+		matrices.pushPose();
+		matrices.translate(1, 1, 0.01);
+		Minecraft.getInstance().font.drawInBatch(
+				text, -textX + x, -textY + y,
+				0x000000, false,
+				matrices.last().pose(), buffer,
+				Font.DisplayMode.NORMAL, 0x000000,
+				RenderHelper.FULL_LIGHT
+		);
+		matrices.popPose();
+		
+		Minecraft.getInstance().font.drawInBatch(
+				text, -textX + x, -textY + y,
+				color, false,
+				matrices.last().pose(), buffer,
+				Font.DisplayMode.NORMAL, 0x000000,
+				RenderHelper.FULL_LIGHT
+		);
 	}
 	
 	private static boolean isHoldingMachine(MachineChainerMachineBlockEntity machine)
