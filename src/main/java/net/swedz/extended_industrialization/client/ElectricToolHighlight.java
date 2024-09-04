@@ -25,7 +25,7 @@ import java.util.Optional;
 public final class ElectricToolHighlight
 {
 	@SubscribeEvent
-	public static void onBlockHighlight(RenderHighlightEvent.Block event)
+	private static void onBlockHighlight(RenderHighlightEvent.Block event)
 	{
 		Player player = Minecraft.getInstance().player;
 		Level level = player.level();
