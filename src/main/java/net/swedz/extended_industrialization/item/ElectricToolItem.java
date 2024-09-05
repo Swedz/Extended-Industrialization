@@ -285,7 +285,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			if(action == PlayerInteractEvent.LeftClickBlock.Action.START ||
 			   action == PlayerInteractEvent.LeftClickBlock.Action.STOP)
 			{
-				LAST_CLICKED_FACE.put(player, new ClickedBlock(event.getPos(), event.getFace()));
+				LAST_CLICKED_FACE.put(player, new ClickedBlock(event.getPos().immutable(), event.getFace()));
 			}
 			else if(action == PlayerInteractEvent.LeftClickBlock.Action.ABORT)
 			{
