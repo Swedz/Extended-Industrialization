@@ -38,4 +38,4 @@ For any questions, please ask in the `#extended-industrialization` channel on [m
   - Crystallized Honey
 
 ## Progress Tracker
-For a list of potentially upcoming features, see the progress tracker issue [here](https://github.com/Swedz/Extended-Industrialization/issues/1).
+For a list of potentially upcoming features, see the progress tracker [here](https://github.com/users/Swedz/projects/10/views/1).
