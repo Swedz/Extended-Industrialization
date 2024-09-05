@@ -245,11 +245,6 @@ public final class MachineLinks implements ChainerElement
 			}
 		}
 		
-		if(!blockState.isAir())
-		{
-			return Result.fail(false, pos);
-		}
-		
 		return Result.fail(false);
 	}
 	
