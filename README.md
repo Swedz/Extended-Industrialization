@@ -37,5 +37,5 @@ For any questions, please ask in the `#extended-industrialization` channel on [m
   - Honey (fluid)
   - Crystallized Honey
 
-## Progress Tracker
-For a list of potentially upcoming features, see the progress tracker [here](https://github.com/users/Swedz/projects/10/views/1).
+## Upcoming Features
+For a list of potentially upcoming features, see the progress tracker [here](https://github.com/users/Swedz/projects/10/views/6).
