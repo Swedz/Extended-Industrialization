@@ -18,11 +18,11 @@ build
 .gradle
 
 # other
+.env
 eclipse
 run
 runs
 run-data
-
 repo
 
 # datagen

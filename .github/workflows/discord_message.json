@@ -12,7 +12,7 @@
                 {
                     "id": 488008850,
                     "name": "Version",
-                    "value": "$MOD_VERSION",
+                    "value": "$MOD_VERSION_SHORT",
                     "inline": false
                 },
                 {

@@ -27,15 +27,20 @@ jobs:
             echo "${{ github.event.release.body }}"
             echo "EOF"
           } >> $GITHUB_ENV
-      - name: Generate additional variables into the environment
+      - name: Generate variables using release data
         run: |
+          echo "MOD_VERSION=$(echo "$GITHUB_RELEASE_TAG_NAME" | sed -E 's/-[0-9]+\.[0-9]+$//')" >> $GITHUB_ENV
+          echo "RELEASE_TYPE=$(echo "$GITHUB_RELEASE_TAG_NAME" | grep -oE '(alpha|beta)' || echo "release")" >> $GITHUB_ENV
           {
             echo "MOD_CHANGELOG_TRIMMED<<EOF"
             echo "$(echo "$MOD_CHANGELOG" | sed -E '/^\s*$/d; s#\*\*Full Changelog\*\*: (https?://[^\ ]+)#\[Full Changelog\](\1)#g' | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')"
             echo "EOF"
           } >> $GITHUB_ENV
+      - name: Finalize variables
+        run: |
+          echo "MOD_VERSION_SHORT=${MOD_VERSION%%-*}" >> $GITHUB_ENV
           echo "RELEASE_TYPE_DISPLAY=${RELEASE_TYPE^}" >> $GITHUB_ENV
-          echo "EMBED_COLOR=$(if [ $RELEASE_TYPE == "release" ]; then echo 2336090; elif [ $RELEASE_TYPE == "beta" ]; then echo 15774258; else echo 15875907; fi)" >> $GITHUB_ENV
+          echo "EMBED_COLOR=$(if [ $RELEASE_TYPE == "alpha" ]; then echo 15875907; elif [ $RELEASE_TYPE == "beta" ]; then echo 15774258; else echo 2336090; fi)" >> $GITHUB_ENV
       - name: Prepare Discord webhook JSON file
         run: |
           envsubst < .github/workflows/discord_message.json > prepared_discord_message.json
