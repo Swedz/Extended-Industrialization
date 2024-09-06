@@ -53,7 +53,7 @@ dependencies {
 
 	implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
 
-	implementation "dev.emi:emi-neoforge:${emi_version}+${minecraft_version}"
+	implementation "dev.emi:emi-neoforge:${emi_version}"
 
 	implementation "net.swedz:tesseract-neoforge:${tesseract_version}"
 
