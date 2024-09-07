@@ -29,7 +29,7 @@ jobs:
           } >> $GITHUB_ENV
       - name: Generate variables using release data
         run: |
-          echo "MOD_VERSION=$(echo "$GITHUB_RELEASE_TAG_NAME" | sed -E 's/-[0-9]+\.[0-9]+$//')" >> $GITHUB_ENV
+          echo "MOD_VERSION=$(echo "$GITHUB_RELEASE_TAG_NAME" | sed -E 's/-[^-]+$//')" >> $GITHUB_ENV
           echo "RELEASE_TYPE=$(echo "$GITHUB_RELEASE_TAG_NAME" | grep -oE '(alpha|beta)' || echo "release")" >> $GITHUB_ENV
           {
             echo "MOD_CHANGELOG_TRIMMED<<EOF"
