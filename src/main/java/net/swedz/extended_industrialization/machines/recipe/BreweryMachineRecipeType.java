@@ -25,7 +25,6 @@ import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.datagen.api.RecipeHelper;
-import net.swedz.tesseract.neoforge.compat.mi.mixin.accessor.MIRecipeAccessor;
 
 import java.util.List;
 import java.util.Optional;
@@ -75,8 +74,7 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 		recipe.addItemInput(inputIngredient, 4, 1f);
 		recipe.addItemInput(reagentIngredient, 1, 1f);
 		recipe.addFluidInput(EIFluids.BLAZING_ESSENCE, 1);
-		// TODO use proper method when its added
-		((MIRecipeAccessor) recipe).recipe().itemOutputs.add(new MachineRecipe.ItemOutput(ItemVariant.of(outputStack), 4, 1f));
+		recipe.addItemOutput(ItemVariant.of(outputStack), 4, 1f);
 		
 		return new RecipeHolder<>(id, RecipeHelper.getActualRecipe(recipe));
 	}

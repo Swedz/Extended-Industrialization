@@ -1,6 +1,5 @@
 package net.swedz.extended_industrialization.datagen.server.provider.recipes;
 
-import aztech.modern_industrialization.machines.recipe.MachineRecipe;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -16,7 +15,6 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIMachines;
-import net.swedz.tesseract.neoforge.compat.mi.mixin.accessor.MIRecipeAccessor;
 
 public final class CanningMachineRecipesServerDatagenProvider extends RecipesServerDatagenProvider
 {
@@ -30,13 +28,10 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 		addMachineRecipe(
 				"canning_machine/filling", id, EIMachines.RecipeTypes.CANNING_MACHINE,
 				2, 5 * 20,
-				(r) ->
-				{
-					r.addFluidInput(fluidStack.getFluid(), fluidStack.getAmount());
-					r.addItemInput(emptyItem, 1);
-					// TODO use proper method when its added
-					((MIRecipeAccessor) r).recipe().itemOutputs.add(new MachineRecipe.ItemOutput(ItemVariant.of(fullItemAsOutput), 1, 1f));
-				},
+				(r) -> r
+						.addFluidInput(fluidStack.getFluid(), fluidStack.getAmount())
+						.addItemInput(emptyItem, 1)
+						.addItemOutput(ItemVariant.of(fullItemAsOutput), 1, 1f),
 				output
 		);
 		addMachineRecipe(
