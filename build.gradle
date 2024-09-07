@@ -12,8 +12,7 @@ configurations {
 	compileClasspath.extendsFrom localImplementation
 }
 
-var versionSimple = System.getenv("MOD_VERSION") ?: "0.0.0-local"
-version = "${versionSimple}-${minecraft_version}"
+version = (System.getenv("MOD_VERSION") ?: "0.0.0-local") + "-${minecraft_version}"
 group = mod_group_id
 base {
 	archivesName = artifact_name
@@ -245,7 +244,7 @@ tasks.withType(ProcessResources).configureEach {
 			loader_version_range                  : loader_version_range,
 			mod_id                                : mod_id,
 			mod_name                              : mod_name,
-			mod_version                           : versionSimple,
+			mod_version                           : version,
 			mod_authors                           : mod_authors,
 			mod_description                       : mod_description,
 			mod_github                            : mod_github,
