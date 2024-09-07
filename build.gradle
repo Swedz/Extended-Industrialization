@@ -7,6 +7,11 @@ plugins {
 	id 'com.modrinth.minotaur' version '2.+'
 }
 
+configurations {
+	runtimeClasspath.extendsFrom localImplementation
+	compileClasspath.extendsFrom localImplementation
+}
+
 var versionSimple = System.getenv("MOD_VERSION") ?: "0.0.0-local"
 version = "${versionSimple}-${minecraft_version}"
 group = mod_group_id
@@ -53,7 +58,11 @@ dependencies {
 
 	implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
 
-	implementation "dev.emi:emi-neoforge:${emi_version}"
+	if (project.runtime_include_emi.toBoolean()) {
+		localImplementation "dev.emi:emi-neoforge:${emi_version}"
+	} else {
+		compileOnly "dev.emi:emi-neoforge:${emi_version}"
+	}
 
 	implementation "net.swedz:tesseract-neoforge:${tesseract_version}"
 
