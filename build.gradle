@@ -183,7 +183,7 @@ neoForge {
 
 	parchment {
 		mappingsVersion = project.parchment_mappings_version
-		minecraftVersion = project.minecraft_version
+		minecraftVersion = project.parchment_mappings_minecraft_version
 	}
 
 	runs {
