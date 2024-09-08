@@ -125,7 +125,7 @@ if (System.getenv("CURSEFORGE_API_KEY")) {
 			id = project.curseforge_project
 			releaseType = System.getenv("RELEASE_TYPE")
 			changelogType = "markdown"
-			delegate.changelog = System.getenv("MOD_CHANGELOG")
+			delegate.changelog = System.getenv("MOD_CHANGELOG_TRIMMED_PUBLISH")
 
 			def compatible_minecraft_versions = project.compatible_minecraft_versions.split(",")
 			compatible_minecraft_versions.each { addGameVersion it }
@@ -154,7 +154,7 @@ if (System.getenv("MODRINTH_API_KEY")) {
 		versionNumber = "${version}"
 		versionName = "${project.mod_name} ${version}"
 		versionType = System.getenv("RELEASE_TYPE")
-		delegate.changelog = System.getenv("MOD_CHANGELOG")
+		delegate.changelog = System.getenv("MOD_CHANGELOG_TRIMMED_PUBLISH")
 
 		gameVersions = project.compatible_minecraft_versions.split(",").collect { it }
 		loaders = ["neoforge"]
