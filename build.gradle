@@ -18,6 +18,8 @@ base {
 	archivesName = artifact_name
 }
 
+logger.lifecycle("${mod_name} version ${version}")
+
 repositories {
 	mavenLocal()
 	mavenCentral()
