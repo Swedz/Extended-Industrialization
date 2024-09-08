@@ -8,27 +8,23 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
-import net.swedz.extended_industrialization.network.EIBasePacket;
+import net.swedz.extended_industrialization.network.EICustomPacket;
+import net.swedz.tesseract.neoforge.packet.PacketContext;
 
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
-public record ModifyElectricToolSpeedPacket(boolean increase) implements EIBasePacket
+public record ModifyElectricToolSpeedPacket(boolean increase) implements EICustomPacket
 {
 	public static final StreamCodec<ByteBuf, ModifyElectricToolSpeedPacket> STREAM_CODEC = ByteBufCodecs.BOOL
 			.map(ModifyElectricToolSpeedPacket::new, ModifyElectricToolSpeedPacket::increase);
 	
 	@Override
-	public void handle(Context context)
+	public void handle(PacketContext context)
 	{
-		if(context.isOnClient())
-		{
-			EI.LOGGER.warn("Received ModifyElectricToolSpeedPacket on the client??");
-			return;
-		}
+		context.assertServerbound();
 		
 		Player player = context.getPlayer();
 		ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);

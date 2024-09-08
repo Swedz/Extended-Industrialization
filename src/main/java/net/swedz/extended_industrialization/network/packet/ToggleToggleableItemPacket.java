@@ -10,9 +10,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.item.ToggleableItem;
-import net.swedz.extended_industrialization.network.EIBasePacket;
+import net.swedz.extended_industrialization.network.EICustomPacket;
+import net.swedz.tesseract.neoforge.packet.PacketContext;
 
-public record ToggleToggleableItemPacket(EquipmentSlot slot, boolean activated) implements EIBasePacket
+public record ToggleToggleableItemPacket(EquipmentSlot slot, boolean activated) implements EICustomPacket
 {
 	public static final StreamCodec<ByteBuf, ToggleToggleableItemPacket> STREAM_CODEC = ByteBufCodecs.fromCodec(RecordCodecBuilder.create((instance) -> instance
 			.group(
@@ -23,9 +24,9 @@ public record ToggleToggleableItemPacket(EquipmentSlot slot, boolean activated) 
 	));
 	
 	@Override
-	public void handle(Context context)
+	public void handle(PacketContext context)
 	{
-		if(context.isOnClient())
+		if(context.isClientbound())
 		{
 			EI.LOGGER.warn("Received ToggleToggleableItemPacket on the client??");
 			return;
