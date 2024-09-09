@@ -598,7 +598,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		);
 		
 		addMachineRecipe(
-				"machines/packer", "large_configurable_chest", MIMachineRecipeTypes.PACKER,
+				"machines/large_configurable_chest", "packer", MIMachineRecipeTypes.PACKER,
 				4, 5 * 20,
 				(builder) -> builder
 						.addItemInput("modern_industrialization:configurable_chest", 1)
