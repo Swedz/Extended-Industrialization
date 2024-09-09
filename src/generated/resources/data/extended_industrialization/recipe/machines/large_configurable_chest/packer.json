@@ -1,0 +1,25 @@
+{
+  "type": "modern_industrialization:packer",
+  "duration": 100,
+  "eu": 4,
+  "item_inputs": [
+    {
+      "amount": 1,
+      "item": "modern_industrialization:configurable_chest"
+    },
+    {
+      "amount": 1,
+      "item": "modern_industrialization:conveyor"
+    },
+    {
+      "amount": 1,
+      "item": "modern_industrialization:configurable_chest"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "extended_industrialization:large_configurable_chest"
+    }
+  ]
+}
