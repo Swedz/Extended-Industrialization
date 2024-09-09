@@ -8,9 +8,9 @@ import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.AutoExtract;
-import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
+import net.swedz.extended_industrialization.EIMachines;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +49,7 @@ public final class LargeConfigurableChestMachineBlockEntity extends MachineBlock
 	@Override
 	protected MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData(MachineCasings.STEEL_CRATE);
+		MachineModelClientData data = new MachineModelClientData(EIMachines.Casings.LARGE_STEEL_CRATE);
 		orientation.writeModelData(data);
 		return data;
 	}
