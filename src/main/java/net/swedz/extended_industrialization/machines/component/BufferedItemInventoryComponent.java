@@ -1,8 +1,11 @@
 package net.swedz.extended_industrialization.machines.component;
 
+import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.util.TransferHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -10,7 +13,7 @@ import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 
-public final class BufferedItemInventoryComponent
+public final class BufferedItemInventoryComponent implements IComponent
 {
 	private final IItemHandler itemHandler;
 	
@@ -91,5 +94,15 @@ public final class BufferedItemInventoryComponent
 		{
 			TransferHelper.moveAll(itemHandler, target, true);
 		}
+	}
+	
+	@Override
+	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
+	{
+	}
+	
+	@Override
+	public void readNbt(CompoundTag tag, HolderLookup.Provider registries, boolean isUpgradingMachine)
+	{
 	}
 }

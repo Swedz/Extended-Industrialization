@@ -46,7 +46,7 @@ public final class ItemBufferMachineBlockEntity extends MachineBlockEntity imple
 		bufferedInventory = new BufferedItemInventoryComponent(inventory.itemStorage.itemHandler);
 		
 		this.registerGuiComponent(new AutoExtract.Server(orientation));
-		this.registerComponents(inventory);
+		this.registerComponents(inventory, bufferedInventory);
 	}
 	
 	@Override
