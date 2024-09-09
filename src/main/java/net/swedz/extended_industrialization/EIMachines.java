@@ -23,6 +23,7 @@ import aztech.modern_industrialization.materials.part.MIParts;
 import com.google.common.collect.Maps;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.fluids.FluidType;
+import net.swedz.extended_industrialization.machines.blockentity.ItemBufferMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.LargeConfigurableChestMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.SolarBoilerMachineBlockEntity;
@@ -417,6 +418,13 @@ public final class EIMachines
 				"Large Configurable Chest", "large_configurable_chest", "large_configurable_chest",
 				Casings.LARGE_STEEL_CRATE, false, false, false, false,
 				LargeConfigurableChestMachineBlockEntity::new,
+				MachineBlockEntity::registerItemApi
+		);
+		
+		hook.register(
+				"Item Buffer", "item_buffer", "item_buffer",
+				STEEL, true, false, false, false,
+				ItemBufferMachineBlockEntity::new,
 				MachineBlockEntity::registerItemApi
 		);
 	}
