@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "modern_industrialization:configurable_chest"
+    },
+    "c": {
+      "item": "modern_industrialization:conveyor"
+    }
+  },
+  "pattern": [
+    "C",
+    "c",
+    "C"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:large_configurable_chest"
+  }
+}

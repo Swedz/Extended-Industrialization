@@ -2,6 +2,7 @@ package net.swedz.extended_industrialization.datagen.server.provider.recipes;
 
 import aztech.modern_industrialization.MIItem;
 import aztech.modern_industrialization.MITags;
+import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
@@ -33,7 +34,7 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		return machine(machine, "steel");
 	}
 	
-	private static void addBasicCraftingMachineRecipes(String machineName, String machineTier, Consumer<ShapedRecipeBuilder> crafting, RecipeOutput output)
+	private static void addBasicCraftingMachineRecipes(String machineName, String machineTier, Consumer<ShapedRecipeBuilder> crafting, boolean assembler, RecipeOutput output)
 	{
 		String recipeId = machineTier == null ? "" : "/%s".formatted(machineTier);
 		
@@ -42,7 +43,20 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		shapedRecipeBuilder.setOutput(machine(machineName, machineTier), 1);
 		shapedRecipeBuilder.offerTo(output, EI.id("machines/%s/craft%s".formatted(machineName, recipeId)));
 		
-		shapedRecipeBuilder.exportToAssembler().offerTo(output, EI.id("machines/%s/assembler%s".formatted(machineName, recipeId)));
+		if(assembler)
+		{
+			shapedRecipeBuilder.exportToAssembler().offerTo(output, EI.id("machines/%s/assembler%s".formatted(machineName, recipeId)));
+		}
+	}
+	
+	private static void addBasicCraftingMachineRecipes(String machineName, Consumer<ShapedRecipeBuilder> crafting, boolean assembler, RecipeOutput output)
+	{
+		addBasicCraftingMachineRecipes(machineName, null, crafting, assembler, output);
+	}
+	
+	private static void addBasicCraftingMachineRecipes(String machineName, String machineTier, Consumer<ShapedRecipeBuilder> crafting, RecipeOutput output)
+	{
+		addBasicCraftingMachineRecipes(machineName, machineTier, crafting, true, output);
 	}
 	
 	private static void addBasicCraftingMachineRecipes(String machineName, Consumer<ShapedRecipeBuilder> crafting, RecipeOutput output)
@@ -569,6 +583,32 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		);
 	}
 	
+	private static void largeConfigurableChest(RecipeOutput output)
+	{
+		addBasicCraftingMachineRecipes(
+				"large_configurable_chest",
+				(builder) -> builder
+						.define('C', "modern_industrialization:configurable_chest")
+						.define('c', MIItem.CONVEYOR)
+						.pattern("C")
+						.pattern("c")
+						.pattern("C"),
+				false,
+				output
+		);
+		
+		addMachineRecipe(
+				"machines/packer", "large_configurable_chest", MIMachineRecipeTypes.PACKER,
+				4, 5 * 20,
+				(builder) -> builder
+						.addItemInput("modern_industrialization:configurable_chest", 1)
+						.addItemInput(MIItem.CONVEYOR, 1)
+						.addItemInput("modern_industrialization:configurable_chest", 1)
+						.addItemOutput("%s:large_configurable_chest".formatted(EI.ID), 1),
+				output
+		);
+	}
+	
 	@Override
 	protected void buildRecipes(RecipeOutput output)
 	{
@@ -588,5 +628,6 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		machineChainer(output);
 		solarPanel(output);
 		wirelessChargingStation(output);
+		largeConfigurableChest(output);
 	}
 }
