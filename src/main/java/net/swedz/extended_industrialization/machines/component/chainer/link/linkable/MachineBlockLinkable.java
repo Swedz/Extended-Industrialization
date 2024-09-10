@@ -35,7 +35,7 @@ public final class MachineBlockLinkable implements ChainerLinkable
 	{
 		if(!context.hasItemStack())
 		{
-			if(context.blockEntity() instanceof MachineChainerMachineBlockEntity chainerBlockEntity)
+			if(context.hasBlockEntity() && context.blockEntity() instanceof MachineChainerMachineBlockEntity chainerBlockEntity)
 			{
 				if(chainerBlockEntity.orientation.facingDirection == context.links().direction() ||
 				   chainerBlockEntity.orientation.facingDirection.getOpposite() == context.links().direction())
