@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.component.farmer.task.tasks;
+package net.swedz.extended_industrialization.machines.component.farmer.task.task;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;

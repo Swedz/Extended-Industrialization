@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.component.farmer.task.tasks;
+package net.swedz.extended_industrialization.machines.component.farmer.task.task;
 
 import aztech.modern_industrialization.inventory.MIItemStorage;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
@@ -13,9 +13,9 @@ import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.machines.component.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlock;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerTile;
-import net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler.HarvestingContext;
-import net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler.HarvestingHandler;
-import net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler.registry.FarmerHarvestingHandlersHolder;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestableBehavior;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.FarmerHarvestableBehaviorHolder;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTaskType;
 
@@ -26,14 +26,14 @@ import java.util.Optional;
 
 public final class HarvestingFarmerTask extends FarmerTask
 {
-	private final FarmerHarvestingHandlersHolder harvestingHandlers;
+	private final FarmerHarvestableBehaviorHolder harvestingHandlers;
 	
 	private final Map<BlockPos, List<ItemStack>> cachedDrops = Maps.newHashMap();
 	
 	public HarvestingFarmerTask(FarmerComponent component)
 	{
 		super(FarmerTaskType.HARVESTING, component);
-		harvestingHandlers = component.getHarvestingHandlersHolder();
+		harvestingHandlers = component.getHarvestableBehaviorHolder();
 	}
 	
 	private boolean insertDrops(List<ItemStack> drops, boolean simulate)
@@ -69,7 +69,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 		return drops;
 	}
 	
-	private List<ItemStack> getDrops(HarvestingContext context, HarvestingHandler handler)
+	private List<ItemStack> getDrops(HarvestingContext context, HarvestableBehavior handler)
 	{
 		BlockPos origin = context.pos();
 		List<ItemStack> drops;
@@ -99,7 +99,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 		return drops;
 	}
 	
-	private boolean harvestBlocks(FarmerBlock cropBlockEntry, HarvestingContext context, HarvestingHandler handler)
+	private boolean harvestBlocks(FarmerBlock cropBlockEntry, HarvestingContext context, HarvestableBehavior handler)
 	{
 		BlockPos origin = context.pos();
 		List<BlockPos> blockPositions = handler.getBlocks(context);
@@ -142,11 +142,11 @@ public final class HarvestingFarmerTask extends FarmerTask
 			BlockState state = crop.state(level);
 			
 			HarvestingContext context = new HarvestingContext(level, pos, state);
-			Optional<HarvestingHandler> handlerOptional = harvestingHandlers.getHandler(context);
+			Optional<HarvestableBehavior> handlerOptional = harvestingHandlers.behavior(context);
 			
 			if(handlerOptional.isPresent())
 			{
-				HarvestingHandler handler = handlerOptional.get();
+				HarvestableBehavior handler = handlerOptional.get();
 				if(handler.isFullyGrown(context) && this.harvestBlocks(crop, context, handler) && operations.operate())
 				{
 					return true;

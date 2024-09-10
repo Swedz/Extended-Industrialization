@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler;
+package net.swedz.extended_industrialization.machines.component.farmer.harvesting;
 
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-public interface LootTableHarvestingHandler extends HarvestingHandler
+public interface LootTableHarvestableBehavior extends HarvestableBehavior
 {
 	default LootTable getLootTable(HarvestingContext context)
 	{

@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler.handlers;
+package net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable;
 
 import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
@@ -7,9 +7,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.neoforged.bus.api.Event;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlockMap;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerTree;
-import net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler.HarvestingContext;
-import net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler.LootTableHarvestingHandler;
-import net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler.registry.FarmerListener;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.LootTableHarvestableBehavior;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.FarmerListener;
 import net.swedz.tesseract.neoforge.event.TreeGrowthEvent;
 
 import java.util.Arrays;
@@ -18,7 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public final class TreeHarvestHandler implements LootTableHarvestingHandler
+public final class TreeHarvestable implements LootTableHarvestableBehavior
 {
 	private final Map<BlockPos, FarmerTree> trees = Maps.newHashMap();
 	
@@ -47,16 +47,16 @@ public final class TreeHarvestHandler implements LootTableHarvestingHandler
 	}
 	
 	@Override
-	public List<FarmerListener<? extends Event>> getListeners(FarmerBlockMap farmerBlockMap)
+	public List<FarmerListener<? extends Event>> getListeners(FarmerBlockMap blockMap)
 	{
 		return List.of(
 				new FarmerListener<>(TreeGrowthEvent.class, (event) ->
 				{
 					BlockPos base = event.getPos();
-					if(farmerBlockMap.containsDirtAt(base.below()))
+					if(blockMap.containsDirtAt(base.below()))
 					{
 						List<BlockPos> blocks = event.getPositions();
-						blocks.removeIf(farmerBlockMap::containsDirtAt);
+						blocks.removeIf(blockMap::containsDirtAt);
 						blocks.sort(Collections.reverseOrder(Comparator.comparingInt(Vec3i::getY)));
 						trees.put(base, new FarmerTree(base, blocks));
 					}

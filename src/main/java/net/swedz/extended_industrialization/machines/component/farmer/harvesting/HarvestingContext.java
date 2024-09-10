@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler;
+package net.swedz.extended_industrialization.machines.component.farmer.harvesting;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;

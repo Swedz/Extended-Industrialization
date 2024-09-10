@@ -1,18 +1,16 @@
-package net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler;
+package net.swedz.extended_industrialization.machines.component.farmer.harvesting;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.Event;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlockMap;
-import net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler.registry.FarmerListener;
+import net.swedz.tesseract.neoforge.behavior.Behavior;
 
 import java.util.List;
 
-public interface HarvestingHandler
+public interface HarvestableBehavior extends Behavior<HarvestingContext>
 {
-	boolean matches(HarvestingContext context);
-	
 	boolean isFullyGrown(HarvestingContext context);
 	
 	List<ItemStack> getDrops(HarvestingContext context);
@@ -23,7 +21,7 @@ public interface HarvestingHandler
 	{
 	}
 	
-	default List<FarmerListener<? extends Event>> getListeners(FarmerBlockMap farmerBlockMap)
+	default List<FarmerListener<? extends Event>> getListeners(FarmerBlockMap blockMap)
 	{
 		return List.of();
 	}

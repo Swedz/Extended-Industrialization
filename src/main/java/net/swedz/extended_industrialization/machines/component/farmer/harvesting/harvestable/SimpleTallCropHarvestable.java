@@ -1,15 +1,15 @@
-package net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler.handlers;
+package net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable;
 
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.extended_industrialization.datamap.FarmerSimpleTallCropSize;
-import net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler.HarvestingContext;
-import net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler.LootTableHarvestingHandler;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.LootTableHarvestableBehavior;
 
 import java.util.List;
 
-public final class SimpleTallCropHarvestHandler implements LootTableHarvestingHandler
+public final class SimpleTallCropHarvestable implements LootTableHarvestableBehavior
 {
 	@Override
 	public boolean matches(HarvestingContext context)

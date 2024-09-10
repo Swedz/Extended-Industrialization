@@ -1,12 +1,12 @@
-package net.swedz.extended_industrialization.machines.component.farmer.task.tasks;
+package net.swedz.extended_industrialization.machines.component.farmer.task.task;
 
 import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.extended_industrialization.machines.component.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.component.farmer.PlantableConfigurableItemStack;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerTile;
-import net.swedz.extended_industrialization.machines.component.farmer.plantinghandler.PlantingContext;
-import net.swedz.extended_industrialization.machines.component.farmer.plantinghandler.PlantingHandler;
-import net.swedz.extended_industrialization.machines.component.farmer.plantinghandler.registry.FarmerPlantingHandlersHolder;
+import net.swedz.extended_industrialization.machines.component.farmer.planting.PlantingContext;
+import net.swedz.extended_industrialization.machines.component.farmer.planting.FarmerPlantable;
+import net.swedz.extended_industrialization.machines.component.farmer.planting.FarmerPlantableBehaviorHolder;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTaskType;
 
@@ -14,12 +14,12 @@ import java.util.List;
 
 public final class PlantingFarmerTask extends FarmerTask
 {
-	private final FarmerPlantingHandlersHolder plantingHandlers;
+	private final FarmerPlantableBehaviorHolder plantingHandlers;
 	
 	public PlantingFarmerTask(FarmerComponent component)
 	{
 		super(FarmerTaskType.PLANTING, component);
-		plantingHandlers = component.getPlantingHandlersHolder();
+		plantingHandlers = component.getPlantableBehaviorHolder();
 	}
 	
 	@Override
@@ -47,12 +47,12 @@ public final class PlantingFarmerTask extends FarmerTask
 			if(state.isAir())
 			{
 				PlantingContext plantingContext = new PlantingContext(level, tile, plantable.getStack().toStack());
-				PlantingHandler plantingHandler = plantable.asPlantable();
-				if(plantingHandler.canPlant(plantingContext))
+				FarmerPlantable farmerPlantable = plantable.asPlantable();
+				if(farmerPlantable.canPlant(plantingContext))
 				{
 					plantable.getStack().decrement(1);
 					
-					plantingHandler.plant(plantingContext);
+					farmerPlantable.plant(plantingContext);
 					
 					if(operations.operate())
 					{

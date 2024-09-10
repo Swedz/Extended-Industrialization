@@ -4,7 +4,7 @@ import aztech.modern_industrialization.inventory.ChangeListener;
 import aztech.modern_industrialization.inventory.ConfigurableItemStack;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import net.minecraft.world.item.Item;
-import net.swedz.extended_industrialization.machines.component.farmer.plantinghandler.PlantingHandler;
+import net.swedz.extended_industrialization.machines.component.farmer.planting.FarmerPlantable;
 
 import java.util.Optional;
 
@@ -15,7 +15,7 @@ public final class PlantableConfigurableItemStack extends ChangeListener
 	
 	private Item lastUpdateItem;
 	
-	private Optional<PlantingHandler> plantingHandler = Optional.empty();
+	private Optional<FarmerPlantable> plantable = Optional.empty();
 	
 	PlantableConfigurableItemStack(FarmerComponentPlantableStacks parent, ConfigurableItemStack stack)
 	{
@@ -42,12 +42,12 @@ public final class PlantableConfigurableItemStack extends ChangeListener
 	
 	public boolean isPlantable()
 	{
-		return plantingHandler.isPresent();
+		return plantable.isPresent();
 	}
 	
-	public PlantingHandler asPlantable()
+	public FarmerPlantable asPlantable()
 	{
-		return plantingHandler.orElseThrow(() -> new IllegalStateException("Tried to get plantable of non-plantable itemStack"));
+		return plantable.orElseThrow(() -> new IllegalStateException("Tried to get plantable of non-plantable itemStack"));
 	}
 	
 	@Override
@@ -57,7 +57,7 @@ public final class PlantableConfigurableItemStack extends ChangeListener
 		Item item = itemVariant.getItem();
 		if(lastUpdateItem != item)
 		{
-			plantingHandler = parent.getFarmer().getPlantingHandlersHolder().getHandler(itemVariant.toStack());
+			plantable = parent.getFarmer().getPlantableBehaviorHolder().behavior(itemVariant.toStack());
 		}
 		lastUpdateItem = item;
 	}

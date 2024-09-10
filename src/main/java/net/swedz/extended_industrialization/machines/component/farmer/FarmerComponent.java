@@ -17,34 +17,67 @@ import net.neoforged.bus.api.Event;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.swedz.extended_industrialization.EILocalizedListeners;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlockMap;
-import net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler.HarvestingHandler;
-import net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler.registry.FarmerHarvestingHandlers;
-import net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler.registry.FarmerHarvestingHandlersHolder;
-import net.swedz.extended_industrialization.machines.component.farmer.harvestinghandler.registry.FarmerListener;
-import net.swedz.extended_industrialization.machines.component.farmer.plantinghandler.registry.FarmerPlantingHandlers;
-import net.swedz.extended_industrialization.machines.component.farmer.plantinghandler.registry.FarmerPlantingHandlersHolder;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.FarmerHarvestableBehaviorHolder;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.FarmerListener;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestableBehavior;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.CropBlockHarvestable;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.NetherWartHarvestable;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.SimpleTallCropHarvestable;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.TreeHarvestable;
+import net.swedz.extended_industrialization.machines.component.farmer.planting.FarmerPlantable;
+import net.swedz.extended_industrialization.machines.component.farmer.planting.FarmerPlantableBehaviorHolder;
+import net.swedz.extended_industrialization.machines.component.farmer.planting.PlantingContext;
+import net.swedz.extended_industrialization.machines.component.farmer.planting.plantable.SpecialFarmerPlantable;
+import net.swedz.extended_industrialization.machines.component.farmer.planting.plantable.StandardFarmerPlantable;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerProcessRates;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTaskType;
+import net.swedz.tesseract.neoforge.behavior.BehaviorRegistry;
 import net.swedz.tesseract.neoforge.compat.mi.helper.MachineInventoryHelper;
 import net.swedz.tesseract.neoforge.event.FarmlandLoseMoistureEvent;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public final class FarmerComponent implements IComponent
 {
+	private static final BehaviorRegistry<FarmerPlantableBehaviorHolder, FarmerPlantable, PlantingContext>         PLANTABLE_REGISTRY   = BehaviorRegistry.create(FarmerPlantableBehaviorHolder::new);
+	private static final BehaviorRegistry<FarmerHarvestableBehaviorHolder, HarvestableBehavior, HarvestingContext> HARVESTABLE_REGISTRY = BehaviorRegistry.create(FarmerHarvestableBehaviorHolder::new);
+	
+	public static void registerPlantable(Supplier<FarmerPlantable> creator)
+	{
+		PLANTABLE_REGISTRY.register(creator);
+	}
+	
+	public static void registerHarvestable(Supplier<HarvestableBehavior> creator)
+	{
+		HARVESTABLE_REGISTRY.register(creator);
+	}
+	
+	static
+	{
+		registerPlantable(StandardFarmerPlantable::new);
+		registerPlantable(SpecialFarmerPlantable::new);
+		
+		registerHarvestable(CropBlockHarvestable::new);
+		registerHarvestable(NetherWartHarvestable::new);
+		registerHarvestable(SimpleTallCropHarvestable::new);
+		registerHarvestable(TreeHarvestable::new);
+	}
+	
 	private final MultiblockInventoryComponent   inventory;
 	private final IsActiveComponent              isActive;
 	private final FarmerComponentPlantableStacks plantableStacks;
 	private final PlantingMode                   defaultPlantingMode;
 	private final FarmerProcessRates             processRates;
 	
-	private final FarmerBlockMap                 blockMap;
-	private final FarmerPlantingHandlersHolder   plantingHandlers;
-	private final FarmerHarvestingHandlersHolder harvestingHandlers;
-	private final List<FarmerTask>               tasks;
+	private final FarmerBlockMap                  blockMap;
+	private final FarmerPlantableBehaviorHolder   plantableBehaviorHolder;
+	private final FarmerHarvestableBehaviorHolder harvestableBehaviorHolder;
+	private final List<FarmerTask>                tasks;
 	
 	private final List<FarmerListener<? extends Event>> listeners = Lists.newArrayList();
 	
@@ -66,8 +99,8 @@ public final class FarmerComponent implements IComponent
 		this.processRates = processRates;
 		
 		blockMap = new FarmerBlockMap();
-		plantingHandlers = FarmerPlantingHandlers.create();
-		harvestingHandlers = FarmerHarvestingHandlers.create();
+		plantableBehaviorHolder = PLANTABLE_REGISTRY.createHolder();
+		harvestableBehaviorHolder = HARVESTABLE_REGISTRY.createHolder();
 		tasks = Stream.of(FarmerTaskType.values())
 				.filter(processRates::contains)
 				.map((task) -> task.create(this))
@@ -88,7 +121,7 @@ public final class FarmerComponent implements IComponent
 				event.setCanceled(true);
 			}
 		}));
-		listeners.addAll(harvestingHandlers.getListeners(blockMap));
+		listeners.addAll(harvestableBehaviorHolder.listeners(blockMap));
 	}
 	
 	public MultiblockInventoryComponent getInventory()
@@ -101,14 +134,14 @@ public final class FarmerComponent implements IComponent
 		return blockMap;
 	}
 	
-	public FarmerPlantingHandlersHolder getPlantingHandlersHolder()
+	public FarmerPlantableBehaviorHolder getPlantableBehaviorHolder()
 	{
-		return plantingHandlers;
+		return plantableBehaviorHolder;
 	}
 	
-	public FarmerHarvestingHandlersHolder getHarvestingHandlersHolder()
+	public FarmerHarvestableBehaviorHolder getHarvestableBehaviorHolder()
 	{
-		return harvestingHandlers;
+		return harvestableBehaviorHolder;
 	}
 	
 	public FarmerComponentPlantableStacks getPlantableStacks()
@@ -198,7 +231,7 @@ public final class FarmerComponent implements IComponent
 		tag.putString("planting_mode", plantingMode.name());
 		
 		CompoundTag harvestingHandlersCache = new CompoundTag();
-		for(HarvestingHandler harvestingHandler : harvestingHandlers.getHandlers())
+		for(HarvestableBehavior harvestingHandler : harvestableBehaviorHolder.behaviors())
 		{
 			harvestingHandler.writeNbt(harvestingHandlersCache);
 		}
@@ -231,7 +264,7 @@ public final class FarmerComponent implements IComponent
 		}
 		
 		CompoundTag harvestingHandlersCache = tag.getCompound("harvesting_handlers");
-		for(HarvestingHandler harvestingHandler : harvestingHandlers.getHandlers())
+		for(HarvestableBehavior harvestingHandler : harvestableBehaviorHolder.behaviors())
 		{
 			harvestingHandler.readNbt(harvestingHandlersCache);
 		}

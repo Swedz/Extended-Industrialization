@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.component.farmer.task.tasks;
+package net.swedz.extended_industrialization.machines.component.farmer.task.task;
 
 import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.core.BlockPos;

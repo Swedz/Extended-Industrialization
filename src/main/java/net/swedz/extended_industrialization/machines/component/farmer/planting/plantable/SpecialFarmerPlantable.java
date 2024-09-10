@@ -1,17 +1,18 @@
-package net.swedz.extended_industrialization.machines.component.farmer.plantinghandler.handlers;
+package net.swedz.extended_industrialization.machines.component.farmer.planting.plantable;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.SpecialPlantable;
 import net.swedz.extended_industrialization.EITags;
-import net.swedz.extended_industrialization.machines.component.farmer.plantinghandler.PlantingContext;
-import net.swedz.extended_industrialization.machines.component.farmer.plantinghandler.PlantingHandler;
+import net.swedz.extended_industrialization.machines.component.farmer.planting.PlantingContext;
+import net.swedz.extended_industrialization.machines.component.farmer.planting.FarmerPlantable;
 
-public final class SpecialPlantingHandler implements PlantingHandler
+public final class SpecialFarmerPlantable implements FarmerPlantable
 {
 	@Override
-	public boolean matches(ItemStack stack)
+	public boolean matches(PlantingContext context)
 	{
+		ItemStack stack = context.stack();
 		return !stack.isEmpty() &&
 			   stack.is(EITags.FARMER_PLANTABLE) &&
 			   stack.getItem() instanceof SpecialPlantable;
