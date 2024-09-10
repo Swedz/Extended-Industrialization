@@ -3,7 +3,7 @@ package net.swedz.extended_industrialization.machines.component.chainer.handler;
 import com.google.common.collect.Lists;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.swedz.extended_industrialization.machines.component.chainer.MachineLinks;
+import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 import net.swedz.extended_industrialization.machines.component.chainer.wrapper.SlotInventoryWrapper;
 
 import java.util.Collections;
@@ -11,9 +11,9 @@ import java.util.List;
 
 public final class ChainerItemHandler extends SlotChainerHandler<IItemHandler> implements IItemHandler
 {
-	public ChainerItemHandler(MachineLinks machineLinks)
+	public ChainerItemHandler(ChainerLinks chainerLinks)
 	{
-		super(machineLinks);
+		super(chainerLinks);
 	}
 	
 	@Override

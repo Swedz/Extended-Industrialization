@@ -47,7 +47,7 @@ public final class PlantableConfigurableItemStack extends ChangeListener
 	
 	public PlantingHandler asPlantable()
 	{
-		return plantingHandler.orElseThrow(() -> new IllegalStateException("Tried to get plantable of non-plantable stack"));
+		return plantingHandler.orElseThrow(() -> new IllegalStateException("Tried to get plantable of non-plantable itemStack"));
 	}
 	
 	@Override

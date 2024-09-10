@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.swedz.extended_industrialization.machines.component.chainer.MachineLinks;
+import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 import net.swedz.extended_industrialization.machines.component.chainer.wrapper.SlotInventoryWrapper;
 
 import java.util.Collections;
@@ -12,9 +12,9 @@ import java.util.List;
 
 public final class ChainerFluidHandler extends SlotChainerHandler<IFluidHandler> implements IFluidHandler
 {
-	public ChainerFluidHandler(MachineLinks machineLinks)
+	public ChainerFluidHandler(ChainerLinks chainerLinks)
 	{
-		super(machineLinks);
+		super(chainerLinks);
 	}
 	
 	@Override

@@ -18,36 +18,36 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public final class MachineChainerComponent implements IComponent, ChainerElement
+public final class ChainerComponent implements IComponent, ChainerElement
 {
 	private final MachineChainerMachineBlockEntity machine;
 	
 	private final LocalizedListener<BlockEvent.NeighborNotifyEvent> listenerNeighborNotify;
 	
-	private final MachineLinks machineLinks;
+	private final ChainerLinks links;
 	
 	private final ChainerItemHandler   itemHandler;
 	private final ChainerFluidHandler  fluidHandler;
 	private final ChainerEnergyHandler energyHandler;
 	
-	public MachineChainerComponent(MachineChainerMachineBlockEntity machine, int maxConnectedMachines)
+	public ChainerComponent(MachineChainerMachineBlockEntity machine, int maxConnectedMachines)
 	{
 		this.machine = machine;
 		
-		this.machineLinks = new MachineLinks(machine, maxConnectedMachines);
+		this.links = new ChainerLinks(machine, maxConnectedMachines);
 		
-		this.itemHandler = new ChainerItemHandler(machineLinks);
-		this.fluidHandler = new ChainerFluidHandler(machineLinks);
-		this.energyHandler = new ChainerEnergyHandler(machineLinks);
+		this.itemHandler = new ChainerItemHandler(links);
+		this.fluidHandler = new ChainerFluidHandler(links);
+		this.energyHandler = new ChainerEnergyHandler(links);
 		
 		this.listenerNeighborNotify = (event) ->
 		{
-			if(machineLinks.origin().equals(event.getPos()))
+			if(links.origin().equals(event.getPos()))
 			{
 				machine.buildLinks();
 			}
-			else if(machineLinks.contains(event.getPos()) ||
-					machineLinks.isAfter(event.getPos()))
+			else if(links.contains(event.getPos()) ||
+					links.isAfter(event.getPos()))
 			{
 				machine.buildLinks();
 			}
@@ -59,9 +59,9 @@ public final class MachineChainerComponent implements IComponent, ChainerElement
 		return machine.getLevel();
 	}
 	
-	public MachineLinks links()
+	public ChainerLinks links()
 	{
-		return machineLinks;
+		return links;
 	}
 	
 	public ChainerItemHandler itemHandler()
@@ -87,7 +87,7 @@ public final class MachineChainerComponent implements IComponent, ChainerElement
 		{
 			throw new IllegalStateException("Cannot register listeners for a chainer that already has listeners registered");
 		}
-		Set<ChunkPos> spannedChunks = machineLinks.getSpannedChunks(true);
+		Set<ChunkPos> spannedChunks = links.getSpannedChunks(true);
 		EILocalizedListeners.INSTANCE.register(this.level(), spannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
 		previousSpannedChunks = spannedChunks;
 	}
@@ -104,7 +104,7 @@ public final class MachineChainerComponent implements IComponent, ChainerElement
 	private void forEachElement(Consumer<ChainerElement> action)
 	{
 		List.of(
-				machineLinks,
+				links,
 				itemHandler,
 				fluidHandler,
 				energyHandler
@@ -126,21 +126,21 @@ public final class MachineChainerComponent implements IComponent, ChainerElement
 	@Override
 	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{
-		tag.putInt("connected_machines", machineLinks.count());
-		machineLinks.failPosition().ifPresent((pos) -> tag.putLong("fail_position", pos.asLong()));
+		tag.putInt("connected_machines", links.count());
+		links.failPosition().ifPresent((pos) -> tag.putLong("fail_position", pos.asLong()));
 	}
 	
 	@Override
 	public void readNbt(CompoundTag tag, HolderLookup.Provider registries, boolean isUpgradingMachine)
 	{
-		machineLinks.count(tag.getInt("connected_machines"));
+		links.count(tag.getInt("connected_machines"));
 		if(tag.contains("fail_position", CompoundTag.TAG_LONG))
 		{
-			machineLinks.failPosition(BlockPos.of(tag.getLong("fail_position")));
+			links.failPosition(BlockPos.of(tag.getLong("fail_position")));
 		}
 		else
 		{
-			machineLinks.failPosition(null);
+			links.failPosition(null);
 		}
 	}
 }

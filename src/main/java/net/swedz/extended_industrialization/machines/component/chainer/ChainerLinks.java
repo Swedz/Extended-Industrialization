@@ -1,25 +1,24 @@
 package net.swedz.extended_industrialization.machines.component.chainer;
 
-import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
-import aztech.modern_industrialization.machines.MachineBlock;
-import aztech.modern_industrialization.machines.MachineBlockEntity;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.component.chainer.link.ChainerLinkable;
+import net.swedz.extended_industrialization.machines.component.chainer.link.LinkContext;
+import net.swedz.extended_industrialization.machines.component.chainer.link.LinkResult;
+import net.swedz.extended_industrialization.machines.component.chainer.link.LinkableBehaviorHolder;
+import net.swedz.extended_industrialization.machines.component.chainer.link.linkable.ChainerRelayLinkable;
+import net.swedz.extended_industrialization.machines.component.chainer.link.linkable.MachineBlockLinkable;
+import net.swedz.tesseract.neoforge.behavior.BehaviorRegistry;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,12 +26,27 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
-public final class MachineLinks implements ChainerElement
+public final class ChainerLinks implements ChainerElement
 {
+	private static final BehaviorRegistry<LinkableBehaviorHolder, ChainerLinkable, LinkContext> BEHAVIOR_REGISTRY = BehaviorRegistry.create(LinkableBehaviorHolder::new);
+	
+	public static void registerLinkable(Supplier<ChainerLinkable> creator)
+	{
+		BEHAVIOR_REGISTRY.register(creator);
+	}
+	
+	static
+	{
+		registerLinkable(ChainerRelayLinkable::new);
+		registerLinkable(MachineBlockLinkable::new);
+	}
+	
 	private final Supplier<Level>     level;
 	private final BlockPos            origin;
 	private final Supplier<Direction> direction;
 	private final int                 maxConnections;
+	
+	private final LinkableBehaviorHolder behaviorHolder;
 	
 	private List<BlockPos> positions = List.of();
 	private int            linkCount;
@@ -43,12 +57,14 @@ public final class MachineLinks implements ChainerElement
 	
 	private Optional<BlockPos> failPosition = Optional.empty();
 	
-	public MachineLinks(MachineChainerMachineBlockEntity machine, int maxConnections)
+	public ChainerLinks(MachineChainerMachineBlockEntity machine, int maxConnections)
 	{
 		this.level = machine::getLevel;
 		this.origin = machine.getBlockPos();
 		this.direction = () -> machine.orientation.facingDirection;
 		this.maxConnections = maxConnections;
+		
+		this.behaviorHolder = BEHAVIOR_REGISTRY.createHolder();
 	}
 	
 	public Level level()
@@ -202,116 +218,14 @@ public final class MachineLinks implements ChainerElement
 		failPosition = Optional.empty();
 	}
 	
-	private Optional<Result> test(BlockPos pos, BlockState blockState, BlockEntity blockEntity)
+	public LinkResult test(BlockPos pos)
 	{
-		IItemHandler itemHandler = this.level().getCapability(Capabilities.ItemHandler.BLOCK, pos, blockState, blockEntity, null);
-		IFluidHandler fluidHandler = this.level().getCapability(Capabilities.FluidHandler.BLOCK, pos, blockState, blockEntity, null);
-		MIEnergyStorage energyHandler = this.level().getCapability(EnergyApi.SIDED, pos, blockState, blockEntity, null);
-		if(itemHandler != null || fluidHandler != null || energyHandler != null)
-		{
-			return Optional.of(Result.success(itemHandler, fluidHandler, energyHandler));
-		}
-		return Optional.empty();
+		return behaviorHolder.test(LinkContext.of(this, pos));
 	}
 	
-	public Result test(BlockPos pos)
+	public LinkResult test(ItemStack stack)
 	{
-		BlockState blockState = this.level().getBlockState(pos);
-		if(blockState.is(EITags.MACHINE_CHAINER_RELAY))
-		{
-			return Result.success();
-		}
-		
-		BlockEntity blockEntity = this.level().getBlockEntity(pos);
-		if(blockEntity instanceof MachineBlockEntity machineBlockEntity)
-		{
-			if(blockEntity instanceof MachineChainerMachineBlockEntity chainerBlockEntity)
-			{
-				if(chainerBlockEntity.orientation.facingDirection == this.direction() ||
-				   chainerBlockEntity.orientation.facingDirection.getOpposite() == this.direction())
-				{
-					return Result.fail(true, pos);
-				}
-				if(chainerBlockEntity.getChainerComponent().links().contains(origin, true))
-				{
-					return Result.fail(true, pos);
-				}
-			}
-			
-			Optional<Result> result = this.test(pos, blockState, blockEntity);
-			if(result.isPresent())
-			{
-				return result.get();
-			}
-		}
-		
-		return Result.fail(false);
-	}
-	
-	public Result test(ItemStack stack)
-	{
-		if(stack.getItem() instanceof BlockItem blockItem)
-		{
-			Block block = blockItem.getBlock();
-			if(block.defaultBlockState().is(EITags.MACHINE_CHAINER_RELAY))
-			{
-				return Result.success();
-			}
-			
-			if(block instanceof MachineBlock machineBlock)
-			{
-				Optional<Result> result = this.test(BlockPos.ZERO, machineBlock.defaultBlockState(), machineBlock.getBlockEntityInstance());
-				if(result.isPresent())
-				{
-					return result.get();
-				}
-			}
-		}
-		return Result.fail(false);
-	}
-	
-	public record Result(
-			boolean isSuccess,
-			Optional<IItemHandler> itemHandler,
-			Optional<IFluidHandler> fluidHandler,
-			Optional<MIEnergyStorage> energyHandler,
-			boolean invalidatesEverything,
-			Optional<BlockPos> failPosition
-	)
-	{
-		public static Result fail(boolean invalidatesEverything, BlockPos failPosition)
-		{
-			return new Result(
-					false,
-					Optional.empty(),
-					Optional.empty(),
-					Optional.empty(),
-					invalidatesEverything,
-					Optional.ofNullable(failPosition)
-			);
-		}
-		
-		public static Result fail(boolean invalidatesEverything)
-		{
-			return fail(invalidatesEverything, null);
-		}
-		
-		public static Result success(IItemHandler itemHandler, IFluidHandler fluidHandler, MIEnergyStorage energyHandler)
-		{
-			return new Result(
-					true,
-					Optional.ofNullable(itemHandler),
-					Optional.ofNullable(fluidHandler),
-					Optional.ofNullable(energyHandler),
-					false,
-					Optional.empty()
-			);
-		}
-		
-		public static Result success()
-		{
-			return success(null, null, null);
-		}
+		return behaviorHolder.test(LinkContext.of(this, stack));
 	}
 	
 	@Override
@@ -322,7 +236,7 @@ public final class MachineLinks implements ChainerElement
 		List<IFluidHandler> fluidHandlers = Lists.newArrayList();
 		List<MIEnergyStorage> energyHandlers = Lists.newArrayList();
 		
-		Result result = null;
+		LinkResult result = null;
 		for(BlockPos pos : this.getSpannedBlocks(false))
 		{
 			result = this.test(pos);

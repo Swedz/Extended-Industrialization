@@ -16,8 +16,8 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIConfig;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.machines.component.chainer.MachineChainerComponent;
-import net.swedz.extended_industrialization.machines.component.chainer.MachineLinks;
+import net.swedz.extended_industrialization.machines.component.chainer.ChainerComponent;
+import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine;
 
@@ -25,7 +25,7 @@ import java.util.List;
 
 public final class MachineChainerMachineBlockEntity extends MachineBlockEntity implements Tickable
 {
-	private final MachineChainerComponent chainer;
+	private final ChainerComponent chainer;
 	
 	private int tick;
 	private int lastRebuildTick = -1;
@@ -40,13 +40,13 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 				new OrientationComponent.Params(false, false, false)
 		);
 		
-		chainer = new MachineChainerComponent(this, EIConfig.machineChainerMaxConnections);
+		chainer = new ChainerComponent(this, EIConfig.machineChainerMaxConnections);
 		
 		this.registerComponents(chainer);
 		
 		this.registerGuiComponent(new ModularMultiblockGui.Server(60, () ->
 		{
-			MachineLinks links = chainer.links();
+			ChainerLinks links = chainer.links();
 			
 			List<ModularMultiblockGuiLine> text = Lists.newArrayList();
 			
@@ -63,7 +63,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		}));
 	}
 	
-	public MachineChainerComponent getChainerComponent()
+	public ChainerComponent getChainerComponent()
 	{
 		return chainer;
 	}

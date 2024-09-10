@@ -1,15 +1,15 @@
 package net.swedz.extended_industrialization.machines.component.chainer.handler;
 
-import net.swedz.extended_industrialization.machines.component.chainer.MachineLinks;
+import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 import net.swedz.extended_industrialization.machines.component.chainer.wrapper.SlotInventoryWrapper;
 
 import java.util.Optional;
 
 public abstract class SlotChainerHandler<H> extends ChainerHandler<H, SlotInventoryWrapper<H>>
 {
-	public SlotChainerHandler(MachineLinks machineLinks)
+	public SlotChainerHandler(ChainerLinks chainerLinks)
 	{
-		super(machineLinks);
+		super(chainerLinks);
 	}
 	
 	protected Optional<SlotInventoryWrapper<H>> getWrapper(int globalSlot)

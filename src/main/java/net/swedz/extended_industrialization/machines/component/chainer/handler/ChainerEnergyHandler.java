@@ -3,7 +3,7 @@ package net.swedz.extended_industrialization.machines.component.chainer.handler;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import com.google.common.collect.Lists;
-import net.swedz.extended_industrialization.machines.component.chainer.MachineLinks;
+import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 import net.swedz.extended_industrialization.machines.component.chainer.wrapper.InventoryWrapper;
 
 import java.util.Collections;
@@ -11,9 +11,9 @@ import java.util.List;
 
 public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, InventoryWrapper<MIEnergyStorage>> implements MIEnergyStorage
 {
-	public ChainerEnergyHandler(MachineLinks machineLinks)
+	public ChainerEnergyHandler(ChainerLinks chainerLinks)
 	{
-		super(machineLinks);
+		super(chainerLinks);
 	}
 	
 	@Override
