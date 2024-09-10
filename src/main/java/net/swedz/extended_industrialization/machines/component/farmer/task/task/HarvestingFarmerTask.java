@@ -15,7 +15,7 @@ import net.swedz.extended_industrialization.machines.component.farmer.block.Farm
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerTile;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestableBehavior;
-import net.swedz.extended_industrialization.machines.component.farmer.harvesting.FarmerHarvestableBehaviorHolder;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestableBehaviorHolder;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTaskType;
 
@@ -26,7 +26,7 @@ import java.util.Optional;
 
 public final class HarvestingFarmerTask extends FarmerTask
 {
-	private final FarmerHarvestableBehaviorHolder harvestingHandlers;
+	private final HarvestableBehaviorHolder harvestingHandlers;
 	
 	private final Map<BlockPos, List<ItemStack>> cachedDrops = Maps.newHashMap();
 	

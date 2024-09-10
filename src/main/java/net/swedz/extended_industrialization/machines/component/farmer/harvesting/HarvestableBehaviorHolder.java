@@ -6,9 +6,9 @@ import net.swedz.tesseract.neoforge.behavior.BehaviorHolder;
 
 import java.util.List;
 
-public final class FarmerHarvestableBehaviorHolder extends BehaviorHolder<HarvestableBehavior, HarvestingContext>
+public final class HarvestableBehaviorHolder extends BehaviorHolder<HarvestableBehavior, HarvestingContext>
 {
-	public FarmerHarvestableBehaviorHolder(List<HarvestableBehavior> behaviors)
+	public HarvestableBehaviorHolder(List<HarvestableBehavior> behaviors)
 	{
 		super(behaviors);
 	}

@@ -6,9 +6,9 @@ import net.swedz.tesseract.neoforge.behavior.BehaviorHolder;
 import java.util.List;
 import java.util.Optional;
 
-public final class FarmerPlantableBehaviorHolder extends BehaviorHolder<FarmerPlantable, PlantingContext>
+public final class PlantableBehaviorHolder extends BehaviorHolder<FarmerPlantable, PlantingContext>
 {
-	public FarmerPlantableBehaviorHolder(List<FarmerPlantable> handlers)
+	public PlantableBehaviorHolder(List<FarmerPlantable> handlers)
 	{
 		super(handlers);
 	}

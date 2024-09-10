@@ -6,7 +6,7 @@ import net.swedz.extended_industrialization.machines.component.farmer.PlantableC
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerTile;
 import net.swedz.extended_industrialization.machines.component.farmer.planting.PlantingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.planting.FarmerPlantable;
-import net.swedz.extended_industrialization.machines.component.farmer.planting.FarmerPlantableBehaviorHolder;
+import net.swedz.extended_industrialization.machines.component.farmer.planting.PlantableBehaviorHolder;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTaskType;
 
@@ -14,7 +14,7 @@ import java.util.List;
 
 public final class PlantingFarmerTask extends FarmerTask
 {
-	private final FarmerPlantableBehaviorHolder plantingHandlers;
+	private final PlantableBehaviorHolder plantingHandlers;
 	
 	public PlantingFarmerTask(FarmerComponent component)
 	{

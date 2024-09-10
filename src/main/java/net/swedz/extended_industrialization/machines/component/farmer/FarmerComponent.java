@@ -17,16 +17,16 @@ import net.neoforged.bus.api.Event;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.swedz.extended_industrialization.EILocalizedListeners;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlockMap;
-import net.swedz.extended_industrialization.machines.component.farmer.harvesting.FarmerHarvestableBehaviorHolder;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.FarmerListener;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestableBehavior;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestableBehaviorHolder;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.CropBlockHarvestable;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.NetherWartHarvestable;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.SimpleTallCropHarvestable;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.TreeHarvestable;
 import net.swedz.extended_industrialization.machines.component.farmer.planting.FarmerPlantable;
-import net.swedz.extended_industrialization.machines.component.farmer.planting.FarmerPlantableBehaviorHolder;
+import net.swedz.extended_industrialization.machines.component.farmer.planting.PlantableBehaviorHolder;
 import net.swedz.extended_industrialization.machines.component.farmer.planting.PlantingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.planting.plantable.SpecialFarmerPlantable;
 import net.swedz.extended_industrialization.machines.component.farmer.planting.plantable.StandardFarmerPlantable;
@@ -44,8 +44,8 @@ import java.util.stream.Stream;
 
 public final class FarmerComponent implements IComponent
 {
-	private static final BehaviorRegistry<FarmerPlantableBehaviorHolder, FarmerPlantable, PlantingContext>         PLANTABLE_REGISTRY   = BehaviorRegistry.create(FarmerPlantableBehaviorHolder::new);
-	private static final BehaviorRegistry<FarmerHarvestableBehaviorHolder, HarvestableBehavior, HarvestingContext> HARVESTABLE_REGISTRY = BehaviorRegistry.create(FarmerHarvestableBehaviorHolder::new);
+	private static final BehaviorRegistry<PlantableBehaviorHolder, FarmerPlantable, PlantingContext>         PLANTABLE_REGISTRY   = BehaviorRegistry.create(PlantableBehaviorHolder::new);
+	private static final BehaviorRegistry<HarvestableBehaviorHolder, HarvestableBehavior, HarvestingContext> HARVESTABLE_REGISTRY = BehaviorRegistry.create(HarvestableBehaviorHolder::new);
 	
 	public static void registerPlantable(Supplier<FarmerPlantable> creator)
 	{
@@ -74,10 +74,10 @@ public final class FarmerComponent implements IComponent
 	private final PlantingMode                   defaultPlantingMode;
 	private final FarmerProcessRates             processRates;
 	
-	private final FarmerBlockMap                  blockMap;
-	private final FarmerPlantableBehaviorHolder   plantableBehaviorHolder;
-	private final FarmerHarvestableBehaviorHolder harvestableBehaviorHolder;
-	private final List<FarmerTask>                tasks;
+	private final FarmerBlockMap            blockMap;
+	private final PlantableBehaviorHolder   plantableBehaviorHolder;
+	private final HarvestableBehaviorHolder harvestableBehaviorHolder;
+	private final List<FarmerTask>          tasks;
 	
 	private final List<FarmerListener<? extends Event>> listeners = Lists.newArrayList();
 	
@@ -134,12 +134,12 @@ public final class FarmerComponent implements IComponent
 		return blockMap;
 	}
 	
-	public FarmerPlantableBehaviorHolder getPlantableBehaviorHolder()
+	public PlantableBehaviorHolder getPlantableBehaviorHolder()
 	{
 		return plantableBehaviorHolder;
 	}
 	
-	public FarmerHarvestableBehaviorHolder getHarvestableBehaviorHolder()
+	public HarvestableBehaviorHolder getHarvestableBehaviorHolder()
 	{
 		return harvestableBehaviorHolder;
 	}
