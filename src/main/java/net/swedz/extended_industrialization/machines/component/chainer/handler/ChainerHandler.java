@@ -1,27 +1,27 @@
 package net.swedz.extended_industrialization.machines.component.chainer.handler;
 
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerElement;
-import net.swedz.extended_industrialization.machines.component.chainer.MachineLinks;
+import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 import net.swedz.extended_industrialization.machines.component.chainer.wrapper.InventoryWrapper;
 
 import java.util.List;
 
 public abstract class ChainerHandler<H, W extends InventoryWrapper<H>> implements ChainerElement
 {
-	protected final MachineLinks machineLinks;
+	protected final ChainerLinks chainerLinks;
 	
 	protected List<W> wrappers = List.of();
 	
 	protected int slots;
 	
-	public ChainerHandler(MachineLinks machineLinks)
+	public ChainerHandler(ChainerLinks chainerLinks)
 	{
-		this.machineLinks = machineLinks;
+		this.chainerLinks = chainerLinks;
 	}
 	
-	public MachineLinks getMachineLinks()
+	public ChainerLinks getMachineLinks()
 	{
-		return machineLinks;
+		return chainerLinks;
 	}
 	
 	@Override

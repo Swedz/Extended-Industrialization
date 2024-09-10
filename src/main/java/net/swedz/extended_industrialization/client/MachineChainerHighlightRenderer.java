@@ -15,7 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.component.chainer.MachineLinks;
+import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 
 public final class MachineChainerHighlightRenderer extends MachineBlockEntityRenderer<MachineChainerMachineBlockEntity>
 {
@@ -41,7 +41,7 @@ public final class MachineChainerHighlightRenderer extends MachineBlockEntityRen
 	@Override
 	public AABB getRenderBoundingBox(MachineChainerMachineBlockEntity machine)
 	{
-		MachineLinks links = machine.getChainerComponent().links();
+		ChainerLinks links = machine.getChainerComponent().links();
 		boolean hasConnections = links.hasConnections();
 		boolean hasFailure = links.failPosition().isPresent();
 		if(hasConnections || hasFailure)
@@ -66,7 +66,7 @@ public final class MachineChainerHighlightRenderer extends MachineBlockEntityRen
 		super.render(machine, tickDelta, matrices, buffer, light, overlay);
 		
 		BlockPos originPos = machine.getBlockPos();
-		MachineLinks links = machine.getChainerComponent().links();
+		ChainerLinks links = machine.getChainerComponent().links();
 		
 		boolean holdingWrench = isHoldingWrench();
 		boolean holdingMachine = isHoldingMachine(machine);
@@ -150,7 +150,7 @@ public final class MachineChainerHighlightRenderer extends MachineBlockEntityRen
 	private String pickArrowSymbol(MachineChainerMachineBlockEntity machine,
 								   Direction playerDirection, Direction renderDirection)
 	{
-		MachineLinks links = machine.getChainerComponent().links();
+		ChainerLinks links = machine.getChainerComponent().links();
 		Direction machineDirection = links.direction();
 		
 		Direction playerDirectionLeft = playerDirection.getCounterClockWise();
@@ -185,7 +185,7 @@ public final class MachineChainerHighlightRenderer extends MachineBlockEntityRen
 		}
 		
 		BlockPos originPos = machine.getBlockPos();
-		MachineLinks links = machine.getChainerComponent().links();
+		ChainerLinks links = machine.getChainerComponent().links();
 		
 		Direction playerDirection = Direction.fromYRot(Minecraft.getInstance().player.yHeadRot);
 		Direction renderDirection = this.pickNumberRenderFace(machine);
