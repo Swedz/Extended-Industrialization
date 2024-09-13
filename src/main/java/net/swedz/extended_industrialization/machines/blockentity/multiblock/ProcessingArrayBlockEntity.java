@@ -46,7 +46,8 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 		{
 			guiComponents.removeIf((component) -> component instanceof SlotPanel.Server);
 			this.registerGuiComponent(new SlotPanel.Server(this)
-					.withRedstoneControl(redstoneControl));
+					.withRedstoneControl(redstoneControl)
+					.withOverdrive(overdrive));
 		}
 		
 		this.machines = new ProcessingArrayMachineComponent();

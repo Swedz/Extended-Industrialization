@@ -28,7 +28,7 @@ public final class ProcessingArrayMachineSlot
 	
 	public static int getSlotY()
 	{
-		return 86 - (EIConfig.allowUpgradesInProcessingArray ? 0 : 20);
+		return 106 - (EIConfig.allowUpgradesInProcessingArray ? 0 : 20);
 	}
 	
 	public static boolean isMachine(ItemStack itemStack)
