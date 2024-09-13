@@ -24,6 +24,6 @@ public class ArmorDyeRecipeIgnoreRainbowItemsMixin
 							  Operation<Boolean> original)
 	{
 		return original.call(stack, tag) &&
-			   !stack.is(EITags.RAINBOW_DYEABLE);
+			   !stack.is(EITags.Items.RAINBOW_DYEABLE);
 	}
 }

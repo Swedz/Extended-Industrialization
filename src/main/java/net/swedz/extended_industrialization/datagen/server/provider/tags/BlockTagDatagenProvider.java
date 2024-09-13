@@ -1,6 +1,8 @@
 package net.swedz.extended_industrialization.datagen.server.provider.tags;
 
+import aztech.modern_industrialization.MITags;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -11,6 +13,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIBlocks;
 import net.swedz.extended_industrialization.EITags;
+import net.swedz.tesseract.neoforge.helper.TagHelper;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 
 import java.util.Comparator;
@@ -24,7 +27,7 @@ public final class BlockTagDatagenProvider extends BlockTagsProvider
 	
 	private void addFarmerDirtTags()
 	{
-		this.tag(EITags.FARMER_DIRT)
+		this.tag(EITags.Blocks.FARMER_DIRT)
 				.add(
 						Blocks.SOUL_SAND
 				)
@@ -33,6 +36,12 @@ public final class BlockTagDatagenProvider extends BlockTagsProvider
 						Tags.Blocks.SANDS,
 						Tags.Blocks.VILLAGER_FARMLANDS
 				);
+	}
+	
+	private void addChainerLinkables()
+	{
+		this.tag(EITags.Blocks.MACHINE_CHAINER_LINKABLE)
+				.addOptionalTag(TagHelper.convert(MITags.BARRELS, BuiltInRegistries.BLOCK));
 	}
 	
 	@Override
@@ -47,6 +56,7 @@ public final class BlockTagDatagenProvider extends BlockTagsProvider
 		}
 		
 		this.addFarmerDirtTags();
+		this.addChainerLinkables();
 	}
 	
 	@Override

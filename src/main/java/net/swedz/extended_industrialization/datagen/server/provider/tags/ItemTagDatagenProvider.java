@@ -25,7 +25,7 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 	
 	private void addFarmerVoidableDropTag()
 	{
-		this.tag(EITags.FARMER_VOIDABLE)
+		this.tag(EITags.Items.FARMER_VOIDABLE)
 				.add(
 						Items.STICK,
 						Items.APPLE,
@@ -39,7 +39,7 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 	
 	private void addFarmerStandardPlantableTag()
 	{
-		this.tag(EITags.FARMER_PLANTABLE)
+		this.tag(EITags.Items.FARMER_PLANTABLE)
 				.addTags(
 						Tags.Items.SEEDS,
 						Tags.Items.CROPS,

@@ -38,7 +38,7 @@ public final class RainbowableDyeRecipe extends CustomRecipe
 			ItemStack item = input.getItem(i);
 			if(!item.isEmpty())
 			{
-				if(item.is(ItemTags.DYEABLE) && item.is(EITags.RAINBOW_DYEABLE))
+				if(item.is(ItemTags.DYEABLE) && item.is(EITags.Items.RAINBOW_DYEABLE))
 				{
 					if(!dyeableItem.isEmpty())
 					{

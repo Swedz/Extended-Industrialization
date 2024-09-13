@@ -211,7 +211,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		
 		private static final SimpleMember DIRT = new PredicateSimpleMember(
 				(state) ->
-						state.is(EITags.FARMER_DIRT) ||
+						state.is(EITags.Blocks.FARMER_DIRT) ||
 						state.getFluidState().is(Fluids.WATER) || state.getFluidState().is(Fluids.FLOWING_WATER),
 				Blocks.DIRT
 		);

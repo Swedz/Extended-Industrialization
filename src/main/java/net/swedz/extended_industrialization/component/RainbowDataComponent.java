@@ -38,7 +38,7 @@ public record RainbowDataComponent(boolean value, boolean showInTooltip) impleme
 		CauldronInteraction.WATER.map().put(item, (state, level, pos, player, hand, stack) ->
 		{
 			if(!stack.is(ItemTags.DYEABLE) &&
-			   !stack.is(EITags.RAINBOW_DYEABLE))
+			   !stack.is(EITags.Items.RAINBOW_DYEABLE))
 			{
 				return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 			}

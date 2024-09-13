@@ -14,7 +14,7 @@ public final class SpecialFarmerPlantable implements FarmerPlantable
 	{
 		ItemStack stack = context.stack();
 		return !stack.isEmpty() &&
-			   stack.is(EITags.FARMER_PLANTABLE) &&
+			   stack.is(EITags.Items.FARMER_PLANTABLE) &&
 			   stack.getItem() instanceof SpecialPlantable;
 	}
 	
