@@ -21,7 +21,7 @@ public class RainbowDyedItemColorMixin
 	private static void getOrDefault(ItemStack stack, int defaultValue,
 									 CallbackInfoReturnable<Integer> callback)
 	{
-		if(stack.is(EITags.RAINBOW_DYEABLE))
+		if(stack.is(EITags.Items.RAINBOW_DYEABLE))
 		{
 			RainbowDataComponent rainbow = stack.get(EIComponents.RAINBOW);
 			if(rainbow != null && rainbow.value())

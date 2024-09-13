@@ -47,7 +47,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 			{
 				long inserted = itemOutput.insertAllSlot(ItemVariant.of(item), item.getCount(), transaction);
 				if(inserted != item.getCount() &&
-				   !item.is(EITags.FARMER_VOIDABLE))
+				   !item.is(EITags.Items.FARMER_VOIDABLE))
 				{
 					success = false;
 					break;
@@ -65,7 +65,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 	
 	private List<ItemStack> sortDrops(List<ItemStack> drops)
 	{
-		drops.sort(Comparator.comparing((item) -> item.is(EITags.FARMER_VOIDABLE)));
+		drops.sort(Comparator.comparing((item) -> item.is(EITags.Items.FARMER_VOIDABLE)));
 		return drops;
 	}
 	

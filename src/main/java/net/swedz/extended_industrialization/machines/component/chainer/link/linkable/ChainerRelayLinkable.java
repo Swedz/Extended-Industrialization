@@ -11,7 +11,7 @@ public final class ChainerRelayLinkable implements ChainerLinkable
 	public boolean matches(LinkContext context)
 	{
 		return context.hasBlockState() &&
-			   context.blockState().is(EITags.MACHINE_CHAINER_RELAY);
+			   context.blockState().is(EITags.Blocks.MACHINE_CHAINER_RELAY);
 	}
 	
 	@Override

@@ -18,6 +18,7 @@ import net.swedz.extended_industrialization.machines.component.chainer.link.Link
 import net.swedz.extended_industrialization.machines.component.chainer.link.LinkableBehaviorHolder;
 import net.swedz.extended_industrialization.machines.component.chainer.link.linkable.ChainerRelayLinkable;
 import net.swedz.extended_industrialization.machines.component.chainer.link.linkable.MachineBlockLinkable;
+import net.swedz.extended_industrialization.machines.component.chainer.link.linkable.TaggedLinkable;
 import net.swedz.tesseract.neoforge.behavior.BehaviorRegistry;
 
 import java.util.Collections;
@@ -39,6 +40,7 @@ public final class ChainerLinks implements ChainerElement
 	{
 		registerLinkable(ChainerRelayLinkable::new);
 		registerLinkable(MachineBlockLinkable::new);
+		registerLinkable(TaggedLinkable::new);
 	}
 	
 	private final Supplier<Level>     level;
