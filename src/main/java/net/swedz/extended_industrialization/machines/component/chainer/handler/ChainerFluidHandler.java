@@ -61,6 +61,10 @@ public final class ChainerFluidHandler extends SlotChainerHandler<IFluidHandler>
 	@Override
 	public int fill(FluidStack resource, FluidAction action)
 	{
+		if(!chainerLinks.doesAllowOperation())
+		{
+			return 0;
+		}
 		int amountFilled = 0;
 		for(int index = 0; index < wrappers.size(); index++)
 		{
@@ -75,6 +79,10 @@ public final class ChainerFluidHandler extends SlotChainerHandler<IFluidHandler>
 	
 	private FluidStack drain(Fluid fluid, int maxAmount, FluidAction action)
 	{
+		if(!chainerLinks.doesAllowOperation())
+		{
+			return FluidStack.EMPTY;
+		}
 		int amountTransferred = 0;
 		for(int index = 0; index < wrappers.size(); index++)
 		{

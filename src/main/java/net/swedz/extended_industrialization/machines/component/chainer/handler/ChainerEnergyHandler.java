@@ -32,6 +32,10 @@ public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, 
 	@Override
 	public long receive(long maxReceive, boolean simulate)
 	{
+		if(!chainerLinks.doesAllowOperation())
+		{
+			return 0;
+		}
 		long amountReceived = 0;
 		for(int i = 0; i < wrappers.size(); i++)
 		{
