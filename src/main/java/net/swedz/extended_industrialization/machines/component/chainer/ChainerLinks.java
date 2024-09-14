@@ -47,6 +47,7 @@ public final class ChainerLinks implements ChainerElement
 	private final BlockPos            origin;
 	private final Supplier<Direction> direction;
 	private final int                 maxConnections;
+	private final Supplier<Boolean>   allowOperation;
 	
 	private final LinkableBehaviorHolder behaviorHolder;
 	
@@ -59,12 +60,13 @@ public final class ChainerLinks implements ChainerElement
 	
 	private Optional<BlockPos> failPosition = Optional.empty();
 	
-	public ChainerLinks(MachineChainerMachineBlockEntity machine, int maxConnections)
+	public ChainerLinks(MachineChainerMachineBlockEntity machine, int maxConnections, Supplier<Boolean> allowOperation)
 	{
 		this.level = machine::getLevel;
 		this.origin = machine.getBlockPos();
 		this.direction = () -> machine.orientation.facingDirection;
 		this.maxConnections = maxConnections;
+		this.allowOperation = allowOperation;
 		
 		this.behaviorHolder = BEHAVIOR_REGISTRY.createHolder();
 	}
@@ -172,6 +174,11 @@ public final class ChainerLinks implements ChainerElement
 			chunks.add(new ChunkPos(block));
 		}
 		return Collections.unmodifiableSet(chunks);
+	}
+	
+	public boolean doesAllowOperation()
+	{
+		return allowOperation.get();
 	}
 	
 	public List<IItemHandler> itemHandlers()

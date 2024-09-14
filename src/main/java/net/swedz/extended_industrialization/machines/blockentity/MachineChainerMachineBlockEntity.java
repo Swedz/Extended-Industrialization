@@ -6,8 +6,10 @@ import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.OrientationComponent;
+import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.AutoExtract;
+import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
@@ -27,6 +29,8 @@ import java.util.List;
 
 public final class MachineChainerMachineBlockEntity extends MachineBlockEntity implements Tickable
 {
+	private final RedstoneControlComponent redstoneControl;
+	
 	private final ChainerComponent chainer;
 	
 	private final TransferCache transfer;
@@ -44,11 +48,18 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 				new OrientationComponent.Params(true, true, true)
 		);
 		
-		chainer = new ChainerComponent(this, EIConfig.machineChainerMaxConnections);
+		redstoneControl = new RedstoneControlComponent();
+		
+		chainer = new ChainerComponent(
+				this,
+				EIConfig.machineChainerMaxConnections,
+				() -> redstoneControl.doAllowNormalOperation(this)
+		);
 		
 		transfer = TransferCache.of(chainer::itemHandler, chainer::fluidHandler);
 		
-		this.registerComponents(chainer);
+		this.registerGuiComponent(new SlotPanel.Server(this)
+				.withRedstoneControl(redstoneControl));
 		
 		this.registerGuiComponent(new AutoExtract.Server(orientation));
 		
@@ -69,6 +80,8 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			
 			return text;
 		}));
+		
+		this.registerComponents(chainer, redstoneControl);
 	}
 	
 	public ChainerComponent getChainerComponent()

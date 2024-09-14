@@ -48,12 +48,20 @@ public final class ChainerItemHandler extends SlotChainerHandler<IItemHandler> i
 	@Override
 	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
 	{
+		if(!chainerLinks.doesAllowOperation())
+		{
+			return stack;
+		}
 		return this.getWrapper(slot).map((wrapper) -> wrapper.handler().insertItem(wrapper.toLocalSlot(slot), stack, simulate)).orElse(stack);
 	}
 	
 	@Override
 	public ItemStack extractItem(int slot, int amount, boolean simulate)
 	{
+		if(!chainerLinks.doesAllowOperation())
+		{
+			return ItemStack.EMPTY;
+		}
 		return this.getWrapper(slot).map((wrapper) -> wrapper.handler().extractItem(wrapper.toLocalSlot(slot), amount, simulate)).orElse(ItemStack.EMPTY);
 	}
 	

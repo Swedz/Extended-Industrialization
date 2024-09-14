@@ -17,6 +17,7 @@ import net.swedz.tesseract.neoforge.localizedlistener.LocalizedListener;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public final class ChainerComponent implements IComponent, ChainerElement
 {
@@ -30,11 +31,11 @@ public final class ChainerComponent implements IComponent, ChainerElement
 	private final ChainerFluidHandler  fluidHandler;
 	private final ChainerEnergyHandler energyHandler;
 	
-	public ChainerComponent(MachineChainerMachineBlockEntity machine, int maxConnectedMachines)
+	public ChainerComponent(MachineChainerMachineBlockEntity machine, int maxConnectedMachines, Supplier<Boolean> allowOperation)
 	{
 		this.machine = machine;
 		
-		this.links = new ChainerLinks(machine, maxConnectedMachines);
+		this.links = new ChainerLinks(machine, maxConnectedMachines, allowOperation);
 		
 		this.itemHandler = new ChainerItemHandler(links);
 		this.fluidHandler = new ChainerFluidHandler(links);
