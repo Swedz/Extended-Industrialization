@@ -61,7 +61,7 @@ public final class EIKeybinds
 					id,
 					KeyConflictContext.IN_GAME,
 					InputConstants.Type.KEYSYM,
-					GLFW.GLFW_KEY_Y,
+					GLFW.GLFW_KEY_U,
 					CATEGORY
 			),
 			toggleableItemAction(EquipmentSlot.MAINHAND)
