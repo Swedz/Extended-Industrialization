@@ -14,8 +14,7 @@
         "bottom_n": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_down",
         "bottom_s": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_up",
         "bottom_e": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_right",
-        "bottom_w": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_left",
-        "back": "extended_industrialization:block/machines/machine_chainer/overlay_back"
+        "bottom_w": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_left"
     },
     "loader": "modern_industrialization:machine"
 }
