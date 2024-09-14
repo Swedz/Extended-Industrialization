@@ -8,7 +8,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.item.ToggleableItem;
 import net.swedz.extended_industrialization.network.EICustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
@@ -26,11 +25,7 @@ public record ToggleToggleableItemPacket(EquipmentSlot slot, boolean activated) 
 	@Override
 	public void handle(PacketContext context)
 	{
-		if(context.isClientbound())
-		{
-			EI.LOGGER.warn("Received ToggleToggleableItemPacket on the client??");
-			return;
-		}
+		context.assertServerbound();
 		
 		Player player = context.getPlayer();
 		

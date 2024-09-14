@@ -90,6 +90,18 @@ public final class EIKeybinds
 			),
 			toggleableItemAction(EquipmentSlot.CHEST)
 	);
+	public static final Keybind TOGGLE_LEGGINGS_ABILITY = create(
+			"toggle_leggings_ability",
+			"Toggle Leggings Ability",
+			(id) -> new KeyMapping(
+					id,
+					KeyConflictContext.IN_GAME,
+					InputConstants.Type.KEYSYM,
+					GLFW.GLFW_KEY_M,
+					CATEGORY
+			),
+			toggleableItemAction(EquipmentSlot.LEGS)
+	);
 	
 	private static Keybind create(String id, String englishName, Function<String, KeyMapping> creator, Runnable action)
 	{

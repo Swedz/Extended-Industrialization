@@ -16,8 +16,9 @@ import java.util.Optional;
 
 public interface NanoSuitAbility
 {
-	NanoSuitNightVisionAbility     NIGHT_VISION    = new NanoSuitNightVisionAbility();
 	NanoSuitGravichestplateAbility GRAVICHESTPLATE = new NanoSuitGravichestplateAbility();
+	NanoSuitNightVisionAbility     NIGHT_VISION    = new NanoSuitNightVisionAbility();
+	NanoSuitSpeedAbility           SPEED           = new NanoSuitSpeedAbility();
 	
 	default Rarity rarity()
 	{
