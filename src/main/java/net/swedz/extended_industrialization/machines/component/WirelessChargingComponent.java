@@ -12,6 +12,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.swedz.extended_industrialization.proxy.accessories.EIAccessoriesProxy;
+import net.swedz.tesseract.neoforge.proxy.ProxyManager;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -82,6 +84,16 @@ public final class WirelessChargingComponent implements IComponent.ServerOnly
 						return eu;
 					}
 				}
+			}
+		}
+		
+		long received = ProxyManager.get(EIAccessoriesProxy.class).chargeAccessories(player, Math.max(0, maxEu - eu));
+		if(received > 0)
+		{
+			eu += received;
+			if(eu == maxEu)
+			{
+				return eu;
 			}
 		}
 		
