@@ -11,9 +11,12 @@ import java.util.List;
 
 public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, InventoryWrapper<MIEnergyStorage>> implements MIEnergyStorage
 {
-	public ChainerEnergyHandler(ChainerLinks chainerLinks)
+	private final boolean insertable;
+	
+	public ChainerEnergyHandler(ChainerLinks chainerLinks, boolean insertable)
 	{
 		super(chainerLinks);
+		this.insertable = insertable;
 	}
 	
 	@Override
@@ -32,7 +35,7 @@ public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, 
 	@Override
 	public long receive(long maxReceive, boolean simulate)
 	{
-		if(!chainerLinks.doesAllowOperation())
+		if(!chainerLinks.doesAllowOperation() || !insertable)
 		{
 			return 0;
 		}
@@ -51,7 +54,21 @@ public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, 
 	@Override
 	public long extract(long maxExtract, boolean simulate)
 	{
-		return 0;
+		if(!chainerLinks.doesAllowOperation() || insertable)
+		{
+			return 0;
+		}
+		long amountExtracted = 0;
+		for(var wrapper : wrappers)
+		{
+			long remainingAmountToExtract = maxExtract - amountExtracted;
+			amountExtracted += wrapper.handler().extract(remainingAmountToExtract, simulate);
+			if(amountExtracted == maxExtract)
+			{
+				break;
+			}
+		}
+		return amountExtracted;
 	}
 	
 	@Override
@@ -69,13 +86,13 @@ public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, 
 	@Override
 	public boolean canExtract()
 	{
-		return false;
+		return !insertable;
 	}
 	
 	@Override
 	public boolean canReceive()
 	{
-		return true;
+		return insertable;
 	}
 	
 	@Override

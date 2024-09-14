@@ -199,7 +199,12 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			);
 			event.registerBlockEntity(
 					EnergyApi.SIDED, bet,
-					(be, direction) -> ((MachineChainerMachineBlockEntity) be).getChainerComponent().energyHandler()
+					(be, direction) ->
+					{
+						MachineChainerMachineBlockEntity machine = (MachineChainerMachineBlockEntity) be;
+						ChainerComponent chainer = machine.getChainerComponent();
+						return machine.orientation.outputDirection == direction ? chainer.extractableEnergyHandler() : chainer.insertableEnergyHandler();
+					}
 			);
 		});
 	}
