@@ -5,14 +5,18 @@ import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.util.Simulation;
-import dev.technici4n.grandpower.api.ILongEnergyStorage;
+import com.google.common.collect.Lists;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.swedz.extended_industrialization.proxy.accessories.EIAccessoriesProxy;
+import net.swedz.tesseract.neoforge.compat.mi.helper.ChargeInventoryHelper;
+import net.swedz.tesseract.neoforge.proxy.ProxyManager;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiPredicate;
@@ -49,43 +53,14 @@ public final class WirelessChargingComponent implements IComponent.ServerOnly
 	private long charge(Player player, long maxEu)
 	{
 		Inventory inventory = player.getInventory();
-		long eu = 0;
 		
-		for(ItemStack armor : inventory.armor)
-		{
-			ILongEnergyStorage energy = armor.getCapability(EnergyApi.ITEM);
-			if(energy != null)
-			{
-				long received = energy.receive(Math.max(0, maxEu - eu), false);
-				if(received > 0)
-				{
-					eu += received;
-					if(eu == maxEu)
-					{
-						return eu;
-					}
-				}
-			}
-		}
+		List<ItemStack> items = Lists.newArrayList();
+		items.addAll(inventory.armor);
+		items.addAll(inventory.items);
+		items.addAll(inventory.offhand);
+		items.addAll(ProxyManager.get(EIAccessoriesProxy.class).getAccessories(player, (stack) -> stack.getCapability(EnergyApi.ITEM) != null));
 		
-		for(ItemStack item : inventory.items)
-		{
-			ILongEnergyStorage energy = item.getCapability(EnergyApi.ITEM);
-			if(energy != null)
-			{
-				long received = energy.receive(Math.max(0, maxEu - eu), false);
-				if(received > 0)
-				{
-					eu += received;
-					if(eu == maxEu)
-					{
-						return eu;
-					}
-				}
-			}
-		}
-		
-		return eu;
+		return ChargeInventoryHelper.charge(items, maxEu, false);
 	}
 	
 	public void tick()

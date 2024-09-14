@@ -50,6 +50,19 @@ repositories {
 			includeGroup "dev.emi"
 		}
 	}
+	maven {
+		name = "Wisp Forest"
+		url = "https://maven.wispforest.io/releases"
+		// Accessories
+	}
+	maven {
+		name = "Su5eD"
+		url = "https://maven.su5ed.dev/releases"
+		content {
+			// Forgified Fabric API - Required by Accessories
+			includeGroup "org.sinytra.forgified-fabric-api"
+		}
+	}
 }
 
 dependencies {
@@ -78,6 +91,12 @@ dependencies {
 			strictly "[${mixinextras_version},)"
 			prefer mixinextras_version
 		}
+	}
+
+	if (project.runtime_include_accessories.toBoolean()) {
+		localImplementation "io.wispforest:accessories-neoforge:${accessories_version}"
+	} else {
+		compileOnly "io.wispforest:accessories-neoforge:${accessories_version}"
 	}
 }
 
@@ -253,7 +272,8 @@ tasks.withType(ProcessResources).configureEach {
 			modern_industrialization_version_range: modern_industrialization_version_range,
 			tesseract_version_range               : tesseract_version_range,
 			mi_tweaks_version_range               : mi_tweaks_version_range,
-			emi_version_range                     : emi_version_range
+			emi_version_range                     : emi_version_range,
+			accessories_version_range             : accessories_version_range
 	]
 	inputs.properties replaceProperties
 
