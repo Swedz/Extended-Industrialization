@@ -29,7 +29,8 @@ public final class ChainerComponent implements IComponent, ChainerElement
 	
 	private final ChainerItemHandler   itemHandler;
 	private final ChainerFluidHandler  fluidHandler;
-	private final ChainerEnergyHandler energyHandler;
+	private final ChainerEnergyHandler insertableEnergyHandler;
+	private final ChainerEnergyHandler extractableEnergyHandler;
 	
 	public ChainerComponent(MachineChainerMachineBlockEntity machine, int maxConnectedMachines, Supplier<Boolean> allowOperation)
 	{
@@ -39,16 +40,16 @@ public final class ChainerComponent implements IComponent, ChainerElement
 		
 		this.itemHandler = new ChainerItemHandler(links);
 		this.fluidHandler = new ChainerFluidHandler(links);
-		this.energyHandler = new ChainerEnergyHandler(links);
+		this.insertableEnergyHandler = new ChainerEnergyHandler(links, true);
+		this.extractableEnergyHandler = new ChainerEnergyHandler(links, false);
 		
 		this.listenerNeighborNotify = (event) ->
 		{
-			if(links.origin().equals(event.getPos()))
-			{
-				machine.buildLinks();
-			}
-			else if(links.contains(event.getPos()) ||
-					links.isAfter(event.getPos()))
+			BlockPos pos = event.getPos();
+			if(links.origin().equals(pos) ||
+			   links.contains(pos) ||
+			   links.isAfter(pos) ||
+			   links.isFailPosition(pos))
 			{
 				machine.buildLinks();
 			}
@@ -75,9 +76,14 @@ public final class ChainerComponent implements IComponent, ChainerElement
 		return fluidHandler;
 	}
 	
-	public ChainerEnergyHandler energyHandler()
+	public ChainerEnergyHandler insertableEnergyHandler()
 	{
-		return energyHandler;
+		return insertableEnergyHandler;
+	}
+	
+	public ChainerEnergyHandler extractableEnergyHandler()
+	{
+		return extractableEnergyHandler;
 	}
 	
 	private Set<ChunkPos> previousSpannedChunks = Set.of();
@@ -88,7 +94,7 @@ public final class ChainerComponent implements IComponent, ChainerElement
 		{
 			throw new IllegalStateException("Cannot register listeners for a chainer that already has listeners registered");
 		}
-		Set<ChunkPos> spannedChunks = links.getSpannedChunks(true);
+		Set<ChunkPos> spannedChunks = links.getSpannedChunks(true, true);
 		EILocalizedListeners.INSTANCE.register(this.level(), spannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
 		previousSpannedChunks = spannedChunks;
 	}
@@ -108,7 +114,8 @@ public final class ChainerComponent implements IComponent, ChainerElement
 				links,
 				itemHandler,
 				fluidHandler,
-				energyHandler
+				insertableEnergyHandler,
+				extractableEnergyHandler
 		).forEach(action);
 	}
 	

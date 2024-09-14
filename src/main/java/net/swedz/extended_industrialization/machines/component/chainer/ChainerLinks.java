@@ -152,7 +152,7 @@ public final class ChainerLinks implements ChainerElement
 		return maxConnections;
 	}
 	
-	List<BlockPos> getSpannedBlocks(boolean includeOrigin)
+	List<BlockPos> getSpannedBlocks(boolean includeOrigin, boolean includeFailure)
 	{
 		List<BlockPos> blocks = Lists.newArrayList();
 		if(includeOrigin)
@@ -163,13 +163,17 @@ public final class ChainerLinks implements ChainerElement
 		{
 			blocks.add(origin.relative(this.direction(), i));
 		}
+		if(includeFailure && this.hasFailure())
+		{
+			blocks.add(this.failPosition().orElseThrow());
+		}
 		return Collections.unmodifiableList(blocks);
 	}
 	
-	Set<ChunkPos> getSpannedChunks(boolean includeOrigin)
+	Set<ChunkPos> getSpannedChunks(boolean includeOrigin, boolean includeFailure)
 	{
 		Set<ChunkPos> chunks = Sets.newHashSet();
-		for(BlockPos block : this.getSpannedBlocks(includeOrigin))
+		for(BlockPos block : this.getSpannedBlocks(includeOrigin, includeFailure))
 		{
 			chunks.add(new ChunkPos(block));
 		}
@@ -211,6 +215,11 @@ public final class ChainerLinks implements ChainerElement
 		return failPosition.map((fail) -> fail.distManhattan(origin)).orElseThrow();
 	}
 	
+	public boolean isFailPosition(BlockPos pos)
+	{
+		return failPosition.map((fail) -> fail.equals(pos)).orElse(false);
+	}
+	
 	void failPosition(BlockPos pos)
 	{
 		failPosition = Optional.ofNullable(pos);
@@ -246,7 +255,7 @@ public final class ChainerLinks implements ChainerElement
 		List<MIEnergyStorage> energyHandlers = Lists.newArrayList();
 		
 		LinkResult result = null;
-		for(BlockPos pos : this.getSpannedBlocks(false))
+		for(BlockPos pos : this.getSpannedBlocks(false, false))
 		{
 			result = this.test(pos);
 			if(result.isSuccess())

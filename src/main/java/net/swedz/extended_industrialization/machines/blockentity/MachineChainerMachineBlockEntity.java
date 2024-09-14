@@ -23,7 +23,9 @@ import net.swedz.extended_industrialization.machines.component.chainer.ChainerCo
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine;
-import net.swedz.tesseract.neoforge.compat.mi.helper.TransferCache;
+import net.swedz.tesseract.neoforge.compat.mi.helper.transfer.MIEnergyTransferCache;
+import net.swedz.tesseract.neoforge.helper.transfer.FluidTransferCache;
+import net.swedz.tesseract.neoforge.helper.transfer.ItemTransferCache;
 
 import java.util.List;
 
@@ -33,7 +35,9 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	
 	private final ChainerComponent chainer;
 	
-	private final TransferCache transfer;
+	private final ItemTransferCache     transferItem;
+	private final FluidTransferCache    transferFluid;
+	private final MIEnergyTransferCache transferEnergy;
 	
 	private int tick;
 	private int lastRebuildTick = -1;
@@ -56,7 +60,9 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 				() -> redstoneControl.doAllowNormalOperation(this)
 		);
 		
-		transfer = TransferCache.of(chainer::itemHandler, chainer::fluidHandler);
+		transferItem = new ItemTransferCache(chainer::itemHandler);
+		transferFluid = new FluidTransferCache(chainer::fluidHandler);
+		transferEnergy = new MIEnergyTransferCache(chainer::extractableEnergyHandler);
 		
 		this.registerGuiComponent(new SlotPanel.Server(this)
 				.withRedstoneControl(redstoneControl));
@@ -163,9 +169,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			return;
 		}
 		
-		tick++;
-		
-		if(tick % 10 * 20 == 0)
+		if(++tick % (10 * 20) == 0)
 		{
 			needsRebuild = true;
 		}
@@ -175,13 +179,20 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			this.buildLinks();
 		}
 		
-		if(orientation.extractItems)
+		if(redstoneControl.doAllowNormalOperation(this))
 		{
-			transfer.autoExtractItems(level, worldPosition, orientation.outputDirection);
-		}
-		if(orientation.extractFluids)
-		{
-			transfer.autoExtractFluids(level, worldPosition, orientation.outputDirection);
+			if(orientation.extractItems)
+			{
+				transferItem.autoExtract(level, worldPosition, orientation.outputDirection);
+			}
+			if(orientation.extractFluids)
+			{
+				transferFluid.autoExtract(level, worldPosition, orientation.outputDirection);
+			}
+			if(transferEnergy.autoExtract(level, worldPosition, orientation.outputDirection))
+			{
+				this.setChanged();
+			}
 		}
 	}
 	
@@ -199,7 +210,12 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			);
 			event.registerBlockEntity(
 					EnergyApi.SIDED, bet,
-					(be, direction) -> ((MachineChainerMachineBlockEntity) be).getChainerComponent().energyHandler()
+					(be, direction) ->
+					{
+						MachineChainerMachineBlockEntity machine = (MachineChainerMachineBlockEntity) be;
+						ChainerComponent chainer = machine.getChainerComponent();
+						return machine.orientation.outputDirection == direction ? chainer.extractableEnergyHandler() : chainer.insertableEnergyHandler();
+					}
 			);
 		});
 	}
