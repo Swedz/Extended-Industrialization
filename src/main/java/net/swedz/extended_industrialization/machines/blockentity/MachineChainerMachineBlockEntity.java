@@ -7,6 +7,7 @@ import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
+import aztech.modern_industrialization.machines.guicomponents.AutoExtract;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
@@ -20,12 +21,15 @@ import net.swedz.extended_industrialization.machines.component.chainer.ChainerCo
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine;
+import net.swedz.tesseract.neoforge.compat.mi.helper.TransferCache;
 
 import java.util.List;
 
 public final class MachineChainerMachineBlockEntity extends MachineBlockEntity implements Tickable
 {
 	private final ChainerComponent chainer;
+	
+	private final TransferCache transfer;
 	
 	private int tick;
 	private int lastRebuildTick = -1;
@@ -36,15 +40,19 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder(EI.id("machine_chainer"), false).backgroundHeight(180).build(),
-				new OrientationComponent.Params(false, false, false)
+				new MachineGuiParameters.Builder(EI.id("machine_chainer"), false).backgroundHeight(175).build(),
+				new OrientationComponent.Params(true, true, true)
 		);
 		
 		chainer = new ChainerComponent(this, EIConfig.machineChainerMaxConnections);
 		
+		transfer = TransferCache.of(chainer::itemHandler, chainer::fluidHandler);
+		
 		this.registerComponents(chainer);
 		
-		this.registerGuiComponent(new ModularMultiblockGui.Server(60, () ->
+		this.registerGuiComponent(new AutoExtract.Server(orientation));
+		
+		this.registerGuiComponent(new ModularMultiblockGui.Server(11, 50, () ->
 		{
 			ChainerLinks links = chainer.links();
 			
@@ -152,6 +160,15 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		if(needsRebuild)
 		{
 			this.buildLinks();
+		}
+		
+		if(orientation.extractItems)
+		{
+			transfer.autoExtractItems(level, worldPosition, orientation.outputDirection);
+		}
+		if(orientation.extractFluids)
+		{
+			transfer.autoExtractFluids(level, worldPosition, orientation.outputDirection);
 		}
 	}
 	
