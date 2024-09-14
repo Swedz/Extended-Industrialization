@@ -45,9 +45,11 @@ public final class ChainerComponent implements IComponent, ChainerElement
 		
 		this.listenerNeighborNotify = (event) ->
 		{
-			if(links.origin().equals(event.getPos()) ||
-			   links.contains(event.getPos()) ||
-			   links.isAfter(event.getPos()))
+			BlockPos pos = event.getPos();
+			if(links.origin().equals(pos) ||
+			   links.contains(pos) ||
+			   links.isAfter(pos) ||
+			   links.isFailPosition(pos))
 			{
 				machine.buildLinks();
 			}
@@ -92,7 +94,7 @@ public final class ChainerComponent implements IComponent, ChainerElement
 		{
 			throw new IllegalStateException("Cannot register listeners for a chainer that already has listeners registered");
 		}
-		Set<ChunkPos> spannedChunks = links.getSpannedChunks(true);
+		Set<ChunkPos> spannedChunks = links.getSpannedChunks(true, true);
 		EILocalizedListeners.INSTANCE.register(this.level(), spannedChunks, BlockEvent.NeighborNotifyEvent.class, listenerNeighborNotify);
 		previousSpannedChunks = spannedChunks;
 	}
