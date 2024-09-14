@@ -163,9 +163,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			return;
 		}
 		
-		tick++;
-		
-		if(tick % 10 * 20 == 0)
+		if(++tick % (10 * 20) == 0)
 		{
 			needsRebuild = true;
 		}
