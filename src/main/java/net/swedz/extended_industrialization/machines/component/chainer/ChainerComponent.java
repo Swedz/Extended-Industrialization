@@ -45,12 +45,9 @@ public final class ChainerComponent implements IComponent, ChainerElement
 		
 		this.listenerNeighborNotify = (event) ->
 		{
-			if(links.origin().equals(event.getPos()))
-			{
-				machine.buildLinks();
-			}
-			else if(links.contains(event.getPos()) ||
-					links.isAfter(event.getPos()))
+			if(links.origin().equals(event.getPos()) ||
+			   links.contains(event.getPos()) ||
+			   links.isAfter(event.getPos()))
 			{
 				machine.buildLinks();
 			}
