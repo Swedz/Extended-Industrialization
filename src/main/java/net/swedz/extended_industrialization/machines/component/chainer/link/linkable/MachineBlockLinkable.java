@@ -32,6 +32,60 @@ public final class MachineBlockLinkable implements ChainerLinkable
 		}
 	}
 	
+	private MIEnergyStorage pickEnergyHandler(boolean input, MIEnergyStorage handlerA, MIEnergyStorage handlerB)
+	{
+		return handlerA != null && (input ? handlerA.canReceive() : handlerA.canExtract()) ? handlerA :
+				handlerB != null && (input ? handlerB.canReceive() : handlerB.canExtract()) ? handlerB : null;
+	}
+	
+	private MIEnergyStorage combine(MIEnergyStorage input, MIEnergyStorage output)
+	{
+		return input != null || output != null ? new MIEnergyStorage()
+		{
+			@Override
+			public boolean canConnect(CableTier cableTier)
+			{
+				return true;
+			}
+			
+			@Override
+			public long receive(long maxReceive, boolean simulate)
+			{
+				return input != null ? input.receive(maxReceive, simulate) : 0;
+			}
+			
+			@Override
+			public long extract(long maxExtract, boolean simulate)
+			{
+				return output != null ? output.extract(maxExtract, simulate) : 0;
+			}
+			
+			@Override
+			public long getAmount()
+			{
+				return input != null ? input.getAmount() : 0;
+			}
+			
+			@Override
+			public long getCapacity()
+			{
+				return input != null ? input.getCapacity() : 0;
+			}
+			
+			@Override
+			public boolean canExtract()
+			{
+				return output != null;
+			}
+			
+			@Override
+			public boolean canReceive()
+			{
+				return input != null;
+			}
+		} : null;
+	}
+	
 	@Override
 	public LinkResult test(LinkContext context)
 	{
@@ -61,59 +115,13 @@ public final class MachineBlockLinkable implements ChainerLinkable
 		
 		IItemHandler itemHandler = context.level().getCapability(Capabilities.ItemHandler.BLOCK, context.pos(), context.blockState(), context.blockEntity(), null);
 		IFluidHandler fluidHandler = context.level().getCapability(Capabilities.FluidHandler.BLOCK, context.pos(), context.blockState(), context.blockEntity(), null);
-		MIEnergyStorage inputEnergyHandler = context.level().getCapability(EnergyApi.SIDED, context.pos(), context.blockState(), context.blockEntity(), null);
-		MIEnergyStorage outputEnergyHandler = outputDirection != null ? context.level().getCapability(EnergyApi.SIDED, context.pos(), context.blockState(), context.blockEntity(), outputDirection) : null;
-		if(itemHandler != null || fluidHandler != null || inputEnergyHandler != null || outputEnergyHandler != null)
+		MIEnergyStorage energyHandlerA = context.level().getCapability(EnergyApi.SIDED, context.pos(), context.blockState(), context.blockEntity(), null);
+		MIEnergyStorage energyHandlerB = outputDirection != null ? context.level().getCapability(EnergyApi.SIDED, context.pos(), context.blockState(), context.blockEntity(), outputDirection) : null;
+		MIEnergyStorage inputEnergyHandler = this.pickEnergyHandler(true, energyHandlerA, energyHandlerB);
+		MIEnergyStorage outputEnergyHandler = this.pickEnergyHandler(false, energyHandlerA, energyHandlerB);
+		MIEnergyStorage energyHandler = this.combine(inputEnergyHandler, outputEnergyHandler);
+		if(itemHandler != null || fluidHandler != null || energyHandler != null)
 		{
-			// TODO probably not a good idea to combine the energy handlers into one like this
-			MIEnergyStorage energyHandler = null;
-			if(inputEnergyHandler != null || outputEnergyHandler != null)
-			{
-				energyHandler = new MIEnergyStorage()
-				{
-					@Override
-					public boolean canConnect(CableTier cableTier)
-					{
-						return true;
-					}
-					
-					@Override
-					public long receive(long maxReceive, boolean simulate)
-					{
-						return inputEnergyHandler != null ? inputEnergyHandler.receive(maxReceive, simulate) : 0;
-					}
-					
-					@Override
-					public long extract(long maxExtract, boolean simulate)
-					{
-						return outputEnergyHandler != null ? outputEnergyHandler.extract(maxExtract, simulate) : 0;
-					}
-					
-					@Override
-					public long getAmount()
-					{
-						return inputEnergyHandler != null ? inputEnergyHandler.getAmount() : 0;
-					}
-					
-					@Override
-					public long getCapacity()
-					{
-						return inputEnergyHandler != null ? inputEnergyHandler.getCapacity() : 0;
-					}
-					
-					@Override
-					public boolean canExtract()
-					{
-						return outputEnergyHandler != null;
-					}
-					
-					@Override
-					public boolean canReceive()
-					{
-						return inputEnergyHandler != null;
-					}
-				};
-			}
 			return LinkResult.success(itemHandler, fluidHandler, energyHandler);
 		}
 		
