@@ -52,3 +52,10 @@ type = "optional"
 versionRange = "${mi_tweaks_version_range}"
 ordering = "AFTER"
 side = "BOTH"
+
+[[dependencies.${ mod_id }]]
+modId = "accessories"
+type = "optional"
+versionRange = "${accessories_version_range}"
+ordering = "AFTER"
+side = "BOTH"
