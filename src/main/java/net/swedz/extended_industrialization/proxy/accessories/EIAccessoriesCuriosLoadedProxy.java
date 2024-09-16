@@ -37,7 +37,10 @@ public class EIAccessoriesCuriosLoadedProxy extends EIAccessoriesProxy
 				for(int index = 0; index < stacks.getSlots(); index++)
 				{
 					ItemStack stack = stacks.getStackInSlot(index);
-					accessories.add(stack);
+					if(filter.test(stack))
+					{
+						accessories.add(stack);
+					}
 				}
 			});
 		});
