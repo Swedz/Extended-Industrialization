@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.proxy.accessories;
+package net.swedz.extended_industrialization.proxy.modslot;
 
 import com.google.common.collect.Lists;
 import io.wispforest.accessories.api.AccessoriesCapability;
