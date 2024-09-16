@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 @ProxyEntrypoint(environment = ProxyEnvironment.MOD, modid = "curios")
-public class EIAccessoriesCuriosLoadedProxy extends EIAccessoriesProxy
+public class EIModSlotCuriosProxy extends EIModSlotProxy
 {
 	@Override
 	public boolean isLoaded()
@@ -23,7 +23,7 @@ public class EIAccessoriesCuriosLoadedProxy extends EIAccessoriesProxy
 	}
 	
 	@Override
-	public List<ItemStack> getAccessories(Player player, Predicate<ItemStack> filter)
+	public List<ItemStack> getContents(Player player, Predicate<ItemStack> filter)
 	{
 		List<ItemStack> accessories = Lists.newArrayList();
 		

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @ProxyEntrypoint(environment = ProxyEnvironment.MOD, modid = "accessories")
-public class EIAccessoriesLoadedProxy extends EIAccessoriesProxy
+public class EIModSlotAccessoriesProxy extends EIModSlotProxy
 {
 	@Override
 	public boolean isLoaded()
@@ -22,7 +22,7 @@ public class EIAccessoriesLoadedProxy extends EIAccessoriesProxy
 	}
 	
 	@Override
-	public List<ItemStack> getAccessories(Player player, Predicate<ItemStack> filter)
+	public List<ItemStack> getContents(Player player, Predicate<ItemStack> filter)
 	{
 		List<ItemStack> accessories = Lists.newArrayList();
 		
