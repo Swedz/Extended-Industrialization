@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
-@ProxyEntrypoint(environment = ProxyEnvironment.MOD, modid = "accessories")
+@ProxyEntrypoint(priority = 1, environment = ProxyEnvironment.MOD, modid = "accessories")
 public class EIModSlotAccessoriesProxy extends EIModSlotProxy
 {
 	@Override
