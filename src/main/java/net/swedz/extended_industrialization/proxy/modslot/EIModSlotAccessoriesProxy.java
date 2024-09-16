@@ -24,17 +24,17 @@ public class EIModSlotAccessoriesProxy extends EIModSlotProxy
 	@Override
 	public List<ItemStack> getContents(Player player, Predicate<ItemStack> filter)
 	{
-		List<ItemStack> accessories = Lists.newArrayList();
+		List<ItemStack> contents = Lists.newArrayList();
 		
 		AccessoriesCapability.getOptionally(player).ifPresent((capability) ->
 		{
 			for(SlotEntryReference entry : capability.getEquipped(filter))
 			{
 				ItemStack stack = entry.stack();
-				accessories.add(stack);
+				contents.add(stack);
 			}
 		});
 		
-		return Collections.unmodifiableList(accessories);
+		return Collections.unmodifiableList(contents);
 	}
 }
