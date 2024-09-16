@@ -60,7 +60,7 @@ public final class EIItems
 	public static final ItemHolder<NanoSuitArmorItem> NANO_HELMET           = createNanosuitArmor("nano_helmet", "Nano Helmet", ArmorItem.Type.HELMET, NanoSuitAbility.NIGHT_VISION);
 	public static final ItemHolder<NanoSuitArmorItem> NANO_CHESTPLATE       = createNanosuitArmor("nano_chestplate", "Nano Chestplate", ArmorItem.Type.CHESTPLATE);
 	public static final ItemHolder<NanoSuitArmorItem> NANO_GRAVICHESTPLATE  = createNanosuitArmor("nano_gravichestplate", "Nano Gravichestplate", ArmorItem.Type.CHESTPLATE, EIArmorMaterials.NANO_GRAVICHESTPLATE, NanoSuitAbility.GRAVICHESTPLATE);
-	public static final ItemHolder<NanoSuitArmorItem> NANO_LEGGINGS         = createNanosuitArmor("nano_leggings", "Nano Leggings", ArmorItem.Type.LEGGINGS);
+	public static final ItemHolder<NanoSuitArmorItem> NANO_LEGGINGS         = createNanosuitArmor("nano_leggings", "Nano Leggings", ArmorItem.Type.LEGGINGS, NanoSuitAbility.SPEED);
 	public static final ItemHolder<NanoSuitArmorItem> NANO_BOOTS            = createNanosuitArmor("nano_boots", "Nano Boots", ArmorItem.Type.BOOTS);
 	
 	public static final ItemHolder<Item> TIN_CAN     = create("tin_can", "Tin Can", Item::new, EISortOrder.OTHER_GEAR).withModel(CommonModelBuilders::generated).register();
