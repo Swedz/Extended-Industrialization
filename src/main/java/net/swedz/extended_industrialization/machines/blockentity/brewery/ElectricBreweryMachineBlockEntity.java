@@ -19,6 +19,7 @@ import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.guicomponents.RecipeEfficiencyBar;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.init.MachineTier;
+import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Simulation;
 import com.google.common.collect.Lists;
 import net.minecraft.core.Direction;
@@ -53,7 +54,7 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 		this.casing = new CasingComponent();
 		this.upgrades = new UpgradeComponent();
 		
-		this.energy = new EnergyComponent(this, 3200);
+		this.energy = new EnergyComponent(this, casing::getEuCapacity);
 		this.insertable = energy.buildInsertable(casing::canInsertEu);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(ENERGY_BAR_X, ENERGY_BAR_Y), energy::getEu, energy::getCapacity));
@@ -139,6 +140,15 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 			result = LubricantHelper.onUse(crafter, player, hand);
 		}
 		return result;
+	}
+	
+	@Override
+	protected MachineModelClientData getMachineModelData()
+	{
+		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
+		orientation.writeModelData(data);
+		data.isActive = isActiveComponent.isActive;
+		return data;
 	}
 	
 	public static void registerEnergyApi(BlockEntityType<?> bet)
