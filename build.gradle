@@ -63,6 +63,14 @@ repositories {
 			includeGroup "org.sinytra.forgified-fabric-api"
 		}
 	}
+	maven {
+		name = "OctoStudios"
+		url = "https://maven.octo-studios.com/releases"
+		content {
+			// Curios
+			includeGroup "top.theillusivec4.curios"
+		}
+	}
 }
 
 dependencies {
@@ -97,6 +105,12 @@ dependencies {
 		localImplementation "io.wispforest:accessories-neoforge:${accessories_version}"
 	} else {
 		compileOnly "io.wispforest:accessories-neoforge:${accessories_version}"
+	}
+
+	if (project.runtime_include_curios.toBoolean()) {
+		localImplementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+	} else {
+		compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 	}
 }
 
@@ -273,7 +287,8 @@ tasks.withType(ProcessResources).configureEach {
 			tesseract_version_range               : tesseract_version_range,
 			mi_tweaks_version_range               : mi_tweaks_version_range,
 			emi_version_range                     : emi_version_range,
-			accessories_version_range             : accessories_version_range
+			accessories_version_range             : accessories_version_range,
+			curios_version_range                  : curios_version_range
 	]
 	inputs.properties replaceProperties
 

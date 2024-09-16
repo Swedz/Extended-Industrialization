@@ -12,7 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.extended_industrialization.proxy.accessories.EIAccessoriesProxy;
+import net.swedz.extended_industrialization.proxy.modslot.EIModSlotProxy;
 import net.swedz.tesseract.neoforge.compat.mi.helper.ChargeInventoryHelper;
 import net.swedz.tesseract.neoforge.proxy.ProxyManager;
 
@@ -58,7 +58,7 @@ public final class WirelessChargingComponent implements IComponent.ServerOnly
 		items.addAll(inventory.armor);
 		items.addAll(inventory.items);
 		items.addAll(inventory.offhand);
-		items.addAll(ProxyManager.get(EIAccessoriesProxy.class).getAccessories(player, (stack) -> stack.getCapability(EnergyApi.ITEM) != null));
+		items.addAll(ProxyManager.get(EIModSlotProxy.class).getContents(player, (stack) -> stack.getCapability(EnergyApi.ITEM) != null));
 		
 		return ChargeInventoryHelper.charge(items, maxEu, false);
 	}

@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.proxy.accessories;
+package net.swedz.extended_industrialization.proxy.modslot;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @ProxyEntrypoint
-public class EIAccessoriesProxy implements Proxy
+public class EIModSlotProxy implements Proxy
 {
 	public boolean isLoaded()
 	{
 		return false;
 	}
 	
-	public List<ItemStack> getAccessories(Player player, Predicate<ItemStack> filter)
+	public List<ItemStack> getContents(Player player, Predicate<ItemStack> filter)
 	{
 		return List.of();
 	}
