@@ -139,7 +139,11 @@ static def trimChangelog(String changelog, int maxLength, boolean discordFormat)
 
 	if(discordFormat) {
 		changelog = changelog.replaceAll(/\r?\n/, '\\\\n')
-		changelog = changelog.replaceAll(/\\\\n\\\\n/, '\\\\n')
+		def previous = null
+		while (changelog != previous) {
+			previous = changelog
+			changelog = changelog.replaceAll(/\\n\\n/, '\\\\n')
+		}
 	}
 
 	if(maxLength > 0) {
