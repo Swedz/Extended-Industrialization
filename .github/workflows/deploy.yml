@@ -8,7 +8,16 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      # Set up Github actions, JDK & Gradle
       - uses: actions/checkout@v2
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: 21
+          cache: gradle
+          distribution: temurin
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
       # Load the variables needed
       - name: Load gradle.properties into the environment
@@ -31,16 +40,8 @@ jobs:
         run: |
           echo "MOD_VERSION=$(echo "$GITHUB_RELEASE_TAG_NAME" | sed -E 's/-[^-]+$//')" >> $GITHUB_ENV
           echo "RELEASE_TYPE=$(echo "$GITHUB_RELEASE_TAG_NAME" | grep -oE '(alpha|beta)' || echo "release")" >> $GITHUB_ENV
-          {
-            echo "MOD_CHANGELOG_TRIMMED_DISCORD<<EOF"
-            echo "$(echo "$MOD_CHANGELOG" | sed '/## What'"'"'s Changed/d' | sed 's/## New Contributors/**New Contributors**/g' | sed -E 's/@([a-zA-Z0-9_]+)/`\@\1`/g' | sed -E 's|https://github.com/([^ ]+)/pull/([0-9]+)|[#\2](https://github.com/\1/pull/\2)|g' | sed -E 's|\*\*Full Changelog\*\*: (https://github.com/[^ ]+/compare/[^\s]+)|[Full Changelog](\1)|g' | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' | sed 's/\\n\\n/\\n/g')"
-            echo "EOF"
-          } >> $GITHUB_ENV
-          {
-            echo "MOD_CHANGELOG_TRIMMED_PUBLISH<<EOF"
-            echo "$(echo "$MOD_CHANGELOG" | sed -E 's/@([a-zA-Z0-9_]+)/`\@\1`/g' | sed -E 's|https://github.com/([^ ]+)/pull/([0-9]+)|[#\2](https://github.com/\1/pull/\2)|g' | sed -E 's|\*\*Full Changelog\*\*: (https://github.com/[^ ]+/compare/[^\s]+)|[Full Changelog](\1)|g')"
-            echo "EOF"
-          } >> $GITHUB_ENV
+      - name: Build changelog
+        run: ./gradlew buildChangelog
       - name: Finalize variables
         run: |
           echo "MOD_VERSION_SHORT=${MOD_VERSION%%-*}" >> $GITHUB_ENV
@@ -53,14 +54,6 @@ jobs:
           cat prepared_discord_message.json
 
       # Build the mod and publish it to ModMaven, CurseForge, and Modrinth
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
-        with:
-          java-version: 21
-          cache: gradle
-          distribution: temurin
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew build
       - name: Publish to ModMaven
