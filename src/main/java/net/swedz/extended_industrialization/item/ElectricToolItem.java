@@ -69,7 +69,7 @@ import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.tesseract.neoforge.helper.ColorHelper;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
-import net.swedz.tesseract.neoforge.proxy.ProxyManager;
+import net.swedz.tesseract.neoforge.proxy.Proxies;
 import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 
@@ -463,7 +463,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			{
 				float speed = getToolSpeed(stack) * SPEED_MULTIPLIER;
 				
-				Optional<Player> player = ProxyManager.get(TesseractProxy.class).findUserWithItem(EquipmentSlot.MAINHAND, stack);
+				Optional<Player> player = Proxies.get(TesseractProxy.class).findUserWithItem(EquipmentSlot.MAINHAND, stack);
 				if(player.isPresent() && this.should3By3(stack, player.get()))
 				{
 					speed /= 4;
