@@ -73,7 +73,7 @@ public final class NanoSuitSpeedAbility implements NanoSuitAbility
 	@Override
 	public void tick(NanoSuitArmorItem item, LivingEntity entity, EquipmentSlot slot, ItemStack stack)
 	{
-		if(item.isActivated(stack))
+		if(item.getStoredEnergy(stack) > 0 && item.isActivated(stack))
 		{
 			item.tryUseEnergy(stack, ENERGY_COST);
 		}
