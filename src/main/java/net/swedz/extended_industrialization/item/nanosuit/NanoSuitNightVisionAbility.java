@@ -77,7 +77,7 @@ public final class NanoSuitNightVisionAbility implements NanoSuitAbility
 	{
 		if(item.isActivated(stack))
 		{
-			if(item.getStoredEnergy(stack) > 0)
+			if(item.hasEnergy(stack))
 			{
 				item.tryUseEnergy(stack, ENERGY_COST);
 				this.maybeAddNightVision(entity);

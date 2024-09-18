@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "extended_industrialization:item/quantum_nano_boots",
+    "layer1": "extended_industrialization:item/quantum_nano_boots_overlay"
+  }
+}

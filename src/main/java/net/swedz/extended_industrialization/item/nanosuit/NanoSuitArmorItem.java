@@ -4,13 +4,19 @@ import aztech.modern_industrialization.api.energy.CableTier;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIArmorMaterials;
 import net.swedz.extended_industrialization.item.ElectricArmorItem;
 import net.swedz.extended_industrialization.item.ToggleableItem;
@@ -22,6 +28,7 @@ import net.swedz.tesseract.neoforge.item.ItemHurtHandler;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorTickHandler, ArmorUnequippedHandler, ItemHurtHandler, ToggleableItem, DynamicDyedItem
 {
@@ -29,8 +36,12 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	private static final long DAMAGE_ENERGY           = 1024;
 	
 	private final Optional<NanoSuitAbility> ability;
+	private final boolean                   quantum;
 	
-	public NanoSuitArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties, Optional<NanoSuitAbility> ability)
+	public NanoSuitArmorItem(
+			Holder<ArmorMaterial> material, Type type, Properties properties,
+			Optional<NanoSuitAbility> ability, boolean quantum
+	)
 	{
 		super(
 				material, type, properties,
@@ -42,6 +53,7 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 			throw new IllegalArgumentException("Mismatching armor type for item and ability");
 		}
 		this.ability = ability;
+		this.quantum = quantum;
 	}
 	
 	public Optional<NanoSuitAbility> ability()
@@ -54,6 +66,29 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 		return ability.filter((a) -> abilityClass.isAssignableFrom(a.getClass())).isPresent();
 	}
 	
+	public boolean isQuantum()
+	{
+		return quantum;
+	}
+	
+	@Override
+	public boolean isBarVisible(ItemStack stack)
+	{
+		return !quantum && super.isBarVisible(stack);
+	}
+	
+	@Override
+	public long getEnergyCapacity(ItemStack stack)
+	{
+		return quantum ? 0 : super.getEnergyCapacity(stack);
+	}
+	
+	@Override
+	public boolean hasEnergy(ItemStack stack)
+	{
+		return quantum || super.hasEnergy(stack);
+	}
+	
 	@Override
 	public ItemAttributeModifiers getModifiedDefaultAttributeModifiers(ItemStack stack, ItemAttributeModifiers modifiers)
 	{
@@ -61,6 +96,18 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 		{
 			NanoSuitAbility ability = this.ability.get();
 			modifiers = ability.getModifiedDefaultAttributeModifiers(this, stack, modifiers);
+		}
+		if(quantum && type == Type.CHESTPLATE)
+		{
+			modifiers = modifiers.withModifierAdded(
+					NeoForgeMod.CREATIVE_FLIGHT,
+					new AttributeModifier(
+							EI.id("quantum_nano"),
+							1,
+							AttributeModifier.Operation.ADD_VALUE
+					),
+					EquipmentSlotGroup.CHEST
+			);
 		}
 		return modifiers;
 	}
@@ -124,5 +171,31 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	{
 		ability.flatMap((a) -> a.getTooltipLines(this, stack))
 				.ifPresent(tooltip::addAll);
+	}
+	
+	private static boolean shouldPreventDamage(LivingEntity entity)
+	{
+		int parts = 0;
+		for(EquipmentSlot slot : EquipmentSlot.values())
+		{
+			if(slot.isArmor() &&
+			   entity.getItemBySlot(slot).getItem() instanceof NanoSuitArmorItem item &&
+			   item.isQuantum())
+			{
+				parts++;
+			}
+		}
+		return parts == 4 || ThreadLocalRandom.current().nextDouble() < parts / 4D;
+	}
+	
+	static
+	{
+		NeoForge.EVENT_BUS.addListener(LivingIncomingDamageEvent.class, (event) ->
+		{
+			if(shouldPreventDamage(event.getEntity()))
+			{
+				event.setCanceled(true);
+			}
+		});
 	}
 }

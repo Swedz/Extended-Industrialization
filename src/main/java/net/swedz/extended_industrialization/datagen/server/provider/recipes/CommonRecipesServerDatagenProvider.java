@@ -244,6 +244,43 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 						.addItemOutput(MIItem.GRAVICHESTPLATE, 1),
 				output
 		);
+		
+		addMachineRecipe(
+				"tool", "nano_suit_helmet_quantum_upgrade", MIMachineRecipeTypes.PACKER,
+				1000000, 10 * 20,
+				(b) -> b
+						.addItemInput(EIItems.NANO_HELMET, 1)
+						.addItemInput(MIItem.QUANTUM_UPGRADE, 1)
+						.addItemOutput(EIItems.QUANTUM_NANO_HELMET, 1),
+				output
+		);
+		addMachineRecipe(
+				"tool", "nano_suit_chestplate_quantum_upgrade", MIMachineRecipeTypes.PACKER,
+				1000000, 10 * 20,
+				(b) -> b
+						.addItemInput(EIItems.NANO_CHESTPLATE, 1)
+						.addItemInput(MIItem.QUANTUM_UPGRADE, 1)
+						.addItemOutput(EIItems.QUANTUM_NANO_CHESTPLATE, 1),
+				output
+		);
+		addMachineRecipe(
+				"tool", "nano_suit_leggings_quantum_upgrade", MIMachineRecipeTypes.PACKER,
+				1000000, 10 * 20,
+				(b) -> b
+						.addItemInput(EIItems.NANO_LEGGINGS, 1)
+						.addItemInput(MIItem.QUANTUM_UPGRADE, 1)
+						.addItemOutput(EIItems.QUANTUM_NANO_LEGGINGS, 1),
+				output
+		);
+		addMachineRecipe(
+				"tool", "nano_suit_boots_quantum_upgrade", MIMachineRecipeTypes.PACKER,
+				1000000, 10 * 20,
+				(b) -> b
+						.addItemInput(EIItems.NANO_BOOTS, 1)
+						.addItemInput(MIItem.QUANTUM_UPGRADE, 1)
+						.addItemOutput(EIItems.QUANTUM_NANO_BOOTS, 1),
+				output
+		);
 	}
 	
 	@Override

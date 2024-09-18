@@ -14,6 +14,7 @@ import net.swedz.tesseract.neoforge.helper.ColorHelper;
 
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 public final class EIArmorMaterials
@@ -22,6 +23,7 @@ public final class EIArmorMaterials
 	
 	public static final Holder<ArmorMaterial> NANO                 = createNanoMaterial("nano");
 	public static final Holder<ArmorMaterial> NANO_GRAVICHESTPLATE = createNanoMaterial("nano_gravichestplate");
+	public static final Holder<ArmorMaterial> QUANTUM_NANO         = createNanoMaterial("quantum_nano", true);
 	
 	public static final int NANO_COLOR                 = ColorHelper.getVibrantColor(DyeColor.LIME);
 	public static final int NANO_GRAVICHESTPLATE_COLOR = ColorHelper.getVibrantColor(DyeColor.LIGHT_BLUE);
@@ -36,12 +38,12 @@ public final class EIArmorMaterials
 		return MATERIALS.register(name, creator);
 	}
 	
-	private static Holder<ArmorMaterial> createNanoMaterial(String name)
+	private static Holder<ArmorMaterial> createNanoMaterial(String name, boolean quantum)
 	{
 		return create(
 				name,
 				(id) -> new ArmorMaterial(
-						Util.make(new EnumMap<>(ArmorItem.Type.class), (map) ->
+						quantum ? Map.of() : Util.make(new EnumMap<>(ArmorItem.Type.class), (map) ->
 						{
 							for(ArmorItem.Type type : ArmorItem.Type.values())
 							{
@@ -58,9 +60,14 @@ public final class EIArmorMaterials
 								new ArmorMaterial.Layer(id, "", true),
 								new ArmorMaterial.Layer(id, "_overlay", false)
 						),
-						3,
+						quantum ? 0 : 3,
 						0.1f
 				)
 		);
+	}
+	
+	private static Holder<ArmorMaterial> createNanoMaterial(String name)
+	{
+		return createNanoMaterial(name, false);
 	}
 }
