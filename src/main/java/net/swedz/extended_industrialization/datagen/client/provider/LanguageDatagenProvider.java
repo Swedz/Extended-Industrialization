@@ -43,7 +43,7 @@ public final class LanguageDatagenProvider extends LanguageProvider
 			this.add(keybind.descriptionId(), keybind.englishName());
 		}
 		
-		EITags.tagNames().forEach(this::add);
+		EITags.translations().forEach(this::add);
 		
 		MIDatagenHooks.Client.withLanguageHook(this, EI.ID);
 		

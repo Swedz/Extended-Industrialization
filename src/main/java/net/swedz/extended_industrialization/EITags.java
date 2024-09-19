@@ -12,11 +12,11 @@ import java.util.Map;
 
 public final class EITags
 {
-	private static final Map<TagKey<Item>, String> TAG_NAMES = Maps.newHashMap();
+	private static final Map<TagKey<Item>, String> TRANSLATIONS = Maps.newHashMap();
 	
-	public static Map<TagKey<Item>, String> tagNames()
+	public static Map<TagKey<Item>, String> translations()
 	{
-		return Collections.unmodifiableMap(TAG_NAMES);
+		return Collections.unmodifiableMap(TRANSLATIONS);
 	}
 	
 	public static final class Items
@@ -37,7 +37,7 @@ public final class EITags
 	public static TagKey<Item> item(String path, String englishName)
 	{
 		TagKey<Item> tag = TagKey.create(BuiltInRegistries.ITEM.key(), EI.id(path));
-		TAG_NAMES.put(tag, englishName);
+		TRANSLATIONS.put(tag, englishName);
 		return tag;
 	}
 	
