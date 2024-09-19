@@ -177,7 +177,7 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	}
 	
 	@Override
-	public void addAttributeTooltipsPre(ItemStack stack, EquipmentSlotGroup slotGroup, Consumer<Component> tooltipAdder)
+	public void appendAttributeTooltipsPre(ItemStack stack, EquipmentSlotGroup slotGroup, Consumer<Component> tooltipAdder)
 	{
 		if(quantum && slotGroup == EquipmentSlotGroup.bySlot(this.getEquipmentSlot()))
 		{
