@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.item.nanosuit;
 
 import aztech.modern_industrialization.api.energy.CableTier;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -24,13 +25,15 @@ import net.swedz.tesseract.neoforge.helper.ColorHelper;
 import net.swedz.tesseract.neoforge.item.ArmorTickHandler;
 import net.swedz.tesseract.neoforge.item.ArmorUnequippedHandler;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
+import net.swedz.tesseract.neoforge.item.ExtraAttributeTooltipsHandler;
 import net.swedz.tesseract.neoforge.item.ItemHurtHandler;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
 
-public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorTickHandler, ArmorUnequippedHandler, ItemHurtHandler, ToggleableItem, DynamicDyedItem
+public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorTickHandler, ArmorUnequippedHandler, ItemHurtHandler, ToggleableItem, DynamicDyedItem, ExtraAttributeTooltipsHandler
 {
 	private static final long DEFAULT_ENERGY_CAPACITY = 60 * 20 * CableTier.MV.getMaxTransfer();
 	private static final long DAMAGE_ENERGY           = 1024;
@@ -171,6 +174,17 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	{
 		ability.flatMap((a) -> a.getTooltipLines(this, stack))
 				.ifPresent(tooltip::addAll);
+	}
+	
+	@Override
+	public void addAttributeTooltipsPre(ItemStack stack, EquipmentSlotGroup slotGroup, Consumer<Component> tooltipAdder)
+	{
+		if(quantum && slotGroup == EquipmentSlotGroup.bySlot(this.getEquipmentSlot()))
+		{
+			String oneQuarterInfinity = " \u00B9\u2044\u2084 |\u221E> + \u00B3\u2044\u2084 |0>";
+			tooltipAdder.accept(Component.translatable("attribute.modifier.plus.0", oneQuarterInfinity, Component.translatable("attribute.name.generic.armor"))
+					.withStyle(ChatFormatting.BLUE));
+		}
 	}
 	
 	private static boolean shouldPreventDamage(LivingEntity entity)
