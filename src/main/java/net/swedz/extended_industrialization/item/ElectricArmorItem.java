@@ -66,6 +66,11 @@ public class ElectricArmorItem extends ArmorItem implements ISimpleEnergyItem, I
 		return energyCapacity;
 	}
 	
+	public boolean hasEnergy(ItemStack stack)
+	{
+		return this.getStoredEnergy(stack) > 0;
+	}
+	
 	@Override
 	public boolean isBarVisible(ItemStack stack)
 	{

@@ -53,7 +53,7 @@ public final class NanoSuitGravichestplateAbility implements NanoSuitAbility
 	@Override
 	public ItemAttributeModifiers getModifiedDefaultAttributeModifiers(NanoSuitArmorItem item, ItemStack stack, ItemAttributeModifiers modifiers)
 	{
-		if(item.getStoredEnergy(stack) > 0 && item.isActivated(stack))
+		if(item.hasEnergy(stack) && item.isActivated(stack))
 		{
 			modifiers = modifiers.withModifierAdded(
 					NeoForgeMod.CREATIVE_FLIGHT,
@@ -87,7 +87,9 @@ public final class NanoSuitGravichestplateAbility implements NanoSuitAbility
 	@Override
 	public void tick(NanoSuitArmorItem item, LivingEntity entity, EquipmentSlot slot, ItemStack stack)
 	{
-		if(entity instanceof Player player && item.isActivated(stack) && player.getAbilities().flying)
+		if(entity instanceof Player player &&
+		   item.hasEnergy(stack) && item.isActivated(stack) &&
+		   player.getAbilities().flying)
 		{
 			item.tryUseEnergy(stack, ENERGY_COST);
 		}
