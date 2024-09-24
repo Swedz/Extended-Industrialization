@@ -9,6 +9,7 @@ import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBlo
 import aztech.modern_industrialization.machines.multiblocks.MultiblockTankBER;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -24,14 +25,16 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.swedz.extended_industrialization.client.MachineChainerHighlightRenderer;
 import net.swedz.extended_industrialization.client.NanoGravichestplateHudRenderer;
+import net.swedz.extended_industrialization.client.model.chainer.MachineChainerBlockEntityRenderer;
+import net.swedz.extended_industrialization.client.model.chainer.MachineChainerUnbakedModel;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.machineconfig.MachineConfigCardItem;
@@ -94,9 +97,12 @@ public final class EIClient
 		);
 	}
 	
-	/**
-	 * Taken from {@link aztech.modern_industrialization.MIClient#registerBlockEntityRenderers(FMLClientSetupEvent)}. This is needed to make multiblocks render their layout when holding a wrench.
-	 */
+	@SubscribeEvent
+	private static void registerModelLoaders(ModelEvent.RegisterGeometryLoaders event)
+	{
+		event.register(MachineChainerUnbakedModel.LOADER_ID, MachineChainerUnbakedModel.LOADER);
+	}
+	
 	@SubscribeEvent
 	private static void registerBlockEntityRenderers(FMLClientSetupEvent event)
 	{
@@ -107,22 +113,14 @@ public final class EIClient
 				MachineBlockEntity blockEntity = machine.getBlockEntityInstance();
 				BlockEntityType type = blockEntity.getType();
 				
-				if(blockEntity instanceof LargeTankMultiblockBlockEntity)
+				BlockEntityRendererProvider provider = switch (blockEntity)
 				{
-					BlockEntityRenderers.register(type, MultiblockTankBER::new);
-				}
-				else if(blockEntity instanceof MultiblockMachineBlockEntity)
-				{
-					BlockEntityRenderers.register(type, MultiblockMachineBER::new);
-				}
-				else if(blockEntity instanceof MachineChainerMachineBlockEntity)
-				{
-					BlockEntityRenderers.register(type, MachineChainerHighlightRenderer::new);
-				}
-				else
-				{
-					BlockEntityRenderers.register(type, (c) -> new MachineBlockEntityRenderer<>(c));
-				}
+					case LargeTankMultiblockBlockEntity be -> MultiblockTankBER::new;
+					case MachineChainerMachineBlockEntity be -> MachineChainerBlockEntityRenderer::new;
+					case MultiblockMachineBlockEntity be -> MultiblockMachineBER::new;
+					default -> MachineBlockEntityRenderer::new;
+				};
+				BlockEntityRenderers.register(type, provider);
 			}
 		}
 	}
