@@ -1,5 +1,5 @@
 {
-    "casing": "mv",
+    "casing": "modern_industrialization:mv",
     "default_overlays": {
         "front": "extended_industrialization:block/machines/machine_chainer/overlay_front",
         "up": "extended_industrialization:block/machines/machine_chainer/overlay_arrow_up",

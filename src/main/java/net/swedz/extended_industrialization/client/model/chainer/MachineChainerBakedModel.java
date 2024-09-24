@@ -4,6 +4,7 @@ import aztech.modern_industrialization.machines.models.MachineBakedModel;
 import aztech.modern_industrialization.machines.models.MachineCasing;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Map;
 
@@ -11,7 +12,7 @@ public final class MachineChainerBakedModel extends MachineBakedModel
 {
 	public MachineChainerBakedModel(MachineCasing baseCasing,
 									int[] outputOverlayIndexes, TextureAtlasSprite[] defaultOverlays,
-									Map<String, TextureAtlasSprite[]> tieredOverlays)
+									Map<ResourceLocation, TextureAtlasSprite[]> tieredOverlays)
 	{
 		super(baseCasing, outputOverlayIndexes, defaultOverlays, tieredOverlays);
 	}
