@@ -157,21 +157,32 @@ public final class MachineChainerHighlightRenderer extends ModularMachineBlockEn
 		Direction playerDirectionRight = playerDirection.getClockWise();
 		
 		String arrow = "";
-		if(playerDirection == machineDirection)
+		if(renderDirection != machineDirection && renderDirection != machineDirection.getOpposite())
 		{
-			arrow = renderDirection == Direction.DOWN ? ARROW_DOWN : ARROW_UP;
-		}
-		else if(playerDirection == machineDirection.getOpposite())
-		{
-			arrow = renderDirection == Direction.DOWN ? ARROW_UP : ARROW_DOWN;
-		}
-		else if(playerDirectionLeft == machineDirection)
-		{
-			arrow = ARROW_LEFT;
-		}
-		else if(playerDirectionRight == machineDirection)
-		{
-			arrow = ARROW_RIGHT;
+			if(playerDirection == machineDirection)
+			{
+				arrow = renderDirection == Direction.DOWN ? ARROW_DOWN : ARROW_UP;
+			}
+			else if(playerDirection == machineDirection.getOpposite())
+			{
+				arrow = renderDirection == Direction.DOWN ? ARROW_UP : ARROW_DOWN;
+			}
+			else if(playerDirectionLeft == machineDirection)
+			{
+				arrow = ARROW_LEFT;
+			}
+			else if(playerDirectionRight == machineDirection)
+			{
+				arrow = ARROW_RIGHT;
+			}
+			else if(machineDirection == Direction.UP)
+			{
+				arrow = ARROW_UP;
+			}
+			else if(machineDirection == Direction.DOWN)
+			{
+				arrow = ARROW_DOWN;
+			}
 		}
 		return arrow;
 	}
