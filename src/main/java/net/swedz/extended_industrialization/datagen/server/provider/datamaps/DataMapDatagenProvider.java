@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.datagen.server.provider.datamaps;
 
 import aztech.modern_industrialization.MI;
+import aztech.modern_industrialization.api.energy.CableTier;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -12,6 +13,7 @@ import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.datamap.FarmerSimpleTallCropSize;
 import net.swedz.extended_industrialization.datamap.FertilizerPotency;
 import net.swedz.extended_industrialization.datamap.LargeElectricFurnaceTier;
+import net.swedz.extended_industrialization.datamap.TeslaTowerTierData;
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
 
 public final class DataMapDatagenProvider extends DataMapProvider
@@ -33,6 +35,8 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		
 		this.addLargeElectricFurnaceTier(MI.id("cupronickel_coil"), 8, 0.75f);
 		this.addLargeElectricFurnaceTier(MI.id("kanthal_coil"), 32, 0.75f);
+		
+		this.addTeslaTowerTier(MI.id("cupronickel_coil"), CableTier.LV);
 	}
 	
 	private void addFarmerSimpleTallCropSize(ResourceLocation block, int maxHeight)
@@ -53,6 +57,11 @@ public final class DataMapDatagenProvider extends DataMapProvider
 	private void addLargeElectricFurnaceTier(ResourceLocation block, int batchSize, float euCostMultiplier)
 	{
 		this.builder(EIDataMaps.LARGE_ELECTRIC_FURNACE_TIER).add(block, new LargeElectricFurnaceTier(batchSize, euCostMultiplier), false);
+	}
+	
+	private void addTeslaTowerTier(ResourceLocation block, CableTier cableTier)
+	{
+		this.builder(EIDataMaps.TESLA_TOWER_TIER).add(block, new TeslaTowerTierData(cableTier), false);
 	}
 	
 	@Override

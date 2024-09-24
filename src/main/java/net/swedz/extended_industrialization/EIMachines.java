@@ -36,6 +36,7 @@ import net.swedz.extended_industrialization.machines.blockentity.multiblock.Larg
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.ProcessingArrayBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer.SteamFarmerBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.wastecollector.WasteCollectorBehavior;
 import net.swedz.extended_industrialization.machines.recipe.BreweryMachineRecipeType;
@@ -215,6 +216,12 @@ public final class EIMachines
 			ReiMachineRecipes.registerWorkstation(MI.id("steel_macerator"), EI.id("large_electric_macerator"));
 			ReiMachineRecipes.registerWorkstation(MI.id("electric_macerator"), EI.id("large_electric_macerator"));
 		}
+		
+		hook.register(
+				"Tesla Tower", "tesla_tower", "tesla_tower",
+				CLEAN_STAINLESS_STEEL, true, false, false,
+				TeslaTowerBlockEntity::new
+		);
 	}
 	
 	public static void singleBlockCrafting(SingleBlockCraftingMachinesMIHookContext hook)
