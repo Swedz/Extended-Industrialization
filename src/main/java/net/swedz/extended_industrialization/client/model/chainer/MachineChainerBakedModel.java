@@ -1,13 +1,13 @@
 package net.swedz.extended_industrialization.client.model.chainer;
 
+import aztech.modern_industrialization.machines.models.MachineBakedModel;
 import aztech.modern_industrialization.machines.models.MachineCasing;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
-import net.swedz.extended_industrialization.client.model.ModularMachineBakedModel;
 
 import java.util.Map;
 
-public final class MachineChainerBakedModel extends ModularMachineBakedModel
+public final class MachineChainerBakedModel extends MachineBakedModel
 {
 	public MachineChainerBakedModel(MachineCasing baseCasing,
 									int[] outputOverlayIndexes, TextureAtlasSprite[] defaultOverlays,

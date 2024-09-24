@@ -4,6 +4,7 @@ import aztech.modern_industrialization.machines.MachineBlock;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.MachineBlockEntityRenderer;
 import aztech.modern_industrialization.machines.blockentities.multiblocks.LargeTankMultiblockBlockEntity;
+import aztech.modern_industrialization.machines.models.MachineUnbakedModel;
 import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBER;
 import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.MultiblockTankBER;
@@ -35,7 +36,6 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.swedz.extended_industrialization.client.MachineChainerHighlightRenderer;
 import net.swedz.extended_industrialization.client.NanoGravichestplateHudRenderer;
-import net.swedz.extended_industrialization.client.model.ModularMachineUnbakedModel;
 import net.swedz.extended_industrialization.client.model.chainer.MachineChainerBakedModel;
 import net.swedz.extended_industrialization.client.model.chainer.MachineChainerOverlaysJson;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
@@ -104,7 +104,7 @@ public final class EIClient
 	private static void registerModelLoaders(ModelEvent.RegisterGeometryLoaders event)
 	{
 		event.register(EI.id("machine_chainer"), (IGeometryLoader) (json, context) ->
-				new ModularMachineUnbakedModel<>(MachineChainerOverlaysJson.class, MachineChainerBakedModel::new, json));
+				new MachineUnbakedModel(MachineChainerOverlaysJson.class, MachineChainerBakedModel::new, json));
 	}
 	
 	@SubscribeEvent

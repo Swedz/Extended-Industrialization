@@ -1,10 +1,10 @@
 package net.swedz.extended_industrialization.client.model.chainer;
 
+import aztech.modern_industrialization.machines.models.MachineOverlaysJson;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
-import net.swedz.extended_industrialization.client.model.ModularOverlaysJson;
 
-public final class MachineChainerOverlaysJson implements ModularOverlaysJson
+public final class MachineChainerOverlaysJson implements MachineOverlaysJson
 {
 	private ResourceLocation front;
 	private ResourceLocation back;
