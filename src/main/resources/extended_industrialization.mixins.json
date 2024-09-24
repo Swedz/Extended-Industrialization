@@ -9,6 +9,7 @@
         "RemoveRainbowWhenDyeingMixin",
         "mi.accessor.CasingComponentAccessor",
         "mi.accessor.ConfigurableItemStackAccessor",
+        "mi.accessor.MachineModelDataAccessor",
         "mi.accessor.RedstoneControlComponentAccessor",
         "mi.accessor.UpgradeComponentAccessor"
     ],

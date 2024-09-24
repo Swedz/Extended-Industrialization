@@ -30,11 +30,14 @@ import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactori
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.swedz.extended_industrialization.client.MachineChainerHighlightRenderer;
 import net.swedz.extended_industrialization.client.NanoGravichestplateHudRenderer;
-import net.swedz.extended_industrialization.client.model.chainer.MachineChainerBlockEntityRenderer;
-import net.swedz.extended_industrialization.client.model.chainer.MachineChainerUnbakedModel;
+import net.swedz.extended_industrialization.client.model.ModularMachineUnbakedModel;
+import net.swedz.extended_industrialization.client.model.chainer.MachineChainerBakedModel;
+import net.swedz.extended_industrialization.client.model.chainer.MachineChainerOverlaysJson;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.machineconfig.MachineConfigCardItem;
@@ -100,7 +103,8 @@ public final class EIClient
 	@SubscribeEvent
 	private static void registerModelLoaders(ModelEvent.RegisterGeometryLoaders event)
 	{
-		event.register(MachineChainerUnbakedModel.LOADER_ID, MachineChainerUnbakedModel.LOADER);
+		event.register(EI.id("machine_chainer"), (IGeometryLoader) (json, context) ->
+				new ModularMachineUnbakedModel<>(MachineChainerOverlaysJson.class, MachineChainerBakedModel::new, json));
 	}
 	
 	@SubscribeEvent
@@ -115,8 +119,8 @@ public final class EIClient
 				
 				BlockEntityRendererProvider provider = switch (blockEntity)
 				{
+					case MachineChainerMachineBlockEntity be -> MachineChainerHighlightRenderer::new;
 					case LargeTankMultiblockBlockEntity be -> MultiblockTankBER::new;
-					case MachineChainerMachineBlockEntity be -> MachineChainerBlockEntityRenderer::new;
 					case MultiblockMachineBlockEntity be -> MultiblockMachineBER::new;
 					default -> MachineBlockEntityRenderer::new;
 				};

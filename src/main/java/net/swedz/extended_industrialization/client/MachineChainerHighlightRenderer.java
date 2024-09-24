@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.client;
 
 import aztech.modern_industrialization.MITags;
-import aztech.modern_industrialization.machines.MachineBlockEntityRenderer;
 import aztech.modern_industrialization.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -14,10 +13,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.swedz.extended_industrialization.client.model.ModularMachineBlockEntityRenderer;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 
-public final class MachineChainerHighlightRenderer extends MachineBlockEntityRenderer<MachineChainerMachineBlockEntity>
+public final class MachineChainerHighlightRenderer extends ModularMachineBlockEntityRenderer<MachineChainerMachineBlockEntity>
 {
 	private static final int COLOR_SUCCESS = 0x6FFF6F;
 	private static final int COLOR_FAILURE = 0xFF6F6F;

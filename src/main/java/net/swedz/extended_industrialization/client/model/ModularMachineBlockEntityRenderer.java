@@ -1,7 +1,8 @@
-package net.swedz.extended_industrialization.client.model.chainer;
+package net.swedz.extended_industrialization.client.model;
 
 import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.compat.sodium.SodiumCompat;
+import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.models.MachineCasing;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.ModelHelper;
@@ -19,37 +20,39 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
-import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
+import net.swedz.extended_industrialization.mixin.mi.accessor.MachineModelDataAccessor;
 
 import java.util.IdentityHashMap;
 
-public class MachineChainerBlockEntityRenderer implements BlockEntityRenderer<MachineChainerMachineBlockEntity>
+public class ModularMachineBlockEntityRenderer<T extends MachineBlockEntity> implements BlockEntityRenderer<T>
 {
-	private final        BlockModelShaper                         blockModels;
-	private              BlockState                               lastBlockState = null;
-	private              MachineChainerBakedModel                 model          = null;
-	private final        IdentityHashMap<MachineCasing, Object[]> quadCache      = new IdentityHashMap<>();
-	private static final Object                                   NO_QUAD        = new Object();
+	private static final Object NO_QUAD = new Object();
 	
-	public MachineChainerBlockEntityRenderer(BlockEntityRendererProvider.Context ctx)
+	private final BlockModelShaper                         blockModels;
+	private final IdentityHashMap<MachineCasing, Object[]> quadCache = new IdentityHashMap<>();
+	
+	private BlockState               lastBlockState = null;
+	private ModularMachineBakedModel model          = null;
+	
+	public ModularMachineBlockEntityRenderer(BlockEntityRendererProvider.Context ctx)
 	{
 		this.blockModels = ctx.getBlockRenderDispatcher().getBlockModelShaper();
 	}
 	
-	private BakedQuad getCachedQuad(MachineModelClientData data, Direction d)
+	private BakedQuad getCachedQuad(MachineModelClientData data, Direction direction)
 	{
-		var facing = data.frontDirection;
-		int cachedQuadIndex = facing.ordinal() * 6 + d.ordinal();
-		var casing = data.casing;
-		var cachedQuads = quadCache.computeIfAbsent(casing, c -> new Object[36]);
+		Direction facing = data.frontDirection;
+		int cachedQuadIndex = facing.ordinal() * 6 + direction.ordinal();
+		MachineCasing casing = data.casing;
+		Object[] cachedQuads = quadCache.computeIfAbsent(casing, c -> new Object[36]);
 		
 		if(cachedQuads[cachedQuadIndex] == null)
 		{
-			TextureAtlasSprite sprite = model == null ? null : MachineChainerBakedModel.getSprite(model.getSprites(casing), d, facing, true);
+			TextureAtlasSprite sprite = model == null ? null : model.getSprite(model.getSprites(casing), direction, facing, true);
 			if(sprite != null)
 			{
-				var vc = new QuadBakingVertexConsumer();
-				cachedQuads[cachedQuadIndex] = ModelHelper.bakeSprite(vc, d, sprite, -2 * MachineChainerBakedModel.Z_OFFSET);
+				QuadBakingVertexConsumer vc = new QuadBakingVertexConsumer();
+				cachedQuads[cachedQuadIndex] = ModelHelper.bakeSprite(vc, direction, sprite, -2 * ModularMachineBakedModel.Z_OFFSET);
 			}
 			else
 			{
@@ -57,25 +60,25 @@ public class MachineChainerBlockEntityRenderer implements BlockEntityRenderer<Ma
 			}
 		}
 		
-		var quad = cachedQuads[cachedQuadIndex];
+		Object quad = cachedQuads[cachedQuadIndex];
 		return quad == NO_QUAD ? null : (BakedQuad) quad;
 	}
 	
-	private MachineChainerBakedModel getMachineModel(BlockState state)
+	private ModularMachineBakedModel getMachineModel(BlockState state)
 	{
-		if(blockModels.getBlockModel(state) instanceof MachineChainerBakedModel mbm)
+		if(blockModels.getBlockModel(state) instanceof ModularMachineBakedModel mbm)
 		{
 			return mbm;
 		}
 		else
 		{
-			MI.LOGGER.warn("Model {} should have been a MachineChainerBakedModel, but was {}", state, blockModels.getBlockModel(state).getClass());
+			MI.LOGGER.warn("Model {} should have been a ModularMachineBakedModel, but was {}", state, blockModels.getBlockModel(state).getClass());
 			return null;
 		}
 	}
 	
 	@Override
-	public void render(MachineChainerMachineBlockEntity entity, float tickDelta, PoseStack matrices, MultiBufferSource vcp, int light, int overlay)
+	public void render(T entity, float tickDelta, PoseStack matrices, MultiBufferSource vcp, int light, int overlay)
 	{
 		BlockState state = entity.getBlockState();
 		if(lastBlockState == null)
@@ -85,11 +88,10 @@ public class MachineChainerBlockEntityRenderer implements BlockEntityRenderer<Ma
 		}
 		else if(lastBlockState != state)
 		{
-			// Sanity check.
 			throw new IllegalStateException("Tried to use the same machine BER with two block states: " + state + " and " + lastBlockState);
 		}
 		
-		MachineModelClientData data = entity.getMachineModelData();
+		MachineModelClientData data = ((MachineModelDataAccessor) entity).getMachineModelData();
 		if(data.isActive)
 		{
 			VertexConsumer vc = vcp.getBuffer(Sheets.cutoutBlockSheet());
