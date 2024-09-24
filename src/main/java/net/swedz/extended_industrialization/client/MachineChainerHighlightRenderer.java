@@ -130,20 +130,40 @@ public final class MachineChainerHighlightRenderer extends ModularMachineBlockEn
 	
 	private Direction pickNumberRenderFace(MachineChainerMachineBlockEntity machine)
 	{
-		int playerY = Minecraft.getInstance().player.blockPosition().getY();
-		int machineY = machine.getBlockPos().getY();
+		int playerY = (int) Math.round(Minecraft.getInstance().player.getY());
 		
-		if(playerY == machineY || playerY == machineY - 1)
+		Direction machineDirection = machine.orientation.facingDirection;
+		if(machineDirection.getAxis().isHorizontal())
 		{
-			return Direction.fromYRot(Minecraft.getInstance().player.yHeadRot).getOpposite();
-		}
-		else if(playerY < machineY)
-		{
-			return Direction.DOWN;
+			int machineY = machine.getBlockPos().getY();
+			
+			if(playerY == machineY || playerY == machineY - 1)
+			{
+				return Direction.fromYRot(Minecraft.getInstance().player.yHeadRot).getOpposite();
+			}
+			else if(playerY < machineY)
+			{
+				return Direction.DOWN;
+			}
+			else
+			{
+				return Direction.UP;
+			}
 		}
 		else
 		{
-			return Direction.UP;
+			int machineEndY = machine.getChainerComponent().links().positionAfter().getY();
+			
+			if(machineDirection == Direction.UP && playerY >= machineEndY)
+			{
+				return Direction.UP;
+			}
+			else if(machineDirection == Direction.DOWN && playerY < machineEndY)
+			{
+				return Direction.DOWN;
+			}
+			
+			return Direction.fromYRot(Minecraft.getInstance().player.yHeadRot).getOpposite();
 		}
 	}
 	
