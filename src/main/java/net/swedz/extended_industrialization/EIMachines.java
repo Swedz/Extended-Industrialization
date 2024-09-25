@@ -27,6 +27,7 @@ import net.swedz.extended_industrialization.machines.blockentity.LargeConfigurab
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.SolarBoilerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.SolarPanelMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.TeslaReceiverMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.UniversalTransformerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.brewery.ElectricBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.brewery.SteamBreweryMachineBlockEntity;
@@ -405,6 +406,13 @@ public final class EIMachines
 				Casings.LARGE_STEEL_CRATE, false, false, false, false,
 				LargeConfigurableChestMachineBlockEntity::new,
 				MachineBlockEntity::registerItemApi
+		);
+		
+		hook.register(
+				"Tesla Receiver", "tesla_receiver", "tesla_receiver",
+				CableTier.LV.casing, false, true, true, true,
+				TeslaReceiverMachineBlockEntity::new,
+				TeslaReceiverMachineBlockEntity::registerEnergyApi
 		);
 	}
 }

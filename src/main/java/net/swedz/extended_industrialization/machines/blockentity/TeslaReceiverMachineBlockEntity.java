@@ -1,9 +1,7 @@
 package net.swedz.extended_industrialization.machines.blockentity;
 
 import aztech.modern_industrialization.MICapabilities;
-import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
-import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
@@ -13,79 +11,57 @@ import aztech.modern_industrialization.machines.components.RedstoneControlCompon
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
+import com.google.common.collect.Lists;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.machines.component.TeslaNetworkComponent;
-import net.swedz.extended_industrialization.mixin.mi.accessor.CasingComponentAccessor;
-import net.swedz.tesseract.neoforge.helper.transfer.InputOutputDirectionalBlockCapabilityCache;
+import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
+import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverComponent;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine;
 
-import java.util.Optional;
+import java.util.List;
 
-public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity
+import static net.swedz.extended_industrialization.EITooltips.*;
+
+public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity implements TeslaReceiver.Delegate
 {
 	private final RedstoneControlComponent redstoneControl;
 	private final CasingComponent          casing;
 	
-	private final InputOutputDirectionalBlockCapabilityCache<MIEnergyStorage> energyOutputCache;
-	private final MIEnergyStorage                                             insertable;
-	
-	private final TeslaNetworkComponent teslaNetwork;
+	private final TeslaReceiverComponent teslaNetwork;
 	
 	public TeslaReceiverMachineBlockEntity(BEP bep)
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder(EI.id("tesla_receiver"), true).backgroundHeight(180).build(),
+				new MachineGuiParameters.Builder(EI.id("tesla_receiver"), false).backgroundHeight(175).build(),
 				new OrientationComponent.Params(true, false, false)
 		);
 		
 		redstoneControl = new RedstoneControlComponent();
 		casing = new CasingComponent();
 		
-		energyOutputCache = new InputOutputDirectionalBlockCapabilityCache<>(EnergyApi.SIDED);
-		insertable = new MIEnergyStorage.NoExtract()
-		{
-			@Override
-			public boolean canConnect(CableTier cableTier)
-			{
-				return false;
-			}
-			
-			@Override
-			public long receive(long maxReceive, boolean simulate)
-			{
-				if(!redstoneControl.doAllowNormalOperation(TeslaReceiverMachineBlockEntity.this))
-				{
-					return 0;
-				}
-				MIEnergyStorage target = energyOutputCache.output(level, worldPosition, orientation.outputDirection);
-				return target != null && target.canConnect(((CasingComponentAccessor) casing).getCurrentTier()) ? target.receive(maxReceive, simulate) : 0;
-			}
-			
-			@Override
-			public long getAmount()
-			{
-				MIEnergyStorage target = energyOutputCache.output(level, worldPosition, orientation.outputDirection);
-				return target != null ? target.getAmount() : 0;
-			}
-			
-			@Override
-			public long getCapacity()
-			{
-				MIEnergyStorage target = energyOutputCache.output(level, worldPosition, orientation.outputDirection);
-				return target != null ? target.getCapacity() : 0;
-			}
-			
-			@Override
-			public boolean canReceive()
-			{
-				return redstoneControl.doAllowNormalOperation(TeslaReceiverMachineBlockEntity.this);
-			}
-		};
-		
-		teslaNetwork = new TeslaNetworkComponent(Optional.of(() -> insertable), Optional.empty());
+		teslaNetwork = new TeslaReceiverComponent(this, () -> redstoneControl.doAllowNormalOperation(this), casing);
 		
 		this.registerComponents(redstoneControl, casing, teslaNetwork);
+		
+		this.registerGuiComponent(new ModularMultiblockGui.Server(0, 60, () ->
+		{
+			List<ModularMultiblockGuiLine> text = Lists.newArrayList();
+			
+			if(teslaNetwork.hasNetwork())
+			{
+				text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_LINKED.text(TESLA_NETWORK_KEY_PARSER.parse(teslaNetwork.getNetworkKey()).copy().setStyle(Style.EMPTY))));
+			}
+			else
+			{
+				text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_NO_LINK.text(), 0xFF0000));
+			}
+			
+			return text;
+		}));
 		
 		this.registerGuiComponent(new SlotPanel.Server(this)
 				.withRedstoneControl(redstoneControl)
@@ -101,9 +77,16 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity
 	@Override
 	protected MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData();
+		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
+		// data.isActive = ...; // TODO check if the source is loaded
 		orientation.writeModelData(data);
 		return data;
+	}
+	
+	@Override
+	public TeslaReceiver getDelegateReceiver()
+	{
+		return teslaNetwork;
 	}
 	
 	public static void registerEnergyApi(BlockEntityType<?> bet)
@@ -112,7 +95,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity
 				event.registerBlockEntity(EnergyApi.SIDED, bet, (be, direction) ->
 				{
 					TeslaReceiverMachineBlockEntity machine = (TeslaReceiverMachineBlockEntity) be;
-					return machine.orientation.outputDirection == direction ? null : machine.insertable;
+					return machine.orientation.outputDirection == direction ? null : machine.teslaNetwork.insertable();
 				}));
 	}
 }

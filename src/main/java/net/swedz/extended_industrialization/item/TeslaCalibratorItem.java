@@ -1,6 +1,5 @@
 package net.swedz.extended_industrialization.item;
 
-import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -16,6 +15,7 @@ import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.blockentity.TeslaReceiverMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
+import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkKey;
 
 import java.util.List;
 
@@ -42,13 +42,21 @@ public final class TeslaCalibratorItem extends Item
 			{
 				if(player.isShiftKeyDown() && hitBlockEntity instanceof TeslaTowerBlockEntity)
 				{
-					itemStack.set(EIComponents.SELECTED_POSITION, GlobalPos.of(context.getLevel().dimension(), context.getClickedPos()));
+					itemStack.set(EIComponents.SELECTED_TESLA_NETWORK, new TeslaNetworkKey(context.getLevel(), context.getClickedPos()));
 					player.displayClientMessage(EIText.TESLA_CALIBRATOR_SELECTED.text(), true);
 				}
 				else if(!player.isShiftKeyDown() && hitBlockEntity instanceof TeslaReceiverMachineBlockEntity receiver)
 				{
-					// TODO set pos in receiver
-					player.displayClientMessage(EIText.TESLA_CALIBRATOR_LINK_SUCCESS.text(), true);
+					if(itemStack.has(EIComponents.SELECTED_TESLA_NETWORK))
+					{
+						TeslaNetworkKey key = itemStack.get(EIComponents.SELECTED_TESLA_NETWORK);
+						receiver.setNetwork(key);
+						player.displayClientMessage(EIText.TESLA_CALIBRATOR_LINK_SUCCESS.text(), true);
+					}
+					else
+					{
+						player.displayClientMessage(EIText.TESLA_CALIBRATOR_LINK_FAILED_NO_SELECTION.text(), true);
+					}
 				}
 			}
 			return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
@@ -61,7 +69,7 @@ public final class TeslaCalibratorItem extends Item
 	{
 		if(player.isShiftKeyDown())
 		{
-			player.getItemInHand(usedHand).remove(EIComponents.SELECTED_POSITION);
+			player.getItemInHand(usedHand).remove(EIComponents.SELECTED_TESLA_NETWORK);
 			player.displayClientMessage(EIText.TESLA_CALIBRATOR_CLEAR.text(), true);
 			return InteractionResultHolder.sidedSuccess(player.getItemInHand(usedHand), level.isClientSide());
 		}
@@ -71,10 +79,10 @@ public final class TeslaCalibratorItem extends Item
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag isAdvanced)
 	{
-		if(stack.has(EIComponents.SELECTED_POSITION))
+		if(stack.has(EIComponents.SELECTED_TESLA_NETWORK))
 		{
-			GlobalPos position = stack.get(EIComponents.SELECTED_POSITION);
-			tooltipComponents.add(EIText.TESLA_CALIBRATOR_LINKED.text(GLOBAL_POS_PARSER.parse(position)).withStyle(DEFAULT_STYLE));
+			TeslaNetworkKey key = stack.get(EIComponents.SELECTED_TESLA_NETWORK);
+			tooltipComponents.add(EIText.TESLA_CALIBRATOR_LINKED.text(TESLA_NETWORK_KEY_PARSER.parse(key)).withStyle(DEFAULT_STYLE));
 		}
 	}
 	

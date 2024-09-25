@@ -98,8 +98,11 @@ public enum EIText implements TranslatableTextEnum
 	STEAM_CHAINSAW_3("- Toggle Silk Touch with %s + %s."),
 	TESLA_CALIBRATOR_CLEAR("Cleared link from tesla calibrator."),
 	TESLA_CALIBRATOR_LINKED("Linked to %s"),
+	TESLA_CALIBRATOR_LINK_FAILED_NO_SELECTION("Failed to link receiver because no Tesla Tower is selected."),
 	TESLA_CALIBRATOR_LINK_SUCCESS("Linked receiver to selected Tesla Tower."),
 	TESLA_CALIBRATOR_SELECTED("Selected Tesla Tower for calibration."),
+	TESLA_RECEIVER_LINKED("Linked to %s"),
+	TESLA_RECEIVER_NO_LINK("Not linked to any Tesla Tower"),
 	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Casing for cable tier to convert from (LV by default)."),
 	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default)."),
 	WASTE_COLLECTOR_HELP("When placed underneath animals, manure will be collected.");

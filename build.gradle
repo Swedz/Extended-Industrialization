@@ -274,6 +274,7 @@ neoForge {
 	accessTransformers = [
 			"src/main/resources/${mod_id}.accesstransformer.cfg"
 	]
+	interfaceInjectionData.from "src/main/resources/interfaces.json"
 
 	parchment {
 		mappingsVersion = project.parchment_mappings_version
