@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.util.ExtraCodecs;
@@ -41,6 +42,10 @@ public final class EIComponents
 	public static final Supplier<DataComponentType<RainbowDataComponent>> RAINBOW             = create(
 			"rainbow",
 			(b) -> b.persistent(RainbowDataComponent.CODEC).networkSynchronized(RainbowDataComponent.STREAM_CODEC)
+	);
+	public static final Supplier<DataComponentType<GlobalPos>>            SELECTED_POSITION   = create(
+			"selected_position",
+			(b) -> b.persistent(GlobalPos.CODEC).networkSynchronized(GlobalPos.STREAM_CODEC)
 	);
 	
 	public static void init(IEventBus bus)

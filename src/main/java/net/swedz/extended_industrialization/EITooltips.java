@@ -5,6 +5,7 @@ import aztech.modern_industrialization.api.energy.EnergyApi;
 import com.google.common.collect.Lists;
 import dev.technici4n.grandpower.api.ILongEnergyStorage;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.ItemTags;
@@ -43,6 +44,8 @@ public final class EITooltips
 	
 	public static final Parser<Boolean> ACTIVATED_BOOLEAN_PARSER = (value) ->
 			value ? EIText.ACTIVATED.text().withStyle(ChatFormatting.GREEN) : EIText.DEACTIVATED.text().withStyle(ChatFormatting.RED);
+	
+	public static final Parser<GlobalPos> GLOBAL_POS_PARSER = Parser.GLOBAL_POS.withStyle(DEFAULT_STYLE);
 	
 	public static final Parser<String> KEYBIND_PARSER = Parser.KEYBIND.withStyle(NUMBER_TEXT);
 	

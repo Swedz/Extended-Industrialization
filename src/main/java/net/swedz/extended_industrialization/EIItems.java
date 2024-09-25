@@ -17,6 +17,7 @@ import net.swedz.extended_industrialization.component.RainbowDataComponent;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
+import net.swedz.extended_industrialization.item.TeslaCalibratorItem;
 import net.swedz.extended_industrialization.item.machineconfig.MachineConfigCardItem;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitAbility;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
@@ -67,6 +68,7 @@ public final class EIItems
 	public static final ItemHolder<Item> CANNED_FOOD = create("canned_food", "Canned Food", Item::new, EISortOrder.OTHER_GEAR).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3f).fast().usingConvertsTo(TIN_CAN).build())).tag(ItemTags.WOLF_FOOD, ItemTags.CAT_FOOD).withModel(CommonModelBuilders::generated).register();
 	
 	public static final ItemHolder<MachineConfigCardItem> MACHINE_CONFIG_CARD = create("machine_config_card", "Machine Config Card", MachineConfigCardItem::new, EISortOrder.OTHER_GEAR).withModel(CommonModelBuilders::generated).register();
+	public static final ItemHolder<TeslaCalibratorItem>   TESLA_CALIBRATOR    = create("tesla_calibrator", "Tesla Calibrator",  TeslaCalibratorItem::new, EISortOrder.OTHER_GEAR).withModel(CommonModelBuilders::generated).register();
 	
 	public static final ItemHolder<Item> NETHERITE_ROTARY_BLADE = create("netherite_rotary_blade", "Netherite Rotary Blade", Item::new, EISortOrder.PARTS).withModel(CommonModelBuilders::generated).register();
 	public static final ItemHolder<Item> STEEL_COMBINE          = create("steel_combine", "Steel Combine", Item::new, EISortOrder.PARTS).withModel(CommonModelBuilders::generated).register();
