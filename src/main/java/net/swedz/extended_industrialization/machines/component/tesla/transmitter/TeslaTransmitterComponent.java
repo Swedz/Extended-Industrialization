@@ -44,11 +44,12 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 				long extracted = 0;
 				for(EnergyComponent energyComponent : energyInputs)
 				{
-					if(remaining > 0)
+					if(remaining == 0)
 					{
-						extracted += energyComponent.consumeEu(remaining, simulate ? Simulation.SIMULATE : Simulation.ACT);
-						remaining -= extracted;
+						break;
 					}
+					extracted += energyComponent.consumeEu(remaining, simulate ? Simulation.SIMULATE : Simulation.ACT);
+					remaining -= extracted;
 				}
 				return extracted;
 			}
