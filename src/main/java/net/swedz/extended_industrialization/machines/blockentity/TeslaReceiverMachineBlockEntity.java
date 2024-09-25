@@ -30,7 +30,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	private final RedstoneControlComponent redstoneControl;
 	private final CasingComponent          casing;
 	
-	private final TeslaReceiverComponent teslaNetwork;
+	private final TeslaReceiverComponent receiver;
 	
 	public TeslaReceiverMachineBlockEntity(BEP bep)
 	{
@@ -43,17 +43,17 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		redstoneControl = new RedstoneControlComponent();
 		casing = new CasingComponent();
 		
-		teslaNetwork = new TeslaReceiverComponent(this, () -> redstoneControl.doAllowNormalOperation(this), casing);
+		receiver = new TeslaReceiverComponent(this, () -> redstoneControl.doAllowNormalOperation(this), casing);
 		
-		this.registerComponents(redstoneControl, casing, teslaNetwork);
+		this.registerComponents(redstoneControl, casing, receiver);
 		
 		this.registerGuiComponent(new ModularMultiblockGui.Server(0, 60, () ->
 		{
 			List<ModularMultiblockGuiLine> text = Lists.newArrayList();
 			
-			if(teslaNetwork.hasNetwork())
+			if(receiver.hasNetwork())
 			{
-				text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_LINKED.text(TESLA_NETWORK_KEY_PARSER.parse(teslaNetwork.getNetworkKey()).copy().setStyle(Style.EMPTY))));
+				text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_LINKED.text(TESLA_NETWORK_KEY_PARSER.parse(receiver.getNetworkKey()).copy().setStyle(Style.EMPTY))));
 			}
 			else
 			{
@@ -86,7 +86,44 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	@Override
 	public TeslaReceiver getDelegateReceiver()
 	{
-		return teslaNetwork;
+		return receiver;
+	}
+	
+	@Override
+	public void setRemoved()
+	{
+		super.setRemoved();
+		
+		if(level.isClientSide())
+		{
+			return;
+		}
+		
+		receiver.removeFromNetwork();
+	}
+	
+	@Override
+	public void clearRemoved()
+	{
+		super.clearRemoved();
+		
+		if(level.isClientSide())
+		{
+			return;
+		}
+		
+		receiver.addToNetwork();
+	}
+	
+	@Override
+	public void onChunkUnloaded()
+	{
+		if(level.isClientSide())
+		{
+			return;
+		}
+		
+		receiver.removeFromNetwork();
 	}
 	
 	public static void registerEnergyApi(BlockEntityType<?> bet)
@@ -95,7 +132,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 				event.registerBlockEntity(EnergyApi.SIDED, bet, (be, direction) ->
 				{
 					TeslaReceiverMachineBlockEntity machine = (TeslaReceiverMachineBlockEntity) be;
-					return machine.orientation.outputDirection == direction ? null : machine.teslaNetwork.insertable();
+					return machine.orientation.outputDirection == direction ? null : machine.receiver.insertable();
 				}));
 	}
 }

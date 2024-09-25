@@ -16,6 +16,7 @@ import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.blockentity.TeslaReceiverMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkKey;
+import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public final class TeslaCalibratorItem extends Item
 			BlockEntity hitBlockEntity = context.getLevel().getBlockEntity(context.getClickedPos());
 			if(!context.getLevel().isClientSide())
 			{
-				if(player.isShiftKeyDown() && hitBlockEntity instanceof TeslaTowerBlockEntity)
+				if(player.isShiftKeyDown() && hitBlockEntity instanceof TeslaTransmitter)
 				{
 					itemStack.set(EIComponents.SELECTED_TESLA_NETWORK, new TeslaNetworkKey(context.getLevel(), context.getClickedPos()));
 					player.displayClientMessage(EIText.TESLA_CALIBRATOR_SELECTED.text(), true);

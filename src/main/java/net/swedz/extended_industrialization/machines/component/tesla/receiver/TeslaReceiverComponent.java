@@ -135,6 +135,28 @@ public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaRecei
 		return insertable.getCapacity();
 	}
 	
+	public void removeFromNetwork()
+	{
+		if(this.hasNetwork())
+		{
+			TesseractProxy proxy = Proxies.get(TesseractProxy.class);
+			TeslaNetworks networks = proxy.getServer().getTeslaNetworks();
+			
+			networks.get(this.getNetworkKey()).remove(this);
+		}
+	}
+	
+	public void addToNetwork()
+	{
+		if(this.hasNetwork())
+		{
+			TesseractProxy proxy = Proxies.get(TesseractProxy.class);
+			TeslaNetworks networks = proxy.getServer().getTeslaNetworks();
+			
+			networks.get(this.getNetworkKey()).add(this);
+		}
+	}
+	
 	@Override
 	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{

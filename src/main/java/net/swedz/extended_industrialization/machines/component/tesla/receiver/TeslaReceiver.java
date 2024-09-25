@@ -1,15 +1,10 @@
 package net.swedz.extended_industrialization.machines.component.tesla.receiver;
 
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkKey;
+import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
 
-public interface TeslaReceiver
+public interface TeslaReceiver extends TeslaNetworkPart
 {
-	boolean hasNetwork();
-	
-	TeslaNetworkKey getNetworkKey();
-	
-	void setNetwork(TeslaNetworkKey key);
-	
 	long receiveEnergy(long maxReceive, boolean simulate);
 	
 	long getStoredEnergy();
