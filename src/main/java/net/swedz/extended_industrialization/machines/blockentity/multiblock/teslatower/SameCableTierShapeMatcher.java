@@ -5,9 +5,12 @@ import aztech.modern_industrialization.machines.blockentities.hatches.EnergyHatc
 import aztech.modern_industrialization.machines.multiblocks.HatchBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
+import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+
+import java.util.Set;
 
 public class SameCableTierShapeMatcher extends ShapeMatcher
 {
@@ -31,16 +34,13 @@ public class SameCableTierShapeMatcher extends ShapeMatcher
 			}
 			else if(originalHatchCount != matchedHatches.size())
 			{
-				CableTier cableTier = null;
+				Set<CableTier> tiers = Sets.newHashSet();
 				for(HatchBlockEntity hatch : matchedHatches)
 				{
 					if(hatch instanceof EnergyHatch energyHatch)
 					{
-						if(cableTier == null)
-						{
-							cableTier = energyHatch.getCableTier();
-						}
-						if(cableTier != energyHatch.getCableTier())
+						tiers.add(energyHatch.getCableTier());
+						if(tiers.size() > 1)
 						{
 							matchSuccessful = false;
 							break;
