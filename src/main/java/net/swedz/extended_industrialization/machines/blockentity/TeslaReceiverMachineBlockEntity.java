@@ -13,6 +13,7 @@ import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import com.google.common.collect.Lists;
 import net.minecraft.network.chat.Style;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
@@ -41,7 +42,20 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		);
 		
 		redstoneControl = new RedstoneControlComponent();
-		casing = new CasingComponent();
+		casing = new CasingComponent()
+		{
+			@Override
+			protected void setCasingStack(ItemStack stack)
+			{
+				super.setCasingStack(stack);
+				
+				// TODO this check doesnt work properly
+				if(level != null && !level.isClientSide())
+				{
+					receiver.addToNetwork();
+				}
+			}
+		};
 		
 		receiver = new TeslaReceiverComponent(this, () -> redstoneControl.doAllowNormalOperation(this), casing);
 		
@@ -51,9 +65,11 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		{
 			List<ModularMultiblockGuiLine> text = Lists.newArrayList();
 			
-			if(receiver.hasNetwork())
+			if(this.hasNetwork())
 			{
-				text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_LINKED.text(TESLA_NETWORK_KEY_PARSER.parse(receiver.getNetworkKey()).copy().setStyle(Style.EMPTY))));
+				text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_LINKED.text(TESLA_NETWORK_KEY_PARSER.parse(this.getNetworkKey()).copy().setStyle(Style.EMPTY))));
+				
+				// TODO display EIText.TESLA_RECEIVER_MISMATCHING_VOLTAGE if the voltage of this receiver is not the same voltage as the network its linked to
 			}
 			else
 			{

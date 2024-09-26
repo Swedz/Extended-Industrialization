@@ -6,6 +6,7 @@ import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.CasingComponent;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -13,7 +14,6 @@ import net.minecraft.nbt.Tag;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkKey;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworks;
-import net.swedz.extended_industrialization.mixin.mi.accessor.CasingComponentAccessor;
 import net.swedz.tesseract.neoforge.helper.transfer.InputOutputDirectionalBlockCapabilityCache;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
@@ -21,8 +21,12 @@ import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaReceiver
+public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 {
+	private final MachineBlockEntity machine;
+	
+	private final Supplier<CableTier> cableTier;
+	
 	private final InputOutputDirectionalBlockCapabilityCache<MIEnergyStorage> energyOutputCache;
 	private final MIEnergyStorage                                             insertable;
 	
@@ -30,6 +34,10 @@ public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaRecei
 	
 	public TeslaReceiverComponent(MachineBlockEntity machine, Supplier<Boolean> canOperate, CasingComponent casing)
 	{
+		this.machine = machine;
+		
+		cableTier = casing::getCableTier;
+		
 		energyOutputCache = new InputOutputDirectionalBlockCapabilityCache<>(EnergyApi.SIDED);
 		insertable = new MIEnergyStorage.NoExtract()
 		{
@@ -47,7 +55,7 @@ public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaRecei
 					return 0;
 				}
 				MIEnergyStorage target = energyOutputCache.output(machine.getLevel(), machine.getBlockPos(), machine.orientation.outputDirection);
-				return target != null && target.canConnect(((CasingComponentAccessor) casing).getCurrentTier()) ? target.receive(maxReceive, simulate) : 0;
+				return target != null && target.canConnect(TeslaReceiverComponent.this.getCableTier()) ? target.receive(maxReceive, simulate) : 0;
 			}
 			
 			@Override
@@ -75,6 +83,17 @@ public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaRecei
 	public MIEnergyStorage insertable()
 	{
 		return insertable;
+	}
+	
+	private CableTier getCableTier()
+	{
+		return cableTier.get();
+	}
+	
+	@Override
+	public boolean canReceiveFrom(TeslaNetwork network)
+	{
+		return this.getCableTier() == network.getCableTier();
 	}
 	
 	@Override
@@ -115,6 +134,12 @@ public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaRecei
 		{
 			networks.get(this.getNetworkKey()).add(this);
 		}
+	}
+	
+	@Override
+	public BlockPos getPosition()
+	{
+		return machine.getBlockPos();
 	}
 	
 	@Override

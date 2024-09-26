@@ -102,6 +102,7 @@ public enum EIText implements TranslatableTextEnum
 	TESLA_CALIBRATOR_LINK_SUCCESS("Linked receiver to selected transmitter."),
 	TESLA_CALIBRATOR_SELECTED("Selected transmitter for calibration."),
 	TESLA_RECEIVER_LINKED("Linked to %s"),
+	TESLA_RECEIVER_MISMATCHING_VOLTAGE("Missing %s hull"),
 	TESLA_RECEIVER_NO_LINK("Not linked to any transmitter"),
 	TESLA_TRANSMITTER_RECEIVERS("Receivers: %d"),
 	TESLA_TRANSMITTER_HAS_NETWORK("Established connection"),

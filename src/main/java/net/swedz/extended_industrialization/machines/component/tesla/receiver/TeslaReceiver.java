@@ -1,10 +1,14 @@
 package net.swedz.extended_industrialization.machines.component.tesla.receiver;
 
+import net.minecraft.core.BlockPos;
+import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkKey;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
 
 public interface TeslaReceiver extends TeslaNetworkPart
 {
+	boolean canReceiveFrom(TeslaNetwork network);
+	
 	long receiveEnergy(long maxReceive, boolean simulate);
 	
 	long getStoredEnergy();
@@ -14,6 +18,12 @@ public interface TeslaReceiver extends TeslaNetworkPart
 	interface Delegate extends TeslaReceiver
 	{
 		TeslaReceiver getDelegateReceiver();
+		
+		@Override
+		default boolean canReceiveFrom(TeslaNetwork network)
+		{
+			return this.getDelegateReceiver().canReceiveFrom(network);
+		}
 		
 		@Override
 		default boolean hasNetwork()
@@ -31,6 +41,12 @@ public interface TeslaReceiver extends TeslaNetworkPart
 		default void setNetwork(TeslaNetworkKey key)
 		{
 			this.getDelegateReceiver().setNetwork(key);
+		}
+		
+		@Override
+		default BlockPos getPosition()
+		{
+			return this.getDelegateReceiver().getPosition();
 		}
 		
 		@Override

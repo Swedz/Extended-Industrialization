@@ -1,9 +1,11 @@
 package net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower;
 
 import aztech.modern_industrialization.MIText;
+import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.machine.component.EnergyAccess;
 import aztech.modern_industrialization.api.machine.holder.EnergyListComponentHolder;
 import aztech.modern_industrialization.machines.BEP;
+import aztech.modern_industrialization.machines.blockentities.hatches.EnergyHatch;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
@@ -21,6 +23,8 @@ import net.swedz.extended_industrialization.machines.component.tesla.transmitter
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.BasicMultiblockMachineBlockEntity;
+import net.swedz.tesseract.neoforge.proxy.Proxies;
+import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 
 import java.util.List;
 
@@ -95,11 +99,17 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	{
 		super.onMatchSuccessful();
 		
+		CableTier cableTier = null;
 		energyInputs.clear();
 		for(HatchBlockEntity hatch : shapeMatcher.getMatchedHatches())
 		{
 			hatch.appendEnergyInputs(energyInputs);
+			if(cableTier == null && hatch instanceof EnergyHatch energyHatch)
+			{
+				cableTier = energyHatch.getCableTier();
+			}
 		}
+		Proxies.get(TesseractProxy.class).getServer().getTeslaNetworks().get(this.getNetworkKey()).setCableTier(cableTier);
 	}
 	
 	@Override

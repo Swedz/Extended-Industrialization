@@ -11,7 +11,10 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 {
 	private final TeslaNetworkKey key;
 	
-	private final Set<TeslaReceiver> receivers = Sets.newHashSet();
+	private final Set<TeslaReceiver> loadedReceivers = Sets.newHashSet();
+	private final Set<TeslaReceiver> receivers       = Sets.newHashSet();
+	
+	private CableTier cableTier;
 	
 	public TeslaNetwork(TeslaNetworkKey key)
 	{
@@ -23,13 +26,46 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 		return key;
 	}
 	
+	public CableTier getCableTier()
+	{
+		return cableTier;
+	}
+	
+	public void setCableTier(CableTier cableTier)
+	{
+		this.cableTier = cableTier;
+		this.updateAll();
+	}
+	
+	private void updateAll()
+	{
+		for(TeslaReceiver receiver : loadedReceivers)
+		{
+			this.update(receiver);
+		}
+	}
+	
+	private void update(TeslaReceiver receiver)
+	{
+		if(receiver.canReceiveFrom(this))
+		{
+			receivers.add(receiver);
+		}
+		else
+		{
+			receivers.remove(receiver);
+		}
+	}
+	
 	public void add(TeslaReceiver receiver)
 	{
-		receivers.add(receiver);
+		loadedReceivers.add(receiver);
+		this.update(receiver);
 	}
 	
 	public void remove(TeslaReceiver receiver)
 	{
+		loadedReceivers.remove(receiver);
 		receivers.remove(receiver);
 	}
 	
@@ -46,20 +82,22 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 	@Override
 	public boolean canReceive()
 	{
-		return !receivers.isEmpty();
+		return true;
 	}
 	
 	@Override
 	public long receive(long maxReceive, boolean simulate)
 	{
 		long amountReceived = 0;
+		long remaining = maxReceive;
 		int index = 0;
 		for(TeslaReceiver receiver : receivers)
 		{
 			int remainingStorages = receivers.size() - index;
-			long remainingAmountToReceive = maxReceive - amountReceived;
-			long amountToReceive = remainingAmountToReceive / remainingStorages;
-			amountReceived += receiver.receiveEnergy(amountToReceive, simulate);
+			long amountToReceive = remainingStorages == 1 ? remaining : remaining / remainingStorages;
+			long received = receiver.receiveEnergy(amountToReceive, simulate);
+			amountReceived += received;
+			remaining -= received;
 			index++;
 		}
 		return amountReceived;
@@ -80,6 +118,6 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 	@Override
 	public boolean canConnect(CableTier cableTier)
 	{
-		return false;
+		return this.cableTier == cableTier;
 	}
 }

@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.machines.component.tesla.transmitter;
 
+import net.minecraft.core.BlockPos;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkKey;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
 
@@ -27,6 +28,12 @@ public interface TeslaTransmitter extends TeslaNetworkPart
 		default void setNetwork(TeslaNetworkKey key)
 		{
 			this.getDelegateTransmitter().setNetwork(key);
+		}
+		
+		@Override
+		default BlockPos getPosition()
+		{
+			return this.getDelegateTransmitter().getPosition();
 		}
 		
 		@Override

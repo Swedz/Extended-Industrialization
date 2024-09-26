@@ -7,6 +7,7 @@ import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.util.Simulation;
 import dev.technici4n.grandpower.api.EnergyStorageUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
@@ -90,6 +91,12 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 	public void setNetwork(TeslaNetworkKey key)
 	{
 		networkKey = Optional.ofNullable(key);
+	}
+	
+	@Override
+	public BlockPos getPosition()
+	{
+		return machine.getBlockPos();
 	}
 	
 	@Override

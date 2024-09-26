@@ -196,6 +196,7 @@
   "text.extended_industrialization.tesla_calibrator_linked": "Linked to %s",
   "text.extended_industrialization.tesla_calibrator_selected": "Selected transmitter for calibration.",
   "text.extended_industrialization.tesla_receiver_linked": "Linked to %s",
+  "text.extended_industrialization.tesla_receiver_mismatching_voltage": "Missing %s hull",
   "text.extended_industrialization.tesla_receiver_no_link": "Not linked to any transmitter",
   "text.extended_industrialization.tesla_transmitter_has_network": "Established connection",
   "text.extended_industrialization.tesla_transmitter_mismatching_hatches": "All energy hatches must be of the same voltage.",
