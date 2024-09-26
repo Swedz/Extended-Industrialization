@@ -23,8 +23,6 @@ import net.swedz.extended_industrialization.machines.component.tesla.transmitter
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.BasicMultiblockMachineBlockEntity;
-import net.swedz.tesseract.neoforge.proxy.Proxies;
-import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 
 import java.util.List;
 
@@ -36,6 +34,8 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	
 	private final TeslaTransmitterComponent transmitter;
 	
+	private CableTier cableTier;
+	
 	public TeslaTowerBlockEntity(BEP bep)
 	{
 		super(
@@ -46,7 +46,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		
 		redstoneControl = new RedstoneControlComponent();
 		
-		transmitter = new TeslaTransmitterComponent(this, energyInputs);
+		transmitter = new TeslaTransmitterComponent(this, energyInputs, () -> cableTier);
 		
 		this.registerComponents(redstoneControl);
 		
@@ -58,13 +58,20 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 			
 			if(this.isShapeValid())
 			{
-				if(transmitter.hasNetwork())
+				if(this.hasNetwork())
 				{
-					TeslaNetwork network = level.getServer().getTeslaNetworks().get(transmitter.getNetworkKey());
+					TeslaNetwork network = this.getNetwork();
 					
-					text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_HAS_NETWORK.text()));
-					
-					text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_RECEIVERS.text(network.size())));
+					if(network.isTransmitterLoaded())
+					{
+						text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_VOLTAGE.text(network.getCableTier().shortEnglishName())));
+						
+						text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_RECEIVERS.text(network.size())));
+					}
+					else
+					{
+						text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_NO_NETWORK.text(), 0xFF0000));
+					}
 				}
 				else
 				{
@@ -109,7 +116,28 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 				cableTier = energyHatch.getCableTier();
 			}
 		}
-		Proxies.get(TesseractProxy.class).getServer().getTeslaNetworks().get(this.getNetworkKey()).setCableTier(cableTier);
+		this.cableTier = cableTier;
+		if(this.hasNetwork())
+		{
+			this.getNetwork().loadTransmitter(transmitter);
+		}
+		else
+		{
+			EI.LOGGER.error("Failed to load transmitter into the network because no network was set yet");
+		}
+	}
+	
+	@Override
+	protected void onMatchFailure()
+	{
+		if(this.hasNetwork())
+		{
+			this.getNetwork().unloadTransmitter();
+		}
+		else
+		{
+			EI.LOGGER.error("Failed to unload transmitter into the network because no network was set yet");
+		}
 	}
 	
 	@Override
@@ -123,7 +151,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	{
 		super.setLevel(level);
 		
-		transmitter.setNetwork(new TeslaNetworkKey(level, worldPosition));
+		this.setNetwork(new TeslaNetworkKey(level, worldPosition));
 	}
 	
 	@Override
@@ -154,7 +182,27 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		if(redstoneControl.doAllowNormalOperation(this))
 		{
 			// TODO limit transmit rate
-			transmitter.transmitEnergy(Long.MAX_VALUE);
+			this.transmitEnergy(Long.MAX_VALUE);
+		}
+	}
+	
+	@Override
+	public void setRemoved()
+	{
+		super.setRemoved();
+		
+		if(level.isClientSide())
+		{
+			return;
+		}
+		
+		if(this.hasNetwork())
+		{
+			this.getNetwork().unloadTransmitter();
+		}
+		else
+		{
+			EI.LOGGER.error("Failed to unload transmitter into the network because no network was set yet");
 		}
 	}
 	

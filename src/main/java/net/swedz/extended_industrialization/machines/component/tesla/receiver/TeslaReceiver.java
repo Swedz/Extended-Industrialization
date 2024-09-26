@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.machines.component.tesla.receiver;
 
+import aztech.modern_industrialization.api.energy.CableTier;
 import net.minecraft.core.BlockPos;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkKey;
@@ -47,6 +48,12 @@ public interface TeslaReceiver extends TeslaNetworkPart
 		default BlockPos getPosition()
 		{
 			return this.getDelegateReceiver().getPosition();
+		}
+		
+		@Override
+		default CableTier getCableTier()
+		{
+			return this.getDelegateReceiver().getCableTier();
 		}
 		
 		@Override

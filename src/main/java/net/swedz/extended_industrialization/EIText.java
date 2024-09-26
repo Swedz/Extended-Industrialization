@@ -104,10 +104,11 @@ public enum EIText implements TranslatableTextEnum
 	TESLA_RECEIVER_LINKED("Linked to %s"),
 	TESLA_RECEIVER_MISMATCHING_VOLTAGE("Missing %s hull"),
 	TESLA_RECEIVER_NO_LINK("Not linked to any transmitter"),
+	TESLA_RECEIVER_UNLOADED_TRANSMITTER("Transmitter is not loaded"),
 	TESLA_TRANSMITTER_RECEIVERS("Receivers: %d"),
-	TESLA_TRANSMITTER_HAS_NETWORK("Established connection"),
 	TESLA_TRANSMITTER_NO_NETWORK("No network found"),
 	TESLA_TRANSMITTER_MISMATCHING_HATCHES("All energy hatches must be of the same voltage."),
+	TESLA_TRANSMITTER_VOLTAGE("Transmitting %s power"),
 	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Casing for cable tier to convert from (LV by default)."),
 	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default)."),
 	WASTE_COLLECTOR_HELP("When placed underneath animals, manure will be collected.");

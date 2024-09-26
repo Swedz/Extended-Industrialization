@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverComponent;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
@@ -57,7 +58,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 			}
 		};
 		
-		receiver = new TeslaReceiverComponent(this, () -> redstoneControl.doAllowNormalOperation(this), casing);
+		receiver = new TeslaReceiverComponent(this, () -> redstoneControl.doAllowNormalOperation(this), casing::getCableTier);
 		
 		this.registerComponents(redstoneControl, casing, receiver);
 		
@@ -67,9 +68,21 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 			
 			if(this.hasNetwork())
 			{
-				text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_LINKED.text(TESLA_NETWORK_KEY_PARSER.parse(this.getNetworkKey()).copy().setStyle(Style.EMPTY))));
+				TeslaNetwork network = this.getNetwork();
 				
-				// TODO display EIText.TESLA_RECEIVER_MISMATCHING_VOLTAGE if the voltage of this receiver is not the same voltage as the network its linked to
+				text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_LINKED.text(TESLA_NETWORK_KEY_PARSER.parse(this.getNetworkKey()).copy().setStyle(Style.EMPTY)), 0xFFFFFF, true));
+				
+				if(network.isTransmitterLoaded())
+				{
+					if(!receiver.canReceiveFrom(network))
+					{
+						text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_MISMATCHING_VOLTAGE.text(network.getCableTier().shortEnglishName()), 0xFF0000));
+					}
+				}
+				else
+				{
+					text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_UNLOADED_TRANSMITTER.text(), 0xFF0000));
+				}
 			}
 			else
 			{
@@ -110,30 +123,6 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	{
 		super.setRemoved();
 		
-		if(level.isClientSide())
-		{
-			return;
-		}
-		
-		receiver.removeFromNetwork();
-	}
-	
-	@Override
-	public void clearRemoved()
-	{
-		super.clearRemoved();
-		
-		if(level.isClientSide())
-		{
-			return;
-		}
-		
-		receiver.addToNetwork();
-	}
-	
-	@Override
-	public void onChunkUnloaded()
-	{
 		if(level.isClientSide())
 		{
 			return;

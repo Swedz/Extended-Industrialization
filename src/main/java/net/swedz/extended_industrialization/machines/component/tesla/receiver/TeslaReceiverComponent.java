@@ -5,7 +5,6 @@ import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
-import aztech.modern_industrialization.machines.components.CasingComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -21,10 +20,9 @@ import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class TeslaReceiverComponent implements IComponent, TeslaReceiver
+public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaReceiver
 {
-	private final MachineBlockEntity machine;
-	
+	private final MachineBlockEntity  machine;
 	private final Supplier<CableTier> cableTier;
 	
 	private final InputOutputDirectionalBlockCapabilityCache<MIEnergyStorage> energyOutputCache;
@@ -32,11 +30,10 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 	
 	private Optional<TeslaNetworkKey> networkKey = Optional.empty();
 	
-	public TeslaReceiverComponent(MachineBlockEntity machine, Supplier<Boolean> canOperate, CasingComponent casing)
+	public TeslaReceiverComponent(MachineBlockEntity machine, Supplier<Boolean> canOperate, Supplier<CableTier> cableTier)
 	{
 		this.machine = machine;
-		
-		cableTier = casing::getCableTier;
+		this.cableTier = cableTier;
 		
 		energyOutputCache = new InputOutputDirectionalBlockCapabilityCache<>(EnergyApi.SIDED);
 		insertable = new MIEnergyStorage.NoExtract()
@@ -83,11 +80,6 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 	public MIEnergyStorage insertable()
 	{
 		return insertable;
-	}
-	
-	private CableTier getCableTier()
-	{
-		return cableTier.get();
 	}
 	
 	@Override
@@ -143,6 +135,12 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 	}
 	
 	@Override
+	public CableTier getCableTier()
+	{
+		return cableTier.get();
+	}
+	
+	@Override
 	public long receiveEnergy(long maxReceive, boolean simulate)
 	{
 		return insertable.receive(maxReceive, simulate);
@@ -164,10 +162,7 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 	{
 		if(this.hasNetwork())
 		{
-			TesseractProxy proxy = Proxies.get(TesseractProxy.class);
-			TeslaNetworks networks = proxy.getServer().getTeslaNetworks();
-			
-			networks.get(this.getNetworkKey()).remove(this);
+			this.getNetwork().remove(this);
 		}
 	}
 	
@@ -175,10 +170,7 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 	{
 		if(this.hasNetwork())
 		{
-			TesseractProxy proxy = Proxies.get(TesseractProxy.class);
-			TeslaNetworks networks = proxy.getServer().getTeslaNetworks();
-			
-			networks.get(this.getNetworkKey()).add(this);
+			this.getNetwork().add(this);
 		}
 	}
 	

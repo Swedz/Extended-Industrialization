@@ -4,7 +4,9 @@ import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import com.google.common.collect.Sets;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
+import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 
+import java.util.Optional;
 import java.util.Set;
 
 public final class TeslaNetwork implements MIEnergyStorage.NoExtract
@@ -14,7 +16,7 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 	private final Set<TeslaReceiver> loadedReceivers = Sets.newHashSet();
 	private final Set<TeslaReceiver> receivers       = Sets.newHashSet();
 	
-	private CableTier cableTier;
+	private Optional<TeslaTransmitter> transmitter = Optional.empty();
 	
 	public TeslaNetwork(TeslaNetworkKey key)
 	{
@@ -26,15 +28,34 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 		return key;
 	}
 	
-	public CableTier getCableTier()
+	public boolean isTransmitterLoaded()
 	{
-		return cableTier;
+		return transmitter.isPresent();
 	}
 	
-	public void setCableTier(CableTier cableTier)
+	public void loadTransmitter(TeslaTransmitter transmitter)
 	{
-		this.cableTier = cableTier;
+		this.transmitter = Optional.of(transmitter);
 		this.updateAll();
+	}
+	
+	public void unloadTransmitter()
+	{
+		transmitter = Optional.empty();
+	}
+	
+	public TeslaTransmitter getTransmitter()
+	{
+		return transmitter.orElseThrow();
+	}
+	
+	public CableTier getCableTier()
+	{
+		if(!this.isTransmitterLoaded())
+		{
+			throw new IllegalStateException("Cannot get cable tier from network without a transmitter");
+		}
+		return this.getTransmitter().getCableTier();
 	}
 	
 	private void updateAll()
@@ -47,7 +68,7 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 	
 	private void update(TeslaReceiver receiver)
 	{
-		if(receiver.canReceiveFrom(this))
+		if(this.isTransmitterLoaded() && receiver.canReceiveFrom(this))
 		{
 			receivers.add(receiver);
 		}
@@ -118,6 +139,6 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 	@Override
 	public boolean canConnect(CableTier cableTier)
 	{
-		return this.cableTier == cableTier;
+		return this.getCableTier() == cableTier;
 	}
 }

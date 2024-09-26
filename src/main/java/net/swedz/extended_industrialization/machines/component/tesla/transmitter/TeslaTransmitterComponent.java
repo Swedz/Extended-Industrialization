@@ -12,10 +12,10 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkKey;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworks;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTransmitter
 {
@@ -23,9 +23,11 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 	
 	private final MIEnergyStorage energyStorage;
 	
+	private final Supplier<CableTier> cableTier;
+	
 	private Optional<TeslaNetworkKey> networkKey = Optional.empty();
 	
-	public TeslaTransmitterComponent(MachineBlockEntity machine, List<EnergyComponent> energyInputs)
+	public TeslaTransmitterComponent(MachineBlockEntity machine, List<EnergyComponent> energyInputs, Supplier<CableTier> cableTier)
 	{
 		this.machine = machine;
 		
@@ -73,6 +75,8 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 				return true;
 			}
 		};
+		
+		this.cableTier = cableTier;
 	}
 	
 	@Override
@@ -100,12 +104,17 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 	}
 	
 	@Override
+	public CableTier getCableTier()
+	{
+		return cableTier.get();
+	}
+	
+	@Override
 	public long transmitEnergy(long maxTransmit)
 	{
 		if(this.hasNetwork())
 		{
-			TeslaNetworks networks = machine.getLevel().getServer().getTeslaNetworks();
-			TeslaNetwork network = networks.get(this.getNetworkKey());
+			TeslaNetwork network = this.getNetwork();
 			return EnergyStorageUtil.move(energyStorage, network, maxTransmit);
 		}
 		return 0;
