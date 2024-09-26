@@ -14,9 +14,16 @@ import java.util.Set;
 
 public class SameCableTierShapeMatcher extends ShapeMatcher
 {
+	protected boolean hasMismatchingHatches;
+	
 	public SameCableTierShapeMatcher(Level level, BlockPos controllerPos, Direction controllerDirection, ShapeTemplate template)
 	{
 		super(level, controllerPos, controllerDirection, template);
+	}
+	
+	public boolean hasMismatchingHatches()
+	{
+		return hasMismatchingHatches;
 	}
 	
 	@Override
@@ -42,6 +49,7 @@ public class SameCableTierShapeMatcher extends ShapeMatcher
 						tiers.add(energyHatch.getCableTier());
 						if(tiers.size() > 1)
 						{
+							hasMismatchingHatches = true;
 							matchSuccessful = false;
 							break;
 						}
@@ -56,6 +64,7 @@ public class SameCableTierShapeMatcher extends ShapeMatcher
 		}
 		else
 		{
+			hasMismatchingHatches = false;
 			for(HatchBlockEntity hatch : matchedHatches)
 			{
 				hatch.link(template.hatchCasing);

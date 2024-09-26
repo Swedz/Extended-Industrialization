@@ -67,6 +67,13 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 					text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_NO_NETWORK.text(), 0xFF0000));
 				}
 			}
+			else
+			{
+				if(this.getShapeMatcher().hasMismatchingHatches())
+				{
+					text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_MISMATCHING_HATCHES.text(), 0xFF0000, true));
+				}
+			}
 			
 			return text;
 		}));
@@ -84,8 +91,10 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	}
 	
 	@Override
-	public void onSuccessfulMatch(ShapeMatcher shapeMatcher)
+	public void onMatchSuccessful()
 	{
+		super.onMatchSuccessful();
+		
 		energyInputs.clear();
 		for(HatchBlockEntity hatch : shapeMatcher.getMatchedHatches())
 		{
@@ -108,9 +117,18 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	}
 	
 	@Override
-	protected ShapeMatcher createShapeMatcher()
+	public ShapeMatcher createShapeMatcher()
 	{
-		return new SameCableTierShapeMatcher(level, worldPosition, orientation.facingDirection, this.getActiveShape());
+		return new SameCableTierShapeMatcher(
+				level, worldPosition, orientation.facingDirection,
+				this.getActiveShape()
+		);
+	}
+	
+	@Override
+	public SameCableTierShapeMatcher getShapeMatcher()
+	{
+		return (SameCableTierShapeMatcher) shapeMatcher;
 	}
 	
 	@Override
