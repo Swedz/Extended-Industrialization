@@ -107,7 +107,11 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		transmitter.setNetwork(new TeslaNetworkKey(level, worldPosition));
 	}
 	
-	// TODO custom linking checks for cable tier of hatches, they must all match
+	@Override
+	protected ShapeMatcher createShapeMatcher()
+	{
+		return new SameCableTierShapeMatcher(level, worldPosition, orientation.facingDirection, this.getActiveShape());
+	}
 	
 	@Override
 	public void tick()
