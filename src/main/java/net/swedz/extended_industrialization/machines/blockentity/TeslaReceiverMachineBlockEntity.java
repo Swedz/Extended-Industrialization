@@ -6,11 +6,13 @@ import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.CasingComponent;
+import aztech.modern_industrialization.machines.components.IsActiveComponent;
 import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
+import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.ItemStack;
@@ -27,8 +29,10 @@ import java.util.List;
 
 import static net.swedz.extended_industrialization.EITooltips.*;
 
-public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity implements TeslaReceiver.Delegate
+public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity implements TeslaReceiver.Delegate, Tickable
 {
+	private final IsActiveComponent isActive;
+	
 	private final RedstoneControlComponent redstoneControl;
 	private final CasingComponent          casing;
 	
@@ -41,6 +45,8 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 				new MachineGuiParameters.Builder(EI.id("tesla_receiver"), false).backgroundHeight(175).build(),
 				new OrientationComponent.Params(true, false, false)
 		);
+		
+		isActive = new IsActiveComponent();
 		
 		redstoneControl = new RedstoneControlComponent();
 		casing = new CasingComponent()
@@ -60,7 +66,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		
 		receiver = new TeslaReceiverComponent(this, () -> redstoneControl.doAllowNormalOperation(this), casing::getCableTier);
 		
-		this.registerComponents(redstoneControl, casing, receiver);
+		this.registerComponents(isActive, redstoneControl, casing, receiver);
 		
 		this.registerGuiComponent(new ModularMultiblockGui.Server(0, 60, () ->
 		{
@@ -107,7 +113,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	protected MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
-		// data.isActive = ...; // TODO check if the source is loaded
+		data.isActive = isActive.isActive;
 		orientation.writeModelData(data);
 		return data;
 	}
@@ -129,6 +135,25 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		}
 		
 		receiver.removeFromNetwork();
+	}
+	
+	@Override
+	public void tick()
+	{
+		if(level.isClientSide())
+		{
+			return;
+		}
+		
+		if(this.hasNetwork() && this.getNetwork().isTransmitterLoaded())
+		{
+			TeslaNetwork network = this.getNetwork();
+			isActive.updateActive(network.isTransmitterLoaded() && this.canReceiveFrom(network).isSuccess(), this);
+		}
+		else
+		{
+			isActive.updateActive(false, this);
+		}
 	}
 	
 	public static void registerEnergyApi(BlockEntityType<?> bet)
