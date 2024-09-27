@@ -39,9 +39,14 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 		return key;
 	}
 	
+	public boolean hasTransmitter()
+	{
+		return transmitter.isPresent();
+	}
+	
 	public boolean isTransmitterLoaded()
 	{
-		return transmitter.isPresent() && transmitter.get().getPosition().isTicking();
+		return this.hasTransmitter() && this.getTransmitter().getPosition().isTicking();
 	}
 	
 	public void loadTransmitter(TeslaTransmitter transmitter)
@@ -65,7 +70,7 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 	{
 		if(!this.isTransmitterLoaded())
 		{
-			throw new IllegalStateException("Cannot get cable tier from network without a transmitter");
+			throw new IllegalStateException("Cannot get cable tier from network without a loaded transmitter");
 		}
 		return this.getTransmitter().getCableTier();
 	}
@@ -101,6 +106,11 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 		loadedReceivers.remove(receiver);
 		receivers.remove(receiver);
 		this.maybeForget();
+	}
+	
+	public int loadedReceiverCount()
+	{
+		return loadedReceivers.size();
 	}
 	
 	public int receiverCount()

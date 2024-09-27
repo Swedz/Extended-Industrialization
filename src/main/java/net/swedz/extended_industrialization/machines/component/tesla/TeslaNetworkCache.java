@@ -11,6 +11,16 @@ public final class TeslaNetworkCache
 {
 	private final Map<WorldPos, TeslaNetwork> networks = Maps.newHashMap();
 	
+	public boolean exists(WorldPos pos)
+	{
+		return networks.containsKey(pos);
+	}
+	
+	public boolean exists(Level level, BlockPos pos)
+	{
+		return this.exists(new WorldPos(level, pos));
+	}
+	
 	public TeslaNetwork get(WorldPos key)
 	{
 		return networks.computeIfAbsent(key, (k) -> new TeslaNetwork(this, key));
