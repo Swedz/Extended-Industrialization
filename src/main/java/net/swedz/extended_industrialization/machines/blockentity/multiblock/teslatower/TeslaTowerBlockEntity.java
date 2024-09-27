@@ -46,7 +46,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		
 		redstoneControl = new RedstoneControlComponent();
 		
-		transmitter = new TeslaTransmitterComponent(this, energyInputs, this::getCableTier);
+		transmitter = new TeslaTransmitterComponent(this, energyInputs, () -> cableTier);
 		
 		this.registerComponents(redstoneControl);
 		
