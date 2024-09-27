@@ -48,6 +48,7 @@ public final class EICommands
 					
 					source.sendSuccess(() -> EIText.COMMAND_TESLA_NETWORK_DUMP_RESULT_1.text(pos.toShortString()), true);
 					
+					// TODO use parser
 					source.sendSuccess(() -> EIText.COMMAND_TESLA_NETWORK_DUMP_RESULT_2.text("%s (%s)".formatted(network.key().pos().toShortString(), network.key().dimension().location().toString())), true);
 					
 					Component transmitterResult;
@@ -56,6 +57,7 @@ public final class EICommands
 						WorldPos transmitterPosition = network.getTransmitter().getPosition();
 						boolean ticking = network.isTransmitterLoaded();
 						transmitterResult = EIText.COMMAND_TESLA_NETWORK_DUMP_RESULT_YES_TRANSMITTER.text(
+								// TODO use parser
 								"%s (%s)".formatted(transmitterPosition.pos().toShortString(), transmitterPosition.dimension().location().toString()),
 								Boolean.toString(ticking),
 								ticking ? network.getCableTier().shortEnglishName() : Component.literal("N/A")
