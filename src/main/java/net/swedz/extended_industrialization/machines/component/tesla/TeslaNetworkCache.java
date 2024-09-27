@@ -7,13 +7,13 @@ import net.swedz.extended_industrialization.api.WorldPos;
 
 import java.util.Map;
 
-public final class TeslaNetworks
+public final class TeslaNetworkCache
 {
 	private final Map<WorldPos, TeslaNetwork> networks = Maps.newHashMap();
 	
 	public TeslaNetwork get(WorldPos key)
 	{
-		return networks.computeIfAbsent(key, TeslaNetwork::new);
+		return networks.computeIfAbsent(key, (k) -> new TeslaNetwork(this, key));
 	}
 	
 	public TeslaNetwork get(Level level, BlockPos pos)
@@ -21,7 +21,7 @@ public final class TeslaNetworks
 		return this.get(new WorldPos(level, pos));
 	}
 	
-	public void forget(TeslaNetwork network)
+	void forget(TeslaNetwork network)
 	{
 		networks.remove(network.key());
 	}

@@ -66,7 +66,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 					{
 						text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_VOLTAGE.text(network.getCableTier().shortEnglishName())));
 						
-						text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_RECEIVERS.text(network.size())));
+						text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_RECEIVERS.text(network.receiverCount())));
 					}
 					else
 					{

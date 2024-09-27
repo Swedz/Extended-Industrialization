@@ -12,16 +12,26 @@ import java.util.Set;
 
 public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 {
-	private final WorldPos key;
+	private final TeslaNetworkCache cache;
+	private final WorldPos          key;
 	
 	private final Set<TeslaReceiver> loadedReceivers = Sets.newHashSet();
 	private final Set<TeslaReceiver> receivers       = Sets.newHashSet();
 	
 	private Optional<TeslaTransmitter> transmitter = Optional.empty();
 	
-	public TeslaNetwork(WorldPos key)
+	public TeslaNetwork(TeslaNetworkCache cache, WorldPos key)
 	{
+		this.cache = cache;
 		this.key = key;
+	}
+	
+	private void maybeForget()
+	{
+		if(transmitter.isEmpty() && loadedReceivers.isEmpty())
+		{
+			cache.forget(this);
+		}
 	}
 	
 	public WorldPos key()
@@ -43,6 +53,7 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 	public void unloadTransmitter()
 	{
 		transmitter = Optional.empty();
+		this.maybeForget();
 	}
 	
 	public TeslaTransmitter getTransmitter()
@@ -89,16 +100,12 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 	{
 		loadedReceivers.remove(receiver);
 		receivers.remove(receiver);
+		this.maybeForget();
 	}
 	
-	public int size()
+	public int receiverCount()
 	{
 		return receivers.size();
-	}
-	
-	public boolean isEmpty()
-	{
-		return receivers.isEmpty();
 	}
 	
 	@Override

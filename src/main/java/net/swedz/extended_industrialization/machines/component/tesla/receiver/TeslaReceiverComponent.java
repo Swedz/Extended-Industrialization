@@ -9,9 +9,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworks;
 import net.swedz.extended_industrialization.api.WorldPos;
+import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.tesseract.neoforge.helper.transfer.InputOutputDirectionalBlockCapabilityCache;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
@@ -107,24 +106,12 @@ public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaRecei
 		{
 			throw new IllegalStateException("Cannot set network of a receiver from the client");
 		}
-		TeslaNetworks networks = proxy.getServer().getTeslaNetworks();
 		
-		if(this.hasNetwork())
-		{
-			TeslaNetwork oldNetwork = networks.get(this.getNetworkKey());
-			oldNetwork.remove(this);
-			if(oldNetwork.isEmpty())
-			{
-				networks.forget(oldNetwork);
-			}
-		}
+		this.removeFromNetwork();
 		
 		networkKey = Optional.ofNullable(key);
 		
-		if(this.hasNetwork())
-		{
-			networks.get(this.getNetworkKey()).add(this);
-		}
+		this.addToNetwork();
 	}
 	
 	@Override

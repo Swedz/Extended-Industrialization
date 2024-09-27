@@ -2,7 +2,7 @@ package net.swedz.extended_industrialization.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkHolder;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworks;
+import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkCache;
 import org.spongepowered.asm.mixin.Implements;
 import org.spongepowered.asm.mixin.Interface;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,9 +13,9 @@ import org.spongepowered.asm.mixin.Unique;
 public class TeslaNetworkHolderMinecraftServerMixin
 {
 	@Unique
-	private final TeslaNetworks teslaNetworks = new TeslaNetworks();
+	private final TeslaNetworkCache teslaNetworks = new TeslaNetworkCache();
 	
-	public TeslaNetworks teslaNetwork$getTeslaNetworks()
+	public TeslaNetworkCache teslaNetwork$getTeslaNetworks()
 	{
 		return teslaNetworks;
 	}
