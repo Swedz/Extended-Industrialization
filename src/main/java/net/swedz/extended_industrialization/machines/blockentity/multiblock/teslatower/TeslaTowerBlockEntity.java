@@ -46,7 +46,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		
 		redstoneControl = new RedstoneControlComponent();
 		
-		transmitter = new TeslaTransmitterComponent(this, energyInputs, () -> cableTier);
+		transmitter = new TeslaTransmitterComponent(this, energyInputs, this::getCableTier);
 		
 		this.registerComponents(redstoneControl);
 		
@@ -70,7 +70,14 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 					}
 					else
 					{
-						text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_NO_NETWORK.text(), 0xFF0000));
+						if(this.getCableTier() == null)
+						{
+							text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_NO_ENERGY_HATCHES.text(), 0xFF0000));
+						}
+						else
+						{
+							text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_NO_NETWORK.text(), 0xFF0000));
+						}
 					}
 				}
 				else
@@ -119,7 +126,10 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		this.cableTier = cableTier;
 		if(this.hasNetwork())
 		{
-			this.getNetwork().loadTransmitter(transmitter);
+			if(this.getCableTier() != null)
+			{
+				this.getNetwork().loadTransmitter(transmitter);
+			}
 		}
 		else
 		{

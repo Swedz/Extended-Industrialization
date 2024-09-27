@@ -200,6 +200,7 @@
   "text.extended_industrialization.tesla_receiver_no_link": "Not linked to any transmitter",
   "text.extended_industrialization.tesla_receiver_unloaded_transmitter": "Transmitter is not loaded",
   "text.extended_industrialization.tesla_transmitter_mismatching_hatches": "All energy hatches must be of the same voltage.",
+  "text.extended_industrialization.tesla_transmitter_no_energy_hatches": "No energy hatches provided",
   "text.extended_industrialization.tesla_transmitter_no_network": "No network found",
   "text.extended_industrialization.tesla_transmitter_receivers": "Receivers: %d",
   "text.extended_industrialization.tesla_transmitter_voltage": "Transmitting %s power",
