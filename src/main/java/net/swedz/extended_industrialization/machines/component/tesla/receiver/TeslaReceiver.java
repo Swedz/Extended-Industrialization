@@ -7,7 +7,7 @@ import net.swedz.extended_industrialization.api.WorldPos;
 
 public interface TeslaReceiver extends TeslaNetworkPart
 {
-	boolean canReceiveFrom(TeslaNetwork network);
+	ReceiveCheckResult canReceiveFrom(TeslaNetwork network);
 	
 	long receiveEnergy(long maxReceive, boolean simulate);
 	
@@ -15,12 +15,28 @@ public interface TeslaReceiver extends TeslaNetworkPart
 	
 	long getEnergyCapacity();
 	
+	enum ReceiveCheckResult
+	{
+		SUCCESS,
+		MISMATCHING_VOLTAGE;
+		
+		public boolean isSuccess()
+		{
+			return this == SUCCESS;
+		}
+		
+		public boolean isFailure()
+		{
+			return !this.isSuccess();
+		}
+	}
+	
 	interface Delegate extends TeslaReceiver
 	{
 		TeslaReceiver getDelegateReceiver();
 		
 		@Override
-		default boolean canReceiveFrom(TeslaNetwork network)
+		default ReceiveCheckResult canReceiveFrom(TeslaNetwork network)
 		{
 			return this.getDelegateReceiver().canReceiveFrom(network);
 		}

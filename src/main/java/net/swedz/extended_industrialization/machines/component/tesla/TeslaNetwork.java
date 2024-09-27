@@ -80,7 +80,7 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 	
 	private void update(TeslaReceiver receiver)
 	{
-		if(this.isTransmitterLoaded() && receiver.canReceiveFrom(this))
+		if(this.isTransmitterLoaded() && receiver.canReceiveFrom(this).isSuccess())
 		{
 			receivers.add(receiver);
 		}

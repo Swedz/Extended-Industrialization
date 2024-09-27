@@ -81,9 +81,13 @@ public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaRecei
 	}
 	
 	@Override
-	public boolean canReceiveFrom(TeslaNetwork network)
+	public ReceiveCheckResult canReceiveFrom(TeslaNetwork network)
 	{
-		return this.getCableTier() == network.getCableTier();
+		if(this.getCableTier() != network.getCableTier())
+		{
+			return ReceiveCheckResult.MISMATCHING_VOLTAGE;
+		}
+		return ReceiveCheckResult.SUCCESS;
 	}
 	
 	@Override

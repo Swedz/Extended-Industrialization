@@ -80,7 +80,8 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 				
 				if(network.isTransmitterLoaded())
 				{
-					if(!receiver.canReceiveFrom(network))
+					ReceiveCheckResult result = this.canReceiveFrom(network);
+					if(result == ReceiveCheckResult.MISMATCHING_VOLTAGE)
 					{
 						text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_MISMATCHING_VOLTAGE.text(network.getCableTier().shortEnglishName()), 0xFF0000));
 					}
