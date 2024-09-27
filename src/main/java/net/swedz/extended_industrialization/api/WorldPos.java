@@ -38,7 +38,11 @@ public record WorldPos(ResourceKey<Level> dimension, BlockPos pos)
 	public ServerLevel level()
 	{
 		TesseractProxy proxy = Proxies.get(TesseractProxy.class);
-		return proxy.hasServer() ? proxy.getServer().getLevel(dimension) : null;
+		if(!proxy.hasServer())
+		{
+			throw new IllegalStateException("Cannot get level from world position on the client");
+		}
+		return proxy.getServer().getLevel(dimension);
 	}
 	
 	public boolean isLoaded()
