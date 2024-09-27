@@ -108,7 +108,7 @@
   "text.extended_industrialization.coils_lef_tier": "Runs LEF in batches of up to %d at %s the EU cost.",
   "text.extended_industrialization.command_tesla_network_dump_cant_have_network": "The block at %s is not a network part.",
   "text.extended_industrialization.command_tesla_network_dump_chunk_not_loaded": "Chunk at %s is not loaded.",
-  "text.extended_industrialization.command_tesla_network_dump_no_network": "The block at %s has no network set.",
+  "text.extended_industrialization.command_tesla_network_dump_no_network": "No existing network could be found for %s.",
   "text.extended_industrialization.command_tesla_network_dump_result_1": "Dumping data on network of %s:",
   "text.extended_industrialization.command_tesla_network_dump_result_2": "* Key: %s",
   "text.extended_industrialization.command_tesla_network_dump_result_3": "* Transmitter: %s",

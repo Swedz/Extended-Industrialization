@@ -14,7 +14,7 @@ public enum EIText implements TranslatableTextEnum
 	COILS_LEF_TIER("Runs LEF in batches of up to %d at %s the EU cost."),
 	COMMAND_TESLA_NETWORK_DUMP_CANT_HAVE_NETWORK("The block at %s is not a network part."),
 	COMMAND_TESLA_NETWORK_DUMP_CHUNK_NOT_LOADED("Chunk at %s is not loaded."),
-	COMMAND_TESLA_NETWORK_DUMP_NO_NETWORK("The block at %s has no network set."),
+	COMMAND_TESLA_NETWORK_DUMP_NO_NETWORK("No existing network could be found for %s."),
 	COMMAND_TESLA_NETWORK_DUMP_RESULT_1("Dumping data on network of %s:"),
 	COMMAND_TESLA_NETWORK_DUMP_RESULT_2("* Key: %s"),
 	COMMAND_TESLA_NETWORK_DUMP_RESULT_3("* Transmitter: %s"),
