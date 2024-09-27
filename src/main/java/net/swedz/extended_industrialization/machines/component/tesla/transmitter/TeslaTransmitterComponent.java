@@ -7,11 +7,10 @@ import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.util.Simulation;
 import dev.technici4n.grandpower.api.EnergyStorageUtil;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkKey;
+import net.swedz.extended_industrialization.api.WorldPos;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +24,7 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 	
 	private final Supplier<CableTier> cableTier;
 	
-	private Optional<TeslaNetworkKey> networkKey = Optional.empty();
+	private Optional<WorldPos> networkKey = Optional.empty();
 	
 	public TeslaTransmitterComponent(MachineBlockEntity machine, List<EnergyComponent> energyInputs, Supplier<CableTier> cableTier)
 	{
@@ -86,21 +85,21 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 	}
 	
 	@Override
-	public TeslaNetworkKey getNetworkKey()
+	public WorldPos getNetworkKey()
 	{
 		return networkKey.orElseThrow();
 	}
 	
 	@Override
-	public void setNetwork(TeslaNetworkKey key)
+	public void setNetwork(WorldPos key)
 	{
 		networkKey = Optional.ofNullable(key);
 	}
 	
 	@Override
-	public BlockPos getPosition()
+	public WorldPos getPosition()
 	{
-		return machine.getBlockPos();
+		return new WorldPos(machine.getLevel(), machine.getBlockPos());
 	}
 	
 	@Override

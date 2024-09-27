@@ -14,8 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.blockentity.TeslaReceiverMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkKey;
+import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 
 import java.util.List;
@@ -43,14 +42,14 @@ public final class TeslaCalibratorItem extends Item
 			{
 				if(player.isShiftKeyDown() && hitBlockEntity instanceof TeslaTransmitter)
 				{
-					itemStack.set(EIComponents.SELECTED_TESLA_NETWORK, new TeslaNetworkKey(context.getLevel(), context.getClickedPos()));
+					itemStack.set(EIComponents.SELECTED_TESLA_NETWORK, new WorldPos(context.getLevel(), context.getClickedPos()));
 					player.displayClientMessage(EIText.TESLA_CALIBRATOR_SELECTED.text(), true);
 				}
 				else if(!player.isShiftKeyDown() && hitBlockEntity instanceof TeslaReceiverMachineBlockEntity receiver)
 				{
 					if(itemStack.has(EIComponents.SELECTED_TESLA_NETWORK))
 					{
-						TeslaNetworkKey key = itemStack.get(EIComponents.SELECTED_TESLA_NETWORK);
+						WorldPos key = itemStack.get(EIComponents.SELECTED_TESLA_NETWORK);
 						receiver.setNetwork(key);
 						player.displayClientMessage(EIText.TESLA_CALIBRATOR_LINK_SUCCESS.text(), true);
 					}
@@ -82,7 +81,7 @@ public final class TeslaCalibratorItem extends Item
 	{
 		if(stack.has(EIComponents.SELECTED_TESLA_NETWORK))
 		{
-			TeslaNetworkKey key = stack.get(EIComponents.SELECTED_TESLA_NETWORK);
+			WorldPos key = stack.get(EIComponents.SELECTED_TESLA_NETWORK);
 			tooltipComponents.add(EIText.TESLA_CALIBRATOR_LINKED.text(TESLA_NETWORK_KEY_PARSER.parse(key)).withStyle(DEFAULT_STYLE));
 		}
 	}

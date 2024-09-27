@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkKey;
+import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitterComponent;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
@@ -151,7 +151,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	{
 		super.setLevel(level);
 		
-		this.setNetwork(new TeslaNetworkKey(level, worldPosition));
+		this.setNetwork(new WorldPos(level, worldPosition));
 	}
 	
 	@Override

@@ -5,14 +5,13 @@ import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkKey;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworks;
+import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.tesseract.neoforge.helper.transfer.InputOutputDirectionalBlockCapabilityCache;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
@@ -28,7 +27,7 @@ public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaRecei
 	private final InputOutputDirectionalBlockCapabilityCache<MIEnergyStorage> energyOutputCache;
 	private final MIEnergyStorage                                             insertable;
 	
-	private Optional<TeslaNetworkKey> networkKey = Optional.empty();
+	private Optional<WorldPos> networkKey = Optional.empty();
 	
 	public TeslaReceiverComponent(MachineBlockEntity machine, Supplier<Boolean> canOperate, Supplier<CableTier> cableTier)
 	{
@@ -95,13 +94,13 @@ public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaRecei
 	}
 	
 	@Override
-	public TeslaNetworkKey getNetworkKey()
+	public WorldPos getNetworkKey()
 	{
 		return networkKey.orElseThrow();
 	}
 	
 	@Override
-	public void setNetwork(TeslaNetworkKey key)
+	public void setNetwork(WorldPos key)
 	{
 		TesseractProxy proxy = Proxies.get(TesseractProxy.class);
 		if(!proxy.hasServer())
@@ -129,9 +128,9 @@ public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaRecei
 	}
 	
 	@Override
-	public BlockPos getPosition()
+	public WorldPos getPosition()
 	{
-		return machine.getBlockPos();
+		return new WorldPos(machine.getLevel(), machine.getBlockPos());
 	}
 	
 	@Override
@@ -179,8 +178,8 @@ public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaRecei
 	{
 		if(this.hasNetwork())
 		{
-			TeslaNetworkKey key = this.getNetworkKey();
-			TeslaNetworkKey.CODEC.encodeStart(NbtOps.INSTANCE, key).result().ifPresent((t) -> tag.put("network_key", t));
+			WorldPos key = this.getNetworkKey();
+			WorldPos.CODEC.encodeStart(NbtOps.INSTANCE, key).result().ifPresent((t) -> tag.put("network_key", t));
 		}
 	}
 	
@@ -190,7 +189,7 @@ public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaRecei
 		if(tag.contains("network_key", Tag.TAG_COMPOUND))
 		{
 			CompoundTag keyTag = tag.getCompound("network_key");
-			this.setNetwork(TeslaNetworkKey.CODEC.parse(NbtOps.INSTANCE, keyTag).result().orElse(null));
+			this.setNetwork(WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result().orElse(null));
 		}
 		else
 		{

@@ -14,7 +14,7 @@ import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkKey;
+import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.tesseract.neoforge.tooltip.BiParser;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 import net.swedz.tesseract.neoforge.tooltip.TooltipAttachment;
@@ -46,7 +46,7 @@ public final class EITooltips
 	public static final Parser<Boolean> ACTIVATED_BOOLEAN_PARSER = (value) ->
 			value ? EIText.ACTIVATED.text().withStyle(ChatFormatting.GREEN) : EIText.DEACTIVATED.text().withStyle(ChatFormatting.RED);
 	
-	public static final Parser<TeslaNetworkKey> TESLA_NETWORK_KEY_PARSER = (key) -> Parser.GLOBAL_POS.withStyle(DEFAULT_STYLE).parse(GlobalPos.of(key.dimension(), key.pos()));
+	public static final Parser<WorldPos> TESLA_NETWORK_KEY_PARSER = (key) -> Parser.GLOBAL_POS.withStyle(DEFAULT_STYLE).parse(GlobalPos.of(key.dimension(), key.pos()));
 	
 	public static final Parser<String> KEYBIND_PARSER = Parser.KEYBIND.withStyle(NUMBER_TEXT);
 	

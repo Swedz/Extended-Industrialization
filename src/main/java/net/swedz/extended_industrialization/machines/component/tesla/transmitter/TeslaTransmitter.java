@@ -1,9 +1,8 @@
 package net.swedz.extended_industrialization.machines.component.tesla.transmitter;
 
 import aztech.modern_industrialization.api.energy.CableTier;
-import net.minecraft.core.BlockPos;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkKey;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
+import net.swedz.extended_industrialization.api.WorldPos;
 
 public interface TeslaTransmitter extends TeslaNetworkPart
 {
@@ -20,19 +19,19 @@ public interface TeslaTransmitter extends TeslaNetworkPart
 		}
 		
 		@Override
-		default TeslaNetworkKey getNetworkKey()
+		default WorldPos getNetworkKey()
 		{
 			return this.getDelegateTransmitter().getNetworkKey();
 		}
 		
 		@Override
-		default void setNetwork(TeslaNetworkKey key)
+		default void setNetwork(WorldPos key)
 		{
 			this.getDelegateTransmitter().setNetwork(key);
 		}
 		
 		@Override
-		default BlockPos getPosition()
+		default WorldPos getPosition()
 		{
 			return this.getDelegateTransmitter().getPosition();
 		}

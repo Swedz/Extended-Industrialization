@@ -1,7 +1,7 @@
 package net.swedz.extended_industrialization.machines.component.tesla;
 
 import aztech.modern_industrialization.api.energy.CableTier;
-import net.minecraft.core.BlockPos;
+import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 
@@ -9,9 +9,9 @@ public interface TeslaNetworkPart
 {
 	boolean hasNetwork();
 	
-	TeslaNetworkKey getNetworkKey();
+	WorldPos getNetworkKey();
 	
-	void setNetwork(TeslaNetworkKey key);
+	void setNetwork(WorldPos key);
 	
 	default TeslaNetwork getNetwork()
 	{
@@ -27,7 +27,7 @@ public interface TeslaNetworkPart
 		return proxy.getServer().getTeslaNetworks().get(this.getNetworkKey());
 	}
 	
-	BlockPos getPosition();
+	WorldPos getPosition();
 	
 	CableTier getCableTier();
 }

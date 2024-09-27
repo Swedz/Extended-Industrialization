@@ -10,7 +10,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.extended_industrialization.component.RainbowDataComponent;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.machineconfig.MachineConfig;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkKey;
+import net.swedz.extended_industrialization.api.WorldPos;
 
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -43,9 +43,9 @@ public final class EIComponents
 			"rainbow",
 			(b) -> b.persistent(RainbowDataComponent.CODEC).networkSynchronized(RainbowDataComponent.STREAM_CODEC)
 	);
-	public static final Supplier<DataComponentType<TeslaNetworkKey>>      SELECTED_TESLA_NETWORK = create(
+	public static final Supplier<DataComponentType<WorldPos>>             SELECTED_TESLA_NETWORK = create(
 			"selected_tesla_network",
-			(b) -> b.persistent(TeslaNetworkKey.CODEC).networkSynchronized(TeslaNetworkKey.STREAM_CODEC)
+			(b) -> b.persistent(WorldPos.CODEC).networkSynchronized(WorldPos.STREAM_CODEC)
 	);
 	
 	public static void init(IEventBus bus)

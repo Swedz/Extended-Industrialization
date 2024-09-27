@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.component.tesla;
+package net.swedz.extended_industrialization.api;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -13,24 +13,24 @@ import net.minecraft.world.level.Level;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 
-public record TeslaNetworkKey(ResourceKey<Level> dimension, BlockPos pos)
+public record WorldPos(ResourceKey<Level> dimension, BlockPos pos)
 {
-	public static final MapCodec<TeslaNetworkKey>             MAP_CODEC    = RecordCodecBuilder.mapCodec((instance) -> instance
+	public static final MapCodec<WorldPos>             MAP_CODEC    = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					Level.RESOURCE_KEY_CODEC.fieldOf("dimension").forGetter(TeslaNetworkKey::dimension),
-					BlockPos.CODEC.fieldOf("pos").forGetter(TeslaNetworkKey::pos)
+					Level.RESOURCE_KEY_CODEC.fieldOf("dimension").forGetter(WorldPos::dimension),
+					BlockPos.CODEC.fieldOf("pos").forGetter(WorldPos::pos)
 			)
-			.apply(instance, TeslaNetworkKey::new));
-	public static final Codec<TeslaNetworkKey>                CODEC        = MAP_CODEC.codec();
-	public static final StreamCodec<ByteBuf, TeslaNetworkKey> STREAM_CODEC = StreamCodec.composite(
+			.apply(instance, WorldPos::new));
+	public static final Codec<WorldPos>                CODEC        = MAP_CODEC.codec();
+	public static final StreamCodec<ByteBuf, WorldPos> STREAM_CODEC = StreamCodec.composite(
 			ResourceKey.streamCodec(Registries.DIMENSION),
-			TeslaNetworkKey::dimension,
+			WorldPos::dimension,
 			BlockPos.STREAM_CODEC,
-			TeslaNetworkKey::pos,
-			TeslaNetworkKey::new
+			WorldPos::pos,
+			WorldPos::new
 	);
 	
-	public TeslaNetworkKey(Level level, BlockPos pos)
+	public WorldPos(Level level, BlockPos pos)
 	{
 		this(level.dimension(), pos);
 	}
@@ -39,6 +39,18 @@ public record TeslaNetworkKey(ResourceKey<Level> dimension, BlockPos pos)
 	{
 		TesseractProxy proxy = Proxies.get(TesseractProxy.class);
 		return proxy.hasServer() ? proxy.getServer().getLevel(dimension) : null;
+	}
+	
+	public boolean isLoaded()
+	{
+		return this.level().isLoaded(pos);
+	}
+	
+	public boolean isTicking()
+	{
+		Level level = this.level();
+		return level.tickRateManager().runsNormally() &&
+			   level.shouldTickBlocksAt(pos);
 	}
 	
 	@Override

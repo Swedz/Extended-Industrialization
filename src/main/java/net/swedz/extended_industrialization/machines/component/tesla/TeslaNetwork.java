@@ -3,6 +3,7 @@ package net.swedz.extended_industrialization.machines.component.tesla;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import com.google.common.collect.Sets;
+import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 
@@ -11,26 +12,26 @@ import java.util.Set;
 
 public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 {
-	private final TeslaNetworkKey key;
+	private final WorldPos key;
 	
 	private final Set<TeslaReceiver> loadedReceivers = Sets.newHashSet();
 	private final Set<TeslaReceiver> receivers       = Sets.newHashSet();
 	
 	private Optional<TeslaTransmitter> transmitter = Optional.empty();
 	
-	public TeslaNetwork(TeslaNetworkKey key)
+	public TeslaNetwork(WorldPos key)
 	{
 		this.key = key;
 	}
 	
-	public TeslaNetworkKey key()
+	public WorldPos key()
 	{
 		return key;
 	}
 	
 	public boolean isTransmitterLoaded()
 	{
-		return transmitter.isPresent();
+		return transmitter.isPresent() && transmitter.get().getPosition().isTicking();
 	}
 	
 	public void loadTransmitter(TeslaTransmitter transmitter)
