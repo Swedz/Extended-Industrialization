@@ -51,6 +51,8 @@ public final class TeslaCalibratorItem extends Item
 					{
 						WorldPos key = itemStack.get(EIComponents.SELECTED_TESLA_NETWORK);
 						receiver.setNetwork(key);
+						receiver.setChanged();
+						receiver.sync();
 						player.displayClientMessage(EIText.TESLA_CALIBRATOR_LINK_SUCCESS.text(), true);
 					}
 					else

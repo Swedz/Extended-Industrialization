@@ -18,7 +18,7 @@ import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaReceiver
+public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 {
 	private final MachineBlockEntity  machine;
 	private final Supplier<CableTier> cableTier;
