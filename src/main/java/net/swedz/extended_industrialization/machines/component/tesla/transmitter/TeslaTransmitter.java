@@ -8,6 +8,8 @@ public interface TeslaTransmitter extends TeslaNetworkPart
 {
 	long transmitEnergy(long maxTransmit);
 	
+	long extractEnergy(long maxExtract, boolean simulate);
+	
 	interface Delegate extends TeslaTransmitter
 	{
 		TeslaTransmitter getDelegateTransmitter();
@@ -46,6 +48,12 @@ public interface TeslaTransmitter extends TeslaNetworkPart
 		default long transmitEnergy(long maxTransmit)
 		{
 			return this.getDelegateTransmitter().transmitEnergy(maxTransmit);
+		}
+		
+		@Override
+		default long extractEnergy(long maxExtract, boolean simulate)
+		{
+			return this.getDelegateTransmitter().extractEnergy(maxExtract, simulate);
 		}
 	}
 }

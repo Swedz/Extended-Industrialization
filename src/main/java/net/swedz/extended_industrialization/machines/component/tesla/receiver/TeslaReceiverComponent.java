@@ -87,6 +87,7 @@ public class TeslaReceiverComponent implements IComponent.ServerOnly, TeslaRecei
 		{
 			return ReceiveCheckResult.MISMATCHING_VOLTAGE;
 		}
+		// TODO check if receiver is within range
 		return ReceiveCheckResult.SUCCESS;
 	}
 	

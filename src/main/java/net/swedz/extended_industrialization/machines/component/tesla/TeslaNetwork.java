@@ -10,7 +10,7 @@ import net.swedz.extended_industrialization.machines.component.tesla.transmitter
 import java.util.Optional;
 import java.util.Set;
 
-public final class TeslaNetwork implements MIEnergyStorage.NoExtract
+public final class TeslaNetwork implements MIEnergyStorage
 {
 	private final TeslaNetworkCache cache;
 	private final WorldPos          key;
@@ -119,6 +119,12 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 	}
 	
 	@Override
+	public boolean canExtract()
+	{
+		return this.hasTransmitter();
+	}
+	
+	@Override
 	public boolean canReceive()
 	{
 		return true;
@@ -140,6 +146,12 @@ public final class TeslaNetwork implements MIEnergyStorage.NoExtract
 			index++;
 		}
 		return amountReceived;
+	}
+	
+	@Override
+	public long extract(long maxExtract, boolean simulate)
+	{
+		return this.getTransmitter().extractEnergy(maxExtract, simulate);
 	}
 	
 	@Override

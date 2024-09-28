@@ -120,6 +120,12 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 	}
 	
 	@Override
+	public long extractEnergy(long maxExtract, boolean simulate)
+	{
+		return energyStorage.extract(maxExtract, simulate);
+	}
+	
+	@Override
 	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{
 	}
