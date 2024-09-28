@@ -1,5 +1,8 @@
 {
     "net/minecraft/server/MinecraftServer": [
         "net/swedz/extended_industrialization/machines/component/tesla/TeslaNetworkHolder"
+    ],
+    "net/minecraft/world/entity/player/Player": [
+        "net/swedz/extended_industrialization/machines/component/tesla/TeslaReceiverHolder"
     ]
 }

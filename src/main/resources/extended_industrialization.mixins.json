@@ -8,6 +8,7 @@
         "RainbowDyedItemColorMixin",
         "RemoveRainbowWhenDyeingMixin",
         "TeslaNetworkHolderMinecraftServerMixin",
+        "TeslaNetworkReceiversPlayerMixin",
         "mi.accessor.CasingComponentAccessor",
         "mi.accessor.ConfigurableItemStackAccessor",
         "mi.accessor.RedstoneControlComponentAccessor",
