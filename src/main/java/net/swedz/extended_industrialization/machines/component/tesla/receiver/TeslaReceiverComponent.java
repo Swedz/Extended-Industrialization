@@ -12,6 +12,8 @@ import net.minecraft.nbt.Tag;
 import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.tesseract.neoforge.helper.transfer.InputOutputDirectionalBlockCapabilityCache;
+import net.swedz.tesseract.neoforge.proxy.Proxies;
+import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -104,7 +106,7 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 	@Override
 	public void setNetwork(WorldPos key)
 	{
-		if(machine.getLevel().isClientSide())
+		if(!Proxies.get(TesseractProxy.class).hasServer())
 		{
 			throw new IllegalStateException("Cannot set network of a receiver from the client");
 		}
@@ -178,26 +180,25 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 		if(tag.contains("network_key", Tag.TAG_COMPOUND))
 		{
 			CompoundTag keyTag = tag.getCompound("network_key");
-			Optional<WorldPos> key = WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result();
-			if(machine.getLevel().isClientSide())
-			{
-				networkKey = key;
-			}
-			else
-			{
-				this.setNetwork(key.orElse(null));
-			}
+			this.setNetwork(WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result().orElse(null));
 		}
 		else
 		{
-			if(machine.getLevel().isClientSide())
-			{
-				networkKey = Optional.empty();
-			}
-			else
-			{
-				this.setNetwork(null);
-			}
+			this.setNetwork(null);
+		}
+	}
+	
+	@Override
+	public void readClientNbt(CompoundTag tag, HolderLookup.Provider registries)
+	{
+		if(tag.contains("network_key", Tag.TAG_COMPOUND))
+		{
+			CompoundTag keyTag = tag.getCompound("network_key");
+			networkKey = WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result();
+		}
+		else
+		{
+			networkKey = Optional.empty();
 		}
 	}
 }

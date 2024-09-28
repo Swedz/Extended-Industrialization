@@ -56,7 +56,6 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 			{
 				super.setCasingStack(stack);
 				
-				// TODO this check doesnt work properly
 				if(level != null && !level.isClientSide())
 				{
 					receiver.addToNetwork();
