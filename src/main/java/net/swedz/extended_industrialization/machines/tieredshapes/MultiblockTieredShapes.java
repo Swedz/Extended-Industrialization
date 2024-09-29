@@ -107,4 +107,22 @@ public abstract class MultiblockTieredShapes<T extends MultiblockTier, D extends
 		NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, DataMapsUpdatedEvent.class, (event) ->
 				event.ifRegistry(Registries.BLOCK, (registry) -> this.invalidate()));
 	}
+	
+	protected static String[][] layersConvertFromVertical(String[][] input)
+	{
+		int rows = input[0].length;
+		int columns = input.length;
+		
+		String[][] result = new String[rows][columns];
+		
+		for(int row = 0; row < rows; row++)
+		{
+			for(int column = 0; column < columns; column++)
+			{
+				result[row][column] = input[column][row];
+			}
+		}
+		
+		return result;
+	}
 }

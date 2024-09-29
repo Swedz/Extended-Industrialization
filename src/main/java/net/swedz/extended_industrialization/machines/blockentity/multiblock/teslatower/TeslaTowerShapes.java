@@ -25,24 +25,6 @@ public final class TeslaTowerShapes extends MultiblockTieredShapes<TeslaTowerTie
 		);
 	}
 	
-	private static String[][] formatPattern(String[][] input)
-	{
-		int rows = input[0].length;
-		int columns = input.length;
-		
-		String[][] result = new String[rows][columns];
-		
-		for(int row = 0; row < rows; row++)
-		{
-			for(int column = 0; column < columns; column++)
-			{
-				result[row][column] = input[column][row];
-			}
-		}
-		
-		return result;
-	}
-	
 	private String[][] pattern()
 	{
 		String[] layerPipe = {
@@ -129,7 +111,7 @@ public final class TeslaTowerShapes extends MultiblockTieredShapes<TeslaTowerTie
 			
 			ShapeTemplate.LayeredBuilder builder = new ShapeTemplate.LayeredBuilder(
 					MachineCasings.CLEAN_STAINLESS_STEEL,
-					formatPattern(this.pattern())
+					layersConvertFromVertical(this.pattern())
 			);
 			builder.key('S', SimpleMember.forBlockId(MI.id("clean_stainless_steel_machine_casing")), new HatchFlags.Builder().with(HatchType.ENERGY_INPUT).build());
 			builder.key('P', SimpleMember.forBlockId(MI.id("stainless_steel_machine_casing_pipe")), HatchFlags.NO_HATCH);
