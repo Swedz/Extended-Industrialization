@@ -79,8 +79,8 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 				
 				if(network.isTransmitterLoaded())
 				{
-					ReceiveCheckResult result = this.canReceiveFrom(network);
-					if(result == ReceiveCheckResult.MISMATCHING_VOLTAGE)
+					ReceiveCheckResult result = this.checkReceiveFrom(network);
+					if(result.type() == ReceiveCheckResult.Type.MISMATCHING_VOLTAGE)
 					{
 						text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_MISMATCHING_VOLTAGE.text(network.getCableTier().shortEnglishName()), 0xFF0000));
 					}
@@ -148,7 +148,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		if(this.hasNetwork() && this.getNetwork().isTransmitterLoaded())
 		{
 			TeslaNetwork network = this.getNetwork();
-			isActive.updateActive(network.isTransmitterLoaded() && this.canReceiveFrom(network).isSuccess(), this);
+			isActive.updateActive(network.isTransmitterLoaded() && this.checkReceiveFrom(network).isSuccess(), this);
 		}
 		else
 		{

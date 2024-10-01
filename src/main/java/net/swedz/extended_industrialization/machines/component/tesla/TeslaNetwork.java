@@ -85,7 +85,7 @@ public final class TeslaNetwork implements MIEnergyStorage
 	
 	private void update(TeslaReceiver receiver)
 	{
-		if(this.isTransmitterLoaded() && receiver.canReceiveFrom(this).isSuccess())
+		if(this.isTransmitterLoaded() && receiver.checkReceiveFrom(this).isSuccess())
 		{
 			receivers.add(receiver);
 		}
@@ -139,8 +139,15 @@ public final class TeslaNetwork implements MIEnergyStorage
 		for(TeslaReceiver receiver : receivers)
 		{
 			int remainingStorages = receivers.size() - index;
+			
 			long amountToReceive = remainingStorages == 1 ? remaining : remaining / remainingStorages;
+			float loss = receiver.checkReceiveFrom(this).loss();
+			if(loss > 0)
+			{
+				amountToReceive = amountToReceive - (long) Math.floor(amountToReceive * loss);
+			}
 			long received = receiver.receiveEnergy(amountToReceive, simulate);
+			
 			amountReceived += received;
 			remaining -= received;
 			index++;

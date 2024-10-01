@@ -26,9 +26,9 @@ public final class PlayerTeslaReceiver implements TeslaReceiver
 	}
 	
 	@Override
-	public ReceiveCheckResult canReceiveFrom(TeslaNetwork network)
+	public ReceiveCheckResult checkReceiveFrom(TeslaNetwork network)
 	{
-		return ReceiveCheckResult.SUCCESS;
+		return ReceiveCheckResult.success(0f);
 	}
 	
 	@Override

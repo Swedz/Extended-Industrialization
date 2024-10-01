@@ -81,14 +81,14 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 	}
 	
 	@Override
-	public ReceiveCheckResult canReceiveFrom(TeslaNetwork network)
+	public ReceiveCheckResult checkReceiveFrom(TeslaNetwork network)
 	{
 		if(this.getCableTier() != network.getCableTier())
 		{
-			return ReceiveCheckResult.MISMATCHING_VOLTAGE;
+			return ReceiveCheckResult.failure(ReceiveCheckResult.Type.MISMATCHING_VOLTAGE);
 		}
 		// TODO check if receiver is within range
-		return ReceiveCheckResult.SUCCESS;
+		return ReceiveCheckResult.success(0f);
 	}
 	
 	@Override
