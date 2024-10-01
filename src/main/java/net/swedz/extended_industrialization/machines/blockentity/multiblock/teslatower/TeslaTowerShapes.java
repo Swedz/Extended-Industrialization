@@ -6,8 +6,8 @@ import aztech.modern_industrialization.machines.multiblocks.HatchFlags;
 import aztech.modern_industrialization.machines.multiblocks.HatchType;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
-import net.minecraft.world.level.block.Blocks;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EIBlocks;
 import net.swedz.extended_industrialization.EIDataMaps;
 import net.swedz.extended_industrialization.datamap.TeslaTowerTierData;
 import net.swedz.extended_industrialization.machines.tieredshapes.MultiblockTieredShapes;
@@ -31,36 +31,36 @@ public final class TeslaTowerShapes extends MultiblockTieredShapes<TeslaTowerTie
 				"       ",
 				"       ",
 				"       ",
-				"   P   ",
+				"   c   ",
 				"       ",
 				"       ",
 				"       "
 		};
 		String[] layerPipeWithCoil = {
 				"       ",
-				"  WWW  ",
-				" W   W ",
-				" W P W ",
-				" W   W ",
-				"  WWW  ",
+				"  TTT  ",
+				" T P T ",
+				" TPcPT ",
+				" T P T ",
+				"  TTT  ",
 				"       "
 		};
 		String[] ballEnd = {
 				"       ",
 				"       ",
-				"  WWW  ",
-				"  WWW  ",
-				"  WWW  ",
+				"  TTT  ",
+				"  TTT  ",
+				"  TTT  ",
 				"       ",
 				"       "
 		};
 		String[] ballMiddle = {
 				"       ",
-				"  WWW  ",
-				" WWWWW ",
-				" WWWWW ",
-				" WWWWW ",
-				"  WWW  ",
+				"  TTT  ",
+				" TTTTT ",
+				" TTTTT ",
+				" TTTTT ",
+				"  TTT  ",
 				"       "
 		};
 		return new String[][]{
@@ -68,7 +68,7 @@ public final class TeslaTowerShapes extends MultiblockTieredShapes<TeslaTowerTie
 						" SSSSS ",
 						"SSCCCSS",
 						"SCCCCCS",
-						"SCCPCCS",
+						"SCCcCCS",
 						"SCCCCCS",
 						"SSCCCSS",
 						" SS#SS "
@@ -77,7 +77,7 @@ public final class TeslaTowerShapes extends MultiblockTieredShapes<TeslaTowerTie
 						"       ",
 						"  CCC  ",
 						" C   C ",
-						" C P C ",
+						" C c C ",
 						" C   C ",
 						"  CCC  ",
 						"       "
@@ -115,8 +115,9 @@ public final class TeslaTowerShapes extends MultiblockTieredShapes<TeslaTowerTie
 			);
 			builder.key('S', SimpleMember.forBlockId(MI.id("clean_stainless_steel_machine_casing")), new HatchFlags.Builder().with(HatchType.ENERGY_INPUT).build());
 			builder.key('P', SimpleMember.forBlockId(MI.id("stainless_steel_machine_casing_pipe")), HatchFlags.NO_HATCH);
+			builder.key('T', SimpleMember.forBlock(EIBlocks.POLISHED_STAINLESS_STEEL_CASING), HatchFlags.NO_HATCH);
 			builder.key('C', SimpleMember.forBlockId(tier.blockId()), HatchFlags.NO_HATCH);
-			builder.key('W', SimpleMember.forBlock(() -> Blocks.WHITE_WOOL), HatchFlags.NO_HATCH);
+			builder.key('c', SimpleMember.forBlockId(tier.blockId()), HatchFlags.NO_HATCH); // TODO secondary coil
 			shapeTemplates[i] = builder.build();
 		}
 	}

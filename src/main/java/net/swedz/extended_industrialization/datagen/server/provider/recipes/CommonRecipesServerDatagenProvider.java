@@ -297,6 +297,18 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				output
 		);
 		
+		addBasicCraftingRecipes(
+				"casing", "polished_stainless_steel_casing", true,
+				EIBlocks.POLISHED_STAINLESS_STEEL_CASING.get().asItem(), 1,
+				(r) -> r
+						.define('C', "modern_industrialization:stainless_steel_curved_plate")
+						.define('P', EITags.itemCommon("plates/stainless_steel"))
+						.pattern("CPC")
+						.pattern("CPC")
+						.pattern("CPC"),
+				output
+		);
+		
 		components(output);
 		
 		addMachineRecipe(
