@@ -16,6 +16,7 @@ import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
@@ -122,6 +123,19 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	public TeslaReceiver getDelegateReceiver()
 	{
 		return receiver;
+	}
+	
+	@Override
+	public void setLevel(Level level)
+	{
+		super.setLevel(level);
+		
+		if(level.isClientSide())
+		{
+			return;
+		}
+		
+		receiver.addToNetwork();
 	}
 	
 	@Override
