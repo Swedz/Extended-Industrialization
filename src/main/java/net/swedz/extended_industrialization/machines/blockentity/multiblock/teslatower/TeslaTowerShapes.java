@@ -10,18 +10,18 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIBlocks;
 import net.swedz.extended_industrialization.EIDataMaps;
 import net.swedz.extended_industrialization.datamap.TeslaTowerTierData;
-import net.swedz.extended_industrialization.machines.tieredshapes.MultiblockTieredShapes;
+import net.swedz.extended_industrialization.machines.tieredshapes.DataMapMultiblockTieredShapes;
 
 import java.util.Comparator;
 
-public final class TeslaTowerShapes extends MultiblockTieredShapes<TeslaTowerTier, TeslaTowerTierData>
+public final class TeslaTowerShapes extends DataMapMultiblockTieredShapes<TeslaTowerTier, TeslaTowerTierData>
 {
 	TeslaTowerShapes()
 	{
 		super(
 				EI.id("tesla_tower"),
-				EIDataMaps.TESLA_TOWER_TIER,
-				Comparator.comparing(TeslaTowerTier::maxDistance)
+				Comparator.comparing(TeslaTowerTier::maxDistance),
+				EIDataMaps.TESLA_TOWER_TIER
 		);
 	}
 	
@@ -101,9 +101,9 @@ public final class TeslaTowerShapes extends MultiblockTieredShapes<TeslaTowerTie
 	}
 	
 	@Override
-	protected void invalidateShapeTemplates()
+	protected ShapeTemplate[] buildShapeTemplates()
 	{
-		shapeTemplates = new ShapeTemplate[tiers.size()];
+		ShapeTemplate[] shapeTemplates = new ShapeTemplate[tiers.size()];
 		
 		for(int i = 0; i < tiers.size(); i++)
 		{
@@ -120,5 +120,7 @@ public final class TeslaTowerShapes extends MultiblockTieredShapes<TeslaTowerTie
 			builder.key('c', SimpleMember.forBlockId(tier.blockId()), HatchFlags.NO_HATCH); // TODO secondary coil
 			shapeTemplates[i] = builder.build();
 		}
+		
+		return shapeTemplates;
 	}
 }
