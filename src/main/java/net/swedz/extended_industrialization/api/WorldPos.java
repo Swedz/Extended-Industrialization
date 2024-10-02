@@ -57,6 +57,15 @@ public record WorldPos(ResourceKey<Level> dimension, BlockPos pos)
 			   level.shouldTickBlocksAt(pos);
 	}
 	
+	public double distanceSqr(WorldPos other)
+	{
+		if(!dimension.equals(other.dimension()))
+		{
+			throw new IllegalArgumentException("Mismatching dimensions in distance check");
+		}
+		return pos.distSqr(other.pos());
+	}
+	
 	@Override
 	public int hashCode()
 	{

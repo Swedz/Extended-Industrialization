@@ -44,7 +44,9 @@ public interface TeslaReceiver extends TeslaNetworkPart
 		public enum Type
 		{
 			SUCCESS,
-			MISMATCHING_VOLTAGE
+			MISMATCHING_VOLTAGE,
+			TOO_FAR,
+			UNDEFINED
 		}
 	}
 	

@@ -10,7 +10,7 @@ import net.swedz.extended_industrialization.machines.component.tesla.transmitter
 import java.util.Optional;
 import java.util.Set;
 
-public final class TeslaNetwork implements MIEnergyStorage
+public final class TeslaNetwork implements MIEnergyStorage, TeslaTransferLimits.Delegate
 {
 	private final TeslaNetworkCache cache;
 	private final WorldPos          key;
@@ -66,13 +66,14 @@ public final class TeslaNetwork implements MIEnergyStorage
 		return transmitter.orElseThrow();
 	}
 	
-	public CableTier getCableTier()
+	@Override
+	public TeslaTransferLimits getDelegateTransferLimits()
 	{
 		if(!this.isTransmitterLoaded())
 		{
 			throw new IllegalStateException("Cannot get cable tier from network without a loaded transmitter");
 		}
-		return this.getTransmitter().getCableTier();
+		return this.getTransmitter();
 	}
 	
 	private void updateAll()
@@ -133,6 +134,10 @@ public final class TeslaNetwork implements MIEnergyStorage
 	@Override
 	public long receive(long maxReceive, boolean simulate)
 	{
+		if(!this.isTransmitterLoaded())
+		{
+			return 0;
+		}
 		long amountReceived = 0;
 		long remaining = maxReceive;
 		int index = 0;

@@ -11,6 +11,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
+import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +23,11 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 	
 	private final MIEnergyStorage energyStorage;
 	
-	private final Supplier<CableTier> cableTier;
+	private final Supplier<TeslaTransferLimits> limits;
 	
 	private Optional<WorldPos> networkKey = Optional.empty();
 	
-	public TeslaTransmitterComponent(MachineBlockEntity machine, List<EnergyComponent> energyInputs, Supplier<CableTier> cableTier)
+	public TeslaTransmitterComponent(MachineBlockEntity machine, List<EnergyComponent> energyInputs, Supplier<TeslaTransferLimits> limits)
 	{
 		this.machine = machine;
 		
@@ -75,7 +76,7 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 			}
 		};
 		
-		this.cableTier = cableTier;
+		this.limits = limits;
 	}
 	
 	@Override
@@ -105,7 +106,25 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 	@Override
 	public CableTier getCableTier()
 	{
-		return cableTier.get();
+		return limits.get().getCableTier();
+	}
+	
+	@Override
+	public long getMaxTransfer()
+	{
+		return limits.get().getMaxTransfer();
+	}
+	
+	@Override
+	public int getMaxDistance()
+	{
+		return limits.get().getMaxDistance();
+	}
+	
+	@Override
+	public float getMaxLoss()
+	{
+		return limits.get().getMaxLoss();
 	}
 	
 	@Override

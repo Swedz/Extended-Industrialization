@@ -36,7 +36,9 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		this.addLargeElectricFurnaceTier(MI.id("cupronickel_coil"), 8, 0.75f);
 		this.addLargeElectricFurnaceTier(MI.id("kanthal_coil"), 32, 0.75f);
 		
-		this.addTeslaTowerTier(MI.id("cupronickel_coil"), CableTier.LV);
+		// TODO use special coils for tesla tower
+		this.addTeslaTowerTier(MI.id("cupronickel_coil"), CableTier.LV.getMaxTransfer(), 128, 0.25f);
+		this.addTeslaTowerTier(MI.id("superconductor_coil"), CableTier.SUPERCONDUCTOR.getMaxTransfer(), 128 * 8, 0f);
 	}
 	
 	private void addFarmerSimpleTallCropSize(ResourceLocation block, int maxHeight)
@@ -59,9 +61,9 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		this.builder(EIDataMaps.LARGE_ELECTRIC_FURNACE_TIER).add(block, new LargeElectricFurnaceTier(batchSize, euCostMultiplier), false);
 	}
 	
-	private void addTeslaTowerTier(ResourceLocation block, CableTier cableTier)
+	private void addTeslaTowerTier(ResourceLocation block, long maxTransfer, int maxDistance, float maxLoss)
 	{
-		this.builder(EIDataMaps.TESLA_TOWER_TIER).add(block, new TeslaTowerTierData(cableTier), false);
+		this.builder(EIDataMaps.TESLA_TOWER_TIER).add(block, new TeslaTowerTierData(maxTransfer, maxDistance, maxLoss), false);
 	}
 	
 	@Override

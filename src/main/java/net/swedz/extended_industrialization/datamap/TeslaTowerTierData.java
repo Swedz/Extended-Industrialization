@@ -1,6 +1,5 @@
 package net.swedz.extended_industrialization.datamap;
 
-import aztech.modern_industrialization.api.energy.CableTier;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -12,18 +11,20 @@ import net.swedz.extended_industrialization.machines.tieredshapes.DataMultiblock
 
 import java.util.Map;
 
-public record TeslaTowerTierData(CableTier cableTier) implements DataMultiblockTier<TeslaTowerTier>
+public record TeslaTowerTierData(long maxTransfer, int maxDistance, float maxLoss) implements DataMultiblockTier<TeslaTowerTier>
 {
 	public static final Codec<TeslaTowerTierData> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
-					Codec.STRING.xmap(CableTier::getTier, (tier) -> tier.name).fieldOf("cableTier").forGetter(TeslaTowerTierData::cableTier)
+					Codec.LONG.fieldOf("transfer").forGetter(TeslaTowerTierData::maxTransfer),
+					Codec.INT.fieldOf("distance").forGetter(TeslaTowerTierData::maxDistance),
+					Codec.FLOAT.fieldOf("loss").forGetter(TeslaTowerTierData::maxLoss)
 			)
 			.apply(instance, TeslaTowerTierData::new));
 	
 	@Override
 	public TeslaTowerTier wrap(ResourceKey<Block> key)
 	{
-		return new TeslaTowerTier(key.location(), cableTier);
+		return new TeslaTowerTier(key.location(), maxTransfer, maxDistance, maxLoss);
 	}
 	
 	public static TeslaTowerTierData getFor(Block block)

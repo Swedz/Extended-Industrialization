@@ -16,8 +16,9 @@ import com.google.common.collect.Lists;
 import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.api.WorldPos;
+import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
+import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitterComponent;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
@@ -46,7 +47,10 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		
 		redstoneControl = new RedstoneControlComponent();
 		
-		transmitter = new TeslaTransmitterComponent(this, energyInputs, () -> cableTier);
+		transmitter = new TeslaTransmitterComponent(
+				this, energyInputs,
+				() -> TeslaTransferLimits.of(cableTier, SHAPES.tiers().get(activeShape.getActiveShapeIndex()))
+		);
 		
 		this.registerComponents(redstoneControl);
 		

@@ -1,10 +1,11 @@
 package net.swedz.extended_industrialization.machines.component.tesla.transmitter;
 
 import aztech.modern_industrialization.api.energy.CableTier;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
 import net.swedz.extended_industrialization.api.WorldPos;
+import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
+import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
 
-public interface TeslaTransmitter extends TeslaNetworkPart
+public interface TeslaTransmitter extends TeslaNetworkPart, TeslaTransferLimits
 {
 	long transmitEnergy(long maxTransmit);
 	
@@ -42,6 +43,24 @@ public interface TeslaTransmitter extends TeslaNetworkPart
 		default CableTier getCableTier()
 		{
 			return this.getDelegateTransmitter().getCableTier();
+		}
+		
+		@Override
+		default long getMaxTransfer()
+		{
+			return this.getDelegateTransmitter().getMaxTransfer();
+		}
+		
+		@Override
+		default int getMaxDistance()
+		{
+			return this.getDelegateTransmitter().getMaxDistance();
+		}
+		
+		@Override
+		default float getMaxLoss()
+		{
+			return this.getDelegateTransmitter().getMaxLoss();
 		}
 		
 		@Override

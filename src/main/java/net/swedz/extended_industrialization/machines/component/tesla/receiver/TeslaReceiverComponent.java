@@ -9,6 +9,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.util.Mth;
 import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.tesseract.neoforge.helper.transfer.InputOutputDirectionalBlockCapabilityCache;
@@ -87,8 +88,28 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 		{
 			return ReceiveCheckResult.failure(ReceiveCheckResult.Type.MISMATCHING_VOLTAGE);
 		}
-		// TODO check if receiver is within range
-		return ReceiveCheckResult.success(0f);
+		if(machine.hasLevel())
+		{
+			WorldPos transmitterPos = network.getTransmitter().getPosition();
+			WorldPos receiverPos = this.getPosition();
+			if(!transmitterPos.dimension().equals(receiverPos.dimension()))
+			{
+				// TODO check for interdimensional upgrade in the transmitter
+				return ReceiveCheckResult.failure(ReceiveCheckResult.Type.TOO_FAR);
+			}
+			double distanceSqr = transmitterPos.distanceSqr(receiverPos);
+			int maxDistanceSqr = Mth.square(network.getMaxDistance());
+			if(distanceSqr > maxDistanceSqr)
+			{
+				return ReceiveCheckResult.failure(ReceiveCheckResult.Type.TOO_FAR);
+			}
+			float loss = ((float) distanceSqr / maxDistanceSqr) * network.getMaxLoss();
+			return ReceiveCheckResult.success(loss);
+		}
+		else
+		{
+			return ReceiveCheckResult.failure(ReceiveCheckResult.Type.UNDEFINED);
+		}
 	}
 	
 	@Override

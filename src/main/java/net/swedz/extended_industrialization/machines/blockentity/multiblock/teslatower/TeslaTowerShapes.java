@@ -21,7 +21,7 @@ public final class TeslaTowerShapes extends MultiblockTieredShapes<TeslaTowerTie
 		super(
 				EI.id("tesla_tower"),
 				EIDataMaps.TESLA_TOWER_TIER,
-				Comparator.comparing(TeslaTowerTier::cableTier)
+				Comparator.comparing(TeslaTowerTier::maxDistance)
 		);
 	}
 	

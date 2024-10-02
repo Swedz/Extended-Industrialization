@@ -54,5 +54,6 @@ public final class LanguageDatagenProvider extends LanguageProvider
 		this.add("lef_tier.%s.%s.%s".formatted(EI.ID, MI.ID, "kanthal_coil"), "Kanthal");
 		
 		this.add("teslatower_tier.%s.%s.%s".formatted(EI.ID, MI.ID, "cupronickel_coil"), "Cupronickel");
+		this.add("teslatower_tier.%s.%s.%s".formatted(EI.ID, MI.ID, "superconductor_coil"), "Superconductor");
 	}
 }

@@ -1,7 +1,14 @@
 {
   "values": {
     "modern_industrialization:cupronickel_coil": {
-      "cableTier": "lv"
+      "distance": 128,
+      "loss": 0.25,
+      "transfer": 256
+    },
+    "modern_industrialization:superconductor_coil": {
+      "distance": 1024,
+      "loss": 0.0,
+      "transfer": 1024000000
     }
   }
 }
