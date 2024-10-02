@@ -54,7 +54,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 				() -> TeslaTransferLimits.of(cableTier, SHAPES.tiers().get(activeShape.getActiveShapeIndex()))
 		);
 		
-		this.registerComponents(redstoneControl);
+		this.registerComponents(redstoneControl, upgrade, transmitter);
 		
 		this.registerGuiComponent(new ModularMultiblockGui.Server(0, ModularMultiblockGui.HEIGHT, (content) ->
 		{
