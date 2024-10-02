@@ -11,8 +11,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.Slot;
@@ -20,6 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EIText;
 
 import java.util.List;
+
+import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
 public final class ProcessingArrayMachineSlotClient implements GuiComponentClient
 {
@@ -73,7 +73,7 @@ public final class ProcessingArrayMachineSlotClient implements GuiComponentClien
 			@Override
 			public Component getTooltip()
 			{
-				return EIText.PROCESSING_ARRAY_MACHINE_INPUT.text().withStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xA9A9A9)));
+				return line(EIText.PROCESSING_ARRAY_MACHINE_INPUT);
 			}
 		}
 		

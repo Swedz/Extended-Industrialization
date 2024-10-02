@@ -11,8 +11,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -23,6 +21,8 @@ import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.TransformerTierComponent;
 
 import java.util.List;
+
+import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
 public final class UniversalTransformerSlotsClient implements GuiComponentClient
 {
@@ -75,7 +75,7 @@ public final class UniversalTransformerSlotsClient implements GuiComponentClient
 			@Override
 			public Component getTooltip()
 			{
-				return tooltip.text().withStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xA9A9A9)));
+				return line(tooltip);
 			}
 		}
 		
