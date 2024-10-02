@@ -22,10 +22,12 @@ import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransf
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitterComponent;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
-import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.BasicMultiblockMachineBlockEntity;
 
 import java.util.List;
+
+import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
+import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser.*;
 
 public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEntity implements EnergyListComponentHolder, TeslaTransmitter.Delegate
 {
@@ -54,11 +56,9 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		
 		this.registerComponents(redstoneControl);
 		
-		this.registerGuiComponent(new ModularMultiblockGui.Server(0, ModularMultiblockGui.HEIGHT, () ->
+		this.registerGuiComponent(new ModularMultiblockGui.Server(0, ModularMultiblockGui.HEIGHT, (content) ->
 		{
-			List<ModularMultiblockGuiLine> text = Lists.newArrayList();
-			
-			text.add(this.isShapeValid() ? new ModularMultiblockGuiLine(MIText.MultiblockShapeValid.text()) : new ModularMultiblockGuiLine(MIText.MultiblockShapeInvalid.text(), 0xFF0000));
+			content.add((this.isShapeValid() ? MIText.MultiblockShapeValid : MIText.MultiblockShapeInvalid).text(), this.isShapeValid() ? WHITE : RED);
 			
 			if(this.isShapeValid())
 			{
@@ -68,36 +68,34 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 					
 					if(network.isTransmitterLoaded())
 					{
-						text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_VOLTAGE.text(network.getCableTier().shortEnglishName())));
+						content.add(EIText.TESLA_TRANSMITTER_VOLTAGE.arg(network.getCableTier(), CABLE_TIER_SHORT));
 						
-						text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_RECEIVERS.text(network.receiverCount())));
+						content.add(EIText.TESLA_TRANSMITTER_RECEIVERS.arg(network.receiverCount()));
 					}
 					else
 					{
 						if(this.getCableTier() == null)
 						{
-							text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_NO_ENERGY_HATCHES.text(), 0xFF0000));
+							content.add(EIText.TESLA_TRANSMITTER_NO_ENERGY_HATCHES, RED);
 						}
 						else
 						{
-							text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_NO_NETWORK.text(), 0xFF0000));
+							content.add(EIText.TESLA_TRANSMITTER_NO_NETWORK, RED);
 						}
 					}
 				}
 				else
 				{
-					text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_NO_NETWORK.text(), 0xFF0000));
+					content.add(EIText.TESLA_TRANSMITTER_NO_NETWORK, RED);
 				}
 			}
 			else
 			{
-				if(this.getShapeMatcher().hasMismatchingHatches())
+				if(this.getShapeMatcher() != null && this.getShapeMatcher().hasMismatchingHatches())
 				{
-					text.add(new ModularMultiblockGuiLine(EIText.TESLA_TRANSMITTER_MISMATCHING_HATCHES.text(), 0xFF0000, true));
+					content.add(EIText.TESLA_TRANSMITTER_MISMATCHING_HATCHES, RED, true);
 				}
 			}
-			
-			return text;
 		}));
 		
 		this.registerGuiComponent(SHAPES.createShapeSelectionGuiComponent(this, activeShape, true));

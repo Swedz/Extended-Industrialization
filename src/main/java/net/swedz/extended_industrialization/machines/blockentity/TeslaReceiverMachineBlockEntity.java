@@ -13,8 +13,6 @@ import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
-import com.google.common.collect.Lists;
-import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -24,11 +22,11 @@ import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwor
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverComponent;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
-import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine;
-
-import java.util.List;
 
 import static net.swedz.extended_industrialization.EITooltips.*;
+import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
+import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser.*;
+import static net.swedz.tesseract.neoforge.tooltip.Parser.*;
 
 public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity implements TeslaReceiver.Delegate, Tickable
 {
@@ -68,35 +66,42 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		
 		this.registerComponents(isActive, redstoneControl, casing, receiver);
 		
-		this.registerGuiComponent(new ModularMultiblockGui.Server(0, 60, () ->
+		this.registerGuiComponent(new ModularMultiblockGui.Server(0, 60, (content) ->
 		{
-			List<ModularMultiblockGuiLine> text = Lists.newArrayList();
-			
 			if(this.hasNetwork())
 			{
 				TeslaNetwork network = this.getNetwork();
 				
-				text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_LINKED.text(TESLA_NETWORK_KEY_PARSER.parse(this.getNetworkKey()).copy().setStyle(Style.EMPTY)), 0xFFFFFF, true));
+				content.add(EIText.TESLA_RECEIVER_LINKED.arg(this.getNetworkKey(), TESLA_NETWORK_KEY_PARSER), WHITE, true);
 				
 				if(network.isTransmitterLoaded())
 				{
 					ReceiveCheckResult result = this.checkReceiveFrom(network);
-					if(result.type() == ReceiveCheckResult.Type.MISMATCHING_VOLTAGE)
+					if(result.isSuccess())
 					{
-						text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_MISMATCHING_VOLTAGE.text(network.getCableTier().shortEnglishName()), 0xFF0000));
+						content.add(EIText.TESLA_RECEIVER_LOSS.arg(result.loss(), 1, FLOAT_PERCENTAGE_SPACED));
+					}
+					else
+					{
+						if(result.type() == ReceiveCheckResult.Type.MISMATCHING_VOLTAGE)
+						{
+							content.add(EIText.TESLA_RECEIVER_MISMATCHING_VOLTAGE.arg(network.getCableTier(), CABLE_TIER_SHORT), RED);
+						}
+						else if(result.type() == ReceiveCheckResult.Type.TOO_FAR)
+						{
+							content.add(EIText.TESLA_RECEIVER_TOO_FAR, RED);
+						}
 					}
 				}
 				else
 				{
-					text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_UNLOADED_TRANSMITTER.text(), 0xFF0000));
+					content.add(EIText.TESLA_RECEIVER_UNLOADED_TRANSMITTER, RED);
 				}
 			}
 			else
 			{
-				text.add(new ModularMultiblockGuiLine(EIText.TESLA_RECEIVER_NO_LINK.text(), 0xFF0000));
+				content.add(EIText.TESLA_RECEIVER_NO_LINK, RED);
 			}
-			
-			return text;
 		}));
 		
 		this.registerGuiComponent(new SlotPanel.Server(this)
