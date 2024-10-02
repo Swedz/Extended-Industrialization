@@ -101,10 +101,8 @@ public final class TeslaTowerShapes extends DataMapMultiblockTieredShapes<TeslaT
 	}
 	
 	@Override
-	protected ShapeTemplate[] buildShapeTemplates()
+	protected void buildShapeTemplates(ShapeTemplate[] shapeTemplates)
 	{
-		ShapeTemplate[] shapeTemplates = new ShapeTemplate[tiers.size()];
-		
 		for(int i = 0; i < tiers.size(); i++)
 		{
 			TeslaTowerTier tier = tiers.get(i);
@@ -120,7 +118,5 @@ public final class TeslaTowerShapes extends DataMapMultiblockTieredShapes<TeslaT
 			builder.key('c', SimpleMember.forBlockId(tier.blockId()), HatchFlags.NO_HATCH); // TODO secondary coil
 			shapeTemplates[i] = builder.build();
 		}
-		
-		return shapeTemplates;
 	}
 }

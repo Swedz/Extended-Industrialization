@@ -71,11 +71,12 @@ public abstract class MultiblockTieredShapes<T extends MultiblockTier>
 		tiersByBlock = tiers.stream().collect(Collectors.toMap(MultiblockTier::blockId, Function.identity()));
 	}
 	
-	protected abstract ShapeTemplate[] buildShapeTemplates();
+	protected abstract void buildShapeTemplates(ShapeTemplate[] shapeTemplates);
 	
 	private void invalidateShapeTemplates()
 	{
-		shapeTemplates = this.buildShapeTemplates();
+		shapeTemplates = new ShapeTemplate[tiers.size()];
+		this.buildShapeTemplates(shapeTemplates);
 	}
 	
 	protected void invalidateRecipeViewerShapes()
