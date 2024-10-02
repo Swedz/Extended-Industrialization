@@ -57,9 +57,14 @@ public record WorldPos(ResourceKey<Level> dimension, BlockPos pos)
 			   level.shouldTickBlocksAt(pos);
 	}
 	
+	public boolean isSameDimension(WorldPos other)
+	{
+		return dimension.equals(other.dimension());
+	}
+	
 	public double distanceSqr(WorldPos other)
 	{
-		if(!dimension.equals(other.dimension()))
+		if(!this.isSameDimension(other))
 		{
 			throw new IllegalArgumentException("Mismatching dimensions in distance check");
 		}

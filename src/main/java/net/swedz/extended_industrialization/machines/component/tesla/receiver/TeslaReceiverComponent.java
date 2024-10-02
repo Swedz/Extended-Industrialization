@@ -92,7 +92,7 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 		{
 			WorldPos transmitterPos = network.getTransmitter().getPosition();
 			WorldPos receiverPos = this.getPosition();
-			if(!transmitterPos.dimension().equals(receiverPos.dimension()))
+			if(!transmitterPos.isSameDimension(receiverPos))
 			{
 				// TODO check for interdimensional upgrade in the transmitter
 				return ReceiveCheckResult.failure(ReceiveCheckResult.Type.TOO_FAR);
