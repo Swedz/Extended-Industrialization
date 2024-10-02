@@ -127,7 +127,7 @@ public final class MachineConfigCardItem extends Item
 		if(stack.has(EIComponents.MACHINE_CONFIG))
 		{
 			Block machineBlock = stack.get(EIComponents.MACHINE_CONFIG).machineBlock();
-			tooltipComponents.add(EIText.MACHINE_CONFIG_CARD_CONFIGURED.text(ITEM_PARSER.parse(machineBlock.asItem())));
+			tooltipComponents.add(EIText.MACHINE_CONFIG_CARD_CONFIGURED.arg(machineBlock.asItem(), ITEM_PARSER));
 		}
 	}
 	

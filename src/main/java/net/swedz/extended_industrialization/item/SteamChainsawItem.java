@@ -195,7 +195,9 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 			if(!level.isClientSide)
 			{
 				user.displayClientMessage(
-						isNotSilkTouch(stack) ? MIText.ToolSwitchedNoSilkTouch.text() : MIText.ToolSwitchedSilkTouch.text(), true);
+						(isNotSilkTouch(stack) ? MIText.ToolSwitchedNoSilkTouch : MIText.ToolSwitchedSilkTouch).text(),
+						true
+				);
 			}
 			return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
 		}

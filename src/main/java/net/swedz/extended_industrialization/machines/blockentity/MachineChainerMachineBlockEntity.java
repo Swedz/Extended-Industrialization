@@ -12,7 +12,6 @@ import aztech.modern_industrialization.machines.guicomponents.AutoExtract;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
-import com.google.common.collect.Lists;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -22,12 +21,12 @@ import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerComponent;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
-import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine;
 import net.swedz.tesseract.neoforge.compat.mi.helper.transfer.MIEnergyTransferCache;
 import net.swedz.tesseract.neoforge.helper.transfer.FluidTransferCache;
 import net.swedz.tesseract.neoforge.helper.transfer.ItemTransferCache;
 
-import java.util.List;
+import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
+import static net.swedz.tesseract.neoforge.tooltip.Parser.*;
 
 public final class MachineChainerMachineBlockEntity extends MachineBlockEntity implements Tickable
 {
@@ -69,22 +68,18 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		
 		this.registerGuiComponent(new AutoExtract.Server(orientation));
 		
-		this.registerGuiComponent(new ModularMultiblockGui.Server(11, 50, () ->
+		this.registerGuiComponent(new ModularMultiblockGui.Server(11, 50, (content) ->
 		{
 			ChainerLinks links = chainer.links();
 			
-			List<ModularMultiblockGuiLine> text = Lists.newArrayList();
-			
 			if(!links.hasConnections() && links.failPosition().isPresent())
 			{
-				text.add(new ModularMultiblockGuiLine(EIText.MACHINE_CHAINER_PROBLEM_AT.text(links.failPosition().get().toShortString()), 0xFF0000));
+				content.add(EIText.MACHINE_CHAINER_PROBLEM_AT.arg(links.failPosition().get(), BLOCK_POS), RED);
 			}
 			else
 			{
-				text.add(new ModularMultiblockGuiLine(EIText.MACHINE_CHAINER_CONNECTED_MACHINES.text(links.count(), links.maxConnections())));
+				content.add(EIText.MACHINE_CHAINER_CONNECTED_MACHINES.arg(links.count()).arg(links.maxConnections()));
 			}
-			
-			return text;
 		}));
 		
 		this.registerComponents(chainer, redstoneControl);

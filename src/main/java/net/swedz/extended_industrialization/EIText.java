@@ -1,8 +1,8 @@
 package net.swedz.extended_industrialization;
 
-import net.swedz.tesseract.neoforge.tooltip.TranslatableTextEnum;
+import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTranslatableTextEnum;
 
-public enum EIText implements TranslatableTextEnum
+public enum EIText implements MICompatibleTranslatableTextEnum
 {
 	ACTIVATED("Activated"),
 	BREWERY_BREWS_MULTIPLE("Brews %s potions at a time."),
