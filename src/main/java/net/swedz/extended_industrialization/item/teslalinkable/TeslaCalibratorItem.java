@@ -11,6 +11,11 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.api.WorldPos;
@@ -22,11 +27,34 @@ import java.util.List;
 import static aztech.modern_industrialization.MITooltips.*;
 import static net.swedz.extended_industrialization.EITooltips.*;
 
+@EventBusSubscriber(modid = EI.ID)
 public final class TeslaCalibratorItem extends Item
 {
 	public TeslaCalibratorItem(Properties properties)
 	{
 		super(properties.stacksTo(1));
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	private static void onPlaceMachineWithConfig(BlockEvent.EntityPlaceEvent event)
+	{
+		if(event.getEntity() instanceof Player player)
+		{
+			ItemStack offhand = player.getItemInHand(InteractionHand.OFF_HAND);
+			if(offhand.has(EIComponents.SELECTED_TESLA_NETWORK))
+			{
+				WorldPos key = offhand.get(EIComponents.SELECTED_TESLA_NETWORK);
+				
+				BlockEntity blockEntity = event.getLevel().getBlockEntity(event.getPos());
+				if(blockEntity instanceof TeslaReceiverMachineBlockEntity receiver)
+				{
+					receiver.setNetwork(key);
+					receiver.setChanged();
+					receiver.sync();
+					player.displayClientMessage(EIText.TESLA_CALIBRATOR_LINK_SUCCESS.text(), true);
+				}
+			}
+		}
 	}
 	
 	@Override
