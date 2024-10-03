@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.api.WorldPos;
-import net.swedz.extended_industrialization.item.teslalinkable.TeslaCarryOnReceiverItem;
+import net.swedz.extended_industrialization.item.teslalinkable.TeslaHandheldReceiverItem;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaReceiverHolder;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.PlayerTeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
@@ -82,7 +82,7 @@ public abstract class TeslaNetworkReceiversPlayerMixin extends LivingEntity
 		
 		for(ItemStack stack : this.getAllItems())
 		{
-			if(stack.getItem() instanceof TeslaCarryOnReceiverItem && stack.has(EIComponents.SELECTED_TESLA_NETWORK))
+			if(stack.getItem() instanceof TeslaHandheldReceiverItem && stack.has(EIComponents.SELECTED_TESLA_NETWORK))
 			{
 				WorldPos key = stack.get(EIComponents.SELECTED_TESLA_NETWORK);
 				found.computeIfAbsent(key, (k) -> new PlayerTeslaReceiver(player, k));

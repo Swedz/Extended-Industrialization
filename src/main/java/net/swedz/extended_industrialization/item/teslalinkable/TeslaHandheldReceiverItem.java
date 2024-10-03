@@ -21,9 +21,9 @@ import java.util.List;
 import static aztech.modern_industrialization.MITooltips.*;
 import static net.swedz.extended_industrialization.EITooltips.*;
 
-public final class TeslaCarryOnReceiverItem extends Item
+public final class TeslaHandheldReceiverItem extends Item
 {
-	public TeslaCarryOnReceiverItem(Properties properties)
+	public TeslaHandheldReceiverItem(Properties properties)
 	{
 		super(properties.stacksTo(1));
 	}
@@ -42,7 +42,7 @@ public final class TeslaCarryOnReceiverItem extends Item
 				if(hitBlockEntity instanceof TeslaTransmitter)
 				{
 					itemStack.set(EIComponents.SELECTED_TESLA_NETWORK, new WorldPos(context.getLevel(), context.getClickedPos()));
-					player.displayClientMessage(EIText.TESLA_CARRYON_SELECTED.text(), true);
+					player.displayClientMessage(EIText.TESLA_HANDHELD_SELECTED.text(), true);
 				}
 			}
 			return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
@@ -56,7 +56,7 @@ public final class TeslaCarryOnReceiverItem extends Item
 		if(player.isShiftKeyDown())
 		{
 			player.getItemInHand(usedHand).remove(EIComponents.SELECTED_TESLA_NETWORK);
-			player.displayClientMessage(EIText.TESLA_CARRYON_CLEAR.text(), true);
+			player.displayClientMessage(EIText.TESLA_HANDHELD_CLEAR.text(), true);
 			return InteractionResultHolder.sidedSuccess(player.getItemInHand(usedHand), level.isClientSide());
 		}
 		return super.use(level, player, usedHand);
@@ -68,7 +68,7 @@ public final class TeslaCarryOnReceiverItem extends Item
 		if(stack.has(EIComponents.SELECTED_TESLA_NETWORK))
 		{
 			WorldPos key = stack.get(EIComponents.SELECTED_TESLA_NETWORK);
-			tooltipComponents.add(EIText.TESLA_CARRYON_LINKED.text(TESLA_NETWORK_KEY_PARSER.parse(key)).withStyle(DEFAULT_STYLE));
+			tooltipComponents.add(EIText.TESLA_HANDHELD_LINKED.text(TESLA_NETWORK_KEY_PARSER.parse(key)).withStyle(DEFAULT_STYLE));
 		}
 	}
 	
