@@ -236,6 +236,16 @@ public final class EITooltips
 			)
 	);
 	
+	public static final TooltipAttachment TESLA_CARRY_ON_RECEIVER = TooltipAttachment.multilines(
+			List.of(EI.id("tesla_carry_on_receiver")),
+			List.of(
+					line(EIText.TESLA_CARRYON_HELP_1),
+					line(EIText.TESLA_CARRYON_HELP_2),
+					line(EIText.TESLA_CARRYON_HELP_3).arg("use", KEYBIND_PARSER),
+					line(EIText.TESLA_CARRYON_HELP_4).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
+			)
+	);
+	
 	public static void init()
 	{
 	}
