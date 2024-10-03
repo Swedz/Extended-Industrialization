@@ -32,20 +32,25 @@ public final class TeslaCalibratorItem extends Item
 	@Override
 	public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context)
 	{
+		boolean client = context.getLevel().isClientSide();
 		Player player = context.getPlayer();
 		if(player != null)
 		{
 			InteractionHand usedHand = context.getHand();
 			ItemStack itemStack = player.getItemInHand(usedHand);
 			BlockEntity hitBlockEntity = context.getLevel().getBlockEntity(context.getClickedPos());
-			if(!context.getLevel().isClientSide())
+			if(player.isShiftKeyDown() && hitBlockEntity instanceof TeslaTransmitter)
 			{
-				if(player.isShiftKeyDown() && hitBlockEntity instanceof TeslaTransmitter)
+				if(!client)
 				{
 					itemStack.set(EIComponents.SELECTED_TESLA_NETWORK, new WorldPos(context.getLevel(), context.getClickedPos()));
 					player.displayClientMessage(EIText.TESLA_CALIBRATOR_SELECTED.text(), true);
 				}
-				else if(!player.isShiftKeyDown() && hitBlockEntity instanceof TeslaReceiverMachineBlockEntity receiver)
+				return InteractionResult.sidedSuccess(client);
+			}
+			else if(!player.isShiftKeyDown() && hitBlockEntity instanceof TeslaReceiverMachineBlockEntity receiver)
+			{
+				if(!client)
 				{
 					if(itemStack.has(EIComponents.SELECTED_TESLA_NETWORK))
 					{
@@ -60,8 +65,8 @@ public final class TeslaCalibratorItem extends Item
 						player.displayClientMessage(EIText.TESLA_CALIBRATOR_LINK_FAILED_NO_SELECTION.text(), true);
 					}
 				}
+				return InteractionResult.sidedSuccess(client);
 			}
-			return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
 		}
 		return InteractionResult.PASS;
 	}

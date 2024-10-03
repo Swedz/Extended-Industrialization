@@ -31,21 +31,22 @@ public final class TeslaHandheldReceiverItem extends Item
 	@Override
 	public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context)
 	{
+		boolean client = context.getLevel().isClientSide();
 		Player player = context.getPlayer();
 		if(player != null)
 		{
 			InteractionHand usedHand = context.getHand();
 			ItemStack itemStack = player.getItemInHand(usedHand);
 			BlockEntity hitBlockEntity = context.getLevel().getBlockEntity(context.getClickedPos());
-			if(!context.getLevel().isClientSide())
+			if(hitBlockEntity instanceof TeslaTransmitter)
 			{
-				if(hitBlockEntity instanceof TeslaTransmitter)
+				if(!client)
 				{
 					itemStack.set(EIComponents.SELECTED_TESLA_NETWORK, new WorldPos(context.getLevel(), context.getClickedPos()));
 					player.displayClientMessage(EIText.TESLA_HANDHELD_SELECTED.text(), true);
 				}
+				return InteractionResult.sidedSuccess(client);
 			}
-			return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
 		}
 		return InteractionResult.PASS;
 	}
