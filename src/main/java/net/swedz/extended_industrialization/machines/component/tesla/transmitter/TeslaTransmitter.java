@@ -7,6 +7,8 @@ import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransf
 
 public interface TeslaTransmitter extends TeslaNetworkPart, TeslaTransferLimits
 {
+	boolean isInterdimensional();
+	
 	long transmitEnergy(long maxTransmit);
 	
 	long extractEnergy(long maxExtract, boolean simulate);
@@ -61,6 +63,12 @@ public interface TeslaTransmitter extends TeslaNetworkPart, TeslaTransferLimits
 		default float getMaxLoss()
 		{
 			return this.getDelegateTransmitter().getMaxLoss();
+		}
+		
+		@Override
+		default boolean isInterdimensional()
+		{
+			return this.getDelegateTransmitter().isInterdimensional();
 		}
 		
 		@Override

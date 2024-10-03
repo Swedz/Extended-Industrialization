@@ -28,6 +28,7 @@ public final class PlayerTeslaReceiver implements TeslaReceiver
 	@Override
 	public ReceiveCheckResult checkReceiveFrom(TeslaNetwork network)
 	{
+		// TODO check distance as well
 		return ReceiveCheckResult.success(0f);
 	}
 	

@@ -12,6 +12,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.util.Mth;
 import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
+import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 import net.swedz.tesseract.neoforge.helper.transfer.InputOutputDirectionalBlockCapabilityCache;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
@@ -90,19 +91,29 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 		}
 		if(machine.hasLevel())
 		{
-			WorldPos transmitterPos = network.getTransmitter().getPosition();
+			TeslaTransmitter transmitter = network.getTransmitter();
+			WorldPos transmitterPos = transmitter.getPosition();
 			WorldPos receiverPos = this.getPosition();
+			
+			boolean interdimensional = transmitter.isInterdimensional();
+			
 			if(!transmitterPos.isSameDimension(receiverPos))
 			{
-				// TODO check for interdimensional upgrade in the transmitter
-				return ReceiveCheckResult.failure(ReceiveCheckResult.Type.TOO_FAR);
+				return interdimensional ?
+						ReceiveCheckResult.success(network.getMaxLoss()) :
+						ReceiveCheckResult.failure(ReceiveCheckResult.Type.TOO_FAR);
 			}
+			
 			double distanceSqr = transmitterPos.distanceSqr(receiverPos);
 			int maxDistanceSqr = Mth.square(network.getMaxDistance());
 			if(distanceSqr > maxDistanceSqr)
 			{
-				return ReceiveCheckResult.failure(ReceiveCheckResult.Type.TOO_FAR);
+				// TODO check for global upgrade
+				return interdimensional ?
+						ReceiveCheckResult.success(network.getMaxLoss()) :
+						ReceiveCheckResult.failure(ReceiveCheckResult.Type.TOO_FAR);
 			}
+			
 			float loss = ((float) distanceSqr / maxDistanceSqr) * network.getMaxLoss();
 			return ReceiveCheckResult.success(loss);
 		}

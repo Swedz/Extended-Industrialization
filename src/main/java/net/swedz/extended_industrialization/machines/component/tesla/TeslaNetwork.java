@@ -76,7 +76,7 @@ public final class TeslaNetwork implements MIEnergyStorage, TeslaTransferLimits.
 		return this.getTransmitter();
 	}
 	
-	private void updateAll()
+	public void updateAll()
 	{
 		for(TeslaReceiver receiver : loadedReceivers)
 		{

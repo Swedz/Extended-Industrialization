@@ -72,6 +72,8 @@ public final class EIItems
 	public static final ItemHolder<TeslaCalibratorItem>      TESLA_CALIBRATOR        = create("tesla_calibrator", "Tesla Calibrator", TeslaCalibratorItem::new, EISortOrder.OTHER_GEAR).withModel(CommonModelBuilders::generated).register();
 	public static final ItemHolder<TeslaCarryOnReceiverItem> TESLA_CARRY_ON_RECEIVER = create("tesla_carry_on_receiver", "Tesla Carry-On Receiver", TeslaCarryOnReceiverItem::new, EISortOrder.OTHER_GEAR).withModel(CommonModelBuilders::generated).register();
 	
+	public static final ItemHolder<Item> TESLA_INTERDIMENSIONAL_UPGRADE = create("tesla_interdimensional_upgrade", "Tesla Interdimensional Upgrade", Item::new, EISortOrder.OTHER_GEAR).withProperties((p) -> p.stacksTo(1).rarity(Rarity.EPIC)).withModel(CommonModelBuilders::generated).register();
+	
 	public static final ItemHolder<Item> NETHERITE_ROTARY_BLADE = create("netherite_rotary_blade", "Netherite Rotary Blade", Item::new, EISortOrder.PARTS).withModel(CommonModelBuilders::generated).register();
 	public static final ItemHolder<Item> STEEL_COMBINE          = create("steel_combine", "Steel Combine", Item::new, EISortOrder.PARTS).withModel(CommonModelBuilders::generated).register();
 	

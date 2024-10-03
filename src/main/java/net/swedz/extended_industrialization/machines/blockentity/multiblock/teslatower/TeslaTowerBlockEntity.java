@@ -5,22 +5,26 @@ import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.machine.component.EnergyAccess;
 import aztech.modern_industrialization.api.machine.holder.EnergyListComponentHolder;
 import aztech.modern_industrialization.machines.BEP;
+import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.blockentities.hatches.EnergyHatch;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
-import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.multiblocks.HatchBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import com.google.common.collect.Lists;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.api.WorldPos;
+import net.swedz.extended_industrialization.machines.component.itemslot.TeslaTowerUpgradeComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitterComponent;
+import net.swedz.extended_industrialization.machines.guicomponent.EIModularSlotPanelSlots;
+import net.swedz.extended_industrialization.machines.guicomponent.modularslots.ModularSlotPanel;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.BasicMultiblockMachineBlockEntity;
 
@@ -32,6 +36,7 @@ import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser.*;
 public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEntity implements EnergyListComponentHolder, TeslaTransmitter.Delegate
 {
 	private final RedstoneControlComponent redstoneControl;
+	private final TeslaTowerUpgradeComponent upgrade;
 	
 	private final List<EnergyComponent> energyInputs = Lists.newArrayList();
 	
@@ -48,6 +53,19 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		);
 		
 		redstoneControl = new RedstoneControlComponent();
+		upgrade = new TeslaTowerUpgradeComponent()
+		{
+			@Override
+			public void setStackServer(MachineBlockEntity machine, ItemStack stack)
+			{
+				super.setStackServer(machine, stack);
+				
+				if(level != null && !level.isClientSide())
+				{
+					transmitter.getNetwork().updateAll();
+				}
+			}
+		};
 		
 		transmitter = new TeslaTransmitterComponent(
 				this, energyInputs,
@@ -100,8 +118,9 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		
 		this.registerGuiComponent(SHAPES.createShapeSelectionGuiComponent(this, activeShape, true));
 		
-		this.registerGuiComponent(new SlotPanel.Server(this)
-				.withRedstoneControl(redstoneControl));
+		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
+				.withRedstoneModule(redstoneControl)
+				.with(EIModularSlotPanelSlots.TESLA_TOWER_UPGRADE, upgrade));
 	}
 	
 	@Override

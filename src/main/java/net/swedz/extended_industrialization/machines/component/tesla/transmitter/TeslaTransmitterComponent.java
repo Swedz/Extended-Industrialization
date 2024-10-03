@@ -10,6 +10,7 @@ import dev.technici4n.grandpower.api.EnergyStorageUtil;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.swedz.extended_industrialization.api.WorldPos;
+import net.swedz.extended_industrialization.machines.component.itemslot.TeslaTowerUpgradeComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
 
@@ -125,6 +126,12 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 	public float getMaxLoss()
 	{
 		return limits.get().getMaxLoss();
+	}
+	
+	@Override
+	public boolean isInterdimensional()
+	{
+		return machine.getComponents().mapOrDefault(TeslaTowerUpgradeComponent.class, TeslaTowerUpgradeComponent::isInterdimensional, false);
 	}
 	
 	@Override

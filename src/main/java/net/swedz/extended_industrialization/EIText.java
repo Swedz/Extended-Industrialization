@@ -119,6 +119,7 @@ public enum EIText implements TranslatableTextEnum
 	TESLA_RECEIVER_NO_LINK("Not linked to any transmitter"),
 	TESLA_RECEIVER_TOO_FAR("Transmitter is too far"),
 	TESLA_RECEIVER_UNLOADED_TRANSMITTER("Transmitter is not loaded"),
+	TESLA_TOWER_UPGRADE("Add tesla upgrades to increase maximum range."),
 	TESLA_TRANSMITTER_MISMATCHING_HATCHES("All energy hatches must be of the same voltage."),
 	TESLA_TRANSMITTER_NO_ENERGY_HATCHES("No energy hatches provided"),
 	TESLA_TRANSMITTER_NO_NETWORK("No network found"),
