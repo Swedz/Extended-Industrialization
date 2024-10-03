@@ -7,7 +7,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.api.WorldPos;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.proxy.modslot.EIModSlotProxy;
 import net.swedz.tesseract.neoforge.compat.mi.helper.ChargeInventoryHelper;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
@@ -23,13 +22,6 @@ public final class PlayerTeslaReceiver implements TeslaReceiver
 	{
 		this.player = player;
 		this.networkKey = networkKey;
-	}
-	
-	@Override
-	public ReceiveCheckResult checkReceiveFrom(TeslaNetwork network)
-	{
-		// TODO check distance as well
-		return ReceiveCheckResult.success(0f);
 	}
 	
 	@Override

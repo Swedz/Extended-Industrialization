@@ -1,13 +1,40 @@
 package net.swedz.extended_industrialization.machines.component.tesla.receiver;
 
 import aztech.modern_industrialization.api.energy.CableTier;
+import net.minecraft.util.Mth;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
 import net.swedz.extended_industrialization.api.WorldPos;
+import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 
 public interface TeslaReceiver extends TeslaNetworkPart
 {
-	ReceiveCheckResult checkReceiveFrom(TeslaNetwork network);
+	default ReceiveCheckResult checkReceiveFrom(TeslaNetwork network)
+	{
+		TeslaTransmitter transmitter = network.getTransmitter();
+		WorldPos transmitterPos = transmitter.getPosition();
+		WorldPos receiverPos = this.getPosition();
+		
+		if(!transmitterPos.isSameDimension(receiverPos))
+		{
+			return transmitter.isInterdimensional() ?
+					ReceiveCheckResult.success(network.getMaxLoss()) :
+					ReceiveCheckResult.failure(ReceiveCheckResult.Type.TOO_FAR);
+		}
+		
+		double distanceSqr = transmitterPos.distanceSqr(receiverPos);
+		int maxDistanceSqr = Mth.square(network.getMaxDistance());
+		if(distanceSqr > maxDistanceSqr)
+		{
+			// TODO check for global upgrade
+			return transmitter.isInterdimensional() ?
+					ReceiveCheckResult.success(network.getMaxLoss()) :
+					ReceiveCheckResult.failure(ReceiveCheckResult.Type.TOO_FAR);
+		}
+		
+		float loss = ((float) distanceSqr / maxDistanceSqr) * network.getMaxLoss();
+		return ReceiveCheckResult.success(loss);
+	}
 	
 	long receiveEnergy(long maxReceive, boolean simulate);
 	
