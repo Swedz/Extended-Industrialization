@@ -212,11 +212,20 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 			return;
 		}
 		
-		if(redstoneControl.doAllowNormalOperation(this))
+		boolean active = false;
+		
+		if(shapeValid.shapeValid)
 		{
-			// TODO limit transmit rate
-			this.transmitEnergy(Long.MAX_VALUE);
+			if(redstoneControl.doAllowNormalOperation(this))
+			{
+				// TODO limit transmit rate
+				this.transmitEnergy(Long.MAX_VALUE);
+				
+				active = true;
+			}
 		}
+		
+		this.updateActive(active);
 	}
 	
 	@Override
