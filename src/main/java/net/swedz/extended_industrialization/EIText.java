@@ -9,6 +9,7 @@ public enum EIText implements TranslatableTextEnum
 	BREWERY_REQUIRES_BLAZING_ESSENCE("Requires %s to brew potions."),
 	CALCIFICATION_PERCENTAGE("Calcification: %d %%"),
 	COILS_LEF_TIER("Runs LEF in batches of up to %d at %s the EU cost."),
+	COILS_TESLA_TOWER_TIER("Allows the Tesla Tower to transmit up to %s within %s blocks with a max loss of %s."),
 	COMMAND_TESLA_NETWORK_DUMP_CANT_HAVE_NETWORK("The block at %s is not a network part."),
 	COMMAND_TESLA_NETWORK_DUMP_CHUNK_NOT_LOADED("Chunk at %s is not loaded."),
 	COMMAND_TESLA_NETWORK_DUMP_NO_NETWORK("No existing network could be found for %s."),

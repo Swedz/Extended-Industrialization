@@ -15,6 +15,8 @@ import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.api.WorldPos;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerTier;
 import net.swedz.tesseract.neoforge.tooltip.BiParser;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 import net.swedz.tesseract.neoforge.tooltip.TooltipAttachment;
@@ -78,7 +80,7 @@ public final class EITooltips
 			)
 	).noShiftRequired();
 	
-	public static final TooltipAttachment COILS = TooltipAttachment.singleLine(
+	public static final TooltipAttachment COILS_LEF = TooltipAttachment.singleLine(
 			(stack, item) ->
 					item instanceof BlockItem blockItem &&
 					LargeElectricFurnaceBlockEntity.getTiersByCoil().containsKey(BuiltInRegistries.BLOCK.getKey(blockItem.getBlock())),
@@ -89,6 +91,21 @@ public final class EITooltips
 				int batchSize = tier.batchSize();
 				float euCostMultiplier = tier.euCostMultiplier();
 				return line(EIText.COILS_LEF_TIER).arg(batchSize).arg(euCostMultiplier, PERCENTAGE_PARSER);
+			}
+	);
+	
+	public static final TooltipAttachment COILS_TESLA = TooltipAttachment.singleLine(
+			(stack, item) ->
+					item instanceof BlockItem blockItem &&
+					TeslaTowerBlockEntity.getTiersByCoil().containsKey(BuiltInRegistries.BLOCK.getKey(blockItem.getBlock())),
+			(stack, item) ->
+			{
+				TeslaTowerTier tier = TeslaTowerBlockEntity.getTiersByCoil()
+						.get(BuiltInRegistries.BLOCK.getKey(((BlockItem) stack.getItem()).getBlock()));
+				return line(EIText.COILS_TESLA_TOWER_TIER)
+						.arg(tier.maxTransfer(), EU_PER_TICK_PARSER)
+						.arg(tier.maxDistance())
+						.arg(tier.maxLoss(), SPACED_PERCENTAGE_PARSER);
 			}
 	);
 	

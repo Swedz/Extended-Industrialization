@@ -13,6 +13,7 @@ import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.multiblocks.HatchBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import com.google.common.collect.Lists;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.EI;
@@ -29,6 +30,7 @@ import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.Mod
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.BasicMultiblockMachineBlockEntity;
 
 import java.util.List;
+import java.util.Map;
 
 import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser.*;
@@ -242,5 +244,10 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	public static void registerTieredShapes()
 	{
 		SHAPES.register();
+	}
+	
+	public static Map<ResourceLocation, TeslaTowerTier> getTiersByCoil()
+	{
+		return SHAPES.tiersByBlock();
 	}
 }
