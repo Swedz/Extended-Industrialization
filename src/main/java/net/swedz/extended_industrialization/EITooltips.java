@@ -148,6 +148,16 @@ public final class EITooltips
 			)
 	);
 	
+	public static final TooltipAttachment TESLA_CALIBRATOR = TooltipAttachment.multilines(
+			EIItems.TESLA_CALIBRATOR,
+			List.of(
+					line(EIText.TESLA_CALIBRATOR_HELP_1).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER),
+					line(EIText.TESLA_CALIBRATOR_HELP_2).arg("use", KEYBIND_PARSER),
+					line(EIText.TESLA_CALIBRATOR_HELP_3),
+					line(EIText.TESLA_CALIBRATOR_HELP_4).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
+			)
+	);
+	
 	public static final TooltipAttachment ELECTRIC_TOOL_HELP = TooltipAttachment.multilines(
 			ElectricToolItem.class,
 			(stack, item) ->
