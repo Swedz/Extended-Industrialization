@@ -192,21 +192,6 @@ public final class EITooltips
 			line(EIText.WASTE_COLLECTOR_HELP)
 	);
 	
-	public static final TooltipAttachment CHARGING_STATION_RANGED = TooltipAttachment.singleLine(
-			List.of(EI.id("local_wireless_charging_station")),
-			line(EIText.CHARGING_STATION_RANGED).arg(EIConfig.localWirelessChargingStationRange)
-	);
-	
-	public static final TooltipAttachment CHARGING_STATION_GLOBAL = TooltipAttachment.singleLine(
-			List.of(EI.id("global_wireless_charging_station")),
-			line(EIText.CHARGING_STATION_GLOBAL)
-	);
-	
-	public static final TooltipAttachment CHARGING_STATION_INTERDIMENSIONAL = TooltipAttachment.singleLine(
-			List.of(EI.id("interdimensional_wireless_charging_station")),
-			line(EIText.CHARGING_STATION_INTERDIMENSIONAL)
-	);
-	
 	public static void init()
 	{
 	}
