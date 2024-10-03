@@ -10,11 +10,11 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
+import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
-import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerTier;
 import net.swedz.tesseract.neoforge.tooltip.BiParser;
@@ -207,6 +207,23 @@ public final class EITooltips
 					EI.id("electric_waste_collector")
 			),
 			line(EIText.WASTE_COLLECTOR_HELP)
+	);
+	
+	public static final TooltipAttachment TESLA_TOWER = TooltipAttachment.multilines(
+			List.of(EI.id("tesla_tower")),
+			List.of(
+					line(EIText.TESLA_TOWER_HELP_1),
+					line(EIText.TESLA_TOWER_HELP_2),
+					line(EIText.TESLA_TOWER_HELP_3)
+			)
+	);
+	
+	public static final TooltipAttachment TESLA_RECEIVER = TooltipAttachment.multilines(
+			List.of(EI.id("tesla_receiver")),
+			List.of(
+					line(EIText.TESLA_RECEIVER_HELP_1),
+					line(EIText.TESLA_RECEIVER_HELP_2)
+			)
 	);
 	
 	public static void init()
