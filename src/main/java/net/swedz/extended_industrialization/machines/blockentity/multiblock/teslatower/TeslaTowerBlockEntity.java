@@ -82,7 +82,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		);
 		
 		arcs = new TeslaArcs(
-				2, 6, 4, 8, 5,
+				3, 6, 4, 8, 5, 10,
 				() ->
 				{
 					Direction facing = orientation.facingDirection;

@@ -71,10 +71,15 @@ final class TeslaPartRenderer
 				}
 				int ticks = points.getFirst().getTimeActive();
 				builder.setAlpha(0.9f * (ticks == 0 ? partialTick : ticks == generator.getTeslaArcs().duration() ? (1 - partialTick) : 1));
+				int halfPoints = points.size() / 2;
+				if(ticks == 0 || ticks == 1)
+				{
+					points = points.subList(0, (int) (halfPoints * partialTick) + (ticks == 1 ? halfPoints : 0));
+				}
 				
 				matrices.pushPose();
 				
-				builder.renderTrail(matrices, trail.getTrailPoints(), (i) -> 1 - i);
+				builder.renderTrail(matrices, points, (i) -> 1 - i);
 				
 				matrices.popPose();
 			}

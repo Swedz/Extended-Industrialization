@@ -19,12 +19,15 @@ public final class TeslaArcs
 	private final int   minLength;
 	private final int   maxLength;
 	private final float maxSectionLength;
+	private final int   sectionSplits;
 	
 	private final Supplier<Vec3> offset;
 	
 	private final List<TrailPointBuilder> trails = Lists.newArrayList();
 	
-	public TeslaArcs(int arcDuration, int arcs, int minLength, int maxLength, float maxSectionLength,
+	public TeslaArcs(int arcDuration, int arcs,
+					 int minLength, int maxLength,
+					 float maxSectionLength, int sectionSplits,
 					 Supplier<Vec3> offset)
 	{
 		Assert.that(arcDuration > 0);
@@ -32,6 +35,7 @@ public final class TeslaArcs
 		Assert.that(minLength > 0);
 		Assert.that(maxLength > 0 && maxLength >= minLength);
 		Assert.that(maxSectionLength > 0);
+		Assert.that(sectionSplits > 0);
 		Assert.notNull(offset);
 		
 		this.arcDuration = arcDuration;
@@ -39,6 +43,7 @@ public final class TeslaArcs
 		this.minLength = minLength;
 		this.maxLength = maxLength;
 		this.maxSectionLength = maxSectionLength;
+		this.sectionSplits = sectionSplits;
 		this.offset = offset;
 	}
 	
@@ -65,6 +70,11 @@ public final class TeslaArcs
 	public float maxSectionLength()
 	{
 		return maxSectionLength;
+	}
+	
+	public int sectionSplits()
+	{
+		return sectionSplits;
 	}
 	
 	public Vec3 offset()
@@ -94,14 +104,17 @@ public final class TeslaArcs
 		float dirZ = this.randomOffset();
 		for(int i = 0; i < length; i++)
 		{
-			trail.addTrailPoint(new Vec3(x, y, z));
 			float sectionLength = maxSectionLength / (i + 1);
 			float offsetX = this.randomOffset();
 			float offsetY = this.randomOffset();
 			float offsetZ = this.randomOffset();
-			x += sectionLength * offsetX * dirX;
-			y += sectionLength * offsetY * dirY;
-			z += sectionLength * offsetZ * dirZ;
+			for(int j = 0; j < sectionSplits; j++)
+			{
+				trail.addTrailPoint(new Vec3(x, y, z));
+				x += (sectionLength * offsetX * dirX) / sectionSplits;
+				y += (sectionLength * offsetY * dirY) / sectionSplits;
+				z += (sectionLength * offsetZ * dirZ) / sectionSplits;
+			}
 		}
 		trails.add(trail);
 	}
