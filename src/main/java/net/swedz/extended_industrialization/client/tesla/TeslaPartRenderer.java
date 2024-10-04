@@ -48,12 +48,7 @@ final class TeslaPartRenderer
 				player.getOffhandItem().has(EIComponents.SELECTED_TESLA_NETWORK) ? Optional.of(player.getOffhandItem().get(EIComponents.SELECTED_TESLA_NETWORK)) : Optional.empty();
 	}
 	
-	private static RenderTypeToken getRenderTypeToken()
-	{
-		return RenderTypeToken.createToken(EI.id("textures/vfx/tesla_arc.png"));
-	}
-	
-	private static final LodestoneRenderType RENDER_LAYER = LodestoneRenderTypes.TRANSPARENT_TEXTURE.applyAndCache(getRenderTypeToken());
+	private static final LodestoneRenderType RENDER_LAYER = LodestoneRenderTypes.TRANSPARENT_TEXTURE.applyAndCache(RenderTypeToken.createToken(EI.id("textures/vfx/tesla_arc.png")));
 	
 	private static void renderArcs(MachineBlockEntity machine, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
 	{
