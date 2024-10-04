@@ -17,8 +17,10 @@ import team.lodestar.lodestone.registry.client.LodestoneRenderTypes;
 import team.lodestar.lodestone.systems.rendering.LodestoneRenderType;
 import team.lodestar.lodestone.systems.rendering.VFXBuilders;
 import team.lodestar.lodestone.systems.rendering.rendeertype.RenderTypeToken;
+import team.lodestar.lodestone.systems.rendering.trail.TrailPoint;
 import team.lodestar.lodestone.systems.rendering.trail.TrailPointBuilder;
 
+import java.util.List;
 import java.util.Optional;
 
 final class TeslaPartRenderer
@@ -62,8 +64,18 @@ final class TeslaPartRenderer
 			
 			for(TrailPointBuilder trail : generator.getTeslaArcs().getTrails())
 			{
+				List<TrailPoint> points = trail.getTrailPoints();
+				if(points.size() < 2)
+				{
+					continue;
+				}
+				int ticks = points.getFirst().getTimeActive();
+				builder.setAlpha(0.9f * (ticks == 0 ? partialTick : ticks == generator.getTeslaArcs().duration() ? (1 - partialTick) : 1));
+				
 				matrices.pushPose();
+				
 				builder.renderTrail(matrices, trail.getTrailPoints(), (i) -> 1 - i);
+				
 				matrices.popPose();
 			}
 		}

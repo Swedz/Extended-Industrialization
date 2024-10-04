@@ -2,6 +2,7 @@ package net.swedz.extended_industrialization.client.tesla.arcs;
 
 import com.google.common.collect.Lists;
 import net.minecraft.world.phys.Vec3;
+import net.swedz.extended_industrialization.api.Assert;
 import team.lodestar.lodestone.systems.rendering.trail.TrailPointBuilder;
 
 import java.util.Collections;
@@ -26,6 +27,13 @@ public final class TeslaArcs
 	public TeslaArcs(int arcDuration, int arcs, int minLength, int maxLength, float maxSectionLength,
 					 Supplier<Vec3> offset)
 	{
+		Assert.that(arcDuration > 0);
+		Assert.that(arcs > 0);
+		Assert.that(minLength > 0);
+		Assert.that(maxLength > 0 && maxLength >= minLength);
+		Assert.that(maxSectionLength > 0);
+		Assert.notNull(offset);
+		
 		this.arcDuration = arcDuration;
 		this.arcs = arcs;
 		this.minLength = minLength;
@@ -34,9 +42,44 @@ public final class TeslaArcs
 		this.offset = offset;
 	}
 	
+	public int duration()
+	{
+		return arcDuration;
+	}
+	
+	public int count()
+	{
+		return arcs;
+	}
+	
+	public int minLength()
+	{
+		return minLength;
+	}
+	
+	public int maxLength()
+	{
+		return maxLength;
+	}
+	
+	public float maxSectionLength()
+	{
+		return maxSectionLength;
+	}
+	
+	public Vec3 offset()
+	{
+		return offset.get();
+	}
+	
 	public List<TrailPointBuilder> getTrails()
 	{
 		return Collections.unmodifiableList(trails);
+	}
+	
+	private float randomOffset()
+	{
+		return RANDOM.nextFloat(3) - 1;
 	}
 	
 	private void createArc(Vec3 offset)
@@ -46,16 +89,16 @@ public final class TeslaArcs
 		double x = offset.x();
 		double y = offset.y();
 		double z = offset.z();
-		float dirX = RANDOM.nextFloat(3) - 1;
-		float dirY = RANDOM.nextFloat(3) - 1;
-		float dirZ = RANDOM.nextFloat(3) - 1;
-		for(int point = 0; point < length; point++)
+		float dirX = this.randomOffset();
+		float dirY = this.randomOffset();
+		float dirZ = this.randomOffset();
+		for(int i = 0; i < length; i++)
 		{
 			trail.addTrailPoint(new Vec3(x, y, z));
-			float sectionLength = maxSectionLength / (point + 1);
-			float offsetX = RANDOM.nextFloat(3) - 1;
-			float offsetY = RANDOM.nextFloat(3) - 1;
-			float offsetZ = RANDOM.nextFloat(3) - 1;
+			float sectionLength = maxSectionLength / (i + 1);
+			float offsetX = this.randomOffset();
+			float offsetY = this.randomOffset();
+			float offsetZ = this.randomOffset();
 			x += sectionLength * offsetX * dirX;
 			y += sectionLength * offsetY * dirY;
 			z += sectionLength * offsetZ * dirZ;
@@ -73,9 +116,10 @@ public final class TeslaArcs
 		
 		if(trails.size() < arcs)
 		{
-			Vec3 offset = this.offset.get();
-			int arcsToCreate = arcs - trails.size();
-			for(int arc = 0; arc < arcsToCreate; arc++)
+			Vec3 offset = this.offset();
+			int maxCreate = arcs - trails.size();
+			int create = Math.max(Math.min(arcs / 2, maxCreate), 1);
+			for(int i = 0; i < create; i++)
 			{
 				this.createArc(offset);
 			}
