@@ -40,20 +40,20 @@ public final class ModularSlotPanel
 	
 	public static ResourceLocation registerSlot(ResourceLocation id, SlotGroup group,
 												int stackLimit, Predicate<ItemStack> insertionChecker,
-												int u, int v,
+												ResourceLocation atlas, int u, int v,
 												Supplier<Component> tooltip)
 	{
 		if(SLOTS.containsKey(id))
 		{
 			throw new IllegalArgumentException("There is already a slot type registered for the id '" + id.toString() + "'");
 		}
-		SLOTS.put(id, new Slot(id, group, stackLimit, insertionChecker, u, v, tooltip));
+		SLOTS.put(id, new Slot(id, group, stackLimit, insertionChecker, atlas, u, v, tooltip));
 		return id;
 	}
 	
 	private static ResourceLocation registerMISlot(String name, SlotPanel.SlotType slotType)
 	{
-		return registerSlot(MI.id(name), slotType.group, slotType.slotLimit, slotType.insertionChecker, slotType.u, slotType.v, () -> line(slotType.tooltip));
+		return registerSlot(MI.id(name), slotType.group, slotType.slotLimit, slotType.insertionChecker, null, slotType.u, slotType.v, () -> line(slotType.tooltip));
 	}
 	
 	static Slot getSlot(ResourceLocation id)
@@ -252,7 +252,7 @@ public final class ModularSlotPanel
 	public record Slot(
 			ResourceLocation id, SlotGroup group,
 			int stackLimit, Predicate<ItemStack> insertionChecker,
-			int u, int v,
+			ResourceLocation atlas, int u, int v,
 			Supplier<Component> tooltip
 	)
 	{

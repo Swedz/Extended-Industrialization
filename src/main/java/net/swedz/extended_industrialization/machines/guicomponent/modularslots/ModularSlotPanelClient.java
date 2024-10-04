@@ -11,6 +11,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.Slot;
@@ -75,6 +76,12 @@ public final class ModularSlotPanelClient implements GuiComponentClient
 				public int getMaxStackSize()
 				{
 					return stackLimit.get();
+				}
+				
+				@Override
+				public ResourceLocation getBackgroundAtlasLocation()
+				{
+					return slot.atlas();
 				}
 				
 				@Override
