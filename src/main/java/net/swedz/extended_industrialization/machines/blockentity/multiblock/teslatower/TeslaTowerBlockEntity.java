@@ -13,12 +13,17 @@ import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.multiblocks.HatchBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import com.google.common.collect.Lists;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.api.WorldPos;
+import net.swedz.extended_industrialization.client.tesla.arcs.TeslaArcGenerator;
+import net.swedz.extended_industrialization.client.tesla.arcs.TeslaArcs;
 import net.swedz.extended_industrialization.machines.component.itemslot.TeslaTowerUpgradeComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
@@ -35,7 +40,7 @@ import java.util.Map;
 import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser.*;
 
-public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEntity implements EnergyListComponentHolder, TeslaTransmitter.Delegate
+public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEntity implements EnergyListComponentHolder, TeslaTransmitter.Delegate, TeslaArcGenerator
 {
 	private final RedstoneControlComponent redstoneControl;
 	private final TeslaTowerUpgradeComponent upgrade;
@@ -43,6 +48,8 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	private final List<EnergyComponent> energyInputs = Lists.newArrayList();
 	
 	private final TeslaTransmitterComponent transmitter;
+	
+	private final TeslaArcs arcs;
 	
 	private CableTier cableTier;
 	
@@ -72,6 +79,18 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		transmitter = new TeslaTransmitterComponent(
 				this, energyInputs,
 				() -> TeslaTransferLimits.of(cableTier, SHAPES.tiers().get(activeShape.getActiveShapeIndex()))
+		);
+		
+		arcs = new TeslaArcs(
+				1, 8, 4, 8, 8,
+				() ->
+				{
+					Direction facing = orientation.facingDirection;
+					BlockPos topLoadCenter = worldPosition
+							.relative(facing.getAxis(), -3)
+							.above(14);
+					return Vec3.atCenterOf(topLoadCenter.subtract(worldPosition));
+				}
 		);
 		
 		this.registerComponents(redstoneControl, upgrade, transmitter);
@@ -123,6 +142,18 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
 				.withRedstoneModule(redstoneControl)
 				.with(EIModularSlotPanelSlots.TESLA_TOWER_UPGRADE, upgrade));
+	}
+	
+	@Override
+	public TeslaArcs getTeslaArcs()
+	{
+		return arcs;
+	}
+	
+	@Override
+	public boolean shouldRenderTeslaArcs()
+	{
+		return isActive.isActive;
 	}
 	
 	@Override
@@ -209,6 +240,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		
 		if(level.isClientSide())
 		{
+			arcs.tick();
 			return;
 		}
 		

@@ -32,8 +32,8 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.swedz.extended_industrialization.client.MachineChainerHighlightRenderer;
 import net.swedz.extended_industrialization.client.NanoGravichestplateHudRenderer;
-import net.swedz.extended_industrialization.client.tesla.TeslaPartMultiblockHighlightRenderer;
-import net.swedz.extended_industrialization.client.tesla.TeslaPartSingleBlockHighlightRenderer;
+import net.swedz.extended_industrialization.client.tesla.TeslaPartMultiblockRenderer;
+import net.swedz.extended_industrialization.client.tesla.TeslaPartSingleBlockRenderer;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.machineconfig.MachineConfigCardItem;
@@ -118,11 +118,11 @@ public final class EIClient
 				{
 					if(blockEntity instanceof MultiblockMachineBlockEntity)
 					{
-						BlockEntityRenderers.register(type, TeslaPartMultiblockHighlightRenderer::new);
+						BlockEntityRenderers.register(type, TeslaPartMultiblockRenderer::new);
 					}
 					else
 					{
-						BlockEntityRenderers.register(type, TeslaPartSingleBlockHighlightRenderer::new);
+						BlockEntityRenderers.register(type, TeslaPartSingleBlockRenderer::new);
 					}
 				}
 				else if(blockEntity instanceof LargeTankMultiblockBlockEntity)
