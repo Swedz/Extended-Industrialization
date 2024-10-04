@@ -89,7 +89,7 @@ public final class TeslaArcs
 	
 	private float randomOffset()
 	{
-		return RANDOM.nextFloat(3) - 1;
+		return RANDOM.nextFloat(2) - 1;
 	}
 	
 	private void createArc(Vec3 offset)
