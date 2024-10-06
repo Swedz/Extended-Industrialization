@@ -22,8 +22,9 @@ import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.api.WorldPos;
-import net.swedz.extended_industrialization.client.tesla.arcs.TeslaArcGenerator;
-import net.swedz.extended_industrialization.client.tesla.arcs.TeslaArcs;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcGenerator;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcs;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaGenerator;
 import net.swedz.extended_industrialization.machines.component.itemslot.TeslaTowerUpgradeComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
@@ -40,7 +41,7 @@ import java.util.Map;
 import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser.*;
 
-public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEntity implements EnergyListComponentHolder, TeslaTransmitter.Delegate, TeslaArcGenerator
+public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEntity implements EnergyListComponentHolder, TeslaTransmitter.Delegate, TeslaArcGenerator, TeslaPlasmaGenerator
 {
 	private final RedstoneControlComponent redstoneControl;
 	private final TeslaTowerUpgradeComponent upgrade;
@@ -81,17 +82,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 				() -> TeslaTransferLimits.of(cableTier, SHAPES.tiers().get(activeShape.getActiveShapeIndex()))
 		);
 		
-		arcs = new TeslaArcs(
-				3, 6, 4, 8, 15, 10,
-				() ->
-				{
-					Direction facing = orientation.facingDirection;
-					BlockPos topLoadCenter = worldPosition
-							.relative(facing.getAxis(), -3)
-							.above(14);
-					return Vec3.atCenterOf(topLoadCenter.subtract(worldPosition));
-				}
-		);
+		arcs = new TeslaArcs(3, 6, 4, 8, 15, 10);
 		
 		this.registerComponents(redstoneControl, upgrade, transmitter);
 		
@@ -151,9 +142,31 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	}
 	
 	@Override
+	public Vec3 getTeslaArcsOffset()
+	{
+		Direction facing = orientation.facingDirection;
+		BlockPos topLoadCenter = worldPosition
+				.relative(facing.getAxis(), -3)
+				.above(14);
+		return Vec3.atCenterOf(topLoadCenter.subtract(worldPosition));
+	}
+	
+	@Override
 	public boolean shouldRenderTeslaArcs()
 	{
 		return isActive.isActive;
+	}
+	
+	@Override
+	public Vec3 getTeslaPlasmaOffset()
+	{
+		return this.getTeslaArcsOffset().subtract(0.5, 0.5, 0.5);
+	}
+	
+	@Override
+	public boolean shouldRenderTeslaPlasma()
+	{
+		return this.shouldRenderTeslaArcs();
 	}
 	
 	@Override
