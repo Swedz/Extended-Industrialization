@@ -2,11 +2,13 @@ package net.swedz.extended_industrialization.client.tesla;
 
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.util.RenderHelper;
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
@@ -15,8 +17,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.swedz.extended_industrialization.EI;
@@ -32,6 +32,7 @@ import team.lodestar.lodestone.systems.rendering.rendeertype.RenderTypeToken;
 import team.lodestar.lodestone.systems.rendering.trail.TrailPoint;
 import team.lodestar.lodestone.systems.rendering.trail.TrailPointBuilder;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -100,39 +101,23 @@ final class TeslaPartRenderer
 		}
 	}
 	
-	private static final VoxelShape TESLA_TOP_LOAD_SHAPE;
+	private record IgnoreSideShape(Direction ignoreSide, VoxelShape shape)
+	{
+	}
+	
+	private static final List<IgnoreSideShape> TESLA_TOP_LOAD_SHAPES;
 	
 	static
 	{
-		VoxelShape shape = Shapes.empty();
-		
-		for(int y = -2; y <= 2; y++)
-		{
-			for(int x = -1; x <= 1; x++)
-			{
-				for(int z = -1; z <= 1; z++)
-				{
-					shape = Shapes.joinUnoptimized(shape, Shapes.create(AABB.unitCubeFromLowerCorner(new Vec3(x, y, z)).inflate(0.05)), BooleanOp.OR);
-				}
-			}
-		}
-		
-		for(int y = -1; y <= 1; y++)
-		{
-			for(int x = -2; x <= 2; x++)
-			{
-				for(int z = -1; z <= 1; z++)
-				{
-					shape = Shapes.joinUnoptimized(shape, Shapes.create(AABB.unitCubeFromLowerCorner(new Vec3(x, y, z)).inflate(0.05)), BooleanOp.OR);
-					if(x != z)
-					{
-						shape = Shapes.joinUnoptimized(shape, Shapes.create(AABB.unitCubeFromLowerCorner(new Vec3(z, y, x)).inflate(0.05)), BooleanOp.OR);
-					}
-				}
-			}
-		}
-		
-		TESLA_TOP_LOAD_SHAPE = shape;
+		List<IgnoreSideShape> shapes = Lists.newArrayList();
+		double inflate = 0.05;
+		shapes.add(new IgnoreSideShape(Direction.UP, Shapes.create(new AABB(-1, -2 - inflate, -1, 1 + 1, -2 + 1 - inflate, 1 + 1).inflate(inflate, 0, inflate))));
+		shapes.add(new IgnoreSideShape(Direction.DOWN, Shapes.create(new AABB(-1, 2 + inflate, -1, 1 + 1, 2 + 1 + inflate, 1 + 1).inflate(inflate, 0, inflate))));
+		shapes.add(new IgnoreSideShape(Direction.WEST, Shapes.create(new AABB(2 + inflate, -1, -1, 2 + 1 + inflate, 1 + 1, 1 + 1).inflate(0, inflate, inflate))));
+		shapes.add(new IgnoreSideShape(Direction.EAST, Shapes.create(new AABB(-2 - inflate, -1, -1, -2 + 1 - inflate, 1 + 1, 1 + 1).inflate(0, inflate, inflate))));
+		shapes.add(new IgnoreSideShape(Direction.NORTH, Shapes.create(new AABB(-1, -1, 2 + inflate, 1 + 1, 1 + 1, 2 + 1 + inflate).inflate(inflate, inflate, 0))));
+		shapes.add(new IgnoreSideShape(Direction.SOUTH, Shapes.create(new AABB(-1, -1, -2 - inflate, 1 + 1, 1 + 1, -2 + 1 - inflate).inflate(inflate, inflate, 0))));
+		TESLA_TOP_LOAD_SHAPES = Collections.unmodifiableList(shapes);
 	}
 	
 	private static RenderType getPlasmaRenderType(float u, float v)
@@ -158,31 +143,37 @@ final class TeslaPartRenderer
 		matrices.pushPose();
 		
 		float tick = Minecraft.getInstance().levelRenderer.getTicks() + partialTick;
-		float speed = 0.015f;
+		float speed = 0.001f;//0.015f;
 		float u = Mth.cos(tick * speed) * 0.5f % 1f;
 		float v = tick * speed * 0.75f % 1f;
 		VertexConsumer vc = buffer.getBuffer(getPlasmaRenderType(u, v));
 		
-		for(AABB box : TESLA_TOP_LOAD_SHAPE.toAabbs())
+		for(IgnoreSideShape shape : TESLA_TOP_LOAD_SHAPES)
 		{
-			for(Direction direction : Direction.values())
+			for(AABB box : shape.shape().toAabbs())
 			{
-				renderPlasmaAddVertexesFace(
-						matrices, light, overlay, vc, direction,
-						(float) box.minX, (float) box.minY, (float) box.minZ,
-						(float) box.maxX, (float) box.maxY, (float) box.maxZ,
-						0, 0
-				);
+				for(Direction direction : Direction.values())
+				{
+					if(direction != shape.ignoreSide())
+					{
+						renderPlasmaAddVertexesFace(
+								matrices, light, overlay, vc, direction,
+								(float) box.minX, (float) box.minY, (float) box.minZ,
+								(float) box.maxX, (float) box.maxY, (float) box.maxZ,
+								0, 0
+						);
+					}
+				}
 			}
+			
+			/*LevelRenderer.renderVoxelShape(
+					matrices,
+					buffer.getBuffer(RenderType.lines()),
+					shape.shape(),
+					0, 0, 0,
+					1f, 1f, 1f, 1f, true
+			);*/
 		}
-		
-		/*LevelRenderer.renderVoxelShape(
-				matrices,
-				buffer.getBuffer(RenderType.lineStrip()),
-				TESLA_TOP_LOAD_SHAPE,
-				0, 0, 0,
-				0f, 0f, 1f, 1f, true
-		);*/
 		
 		matrices.popPose();
 	}
@@ -194,47 +185,83 @@ final class TeslaPartRenderer
 													float x2, float y2, float z2,
 													float u, float v)
 	{
-		// TODO calculate UV offsets based on the side - currently it scales wrong on taller/wider faces
-		float offsetV = 0.5f * 3f;
-		float offsetU = (offsetV / 2f);// * 3f;
+		float dx = Math.abs(x2 - x1);
+		float dy = Math.abs(y2 - y1);
+		float dz = Math.abs(z2 - z1);
+		float width, height;
 		switch (direction)
 		{
-			case DOWN:
+			case DOWN ->
+			{
+				width = dx;
+				height = dz;
+			}
+			case UP ->
+			{
+				width = dz;
+				height = dx;
+			}
+			case NORTH, SOUTH ->
+			{
+				width = dx;
+				height = dy;
+			}
+			case WEST, EAST ->
+			{
+				width = dz;
+				height = dy;
+			}
+			default -> throw new IllegalStateException("Unexpected value: " + direction);
+		}
+		
+		float scale = 8f / 64f;
+		float offsetU = width / 64f / scale;
+		float offsetV = height / 32f / scale;
+		
+		switch (direction)
+		{
+			case DOWN ->
+			{
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z1, u, v);
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z1, u + offsetU, v);
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z2, u + offsetU, v + offsetV);
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z2, u, v + offsetV);
-				break;
-			case UP:
+			}
+			case UP ->
+			{
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z1, u, v);
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z2, u + offsetU, v);
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z2, u + offsetU, v + offsetV);
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z1, u, v + offsetV);
-				break;
-			case NORTH:
+			}
+			case NORTH ->
+			{
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z1, u, v);
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z1, u + offsetU, v);
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z1, u + offsetU, v + offsetV);
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z1, u, v + offsetV);
-				break;
-			case SOUTH:
+			}
+			case SOUTH ->
+			{
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z2, u, v);
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z2, u + offsetU, v);
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z2, u + offsetU, v + offsetV);
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z2, u, v + offsetV);
-				break;
-			case EAST:
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z1, u, v);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z1, u + offsetU, v);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z2, u + offsetU, v + offsetV);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z2, u, v + offsetV);
-				break;
-			case WEST:
+			}
+			case WEST ->
+			{
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z1, u, v);
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z2, u + offsetU, v);
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z2, u + offsetU, v + offsetV);
 				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z1, u, v + offsetV);
-				break;
+			}
+			case EAST ->
+			{
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z1, u, v);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z1, u + offsetU, v);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z2, u + offsetU, v + offsetV);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z2, u, v + offsetV);
+			}
 		}
 	}
 	
