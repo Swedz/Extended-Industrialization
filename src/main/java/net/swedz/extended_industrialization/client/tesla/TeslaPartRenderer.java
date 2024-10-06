@@ -144,8 +144,8 @@ final class TeslaPartRenderer
 		
 		float tick = Minecraft.getInstance().levelRenderer.getTicks() + partialTick;
 		float speed = 0.001f;//0.015f;
-		float u = Mth.cos(tick * speed) * 0.5f % 1f;
-		float v = tick * speed * 0.75f % 1f;
+		float u = (tick * speed) % 1f;
+		float v = (tick * speed) % 1f;
 		VertexConsumer vc = buffer.getBuffer(getPlasmaRenderType(u, v));
 		
 		for(IgnoreSideShape shape : TESLA_TOP_LOAD_SHAPES)
