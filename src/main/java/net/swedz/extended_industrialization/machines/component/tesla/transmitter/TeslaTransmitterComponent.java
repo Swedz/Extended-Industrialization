@@ -25,10 +25,11 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 	private final MIEnergyStorage energyStorage;
 	
 	private final Supplier<TeslaTransferLimits> limits;
+	private final Supplier<WorldPos>            sourcePosition;
 	
 	private Optional<WorldPos> networkKey = Optional.empty();
 	
-	public TeslaTransmitterComponent(MachineBlockEntity machine, List<EnergyComponent> energyInputs, Supplier<TeslaTransferLimits> limits)
+	public TeslaTransmitterComponent(MachineBlockEntity machine, List<EnergyComponent> energyInputs, Supplier<TeslaTransferLimits> limits, Supplier<WorldPos> sourcePosition)
 	{
 		this.machine = machine;
 		
@@ -78,6 +79,7 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 		};
 		
 		this.limits = limits;
+		this.sourcePosition = sourcePosition;
 	}
 	
 	@Override
@@ -102,6 +104,12 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 	public WorldPos getPosition()
 	{
 		return new WorldPos(machine.getLevel(), machine.getBlockPos());
+	}
+	
+	@Override
+	public WorldPos getSourcePosition()
+	{
+		return sourcePosition.get();
 	}
 	
 	@Override

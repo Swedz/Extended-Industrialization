@@ -131,6 +131,12 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 	}
 	
 	@Override
+	public WorldPos getSourcePosition()
+	{
+		return this.getPosition();
+	}
+	
+	@Override
 	public CableTier getCableTier()
 	{
 		return cableTier.get();

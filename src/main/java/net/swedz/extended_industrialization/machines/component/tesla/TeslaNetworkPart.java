@@ -29,5 +29,7 @@ public interface TeslaNetworkPart
 	
 	WorldPos getPosition();
 	
+	WorldPos getSourcePosition();
+	
 	CableTier getCableTier();
 }

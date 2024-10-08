@@ -75,6 +75,12 @@ public final class PlayerTeslaReceiver implements TeslaReceiver
 	}
 	
 	@Override
+	public WorldPos getSourcePosition()
+	{
+		return this.getPosition();
+	}
+	
+	@Override
 	public CableTier getCableTier()
 	{
 		throw new UnsupportedOperationException("Cannot get cable tier for a player receiver");

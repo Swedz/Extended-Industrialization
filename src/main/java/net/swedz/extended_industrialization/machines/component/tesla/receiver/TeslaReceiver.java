@@ -12,8 +12,8 @@ public interface TeslaReceiver extends TeslaNetworkPart
 	default ReceiveCheckResult checkReceiveFrom(TeslaNetwork network)
 	{
 		TeslaTransmitter transmitter = network.getTransmitter();
-		WorldPos transmitterPos = transmitter.getPosition();
-		WorldPos receiverPos = this.getPosition();
+		WorldPos transmitterPos = transmitter.getSourcePosition();
+		WorldPos receiverPos = this.getSourcePosition();
 		
 		if(!transmitterPos.isSameDimension(receiverPos))
 		{
@@ -109,6 +109,12 @@ public interface TeslaReceiver extends TeslaNetworkPart
 		default WorldPos getPosition()
 		{
 			return this.getDelegateReceiver().getPosition();
+		}
+		
+		@Override
+		default WorldPos getSourcePosition()
+		{
+			return this.getDelegateReceiver().getSourcePosition();
 		}
 		
 		@Override

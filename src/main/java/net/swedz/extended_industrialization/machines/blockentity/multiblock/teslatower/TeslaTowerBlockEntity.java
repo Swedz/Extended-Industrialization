@@ -79,7 +79,8 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		
 		transmitter = new TeslaTransmitterComponent(
 				this, energyInputs,
-				() -> TeslaTransferLimits.of(cableTier, SHAPES.tiers().get(activeShape.getActiveShapeIndex()))
+				() -> TeslaTransferLimits.of(cableTier, SHAPES.tiers().get(activeShape.getActiveShapeIndex())),
+				() -> new WorldPos(level, this.getTopLoadPosition())
 		);
 		
 		arcs = new TeslaArcs(3, 6, 4, 8, 15, 10);
@@ -135,6 +136,15 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 				.with(EIModularSlotPanelSlots.TESLA_TOWER_UPGRADE, upgrade));
 	}
 	
+	public BlockPos getTopLoadPosition()
+	{
+		Direction facing = orientation.facingDirection;
+		BlockPos topLoadCenter = worldPosition
+				.relative(facing.getAxis(), -3)
+				.above(14);
+		return topLoadCenter.subtract(worldPosition);
+	}
+	
 	@Override
 	public TeslaArcs getTeslaArcs()
 	{
@@ -144,11 +154,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	@Override
 	public Vec3 getTeslaArcsOffset()
 	{
-		Direction facing = orientation.facingDirection;
-		BlockPos topLoadCenter = worldPosition
-				.relative(facing.getAxis(), -3)
-				.above(14);
-		return Vec3.atCenterOf(topLoadCenter.subtract(worldPosition));
+		return Vec3.atCenterOf(this.getTopLoadPosition());
 	}
 	
 	@Override
@@ -160,7 +166,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	@Override
 	public Vec3 getTeslaPlasmaOffset()
 	{
-		return this.getTeslaArcsOffset().subtract(0.5, 0.5, 0.5);
+		return Vec3.atLowerCornerOf(this.getTopLoadPosition());
 	}
 	
 	@Override

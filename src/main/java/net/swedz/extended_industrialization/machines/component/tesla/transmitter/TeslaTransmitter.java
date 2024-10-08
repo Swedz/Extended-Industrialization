@@ -42,6 +42,12 @@ public interface TeslaTransmitter extends TeslaNetworkPart, TeslaTransferLimits
 		}
 		
 		@Override
+		default WorldPos getSourcePosition()
+		{
+			return this.getDelegateTransmitter().getSourcePosition();
+		}
+		
+		@Override
 		default CableTier getCableTier()
 		{
 			return this.getDelegateTransmitter().getCableTier();
