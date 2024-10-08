@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.machines.component.tesla.receiver;
 
 import aztech.modern_industrialization.api.energy.CableTier;
+import net.minecraft.core.BlockPos;
 import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
@@ -18,7 +19,9 @@ public interface TeslaReceiver extends TeslaNetworkPart
 		}
 		
 		WorldPos transmitterPos = transmitter.getSourcePosition();
+		BlockPos transmitterBlockPos = transmitterPos.pos();
 		WorldPos receiverPos = this.getSourcePosition();
+		BlockPos receiverBlockPos = receiverPos.pos();
 		
 		if(!transmitterPos.isSameDimension(receiverPos))
 		{
@@ -26,9 +29,9 @@ public interface TeslaReceiver extends TeslaNetworkPart
 		}
 		
 		int maxDistance = network.getMaxDistance();
-		int distX = Math.abs(transmitterPos.pos().getX() - receiverPos.pos().getX());
-		int distY = Math.abs(transmitterPos.pos().getY() - receiverPos.pos().getY());
-		int distZ = Math.abs(transmitterPos.pos().getZ() - receiverPos.pos().getZ());
+		int distX = Math.abs(transmitterBlockPos.getX() - receiverBlockPos.getX());
+		int distY = Math.abs(transmitterBlockPos.getY() - receiverBlockPos.getY());
+		int distZ = Math.abs(transmitterBlockPos.getZ() - receiverBlockPos.getZ());
 		if(distX > maxDistance || distY > maxDistance || distZ > maxDistance)
 		{
 			return ReceiveCheckResult.TOO_FAR;
