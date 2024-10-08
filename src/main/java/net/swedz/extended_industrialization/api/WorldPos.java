@@ -71,6 +71,21 @@ public record WorldPos(ResourceKey<Level> dimension, BlockPos pos)
 		return pos.distSqr(other.pos());
 	}
 	
+	public int getX()
+	{
+		return pos.getX();
+	}
+	
+	public int getY()
+	{
+		return pos.getY();
+	}
+	
+	public int getZ()
+	{
+		return pos.getZ();
+	}
+	
 	@Override
 	public int hashCode()
 	{
