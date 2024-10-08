@@ -46,9 +46,16 @@ public final class EIBlocks
 		Registry.init(bus);
 	}
 	
-	public static final BlockHolder<Block> MACHINE_CHAINER_RELAY           = create("machine_chainer_relay", "Machine Chainer Relay", Block::new, BlockItem::new, EISortOrder.MACHINES).withProperties((p) -> p.mapColor(MapColor.METAL).destroyTime(4f).requiresCorrectToolForDrops()).tag(TagHelper.getMiningLevelTag(1)).tag(EITags.Blocks.MACHINE_CHAINER_RELAY).withLootTable(CommonLootTableBuilders::self).withModel(CommonModelBuilders::blockstateOnly).register();
-	public static final BlockHolder<Block> STEEL_PLATED_BRICKS             = create("steel_plated_bricks", "Steel Plated Bricks", Block::new, BlockItem::new, EISortOrder.CASINGS).withProperties((p) -> p.destroyTime(5f).explosionResistance(6f).requiresCorrectToolForDrops()).tag(TagHelper.getMiningLevelTag(1)).withLootTable(CommonLootTableBuilders::self).withModel(CommonModelBuilders::blockCubeAll).register();
-	public static final BlockHolder<Block> POLISHED_STAINLESS_STEEL_CASING = create("polished_stainless_steel_casing", "Polished Stainless Steel Casing", Block::new, BlockItem::new, EISortOrder.CASINGS).withProperties((p) -> p.mapColor(MapColor.METAL).destroyTime(5f).explosionResistance(6f).requiresCorrectToolForDrops()).tag(TagHelper.getMiningLevelTag(1)).withLootTable(CommonLootTableBuilders::self).withModel(CommonModelBuilders::blockCubeAll).register();
+	public static final BlockHolder<Block> MACHINE_CHAINER_RELAY = create("machine_chainer_relay", "Machine Chainer Relay", Block::new, BlockItem::new, EISortOrder.MACHINES).withProperties((p) -> p.mapColor(MapColor.METAL).destroyTime(4f).requiresCorrectToolForDrops()).tag(TagHelper.getMiningLevelTag(1)).tag(EITags.Blocks.MACHINE_CHAINER_RELAY).withLootTable(CommonLootTableBuilders::self).withModel(CommonModelBuilders::blockstateOnly).register();
+	
+	public static final BlockHolder<Block> STEEL_PLATED_BRICKS             = createSimple("steel_plated_bricks", "Steel Plated Bricks", EISortOrder.CASINGS, MapColor.METAL, 5f, 6f).withModel(CommonModelBuilders::blockCubeAll).register();
+	public static final BlockHolder<Block> POLISHED_STAINLESS_STEEL_CASING = createSimple("polished_stainless_steel_casing", "Polished Stainless Steel Casing", EISortOrder.CASINGS, MapColor.METAL, 5f, 6f).withModel(CommonModelBuilders::blockCubeAll).register();
+	
+	public static final BlockHolder<Block> COPPER_TESLA_WINDING          = createSimple("copper_tesla_winding", "Copper Tesla Winding", EISortOrder.CASINGS, MapColor.METAL, 5f, 6f).withModel(CommonModelBuilders::blockTopEnd).register();
+	public static final BlockHolder<Block> ELECTRUM_TESLA_WINDING        = createSimple("electrum_tesla_winding", "Electrum Tesla Winding", EISortOrder.CASINGS, MapColor.METAL, 5f, 6f).withModel(CommonModelBuilders::blockTopEnd).register();
+	public static final BlockHolder<Block> ALUMINUM_TESLA_WINDING        = createSimple("aluminum_tesla_winding", "Aluminum Tesla Winding", EISortOrder.CASINGS, MapColor.METAL, 5f, 6f).withModel(CommonModelBuilders::blockTopEnd).register();
+	public static final BlockHolder<Block> ANNEALED_COPPER_TESLA_WINDING = createSimple("annealed_copper_tesla_winding", "Annealed Copper Tesla Winding", EISortOrder.CASINGS, MapColor.METAL, 5f, 6f).withModel(CommonModelBuilders::blockTopEnd).register();
+	public static final BlockHolder<Block> SUPERCONDUCTOR_TESLA_WINDING  = createSimple("superconductor_tesla_winding", "Superconductor Tesla Winding", EISortOrder.CASINGS, MapColor.METAL, 5f, 6f).withModel(CommonModelBuilders::blockTopEnd).register();
 	
 	public static Set<BlockHolder> values()
 	{
@@ -87,5 +94,13 @@ public final class EIBlocks
 		Registry.include(holder);
 		EIItems.Registry.include(holder.item());
 		return holder;
+	}
+	
+	public static BlockHolder<Block> createSimple(String id, String englishName, SortOrder sortOrder, MapColor mapColor, float destroyTime, float explosionResistance)
+	{
+		return create(id, englishName, Block::new, BlockItem::new, sortOrder)
+				.withProperties((p) -> p.mapColor(mapColor).destroyTime(destroyTime).explosionResistance(explosionResistance).requiresCorrectToolForDrops())
+				.tag(TagHelper.getMiningLevelTag(1))
+				.withLootTable(CommonLootTableBuilders::self);
 	}
 }

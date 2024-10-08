@@ -246,6 +246,28 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 		);
 	}
 	
+	private static void teslaWinding(String name, RecipeOutput output)
+	{
+		addMachineRecipe(
+				"tesla_winding", name, MIMachineRecipeTypes.ASSEMBLER,
+				8, 5 * 20,
+				(b) -> b
+						.addItemInput("modern_industrialization:%s_cable".formatted(name), 8)
+						.addItemInput(EITags.itemCommon("plates/stainless_steel"), 4)
+						.addItemOutput("extended_industrialization:%s_tesla_winding".formatted(name), 1),
+				output
+		);
+	}
+	
+	private static void tesla(RecipeOutput output)
+	{
+		teslaWinding("copper", output);
+		teslaWinding("electrum", output);
+		teslaWinding("aluminum", output);
+		teslaWinding("annealed_copper", output);
+		teslaWinding("superconductor", output);
+	}
+	
 	@Override
 	protected void buildRecipes(RecipeOutput output)
 	{
@@ -401,5 +423,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 		);
 		
 		nanoSuit(output);
+		
+		tesla(output);
 	}
 }

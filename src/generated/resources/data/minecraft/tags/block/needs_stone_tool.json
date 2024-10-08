@@ -1,9 +1,12 @@
 {
   "values": [
+    "extended_industrialization:aluminum_tesla_winding",
+    "extended_industrialization:annealed_copper_tesla_winding",
     "extended_industrialization:bronze_bending_machine",
     "extended_industrialization:bronze_composter",
     "extended_industrialization:bronze_solar_boiler",
     "extended_industrialization:bronze_waste_collector",
+    "extended_industrialization:copper_tesla_winding",
     "extended_industrialization:electric_alloy_smelter",
     "extended_industrialization:electric_bending_machine",
     "extended_industrialization:electric_brewery",
@@ -12,6 +15,7 @@
     "extended_industrialization:electric_farmer",
     "extended_industrialization:electric_honey_extractor",
     "extended_industrialization:electric_waste_collector",
+    "extended_industrialization:electrum_tesla_winding",
     "extended_industrialization:hv_solar_panel",
     "extended_industrialization:large_configurable_chest",
     "extended_industrialization:large_electric_furnace",
@@ -34,6 +38,7 @@
     "extended_industrialization:steel_plated_bricks",
     "extended_industrialization:steel_solar_boiler",
     "extended_industrialization:steel_waste_collector",
+    "extended_industrialization:superconductor_tesla_winding",
     "extended_industrialization:tesla_receiver",
     "extended_industrialization:tesla_tower",
     "extended_industrialization:universal_transformer"
