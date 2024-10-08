@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.machines.component.tesla.receiver;
 
 import aztech.modern_industrialization.api.energy.CableTier;
-import net.minecraft.util.Mth;
 import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
@@ -12,20 +11,27 @@ public interface TeslaReceiver extends TeslaNetworkPart
 	default ReceiveCheckResult checkReceiveFrom(TeslaNetwork network)
 	{
 		TeslaTransmitter transmitter = network.getTransmitter();
+		
+		if(transmitter.isInterdimensional())
+		{
+			return ReceiveCheckResult.SUCCESS;
+		}
+		
 		WorldPos transmitterPos = transmitter.getSourcePosition();
 		WorldPos receiverPos = this.getSourcePosition();
 		
 		if(!transmitterPos.isSameDimension(receiverPos))
 		{
-			return transmitter.isInterdimensional() ? ReceiveCheckResult.SUCCESS : ReceiveCheckResult.TOO_FAR;
+			return ReceiveCheckResult.TOO_FAR;
 		}
 		
-		double distanceSqr = transmitterPos.distanceSqr(receiverPos);
-		int maxDistanceSqr = Mth.square(network.getMaxDistance());
-		if(distanceSqr > maxDistanceSqr)
+		int maxDistance = network.getMaxDistance();
+		int distX = Math.abs(transmitterPos.pos().getX() - receiverPos.pos().getX());
+		int distY = Math.abs(transmitterPos.pos().getY() - receiverPos.pos().getY());
+		int distZ = Math.abs(transmitterPos.pos().getZ() - receiverPos.pos().getZ());
+		if(distX > maxDistance || distY > maxDistance || distZ > maxDistance)
 		{
-			// TODO check for global upgrade
-			return transmitter.isInterdimensional() ? ReceiveCheckResult.SUCCESS : ReceiveCheckResult.TOO_FAR;
+			return ReceiveCheckResult.TOO_FAR;
 		}
 		
 		return ReceiveCheckResult.SUCCESS;
