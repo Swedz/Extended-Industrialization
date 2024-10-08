@@ -9,7 +9,6 @@ public enum EIText implements TranslatableTextEnum
 	BREWERY_REQUIRES_BLAZING_ESSENCE("Requires %s to brew potions."),
 	CALCIFICATION_PERCENTAGE("Calcification: %d %%"),
 	COILS_LEF_TIER("Runs LEF in batches of up to %d at %s the EU cost."),
-	COILS_TESLA_TOWER_TIER("Allows the Tesla Tower to transmit up to %s within %s blocks with a max loss of %s."),
 	COMMAND_TESLA_NETWORK_DUMP_CANT_HAVE_NETWORK("The block at %s is not a network part."),
 	COMMAND_TESLA_NETWORK_DUMP_CHUNK_NOT_LOADED("Chunk at %s is not loaded."),
 	COMMAND_TESLA_NETWORK_DUMP_NO_NETWORK("No existing network could be found for %s."),
@@ -128,7 +127,7 @@ public enum EIText implements TranslatableTextEnum
 	TESLA_RECEIVER_TOO_FAR("Transmitter is too far"),
 	TESLA_RECEIVER_UNLOADED_TRANSMITTER("Transmitter is not loaded"),
 	TESLA_TOWER_HELP_1("Wirelessly transmits energy to receivers within range."),
-	TESLA_TOWER_HELP_2("Energy transfer rate and range is determined by the coils used."),
+	TESLA_TOWER_HELP_2("Energy transfer rate and range is determined by the windings used."),
 	TESLA_TOWER_HELP_3("Voltage of energy transmitted is set by the energy hatches. All hatches must be the same tier."),
 	TESLA_TOWER_UPGRADE("Add tesla upgrades to increase maximum range."),
 	TESLA_TRANSMITTER_MISMATCHING_HATCHES("All energy hatches must be of the same voltage."),
@@ -138,7 +137,8 @@ public enum EIText implements TranslatableTextEnum
 	TESLA_TRANSMITTER_VOLTAGE("Transmitting %s power"),
 	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Casing for cable tier to convert from (LV by default)."),
 	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default)."),
-	WASTE_COLLECTOR_HELP("When placed underneath animals, manure will be collected.");
+	WASTE_COLLECTOR_HELP("When placed underneath animals, manure will be collected."),
+	WINDINGS_TESLA_TOWER_TIER("Allows the Tesla Tower to transmit up to %s within %s blocks with a max loss of %s.");
 	
 	private final String englishText;
 	

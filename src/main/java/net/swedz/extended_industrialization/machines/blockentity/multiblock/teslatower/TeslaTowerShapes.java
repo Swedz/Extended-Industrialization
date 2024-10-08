@@ -27,20 +27,20 @@ public final class TeslaTowerShapes extends DataMapMultiblockTieredShapes<TeslaT
 	
 	private String[][] pattern()
 	{
-		String[] layerPipe = {
+		String[] layerWinding = {
 				"       ",
 				"       ",
 				"       ",
-				"   c   ",
+				"   w   ",
 				"       ",
 				"       ",
 				"       "
 		};
-		String[] layerPipeWithCoil = {
+		String[] layerRingedWinding = {
 				"       ",
 				"  TTT  ",
 				" T P T ",
-				" TPcPT ",
+				" TPwPT ",
 				" T P T ",
 				"  TTT  ",
 				"       "
@@ -66,32 +66,32 @@ public final class TeslaTowerShapes extends DataMapMultiblockTieredShapes<TeslaT
 		return new String[][]{
 				{
 						" SSSSS ",
-						"SSCCCSS",
-						"SCCCCCS",
-						"SCCcCCS",
-						"SCCCCCS",
-						"SSCCCSS",
+						"SSWWWSS",
+						"SWWWWWS",
+						"SWWwWWS",
+						"SWWWWWS",
+						"SSWWWSS",
 						" SS#SS "
 				},
 				{
 						"       ",
-						"  CCC  ",
-						" C   C ",
-						" C c C ",
-						" C   C ",
-						"  CCC  ",
+						"  WWW  ",
+						" W   W ",
+						" W w W ",
+						" W   W ",
+						"  WWW  ",
 						"       "
 				},
-				layerPipe,
-				layerPipe,
-				layerPipeWithCoil,
-				layerPipe,
-				layerPipeWithCoil,
-				layerPipe,
-				layerPipeWithCoil,
-				layerPipe,
-				layerPipeWithCoil,
-				layerPipe,
+				layerWinding,
+				layerWinding,
+				layerRingedWinding,
+				layerWinding,
+				layerRingedWinding,
+				layerWinding,
+				layerRingedWinding,
+				layerWinding,
+				layerRingedWinding,
+				layerWinding,
 				ballEnd,
 				ballMiddle,
 				ballMiddle,
@@ -114,8 +114,8 @@ public final class TeslaTowerShapes extends DataMapMultiblockTieredShapes<TeslaT
 			builder.key('S', SimpleMember.forBlockId(MI.id("clean_stainless_steel_machine_casing")), new HatchFlags.Builder().with(HatchType.ENERGY_INPUT).build());
 			builder.key('P', SimpleMember.forBlockId(MI.id("stainless_steel_machine_casing_pipe")), HatchFlags.NO_HATCH);
 			builder.key('T', SimpleMember.forBlock(EIBlocks.POLISHED_STAINLESS_STEEL_CASING), HatchFlags.NO_HATCH);
-			builder.key('C', SimpleMember.forBlockId(tier.blockId()), HatchFlags.NO_HATCH);
-			builder.key('c', SimpleMember.forBlockId(tier.blockId()), HatchFlags.NO_HATCH); // TODO secondary coil
+			builder.key('W', SimpleMember.forBlockId(tier.blockId()), HatchFlags.NO_HATCH);
+			builder.key('w', SimpleMember.forBlockId(tier.blockId()), HatchFlags.NO_HATCH); // TODO secondary winding?
 			shapeTemplates[i] = builder.build();
 		}
 	}

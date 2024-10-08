@@ -300,7 +300,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		SHAPES.register();
 	}
 	
-	public static Map<ResourceLocation, TeslaTowerTier> getTiersByCoil()
+	public static Map<ResourceLocation, TeslaTowerTier> getTiersByWinding()
 	{
 		return SHAPES.tiersByBlock();
 	}

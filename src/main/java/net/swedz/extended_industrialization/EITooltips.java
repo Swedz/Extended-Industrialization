@@ -94,15 +94,15 @@ public final class EITooltips
 			}
 	);
 	
-	public static final TooltipAttachment COILS_TESLA = TooltipAttachment.singleLine(
+	public static final TooltipAttachment WINDINGS_TESLA = TooltipAttachment.singleLine(
 			(stack, item) ->
 					item instanceof BlockItem blockItem &&
-					TeslaTowerBlockEntity.getTiersByCoil().containsKey(BuiltInRegistries.BLOCK.getKey(blockItem.getBlock())),
+					TeslaTowerBlockEntity.getTiersByWinding().containsKey(BuiltInRegistries.BLOCK.getKey(blockItem.getBlock())),
 			(stack, item) ->
 			{
-				TeslaTowerTier tier = TeslaTowerBlockEntity.getTiersByCoil()
+				TeslaTowerTier tier = TeslaTowerBlockEntity.getTiersByWinding()
 						.get(BuiltInRegistries.BLOCK.getKey(((BlockItem) stack.getItem()).getBlock()));
-				return line(EIText.COILS_TESLA_TOWER_TIER)
+				return line(EIText.WINDINGS_TESLA_TOWER_TIER)
 						.arg(tier.maxTransfer(), EU_PER_TICK_PARSER)
 						.arg(tier.maxDistance())
 						.arg(tier.maxLoss(), SPACED_PERCENTAGE_PARSER);
