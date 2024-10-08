@@ -26,9 +26,9 @@ public interface TeslaReceiver extends TeslaNetworkPart
 		}
 		
 		int maxDistance = network.getMaxDistance();
-		int distX = Math.abs(receiverPos.getX() - receiverPos.getX());
-		int distY = Math.abs(receiverPos.getY() - receiverPos.getY());
-		int distZ = Math.abs(receiverPos.getZ() - receiverPos.getZ());
+		int distX = Math.abs(transmitterPos.getX() - receiverPos.getX());
+		int distY = Math.abs(transmitterPos.getY() - receiverPos.getY());
+		int distZ = Math.abs(transmitterPos.getZ() - receiverPos.getZ());
 		if(distX > maxDistance || distY > maxDistance || distZ > maxDistance)
 		{
 			return ReceiveCheckResult.TOO_FAR;
