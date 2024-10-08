@@ -146,11 +146,6 @@ public final class TeslaNetwork implements MIEnergyStorage, TeslaTransferLimits.
 			int remainingStorages = receivers.size() - index;
 			
 			long amountToReceive = remainingStorages == 1 ? remaining : remaining / remainingStorages;
-			float loss = receiver.checkReceiveFrom(this).loss();
-			if(loss > 0)
-			{
-				amountToReceive = amountToReceive - (long) Math.floor(amountToReceive * loss);
-			}
 			long received = receiver.receiveEnergy(amountToReceive, simulate);
 			
 			amountReceived += received;

@@ -26,7 +26,6 @@ import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.Mod
 import static net.swedz.extended_industrialization.EITooltips.*;
 import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser.*;
-import static net.swedz.tesseract.neoforge.tooltip.Parser.*;
 
 public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity implements TeslaReceiver.Delegate, Tickable
 {
@@ -77,17 +76,13 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 				if(network.isTransmitterLoaded())
 				{
 					ReceiveCheckResult result = this.checkReceiveFrom(network);
-					if(result.isSuccess())
+					if(result.isFailure())
 					{
-						content.add(EIText.TESLA_RECEIVER_LOSS.arg(result.loss(), 1, FLOAT_PERCENTAGE_SPACED));
-					}
-					else
-					{
-						if(result.type() == ReceiveCheckResult.Type.MISMATCHING_VOLTAGE)
+						if(result == ReceiveCheckResult.MISMATCHING_VOLTAGE)
 						{
 							content.add(EIText.TESLA_RECEIVER_MISMATCHING_VOLTAGE.arg(network.getCableTier(), CABLE_TIER_SHORT), RED);
 						}
-						else if(result.type() == ReceiveCheckResult.Type.TOO_FAR)
+						else if(result == ReceiveCheckResult.TOO_FAR)
 						{
 							content.add(EIText.TESLA_RECEIVER_TOO_FAR, RED);
 						}

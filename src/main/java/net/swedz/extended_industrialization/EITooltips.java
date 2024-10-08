@@ -105,7 +105,7 @@ public final class EITooltips
 				return line(EIText.WINDINGS_TESLA_TOWER_TIER)
 						.arg(tier.maxTransfer(), EU_PER_TICK_PARSER)
 						.arg(tier.maxDistance())
-						.arg(tier.maxLoss(), SPACED_PERCENTAGE_PARSER);
+						.arg(tier.drain(), EU_PER_TICK_PARSER);
 			}
 	);
 	

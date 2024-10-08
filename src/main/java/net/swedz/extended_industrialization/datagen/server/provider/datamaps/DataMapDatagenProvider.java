@@ -38,11 +38,11 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		this.addLargeElectricFurnaceTier(MI.id("cupronickel_coil"), 8, 0.75f);
 		this.addLargeElectricFurnaceTier(MI.id("kanthal_coil"), 32, 0.75f);
 		
-		this.addTeslaTowerTier(EIBlocks.COPPER_TESLA_WINDING, CableTier.LV.getMaxTransfer(), 128, 0.25f);
-		this.addTeslaTowerTier(EIBlocks.ELECTRUM_TESLA_WINDING, CableTier.MV.getMaxTransfer(), 128 * 2, 0.2f);
-		this.addTeslaTowerTier(EIBlocks.ALUMINUM_TESLA_WINDING, CableTier.HV.getMaxTransfer(), 128 * 2 * 2, 0.15f);
-		this.addTeslaTowerTier(EIBlocks.ANNEALED_COPPER_TESLA_WINDING, CableTier.EV.getMaxTransfer(), 128 * 2 * 2 * 2, 0.1f);
-		this.addTeslaTowerTier(EIBlocks.SUPERCONDUCTOR_TESLA_WINDING, CableTier.SUPERCONDUCTOR.getMaxTransfer(), 128 * 2 * 2 * 2 * 2, 0f);
+		this.addTeslaTowerTier(EIBlocks.COPPER_TESLA_WINDING, CableTier.LV.getMaxTransfer() * 6, 32, 64);
+		this.addTeslaTowerTier(EIBlocks.ELECTRUM_TESLA_WINDING, CableTier.MV.getMaxTransfer() * 6, 32 * 2, 64 * 4);
+		this.addTeslaTowerTier(EIBlocks.ALUMINUM_TESLA_WINDING, CableTier.HV.getMaxTransfer() * 6, 32 * 2 * 2, 64 * 4 * 4);
+		this.addTeslaTowerTier(EIBlocks.ANNEALED_COPPER_TESLA_WINDING, CableTier.EV.getMaxTransfer() * 6, 32 * 2 * 2 * 2, 64 * 4 * 4 * 4);
+		this.addTeslaTowerTier(EIBlocks.SUPERCONDUCTOR_TESLA_WINDING, CableTier.SUPERCONDUCTOR.getMaxTransfer() * 6, 32 * 2 * 2 * 2 * 2, 64 * 4 * 4 * 4 * 4);
 	}
 	
 	private void addFarmerSimpleTallCropSize(ResourceLocation block, int maxHeight)
@@ -65,9 +65,9 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		this.builder(EIDataMaps.LARGE_ELECTRIC_FURNACE_TIER).add(block, new LargeElectricFurnaceTier(batchSize, euCostMultiplier), false);
 	}
 	
-	private void addTeslaTowerTier(BlockHolder block, long maxTransfer, int maxDistance, float maxLoss)
+	private void addTeslaTowerTier(BlockHolder block, long maxTransfer, int maxDistance, long drain)
 	{
-		this.builder(EIDataMaps.TESLA_TOWER_TIER).add(block.identifier().location(), new TeslaTowerTierData(maxTransfer, maxDistance, maxLoss), false);
+		this.builder(EIDataMaps.TESLA_TOWER_TIER).add(block.identifier().location(), new TeslaTowerTierData(maxTransfer, maxDistance, drain), false);
 	}
 	
 	@Override

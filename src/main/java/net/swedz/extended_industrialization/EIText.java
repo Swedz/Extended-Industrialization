@@ -1,8 +1,8 @@
 package net.swedz.extended_industrialization;
 
-import net.swedz.tesseract.neoforge.tooltip.TranslatableTextEnum;
+import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTranslatableTextEnum;
 
-public enum EIText implements TranslatableTextEnum
+public enum EIText implements MICompatibleTranslatableTextEnum
 {
 	ACTIVATED("Activated"),
 	BREWERY_BREWS_MULTIPLE("Brews %s potions at a time."),
@@ -121,7 +121,6 @@ public enum EIText implements TranslatableTextEnum
 	TESLA_RECEIVER_HELP_1("Can receive energy from a linked Tesla Tower."),
 	TESLA_RECEIVER_HELP_2("Must accept energy of the same voltage as the linked tower."),
 	TESLA_RECEIVER_LINKED("Linked to %s"),
-	TESLA_RECEIVER_LOSS("Energy Loss: %s"),
 	TESLA_RECEIVER_MISMATCHING_VOLTAGE("Cannot receive %s power"),
 	TESLA_RECEIVER_NO_LINK("Not linked to any transmitter"),
 	TESLA_RECEIVER_TOO_FAR("Transmitter is too far"),
@@ -130,15 +129,17 @@ public enum EIText implements TranslatableTextEnum
 	TESLA_TOWER_HELP_2("Energy transfer rate and range is determined by the windings used."),
 	TESLA_TOWER_HELP_3("Voltage of energy transmitted is set by the energy hatches. All hatches must be the same tier."),
 	TESLA_TOWER_UPGRADE("Add tesla upgrades to increase maximum range."),
+	TESLA_TRANSMITTER_CONSUMING("Consuming: %s"),
+	TESLA_TRANSMITTER_DRAIN("Drain: %s"),
 	TESLA_TRANSMITTER_MISMATCHING_HATCHES("All energy hatches must be of the same voltage."),
 	TESLA_TRANSMITTER_NO_ENERGY_HATCHES("No energy hatches provided"),
 	TESLA_TRANSMITTER_NO_NETWORK("No network found"),
 	TESLA_TRANSMITTER_RECEIVERS("Receivers: %d"),
-	TESLA_TRANSMITTER_VOLTAGE("Transmitting %s power"),
+	TESLA_TRANSMITTER_TRANSMITTING("Transmitting: %s (%s)"),
 	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Casing for cable tier to convert from (LV by default)."),
 	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default)."),
 	WASTE_COLLECTOR_HELP("When placed underneath animals, manure will be collected."),
-	WINDINGS_TESLA_TOWER_TIER("Allows the Tesla Tower to transmit up to %s within %s blocks with a max loss of %s.");
+	WINDINGS_TESLA_TOWER_TIER("Allows the Tesla Tower to transmit up to %s within %s blocks with a passive drain of %s.");
 	
 	private final String englishText;
 	

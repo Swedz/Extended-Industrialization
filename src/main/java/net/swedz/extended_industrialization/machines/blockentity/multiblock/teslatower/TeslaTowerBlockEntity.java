@@ -38,6 +38,7 @@ import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.Bas
 import java.util.List;
 import java.util.Map;
 
+import static aztech.modern_industrialization.MITooltips.*;
 import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser.*;
 
@@ -53,6 +54,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	private final TeslaArcs arcs;
 	
 	private CableTier cableTier;
+	private long lastEnergyTransmitted;
 	
 	public TeslaTowerBlockEntity(BEP bep)
 	{
@@ -99,9 +101,12 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 					
 					if(network.isTransmitterLoaded())
 					{
-						content.add(EIText.TESLA_TRANSMITTER_VOLTAGE.arg(network.getCableTier(), CABLE_TIER_SHORT));
-						
 						content.add(EIText.TESLA_TRANSMITTER_RECEIVERS.arg(network.receiverCount()));
+						
+						content.add(EIText.TESLA_TRANSMITTER_TRANSMITTING.arg(lastEnergyTransmitted, EU_PER_TICK_PARSER).arg(network.getCableTier(), CABLE_TIER_SHORT));
+						long drain = this.getPassiveDrain();
+						content.add(EIText.TESLA_TRANSMITTER_DRAIN.arg(drain, EU_PER_TICK_PARSER));
+						content.add(EIText.TESLA_TRANSMITTER_CONSUMING.arg(lastEnergyTransmitted + drain, EU_PER_TICK_PARSER));
 					}
 					else
 					{
@@ -263,16 +268,20 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 			return;
 		}
 		
+		lastEnergyTransmitted = 0;
 		boolean active = false;
 		
 		if(shapeValid.shapeValid)
 		{
 			if(redstoneControl.doAllowNormalOperation(this))
 			{
-				// TODO limit transmit rate
-				this.transmitEnergy(Long.MAX_VALUE);
-				
-				active = true;
+				long amountToDrain = this.getPassiveDrain();
+				long drained = this.extractEnergy(amountToDrain, false);
+				if(drained == amountToDrain)
+				{
+					lastEnergyTransmitted = this.transmitEnergy(this.getMaxTransfer());
+					active = true;
+				}
 			}
 		}
 		

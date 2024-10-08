@@ -85,7 +85,7 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 	{
 		if(this.getCableTier() != network.getCableTier())
 		{
-			return ReceiveCheckResult.failure(ReceiveCheckResult.Type.MISMATCHING_VOLTAGE);
+			return ReceiveCheckResult.MISMATCHING_VOLTAGE;
 		}
 		else if(machine.hasLevel())
 		{
@@ -93,7 +93,7 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 		}
 		else
 		{
-			return ReceiveCheckResult.failure(ReceiveCheckResult.Type.UNDEFINED);
+			return ReceiveCheckResult.UNDEFINED;
 		}
 	}
 	

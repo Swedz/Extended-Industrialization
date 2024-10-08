@@ -28,9 +28,9 @@ public interface TeslaTransferLimits
 			}
 			
 			@Override
-			public float getMaxLoss()
+			public long getPassiveDrain()
 			{
-				return towerTier.maxLoss();
+				return towerTier.drain();
 			}
 		};
 	}
@@ -41,7 +41,7 @@ public interface TeslaTransferLimits
 	
 	int getMaxDistance();
 	
-	float getMaxLoss();
+	long getPassiveDrain();
 	
 	interface Delegate extends TeslaTransferLimits
 	{
@@ -66,9 +66,9 @@ public interface TeslaTransferLimits
 		}
 		
 		@Override
-		default float getMaxLoss()
+		default long getPassiveDrain()
 		{
-			return this.getDelegateTransferLimits().getMaxLoss();
+			return this.getDelegateTransferLimits().getPassiveDrain();
 		}
 	}
 }

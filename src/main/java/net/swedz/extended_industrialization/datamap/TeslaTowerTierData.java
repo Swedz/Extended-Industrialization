@@ -7,19 +7,21 @@ import net.minecraft.world.level.block.Block;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerTier;
 import net.swedz.extended_industrialization.machines.tieredshapes.DataMultiblockTier;
 
-public record TeslaTowerTierData(long maxTransfer, int maxDistance, float maxLoss) implements DataMultiblockTier<TeslaTowerTier>
+public record TeslaTowerTierData(
+		long maxTransfer, int maxDistance, long drain
+) implements DataMultiblockTier<TeslaTowerTier>
 {
 	public static final Codec<TeslaTowerTierData> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
 					Codec.LONG.fieldOf("transfer").forGetter(TeslaTowerTierData::maxTransfer),
 					Codec.INT.fieldOf("distance").forGetter(TeslaTowerTierData::maxDistance),
-					Codec.FLOAT.fieldOf("loss").forGetter(TeslaTowerTierData::maxLoss)
+					Codec.LONG.fieldOf("drain").forGetter(TeslaTowerTierData::drain)
 			)
 			.apply(instance, TeslaTowerTierData::new));
 	
 	@Override
 	public TeslaTowerTier wrap(ResourceKey<Block> key)
 	{
-		return new TeslaTowerTier(key.location(), maxTransfer, maxDistance, maxLoss);
+		return new TeslaTowerTier(key.location(), maxTransfer, maxDistance, drain);
 	}
 }

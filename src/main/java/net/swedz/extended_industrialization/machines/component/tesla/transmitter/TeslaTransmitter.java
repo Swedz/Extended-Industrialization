@@ -66,9 +66,9 @@ public interface TeslaTransmitter extends TeslaNetworkPart, TeslaTransferLimits
 		}
 		
 		@Override
-		default float getMaxLoss()
+		default long getPassiveDrain()
 		{
-			return this.getDelegateTransmitter().getMaxLoss();
+			return this.getDelegateTransmitter().getPassiveDrain();
 		}
 		
 		@Override

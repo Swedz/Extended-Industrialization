@@ -131,9 +131,9 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 	}
 	
 	@Override
-	public float getMaxLoss()
+	public long getPassiveDrain()
 	{
-		return limits.get().getMaxLoss();
+		return limits.get().getPassiveDrain();
 	}
 	
 	@Override
