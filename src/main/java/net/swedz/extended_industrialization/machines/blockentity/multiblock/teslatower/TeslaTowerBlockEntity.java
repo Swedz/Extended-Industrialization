@@ -85,7 +85,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 				() -> new WorldPos(level, this.getTopLoadPosition())
 		);
 		
-		arcs = new TeslaArcs(3, 6, 4, 8, 15, 10);
+		arcs = new TeslaArcs(1f, 3, 6, 4, 8, 15, 10);
 		
 		this.registerComponents(redstoneControl, upgrade, transmitter);
 		
