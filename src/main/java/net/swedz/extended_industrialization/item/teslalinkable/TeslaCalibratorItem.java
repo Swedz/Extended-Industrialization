@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.item.teslalinkable;
 
+import aztech.modern_industrialization.machines.MachineBlockEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -19,7 +20,7 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.api.WorldPos;
-import net.swedz.extended_industrialization.machines.blockentity.TeslaReceiverMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public final class TeslaCalibratorItem extends Item
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	private static void onPlaceMachineWithConfig(BlockEvent.EntityPlaceEvent event)
+	private static void onPlaceReceiverWithCalibrator(BlockEvent.EntityPlaceEvent event)
 	{
 		if(event.getEntity() instanceof Player player)
 		{
@@ -46,11 +47,12 @@ public final class TeslaCalibratorItem extends Item
 				WorldPos key = offhand.get(EIComponents.SELECTED_TESLA_NETWORK);
 				
 				BlockEntity blockEntity = event.getLevel().getBlockEntity(event.getPos());
-				if(blockEntity instanceof TeslaReceiverMachineBlockEntity receiver)
+				if(blockEntity instanceof MachineBlockEntity machine &&
+				   blockEntity instanceof TeslaReceiver receiver)
 				{
 					receiver.setNetwork(key);
-					receiver.setChanged();
-					receiver.sync();
+					machine.setChanged();
+					machine.sync();
 					player.displayClientMessage(EIText.TESLA_CALIBRATOR_LINK_SUCCESS.text(), true);
 				}
 			}
@@ -67,16 +69,19 @@ public final class TeslaCalibratorItem extends Item
 			InteractionHand usedHand = context.getHand();
 			ItemStack itemStack = player.getItemInHand(usedHand);
 			BlockEntity hitBlockEntity = context.getLevel().getBlockEntity(context.getClickedPos());
-			if(player.isShiftKeyDown() && hitBlockEntity instanceof TeslaTransmitter)
+			if(player.isShiftKeyDown() &&
+			   hitBlockEntity instanceof TeslaTransmitter transmitter)
 			{
 				if(!client)
 				{
-					itemStack.set(EIComponents.SELECTED_TESLA_NETWORK, new WorldPos(context.getLevel(), context.getClickedPos()));
+					itemStack.set(EIComponents.SELECTED_TESLA_NETWORK, transmitter.getPosition());
 					player.displayClientMessage(EIText.TESLA_CALIBRATOR_SELECTED.text(), true);
 				}
 				return InteractionResult.sidedSuccess(client);
 			}
-			else if(!player.isShiftKeyDown() && hitBlockEntity instanceof TeslaReceiverMachineBlockEntity receiver)
+			else if(!player.isShiftKeyDown() &&
+					hitBlockEntity instanceof MachineBlockEntity machine &&
+					hitBlockEntity instanceof TeslaReceiver receiver)
 			{
 				if(!client)
 				{
@@ -84,8 +89,8 @@ public final class TeslaCalibratorItem extends Item
 					{
 						WorldPos key = itemStack.get(EIComponents.SELECTED_TESLA_NETWORK);
 						receiver.setNetwork(key);
-						receiver.setChanged();
-						receiver.sync();
+						machine.setChanged();
+						machine.sync();
 						player.displayClientMessage(EIText.TESLA_CALIBRATOR_LINK_SUCCESS.text(), true);
 					}
 					else

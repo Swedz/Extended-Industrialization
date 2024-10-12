@@ -38,11 +38,11 @@ public final class TeslaHandheldReceiverItem extends Item
 			InteractionHand usedHand = context.getHand();
 			ItemStack itemStack = player.getItemInHand(usedHand);
 			BlockEntity hitBlockEntity = context.getLevel().getBlockEntity(context.getClickedPos());
-			if(hitBlockEntity instanceof TeslaTransmitter)
+			if(hitBlockEntity instanceof TeslaTransmitter transmitter)
 			{
 				if(!client)
 				{
-					itemStack.set(EIComponents.SELECTED_TESLA_NETWORK, new WorldPos(context.getLevel(), context.getClickedPos()));
+					itemStack.set(EIComponents.SELECTED_TESLA_NETWORK, transmitter.getPosition());
 					player.displayClientMessage(EIText.TESLA_HANDHELD_SELECTED.text(), true);
 				}
 				return InteractionResult.sidedSuccess(client);
