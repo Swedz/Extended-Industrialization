@@ -7,6 +7,11 @@ public interface TeslaTransferLimits
 {
 	static TeslaTransferLimits of(CableTier cableTier, TeslaTowerTier towerTier)
 	{
+		return of(cableTier, towerTier.maxTransfer(), towerTier.maxDistance(), towerTier.drain());
+	}
+	
+	static TeslaTransferLimits of(CableTier cableTier, long maxTransfer, int maxDistance, long passiveDrain)
+	{
 		return new TeslaTransferLimits()
 		{
 			@Override
@@ -18,19 +23,19 @@ public interface TeslaTransferLimits
 			@Override
 			public long getMaxTransfer()
 			{
-				return towerTier.maxTransfer();
+				return maxTransfer;
 			}
 			
 			@Override
 			public int getMaxDistance()
 			{
-				return towerTier.maxDistance();
+				return maxDistance;
 			}
 			
 			@Override
 			public long getPassiveDrain()
 			{
-				return towerTier.drain();
+				return passiveDrain;
 			}
 		};
 	}

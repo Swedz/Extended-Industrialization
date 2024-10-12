@@ -4,9 +4,9 @@ import net.minecraft.world.phys.Vec3;
 
 public interface TeslaArcGenerator
 {
-	Vec3 getTeslaArcsOffset();
-	
 	TeslaArcs getTeslaArcs();
+	
+	Vec3 getTeslaArcsOffset();
 	
 	boolean shouldRenderTeslaArcs();
 }

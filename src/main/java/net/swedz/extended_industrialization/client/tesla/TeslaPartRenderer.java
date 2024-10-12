@@ -22,6 +22,7 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcGenerator;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcs;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaGenerator;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
 import team.lodestar.lodestone.handlers.RenderHandler;
@@ -76,7 +77,8 @@ final class TeslaPartRenderer
 					.setRenderType(TESLA_ARC)
 					.setColorRaw(1f, 1f, 1f);
 			
-			for(TrailPointBuilder trail : generator.getTeslaArcs().getTrails())
+			TeslaArcs arcs = generator.getTeslaArcs();
+			for(TrailPointBuilder trail : arcs.getTrails())
 			{
 				List<TrailPoint> points = trail.getTrailPoints();
 				if(points.size() < 2)
@@ -84,7 +86,7 @@ final class TeslaPartRenderer
 					continue;
 				}
 				int ticks = points.getFirst().getTimeActive();
-				builder.setAlpha(0.9f * (ticks == 0 ? partialTick : ticks == generator.getTeslaArcs().duration() ? (1 - partialTick) : 1));
+				builder.setAlpha(0.9f * (ticks == 0 ? partialTick : ticks == arcs.duration() ? (1 - partialTick) : 1));
 				int halfPoints = points.size() / 2;
 				if(ticks == 0 || ticks == 1)
 				{
@@ -96,7 +98,7 @@ final class TeslaPartRenderer
 				Vec3 offset = generator.getTeslaArcsOffset();
 				matrices.translate(offset.x(), offset.y(), offset.z());
 				
-				builder.renderTrail(matrices, points, (i) -> 1 - i);
+				builder.renderTrail(matrices, points, (i) -> (1 - i) * arcs.widthScale());
 				
 				matrices.popPose();
 			}

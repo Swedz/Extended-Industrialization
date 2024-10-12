@@ -82,6 +82,11 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 		this.sourcePosition = sourcePosition;
 	}
 	
+	public TeslaTransmitterComponent(MachineBlockEntity machine, List<EnergyComponent> energyInputs, Supplier<TeslaTransferLimits> limits)
+	{
+		this(machine, energyInputs, limits, () -> new WorldPos(machine.getLevel(), machine.getBlockPos()));
+	}
+	
 	@Override
 	public boolean hasNetwork()
 	{
