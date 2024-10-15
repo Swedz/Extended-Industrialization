@@ -18,9 +18,11 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientConfig;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.api.WorldPos;
-import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcGenerator;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehavior;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehaviorHolder;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcs;
-import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaGenerator;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehavior;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehaviorHolder;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
 import team.lodestar.lodestone.handlers.RenderHandler;
 import team.lodestar.lodestone.registry.client.LodestoneRenderTypes;
@@ -66,34 +68,38 @@ final class TeslaPartRenderer
 	
 	private static void renderArcs(MachineBlockEntity machine, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
 	{
-		if(machine instanceof TeslaArcGenerator generator && generator.shouldRenderTeslaArcs())
+		if(machine instanceof TeslaArcBehaviorHolder holder)
 		{
-			VFXBuilders.WorldVFXBuilder builder = VFXBuilders.createWorld();
-			builder.replaceBufferSource(RenderHandler.LATE_DELAYED_RENDER.getTarget())
-					.setRenderType(TESLA_ARC)
-					.setColorRaw(1f, 1f, 1f);
-			
-			TeslaArcs arcs = generator.getTeslaArcs();
-			for(TrailPointBuilder trail : arcs.getTrails())
+			TeslaArcBehavior behavior = holder.getTeslaArcBehavior();
+			if(behavior.shouldRender())
 			{
-				List<TrailPoint> points = trail.getTrailPoints();
-				if(points.size() < 2)
+				VFXBuilders.WorldVFXBuilder builder = VFXBuilders.createWorld();
+				builder.replaceBufferSource(RenderHandler.LATE_DELAYED_RENDER.getTarget())
+						.setRenderType(TESLA_ARC)
+						.setColorRaw(1f, 1f, 1f);
+				
+				TeslaArcs arcs = behavior.getArcs();
+				for(TrailPointBuilder trail : arcs.getTrails())
 				{
-					continue;
+					List<TrailPoint> points = trail.getTrailPoints();
+					if(points.size() < 2)
+					{
+						continue;
+					}
+					int ticks = points.getFirst().getTimeActive();
+					builder.setAlpha(0.9f * (ticks == 0 ? partialTick : ticks == arcs.duration() ? (1 - partialTick) : 1));
+					int halfPoints = points.size() / 2;
+					if(ticks == 0 || ticks == 1)
+					{
+						points = points.subList(0, (int) (halfPoints * partialTick) + (ticks == 1 ? halfPoints : 0));
+					}
+					
+					matrices.pushPose();
+					
+					builder.renderTrail(matrices, points, (i) -> (1 - i) * arcs.widthScale());
+					
+					matrices.popPose();
 				}
-				int ticks = points.getFirst().getTimeActive();
-				builder.setAlpha(0.9f * (ticks == 0 ? partialTick : ticks == arcs.duration() ? (1 - partialTick) : 1));
-				int halfPoints = points.size() / 2;
-				if(ticks == 0 || ticks == 1)
-				{
-					points = points.subList(0, (int) (halfPoints * partialTick) + (ticks == 1 ? halfPoints : 0));
-				}
-				
-				matrices.pushPose();
-				
-				builder.renderTrail(matrices, points, (i) -> (1 - i) * arcs.widthScale());
-				
-				matrices.popPose();
 			}
 		}
 	}
@@ -118,41 +124,46 @@ final class TeslaPartRenderer
 	
 	private static void renderPlasma(MachineBlockEntity machine, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
 	{
-		if(machine instanceof TeslaPlasmaGenerator generator && generator.shouldRenderTeslaPlasma())
+		if(machine instanceof TeslaPlasmaBehaviorHolder holder)
 		{
-			matrices.pushPose();
-			
-			Vec3 offset = generator.getTeslaPlasmaOffset();
-			matrices.translate(offset.x(), offset.y(), offset.z());
-			
-			float tick = Minecraft.getInstance().levelRenderer.getTicks() + partialTick;
-			float speed = 0.0075f;
-			float u = (tick * speed) % 1f;
-			float v = (tick * speed) % 1f;
-			VertexConsumer vc = buffer.getBuffer(getPlasmaRenderType(u, v));
-			
-			generator.getTeslaPlasmaShape((box, ignoreFaces) ->
+			TeslaPlasmaBehavior behavior = holder.getTeslaPlasmaBehavior();
+			if(behavior.shouldRender())
 			{
-				for(Direction direction : Direction.values())
+				matrices.pushPose();
+				
+				Vec3 offset = behavior.getOffset();
+				matrices.translate(offset.x(), offset.y(), offset.z());
+				
+				float tick = Minecraft.getInstance().levelRenderer.getTicks() + partialTick;
+				float speed = behavior.getSpeed();
+				float u = (tick * speed) % 1f;
+				float v = (tick * speed) % 1f;
+				VertexConsumer vc = buffer.getBuffer(getPlasmaRenderType(u, v));
+				
+				behavior.getShape((box, ignoreFaces) ->
 				{
-					if(!ignoreFaces.contains(direction))
+					for(Direction direction : Direction.values())
 					{
-						renderPlasmaAddVertexesFace(
-								matrices, light, overlay, vc, direction,
-								(float) box.minX, (float) box.minY, (float) box.minZ,
-								(float) box.maxX, (float) box.maxY, (float) box.maxZ
-						);
+						if(!ignoreFaces.contains(direction))
+						{
+							renderPlasmaAddVertexesFace(
+									matrices, light, overlay, vc,
+									behavior.getTextureScale(), direction,
+									(float) box.minX, (float) box.minY, (float) box.minZ,
+									(float) box.maxX, (float) box.maxY, (float) box.maxZ
+							);
+						}
 					}
-				}
-			});
-			
-			matrices.popPose();
+				});
+				
+				matrices.popPose();
+			}
 		}
 	}
 	
 	private static void renderPlasmaAddVertexesFace(PoseStack matrices, int light, int overlay,
 													VertexConsumer vc,
-													Direction direction,
+													float textureScale, Direction direction,
 													float x1, float y1, float z1,
 													float x2, float y2, float z2)
 	{
@@ -185,9 +196,8 @@ final class TeslaPartRenderer
 			default -> throw new IllegalStateException("Unexpected value: " + direction);
 		}
 		
-		float scale = 32f / 64f;
-		float offsetU = width / 64f / scale;
-		float offsetV = height / 32f / scale;
+		float offsetU = width / 64f / textureScale;
+		float offsetV = height / 32f / textureScale;
 		
 		switch (direction)
 		{

@@ -24,9 +24,11 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientConfig;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.api.WorldPos;
-import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcGenerator;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehavior;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehaviorHolder;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcs;
-import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaGenerator;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehavior;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehaviorHolder;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaShapeAdder;
 import net.swedz.extended_industrialization.machines.component.itemslot.TeslaTowerUpgradeComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
@@ -46,7 +48,7 @@ import static aztech.modern_industrialization.MITooltips.*;
 import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser.*;
 
-public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEntity implements EnergyListComponentHolder, TeslaTransmitter.Delegate, TeslaArcGenerator, TeslaPlasmaGenerator
+public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEntity implements EnergyListComponentHolder, TeslaTransmitter.Delegate, TeslaArcBehaviorHolder, TeslaPlasmaBehaviorHolder
 {
 	private final RedstoneControlComponent redstoneControl;
 	private final TeslaTowerUpgradeComponent upgrade;
@@ -158,39 +160,65 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	}
 	
 	@Override
-	public TeslaArcs getTeslaArcs()
+	public TeslaArcBehavior getTeslaArcBehavior()
 	{
-		return arcs;
+		return new TeslaArcBehavior()
+		{
+			@Override
+			public boolean shouldRender()
+			{
+				return isActive.isActive;
+			}
+			
+			@Override
+			public TeslaArcs getArcs()
+			{
+				return arcs;
+			}
+		};
 	}
 	
 	@Override
-	public boolean shouldRenderTeslaArcs()
+	public TeslaPlasmaBehavior getTeslaPlasmaBehavior()
 	{
-		return isActive.isActive;
-	}
-	
-	@Override
-	public boolean shouldRenderTeslaPlasma()
-	{
-		return this.shouldRenderTeslaArcs();
-	}
-	
-	@Override
-	public Vec3 getTeslaPlasmaOffset()
-	{
-		return Vec3.atLowerCornerOf(this.getTopLoadPosition());
-	}
-	
-	@Override
-	public void getTeslaPlasmaShape(TeslaPlasmaShapeAdder shapes)
-	{
-		double inflate = 0.1;
-		shapes.add(new AABB(-1, -2 - inflate, -1, 2, -1 - inflate, 2).inflate(inflate, 0, inflate), Set.of(Direction.UP));
-		shapes.add(new AABB(-1, 2 + inflate, -1, 2, 3 + inflate, 2).inflate(inflate, 0, inflate), Set.of(Direction.DOWN));
-		shapes.add(new AABB(2 + inflate, -1, -1, 3 + inflate, 2, 2).inflate(0, inflate, inflate), Set.of(Direction.WEST));
-		shapes.add(new AABB(-2 - inflate, -1, -1, -1 - inflate, 2, 2).inflate(0, inflate, inflate), Set.of(Direction.EAST));
-		shapes.add(new AABB(-1, -1, 2 + inflate, 2, 2, 3 + inflate).inflate(inflate, inflate, 0), Set.of(Direction.NORTH));
-		shapes.add(new AABB(-1, -1, -2 - inflate, 2, 2, -1 - inflate).inflate(inflate, inflate, 0), Set.of(Direction.SOUTH));
+		return new TeslaPlasmaBehavior()
+		{
+			@Override
+			public boolean shouldRender()
+			{
+				return isActive.isActive;
+			}
+			
+			@Override
+			public Vec3 getOffset()
+			{
+				return Vec3.atLowerCornerOf(TeslaTowerBlockEntity.this.getTopLoadPosition());
+			}
+			
+			@Override
+			public void getShape(TeslaPlasmaShapeAdder shapes)
+			{
+				double inflate = 0.1;
+				shapes.add(new AABB(-1, -2 - inflate, -1, 2, -1 - inflate, 2).inflate(inflate, 0, inflate), Set.of(Direction.UP));
+				shapes.add(new AABB(-1, 2 + inflate, -1, 2, 3 + inflate, 2).inflate(inflate, 0, inflate), Set.of(Direction.DOWN));
+				shapes.add(new AABB(2 + inflate, -1, -1, 3 + inflate, 2, 2).inflate(0, inflate, inflate), Set.of(Direction.WEST));
+				shapes.add(new AABB(-2 - inflate, -1, -1, -1 - inflate, 2, 2).inflate(0, inflate, inflate), Set.of(Direction.EAST));
+				shapes.add(new AABB(-1, -1, 2 + inflate, 2, 2, 3 + inflate).inflate(inflate, inflate, 0), Set.of(Direction.NORTH));
+				shapes.add(new AABB(-1, -1, -2 - inflate, 2, 2, -1 - inflate).inflate(inflate, inflate, 0), Set.of(Direction.SOUTH));
+			}
+			
+			@Override
+			public float getSpeed()
+			{
+				return 0.0075f;
+			}
+			
+			@Override
+			public float getTextureScale()
+			{
+				return 32f / 64f;
+			}
+		};
 	}
 	
 	@Override

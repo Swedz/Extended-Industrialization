@@ -26,7 +26,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientConfig;
-import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcGenerator;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehavior;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehaviorHolder;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcs;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
@@ -36,7 +37,7 @@ import net.swedz.extended_industrialization.machines.guicomponent.modularslots.M
 import java.util.List;
 import java.util.Set;
 
-public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implements TeslaTransmitter.Delegate, Tickable, EnergyComponentHolder, TeslaArcGenerator
+public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implements TeslaTransmitter.Delegate, Tickable, EnergyComponentHolder, TeslaArcBehaviorHolder
 {
 	private final IsActiveComponent isActive;
 	
@@ -112,15 +113,22 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	}
 	
 	@Override
-	public TeslaArcs getTeslaArcs()
+	public TeslaArcBehavior getTeslaArcBehavior()
 	{
-		return arcs;
-	}
-	
-	@Override
-	public boolean shouldRenderTeslaArcs()
-	{
-		return isActive.isActive;
+		return new TeslaArcBehavior()
+		{
+			@Override
+			public boolean shouldRender()
+			{
+				return isActive.isActive;
+			}
+			
+			@Override
+			public TeslaArcs getArcs()
+			{
+				return arcs;
+			}
+		};
 	}
 	
 	@Override
