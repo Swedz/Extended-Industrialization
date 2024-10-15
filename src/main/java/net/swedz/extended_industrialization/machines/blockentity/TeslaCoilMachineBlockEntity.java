@@ -23,12 +23,16 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientConfig;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehavior;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehaviorHolder;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcs;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehavior;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehaviorHolder;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaShapeAdder;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitterComponent;
@@ -37,7 +41,7 @@ import net.swedz.extended_industrialization.machines.guicomponent.modularslots.M
 import java.util.List;
 import java.util.Set;
 
-public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implements TeslaTransmitter.Delegate, Tickable, EnergyComponentHolder, TeslaArcBehaviorHolder
+public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implements TeslaTransmitter.Delegate, Tickable, EnergyComponentHolder, TeslaArcBehaviorHolder, TeslaPlasmaBehaviorHolder
 {
 	private final IsActiveComponent isActive;
 	
@@ -127,6 +131,47 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 			public TeslaArcs getArcs()
 			{
 				return arcs;
+			}
+		};
+	}
+	
+	@Override
+	public TeslaPlasmaBehavior getTeslaPlasmaBehavior()
+	{
+		return new TeslaPlasmaBehavior()
+		{
+			@Override
+			public boolean shouldRender()
+			{
+				return isActive.isActive;
+			}
+			
+			@Override
+			public Vec3 getOffset()
+			{
+				return Vec3.ZERO;
+			}
+			
+			@Override
+			public void getShape(TeslaPlasmaShapeAdder shapes)
+			{
+				double inflate = 0.02;
+				shapes.add(new AABB(0, 11f / 16f - inflate, 0, 1, 1 + inflate, 5f / 16f).inflate(inflate, 0, inflate), Set.of(Direction.DOWN, Direction.SOUTH));
+				shapes.add(new AABB(0, 11f / 16f - inflate, 11f / 16f, 1, 1 + inflate, 1).inflate(inflate, 0, inflate), Set.of(Direction.DOWN, Direction.NORTH));
+				shapes.add(new AABB(0, 11f / 16f - inflate, 5f / 16f + inflate + inflate, 5f / 16f, 1 + inflate, 11f / 16f - inflate - inflate).inflate(inflate, 0, inflate), Set.of(Direction.DOWN, Direction.EAST, Direction.SOUTH, Direction.NORTH));
+				shapes.add(new AABB(11f / 16f, 11f / 16f - inflate, 5f / 16f + inflate + inflate, 1, 1 + inflate, 11f / 16f - inflate - inflate).inflate(inflate, 0, inflate), Set.of(Direction.DOWN, Direction.WEST, Direction.SOUTH, Direction.NORTH));
+			}
+			
+			@Override
+			public float getSpeed()
+			{
+				return 0.0075f;
+			}
+			
+			@Override
+			public float getTextureScale()
+			{
+				return 8f / 64f;
 			}
 		};
 	}
