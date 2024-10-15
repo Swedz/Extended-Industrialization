@@ -167,81 +167,75 @@ final class TeslaPartRenderer
 													float x1, float y1, float z1,
 													float x2, float y2, float z2)
 	{
-		float dx = Math.abs(x2 - x1);
-		float dy = Math.abs(y2 - y1);
-		float dz = Math.abs(z2 - z1);
-		float width, height;
+		float u1, v1, u2, v2;
 		switch (direction)
 		{
-			case DOWN ->
+			case DOWN, UP ->
 			{
-				width = dx;
-				height = dz;
-			}
-			case UP ->
-			{
-				width = dz;
-				height = dx;
+				u1 = (x1 / 64f) / textureScale;
+				v1 = (z1 / 32f) / textureScale;
+				u2 = (x2 / 64f) / textureScale;
+				v2 = (z2 / 32f) / textureScale;
 			}
 			case NORTH, SOUTH ->
 			{
-				width = dx;
-				height = dy;
+				u1 = (x1 / 64f) / textureScale;
+				v1 = (y1 / 32f) / textureScale;
+				u2 = (x2 / 64f) / textureScale;
+				v2 = (y2 / 32f) / textureScale;
 			}
 			case WEST, EAST ->
 			{
-				width = dz;
-				height = dy;
+				u1 = (z1 / 64f) / textureScale;
+				v1 = (y1 / 32f) / textureScale;
+				u2 = (z2 / 64f) / textureScale;
+				v2 = (y2 / 32f) / textureScale;
 			}
 			default -> throw new IllegalStateException("Unexpected value: " + direction);
 		}
-		
-		float offsetU = width / 64f / textureScale;
-		float offsetV = height / 32f / textureScale;
-		
 		switch (direction)
 		{
 			case DOWN ->
 			{
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z1, 0, 0);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z1, offsetU, 0);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z2, offsetU, offsetV);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z2, 0, offsetV);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z1, u1, v1);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z1, u2, v1);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z2, u2, v2);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z2, u1, v2);
 			}
 			case UP ->
 			{
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z1, 0, 0);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z2, offsetU, 0);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z2, offsetU, offsetV);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z1, 0, offsetV);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z1, u1, v1);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z1, u2, v1);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z2, u2, v2);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z2, u1, v2);
 			}
 			case NORTH ->
 			{
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z1, 0, 0);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z1, offsetU, 0);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z1, offsetU, offsetV);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z1, 0, offsetV);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z1, u1, v1);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z1, u2, v1);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z1, u2, v2);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z1, u1, v2);
 			}
 			case SOUTH ->
 			{
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z2, 0, 0);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z2, offsetU, 0);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z2, offsetU, offsetV);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z2, 0, offsetV);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z2, u1, v1);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z2, u2, v1);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z2, u2, v2);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z2, u1, v2);
 			}
 			case WEST ->
 			{
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z1, 0, 0);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z2, offsetU, 0);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z2, offsetU, offsetV);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z1, 0, offsetV);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z1, u1, v1);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y1, z2, u2, v1);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z2, u2, v2);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x1, y2, z1, u1, v2);
 			}
 			case EAST ->
 			{
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z1, 0, 0);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z2, offsetU, 0);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z2, offsetU, offsetV);
-				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z1, 0, offsetV);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z1, u1, v1);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y1, z2, u2, v1);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z2, u2, v2);
+				renderPlasmaAddVertex(matrices, light, overlay, vc, x2, y2, z1, u1, v2);
 			}
 		}
 	}
