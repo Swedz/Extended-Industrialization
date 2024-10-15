@@ -96,8 +96,8 @@ public enum EIText implements MICompatibleTranslatableTextEnum
 	STEAM_CHAINSAW_1("- Press %s on still or flowing water to fill."),
 	STEAM_CHAINSAW_2("- Place fuel inside the chainsaw using %s."),
 	STEAM_CHAINSAW_3("- Toggle Silk Touch with %s + %s."),
-	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Casing for cable tier to convert from (LV by default)."),
-	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default)."),
+	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Hull for cable tier to convert from (LV by default)."),
+	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Hull for cable tier to convert to (LV by default)."),
 	WASTE_COLLECTOR_HELP("When placed underneath animals, manure will be collected.");
 	
 	private final String englishText;
