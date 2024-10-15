@@ -19,6 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EIClientConfig;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcGenerator;
@@ -279,7 +280,10 @@ final class TeslaPartRenderer
 	static void render(MachineBlockEntity machine, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
 	{
 		renderHighlight(machine, partialTick, matrices, buffer, light, overlay);
-		renderArcs(machine, partialTick, matrices, buffer, light, overlay);
-		renderPlasma(machine, partialTick, matrices, buffer, light, overlay);
+		if(EIClientConfig.renderTeslaAnimations)
+		{
+			renderArcs(machine, partialTick, matrices, buffer, light, overlay);
+			renderPlasma(machine, partialTick, matrices, buffer, light, overlay);
+		}
 	}
 }

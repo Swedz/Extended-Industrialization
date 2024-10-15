@@ -25,6 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EIClientConfig;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcGenerator;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcs;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
@@ -183,7 +184,10 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	{
 		if(level.isClientSide())
 		{
-			arcs.tick();
+			if(EIClientConfig.renderTeslaAnimations)
+			{
+				arcs.tick();
+			}
 			return;
 		}
 		

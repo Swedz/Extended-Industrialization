@@ -19,9 +19,12 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
@@ -48,8 +51,11 @@ import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 @EventBusSubscriber(value = Dist.CLIENT, modid = EI.ID, bus = EventBusSubscriber.Bus.MOD)
 public final class EIClient
 {
-	public EIClient(IEventBus bus)
+	public EIClient(IEventBus bus, ModContainer container)
 	{
+		container.registerConfig(ModConfig.Type.CLIENT, EIClientConfig.SPEC);
+		bus.addListener(FMLCommonSetupEvent.class, (event) -> EIClientConfig.loadConfig());
+		
 		EIKeybinds.init(bus);
 		
 		NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, (event) ->

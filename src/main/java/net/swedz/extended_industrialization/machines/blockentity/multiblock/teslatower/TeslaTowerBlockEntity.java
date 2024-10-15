@@ -20,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EIClientConfig;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcGenerator;
@@ -261,7 +262,10 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		
 		if(level.isClientSide())
 		{
-			arcs.tick();
+			if(EIClientConfig.renderTeslaAnimations)
+			{
+				arcs.tick();
+			}
 			return;
 		}
 		
