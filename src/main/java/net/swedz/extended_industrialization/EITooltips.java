@@ -5,14 +5,18 @@ import aztech.modern_industrialization.api.energy.EnergyApi;
 import com.google.common.collect.Lists;
 import dev.technici4n.grandpower.api.ILongEnergyStorage;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
+import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerTier;
 import net.swedz.tesseract.neoforge.tooltip.BiParser;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 import net.swedz.tesseract.neoforge.tooltip.TooltipAttachment;
@@ -44,6 +48,8 @@ public final class EITooltips
 	public static final Parser<Boolean> ACTIVATED_BOOLEAN_PARSER = (value) ->
 			value ? EIText.ACTIVATED.text().withStyle(ChatFormatting.GREEN) : EIText.DEACTIVATED.text().withStyle(ChatFormatting.RED);
 	
+	public static final Parser<WorldPos> TESLA_NETWORK_KEY_PARSER = (key) -> Parser.GLOBAL_POS.withStyle(DEFAULT_STYLE).parse(GlobalPos.of(key.dimension(), key.pos()));
+	
 	public static final Parser<String> KEYBIND_PARSER = Parser.KEYBIND.withStyle(NUMBER_TEXT);
 	
 	public static final TooltipAttachment ENERGY_STORED_ITEM = TooltipAttachment.singleLineOptional(
@@ -74,7 +80,7 @@ public final class EITooltips
 			)
 	).noShiftRequired();
 	
-	public static final TooltipAttachment COILS = TooltipAttachment.singleLine(
+	public static final TooltipAttachment COILS_LEF = TooltipAttachment.singleLine(
 			(stack, item) ->
 					item instanceof BlockItem blockItem &&
 					LargeElectricFurnaceBlockEntity.getTiersByCoil().containsKey(BuiltInRegistries.BLOCK.getKey(blockItem.getBlock())),
@@ -85,6 +91,21 @@ public final class EITooltips
 				int batchSize = tier.batchSize();
 				float euCostMultiplier = tier.euCostMultiplier();
 				return line(EIText.COILS_LEF_TIER).arg(batchSize).arg(euCostMultiplier, PERCENTAGE_PARSER);
+			}
+	);
+	
+	public static final TooltipAttachment WINDINGS_TESLA = TooltipAttachment.singleLine(
+			(stack, item) ->
+					item instanceof BlockItem blockItem &&
+					TeslaTowerBlockEntity.getTiersByWinding().containsKey(BuiltInRegistries.BLOCK.getKey(blockItem.getBlock())),
+			(stack, item) ->
+			{
+				TeslaTowerTier tier = TeslaTowerBlockEntity.getTiersByWinding()
+						.get(BuiltInRegistries.BLOCK.getKey(((BlockItem) stack.getItem()).getBlock()));
+				return line(EIText.WINDINGS_TESLA_TOWER_TIER)
+						.arg(tier.maxTransfer(), EU_PER_TICK_PARSER)
+						.arg(tier.maxDistance())
+						.arg(tier.drain(), EU_PER_TICK_PARSER);
 			}
 	);
 	
@@ -124,6 +145,16 @@ public final class EITooltips
 					line(EIText.MACHINE_CONFIG_CARD_HELP_2).arg("use", KEYBIND_PARSER),
 					line(EIText.MACHINE_CONFIG_CARD_HELP_3),
 					line(EIText.MACHINE_CONFIG_CARD_HELP_4).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
+			)
+	);
+	
+	public static final TooltipAttachment TESLA_CALIBRATOR = TooltipAttachment.multilines(
+			EIItems.TESLA_CALIBRATOR,
+			List.of(
+					line(EIText.TESLA_CALIBRATOR_HELP_1).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER),
+					line(EIText.TESLA_CALIBRATOR_HELP_2).arg("use", KEYBIND_PARSER),
+					line(EIText.TESLA_CALIBRATOR_HELP_3),
+					line(EIText.TESLA_CALIBRATOR_HELP_4).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
 			)
 	);
 	
@@ -188,19 +219,31 @@ public final class EITooltips
 			line(EIText.WASTE_COLLECTOR_HELP)
 	);
 	
-	public static final TooltipAttachment CHARGING_STATION_RANGED = TooltipAttachment.singleLine(
-			List.of(EI.id("local_wireless_charging_station")),
-			line(EIText.CHARGING_STATION_RANGED).arg(EIConfig.localWirelessChargingStationRange)
+	public static final TooltipAttachment TESLA_TOWER = TooltipAttachment.multilines(
+			List.of(EI.id("tesla_tower")),
+			List.of(
+					line(EIText.TESLA_TOWER_HELP_1),
+					line(EIText.TESLA_TOWER_HELP_2),
+					line(EIText.TESLA_TOWER_HELP_3)
+			)
 	);
 	
-	public static final TooltipAttachment CHARGING_STATION_GLOBAL = TooltipAttachment.singleLine(
-			List.of(EI.id("global_wireless_charging_station")),
-			line(EIText.CHARGING_STATION_GLOBAL)
+	public static final TooltipAttachment TESLA_RECEIVER = TooltipAttachment.multilines(
+			List.of(EI.id("tesla_receiver")),
+			List.of(
+					line(EIText.TESLA_RECEIVER_HELP_1),
+					line(EIText.TESLA_RECEIVER_HELP_2)
+			)
 	);
 	
-	public static final TooltipAttachment CHARGING_STATION_INTERDIMENSIONAL = TooltipAttachment.singleLine(
-			List.of(EI.id("interdimensional_wireless_charging_station")),
-			line(EIText.CHARGING_STATION_INTERDIMENSIONAL)
+	public static final TooltipAttachment TESLA_HANDHELD_RECEIVER = TooltipAttachment.multilines(
+			List.of(EI.id("tesla_handheld_receiver")),
+			List.of(
+					line(EIText.TESLA_HANDHELD_HELP_1),
+					line(EIText.TESLA_HANDHELD_HELP_2),
+					line(EIText.TESLA_HANDHELD_HELP_3).arg("use", KEYBIND_PARSER),
+					line(EIText.TESLA_HANDHELD_HELP_4).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
+			)
 	);
 	
 	public static void init()

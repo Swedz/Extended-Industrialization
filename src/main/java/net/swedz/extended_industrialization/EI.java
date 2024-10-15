@@ -16,6 +16,8 @@ import net.neoforged.neoforge.registries.datamaps.DataMapsUpdatedEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.swedz.extended_industrialization.datagen.DatagenDelegator;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
+import net.swedz.extended_industrialization.machines.guicomponent.EIModularSlotPanelSlots;
 import net.swedz.extended_industrialization.network.EIPackets;
 import net.swedz.tesseract.neoforge.api.MCIdentifiable;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
@@ -64,6 +66,7 @@ public final class EI
 		EIBlocks.init(bus);
 		EIFluids.init(bus);
 		EIOtherRegistries.init(bus);
+		EIModularSlotPanelSlots.init();
 		
 		bus.register(new DatagenDelegator());
 		
@@ -81,5 +84,6 @@ public final class EI
 		
 		NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, DataMapsUpdatedEvent.class, (event) ->
 				event.ifRegistry(Registries.BLOCK, (registry) -> LargeElectricFurnaceBlockEntity.initTiers()));
+		TeslaTowerBlockEntity.registerTieredShapes();
 	}
 }

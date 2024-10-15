@@ -19,9 +19,12 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
@@ -32,12 +35,15 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.swedz.extended_industrialization.client.MachineChainerHighlightRenderer;
 import net.swedz.extended_industrialization.client.NanoGravichestplateHudRenderer;
+import net.swedz.extended_industrialization.client.tesla.TeslaPartMultiblockRenderer;
+import net.swedz.extended_industrialization.client.tesla.TeslaPartSingleBlockRenderer;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.machineconfig.MachineConfigCardItem;
 import net.swedz.extended_industrialization.item.tooltip.MachineConfigCardTooltipComponent;
 import net.swedz.extended_industrialization.item.tooltip.SteamChainsawTooltipComponent;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
 import net.swedz.extended_industrialization.network.packet.ModifyElectricToolSpeedPacket;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 
@@ -45,8 +51,11 @@ import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 @EventBusSubscriber(value = Dist.CLIENT, modid = EI.ID, bus = EventBusSubscriber.Bus.MOD)
 public final class EIClient
 {
-	public EIClient(IEventBus bus)
+	public EIClient(IEventBus bus, ModContainer container)
 	{
+		container.registerConfig(ModConfig.Type.CLIENT, EIClientConfig.SPEC);
+		bus.addListener(FMLCommonSetupEvent.class, (event) -> EIClientConfig.loadConfig());
+		
 		EIKeybinds.init(bus);
 		
 		NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, (event) ->
@@ -107,17 +116,28 @@ public final class EIClient
 				MachineBlockEntity blockEntity = machine.getBlockEntityInstance();
 				BlockEntityType type = blockEntity.getType();
 				
-				if(blockEntity instanceof LargeTankMultiblockBlockEntity)
+				if(blockEntity instanceof MachineChainerMachineBlockEntity)
+				{
+					BlockEntityRenderers.register(type, MachineChainerHighlightRenderer::new);
+				}
+				else if(blockEntity instanceof TeslaNetworkPart)
+				{
+					if(blockEntity instanceof MultiblockMachineBlockEntity)
+					{
+						BlockEntityRenderers.register(type, TeslaPartMultiblockRenderer::new);
+					}
+					else
+					{
+						BlockEntityRenderers.register(type, TeslaPartSingleBlockRenderer::new);
+					}
+				}
+				else if(blockEntity instanceof LargeTankMultiblockBlockEntity)
 				{
 					BlockEntityRenderers.register(type, MultiblockTankBER::new);
 				}
 				else if(blockEntity instanceof MultiblockMachineBlockEntity)
 				{
 					BlockEntityRenderers.register(type, MultiblockMachineBER::new);
-				}
-				else if(blockEntity instanceof MachineChainerMachineBlockEntity)
-				{
-					BlockEntityRenderers.register(type, MachineChainerHighlightRenderer::new);
 				}
 				else
 				{

@@ -71,6 +71,14 @@ repositories {
 			includeGroup "top.theillusivec4.curios"
 		}
 	}
+	maven {
+		name = "BlameJared"
+		url = "https://maven.blamejared.com/"
+		content {
+			// Lodestone
+			includeGroup "team.lodestar.lodestone"
+		}
+	}
 }
 
 dependencies {
@@ -111,6 +119,14 @@ dependencies {
 		localImplementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 	} else {
 		compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+	}
+
+	jarJar(implementation("team.lodestar.lodestone:lodestone:${lodestone_version}")) {
+		version {
+			strictly lodestone_version_range
+			prefer lodestone_version
+		}
+		exclude group: 'top.theillusivec4.curios', module: 'curios-neoforge'
 	}
 }
 
@@ -274,6 +290,7 @@ neoForge {
 	accessTransformers = [
 			"src/main/resources/${mod_id}.accesstransformer.cfg"
 	]
+	interfaceInjectionData.from "src/main/resources/interfaces.json"
 
 	parchment {
 		mappingsVersion = project.parchment_mappings_version

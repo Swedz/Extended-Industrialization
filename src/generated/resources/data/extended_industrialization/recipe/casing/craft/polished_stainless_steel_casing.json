@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "modern_industrialization:stainless_steel_curved_plate"
+    },
+    "P": {
+      "tag": "c:plates/stainless_steel"
+    }
+  },
+  "pattern": [
+    "CPC",
+    "CPC",
+    "CPC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:polished_stainless_steel_casing"
+  }
+}

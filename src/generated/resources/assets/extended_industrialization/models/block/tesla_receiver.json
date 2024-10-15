@@ -1,0 +1,13 @@
+{
+  "casing": "lv",
+  "default_overlays": {
+    "fluid_auto": "modern_industrialization:block/overlays/fluid_auto",
+    "item_auto": "modern_industrialization:block/overlays/item_auto",
+    "output": "modern_industrialization:block/overlays/output",
+    "side": "extended_industrialization:block/machines/tesla_receiver/overlay_side",
+    "side_active": "extended_industrialization:block/machines/tesla_receiver/overlay_side_active",
+    "top": "extended_industrialization:block/machines/tesla_receiver/overlay_top",
+    "top_active": "extended_industrialization:block/machines/tesla_receiver/overlay_top_active"
+  },
+  "loader": "modern_industrialization:machine"
+}
