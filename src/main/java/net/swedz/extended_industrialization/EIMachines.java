@@ -411,7 +411,7 @@ public final class EIMachines
 		
 		hook.register(
 				"Tesla Coil", "tesla_coil", "tesla_coil",
-				CableTier.LV.casing, false, true, true, true,
+				CableTier.LV.casing, true, true, true, true,
 				TeslaCoilMachineBlockEntity::new,
 				TeslaCoilMachineBlockEntity::registerEnergyApi
 		);

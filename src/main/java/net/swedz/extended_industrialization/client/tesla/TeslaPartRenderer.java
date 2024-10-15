@@ -95,9 +95,6 @@ final class TeslaPartRenderer
 				
 				matrices.pushPose();
 				
-				Vec3 offset = generator.getTeslaArcsOffset();
-				matrices.translate(offset.x(), offset.y(), offset.z());
-				
 				builder.renderTrail(matrices, points, (i) -> (1 - i) * arcs.widthScale());
 				
 				matrices.popPose();

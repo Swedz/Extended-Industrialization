@@ -20,7 +20,7 @@ public final class TeslaArcs
 {
 	private static final Set<Direction> ALL_DIRECTIONS = Arrays.stream(Direction.values()).collect(Collectors.toUnmodifiableSet());
 	
-	private static final Random RANDOM = new Random();
+	public static final Random RANDOM = new Random();
 	
 	private final float widthScale;
 	private final int   arcDuration;
@@ -30,6 +30,8 @@ public final class TeslaArcs
 	private final float maxSectionLength;
 	private final int   sectionSplits;
 	
+	private final Supplier<Vec3> originSupplier;
+	
 	private final Map<Direction.Axis, Supplier<Float>> offsetGenerators;
 	
 	private final List<TrailPointBuilder> trails = Lists.newArrayList();
@@ -38,6 +40,7 @@ public final class TeslaArcs
 					 int arcDuration, int arcs,
 					 int minLength, int maxLength,
 					 float maxSectionLength, int sectionSplits,
+					 Supplier<Vec3> originSupplier,
 					 Set<Direction> allowedDirections)
 	{
 		Assert.that(widthScale > 0);
@@ -47,6 +50,7 @@ public final class TeslaArcs
 		Assert.that(maxLength > 0 && maxLength >= minLength);
 		Assert.that(maxSectionLength > 0);
 		Assert.that(sectionSplits > 0);
+		Assert.notNull(originSupplier);
 		Assert.notNull(allowedDirections);
 		Assert.that(!allowedDirections.isEmpty());
 		
@@ -57,15 +61,17 @@ public final class TeslaArcs
 		this.maxLength = maxLength;
 		this.maxSectionLength = maxSectionLength;
 		this.sectionSplits = sectionSplits;
+		this.originSupplier = originSupplier;
 		this.offsetGenerators = this.buildOffsetGenerators(allowedDirections);
 	}
 	
 	public TeslaArcs(float widthScale,
 					 int arcDuration, int arcs,
 					 int minLength, int maxLength,
-					 float maxSectionLength, int sectionSplits)
+					 float maxSectionLength, int sectionSplits,
+					 Supplier<Vec3> originSupplier)
 	{
-		this(widthScale, arcDuration, arcs, minLength, maxLength, maxSectionLength, sectionSplits, ALL_DIRECTIONS);
+		this(widthScale, arcDuration, arcs, minLength, maxLength, maxSectionLength, sectionSplits, originSupplier, ALL_DIRECTIONS);
 	}
 	
 	private Map<Direction.Axis, Supplier<Float>> buildOffsetGenerators(Set<Direction> allowedDirections)
@@ -145,9 +151,10 @@ public final class TeslaArcs
 	{
 		TrailPointBuilder trail = TrailPointBuilder.create(arcDuration);
 		int length = RANDOM.nextInt(minLength, maxLength + 1);
-		double x = 0;
-		double y = 0;
-		double z = 0;
+		Vec3 origin = originSupplier.get();
+		double x = origin.x();
+		double y = origin.y();
+		double z = origin.z();
 		float dirX = this.randomOffset(Direction.Axis.X);
 		float dirY = this.randomOffset(Direction.Axis.Y);
 		float dirZ = this.randomOffset(Direction.Axis.Z);

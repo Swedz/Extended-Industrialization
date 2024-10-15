@@ -85,7 +85,10 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 				() -> new WorldPos(level, this.getTopLoadPosition())
 		);
 		
-		arcs = new TeslaArcs(1f, 3, 6, 4, 8, 15, 10);
+		arcs = new TeslaArcs(
+				1f, 3, 6, 4, 8, 15, 10,
+				() -> Vec3.atCenterOf(this.getTopLoadPosition())
+		);
 		
 		this.registerComponents(redstoneControl, upgrade, transmitter);
 		
@@ -154,12 +157,6 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	public TeslaArcs getTeslaArcs()
 	{
 		return arcs;
-	}
-	
-	@Override
-	public Vec3 getTeslaArcsOffset()
-	{
-		return Vec3.atCenterOf(this.getTopLoadPosition());
 	}
 	
 	@Override

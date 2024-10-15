@@ -89,7 +89,18 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 				}
 		);
 		
-		arcs = new TeslaArcs(0.25f, 3, 6, 1, 3, 2, 5, Set.of(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST));
+		arcs = new TeslaArcs(
+				0.25f, 3, 3, 1, 3, 2, 5,
+				() ->
+				{
+					double radius = 0.35;
+					boolean side = TeslaArcs.RANDOM.nextBoolean();
+					double x = (side ? radius : radius * TeslaArcs.RANDOM.nextDouble()) * (TeslaArcs.RANDOM.nextBoolean() ? 1 : -1);
+					double z = (!side ? radius : radius * TeslaArcs.RANDOM.nextDouble()) * (TeslaArcs.RANDOM.nextBoolean() ? 1 : -1);
+					return Vec3.upFromBottomCenterOf(Vec3i.ZERO, 1).add(x, -0.2, z);
+				},
+				Set.of(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST)
+		);
 		
 		this.registerComponents(isActive, redstoneControl, casing, energy, transmitter);
 		
@@ -103,12 +114,6 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	public TeslaArcs getTeslaArcs()
 	{
 		return arcs;
-	}
-	
-	@Override
-	public Vec3 getTeslaArcsOffset()
-	{
-		return Vec3.upFromBottomCenterOf(Vec3i.ZERO, 1);
 	}
 	
 	@Override
