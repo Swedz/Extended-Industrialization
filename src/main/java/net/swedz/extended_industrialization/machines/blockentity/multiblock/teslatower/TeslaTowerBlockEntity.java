@@ -18,6 +18,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientConfig;
@@ -26,6 +27,7 @@ import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcGenerator;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcs;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaGenerator;
+import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaShapeAdder;
 import net.swedz.extended_industrialization.machines.component.itemslot.TeslaTowerUpgradeComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
@@ -38,6 +40,7 @@ import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.Bas
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static aztech.modern_industrialization.MITooltips.*;
 import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
@@ -55,7 +58,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	private final TeslaArcs arcs;
 	
 	private CableTier cableTier;
-	private long lastEnergyTransmitted;
+	private long      lastEnergyTransmitted;
 	
 	public TeslaTowerBlockEntity(BEP bep)
 	{
@@ -167,15 +170,27 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	}
 	
 	@Override
+	public boolean shouldRenderTeslaPlasma()
+	{
+		return this.shouldRenderTeslaArcs();
+	}
+	
+	@Override
 	public Vec3 getTeslaPlasmaOffset()
 	{
 		return Vec3.atLowerCornerOf(this.getTopLoadPosition());
 	}
 	
 	@Override
-	public boolean shouldRenderTeslaPlasma()
+	public void getTeslaPlasmaShape(TeslaPlasmaShapeAdder shapes)
 	{
-		return this.shouldRenderTeslaArcs();
+		double inflate = 0.1;
+		shapes.add(new AABB(-1, -2 - inflate, -1, 2, -1 - inflate, 2).inflate(inflate, 0, inflate), Set.of(Direction.UP));
+		shapes.add(new AABB(-1, 2 + inflate, -1, 2, 3 + inflate, 2).inflate(inflate, 0, inflate), Set.of(Direction.DOWN));
+		shapes.add(new AABB(2 + inflate, -1, -1, 3 + inflate, 2, 2).inflate(0, inflate, inflate), Set.of(Direction.WEST));
+		shapes.add(new AABB(-2 - inflate, -1, -1, -1 - inflate, 2, 2).inflate(0, inflate, inflate), Set.of(Direction.EAST));
+		shapes.add(new AABB(-1, -1, 2 + inflate, 2, 2, 3 + inflate).inflate(inflate, inflate, 0), Set.of(Direction.NORTH));
+		shapes.add(new AABB(-1, -1, -2 - inflate, 2, 2, -1 - inflate).inflate(inflate, inflate, 0), Set.of(Direction.SOUTH));
 	}
 	
 	@Override

@@ -2,7 +2,6 @@ package net.swedz.extended_industrialization.client.tesla;
 
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.util.RenderHelper;
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -14,10 +13,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientConfig;
 import net.swedz.extended_industrialization.EIComponents;
@@ -34,7 +30,6 @@ import team.lodestar.lodestone.systems.rendering.rendeertype.RenderTypeToken;
 import team.lodestar.lodestone.systems.rendering.trail.TrailPoint;
 import team.lodestar.lodestone.systems.rendering.trail.TrailPointBuilder;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -103,25 +98,6 @@ final class TeslaPartRenderer
 		}
 	}
 	
-	private record IgnoreSideShape(Direction ignoreSide, VoxelShape shape)
-	{
-	}
-	
-	private static final List<IgnoreSideShape> TESLA_TOP_LOAD_SHAPES;
-	
-	static
-	{
-		List<IgnoreSideShape> shapes = Lists.newArrayList();
-		double inflate = 0.1;
-		shapes.add(new IgnoreSideShape(Direction.UP, Shapes.create(new AABB(-1, -2 - inflate, -1, 1 + 1, -2 + 1 - inflate, 1 + 1).inflate(inflate, 0, inflate))));
-		shapes.add(new IgnoreSideShape(Direction.DOWN, Shapes.create(new AABB(-1, 2 + inflate, -1, 1 + 1, 2 + 1 + inflate, 1 + 1).inflate(inflate, 0, inflate))));
-		shapes.add(new IgnoreSideShape(Direction.WEST, Shapes.create(new AABB(2 + inflate, -1, -1, 2 + 1 + inflate, 1 + 1, 1 + 1).inflate(0, inflate, inflate))));
-		shapes.add(new IgnoreSideShape(Direction.EAST, Shapes.create(new AABB(-2 - inflate, -1, -1, -2 + 1 - inflate, 1 + 1, 1 + 1).inflate(0, inflate, inflate))));
-		shapes.add(new IgnoreSideShape(Direction.NORTH, Shapes.create(new AABB(-1, -1, 2 + inflate, 1 + 1, 1 + 1, 2 + 1 + inflate).inflate(inflate, inflate, 0))));
-		shapes.add(new IgnoreSideShape(Direction.SOUTH, Shapes.create(new AABB(-1, -1, -2 - inflate, 1 + 1, 1 + 1, -2 + 1 - inflate).inflate(inflate, inflate, 0))));
-		TESLA_TOP_LOAD_SHAPES = Collections.unmodifiableList(shapes);
-	}
-	
 	private static RenderType getPlasmaRenderType(float u, float v)
 	{
 		return RenderType.create(
@@ -155,23 +131,20 @@ final class TeslaPartRenderer
 			float v = (tick * speed) % 1f;
 			VertexConsumer vc = buffer.getBuffer(getPlasmaRenderType(u, v));
 			
-			for(IgnoreSideShape shape : TESLA_TOP_LOAD_SHAPES)
+			generator.getTeslaPlasmaShape((box, ignoreFaces) ->
 			{
-				for(AABB box : shape.shape().toAabbs())
+				for(Direction direction : Direction.values())
 				{
-					for(Direction direction : Direction.values())
+					if(!ignoreFaces.contains(direction))
 					{
-						if(direction != shape.ignoreSide())
-						{
-							renderPlasmaAddVertexesFace(
-									matrices, light, overlay, vc, direction,
-									(float) box.minX, (float) box.minY, (float) box.minZ,
-									(float) box.maxX, (float) box.maxY, (float) box.maxZ
-							);
-						}
+						renderPlasmaAddVertexesFace(
+								matrices, light, overlay, vc, direction,
+								(float) box.minX, (float) box.minY, (float) box.minZ,
+								(float) box.maxX, (float) box.maxY, (float) box.maxZ
+						);
 					}
 				}
-			}
+			});
 			
 			matrices.popPose();
 		}

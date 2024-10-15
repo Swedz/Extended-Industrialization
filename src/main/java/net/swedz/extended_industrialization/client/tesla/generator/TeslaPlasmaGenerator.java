@@ -4,7 +4,9 @@ import net.minecraft.world.phys.Vec3;
 
 public interface TeslaPlasmaGenerator
 {
+	boolean shouldRenderTeslaPlasma();
+	
 	Vec3 getTeslaPlasmaOffset();
 	
-	boolean shouldRenderTeslaPlasma();
+	void getTeslaPlasmaShape(TeslaPlasmaShapeAdder shapes);
 }
