@@ -84,7 +84,7 @@ public abstract class TeslaNetworkReceiversPlayerMixin extends LivingEntity
 		{
 			if(stack.getItem() instanceof TeslaHandheldReceiverItem && stack.has(EIComponents.SELECTED_TESLA_NETWORK))
 			{
-				WorldPos key = stack.get(EIComponents.SELECTED_TESLA_NETWORK);
+				WorldPos key = stack.get(EIComponents.SELECTED_TESLA_NETWORK).key();
 				found.computeIfAbsent(key, (k) -> new PlayerTeslaReceiver(player, k));
 			}
 		}

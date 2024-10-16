@@ -33,6 +33,8 @@ import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.swedz.extended_industrialization.client.tooltip.ItemStackClientTooltipComponent;
+import net.swedz.extended_industrialization.api.ItemStackTooltipComponent;
 import net.swedz.extended_industrialization.client.MachineChainerHighlightRenderer;
 import net.swedz.extended_industrialization.client.NanoGravichestplateHudRenderer;
 import net.swedz.extended_industrialization.client.tesla.TeslaPartMultiblockRenderer;
@@ -152,6 +154,7 @@ public final class EIClient
 	{
 		event.register(SteamChainsawItem.SteamChainsawTooltipData.class, SteamChainsawTooltipComponent::new);
 		event.register(MachineConfigCardItem.TooltipData.class, MachineConfigCardTooltipComponent::new);
+		event.register(ItemStackTooltipComponent.class, ItemStackClientTooltipComponent::new);
 	}
 	
 	@SubscribeEvent
