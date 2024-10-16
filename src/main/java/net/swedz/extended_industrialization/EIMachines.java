@@ -418,7 +418,7 @@ public final class EIMachines
 		
 		hook.register(
 				"Tesla Receiver", "tesla_receiver", "tesla_receiver",
-				CableTier.LV.casing, false, true, true, true,
+				CableTier.LV.casing, true, true, true, true,
 				TeslaReceiverMachineBlockEntity::new,
 				TeslaReceiverMachineBlockEntity::registerEnergyApi
 		);
