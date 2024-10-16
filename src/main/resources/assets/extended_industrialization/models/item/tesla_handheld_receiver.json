@@ -1,0 +1,14 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "extended_industrialization:item/tesla_handheld_receiver"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "extended_industrialization:selected_tesla_network": 1
+            },
+            "model": "extended_industrialization:item/tesla_handheld_receiver_active"
+        }
+    ]
+}

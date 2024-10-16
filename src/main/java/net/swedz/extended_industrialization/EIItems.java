@@ -2,6 +2,7 @@ package net.swedz.extended_industrialization;
 
 import aztech.modern_industrialization.api.energy.CableTier;
 import com.google.common.collect.Sets;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -69,8 +70,8 @@ public final class EIItems
 	public static final ItemHolder<Item> CANNED_FOOD = create("canned_food", "Canned Food", Item::new, EISortOrder.OTHER_GEAR).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3f).fast().usingConvertsTo(TIN_CAN).build())).tag(ItemTags.WOLF_FOOD, ItemTags.CAT_FOOD).withModel(CommonModelBuilders::generated).register();
 	
 	public static final ItemHolder<MachineConfigCardItem>     MACHINE_CONFIG_CARD     = create("machine_config_card", "Machine Config Card", MachineConfigCardItem::new, EISortOrder.OTHER_GEAR).withModel(CommonModelBuilders::generated).register();
-	public static final ItemHolder<TeslaCalibratorItem>       TESLA_CALIBRATOR        = create("tesla_calibrator", "Tesla Calibrator", TeslaCalibratorItem::new, EISortOrder.OTHER_GEAR).withModel(CommonModelBuilders::generated).register();
-	public static final ItemHolder<TeslaHandheldReceiverItem> TESLA_HANDHELD_RECEIVER = create("tesla_handheld_receiver", "Tesla Handheld Receiver", TeslaHandheldReceiverItem::new, EISortOrder.OTHER_GEAR).withModel(CommonModelBuilders::generated).register();
+	public static final ItemHolder<TeslaCalibratorItem>       TESLA_CALIBRATOR        = create("tesla_calibrator", "Tesla Calibrator", TeslaCalibratorItem::new, EISortOrder.OTHER_GEAR).withModel(CommonModelBuilders::generated).withRegistrationListener(EIItems::itemPropertyTeslaNetworkSelected).register();
+	public static final ItemHolder<TeslaHandheldReceiverItem> TESLA_HANDHELD_RECEIVER = create("tesla_handheld_receiver", "Tesla Handheld Receiver", TeslaHandheldReceiverItem::new, EISortOrder.OTHER_GEAR).withRegistrationListener(EIItems::itemPropertyTeslaNetworkSelected).register();
 	
 	public static final ItemHolder<Item> TESLA_INTERDIMENSIONAL_UPGRADE = create("tesla_interdimensional_upgrade", "Tesla Interdimensional Upgrade", Item::new, EISortOrder.OTHER_GEAR).withProperties((p) -> p.stacksTo(1).rarity(Rarity.EPIC)).withModel(CommonModelBuilders::generated).register();
 	
@@ -152,5 +153,10 @@ public final class EIItems
 				.tag(EITags.Items.PHOTOVOLTAIC_CELL)
 				.withModel(CommonModelBuilders::generated)
 				.register();
+	}
+	
+	public static void itemPropertyTeslaNetworkSelected(Item item)
+	{
+		ItemProperties.register(item, EI.id("selected_tesla_network"), (stack, __, ___, ____) -> stack.has(EIComponents.SELECTED_TESLA_NETWORK) ? 1 : 0);
 	}
 }
