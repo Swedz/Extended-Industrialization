@@ -1,16 +1,19 @@
 package net.swedz.extended_industrialization.machines.blockentity;
 
-import aztech.modern_industrialization.MICapabilities;
 import aztech.modern_industrialization.api.energy.EnergyApi;
+import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.CasingComponent;
+import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.IsActiveComponent;
 import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
+import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
+import aztech.modern_industrialization.machines.helper.EnergyHelper;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.core.Direction;
@@ -28,6 +31,7 @@ import net.swedz.extended_industrialization.machines.component.tesla.receiver.Te
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverState;
 import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.TeslaNetworkBar;
+import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 
 import java.util.Optional;
 import java.util.Set;
@@ -38,6 +42,10 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	
 	private final RedstoneControlComponent redstoneControl;
 	private final CasingComponent          casing;
+	
+	private final EnergyComponent energy;
+	private final MIEnergyStorage insertable;
+	private final MIEnergyStorage extractable;
 	
 	private final TeslaReceiverComponent receiver;
 	
@@ -66,9 +74,20 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 			}
 		};
 		
-		receiver = new TeslaReceiverComponent(this, () -> redstoneControl.doAllowNormalOperation(this), casing::getCableTier);
+		energy = new EnergyComponent(this, casing::getEuCapacity);
+		insertable = energy.buildInsertable(casing::canInsertEu);
+		extractable = energy.buildExtractable(casing::canInsertEu);
+		
+		receiver = new TeslaReceiverComponent(
+				this,
+				insertable,
+				() -> redstoneControl.doAllowNormalOperation(this),
+				casing::getCableTier
+		);
 		
 		this.registerComponents(isActive, redstoneControl, casing, receiver);
+		
+		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(61, 34), energy::getEu, energy::getCapacity));
 		
 		this.registerGuiComponent(new TeslaNetworkBar.Server(
 				new TeslaNetworkBar.Parameters(101, 34),
@@ -204,15 +223,17 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		{
 			isActive.updateActive(false, this);
 		}
+		
+		EnergyHelper.autoOutput(this, orientation, casing.getCableTier(), extractable);
 	}
 	
 	public static void registerEnergyApi(BlockEntityType<?> bet)
 	{
-		MICapabilities.onEvent((event) ->
+		CapabilitiesListeners.register(EI.ID, (event) ->
 				event.registerBlockEntity(EnergyApi.SIDED, bet, (be, direction) ->
 				{
 					TeslaReceiverMachineBlockEntity machine = (TeslaReceiverMachineBlockEntity) be;
-					return machine.orientation.outputDirection == direction ? null : machine.receiver.insertable();
+					return machine.orientation.outputDirection == direction ? machine.extractable : null;
 				}));
 	}
 }

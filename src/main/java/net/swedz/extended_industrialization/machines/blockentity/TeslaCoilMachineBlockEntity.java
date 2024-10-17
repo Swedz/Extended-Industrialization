@@ -1,6 +1,5 @@
 package net.swedz.extended_industrialization.machines.blockentity;
 
-import aztech.modern_industrialization.MICapabilities;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
@@ -39,6 +38,7 @@ import net.swedz.extended_industrialization.machines.component.tesla.transmitter
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitterComponent;
 import net.swedz.extended_industrialization.machines.guicomponent.modularslots.ModularSlotPanel;
 import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.TeslaNetworkBar;
+import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 
 import java.util.List;
 import java.util.Optional;
@@ -89,7 +89,8 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		insertable = energy.buildInsertable(casing::canInsertEu);
 		
 		transmitter = new TeslaTransmitterComponent(
-				this, List.of(energy),
+				this,
+				List.of(energy),
 				() ->
 				{
 					CableTier tier = casing.getCableTier();
@@ -290,7 +291,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	
 	public static void registerEnergyApi(BlockEntityType<?> bet)
 	{
-		MICapabilities.onEvent((event) ->
+		CapabilitiesListeners.register(EI.ID, (event) ->
 				event.registerBlockEntity(EnergyApi.SIDED, bet, (be, direction) -> ((TeslaCoilMachineBlockEntity) be).insertable));
 	}
 }
