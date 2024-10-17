@@ -33,12 +33,15 @@ import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcs;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehavior;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehaviorHolder;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaShapeAdder;
+import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitterComponent;
 import net.swedz.extended_industrialization.machines.guicomponent.modularslots.ModularSlotPanel;
+import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.TeslaNetworkBar;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implements TeslaTransmitter.Delegate, Tickable, EnergyComponentHolder, TeslaArcBehaviorHolder, TeslaPlasmaBehaviorHolder
@@ -110,7 +113,31 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		
 		this.registerComponents(isActive, redstoneControl, casing, energy, transmitter);
 		
-		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(81, 34), energy::getEu, energy::getCapacity));
+		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(61, 34), energy::getEu, energy::getCapacity));
+		
+		this.registerGuiComponent(new TeslaNetworkBar.Server(
+				new TeslaNetworkBar.Parameters(101, 34),
+				() ->
+				{
+					if(this.hasNetwork())
+					{
+						TeslaNetwork network = this.getNetwork();
+						if(network.isTransmitterLoaded())
+						{
+							long drain = this.getPassiveDrain();
+							return Optional.of(new TeslaNetworkBar.TransmitterData(
+									network.receiverCount(),
+									lastEnergyTransmitted,
+									network.getCableTier(),
+									drain,
+									lastEnergyTransmitted + drain
+							));
+						}
+					}
+					return Optional.empty();
+				}
+		));
+		
 		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
 				.withRedstoneModule(redstoneControl)
 				.withCasings(casing));

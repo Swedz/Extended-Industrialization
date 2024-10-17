@@ -107,38 +107,26 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 				if(this.hasNetwork())
 				{
 					TeslaNetwork network = this.getNetwork();
-					
 					if(network.isTransmitterLoaded())
 					{
-						content.add(EIText.TESLA_TRANSMITTER_RECEIVERS.arg(network.receiverCount()));
+						content.add(EIText.TESLA_NETWORK_TRANSMITTER_RECEIVERS.arg(network.receiverCount()));
 						
-						content.add(EIText.TESLA_TRANSMITTER_TRANSMITTING.arg(lastEnergyTransmitted, EU_PER_TICK_PARSER).arg(network.getCableTier(), CABLE_TIER_SHORT));
+						content.add(EIText.TESLA_NETWORK_TRANSMITTER_TRANSMITTING.arg(lastEnergyTransmitted, EU_PER_TICK_PARSER).arg(network.getCableTier(), CABLE_TIER_SHORT));
 						long drain = this.getPassiveDrain();
-						content.add(EIText.TESLA_TRANSMITTER_DRAIN.arg(drain, EU_PER_TICK_PARSER));
-						content.add(EIText.TESLA_TRANSMITTER_CONSUMING.arg(lastEnergyTransmitted + drain, EU_PER_TICK_PARSER));
+						content.add(EIText.TESLA_NETWORK_TRANSMITTER_DRAIN.arg(drain, EU_PER_TICK_PARSER));
+						content.add(EIText.TESLA_NETWORK_TRANSMITTER_CONSUMING.arg(lastEnergyTransmitted + drain, EU_PER_TICK_PARSER));
 					}
-					else
+					else if(this.getCableTier() == null)
 					{
-						if(this.getCableTier() == null)
-						{
-							content.add(EIText.TESLA_TRANSMITTER_NO_ENERGY_HATCHES, RED);
-						}
-						else
-						{
-							content.add(EIText.TESLA_TRANSMITTER_NO_NETWORK, RED);
-						}
+						content.add(EIText.TESLA_TOWER_NO_ENERGY_HATCHES, RED);
 					}
-				}
-				else
-				{
-					content.add(EIText.TESLA_TRANSMITTER_NO_NETWORK, RED);
 				}
 			}
 			else
 			{
 				if(this.getShapeMatcher() != null && this.getShapeMatcher().hasMismatchingHatches())
 				{
-					content.add(EIText.TESLA_TRANSMITTER_MISMATCHING_HATCHES, RED, true);
+					content.add(EIText.TESLA_TOWER_MISMATCHING_HATCHES, RED, true);
 				}
 			}
 		}));

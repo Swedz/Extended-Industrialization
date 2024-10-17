@@ -20,20 +20,17 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehavior;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehaviorHolder;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaShapeAdder;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverComponent;
-import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
+import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverState;
+import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.TeslaNetworkBar;
 
+import java.util.Optional;
 import java.util.Set;
-
-import static net.swedz.extended_industrialization.EITooltips.*;
-import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
-import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser.*;
 
 public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity implements TeslaReceiver.Delegate, Tickable, TeslaPlasmaBehaviorHolder
 {
@@ -48,7 +45,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder(EI.id("tesla_receiver"), false).backgroundHeight(175).build(),
+				new MachineGuiParameters.Builder(EI.id("tesla_receiver"), false).build(),
 				new OrientationComponent.Params(true, false, false)
 		);
 		
@@ -73,39 +70,29 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		
 		this.registerComponents(isActive, redstoneControl, casing, receiver);
 		
-		this.registerGuiComponent(new ModularMultiblockGui.Server(0, 60, (content) ->
-		{
-			if(this.hasNetwork())
-			{
-				TeslaNetwork network = this.getNetwork();
-				
-				content.add(EIText.TESLA_RECEIVER_LINKED.arg(this.getNetworkKey(), TESLA_NETWORK_KEY_PARSER), WHITE, true);
-				
-				if(network.isTransmitterLoaded())
+		this.registerGuiComponent(new TeslaNetworkBar.Server(
+				new TeslaNetworkBar.Parameters(101, 34),
+				() ->
 				{
-					ReceiveCheckResult result = this.checkReceiveFrom(network);
-					if(result.isFailure())
+					if(this.hasNetwork())
 					{
-						if(result == ReceiveCheckResult.MISMATCHING_VOLTAGE)
+						TeslaNetwork network = this.getNetwork();
+						if(network.isTransmitterLoaded())
 						{
-							content.add(EIText.TESLA_RECEIVER_MISMATCHING_VOLTAGE.arg(network.getCableTier(), CABLE_TIER_SHORT), RED);
+							TeslaReceiverState state = this.checkReceiveFrom(network);
+							return Optional.of(new TeslaNetworkBar.ReceiverData(state, Optional.of(this.getNetworkKey()), Optional.of(network.getCableTier())));
 						}
-						else if(result == ReceiveCheckResult.TOO_FAR)
+						else
 						{
-							content.add(EIText.TESLA_RECEIVER_TOO_FAR, RED);
+							return Optional.of(new TeslaNetworkBar.ReceiverData(TeslaReceiverState.UNLOADED_TRANSMITTER, Optional.of(this.getNetworkKey()), Optional.empty()));
 						}
 					}
+					else
+					{
+						return Optional.of(new TeslaNetworkBar.ReceiverData(TeslaReceiverState.NO_LINK, Optional.empty(), Optional.empty()));
+					}
 				}
-				else
-				{
-					content.add(EIText.TESLA_RECEIVER_UNLOADED_TRANSMITTER, RED);
-				}
-			}
-			else
-			{
-				content.add(EIText.TESLA_RECEIVER_NO_LINK, RED);
-			}
-		}));
+		));
 		
 		this.registerGuiComponent(new SlotPanel.Server(this)
 				.withRedstoneControl(redstoneControl)

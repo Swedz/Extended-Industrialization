@@ -8,13 +8,13 @@ import net.swedz.extended_industrialization.machines.component.tesla.transmitter
 
 public interface TeslaReceiver extends TeslaNetworkPart
 {
-	default ReceiveCheckResult checkReceiveFrom(TeslaNetwork network)
+	default TeslaReceiverState checkReceiveFrom(TeslaNetwork network)
 	{
 		TeslaTransmitter transmitter = network.getTransmitter();
 		
 		if(transmitter.isInterdimensional())
 		{
-			return ReceiveCheckResult.SUCCESS;
+			return TeslaReceiverState.SUCCESS;
 		}
 		
 		WorldPos transmitterPos = transmitter.getSourcePosition();
@@ -22,7 +22,7 @@ public interface TeslaReceiver extends TeslaNetworkPart
 		
 		if(!transmitterPos.isSameDimension(receiverPos))
 		{
-			return ReceiveCheckResult.TOO_FAR;
+			return TeslaReceiverState.TOO_FAR;
 		}
 		
 		int maxDistance = network.getMaxDistance();
@@ -31,10 +31,10 @@ public interface TeslaReceiver extends TeslaNetworkPart
 		int distZ = Math.abs(transmitterPos.getZ() - receiverPos.getZ());
 		if(distX > maxDistance || distY > maxDistance || distZ > maxDistance)
 		{
-			return ReceiveCheckResult.TOO_FAR;
+			return TeslaReceiverState.TOO_FAR;
 		}
 		
-		return ReceiveCheckResult.SUCCESS;
+		return TeslaReceiverState.SUCCESS;
 	}
 	
 	long receiveEnergy(long maxReceive, boolean simulate);
@@ -43,30 +43,12 @@ public interface TeslaReceiver extends TeslaNetworkPart
 	
 	long getEnergyCapacity();
 	
-	enum ReceiveCheckResult
-	{
-		SUCCESS,
-		MISMATCHING_VOLTAGE,
-		TOO_FAR,
-		UNDEFINED;
-		
-		public boolean isSuccess()
-		{
-			return this == ReceiveCheckResult.SUCCESS;
-		}
-		
-		public boolean isFailure()
-		{
-			return !this.isSuccess();
-		}
-	}
-	
 	interface Delegate extends TeslaReceiver
 	{
 		TeslaReceiver getDelegateReceiver();
 		
 		@Override
-		default ReceiveCheckResult checkReceiveFrom(TeslaNetwork network)
+		default TeslaReceiverState checkReceiveFrom(TeslaNetwork network)
 		{
 			return this.getDelegateReceiver().checkReceiveFrom(network);
 		}

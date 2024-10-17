@@ -71,7 +71,7 @@ public final class TeslaNetwork implements MIEnergyStorage, TeslaTransferLimits.
 	{
 		if(!this.isTransmitterLoaded())
 		{
-			throw new IllegalStateException("Cannot get cable tier from network without a loaded transmitter");
+			throw new IllegalStateException("Cannot get transfer limits from network without a loaded transmitter");
 		}
 		return this.getTransmitter();
 	}

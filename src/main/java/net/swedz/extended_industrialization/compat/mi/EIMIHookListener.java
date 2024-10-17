@@ -9,6 +9,8 @@ import net.swedz.extended_industrialization.machines.guicomponent.processingarra
 import net.swedz.extended_industrialization.machines.guicomponent.processingarraymachineslot.ProcessingArrayMachineSlotClient;
 import net.swedz.extended_industrialization.machines.guicomponent.solarefficiency.SolarEfficiencyBar;
 import net.swedz.extended_industrialization.machines.guicomponent.solarefficiency.SolarEfficiencyBarClient;
+import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.TeslaNetworkBar;
+import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.TeslaNetworkBarClient;
 import net.swedz.extended_industrialization.machines.guicomponent.universaltransformer.UniversalTransformerSlots;
 import net.swedz.extended_industrialization.machines.guicomponent.universaltransformer.UniversalTransformerSlotsClient;
 import net.swedz.tesseract.neoforge.compat.mi.hook.MIHookEntrypoint;
@@ -37,6 +39,7 @@ public final class EIMIHookListener implements MIHookListener
 		hook.register(SolarEfficiencyBar.ID, SolarEfficiencyBarClient::new);
 		hook.register(ProcessingArrayMachineSlot.ID, ProcessingArrayMachineSlotClient::new);
 		hook.register(UniversalTransformerSlots.ID, UniversalTransformerSlotsClient::new);
+		hook.register(TeslaNetworkBar.ID, TeslaNetworkBarClient::new);
 		// TODO move to tesseract
 		hook.register(ModularSlotPanel.ID, ModularSlotPanelClient::new);
 	}

@@ -81,11 +81,11 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 	}
 	
 	@Override
-	public ReceiveCheckResult checkReceiveFrom(TeslaNetwork network)
+	public TeslaReceiverState checkReceiveFrom(TeslaNetwork network)
 	{
 		if(this.getCableTier() != network.getCableTier())
 		{
-			return ReceiveCheckResult.MISMATCHING_VOLTAGE;
+			return TeslaReceiverState.MISMATCHING_VOLTAGE;
 		}
 		else if(machine.hasLevel())
 		{
@@ -93,7 +93,7 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 		}
 		else
 		{
-			return ReceiveCheckResult.UNDEFINED;
+			return TeslaReceiverState.UNDEFINED;
 		}
 	}
 	
