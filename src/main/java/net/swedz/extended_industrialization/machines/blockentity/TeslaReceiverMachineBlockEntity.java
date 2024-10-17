@@ -85,7 +85,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 				casing::getCableTier
 		);
 		
-		this.registerComponents(isActive, redstoneControl, casing, receiver);
+		this.registerComponents(isActive, redstoneControl, casing, energy, receiver);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(61, 34), energy::getEu, energy::getCapacity));
 		
