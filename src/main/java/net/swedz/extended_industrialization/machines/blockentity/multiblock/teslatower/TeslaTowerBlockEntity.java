@@ -86,7 +86,8 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		};
 		
 		transmitter = new TeslaTransmitterComponent(
-				this, energyInputs,
+				this,
+				energyInputs,
 				() -> TeslaTransferLimits.of(cableTier, SHAPES.tiers().get(activeShape.getActiveShapeIndex())),
 				() -> new WorldPos(level, this.getTopLoadPosition())
 		);
