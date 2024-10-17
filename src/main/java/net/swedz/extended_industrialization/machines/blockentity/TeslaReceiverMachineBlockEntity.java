@@ -224,7 +224,10 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 			isActive.updateActive(false, this);
 		}
 		
-		EnergyHelper.autoOutput(this, orientation, casing.getCableTier(), extractable);
+		if(redstoneControl.doAllowNormalOperation(this))
+		{
+			EnergyHelper.autoOutput(this, orientation, casing.getCableTier(), extractable);
+		}
 	}
 	
 	public static void registerEnergyApi(BlockEntityType<?> bet)
