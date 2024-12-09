@@ -161,9 +161,9 @@ public final class TeslaArcs
 		for(int i = 0; i < length; i++)
 		{
 			float sectionLength = maxSectionLength / (i + 1);
-			float offsetX = this.randomOffset(Direction.Axis.X);
-			float offsetY = this.randomOffset(Direction.Axis.Y);
-			float offsetZ = this.randomOffset(Direction.Axis.Z);
+			float offsetX = Math.abs(dirX) * RANDOM.nextFloat();
+			float offsetY = Math.abs(dirY) * RANDOM.nextFloat();
+			float offsetZ = Math.abs(dirZ) * RANDOM.nextFloat();
 			for(int j = 0; j < sectionSplits; j++)
 			{
 				trail.addTrailPoint(new Vec3(x, y, z));
