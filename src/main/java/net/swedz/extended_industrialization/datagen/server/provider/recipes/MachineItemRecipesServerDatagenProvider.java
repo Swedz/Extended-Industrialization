@@ -9,6 +9,7 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.datagen.api.recipe.ShapedRecipeBuilder;
 import net.swedz.extended_industrialization.datagen.api.recipe.ShapelessRecipeBuilder;
+import net.swedz.extended_industrialization.material.EIMaterials;
 
 import java.util.function.Consumer;
 
@@ -38,14 +39,14 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 	{
 		String recipeId = machineTier == null ? "" : "/%s".formatted(machineTier);
 		
-		ShapedRecipeBuilder shapedRecipeBuilder = new ShapedRecipeBuilder();
-		crafting.accept(shapedRecipeBuilder);
-		shapedRecipeBuilder.setOutput(machine(machineName, machineTier), 1);
-		shapedRecipeBuilder.offerTo(output, EI.id("machines/%s/craft%s".formatted(machineName, recipeId)));
+		ShapedRecipeBuilder builder = new ShapedRecipeBuilder();
+		crafting.accept(builder);
+		builder.setOutput(machine(machineName, machineTier), 1);
+		builder.offerTo(output, EI.id("machines/%s/craft%s".formatted(machineName, recipeId)));
 		
 		if(assembler)
 		{
-			shapedRecipeBuilder.exportToAssembler().offerTo(output, EI.id("machines/%s/assembler%s".formatted(machineName, recipeId)));
+			builder.exportToAssembler().offerTo(output, EI.id("machines/%s/assembler%s".formatted(machineName, recipeId)));
 		}
 	}
 	
@@ -81,21 +82,36 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 	
 	private static void addSteelUpgradeMachineRecipes(String machine, RecipeOutput output)
 	{
-		ShapelessRecipeBuilder shapelessRecipeBuilder = new ShapelessRecipeBuilder()
+		ShapelessRecipeBuilder builder = new ShapelessRecipeBuilder()
 				.with(machineBronze(machine))
 				.with(MIItem.STEEL_UPGRADE)
 				.setOutput(machineSteel(machine), 1);
-		shapelessRecipeBuilder.offerTo(output, EI.id("machines/%s/craft/upgrade_steel".formatted(machine)));
+		builder.offerTo(output, EI.id("machines/%s/craft/upgrade_steel".formatted(machine)));
 		
-		shapelessRecipeBuilder.exportToPacker().offerTo(output, EI.id("machines/%s/packer/upgrade_steel".formatted(machine)));
+		builder.exportToPacker().offerTo(output, EI.id("machines/%s/packer/upgrade_steel".formatted(machine)));
 		
-		shapelessRecipeBuilder.exportToUnpackerAndFlip().offerTo(output, EI.id("machines/%s/unpacker/downgrade_steel".formatted(machine)));
+		builder.exportToUnpackerAndFlip().offerTo(output, EI.id("machines/%s/unpacker/downgrade_steel".formatted(machine)));
 	}
 	
 	private static void addBronzeAndSteelMachineRecipes(String machine, Consumer<ShapedRecipeBuilder> crafting, RecipeOutput output)
 	{
 		addBronzeMachineRecipes(machine, crafting, output);
 		addSteelUpgradeMachineRecipes(machine, output);
+	}
+	
+	private static void addInterchangeableMachinesRecipes(String machineA, String machineB, RecipeOutput output)
+	{
+		String recipeBId = "from_%s".formatted(machineA);
+		new ShapelessRecipeBuilder()
+				.with(machine(machineA, null))
+				.setOutput(machine(machineB, null), 1)
+				.offerTo(output, EI.id("machines/%s/craft/%s".formatted(machineB, recipeBId)));
+		
+		String recipeAId = "from_%s".formatted(machineB);
+		new ShapelessRecipeBuilder()
+				.with(machine(machineB, null))
+				.setOutput(machine(machineA, null), 1)
+				.offerTo(output, EI.id("machines/%s/craft/%s".formatted(machineA, recipeAId)));
 	}
 	
 	private static void bendingMachine(RecipeOutput output)
@@ -564,6 +580,53 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		);
 	}
 	
+	private static void tesla(RecipeOutput output)
+	{
+		addBasicCraftingMachineRecipes(
+				"tesla_coil",
+				(builder) -> builder
+						.define('L', EIMaterials.SILVER.get(EIMaterials.Parts.TESLA_TOP_LOAD))
+						.define('E', MIItem.ELECTRONIC_CIRCUIT)
+						.define('H', "modern_industrialization:advanced_machine_hull")
+						.define('B', "modern_industrialization:silicon_battery")
+						.define('C', "modern_industrialization:electrum_cable")
+						.pattern(" L ")
+						.pattern("EHE")
+						.pattern("BCB"),
+				true,
+				output
+		);
+		addBasicCraftingMachineRecipes(
+				"tesla_receiver",
+				(builder) -> builder
+						.define('L', EIMaterials.SILVER.get(EIMaterials.Parts.TESLA_TOP_LOAD))
+						.define('E', MIItem.ELECTRONIC_CIRCUIT)
+						.define('H', "modern_industrialization:advanced_machine_hull")
+						.define('B', "modern_industrialization:silicon_battery")
+						.define('C', "modern_industrialization:electrum_cable")
+						.pattern(" L ")
+						.pattern("BHB")
+						.pattern("ECE"),
+				true,
+				output
+		);
+		addInterchangeableMachinesRecipes("tesla_coil", "tesla_receiver", output);
+		
+		addBasicCraftingMachineRecipes(
+				"tesla_tower",
+				(builder) -> builder
+						.define('A', "modern_industrialization:aluminum_cable")
+						.define('C', "modern_industrialization:clean_stainless_steel_machine_casing")
+						.define('D', MIItem.DIGITAL_CIRCUIT)
+						.define('H', "modern_industrialization:turbo_machine_hull")
+						.pattern("ACA")
+						.pattern("DHD")
+						.pattern("ACA"),
+				true,
+				output
+		);
+	}
+	
 	@Override
 	protected void buildRecipes(RecipeOutput output)
 	{
@@ -583,5 +646,6 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		machineChainer(output);
 		solarPanel(output);
 		largeConfigurableChest(output);
+		tesla(output);
 	}
 }

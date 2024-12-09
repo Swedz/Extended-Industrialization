@@ -7,7 +7,6 @@ import aztech.modern_industrialization.machines.multiblocks.HatchType;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIBlocks;
 import net.swedz.extended_industrialization.EIDataMaps;
 import net.swedz.extended_industrialization.datamap.TeslaTowerTierData;
 import net.swedz.extended_industrialization.machines.tieredshapes.DataMapMultiblockTieredShapes;
@@ -113,7 +112,7 @@ public final class TeslaTowerShapes extends DataMapMultiblockTieredShapes<TeslaT
 			);
 			builder.key('S', SimpleMember.forBlockId(MI.id("clean_stainless_steel_machine_casing")), new HatchFlags.Builder().with(HatchType.ENERGY_INPUT).build());
 			builder.key('P', SimpleMember.forBlockId(MI.id("stainless_steel_machine_casing_pipe")), HatchFlags.NO_HATCH);
-			builder.key('T', SimpleMember.forBlock(EIBlocks.POLISHED_STAINLESS_STEEL_CASING), HatchFlags.NO_HATCH);
+			builder.key('T', SimpleMember.forBlockId(EI.id("polished_silver_machine_casing")), HatchFlags.NO_HATCH);
 			builder.key('W', SimpleMember.forBlockId(tier.blockId()), HatchFlags.NO_HATCH);
 			builder.key('w', SimpleMember.forBlockId(tier.blockId()), HatchFlags.NO_HATCH); // TODO secondary winding?
 			shapeTemplates[i] = builder.build();

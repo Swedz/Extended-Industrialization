@@ -17,6 +17,7 @@ import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.datagen.api.recipe.ShapedRecipeBuilder;
+import net.swedz.extended_industrialization.material.EIMaterials;
 
 import java.util.function.Consumer;
 
@@ -246,26 +247,49 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 		);
 	}
 	
-	private static void teslaWinding(String name, RecipeOutput output)
-	{
-		addMachineRecipe(
-				"tesla_winding", name, MIMachineRecipeTypes.ASSEMBLER,
-				8, 5 * 20,
-				(b) -> b
-						.addItemInput("modern_industrialization:%s_cable".formatted(name), 8)
-						.addItemInput(EITags.itemCommon("plates/stainless_steel"), 4)
-						.addItemOutput("extended_industrialization:%s_tesla_winding".formatted(name), 1),
-				output
-		);
-	}
-	
 	private static void tesla(RecipeOutput output)
 	{
-		teslaWinding("copper", output);
-		teslaWinding("electrum", output);
-		teslaWinding("aluminum", output);
-		teslaWinding("annealed_copper", output);
-		teslaWinding("superconductor", output);
+		addBasicCraftingRecipes(
+				"tool", "tesla_calibrator", true,
+				EIItems.TESLA_CALIBRATOR, 1,
+				(r) -> r
+						.define('S', "%s:silver_tesla_top_load".formatted(EI.ID))
+						.define('T', MIItem.TRANSISTOR)
+						.define('G', EITags.itemCommon("glass_panes"))
+						.define('D', MIItem.DIODE)
+						.define('C', MIItem.ELECTRONIC_CIRCUIT)
+						.pattern(" S ")
+						.pattern("TGT")
+						.pattern("DCD"),
+				output
+		);
+		
+		addBasicCraftingRecipes(
+				"tool", "tesla_handheld_receiver", true,
+				EIItems.TESLA_HANDHELD_RECEIVER, 1,
+				(r) -> r
+						.define('S', "%s:silver_tesla_top_load".formatted(EI.ID))
+						.define('W', EIMaterials.ANNEALED_COPPER.get(EIMaterials.Parts.TESLA_WINDING))
+						.define('T', MIItem.TRANSISTOR)
+						.define('D', MIItem.DIODE)
+						.define('C', MIItem.ELECTRONIC_CIRCUIT)
+						.pattern("S  ")
+						.pattern("WTT")
+						.pattern("CDD"),
+				output
+		);
+		
+		addMachineRecipe(
+				"upgrade", "tesla_interdimensional_upgrade", MIMachineRecipeTypes.ASSEMBLER,
+				32, 60 * 20,
+				(r) -> r
+						.addItemInput("%s:superconductor_tesla_winding".formatted(EI.ID), 8)
+						.addItemInput(MIItem.HIGHLY_ADVANCED_UPGRADE, 4)
+						.addItemInput(MIItem.PROCESSING_UNIT, 1)
+						.addFluidInput(MIFluids.POLYVINYL_CHLORIDE, 1000)
+						.addItemOutput(EIItems.TESLA_INTERDIMENSIONAL_UPGRADE, 1),
+				output
+		);
 	}
 	
 	@Override
@@ -316,18 +340,6 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 						.pattern("SSS")
 						.pattern("SBS")
 						.pattern("SSS"),
-				output
-		);
-		
-		addBasicCraftingRecipes(
-				"casing", "polished_stainless_steel_casing", true,
-				EIBlocks.POLISHED_STAINLESS_STEEL_CASING.get().asItem(), 1,
-				(r) -> r
-						.define('C', "modern_industrialization:stainless_steel_curved_plate")
-						.define('P', EITags.itemCommon("plates/stainless_steel"))
-						.pattern("CPC")
-						.pattern("CPC")
-						.pattern("CPC"),
 				output
 		);
 		

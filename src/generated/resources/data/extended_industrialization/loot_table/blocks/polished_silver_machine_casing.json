@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "extended_industrialization:polished_stainless_steel_casing"
+          "name": "extended_industrialization:polished_silver_machine_casing"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "extended_industrialization:blocks/polished_stainless_steel_casing"
+  "random_sequence": "extended_industrialization:blocks/polished_silver_machine_casing"
 }

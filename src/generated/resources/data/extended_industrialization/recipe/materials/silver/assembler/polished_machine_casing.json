@@ -5,17 +5,17 @@
   "item_inputs": [
     {
       "amount": 3,
-      "tag": "c:plates/stainless_steel"
+      "tag": "c:plates/silver"
     },
     {
       "amount": 6,
-      "item": "modern_industrialization:stainless_steel_curved_plate"
+      "item": "extended_industrialization:silver_curved_plate"
     }
   ],
   "item_outputs": [
     {
       "amount": 1,
-      "item": "extended_industrialization:polished_stainless_steel_casing"
+      "item": "extended_industrialization:polished_silver_machine_casing"
     }
   ]
 }
