@@ -237,7 +237,6 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		super.setLevel(level);
 		
 		this.setNetwork(this.getPosition());
-		this.getNetwork().loadTransmitter(transmitter);
 	}
 	
 	@Override
@@ -270,6 +269,12 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 				arcs.tick();
 			}
 			return;
+		}
+		
+		TeslaNetwork network = this.getNetwork();
+		if(!network.hasTransmitter())
+		{
+			network.loadTransmitter(transmitter);
 		}
 		
 		lastEnergyTransmitted = 0;
