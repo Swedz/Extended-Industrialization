@@ -5,7 +5,6 @@ import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.machine.component.EnergyAccess;
 import aztech.modern_industrialization.api.machine.holder.EnergyListComponentHolder;
 import aztech.modern_industrialization.machines.BEP;
-import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.blockentities.hatches.EnergyHatch;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
@@ -16,6 +15,9 @@ import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -72,19 +74,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		);
 		
 		redstoneControl = new RedstoneControlComponent();
-		upgrade = new TeslaTowerUpgradeComponent()
-		{
-			@Override
-			public void setStackServer(MachineBlockEntity machine, ItemStack stack)
-			{
-				super.setStackServer(machine, stack);
-				
-				if(level != null && !level.isClientSide())
-				{
-					transmitter.getNetwork().updateAll();
-				}
-			}
-		};
+		upgrade = new TeslaTowerUpgradeComponent(this::onUpgradeUpdate);
 		
 		transmitter = new TeslaTransmitterComponent(
 				this,
@@ -138,6 +128,14 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
 				.withRedstoneModule(redstoneControl)
 				.with(EIModularSlotPanelSlots.TESLA_TOWER_UPGRADE, upgrade));
+	}
+	
+	private void onUpgradeUpdate(ItemStack from, ItemStack to)
+	{
+		if(level != null && !level.isClientSide())
+		{
+			transmitter.getNetwork().updateAll();
+		}
 	}
 	
 	public BlockPos getTopLoadPosition()
@@ -272,6 +270,21 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		super.setLevel(level);
 		
 		this.setNetwork(new WorldPos(level, worldPosition));
+	}
+	
+	@Override
+	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
+	{
+		var result = super.useItemOn(player, hand, face);
+		if(!result.consumesAction())
+		{
+			result = redstoneControl.onUse(this, player, hand);
+		}
+		if(!result.consumesAction())
+		{
+			result = upgrade.onUse(this, player, hand);
+		}
+		return result;
 	}
 	
 	@Override

@@ -13,13 +13,26 @@ import net.minecraft.world.item.ItemStack;
 
 public class SimpleItemStackComponent implements IComponent, DropableComponent
 {
+	public interface UpdatedCallback
+	{
+		void onUpdate(ItemStack from, ItemStack to);
+	}
+	
 	protected final String stackTagKey;
+	
+	protected final UpdatedCallback callback;
 	
 	protected ItemStack stack = ItemStack.EMPTY;
 	
-	public SimpleItemStackComponent(String stackTagKey)
+	public SimpleItemStackComponent(String stackTagKey, UpdatedCallback callback)
 	{
 		this.stackTagKey = stackTagKey;
+		this.callback = callback;
+	}
+	
+	public SimpleItemStackComponent(String stackTagKey)
+	{
+		this(stackTagKey, null);
 	}
 	
 	public ItemStack getStack()
@@ -29,9 +42,14 @@ public class SimpleItemStackComponent implements IComponent, DropableComponent
 	
 	public void setStackServer(MachineBlockEntity machine, ItemStack stack)
 	{
+		ItemStack previous = this.stack;
 		this.stack = stack;
 		machine.setChanged();
 		machine.sync();
+		if(callback != null)
+		{
+			callback.onUpdate(previous, stack);
+		}
 	}
 	
 	@Override
