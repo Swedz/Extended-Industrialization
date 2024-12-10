@@ -35,7 +35,7 @@ public final class BlockLootTableDatagenProvider extends BlockLootSubProvider
 				continue;
 			}
 			
-			this.add(block.get(), block.getLootTableBuilder().apply(this));
+			this.add(block.get(), block.buildLootTable(this));
 		}
 	}
 }

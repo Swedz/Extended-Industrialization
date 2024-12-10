@@ -52,9 +52,9 @@ public record MachineConfigPanel(
 			}
 		};
 		
-		machine.forComponentType(RedstoneControlComponent.class, (component) -> action.accept(SlotPanel.SlotType.REDSTONE_MODULE, component));
-		machine.forComponentType(UpgradeComponent.class, (component) -> action.accept(SlotPanel.SlotType.UPGRADES, component));
-		machine.forComponentType(CasingComponent.class, (component) -> action.accept(SlotPanel.SlotType.CASINGS, component));
+		machine.components.forType(RedstoneControlComponent.class, (component) -> action.accept(SlotPanel.SlotType.REDSTONE_MODULE, component));
+		machine.components.forType(UpgradeComponent.class, (component) -> action.accept(SlotPanel.SlotType.UPGRADES, component));
+		machine.components.forType(CasingComponent.class, (component) -> action.accept(SlotPanel.SlotType.CASINGS, component));
 		
 		return new MachineConfigPanel(slotItems);
 	}
@@ -86,7 +86,7 @@ public record MachineConfigPanel(
 	@Override
 	public boolean matches(MachineBlockEntity target)
 	{
-		return target.mapComponentOrDefault(SlotPanel.Server.class, (component) -> true, false);
+		return target.components.mapOrDefault(SlotPanel.Server.class, (component) -> true, false);
 	}
 	
 	private boolean insertItemToRedstoneComponent(Player player, MachineBlockEntity target, RedstoneControlComponent component, ComponentStackHolder componentStackHolder, ItemStack item, Simulation simulation)
@@ -274,7 +274,7 @@ public record MachineConfigPanel(
 		
 		Inventory inventory = player.getInventory();
 		
-		target.forComponentType(componentType, (component) ->
+		target.components.forType(componentType, (component) ->
 		{
 			if(slotItems.containsKey(slotType))
 			{
