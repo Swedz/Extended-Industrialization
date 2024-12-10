@@ -36,7 +36,6 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.swedz.extended_industrialization.api.ItemStackTooltipComponent;
-import net.swedz.extended_industrialization.client.MachineChainerHighlightRenderer;
 import net.swedz.extended_industrialization.client.NanoGravichestplateHudRenderer;
 import net.swedz.extended_industrialization.client.ber.chainer.MachineChainerHighlightRenderer;
 import net.swedz.extended_industrialization.client.model.chainer.MachineChainerUnbakedModel;
@@ -128,17 +127,11 @@ public final class EIClient
 				BlockEntityRendererProvider provider = switch (blockEntity)
 				{
 					case MachineChainerMachineBlockEntity be -> MachineChainerHighlightRenderer::new;
-					case TeslaNetworkPart __ ->
+					case TeslaNetworkPart __ -> switch (blockEntity)
 					{
-						if(blockEntity instanceof MultiblockMachineBlockEntity)
-						{
-							yield TeslaPartMultiblockRenderer::new;
-						}
-						else
-						{
-							yield TeslaPartSingleBlockRenderer::new;
-						}
-					}
+						case MultiblockMachineBlockEntity be -> TeslaPartMultiblockRenderer::new;
+						default -> TeslaPartSingleBlockRenderer::new;
+					};
 					case LargeTankMultiblockBlockEntity be -> MultiblockTankBER::new;
 					case MultiblockMachineBlockEntity be -> MultiblockMachineBER::new;
 					default -> MachineBlockEntityRenderer::new;
