@@ -1,7 +1,6 @@
-package net.swedz.extended_industrialization.client;
+package net.swedz.extended_industrialization.client.ber.chainer;
 
 import aztech.modern_industrialization.MITags;
-import aztech.modern_industrialization.machines.MachineBlockEntityRenderer;
 import aztech.modern_industrialization.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -17,7 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 
-public final class MachineChainerHighlightRenderer extends MachineBlockEntityRenderer<MachineChainerMachineBlockEntity>
+public final class MachineChainerHighlightRenderer extends MachineChainerBlockEntityRenderer
 {
 	private static final int COLOR_SUCCESS = 0x6FFF6F;
 	private static final int COLOR_FAILURE = 0xFF6F6F;
@@ -130,20 +129,40 @@ public final class MachineChainerHighlightRenderer extends MachineBlockEntityRen
 	
 	private Direction pickNumberRenderFace(MachineChainerMachineBlockEntity machine)
 	{
-		int playerY = Minecraft.getInstance().player.blockPosition().getY();
-		int machineY = machine.getBlockPos().getY();
+		int playerY = (int) Math.round(Minecraft.getInstance().player.getY());
 		
-		if(playerY == machineY || playerY == machineY - 1)
+		Direction machineDirection = machine.orientation.facingDirection;
+		if(machineDirection.getAxis().isHorizontal())
 		{
-			return Direction.fromYRot(Minecraft.getInstance().player.yHeadRot).getOpposite();
-		}
-		else if(playerY < machineY)
-		{
-			return Direction.DOWN;
+			int machineY = machine.getBlockPos().getY();
+			
+			if(playerY == machineY || playerY == machineY - 1)
+			{
+				return Direction.fromYRot(Minecraft.getInstance().player.yHeadRot).getOpposite();
+			}
+			else if(playerY < machineY)
+			{
+				return Direction.DOWN;
+			}
+			else
+			{
+				return Direction.UP;
+			}
 		}
 		else
 		{
-			return Direction.UP;
+			int machineEndY = machine.getChainerComponent().links().positionAfter().getY();
+			
+			if(machineDirection == Direction.UP && playerY >= machineEndY)
+			{
+				return Direction.UP;
+			}
+			else if(machineDirection == Direction.DOWN && playerY < machineEndY)
+			{
+				return Direction.DOWN;
+			}
+			
+			return Direction.fromYRot(Minecraft.getInstance().player.yHeadRot).getOpposite();
 		}
 	}
 	
@@ -157,21 +176,32 @@ public final class MachineChainerHighlightRenderer extends MachineBlockEntityRen
 		Direction playerDirectionRight = playerDirection.getClockWise();
 		
 		String arrow = "";
-		if(playerDirection == machineDirection)
+		if(renderDirection != machineDirection && renderDirection != machineDirection.getOpposite())
 		{
-			arrow = renderDirection == Direction.DOWN ? ARROW_DOWN : ARROW_UP;
-		}
-		else if(playerDirection == machineDirection.getOpposite())
-		{
-			arrow = renderDirection == Direction.DOWN ? ARROW_UP : ARROW_DOWN;
-		}
-		else if(playerDirectionLeft == machineDirection)
-		{
-			arrow = ARROW_LEFT;
-		}
-		else if(playerDirectionRight == machineDirection)
-		{
-			arrow = ARROW_RIGHT;
+			if(playerDirection == machineDirection)
+			{
+				arrow = renderDirection == Direction.DOWN ? ARROW_DOWN : ARROW_UP;
+			}
+			else if(playerDirection == machineDirection.getOpposite())
+			{
+				arrow = renderDirection == Direction.DOWN ? ARROW_UP : ARROW_DOWN;
+			}
+			else if(playerDirectionLeft == machineDirection)
+			{
+				arrow = ARROW_LEFT;
+			}
+			else if(playerDirectionRight == machineDirection)
+			{
+				arrow = ARROW_RIGHT;
+			}
+			else if(machineDirection == Direction.UP)
+			{
+				arrow = ARROW_UP;
+			}
+			else if(machineDirection == Direction.DOWN)
+			{
+				arrow = ARROW_DOWN;
+			}
 		}
 		return arrow;
 	}

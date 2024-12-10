@@ -48,7 +48,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		super(
 				bep,
 				new MachineGuiParameters.Builder(EI.id("machine_chainer"), false).backgroundHeight(175).build(),
-				new OrientationComponent.Params(true, true, true)
+				new OrientationComponent.Params(true, true, true, true)
 		);
 		
 		redstoneControl = new RedstoneControlComponent();
@@ -126,7 +126,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	}
 	
 	@Override
-	protected MachineModelClientData getMachineModelData()
+	public MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = new MachineModelClientData();
 		orientation.writeModelData(data);
