@@ -27,8 +27,8 @@ import net.swedz.extended_industrialization.machines.blockentity.LargeConfigurab
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.SolarBoilerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.SolarPanelMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentity.TeslaCoilMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentity.TeslaReceiverMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaCoilMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaReceiverMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.UniversalTransformerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.brewery.ElectricBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.brewery.SteamBreweryMachineBlockEntity;

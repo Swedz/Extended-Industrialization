@@ -231,7 +231,7 @@ public final class EITooltips
 	public static final TooltipAttachment TESLA_COIL = TooltipAttachment.multilines(
 			List.of(EI.id("tesla_coil")),
 			List.of(
-					line(EIText.TESLA_COIL_HELP_1),
+					line(EIText.TESLA_COIL_HELP_1).arg(EIConfig.teslaCoilRange),
 					line(EIText.TESLA_COIL_HELP_2)
 			)
 	);

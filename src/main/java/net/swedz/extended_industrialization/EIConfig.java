@@ -6,7 +6,7 @@ public final class EIConfig
 {
 	private static final ModConfigSpec.Builder BUILDER;
 	
-	private static final ModConfigSpec.IntValue     LOCAL_WIRELESS_CHARGING_STATION_RANGE;
+	private static final ModConfigSpec.IntValue     TESLA_COIL_RANGE;
 	private static final ModConfigSpec.IntValue     MACHINE_CHAINER_MAX_CONNECTIONS;
 	private static final ModConfigSpec.BooleanValue ALLOW_UPGRADES_IN_PROCESSING_ARRAY;
 	private static final ModConfigSpec.IntValue     LARGE_STEAM_MACERATOR_SIZE;
@@ -23,9 +23,9 @@ public final class EIConfig
 	{
 		BUILDER = new ModConfigSpec.Builder();
 		
-		LOCAL_WIRELESS_CHARGING_STATION_RANGE = BUILDER
-				.comment("The range for the local wireless charging station machine")
-				.defineInRange("local_wireless_charging_station_range", 32, 0, Integer.MAX_VALUE);
+		TESLA_COIL_RANGE = BUILDER
+				.comment("The range for the tesla coil to transmit energy within")
+				.defineInRange("tesla_coil_range", 32, 0, Integer.MAX_VALUE);
 		
 		MACHINE_CHAINER_MAX_CONNECTIONS = BUILDER
 				.comment("The maximum amount of connections a machine chainer can have")
@@ -69,7 +69,7 @@ public final class EIConfig
 		SPEC = BUILDER.build();
 	}
 	
-	public static int     localWirelessChargingStationRange;
+	public static int     teslaCoilRange;
 	public static int     machineChainerMaxConnections;
 	public static boolean allowUpgradesInProcessingArray;
 	public static int     largeSteamMaceratorBatchSize;
@@ -82,7 +82,7 @@ public final class EIConfig
 	
 	public static void loadConfig()
 	{
-		localWirelessChargingStationRange = LOCAL_WIRELESS_CHARGING_STATION_RANGE.get();
+		teslaCoilRange = TESLA_COIL_RANGE.get();
 		machineChainerMaxConnections = MACHINE_CHAINER_MAX_CONNECTIONS.get();
 		allowUpgradesInProcessingArray = ALLOW_UPGRADES_IN_PROCESSING_ARRAY.get();
 		largeSteamMaceratorBatchSize = LARGE_STEAM_MACERATOR_SIZE.get();

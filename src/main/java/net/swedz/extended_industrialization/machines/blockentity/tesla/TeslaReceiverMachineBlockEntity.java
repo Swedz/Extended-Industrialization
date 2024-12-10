@@ -1,10 +1,8 @@
-package net.swedz.extended_industrialization.machines.blockentity;
+package net.swedz.extended_industrialization.machines.blockentity.tesla;
 
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
-import aztech.modern_industrialization.api.machine.component.EnergyAccess;
-import aztech.modern_industrialization.api.machine.holder.EnergyComponentHolder;
 import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
@@ -15,35 +13,30 @@ import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
+import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
+import aztech.modern_industrialization.machines.helper.EnergyHelper;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIClientConfig;
-import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehavior;
-import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehaviorHolder;
-import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcs;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehavior;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehaviorHolder;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaShapeAdder;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
-import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
-import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitterComponent;
-import net.swedz.extended_industrialization.machines.guicomponent.modularslots.ModularSlotPanel;
+import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
+import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverComponent;
+import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverState;
 import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.TeslaNetworkBar;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implements TeslaTransmitter.Delegate, Tickable, EnergyComponentHolder, TeslaArcBehaviorHolder, TeslaPlasmaBehaviorHolder
+public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity implements TeslaReceiver.Delegate, Tickable, TeslaPlasmaBehaviorHolder
 {
 	private final IsActiveComponent isActive;
 	
@@ -52,19 +45,16 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	
 	private final EnergyComponent energy;
 	private final MIEnergyStorage insertable;
+	private final MIEnergyStorage extractable;
 	
-	private final TeslaTransmitterComponent transmitter;
+	private final TeslaReceiverComponent receiver;
 	
-	private final TeslaArcs arcs;
-	
-	private long lastEnergyTransmitted;
-	
-	public TeslaCoilMachineBlockEntity(BEP bep)
+	public TeslaReceiverMachineBlockEntity(BEP bep)
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder(EI.id("tesla_coil"), false).build(),
-				new OrientationComponent.Params(false, false, false)
+				new MachineGuiParameters.Builder(EI.id("tesla_receiver"), false).build(),
+				new OrientationComponent.Params(true, false, false)
 		);
 		
 		isActive = new IsActiveComponent();
@@ -74,32 +64,16 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		
 		energy = new EnergyComponent(this, casing::getEuCapacity);
 		insertable = energy.buildInsertable(casing::canInsertEu);
+		extractable = energy.buildExtractable(casing::canInsertEu);
 		
-		transmitter = new TeslaTransmitterComponent(
+		receiver = new TeslaReceiverComponent(
 				this,
-				List.of(energy),
-				() ->
-				{
-					CableTier tier = casing.getCableTier();
-					long maxTransfer = tier.getMaxTransfer();
-					return TeslaTransferLimits.of(tier, maxTransfer, 32, 2);
-				}
+				insertable,
+				() -> redstoneControl.doAllowNormalOperation(this),
+				casing::getCableTier
 		);
 		
-		arcs = new TeslaArcs(
-				0.25f, 3, 3, 1, 3, 2, 5,
-				() ->
-				{
-					double radius = 0.35;
-					boolean side = TeslaArcs.RANDOM.nextBoolean();
-					double x = (side ? radius : radius * TeslaArcs.RANDOM.nextDouble()) * (TeslaArcs.RANDOM.nextBoolean() ? 1 : -1);
-					double z = (!side ? radius : radius * TeslaArcs.RANDOM.nextDouble()) * (TeslaArcs.RANDOM.nextBoolean() ? 1 : -1);
-					return Vec3.upFromBottomCenterOf(Vec3i.ZERO, 1).add(x, -0.2, z);
-				},
-				Set.of(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST)
-		);
-		
-		this.registerComponents(isActive, redstoneControl, casing, energy, transmitter);
+		this.registerComponents(isActive, redstoneControl, casing, energy, receiver);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(61, 34), energy::getEu, energy::getCapacity));
 		
@@ -112,50 +86,32 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 						TeslaNetwork network = this.getNetwork();
 						if(network.isTransmitterLoaded())
 						{
-							long drain = this.getPassiveDrain();
-							return Optional.of(new TeslaNetworkBar.TransmitterData(
-									network.receiverCount(),
-									lastEnergyTransmitted,
-									network.getCableTier(),
-									drain,
-									lastEnergyTransmitted + drain
-							));
+							TeslaReceiverState state = this.checkReceiveFrom(network);
+							return Optional.of(new TeslaNetworkBar.ReceiverData(state, Optional.of(this.getNetworkKey()), Optional.of(network.getCableTier())));
+						}
+						else
+						{
+							return Optional.of(new TeslaNetworkBar.ReceiverData(TeslaReceiverState.UNLOADED_TRANSMITTER, Optional.of(this.getNetworkKey()), Optional.empty()));
 						}
 					}
-					return Optional.empty();
+					else
+					{
+						return Optional.of(new TeslaNetworkBar.ReceiverData(TeslaReceiverState.NO_LINK, Optional.empty(), Optional.empty()));
+					}
 				}
 		));
 		
-		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
-				.withRedstoneModule(redstoneControl)
-				.withCasings(casing));
+		this.registerGuiComponent(new SlotPanel.Server(this)
+				.withRedstoneControl(redstoneControl)
+				.withCasing(casing));
 	}
 	
 	private void onCasingUpdate(CableTier from, CableTier to)
 	{
 		if(level != null && !level.isClientSide())
 		{
-			transmitter.getNetwork().updateAll();
+			receiver.addToNetwork();
 		}
-	}
-	
-	@Override
-	public TeslaArcBehavior getTeslaArcBehavior()
-	{
-		return new TeslaArcBehavior()
-		{
-			@Override
-			public boolean shouldRender()
-			{
-				return isActive.isActive;
-			}
-			
-			@Override
-			public TeslaArcs getArcs()
-			{
-				return arcs;
-			}
-		};
 	}
 	
 	@Override
@@ -206,18 +162,6 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	}
 	
 	@Override
-	public EnergyAccess getEnergyComponent()
-	{
-		return energy;
-	}
-	
-	@Override
-	public TeslaTransmitter getDelegateTransmitter()
-	{
-		return transmitter;
-	}
-	
-	@Override
 	protected MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
@@ -227,11 +171,22 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	}
 	
 	@Override
+	public TeslaReceiver getDelegateReceiver()
+	{
+		return receiver;
+	}
+	
+	@Override
 	public void setLevel(Level level)
 	{
 		super.setLevel(level);
 		
-		this.setNetwork(this.getPosition());
+		if(level.isClientSide())
+		{
+			return;
+		}
+		
+		receiver.addToNetwork();
 	}
 	
 	@Override
@@ -244,14 +199,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 			return;
 		}
 		
-		if(this.hasNetwork())
-		{
-			this.getNetwork().unloadTransmitter();
-		}
-		else
-		{
-			EI.LOGGER.error("Failed to unload transmitter into the network because no network was set yet");
-		}
+		receiver.removeFromNetwork();
 	}
 	
 	@Override
@@ -259,39 +207,32 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	{
 		if(level.isClientSide())
 		{
-			if(EIClientConfig.renderTeslaAnimations)
-			{
-				arcs.tick();
-			}
 			return;
 		}
 		
-		TeslaNetwork network = this.getNetwork();
-		if(!network.hasTransmitter())
+		if(this.hasNetwork() && this.getNetwork().isTransmitterLoaded())
 		{
-			network.loadTransmitter(transmitter);
+			TeslaNetwork network = this.getNetwork();
+			isActive.updateActive(network.isTransmitterLoaded() && this.checkReceiveFrom(network).isSuccess(), this);
 		}
-		
-		lastEnergyTransmitted = 0;
-		boolean active = false;
+		else
+		{
+			isActive.updateActive(false, this);
+		}
 		
 		if(redstoneControl.doAllowNormalOperation(this))
 		{
-			long amountToDrain = this.getPassiveDrain();
-			long drained = this.extractEnergy(amountToDrain, false);
-			if(drained == amountToDrain)
-			{
-				lastEnergyTransmitted = this.transmitEnergy(this.getMaxTransfer());
-				active = true;
-			}
+			EnergyHelper.autoOutput(this, orientation, casing.getCableTier(), extractable);
 		}
-		
-		isActive.updateActive(active, this);
 	}
 	
 	public static void registerEnergyApi(BlockEntityType<?> bet)
 	{
 		CapabilitiesListeners.register(EI.ID, (event) ->
-				event.registerBlockEntity(EnergyApi.SIDED, bet, (be, direction) -> ((TeslaCoilMachineBlockEntity) be).insertable));
+				event.registerBlockEntity(EnergyApi.SIDED, bet, (be, direction) ->
+				{
+					TeslaReceiverMachineBlockEntity machine = (TeslaReceiverMachineBlockEntity) be;
+					return machine.orientation.outputDirection == direction ? machine.extractable : null;
+				}));
 	}
 }
