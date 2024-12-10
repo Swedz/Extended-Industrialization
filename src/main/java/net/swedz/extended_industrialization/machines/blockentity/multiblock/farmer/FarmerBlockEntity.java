@@ -141,24 +141,23 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	public abstract long consumeEu(long max);
 	
 	@Override
-	public void onLink(ShapeMatcher shapeMatcher)
+	public ShapeMatcher createShapeMatcher()
 	{
-		farmer.registerListeners(level, shapeMatcher);
+		return new FarmerShapeMatcher(level, worldPosition, orientation.facingDirection, this.getActiveShape(), farmer);
 	}
 	
 	@Override
-	public void onUnlink(ShapeMatcher shapeMatcher)
+	protected void onRematch(ShapeMatcher shapeMatcher)
 	{
-		farmer.unregisterListeners(level, shapeMatcher);
-	}
-	
-	@Override
-	public void onSuccessfulMatch(ShapeMatcher shapeMatcher)
-	{
-		List<BlockPos> offsets = shapes.dirtPositions()[activeShape.getActiveShapeIndex()];
-		farmer.fromOffsets(worldPosition, orientation.facingDirection, offsets);
+		super.onRematch(shapeMatcher);
 		
-		farmer.updateStackListeners();
+		if(shapeMatcher.isMatchSuccessful())
+		{
+			List<BlockPos> offsets = shapes.dirtPositions()[activeShape.getActiveShapeIndex()];
+			farmer.fromOffsets(worldPosition, orientation.facingDirection, offsets);
+			
+			farmer.updateStackListeners();
+		}
 	}
 	
 	public boolean isEnabled()

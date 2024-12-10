@@ -135,7 +135,7 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 	}
 	
 	@Override
-	protected void fillRecipeList(Level level)
+	protected void fillRecipeList(Level level, List<RecipeHolder<MachineRecipe>> recipeList)
 	{
 		recipeList.addAll(this.getManagerRecipes(level));
 		

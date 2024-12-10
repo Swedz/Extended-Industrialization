@@ -189,7 +189,7 @@
   "text.extended_industrialization.steam_chainsaw_1": "- Press %s on still or flowing water to fill.",
   "text.extended_industrialization.steam_chainsaw_2": "- Place fuel inside the chainsaw using %s.",
   "text.extended_industrialization.steam_chainsaw_3": "- Toggle Silk Touch with %s + %s.",
-  "text.extended_industrialization.universal_transformer_from_tier_input": "Casing for cable tier to convert from (LV by default).",
-  "text.extended_industrialization.universal_transformer_to_tier_input": "Casing for cable tier to convert to (LV by default).",
+  "text.extended_industrialization.universal_transformer_from_tier_input": "Hull for cable tier to convert from (LV by default).",
+  "text.extended_industrialization.universal_transformer_to_tier_input": "Hull for cable tier to convert to (LV by default).",
   "text.extended_industrialization.waste_collector_help": "When placed underneath animals, manure will be collected."
 }

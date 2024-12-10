@@ -78,7 +78,7 @@ public final class EIMachines
 		Casings.BRONZE_PIPE = hook.registerImitateBlock("bronze_pipe", () -> MIMaterials.BRONZE.getPart(MIParts.MACHINE_CASING_PIPE).asBlock());
 		Casings.STEEL_PIPE = hook.registerImitateBlock("steel_pipe", () -> MIMaterials.STEEL.getPart(MIParts.MACHINE_CASING_PIPE).asBlock());
 		Casings.STEEL_PLATED_BRICKS = hook.registerImitateBlock("steel_plated_bricks", EIBlocks.STEEL_PLATED_BRICKS);
-		Casings.LARGE_STEEL_CRATE = hook.registerCubeAll("large_steel_crate", EI.id("block/casings/large_steel_crate"));
+		Casings.LARGE_STEEL_CRATE = hook.registerCubeAll("large_steel_crate", "Large Steel Crate", EI.id("block/casings/large_steel_crate"));
 	}
 	
 	public static final class RecipeTypes

@@ -88,14 +88,17 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 	}
 	
 	@Override
-	public void onSuccessfulMatch(ShapeMatcher shapeMatcher)
+	protected void onRematch(ShapeMatcher shapeMatcher)
 	{
-		super.onSuccessfulMatch(shapeMatcher);
+		super.onRematch(shapeMatcher);
 		
-		energyInputs.clear();
-		for(HatchBlockEntity hatch : shapeMatcher.getMatchedHatches())
+		if(shapeMatcher.isMatchSuccessful())
 		{
-			hatch.appendEnergyInputs(energyInputs);
+			energyInputs.clear();
+			for(HatchBlockEntity hatch : shapeMatcher.getMatchedHatches())
+			{
+				hatch.appendEnergyInputs(energyInputs);
+			}
 		}
 	}
 	
@@ -105,7 +108,7 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 		ItemInteractionResult result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction())
 		{
-			result = this.mapComponentOrDefault(UpgradeComponent.class, (upgrade) -> upgrade.onUse(this, player, hand), result);
+			result = components.mapOrDefault(UpgradeComponent.class, (upgrade) -> upgrade.onUse(this, player, hand), result);
 		}
 		if(!result.consumesAction())
 		{

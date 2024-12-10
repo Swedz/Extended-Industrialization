@@ -557,7 +557,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			if(!world.isClientSide)
 			{
 				user.displayClientMessage(
-						isFortune(stack) ? MIText.ToolSwitchedFortune.text() : MIText.ToolSwitchedSilkTouch.text(),
+						(isFortune(stack) ? MIText.ToolSwitchedFortune : MIText.ToolSwitchedSilkTouch).text(),
 						true
 				);
 			}
