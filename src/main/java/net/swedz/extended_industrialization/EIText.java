@@ -54,7 +54,7 @@ public enum EIText implements MICompatibleTranslatableTextEnum
 	KEY_MOUSE_SCROLL("Mouse Scroll"),
 	MACHINE_BATCHER_COILS("Batch size and cost is determined by coil used."),
 	MACHINE_CHAINER_CONNECTED_MACHINES("Connected Machines: %d / %d"),
-	MACHINE_CHAINER_HELP_1("Connects up to %d consecutive machines in a horizontal line in the direction it is facing."),
+	MACHINE_CHAINER_HELP_1("Connects up to %d consecutive machines in a straight line in the direction it is facing."),
 	MACHINE_CHAINER_HELP_2("Accepts items, fluids, and energy and distributes them to connected machines."),
 	MACHINE_CHAINER_HELP_3("Can connect to other machine chainers, but it must not link back to itself."),
 	MACHINE_CHAINER_PROBLEM_AT("Problem at: %s"),
@@ -138,8 +138,8 @@ public enum EIText implements MICompatibleTranslatableTextEnum
 	TESLA_TOWER_MISMATCHING_HATCHES("All energy hatches must be of the same voltage."),
 	TESLA_TOWER_NO_ENERGY_HATCHES("No energy hatches provided"),
 	TESLA_TOWER_UPGRADE("Add tesla upgrades to increase maximum range."),
-	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Casing for cable tier to convert from (LV by default)."),
-	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default)."),
+	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Hull for cable tier to convert from (LV by default)."),
+	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Hull for cable tier to convert to (LV by default)."),
 	WASTE_COLLECTOR_HELP("When placed underneath animals, manure will be collected."),
 	WINDINGS_TESLA_TOWER_TIER("Allows the Tesla Tower to transmit up to %s within %s blocks with a passive drain of %s.");
 	

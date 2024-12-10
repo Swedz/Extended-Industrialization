@@ -72,6 +72,16 @@ repositories {
 		}
 	}
 	maven {
+		name = "Blakebr0"
+		url = "https://maven.blakesmods.com/releases"
+		content {
+			// Cucumber
+			includeGroup "com.blakebr0.cucumber"
+			// Mystical Agriculture
+			includeGroup "com.blakebr0.mysticalagriculture"
+		}
+	}
+	maven {
 		name = "BlameJared"
 		url = "https://maven.blamejared.com/"
 		content {
@@ -119,6 +129,14 @@ dependencies {
 		localImplementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 	} else {
 		compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+	}
+
+	if (project.runtime_include_mystical_agriculture.toBoolean()) {
+		localImplementation "com.blakebr0.cucumber:Cucumber:${cucumber_version}"
+		localImplementation "com.blakebr0.mysticalagriculture:MysticalAgriculture:${mystical_agriculture_version}"
+	} else {
+		compileOnly "com.blakebr0.cucumber:Cucumber:${cucumber_version}"
+		compileOnly "com.blakebr0.mysticalagriculture:MysticalAgriculture:${mystical_agriculture_version}"
 	}
 
 	jarJar(implementation("team.lodestar.lodestone:lodestone:${lodestone_version}")) {
@@ -365,7 +383,8 @@ tasks.withType(ProcessResources).configureEach {
 			mi_tweaks_version_range               : mi_tweaks_version_range,
 			emi_version_range                     : emi_version_range,
 			accessories_version_range             : accessories_version_range,
-			curios_version_range                  : curios_version_range
+			curios_version_range                  : curios_version_range,
+			mystical_agriculture_version_range    : mystical_agriculture_version_range
 	]
 	inputs.properties replaceProperties
 

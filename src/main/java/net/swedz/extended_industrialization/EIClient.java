@@ -9,6 +9,7 @@ import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBlo
 import aztech.modern_industrialization.machines.multiblocks.MultiblockTankBER;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -27,6 +28,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
@@ -36,6 +38,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.swedz.extended_industrialization.api.ItemStackTooltipComponent;
 import net.swedz.extended_industrialization.client.MachineChainerHighlightRenderer;
 import net.swedz.extended_industrialization.client.NanoGravichestplateHudRenderer;
+import net.swedz.extended_industrialization.client.ber.chainer.MachineChainerHighlightRenderer;
+import net.swedz.extended_industrialization.client.model.chainer.MachineChainerUnbakedModel;
 import net.swedz.extended_industrialization.client.tesla.TeslaPartMultiblockRenderer;
 import net.swedz.extended_industrialization.client.tesla.TeslaPartSingleBlockRenderer;
 import net.swedz.extended_industrialization.client.tooltip.ItemStackClientTooltipComponent;
@@ -105,9 +109,12 @@ public final class EIClient
 		);
 	}
 	
-	/**
-	 * Taken from {@link aztech.modern_industrialization.MIClient#registerBlockEntityRenderers(FMLClientSetupEvent)}. This is needed to make multiblocks render their layout when holding a wrench.
-	 */
+	@SubscribeEvent
+	private static void registerModelLoaders(ModelEvent.RegisterGeometryLoaders event)
+	{
+		event.register(MachineChainerUnbakedModel.LOADER_ID, MachineChainerUnbakedModel.LOADER);
+	}
+	
 	@SubscribeEvent
 	private static void registerBlockEntityRenderers(FMLClientSetupEvent event)
 	{
@@ -118,33 +125,25 @@ public final class EIClient
 				MachineBlockEntity blockEntity = machine.getBlockEntityInstance();
 				BlockEntityType type = blockEntity.getType();
 				
-				if(blockEntity instanceof MachineChainerMachineBlockEntity)
+				BlockEntityRendererProvider provider = switch (blockEntity)
 				{
-					BlockEntityRenderers.register(type, MachineChainerHighlightRenderer::new);
-				}
-				else if(blockEntity instanceof TeslaNetworkPart)
-				{
-					if(blockEntity instanceof MultiblockMachineBlockEntity)
+					case MachineChainerMachineBlockEntity be -> MachineChainerHighlightRenderer::new;
+					case TeslaNetworkPart __ ->
 					{
-						BlockEntityRenderers.register(type, TeslaPartMultiblockRenderer::new);
+						if(blockEntity instanceof MultiblockMachineBlockEntity)
+						{
+							yield TeslaPartMultiblockRenderer::new;
+						}
+						else
+						{
+							yield TeslaPartSingleBlockRenderer::new;
+						}
 					}
-					else
-					{
-						BlockEntityRenderers.register(type, TeslaPartSingleBlockRenderer::new);
-					}
-				}
-				else if(blockEntity instanceof LargeTankMultiblockBlockEntity)
-				{
-					BlockEntityRenderers.register(type, MultiblockTankBER::new);
-				}
-				else if(blockEntity instanceof MultiblockMachineBlockEntity)
-				{
-					BlockEntityRenderers.register(type, MultiblockMachineBER::new);
-				}
-				else
-				{
-					BlockEntityRenderers.register(type, (c) -> new MachineBlockEntityRenderer<>(c));
-				}
+					case LargeTankMultiblockBlockEntity be -> MultiblockTankBER::new;
+					case MultiblockMachineBlockEntity be -> MultiblockMachineBER::new;
+					default -> MachineBlockEntityRenderer::new;
+				};
+				BlockEntityRenderers.register(type, provider);
 			}
 		}
 	}
