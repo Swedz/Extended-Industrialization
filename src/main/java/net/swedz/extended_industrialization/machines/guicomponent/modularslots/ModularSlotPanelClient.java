@@ -81,7 +81,8 @@ public final class ModularSlotPanelClient implements GuiComponentClient
 				@Override
 				public ResourceLocation getBackgroundAtlasLocation()
 				{
-					return slot.atlas();
+					ResourceLocation atlas = slot.atlas();
+					return atlas == null ? super.getBackgroundAtlasLocation() : atlas;
 				}
 				
 				@Override

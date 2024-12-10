@@ -144,7 +144,7 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 	@Override
 	public boolean isInterdimensional()
 	{
-		return machine.getComponents().mapOrDefault(TeslaTowerUpgradeComponent.class, TeslaTowerUpgradeComponent::isInterdimensional, false);
+		return machine.components.mapOrDefault(TeslaTowerUpgradeComponent.class, TeslaTowerUpgradeComponent::isInterdimensional, false);
 	}
 	
 	@Override

@@ -19,7 +19,6 @@ import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.AABB;
@@ -71,19 +70,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		isActive = new IsActiveComponent();
 		
 		redstoneControl = new RedstoneControlComponent();
-		casing = new CasingComponent()
-		{
-			@Override
-			protected void setCasingStack(ItemStack stack)
-			{
-				super.setCasingStack(stack);
-				
-				if(level != null && !level.isClientSide())
-				{
-					transmitter.getNetwork().updateAll();
-				}
-			}
-		};
+		casing = new CasingComponent(this::onCasingUpdate);
 		
 		energy = new EnergyComponent(this, casing::getEuCapacity);
 		insertable = energy.buildInsertable(casing::canInsertEu);
@@ -142,6 +129,14 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
 				.withRedstoneModule(redstoneControl)
 				.withCasings(casing));
+	}
+	
+	private void onCasingUpdate(CableTier from, CableTier to)
+	{
+		if(level != null && !level.isClientSide())
+		{
+			transmitter.getNetwork().updateAll();
+		}
 	}
 	
 	@Override

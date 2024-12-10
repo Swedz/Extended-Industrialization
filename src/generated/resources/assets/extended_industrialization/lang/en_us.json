@@ -163,7 +163,7 @@
   "text.extended_industrialization.key_mouse_scroll": "Mouse Scroll",
   "text.extended_industrialization.machine_batcher_coils": "Batch size and cost is determined by coil used.",
   "text.extended_industrialization.machine_chainer_connected_machines": "Connected Machines: %d / %d",
-  "text.extended_industrialization.machine_chainer_help_1": "Connects up to %d consecutive machines in a horizontal line in the direction it is facing.",
+  "text.extended_industrialization.machine_chainer_help_1": "Connects up to %d consecutive machines in a straight line in the direction it is facing.",
   "text.extended_industrialization.machine_chainer_help_2": "Accepts items, fluids, and energy and distributes them to connected machines.",
   "text.extended_industrialization.machine_chainer_help_3": "Can connect to other machine chainers, but it must not link back to itself.",
   "text.extended_industrialization.machine_chainer_problem_at": "Problem at: %s",
@@ -247,8 +247,8 @@
   "text.extended_industrialization.tesla_tower_mismatching_hatches": "All energy hatches must be of the same voltage.",
   "text.extended_industrialization.tesla_tower_no_energy_hatches": "No energy hatches provided",
   "text.extended_industrialization.tesla_tower_upgrade": "Add tesla upgrades to increase maximum range.",
-  "text.extended_industrialization.universal_transformer_from_tier_input": "Casing for cable tier to convert from (LV by default).",
-  "text.extended_industrialization.universal_transformer_to_tier_input": "Casing for cable tier to convert to (LV by default).",
+  "text.extended_industrialization.universal_transformer_from_tier_input": "Hull for cable tier to convert from (LV by default).",
+  "text.extended_industrialization.universal_transformer_to_tier_input": "Hull for cable tier to convert to (LV by default).",
   "text.extended_industrialization.waste_collector_help": "When placed underneath animals, manure will be collected.",
   "text.extended_industrialization.windings_tesla_tower_tier": "Allows the Tesla Tower to transmit up to %s within %s blocks with a passive drain of %s."
 }

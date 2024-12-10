@@ -11,66 +11,36 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class SameCableTierShapeMatcher extends ShapeMatcher
 {
-	protected boolean hasMismatchingHatches;
+	protected final Consumer<Boolean> mismatchingHatchesCallback;
 	
-	public SameCableTierShapeMatcher(Level level, BlockPos controllerPos, Direction controllerDirection, ShapeTemplate template)
+	public SameCableTierShapeMatcher(Level level, BlockPos controllerPos, Direction controllerDirection, ShapeTemplate template, Consumer<Boolean> mismatchingHatchesCallback)
 	{
 		super(level, controllerPos, controllerDirection, template);
-	}
-	
-	public boolean hasMismatchingHatches()
-	{
-		return hasMismatchingHatches;
+		this.mismatchingHatchesCallback = mismatchingHatchesCallback;
 	}
 	
 	@Override
-	public void rematch(Level level)
+	protected boolean checkRematch(Level world)
 	{
-		this.unlinkHatches();
-		matchSuccessful = true;
-		
-		for(BlockPos pos : simpleMembers.keySet())
+		boolean hasMismatchingHatches = false;
+		Set<CableTier> tiers = Sets.newHashSet();
+		for(HatchBlockEntity hatch : this.getMatchedHatches())
 		{
-			int originalHatchCount = matchedHatches.size();
-			if(!this.matches(pos, level, matchedHatches))
+			if(hatch instanceof EnergyHatch energyHatch)
 			{
-				matchSuccessful = false;
-			}
-			else if(originalHatchCount != matchedHatches.size())
-			{
-				Set<CableTier> tiers = Sets.newHashSet();
-				for(HatchBlockEntity hatch : matchedHatches)
+				tiers.add(energyHatch.getCableTier());
+				if(tiers.size() > 1)
 				{
-					if(hatch instanceof EnergyHatch energyHatch)
-					{
-						tiers.add(energyHatch.getCableTier());
-						if(tiers.size() > 1)
-						{
-							hasMismatchingHatches = true;
-							matchSuccessful = false;
-							break;
-						}
-					}
+					hasMismatchingHatches = true;
+					break;
 				}
 			}
 		}
-		
-		if(!matchSuccessful)
-		{
-			matchedHatches.clear();
-		}
-		else
-		{
-			hasMismatchingHatches = false;
-			for(HatchBlockEntity hatch : matchedHatches)
-			{
-				hatch.link(template.hatchCasing);
-			}
-		}
-		
-		needsRematch = false;
+		mismatchingHatchesCallback.accept(hasMismatchingHatches);
+		return !hasMismatchingHatches;
 	}
 }

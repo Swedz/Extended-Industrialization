@@ -50,7 +50,7 @@ import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser.*;
 
 public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEntity implements EnergyListComponentHolder, TeslaTransmitter.Delegate, TeslaArcBehaviorHolder, TeslaPlasmaBehaviorHolder
 {
-	private final RedstoneControlComponent redstoneControl;
+	private final RedstoneControlComponent   redstoneControl;
 	private final TeslaTowerUpgradeComponent upgrade;
 	
 	private final List<EnergyComponent> energyInputs = Lists.newArrayList();
@@ -59,6 +59,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	
 	private final TeslaArcs arcs;
 	
+	private boolean   hasMismatchingHatches;
 	private CableTier cableTier;
 	private long      lastEnergyTransmitted;
 	
@@ -125,7 +126,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 			}
 			else
 			{
-				if(this.getShapeMatcher() != null && this.getShapeMatcher().hasMismatchingHatches())
+				if(hasMismatchingHatches)
 				{
 					content.add(EIText.TESLA_TOWER_MISMATCHING_HATCHES, RED, true);
 				}
@@ -217,44 +218,45 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	}
 	
 	@Override
-	public void onMatchSuccessful()
+	protected void onRematch(ShapeMatcher shapeMatcher)
 	{
-		super.onMatchSuccessful();
+		super.onRematch(shapeMatcher);
 		
-		CableTier cableTier = null;
-		energyInputs.clear();
-		for(HatchBlockEntity hatch : shapeMatcher.getMatchedHatches())
+		if(shapeMatcher.isMatchSuccessful())
 		{
-			hatch.appendEnergyInputs(energyInputs);
-			if(cableTier == null && hatch instanceof EnergyHatch energyHatch)
+			CableTier cableTier = null;
+			energyInputs.clear();
+			for(HatchBlockEntity hatch : shapeMatcher.getMatchedHatches())
 			{
-				cableTier = energyHatch.getCableTier();
+				hatch.appendEnergyInputs(energyInputs);
+				if(cableTier == null && hatch instanceof EnergyHatch energyHatch)
+				{
+					cableTier = energyHatch.getCableTier();
+				}
 			}
-		}
-		this.cableTier = cableTier;
-		if(this.hasNetwork())
-		{
-			if(this.getCableTier() != null)
+			this.cableTier = cableTier;
+			if(this.hasNetwork())
 			{
-				this.getNetwork().loadTransmitter(transmitter);
+				if(this.getCableTier() != null)
+				{
+					this.getNetwork().loadTransmitter(transmitter);
+				}
+			}
+			else
+			{
+				EI.LOGGER.error("Failed to load transmitter into the network because no network was set yet");
 			}
 		}
 		else
 		{
-			EI.LOGGER.error("Failed to load transmitter into the network because no network was set yet");
-		}
-	}
-	
-	@Override
-	protected void onMatchFailure()
-	{
-		if(this.hasNetwork())
-		{
-			this.getNetwork().unloadTransmitter();
-		}
-		else
-		{
-			EI.LOGGER.error("Failed to unload transmitter into the network because no network was set yet");
+			if(this.hasNetwork())
+			{
+				this.getNetwork().unloadTransmitter();
+			}
+			else
+			{
+				EI.LOGGER.error("Failed to unload transmitter into the network because no network was set yet");
+			}
 		}
 	}
 	
@@ -277,14 +279,8 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	{
 		return new SameCableTierShapeMatcher(
 				level, worldPosition, orientation.facingDirection,
-				this.getActiveShape()
+				this.getActiveShape(), (value) -> hasMismatchingHatches = value
 		);
-	}
-	
-	@Override
-	public SameCableTierShapeMatcher getShapeMatcher()
-	{
-		return (SameCableTierShapeMatcher) shapeMatcher;
 	}
 	
 	@Override
