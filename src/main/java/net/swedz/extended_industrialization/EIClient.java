@@ -4,7 +4,6 @@ import aztech.modern_industrialization.machines.MachineBlock;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.MachineBlockEntityRenderer;
 import aztech.modern_industrialization.machines.blockentities.multiblocks.LargeTankMultiblockBlockEntity;
-import aztech.modern_industrialization.machines.models.MachineUnbakedModel;
 import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBER;
 import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.MultiblockTankBER;
@@ -31,13 +30,11 @@ import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactori
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
-import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.swedz.extended_industrialization.client.MachineChainerHighlightRenderer;
 import net.swedz.extended_industrialization.client.NanoGravichestplateHudRenderer;
-import net.swedz.extended_industrialization.client.model.chainer.MachineChainerBakedModel;
-import net.swedz.extended_industrialization.client.model.chainer.MachineChainerOverlaysJson;
+import net.swedz.extended_industrialization.client.ber.chainer.MachineChainerHighlightRenderer;
+import net.swedz.extended_industrialization.client.model.chainer.MachineChainerUnbakedModel;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.machineconfig.MachineConfigCardItem;
@@ -103,8 +100,7 @@ public final class EIClient
 	@SubscribeEvent
 	private static void registerModelLoaders(ModelEvent.RegisterGeometryLoaders event)
 	{
-		event.register(EI.id("machine_chainer"), (IGeometryLoader) (json, context) ->
-				new MachineUnbakedModel(MachineChainerOverlaysJson.class, MachineChainerBakedModel::new, json));
+		event.register(MachineChainerUnbakedModel.LOADER_ID, MachineChainerUnbakedModel.LOADER);
 	}
 	
 	@SubscribeEvent
