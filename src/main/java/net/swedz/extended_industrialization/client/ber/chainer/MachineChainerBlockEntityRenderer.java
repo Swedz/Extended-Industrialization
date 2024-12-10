@@ -87,7 +87,7 @@ public sealed class MachineChainerBlockEntityRenderer implements BlockEntityRend
 			throw new IllegalStateException("Tried to use the same machine BER with two block states: " + state + " and " + lastBlockState);
 		}
 		
-		MachineModelClientData data = machine.getMachineModelData();
+		MachineModelClientData data = machine.getModelData().get(MachineModelClientData.KEY);
 		if(data.isActive)
 		{
 			VertexConsumer vc = buffer.getBuffer(Sheets.cutoutBlockSheet());

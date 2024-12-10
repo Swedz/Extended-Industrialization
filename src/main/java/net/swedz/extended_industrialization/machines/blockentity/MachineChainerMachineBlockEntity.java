@@ -126,7 +126,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	}
 	
 	@Override
-	public MachineModelClientData getMachineModelData()
+	protected MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = new MachineModelClientData();
 		orientation.writeModelData(data);
