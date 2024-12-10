@@ -242,7 +242,7 @@
   "text.extended_industrialization.tesla_receiver_help_1": "Can receive energy from a linked transmitter.",
   "text.extended_industrialization.tesla_receiver_help_2": "Must accept energy of the same voltage as the linked transmitter.",
   "text.extended_industrialization.tesla_tower_help_1": "Wirelessly transmits energy to linked receivers within range.",
-  "text.extended_industrialization.tesla_tower_help_2": "Energy transfer rate and range is determined by the windings used.",
+  "text.extended_industrialization.tesla_tower_help_2": "Energy transfer rate, range, and passive drain is determined by the windings used.",
   "text.extended_industrialization.tesla_tower_help_3": "Voltage of energy transmitted is set by the energy hatches. All hatches must be the same tier.",
   "text.extended_industrialization.tesla_tower_mismatching_hatches": "All energy hatches must be of the same voltage.",
   "text.extended_industrialization.tesla_tower_no_energy_hatches": "No energy hatches provided",

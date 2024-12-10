@@ -133,7 +133,7 @@ public enum EIText implements MICompatibleTranslatableTextEnum
 	TESLA_RECEIVER_HELP_1("Can receive energy from a linked transmitter."),
 	TESLA_RECEIVER_HELP_2("Must accept energy of the same voltage as the linked transmitter."),
 	TESLA_TOWER_HELP_1("Wirelessly transmits energy to linked receivers within range."),
-	TESLA_TOWER_HELP_2("Energy transfer rate and range is determined by the windings used."),
+	TESLA_TOWER_HELP_2("Energy transfer rate, range, and passive drain is determined by the windings used."),
 	TESLA_TOWER_HELP_3("Voltage of energy transmitted is set by the energy hatches. All hatches must be the same tier."),
 	TESLA_TOWER_MISMATCHING_HATCHES("All energy hatches must be of the same voltage."),
 	TESLA_TOWER_NO_ENERGY_HATCHES("No energy hatches provided"),
