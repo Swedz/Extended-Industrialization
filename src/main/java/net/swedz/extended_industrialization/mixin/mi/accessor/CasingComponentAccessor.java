@@ -1,6 +1,5 @@
 package net.swedz.extended_industrialization.mixin.mi.accessor;
 
-import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.machines.components.CasingComponent;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.api.ComponentStackHolder;
@@ -14,9 +13,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 )
 public interface CasingComponentAccessor extends ComponentStackHolder
 {
-	@Accessor("currentTier")
-	CableTier getCurrentTier();
-	
 	@Accessor("casingStack")
 	ItemStack getStack();
 	
