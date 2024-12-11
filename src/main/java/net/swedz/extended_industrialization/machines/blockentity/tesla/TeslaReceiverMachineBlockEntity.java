@@ -18,11 +18,13 @@ import aztech.modern_industrialization.machines.helper.EnergyHelper;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehavior;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehaviorHolder;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaShapeAdder;
@@ -33,8 +35,11 @@ import net.swedz.extended_industrialization.machines.component.tesla.receiver.Te
 import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.TeslaNetworkBar;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
 public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity implements TeslaReceiver.Delegate, Tickable, TeslaPlasmaBehaviorHolder
 {
@@ -224,6 +229,15 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		{
 			EnergyHelper.autoOutput(this, orientation, casing.getCableTier(), extractable);
 		}
+	}
+	
+	@Override
+	public List<Component> getTooltips()
+	{
+		return List.of(
+				line(EIText.TESLA_RECEIVER_HELP_1),
+				line(EIText.TESLA_RECEIVER_HELP_2)
+		);
 	}
 	
 	public static void registerEnergyApi(BlockEntityType<?> bet)

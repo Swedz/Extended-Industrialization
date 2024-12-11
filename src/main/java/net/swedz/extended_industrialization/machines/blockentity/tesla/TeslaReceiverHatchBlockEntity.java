@@ -13,8 +13,10 @@ import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.multiblocks.HatchBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.HatchType;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverComponent;
@@ -23,6 +25,8 @@ import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.T
 
 import java.util.List;
 import java.util.Optional;
+
+import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
 public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implements EnergyComponentHolder, CableTierHolder, TeslaReceiver.Delegate
 {
@@ -151,5 +155,11 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 		}
 		
 		receiver.removeFromNetwork();
+	}
+	
+	@Override
+	public List<Component> getTooltips()
+	{
+		return List.of(line(EIText.TESLA_RECEIVER_HELP_1));
 	}
 }

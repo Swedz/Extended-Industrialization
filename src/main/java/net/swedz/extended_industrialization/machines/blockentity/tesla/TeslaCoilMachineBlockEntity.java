@@ -19,6 +19,7 @@ import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.AABB;
@@ -26,6 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientConfig;
 import net.swedz.extended_industrialization.EIConfig;
+import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehavior;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehaviorHolder;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcs;
@@ -43,6 +45,8 @@ import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlot
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
 public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implements TeslaTransmitter.Delegate, Tickable, EnergyComponentHolder, TeslaArcBehaviorHolder, TeslaPlasmaBehaviorHolder
 {
@@ -288,6 +292,15 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		}
 		
 		isActive.updateActive(active, this);
+	}
+	
+	@Override
+	public List<Component> getTooltips()
+	{
+		return List.of(
+				line(EIText.TESLA_COIL_HELP_1).arg(EIConfig.teslaCoilRange),
+				line(EIText.TESLA_COIL_HELP_2)
+		);
 	}
 	
 	public static void registerEnergyApi(BlockEntityType<?> bet)

@@ -219,34 +219,9 @@ public final class EITooltips
 			line(EIText.WASTE_COLLECTOR_HELP)
 	);
 	
-	public static final TooltipAttachment TESLA_TOWER = TooltipAttachment.multilines(
-			List.of(EI.id("tesla_tower")),
-			List.of(
-					line(EIText.TESLA_TOWER_HELP_1),
-					line(EIText.TESLA_TOWER_HELP_2),
-					line(EIText.TESLA_TOWER_HELP_3)
-			)
-	);
-	
-	public static final TooltipAttachment TESLA_COIL = TooltipAttachment.multilines(
-			List.of(EI.id("tesla_coil")),
-			List.of(
-					line(EIText.TESLA_COIL_HELP_1).arg(EIConfig.teslaCoilRange),
-					line(EIText.TESLA_COIL_HELP_2)
-			)
-	);
-	
 	public static final TooltipAttachment TESLA_INTERDIMENSIONAL_UPGRADE = TooltipAttachment.singleLine(
 			List.of(EI.id("tesla_interdimensional_upgrade")),
 			line(EIText.TESLA_INTERDIMENSIONAL_UPGRADE_HELP)
-	);
-	
-	public static final TooltipAttachment TESLA_RECEIVER = TooltipAttachment.multilines(
-			List.of(EI.id("tesla_receiver")),
-			List.of(
-					line(EIText.TESLA_RECEIVER_HELP_1),
-					line(EIText.TESLA_RECEIVER_HELP_2)
-			)
 	);
 	
 	public static final TooltipAttachment TESLA_HANDHELD_RECEIVER = TooltipAttachment.multilines(

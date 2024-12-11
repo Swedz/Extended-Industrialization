@@ -14,6 +14,7 @@ import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -49,6 +50,7 @@ import java.util.Set;
 
 import static aztech.modern_industrialization.MITooltips.*;
 import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
+import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.line;
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser.*;
 
 public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEntity implements EnergyListComponentHolder, TeslaTransmitter.Delegate, TeslaArcBehaviorHolder, TeslaPlasmaBehaviorHolder
@@ -353,6 +355,16 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		{
 			EI.LOGGER.error("Failed to unload transmitter into the network because no network was set yet");
 		}
+	}
+	
+	@Override
+	public List<Component> getTooltips()
+	{
+		return List.of(
+				line(EIText.TESLA_TOWER_HELP_1),
+				line(EIText.TESLA_TOWER_HELP_2),
+				line(EIText.TESLA_TOWER_HELP_3)
+		);
 	}
 	
 	private static final TeslaTowerShapes SHAPES = new TeslaTowerShapes();
