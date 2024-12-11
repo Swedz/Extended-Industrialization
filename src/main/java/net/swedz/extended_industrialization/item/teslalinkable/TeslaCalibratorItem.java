@@ -21,10 +21,10 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.api.ItemStackTooltipComponent;
-import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
+import net.swedz.tesseract.neoforge.api.WorldPos;
+import net.swedz.tesseract.neoforge.tooltip.component.ItemStackTooltipComponent;
 
 import java.util.List;
 import java.util.Optional;

@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
-import net.swedz.extended_industrialization.api.Assert;
+import net.swedz.tesseract.neoforge.api.Assert;
 import team.lodestar.lodestone.systems.rendering.trail.TrailPointBuilder;
 
 import java.util.Arrays;

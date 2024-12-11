@@ -2,7 +2,7 @@ package net.swedz.extended_industrialization.machines.blockentity.multiblock.tes
 
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.machines.tieredshapes.MultiblockTier;
+import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.tieredshape.MultiblockTier;
 
 public record TeslaTowerTier(
 		ResourceLocation blockId, long maxTransfer, int maxDistance, long drain

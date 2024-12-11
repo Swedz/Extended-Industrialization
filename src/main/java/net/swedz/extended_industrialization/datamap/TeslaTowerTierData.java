@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerTier;
-import net.swedz.extended_industrialization.machines.tieredshapes.DataMultiblockTier;
+import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.tieredshape.DataMultiblockTier;
 
 public record TeslaTowerTierData(
 		long maxTransfer, int maxDistance, long drain

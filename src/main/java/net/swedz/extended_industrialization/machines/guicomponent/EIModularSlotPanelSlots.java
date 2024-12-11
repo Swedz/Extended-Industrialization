@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.machines.guicomponent.modularslots.ModularSlotPanel;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;

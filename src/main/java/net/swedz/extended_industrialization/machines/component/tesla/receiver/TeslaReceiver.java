@@ -1,10 +1,10 @@
 package net.swedz.extended_industrialization.machines.component.tesla.receiver;
 
 import aztech.modern_industrialization.api.energy.CableTier;
-import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
+import net.swedz.tesseract.neoforge.api.WorldPos;
 
 public interface TeslaReceiver extends TeslaNetworkPart
 {

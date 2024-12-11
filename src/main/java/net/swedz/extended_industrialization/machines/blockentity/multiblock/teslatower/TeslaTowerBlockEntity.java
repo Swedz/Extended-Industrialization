@@ -25,7 +25,6 @@ import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientConfig;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehavior;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehaviorHolder;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcs;
@@ -38,9 +37,11 @@ import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransf
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitterComponent;
 import net.swedz.extended_industrialization.machines.guicomponent.EIModularSlotPanelSlots;
-import net.swedz.extended_industrialization.machines.guicomponent.modularslots.ModularSlotPanel;
+import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.BasicMultiblockMachineBlockEntity;
+import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.matcher.SameCableTierShapeMatcher;
 
 import java.util.List;
 import java.util.Map;

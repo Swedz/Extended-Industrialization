@@ -13,8 +13,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverState;
+import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.helper.ComponentHelper;
 
 import java.util.List;
@@ -115,8 +115,10 @@ public final class TeslaNetworkBarClient implements GuiComponentClient
 								switch (receiver.state())
 								{
 									case NO_LINK -> lines.add(EIText.TESLA_NETWORK_RECEIVER_NO_LINK.text());
-									case UNLOADED_TRANSMITTER -> lines.add(EIText.TESLA_NETWORK_RECEIVER_UNLOADED.text());
-									case MISMATCHING_VOLTAGE -> lines.add(EIText.TESLA_NETWORK_RECEIVER_MISMATCHING_VOLTAGE.arg(receiver.networkCableTier().orElseThrow(), CABLE_TIER_SHORT));
+									case UNLOADED_TRANSMITTER ->
+											lines.add(EIText.TESLA_NETWORK_RECEIVER_UNLOADED.text());
+									case MISMATCHING_VOLTAGE ->
+											lines.add(EIText.TESLA_NETWORK_RECEIVER_MISMATCHING_VOLTAGE.arg(receiver.networkCableTier().orElseThrow(), CABLE_TIER_SHORT));
 									case TOO_FAR -> lines.add(EIText.TESLA_NETWORK_RECEIVER_TOO_FAR.text());
 								}
 							}

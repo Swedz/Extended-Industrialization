@@ -7,9 +7,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.neoforged.bus.api.Event;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlockMap;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerTree;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.FarmerListener;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.LootTableHarvestableBehavior;
-import net.swedz.extended_industrialization.machines.component.farmer.harvesting.FarmerListener;
 import net.swedz.tesseract.neoforge.event.TreeGrowthEvent;
 
 import java.util.Arrays;

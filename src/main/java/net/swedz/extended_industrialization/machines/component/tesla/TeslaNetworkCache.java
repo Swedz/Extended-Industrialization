@@ -3,7 +3,7 @@ package net.swedz.extended_industrialization.machines.component.tesla;
 import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.swedz.extended_industrialization.api.WorldPos;
+import net.swedz.tesseract.neoforge.api.WorldPos;
 
 import java.util.Map;
 

@@ -6,6 +6,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EIItems;
+import net.swedz.tesseract.neoforge.compat.mi.component.SimpleItemStackComponent;
 
 public class TeslaTowerUpgradeComponent extends SimpleItemStackComponent
 {

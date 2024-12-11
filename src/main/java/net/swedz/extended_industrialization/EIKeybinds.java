@@ -90,7 +90,7 @@ public final class EIKeybinds
 			),
 			toggleableItemAction(EquipmentSlot.CHEST)
 	);
-	public static final Keybind TOGGLE_LEGGINGS_ABILITY = create(
+	public static final Keybind TOGGLE_LEGGINGS_ABILITY   = create(
 			"toggle_leggings_ability",
 			"Toggle Leggings Ability",
 			(id) -> new KeyMapping(

@@ -36,9 +36,9 @@ import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwor
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitterComponent;
-import net.swedz.extended_industrialization.machines.guicomponent.modularslots.ModularSlotPanel;
 import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.TeslaNetworkBar;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
 
 import java.util.List;
 import java.util.Optional;

@@ -27,8 +27,6 @@ import net.swedz.extended_industrialization.machines.blockentity.LargeConfigurab
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.SolarBoilerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.SolarPanelMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaCoilMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaReceiverMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.UniversalTransformerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.brewery.ElectricBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.brewery.SteamBreweryMachineBlockEntity;
@@ -39,6 +37,8 @@ import net.swedz.extended_industrialization.machines.blockentity.multiblock.Proc
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer.SteamFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaCoilMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaReceiverMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.wastecollector.WasteCollectorBehavior;
 import net.swedz.extended_industrialization.machines.recipe.BreweryMachineRecipeType;

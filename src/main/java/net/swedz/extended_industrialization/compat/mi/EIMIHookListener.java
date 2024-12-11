@@ -3,8 +3,6 @@ package net.swedz.extended_industrialization.compat.mi;
 import net.swedz.extended_industrialization.EIMachines;
 import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.compat.viewer.common.FluidFertilizerCategory;
-import net.swedz.extended_industrialization.machines.guicomponent.modularslots.ModularSlotPanel;
-import net.swedz.extended_industrialization.machines.guicomponent.modularslots.ModularSlotPanelClient;
 import net.swedz.extended_industrialization.machines.guicomponent.processingarraymachineslot.ProcessingArrayMachineSlot;
 import net.swedz.extended_industrialization.machines.guicomponent.processingarraymachineslot.ProcessingArrayMachineSlotClient;
 import net.swedz.extended_industrialization.machines.guicomponent.solarefficiency.SolarEfficiencyBar;
@@ -40,8 +38,6 @@ public final class EIMIHookListener implements MIHookListener
 		hook.register(ProcessingArrayMachineSlot.ID, ProcessingArrayMachineSlotClient::new);
 		hook.register(UniversalTransformerSlots.ID, UniversalTransformerSlotsClient::new);
 		hook.register(TeslaNetworkBar.ID, TeslaNetworkBarClient::new);
-		// TODO move to tesseract
-		hook.register(ModularSlotPanel.ID, ModularSlotPanelClient::new);
 	}
 	
 	@Override

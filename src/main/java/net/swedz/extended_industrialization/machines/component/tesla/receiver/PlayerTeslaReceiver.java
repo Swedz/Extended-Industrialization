@@ -6,8 +6,8 @@ import com.google.common.collect.Lists;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.extended_industrialization.api.WorldPos;
 import net.swedz.extended_industrialization.proxy.modslot.EIModSlotProxy;
+import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.compat.mi.helper.ChargeInventoryHelper;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 

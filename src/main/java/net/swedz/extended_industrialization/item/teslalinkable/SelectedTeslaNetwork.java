@@ -7,7 +7,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.block.Block;
-import net.swedz.extended_industrialization.api.WorldPos;
+import net.swedz.tesseract.neoforge.api.WorldPos;
 
 public record SelectedTeslaNetwork(WorldPos key, Block block)
 {

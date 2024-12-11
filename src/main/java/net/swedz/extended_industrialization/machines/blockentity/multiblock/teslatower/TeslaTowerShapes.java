@@ -9,7 +9,7 @@ import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIDataMaps;
 import net.swedz.extended_industrialization.datamap.TeslaTowerTierData;
-import net.swedz.extended_industrialization.machines.tieredshapes.DataMapMultiblockTieredShapes;
+import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.tieredshape.DataMapMultiblockTieredShapes;
 
 import java.util.Comparator;
 
