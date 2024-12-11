@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.block.Block;
 import net.swedz.extended_industrialization.EIDataMaps;
+import net.swedz.tesseract.neoforge.helper.RegistryHelper;
 
 import java.util.Map;
 
@@ -20,10 +21,9 @@ public record LargeElectricFurnaceTier(int batchSize, float euCostMultiplier)
 			.apply(instance, LargeElectricFurnaceTier::new)
 	);
 	
-	@SuppressWarnings("deprecation")
 	public static LargeElectricFurnaceTier getFor(Block block)
 	{
-		return block.builtInRegistryHolder().getData(EIDataMaps.LARGE_ELECTRIC_FURNACE_TIER);
+		return RegistryHelper.holder(BuiltInRegistries.BLOCK, block).getData(EIDataMaps.LARGE_ELECTRIC_FURNACE_TIER);
 	}
 	
 	public static Map<ResourceKey<Block>, LargeElectricFurnaceTier> getAll()

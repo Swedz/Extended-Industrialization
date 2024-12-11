@@ -2,19 +2,25 @@ package net.swedz.extended_industrialization.machines.component.farmer.harvestin
 
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.GrowingPlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.swedz.extended_industrialization.datamap.FarmerSimpleTallCropSize;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.LootTableHarvestableBehavior;
 
 import java.util.List;
 
-public final class SimpleTallCropHarvestable implements LootTableHarvestableBehavior
+public final class GrowingPlantHarvestable implements LootTableHarvestableBehavior
 {
+	private static boolean isValidBlock(BlockState state)
+	{
+		return state.getBlock() instanceof GrowingPlantBlock block && block.growthDirection == Direction.UP;
+	}
+	
 	@Override
 	public boolean matches(HarvestingContext context)
 	{
-		return FarmerSimpleTallCropSize.getFor(context.state().getBlock()) != null;
+		return isValidBlock(context.state());
 	}
 	
 	@Override
@@ -28,12 +34,11 @@ public final class SimpleTallCropHarvestable implements LootTableHarvestableBeha
 	{
 		List<BlockPos> blocks = Lists.newArrayList();
 		
-		int maxHeight = FarmerSimpleTallCropSize.getFor(context.state().getBlock()).maxHeight();
-		for(int y = 0; y <= maxHeight; y++)
+		for(int y = 0; y <= 26; y++)
 		{
 			BlockPos pos = context.pos().above(y);
 			BlockState state = context.level().getBlockState(pos);
-			if(state.getBlock() == context.state().getBlock())
+			if(isValidBlock(state))
 			{
 				blocks.add(pos);
 			}
@@ -43,6 +48,6 @@ public final class SimpleTallCropHarvestable implements LootTableHarvestableBeha
 			}
 		}
 		
-		return blocks.size() > 1 ? blocks : List.of();
+		return blocks.size() > 1 ? blocks.reversed() : List.of();
 	}
 }
