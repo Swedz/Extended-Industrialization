@@ -2,9 +2,11 @@ package net.swedz.extended_industrialization.datamap;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.material.Fluid;
 import net.swedz.extended_industrialization.EIDataMaps;
+import net.swedz.tesseract.neoforge.helper.RegistryHelper;
 
 public record FertilizerPotency(int tickRate, int mbToConsumePerFertilizerTick)
 {
@@ -16,9 +18,8 @@ public record FertilizerPotency(int tickRate, int mbToConsumePerFertilizerTick)
 			.apply(instance, FertilizerPotency::new)
 	);
 	
-	@SuppressWarnings("deprecation")
 	public static FertilizerPotency getFor(Fluid fluid)
 	{
-		return fluid.builtInRegistryHolder().getData(EIDataMaps.FERTILIZER_POTENCY);
+		return RegistryHelper.holder(BuiltInRegistries.FLUID, fluid).getData(EIDataMaps.FERTILIZER_POTENCY);
 	}
 }

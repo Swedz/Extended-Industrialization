@@ -42,6 +42,7 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 	private void addFarmerStandardPlantableTag()
 	{
 		this.tag(EITags.Items.FARMER_PLANTABLE)
+				.add(Items.KELP)
 				.addTags(
 						Tags.Items.SEEDS,
 						Tags.Items.CROPS,

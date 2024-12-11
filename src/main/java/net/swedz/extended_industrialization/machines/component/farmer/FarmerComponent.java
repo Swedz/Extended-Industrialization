@@ -22,6 +22,7 @@ import net.swedz.extended_industrialization.machines.component.farmer.harvesting
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestableBehaviorHolder;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.CropBlockHarvestable;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.GrowingPlantHarvestable;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.MysticalAgricultureHarvestable;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.NetherWartHarvestable;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.SimpleTallCropHarvestable;
@@ -70,6 +71,7 @@ public final class FarmerComponent implements IComponent
 		}
 		
 		registerHarvestable(CropBlockHarvestable::new);
+		registerHarvestable(GrowingPlantHarvestable::new);
 		registerHarvestable(NetherWartHarvestable::new);
 		registerHarvestable(SimpleTallCropHarvestable::new);
 		registerHarvestable(TreeHarvestable::new);

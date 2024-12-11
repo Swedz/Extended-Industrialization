@@ -6,16 +6,15 @@ import aztech.modern_industrialization.thirdparty.fabrictransfer.api.transaction
 import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.machines.component.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlock;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerTile;
-import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestableBehavior;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestableBehaviorHolder;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTaskType;
 
@@ -104,7 +103,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 		BlockPos origin = context.pos();
 		List<BlockPos> blockPositions = handler.getBlocks(context);
 		
-		if(blockPositions.isEmpty())
+		if(blockPositions.isEmpty() || !blockPositions.contains(origin))
 		{
 			return false;
 		}
@@ -117,15 +116,22 @@ public final class HarvestingFarmerTask extends FarmerTask
 		
 		this.insertDrops(drops, false);
 		
-		BlockState newState = Blocks.AIR.defaultBlockState();
-		int i = 0;
-		for(BlockPos blockPosition : blockPositions)
+		BlockState newOriginState = null;
+		for(BlockPos pos : blockPositions)
 		{
-			level.setBlock(blockPosition, newState, 1 | 2);
-			level.gameEvent(GameEvent.BLOCK_DESTROY, blockPosition, GameEvent.Context.of(level.getBlockState(blockPosition)));
-			i++;
+			BlockState newState = level.getFluidState(pos).createLegacyBlock();
+			if(pos.equals(origin))
+			{
+				newOriginState = newState;
+			}
+			level.setBlock(pos, newState, 1 | 2);
+			level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(level.getBlockState(pos)));
 		}
-		cropBlockEntry.updateState(newState);
+		if(newOriginState == null)
+		{
+			throw new IllegalStateException("Didn't update origin block when harvesting?");
+		}
+		cropBlockEntry.updateState(newOriginState);
 		
 		handler.harvested(context);
 		
