@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.compat.mi;
 
+import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -63,6 +64,13 @@ public final class EIMIHookRegistry implements MIHookRegistry
 	public void onItemRegister(ItemHolder itemHolder)
 	{
 		EIItems.Registry.include(itemHolder);
+		
+		String id = itemHolder.identifier().id();
+		if(id.endsWith("_tesla_receiver_hatch"))
+		{
+			CableTier tier = CableTier.getTier(id.substring(0, id.indexOf("_tesla_receiver_hatch")));
+			itemHolder.sorted(EISortOrder.HATCHES.and(tier));
+		}
 	}
 	
 	@Override

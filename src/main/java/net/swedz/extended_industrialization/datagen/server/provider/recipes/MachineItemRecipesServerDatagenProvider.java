@@ -1,7 +1,9 @@
 package net.swedz.extended_industrialization.datagen.server.provider.recipes;
 
+import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.MIItem;
 import aztech.modern_industrialization.MITags;
+import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -611,6 +613,36 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 				output
 		);
 		addInterchangeableMachinesRecipes("tesla_coil", "tesla_receiver", output);
+		
+		String[] casings = {"basic", "advanced", "turbo", "highly_advanced", "quantum"};
+		String[] cables = {"tin", "electrum", "aluminum", "annealed_copper", "superconductor"};
+		CableTier[] cableTiers = {CableTier.LV, CableTier.MV, CableTier.HV, CableTier.EV, CableTier.SUPERCONDUCTOR};
+		for(int i = 0; i < casings.length; i++)
+		{
+			String casing = casings[i];
+			String cable = cables[i];
+			CableTier tier = cableTiers[i];
+			addMachineRecipe(
+					"machines/%s_tesla_receiver_hatch".formatted(tier.name), "assembler", MIMachineRecipeTypes.ASSEMBLER,
+					8, 10 * 20,
+					(builder) -> builder
+							.addItemInput("%s:%s_cable".formatted(MI.ID, cable), 1)
+							.addItemInput("%s:%s_machine_hull".formatted(MI.ID, casing), 1)
+							.addItemInput(EIMaterials.SILVER.get(EIMaterials.Parts.CURVED_PLATE), 4)
+							.addItemInput(MIItem.ELECTRONIC_CIRCUIT, 2)
+							.addItemOutput("%s:%s_tesla_receiver_hatch".formatted(EI.ID, tier.name), 1),
+					output
+			);
+			addMachineRecipe(
+					"machines/%s_tesla_receiver_hatch".formatted(tier.name), "unpacker", MIMachineRecipeTypes.UNPACKER,
+					2, 10 * 20,
+					(builder) -> builder
+							.addItemInput("%s:%s_tesla_receiver_hatch".formatted(EI.ID, tier.name), 1)
+							.addItemOutput("modern_industrialization:%s_machine_hull".formatted(casing), 1)
+							.addItemOutput(MIItem.ELECTRONIC_CIRCUIT, 2),
+					output
+			);
+		}
 		
 		addBasicCraftingMachineRecipes(
 				"tesla_tower",

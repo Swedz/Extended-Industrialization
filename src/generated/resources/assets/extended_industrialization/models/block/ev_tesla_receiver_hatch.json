@@ -1,0 +1,11 @@
+{
+  "casing": "ev",
+  "default_overlays": {
+    "fluid_auto": "modern_industrialization:block/overlays/fluid_auto",
+    "front": "extended_industrialization:block/machines/tesla_receiver_hatch/overlay_front",
+    "item_auto": "modern_industrialization:block/overlays/item_auto",
+    "output": "modern_industrialization:block/overlays/output",
+    "side": "extended_industrialization:block/machines/tesla_receiver_hatch/overlay_side"
+  },
+  "loader": "modern_industrialization:machine"
+}

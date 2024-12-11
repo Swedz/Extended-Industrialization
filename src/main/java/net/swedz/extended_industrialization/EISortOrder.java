@@ -11,7 +11,8 @@ public interface EISortOrder
 	SortOrder CASINGS        = new SortOrder(2);
 	SortOrder TESLA_WINDINGS = new SortOrder(3);
 	SortOrder MACHINES       = new SortOrder(4);
-	SortOrder PARTS          = new SortOrder(5);
-	SortOrder RESOURCES      = new SortOrder(6);
-	SortOrder BUCKETS        = new SortOrder(7);
+	SortOrder HATCHES        = new SortOrder(5);
+	SortOrder PARTS          = new SortOrder(6);
+	SortOrder RESOURCES      = new SortOrder(7);
+	SortOrder BUCKETS        = new SortOrder(8);
 }

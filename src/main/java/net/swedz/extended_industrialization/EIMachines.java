@@ -38,6 +38,7 @@ import net.swedz.extended_industrialization.machines.blockentity.multiblock.farm
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer.SteamFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaCoilMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaReceiverHatchBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaReceiverMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.wastecollector.WasteCollectorBehavior;
@@ -422,5 +423,14 @@ public final class EIMachines
 				TeslaReceiverMachineBlockEntity::new,
 				TeslaReceiverMachineBlockEntity::registerEnergyApi
 		);
+		
+		for(CableTier tier : CableTier.allTiers())
+		{
+			hook.register(
+					"%s Tesla Receiver Hatch".formatted(tier.shortEnglishName), "%s_tesla_receiver_hatch".formatted(tier.name), "tesla_receiver_hatch",
+					tier.casing, true, false, true, false,
+					(bep) -> new TeslaReceiverHatchBlockEntity(bep, tier)
+			);
+		}
 	}
 }
