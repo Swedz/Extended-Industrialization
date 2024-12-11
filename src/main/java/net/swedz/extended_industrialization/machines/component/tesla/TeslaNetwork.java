@@ -86,7 +86,7 @@ public final class TeslaNetwork implements MIEnergyStorage, TeslaTransferLimits.
 	
 	private void update(TeslaReceiver receiver)
 	{
-		if(this.isTransmitterLoaded() && receiver.checkReceiveFrom(this).isSuccess())
+		if(this.isTransmitterLoaded() && (receiver.isMobile() || receiver.checkReceiveFrom(this).isSuccess()))
 		{
 			receivers.add(receiver);
 		}
@@ -143,6 +143,12 @@ public final class TeslaNetwork implements MIEnergyStorage, TeslaTransferLimits.
 		int index = 0;
 		for(TeslaReceiver receiver : receivers)
 		{
+			if(receiver.isMobile() && receiver.checkReceiveFrom(this).isFailure())
+			{
+				index++;
+				continue;
+			}
+			
 			int remainingStorages = receivers.size() - index;
 			
 			long amountToReceive = remainingStorages == 1 ? remaining : remaining / remainingStorages;

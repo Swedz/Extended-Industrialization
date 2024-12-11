@@ -8,6 +8,11 @@ import net.swedz.tesseract.neoforge.api.WorldPos;
 
 public interface TeslaReceiver extends TeslaNetworkPart
 {
+	default boolean isMobile()
+	{
+		return false;
+	}
+	
 	default TeslaReceiverState checkReceiveFrom(TeslaNetwork network)
 	{
 		TeslaTransmitter transmitter = network.getTransmitter();

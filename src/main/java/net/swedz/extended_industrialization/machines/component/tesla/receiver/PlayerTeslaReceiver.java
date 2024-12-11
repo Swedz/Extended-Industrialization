@@ -25,6 +25,12 @@ public final class PlayerTeslaReceiver implements TeslaReceiver
 	}
 	
 	@Override
+	public boolean isMobile()
+	{
+		return true;
+	}
+	
+	@Override
 	public long receiveEnergy(long maxReceive, boolean simulate)
 	{
 		Inventory inventory = player.getInventory();

@@ -42,11 +42,11 @@ public abstract class TeslaNetworkReceiversPlayerMixin extends LivingEntity
 	}
 	
 	@Unique
-	private final Map<WorldPos, TeslaReceiver> receivers = Maps.newHashMap();
+	private final Map<WorldPos, PlayerTeslaReceiver> playerReceivers = Maps.newHashMap();
 	
 	public Collection<TeslaReceiver> teslaNetwork$getTeslaReceivers()
 	{
-		return Collections.unmodifiableCollection(receivers.values());
+		return Collections.unmodifiableCollection(playerReceivers.values());
 	}
 	
 	@Unique
@@ -78,30 +78,28 @@ public abstract class TeslaNetworkReceiversPlayerMixin extends LivingEntity
 			return;
 		}
 		
-		Map<WorldPos, TeslaReceiver> found = Maps.newHashMap();
-		
+		Set<WorldPos> found = Sets.newHashSet();
 		for(ItemStack stack : this.getAllItems())
 		{
 			if(stack.getItem() instanceof TeslaHandheldReceiverItem && stack.has(EIComponents.SELECTED_TESLA_NETWORK))
 			{
-				WorldPos key = stack.get(EIComponents.SELECTED_TESLA_NETWORK).key();
-				found.computeIfAbsent(key, (k) -> new PlayerTeslaReceiver(player, k));
+				found.add(stack.get(EIComponents.SELECTED_TESLA_NETWORK).key());
 			}
 		}
 		
-		Set<WorldPos> toRemove = Sets.difference(receivers.keySet(), found.keySet());
+		Set<WorldPos> toRemove = Sets.difference(playerReceivers.keySet(), found);
 		for(WorldPos key : toRemove)
 		{
-			TeslaReceiver receiver = receivers.remove(key);
+			PlayerTeslaReceiver receiver = playerReceivers.remove(key);
 			receiver.getNetwork().remove(receiver);
 		}
 		
-		Set<WorldPos> toAdd = Sets.difference(found.keySet(), receivers.keySet());
+		Set<WorldPos> toAdd = Sets.difference(found, playerReceivers.keySet());
 		for(WorldPos key : toAdd)
 		{
-			TeslaReceiver receiver = found.get(key);
+			PlayerTeslaReceiver receiver = new PlayerTeslaReceiver(player, key);
 			receiver.getNetwork().add(receiver);
-			receivers.put(key, receiver);
+			playerReceivers.put(key, receiver);
 		}
 	}
 	
@@ -117,7 +115,7 @@ public abstract class TeslaNetworkReceiversPlayerMixin extends LivingEntity
 			return;
 		}
 		
-		receivers.forEach((key, receiver) -> receiver.getNetwork().remove(receiver));
-		receivers.clear();
+		playerReceivers.forEach((key, receiver) -> receiver.getNetwork().remove(receiver));
+		playerReceivers.clear();
 	}
 }
