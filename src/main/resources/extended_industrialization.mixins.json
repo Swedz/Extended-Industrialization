@@ -7,10 +7,7 @@
         "ArmorDyeRecipeIgnoreRainbowItemsMixin",
         "RainbowDyedItemColorMixin",
         "RemoveRainbowWhenDyeingMixin",
-        "mi.accessor.CasingComponentAccessor",
-        "mi.accessor.ConfigurableItemStackAccessor",
-        "mi.accessor.RedstoneControlComponentAccessor",
-        "mi.accessor.UpgradeComponentAccessor"
+        "mi.accessor.ConfigurableItemStackAccessor"
     ],
     "client": [
         "client.NanoArmorRenderVisorTransparentMixin"
