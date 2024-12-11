@@ -143,7 +143,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	{
 		Direction facing = orientation.facingDirection;
 		BlockPos topLoadCenter = worldPosition
-				.relative(facing.getAxis(), -3)
+				.relative(facing, -3)
 				.above(14);
 		return topLoadCenter.subtract(worldPosition);
 	}
