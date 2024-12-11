@@ -4,6 +4,7 @@
     "minecraft:wheat"
   ],
   "values": [
+    "minecraft:kelp",
     "#c:seeds",
     "#c:crops",
     "#minecraft:villager_plantable_seeds",

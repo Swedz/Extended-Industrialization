@@ -4,9 +4,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.extended_industrialization.machines.component.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.component.farmer.PlantableConfigurableItemStack;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerTile;
-import net.swedz.extended_industrialization.machines.component.farmer.planting.PlantingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.planting.FarmerPlantable;
 import net.swedz.extended_industrialization.machines.component.farmer.planting.PlantableBehaviorHolder;
+import net.swedz.extended_industrialization.machines.component.farmer.planting.PlantingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTaskType;
 
@@ -44,7 +44,7 @@ public final class PlantingFarmerTask extends FarmerTask
 			}
 			
 			BlockState state = tile.crop().state(level);
-			if(state.isAir())
+			if(state == state.getFluidState().createLegacyBlock())
 			{
 				PlantingContext plantingContext = new PlantingContext(level, tile, plantable.getStack().toStack());
 				FarmerPlantable farmerPlantable = plantable.asPlantable();
