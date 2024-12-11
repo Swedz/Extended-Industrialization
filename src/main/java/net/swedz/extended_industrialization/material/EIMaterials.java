@@ -38,7 +38,7 @@ public interface EIMaterials
 		MaterialPart TESLA_WINDING = create("tesla_winding", "Tesla Winding")
 				.blockModel(CommonModelBuilders::blockTopEnd)
 				.blockLoot(CommonLootTableBuilders::self)
-				.itemOn(EI.ID, (c, h) -> h.sorted(EISortOrder.CASINGS));
+				.itemOn(EI.ID, (c, h) -> h.sorted(EISortOrder.TESLA_WINDINGS));
 		
 		static MaterialPart create(String id, String englishName)
 		{
