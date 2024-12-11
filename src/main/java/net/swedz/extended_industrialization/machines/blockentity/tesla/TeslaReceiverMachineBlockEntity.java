@@ -62,7 +62,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		redstoneControl = new RedstoneControlComponent();
 		casing = new CasingComponent(this::onCasingUpdate);
 		
-		energy = new EnergyComponent(this, casing::getEuCapacity);
+		energy = new EnergyComponent(this, () -> 30 * 20 * casing.getCableTier().eu);
 		insertable = energy.buildInsertable(casing::canInsertEu);
 		extractable = energy.buildExtractable(casing::canInsertEu);
 		

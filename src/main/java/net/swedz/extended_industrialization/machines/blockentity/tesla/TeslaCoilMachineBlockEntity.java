@@ -73,7 +73,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		redstoneControl = new RedstoneControlComponent();
 		casing = new CasingComponent(this::onCasingUpdate);
 		
-		energy = new EnergyComponent(this, casing::getEuCapacity);
+		energy = new EnergyComponent(this, () -> 30 * 20 * casing.getCableTier().eu);
 		insertable = energy.buildInsertable(casing::canInsertEu);
 		
 		transmitter = new TeslaTransmitterComponent(
