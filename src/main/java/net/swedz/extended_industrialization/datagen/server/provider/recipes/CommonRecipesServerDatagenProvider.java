@@ -4,8 +4,6 @@ import aztech.modern_industrialization.MIFluids;
 import aztech.modern_industrialization.MIItem;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
-import aztech.modern_industrialization.materials.MIMaterials;
-import aztech.modern_industrialization.materials.part.MIParts;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
@@ -18,6 +16,8 @@ import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.datagen.api.recipe.ShapedRecipeBuilder;
 import net.swedz.extended_industrialization.material.EIMaterials;
+import net.swedz.tesseract.neoforge.compat.mi.material.MIMaterials;
+import net.swedz.tesseract.neoforge.compat.mi.material.part.MIMaterialParts;
 
 import java.util.function.Consumer;
 
@@ -253,7 +253,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				"tool", "tesla_calibrator", true,
 				EIItems.TESLA_CALIBRATOR, 1,
 				(r) -> r
-						.define('S', "%s:silver_tesla_top_load".formatted(EI.ID))
+						.define('S', MIMaterials.SILVER.get(MIMaterialParts.WIRE))
 						.define('T', MIItem.TRANSISTOR)
 						.define('G', EITags.itemCommon("glass_panes"))
 						.define('D', MIItem.DIODE)
@@ -335,7 +335,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				"casing", "steel_plated_bricks", true,
 				EIBlocks.STEEL_PLATED_BRICKS.get().asItem(), 1,
 				(r) -> r
-						.define('S', MIMaterials.STEEL.getPart(MIParts.PLATE))
+						.define('S', MIMaterials.STEEL.get(MIMaterialParts.PLATE))
 						.define('B', "modern_industrialization:fire_clay_bricks")
 						.pattern("SSS")
 						.pattern("SBS")
