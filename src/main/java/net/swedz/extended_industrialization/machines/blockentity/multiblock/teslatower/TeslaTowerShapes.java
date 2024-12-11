@@ -114,7 +114,7 @@ public final class TeslaTowerShapes extends DataMapMultiblockTieredShapes<TeslaT
 			builder.key('P', SimpleMember.forBlockId(MI.id("stainless_steel_machine_casing_pipe")), HatchFlags.NO_HATCH);
 			builder.key('T', SimpleMember.forBlockId(EI.id("polished_silver_machine_casing")), HatchFlags.NO_HATCH);
 			builder.key('W', SimpleMember.forBlockId(tier.blockId()), HatchFlags.NO_HATCH);
-			builder.key('w', SimpleMember.forBlockId(tier.blockId()), HatchFlags.NO_HATCH); // TODO secondary winding?
+			builder.key('w', SimpleMember.forBlockId(tier.blockId()), HatchFlags.NO_HATCH);
 			shapeTemplates[i] = builder.build();
 		}
 	}
