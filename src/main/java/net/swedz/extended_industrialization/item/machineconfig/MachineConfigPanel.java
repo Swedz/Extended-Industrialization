@@ -20,7 +20,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.api.ComponentStackHolder;
-import net.swedz.extended_industrialization.mixin.mi.accessor.CasingComponentAccessor;
 
 import java.util.List;
 import java.util.Map;
@@ -46,9 +45,10 @@ public record MachineConfigPanel(
 		
 		BiConsumer<SlotPanel.SlotType, DropableComponent> action = (slotType, component) ->
 		{
-			if(!component.getDrop().isEmpty())
+			ItemStack drop = component.getDrop().copy();
+			if(!drop.isEmpty())
 			{
-				slotItems.put(slotType, component.getDrop());
+				slotItems.put(slotType, drop);
 			}
 		};
 		
@@ -74,7 +74,7 @@ public record MachineConfigPanel(
 		List<ItemStack> items = Lists.newArrayList();
 		for(int i = 0; i < inventory.items.size(); i++)
 		{
-			ItemStack slot = inventory.items.get(i);
+			ItemStack slot = inventory.items.get(i).copy();
 			if(!slot.isEmpty() && ItemStack.isSameItem(itemStack, slot))
 			{
 				items.add(slot);
@@ -186,7 +186,7 @@ public record MachineConfigPanel(
 	
 	private boolean insertItemToCasingComponent(Player player, MachineBlockEntity target, CasingComponent component, ComponentStackHolder componentStackHolder, ItemStack item, Simulation simulation)
 	{
-		CableTier currentTier = ((CasingComponentAccessor) component).getCurrentTier();
+		CableTier currentTier = component.getCableTier();
 		ItemStack componentItem = componentStackHolder.getStack();
 		if(!item.isEmpty())
 		{
@@ -230,13 +230,16 @@ public record MachineConfigPanel(
 		}
 		boolean success = false;
 		
-		ItemStack slotItem = slotItems.get(slotType);
+		ItemStack slotItem = slotItems.get(slotType).copy();
+		List<ItemStack> matchingItems = player.hasInfiniteMaterials() ? List.of(slotItem) : findItemsMatching(player.getInventory(), slotItem);
 		
-		List<ItemStack> matchingItems = player.hasInfiniteMaterials() ? List.of(slotItem.copy()) : findItemsMatching(player.getInventory(), slotItem);
-		
-		if(matchingItems.isEmpty() && componentStackHolder instanceof RedstoneControlComponent && !componentStackHolder.getStack().isEmpty())
+		if(matchingItems.isEmpty() && componentStackHolder instanceof RedstoneControlComponent)
 		{
-			matchingItems.add(componentStackHolder.getStack().copy());
+			ItemStack componentStack = componentStackHolder.getStack().copy();
+			if(!componentStack.isEmpty())
+			{
+				matchingItems.add(componentStack);
+			}
 		}
 		
 		for(ItemStack matchingItem : matchingItems)
