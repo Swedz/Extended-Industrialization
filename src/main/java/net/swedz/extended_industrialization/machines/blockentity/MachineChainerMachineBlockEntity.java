@@ -39,7 +39,8 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	private final MIEnergyTransferCache transferEnergy;
 	
 	private int tick;
-	private int lastRebuildTick = -1;
+	private int lastRebuildTick  = -1;
+	private int rebuildsThisTick = 0;
 	
 	private boolean needsRebuild;
 	
@@ -92,9 +93,11 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	
 	public void buildLinks()
 	{
+		rebuildsThisTick++;
+		
 		if(tick == lastRebuildTick)
 		{
-			EI.LOGGER.warn("Prevented Machine Chainer in dimension '{}' at ({}) from rebuilding links more than once in the same tick!", level.dimension().location(), worldPosition.toShortString());
+			needsRebuild = true;
 			return;
 		}
 		
@@ -109,7 +112,6 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		
 		this.invalidateCapabilities();
 		
-		//level.blockUpdated(worldPosition, Blocks.AIR);
 		this.setChanged();
 		if(!level.isClientSide())
 		{
@@ -189,6 +191,12 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 				this.setChanged();
 			}
 		}
+		
+		if(rebuildsThisTick >= 10)
+		{
+			EI.LOGGER.warn("Prevented Machine Chainer in dimension '{}' at ({}) from rebuilding links {} times in the same tick!", level.dimension().location(), worldPosition.toShortString(), rebuildsThisTick);
+		}
+		rebuildsThisTick = 0;
 	}
 	
 	public static void registerCapabilities(BlockEntityType<?> bet)
