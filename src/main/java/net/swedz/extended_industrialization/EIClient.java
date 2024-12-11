@@ -37,8 +37,6 @@ import net.swedz.extended_industrialization.client.ber.chainer.MachineChainerHig
 import net.swedz.extended_industrialization.client.model.chainer.MachineChainerUnbakedModel;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
-import net.swedz.extended_industrialization.item.machineconfig.MachineConfigCardItem;
-import net.swedz.extended_industrialization.item.tooltip.MachineConfigCardTooltipComponent;
 import net.swedz.extended_industrialization.item.tooltip.SteamChainsawTooltipComponent;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.network.packet.ModifyElectricToolSpeedPacket;
@@ -129,7 +127,6 @@ public final class EIClient
 	private static void registerClientTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event)
 	{
 		event.register(SteamChainsawItem.SteamChainsawTooltipData.class, SteamChainsawTooltipComponent::new);
-		event.register(MachineConfigCardItem.TooltipData.class, MachineConfigCardTooltipComponent::new);
 	}
 	
 	@SubscribeEvent

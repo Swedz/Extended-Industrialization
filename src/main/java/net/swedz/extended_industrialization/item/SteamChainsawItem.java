@@ -459,8 +459,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	
 	public record SteamChainsawTooltipData(
 			int waterLevel, int burnTicks, int maxBurnTicks, ItemVariant variant, long amount
-	)
-			implements TooltipComponent
+	) implements TooltipComponent
 	{
 	}
 	
