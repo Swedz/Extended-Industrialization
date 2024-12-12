@@ -70,8 +70,8 @@ public final class EIItems
 	public static final ItemHolder<Item> CANNED_FOOD = create("canned_food", "Canned Food", Item::new, EISortOrder.OTHER_GEAR).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3f).fast().usingConvertsTo(TIN_CAN).build())).tag(ItemTags.WOLF_FOOD, ItemTags.CAT_FOOD).withModelBuilder(CommonModelBuilders::generated).register();
 	
 	public static final ItemHolder<MachineConfigCardItem>     MACHINE_CONFIG_CARD     = create("machine_config_card", "Machine Config Card", MachineConfigCardItem::new, EISortOrder.OTHER_GEAR).withModelBuilder(CommonModelBuilders::generated).register();
-	public static final ItemHolder<TeslaCalibratorItem>       TESLA_CALIBRATOR        = create("tesla_calibrator", "Tesla Calibrator", TeslaCalibratorItem::new, EISortOrder.OTHER_GEAR).withModelBuilder(CommonModelBuilders::generated).withRegistrationListener(EIItems::itemPropertyTeslaNetworkSelected).register();
-	public static final ItemHolder<TeslaHandheldReceiverItem> TESLA_HANDHELD_RECEIVER = create("tesla_handheld_receiver", "Tesla Handheld Receiver", TeslaHandheldReceiverItem::new, EISortOrder.OTHER_GEAR).withRegistrationListener(EIItems::itemPropertyTeslaNetworkSelected).register();
+	public static final ItemHolder<TeslaCalibratorItem>       TESLA_CALIBRATOR        = create("tesla_calibrator", "Tesla Calibrator", TeslaCalibratorItem::new, EISortOrder.OTHER_GEAR).withModelBuilder(CommonModelBuilders::generated).withClientRegistrationListener(EIItems::itemPropertyTeslaNetworkSelected).register();
+	public static final ItemHolder<TeslaHandheldReceiverItem> TESLA_HANDHELD_RECEIVER = create("tesla_handheld_receiver", "Tesla Handheld Receiver", TeslaHandheldReceiverItem::new, EISortOrder.OTHER_GEAR).withClientRegistrationListener(EIItems::itemPropertyTeslaNetworkSelected).register();
 	
 	public static final ItemHolder<Item> TESLA_INTERDIMENSIONAL_UPGRADE = create("tesla_interdimensional_upgrade", "Tesla Interdimensional Upgrade", Item::new, EISortOrder.OTHER_GEAR).withProperties((p) -> p.stacksTo(1).rarity(Rarity.EPIC)).withModelBuilder(CommonModelBuilders::generated).register();
 	

@@ -47,6 +47,7 @@ import net.swedz.extended_industrialization.machines.blockentity.MachineChainerM
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
 import net.swedz.extended_industrialization.network.packet.ModifyElectricToolSpeedPacket;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
+import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 @Mod(value = EI.ID, dist = Dist.CLIENT)
 @EventBusSubscriber(value = Dist.CLIENT, modid = EI.ID, bus = EventBusSubscriber.Bus.MOD)
@@ -88,6 +89,12 @@ public final class EIClient
 				}
 			}
 		});
+	}
+	
+	@SubscribeEvent
+	private static void registerItemProperties(FMLClientSetupEvent event)
+	{
+		event.enqueueWork(() -> EIItems.values().forEach(ItemHolder::triggerClientRegistrationListener));
 	}
 	
 	@SubscribeEvent
