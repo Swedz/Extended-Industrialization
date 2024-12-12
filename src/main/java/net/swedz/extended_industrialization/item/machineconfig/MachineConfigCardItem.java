@@ -23,6 +23,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIText;
+import net.swedz.tesseract.neoforge.tooltip.component.ItemStackTooltipComponent;
 
 import java.util.List;
 import java.util.Optional;
@@ -138,13 +139,9 @@ public final class MachineConfigCardItem extends Item
 		{
 			Block machineBlock = stack.get(EIComponents.MACHINE_CONFIG).machineBlock();
 			Item item = machineBlock.asItem();
-			return Optional.of(new TooltipData(item.getDefaultInstance()));
+			return Optional.of(new ItemStackTooltipComponent(item.getDefaultInstance()));
 		}
 		return Optional.empty();
-	}
-	
-	public record TooltipData(ItemStack machineItemStack) implements TooltipComponent
-	{
 	}
 	
 	@Override

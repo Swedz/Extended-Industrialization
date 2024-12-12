@@ -1,10 +1,12 @@
 package net.swedz.extended_industrialization.datagen.server.provider.recipes;
 
+import aztech.modern_industrialization.MIBlock;
 import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.MIItem;
 import aztech.modern_industrialization.MITags;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
+import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
@@ -479,20 +481,16 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 	
 	private static void machineChainer(RecipeOutput output)
 	{
-		addBasicCraftingMachineRecipes(
-				"machine_chainer",
-				(builder) -> builder
-						.define('M', "modern_industrialization:large_motor")
-						.define('I', MITags.ITEM_PIPES)
-						.define('U', "extended_industrialization:universal_transformer")
-						.define('H', "modern_industrialization:advanced_machine_hull")
-						.define('P', "modern_industrialization:large_pump")
-						.define('F', MITags.FLUID_PIPES)
-						.pattern("MIM")
-						.pattern("UHU")
-						.pattern("PFP"),
-				output
-		);
+		new MachineRecipeBuilder(MIMachineRecipeTypes.ASSEMBLER, 8, 10 * 20)
+				.addItemInput(MIBlock.ADVANCED_MACHINE_HULL, 1)
+				.addItemInput("extended_industrialization:universal_transformer", 2)
+				.addItemInput(MIItem.LARGE_MOTOR, 2)
+				.addItemInput(MIItem.LARGE_PUMP, 2)
+				.addItemInput(MITags.ITEM_PIPES, 64)
+				.addItemInput(MITags.FLUID_PIPES, 64)
+				.addItemInput("modern_industrialization:electrum_cable", 64)
+				.addItemOutput("extended_industrialization:machine_chainer", 1)
+				.offerTo(output, "machines/machine_chainer/assembler");
 		
 		addBasicCraftingMachineRecipes(
 				"machine_chainer_relay",

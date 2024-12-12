@@ -331,7 +331,9 @@ neoForge {
 
 			gameDirectory.set(project.getLayout().getProjectDirectory().dir('runs/client'))
 
-			programArguments.addAll '--username', 'Swedz', '--uuid', 'a2dca537-693e-4ded-ac4b-c4006dd4d382'
+			if (System.getenv("MC_USERNAME") && System.getenv("MC_UUID")) {
+				programArguments.addAll '--username', System.getenv("MC_USERNAME"), '--uuid', System.getenv("MC_UUID")
+			}
 
 			systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
 
