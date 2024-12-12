@@ -19,6 +19,9 @@ import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.AABB;
@@ -229,6 +232,21 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		{
 			EnergyHelper.autoOutput(this, orientation, casing.getCableTier(), extractable);
 		}
+	}
+	
+	@Override
+	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
+	{
+		ItemInteractionResult result = super.useItemOn(player, hand, face);
+		if(!result.consumesAction())
+		{
+			result = redstoneControl.onUse(this, player, hand);
+		}
+		if(!result.consumesAction())
+		{
+			result = casing.onUse(this, player, hand);
+		}
+		return result;
 	}
 	
 	@Override
