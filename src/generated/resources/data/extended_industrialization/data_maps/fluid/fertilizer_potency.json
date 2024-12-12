@@ -1,15 +1,15 @@
 {
   "values": {
     "extended_industrialization:composted_manure": {
-      "mb_to_consume_per_fertilizer_tick": 50,
+      "mb_to_consume_per_fertilizer_tick": 150,
       "tick_rate": 25
     },
     "extended_industrialization:manure": {
-      "mb_to_consume_per_fertilizer_tick": 100,
+      "mb_to_consume_per_fertilizer_tick": 300,
       "tick_rate": 25
     },
     "extended_industrialization:npk_fertilizer": {
-      "mb_to_consume_per_fertilizer_tick": 10,
+      "mb_to_consume_per_fertilizer_tick": 30,
       "tick_rate": 10
     }
   }

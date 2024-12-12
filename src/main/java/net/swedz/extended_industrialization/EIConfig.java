@@ -9,6 +9,7 @@ public final class EIConfig
 	private static final ModConfigSpec.IntValue     LOCAL_WIRELESS_CHARGING_STATION_RANGE;
 	private static final ModConfigSpec.IntValue     MACHINE_CHAINER_MAX_CONNECTIONS;
 	private static final ModConfigSpec.BooleanValue ALLOW_UPGRADES_IN_PROCESSING_ARRAY;
+	private static final ModConfigSpec.IntValue     FARMER_FERTILIZER_MAX_RANDOM_TICKS;
 	private static final ModConfigSpec.IntValue     LARGE_STEAM_MACERATOR_SIZE;
 	private static final ModConfigSpec.DoubleValue  LARGE_STEAM_MACERATOR_EU;
 	private static final ModConfigSpec.IntValue     LARGE_STEAM_FURNACE_SIZE;
@@ -34,6 +35,10 @@ public final class EIConfig
 		ALLOW_UPGRADES_IN_PROCESSING_ARRAY = BUILDER
 				.comment("Whether upgrades should be allowed in the Processing Array")
 				.define("allow_upgrades_in_processing_array", true);
+		
+		FARMER_FERTILIZER_MAX_RANDOM_TICKS = BUILDER
+				.comment("The maximum amount of random ticks the farmer can do on a crop block in a single use of fertilizer")
+				.defineInRange("farmer_fertilizer_max_random_ticks", 80, 1, 1000);
 		
 		{
 			BUILDER.push("batching_machines");
@@ -72,6 +77,7 @@ public final class EIConfig
 	public static int     localWirelessChargingStationRange;
 	public static int     machineChainerMaxConnections;
 	public static boolean allowUpgradesInProcessingArray;
+	public static int     farmerFertilizerMaxRandomTicks;
 	public static int     largeSteamMaceratorBatchSize;
 	public static double  largeSteamMaceratorEuCostMultiplier;
 	public static int     largeSteamFurnaceBatchSize;
@@ -85,6 +91,7 @@ public final class EIConfig
 		localWirelessChargingStationRange = LOCAL_WIRELESS_CHARGING_STATION_RANGE.get();
 		machineChainerMaxConnections = MACHINE_CHAINER_MAX_CONNECTIONS.get();
 		allowUpgradesInProcessingArray = ALLOW_UPGRADES_IN_PROCESSING_ARRAY.get();
+		farmerFertilizerMaxRandomTicks = FARMER_FERTILIZER_MAX_RANDOM_TICKS.get();
 		largeSteamMaceratorBatchSize = LARGE_STEAM_MACERATOR_SIZE.get();
 		largeSteamMaceratorEuCostMultiplier = LARGE_STEAM_MACERATOR_EU.get();
 		largeSteamFurnaceBatchSize = LARGE_STEAM_FURNACE_SIZE.get();
