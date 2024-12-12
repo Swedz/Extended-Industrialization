@@ -208,18 +208,6 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	}
 	
 	@Override
-	public MIInventory getInventory()
-	{
-		return MIInventory.EMPTY;
-	}
-	
-	@Override
-	public EnergyAccess getEnergyComponent()
-	{
-		return energy;
-	}
-	
-	@Override
 	public TeslaTransmitter getDelegateTransmitter()
 	{
 		return transmitter;
@@ -232,6 +220,18 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		data.isActive = isActive.isActive;
 		orientation.writeModelData(data);
 		return data;
+	}
+	
+	@Override
+	public MIInventory getInventory()
+	{
+		return MIInventory.EMPTY;
+	}
+	
+	@Override
+	public EnergyAccess getEnergyComponent()
+	{
+		return energy;
 	}
 	
 	@Override

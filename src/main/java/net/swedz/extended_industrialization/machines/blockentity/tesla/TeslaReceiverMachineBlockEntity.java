@@ -164,9 +164,9 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	}
 	
 	@Override
-	public MIInventory getInventory()
+	public TeslaReceiver getDelegateReceiver()
 	{
-		return MIInventory.EMPTY;
+		return receiver;
 	}
 	
 	@Override
@@ -179,9 +179,9 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	}
 	
 	@Override
-	public TeslaReceiver getDelegateReceiver()
+	public MIInventory getInventory()
 	{
-		return receiver;
+		return MIInventory.EMPTY;
 	}
 	
 	@Override
