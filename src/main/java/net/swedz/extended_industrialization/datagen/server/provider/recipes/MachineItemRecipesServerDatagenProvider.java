@@ -1,7 +1,7 @@
 package net.swedz.extended_industrialization.datagen.server.provider.recipes;
 
-import aztech.modern_industrialization.MIBlock;
 import aztech.modern_industrialization.MI;
+import aztech.modern_industrialization.MIBlock;
 import aztech.modern_industrialization.MIItem;
 import aztech.modern_industrialization.MITags;
 import aztech.modern_industrialization.api.energy.CableTier;
@@ -620,15 +620,16 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 			String casing = casings[i];
 			String cable = cables[i];
 			CableTier tier = cableTiers[i];
-			addMachineRecipe(
-					"machines/%s_tesla_receiver_hatch".formatted(tier.name), "assembler", MIMachineRecipeTypes.ASSEMBLER,
-					8, 10 * 20,
+			addBasicCraftingMachineRecipes(
+					"%s_tesla_receiver_hatch".formatted(tier.name),
 					(builder) -> builder
-							.addItemInput("%s:%s_cable".formatted(MI.ID, cable), 1)
-							.addItemInput("%s:%s_machine_hull".formatted(MI.ID, casing), 1)
-							.addItemInput(EIMaterials.SILVER.get(EIMaterials.Parts.CURVED_PLATE), 4)
-							.addItemInput(MIItem.ELECTRONIC_CIRCUIT, 2)
-							.addItemOutput("%s:%s_tesla_receiver_hatch".formatted(EI.ID, tier.name), 1),
+							.define('R', "%s:tesla_receiver".formatted(EI.ID))
+							.define('H', "%s:%s_machine_hull".formatted(MI.ID, casing))
+							.define('C', "%s:%s_cable".formatted(MI.ID, cable))
+							.pattern("R")
+							.pattern("H")
+							.pattern("C"),
+					true,
 					output
 			);
 			addMachineRecipe(
@@ -636,8 +637,8 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 					2, 10 * 20,
 					(builder) -> builder
 							.addItemInput("%s:%s_tesla_receiver_hatch".formatted(EI.ID, tier.name), 1)
-							.addItemOutput("modern_industrialization:%s_machine_hull".formatted(casing), 1)
-							.addItemOutput(MIItem.ELECTRONIC_CIRCUIT, 2),
+							.addItemOutput("%s:%s_machine_hull".formatted(MI.ID, casing), 1)
+							.addItemOutput("%s:tesla_receiver".formatted(EI.ID), 1),
 					output
 			);
 		}

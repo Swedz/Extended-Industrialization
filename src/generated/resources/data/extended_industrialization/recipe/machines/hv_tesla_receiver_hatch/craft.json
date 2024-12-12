@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "modern_industrialization:aluminum_cable"
+    },
+    "H": {
+      "item": "modern_industrialization:turbo_machine_hull"
+    },
+    "R": {
+      "item": "extended_industrialization:tesla_receiver"
+    }
+  },
+  "pattern": [
+    "R",
+    "H",
+    "C"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:hv_tesla_receiver_hatch"
+  }
+}
