@@ -27,9 +27,9 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		this.addFarmerSimpleTallCropSize(Blocks.SUGAR_CANE, 3);
 		this.addFarmerSimpleTallCropSize(Blocks.CACTUS, 3);
 		
-		this.addFluidFertilizerPotency(EIFluids.MANURE, 25, 100);
-		this.addFluidFertilizerPotency(EIFluids.COMPOSTED_MANURE, 25, 50);
-		this.addFluidFertilizerPotency(EIFluids.NPK_FERTILIZER, 10, 10);
+		this.addFluidFertilizerPotency(EIFluids.MANURE, 25, 300);
+		this.addFluidFertilizerPotency(EIFluids.COMPOSTED_MANURE, 25, 150);
+		this.addFluidFertilizerPotency(EIFluids.NPK_FERTILIZER, 10, 30);
 		
 		this.addLargeElectricFurnaceTier(MI.id("cupronickel_coil"), 8, 0.75f);
 		this.addLargeElectricFurnaceTier(MI.id("kanthal_coil"), 32, 0.75f);
