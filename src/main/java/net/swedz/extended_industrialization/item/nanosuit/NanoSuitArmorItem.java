@@ -105,7 +105,7 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 			modifiers = modifiers.withModifierAdded(
 					NeoForgeMod.CREATIVE_FLIGHT,
 					new AttributeModifier(
-							EI.id("quantum_nano"),
+							EI.id("nano_quantum"),
 							1,
 							AttributeModifier.Operation.ADD_VALUE
 					),

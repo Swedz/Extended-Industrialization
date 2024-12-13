@@ -23,7 +23,7 @@ public final class EIArmorMaterials
 	
 	public static final Holder<ArmorMaterial> NANO                 = createNanoMaterial("nano");
 	public static final Holder<ArmorMaterial> NANO_GRAVICHESTPLATE = createNanoMaterial("nano_gravichestplate");
-	public static final Holder<ArmorMaterial> QUANTUM_NANO         = createNanoMaterial("quantum_nano", true);
+	public static final Holder<ArmorMaterial> NANO_QUANTUM         = createNanoMaterial("nano_quantum", true);
 	
 	public static final int NANO_COLOR                 = ColorHelper.getVibrantColor(DyeColor.LIME);
 	public static final int NANO_GRAVICHESTPLATE_COLOR = ColorHelper.getVibrantColor(DyeColor.LIGHT_BLUE);

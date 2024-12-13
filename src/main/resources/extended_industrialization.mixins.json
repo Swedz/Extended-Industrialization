@@ -10,7 +10,7 @@
         "mi.accessor.ConfigurableItemStackAccessor"
     ],
     "client": [
-        "client.NanoArmorRenderVisorTransparentMixin"
+        "NanoArmorDontUseVanillaRendererMixin"
     ],
     "injectors": {
         "defaultRequire": 1
