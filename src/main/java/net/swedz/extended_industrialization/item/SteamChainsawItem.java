@@ -195,7 +195,9 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 			if(!level.isClientSide)
 			{
 				user.displayClientMessage(
-						isNotSilkTouch(stack) ? MIText.ToolSwitchedNoSilkTouch.text() : MIText.ToolSwitchedSilkTouch.text(), true);
+						(isNotSilkTouch(stack) ? MIText.ToolSwitchedNoSilkTouch : MIText.ToolSwitchedSilkTouch).text(),
+						true
+				);
 			}
 			return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
 		}
@@ -254,7 +256,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 		if(fuel.burnTicks() > 0)
 		{
 			stack.set(MIComponents.STEAM_DRILL_FUEL, new SteamDrillFuel(Math.max(0, fuel.burnTicks() - 5), fuel.maxBurnTicks()));
-			int water = stack.get(MIComponents.WATER);
+			int water = Math.max(0, stack.get(MIComponents.WATER) - 5);
 			if(water > 0)
 			{
 				stack.set(MIComponents.WATER, water);
@@ -457,8 +459,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	
 	public record SteamChainsawTooltipData(
 			int waterLevel, int burnTicks, int maxBurnTicks, ItemVariant variant, long amount
-	)
-			implements TooltipComponent
+	) implements TooltipComponent
 	{
 	}
 	

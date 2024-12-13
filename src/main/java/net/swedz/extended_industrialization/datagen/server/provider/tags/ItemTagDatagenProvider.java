@@ -2,6 +2,7 @@ package net.swedz.extended_industrialization.datagen.server.provider.tags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -34,12 +35,14 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 				)
 				.addTags(
 						ItemTags.SAPLINGS
-				);
+				)
+				.addOptionalTag(ResourceLocation.fromNamespaceAndPath("rootsclassic", "berries"));
 	}
 	
 	private void addFarmerStandardPlantableTag()
 	{
 		this.tag(EITags.Items.FARMER_PLANTABLE)
+				.add(Items.KELP)
 				.addTags(
 						Tags.Items.SEEDS,
 						Tags.Items.CROPS,

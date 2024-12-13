@@ -27,6 +27,7 @@ public final class SimpleTallCropHarvestable implements LootTableHarvestableBeha
 	public List<BlockPos> getBlocks(HarvestingContext context)
 	{
 		List<BlockPos> blocks = Lists.newArrayList();
+		
 		int maxHeight = FarmerSimpleTallCropSize.getFor(context.state().getBlock()).maxHeight();
 		for(int y = 0; y <= maxHeight; y++)
 		{
@@ -41,6 +42,7 @@ public final class SimpleTallCropHarvestable implements LootTableHarvestableBeha
 				break;
 			}
 		}
+		
 		return blocks.size() > 1 ? blocks : List.of();
 	}
 }

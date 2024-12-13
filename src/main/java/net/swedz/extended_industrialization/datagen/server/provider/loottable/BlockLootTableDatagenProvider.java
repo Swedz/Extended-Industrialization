@@ -30,12 +30,10 @@ public final class BlockLootTableDatagenProvider extends BlockLootSubProvider
 	{
 		for(BlockHolder<?> block : EIBlocks.values())
 		{
-			if(!block.hasLootTable())
+			if(block.hasLootTable())
 			{
-				continue;
+				this.add(block.get(), block.buildLootTable(this));
 			}
-			
-			this.add(block.get(), block.getLootTableBuilder().apply(this));
 		}
 	}
 }

@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.ComposterBlock;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.datagen.api.RecipeHelper;
 
+import java.util.List;
+
 public final class ComposterMachineRecipeType extends ProxyableMachineRecipeType
 {
 	public ComposterMachineRecipeType(ResourceLocation id)
@@ -35,7 +37,7 @@ public final class ComposterMachineRecipeType extends ProxyableMachineRecipeType
 	}
 	
 	@Override
-	protected void fillRecipeList(Level level)
+	protected void fillRecipeList(Level level, List<RecipeHolder<MachineRecipe>> recipeList)
 	{
 		recipeList.addAll(this.getManagerRecipes(level));
 		

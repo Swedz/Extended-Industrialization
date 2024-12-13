@@ -1,8 +1,8 @@
 package net.swedz.extended_industrialization;
 
-import net.swedz.tesseract.neoforge.tooltip.TranslatableTextEnum;
+import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTranslatableTextEnum;
 
-public enum EIText implements TranslatableTextEnum
+public enum EIText implements MICompatibleTranslatableTextEnum
 {
 	ACTIVATED("Activated"),
 	BREWERY_BREWS_MULTIPLE("Brews %s potions at a time."),
@@ -48,7 +48,7 @@ public enum EIText implements TranslatableTextEnum
 	KEY_MOUSE_SCROLL("Mouse Scroll"),
 	MACHINE_BATCHER_COILS("Batch size and cost is determined by coil used."),
 	MACHINE_CHAINER_CONNECTED_MACHINES("Connected Machines: %d / %d"),
-	MACHINE_CHAINER_HELP_1("Connects up to %d consecutive machines in a horizontal line in the direction it is facing."),
+	MACHINE_CHAINER_HELP_1("Connects up to %d consecutive machines in a straight line in the direction it is facing."),
 	MACHINE_CHAINER_HELP_2("Accepts items, fluids, and energy and distributes them to connected machines."),
 	MACHINE_CHAINER_HELP_3("Can connect to other machine chainers, but it must not link back to itself."),
 	MACHINE_CHAINER_PROBLEM_AT("Problem at: %s"),
@@ -96,8 +96,8 @@ public enum EIText implements TranslatableTextEnum
 	STEAM_CHAINSAW_1("- Press %s on still or flowing water to fill."),
 	STEAM_CHAINSAW_2("- Place fuel inside the chainsaw using %s."),
 	STEAM_CHAINSAW_3("- Toggle Silk Touch with %s + %s."),
-	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Casing for cable tier to convert from (LV by default)."),
-	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Casing for cable tier to convert to (LV by default)."),
+	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Hull for cable tier to convert from (LV by default)."),
+	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Hull for cable tier to convert to (LV by default)."),
 	WASTE_COLLECTOR_HELP("When placed underneath animals, manure will be collected.");
 	
 	private final String englishText;

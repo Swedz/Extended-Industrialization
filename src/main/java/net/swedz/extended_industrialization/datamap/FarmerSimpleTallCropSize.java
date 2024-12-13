@@ -2,9 +2,11 @@ package net.swedz.extended_industrialization.datamap;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.block.Block;
 import net.swedz.extended_industrialization.EIDataMaps;
+import net.swedz.tesseract.neoforge.helper.RegistryHelper;
 
 public record FarmerSimpleTallCropSize(int maxHeight)
 {
@@ -15,9 +17,8 @@ public record FarmerSimpleTallCropSize(int maxHeight)
 			.apply(instance, FarmerSimpleTallCropSize::new)
 	);
 	
-	@SuppressWarnings("deprecation")
 	public static FarmerSimpleTallCropSize getFor(Block block)
 	{
-		return block.builtInRegistryHolder().getData(EIDataMaps.FARMER_SIMPLE_TALL_CROP_SIZE);
+		return RegistryHelper.holder(BuiltInRegistries.BLOCK, block).getData(EIDataMaps.FARMER_SIMPLE_TALL_CROP_SIZE);
 	}
 }

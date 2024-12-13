@@ -22,6 +22,8 @@ import net.swedz.extended_industrialization.machines.component.farmer.harvesting
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestableBehaviorHolder;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.CropBlockHarvestable;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.GrowingPlantHarvestable;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.MysticalAgricultureHarvestable;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.NetherWartHarvestable;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.SimpleTallCropHarvestable;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.TreeHarvestable;
@@ -34,6 +36,7 @@ import net.swedz.extended_industrialization.machines.component.farmer.task.Farme
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTaskType;
 import net.swedz.tesseract.neoforge.behavior.BehaviorRegistry;
+import net.swedz.tesseract.neoforge.compat.ModLoadedHelper;
 import net.swedz.tesseract.neoforge.compat.mi.helper.MachineInventoryHelper;
 import net.swedz.tesseract.neoforge.event.FarmlandLoseMoistureEvent;
 
@@ -62,7 +65,13 @@ public final class FarmerComponent implements IComponent
 		registerPlantable(StandardFarmerPlantable::new);
 		registerPlantable(SpecialFarmerPlantable::new);
 		
+		if(ModLoadedHelper.isLoaded("mysticalagriculture"))
+		{
+			registerHarvestable(MysticalAgricultureHarvestable::new);
+		}
+		
 		registerHarvestable(CropBlockHarvestable::new);
+		registerHarvestable(GrowingPlantHarvestable::new);
 		registerHarvestable(NetherWartHarvestable::new);
 		registerHarvestable(SimpleTallCropHarvestable::new);
 		registerHarvestable(TreeHarvestable::new);
@@ -81,11 +90,11 @@ public final class FarmerComponent implements IComponent
 	
 	private final List<FarmerListener<? extends Event>> listeners = Lists.newArrayList();
 	
+	private Level   level;
+	private boolean listenersRegistered = false;
+	
 	public PlantingMode plantingMode;
 	public boolean      tilling;
-	
-	private Level        level;
-	private ShapeMatcher shapeMatcher;
 	
 	private int processTick;
 	
@@ -203,12 +212,12 @@ public final class FarmerComponent implements IComponent
 	
 	public void registerListeners(Level level, ShapeMatcher shapeMatcher)
 	{
-		if(this.shapeMatcher != null)
+		if(listenersRegistered)
 		{
 			throw new IllegalStateException("There are already listeners registered on this FarmerComponent");
 		}
+		listenersRegistered = true;
 		this.level = level;
-		this.shapeMatcher = shapeMatcher;
 		for(FarmerListener listener : listeners)
 		{
 			EILocalizedListeners.INSTANCE.register(level, shapeMatcher.getSpannedChunks(), listener.eventClass(), listener.listener());
@@ -221,7 +230,7 @@ public final class FarmerComponent implements IComponent
 		{
 			EILocalizedListeners.INSTANCE.unregister(level, shapeMatcher.getSpannedChunks(), listener.eventClass(), listener.listener());
 		}
-		this.shapeMatcher = null;
+		this.listenersRegistered = false;
 	}
 	
 	@Override

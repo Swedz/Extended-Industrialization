@@ -71,6 +71,16 @@ repositories {
 			includeGroup "top.theillusivec4.curios"
 		}
 	}
+	maven {
+		name = "Blakebr0"
+		url = "https://maven.blakesmods.com/releases"
+		content {
+			// Cucumber
+			includeGroup "com.blakebr0.cucumber"
+			// Mystical Agriculture
+			includeGroup "com.blakebr0.mysticalagriculture"
+		}
+	}
 }
 
 dependencies {
@@ -111,6 +121,14 @@ dependencies {
 		localImplementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 	} else {
 		compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+	}
+
+	if (project.runtime_include_mystical_agriculture.toBoolean()) {
+		localImplementation "com.blakebr0.cucumber:Cucumber:${cucumber_version}"
+		localImplementation "com.blakebr0.mysticalagriculture:MysticalAgriculture:${mystical_agriculture_version}"
+	} else {
+		compileOnly "com.blakebr0.cucumber:Cucumber:${cucumber_version}"
+		compileOnly "com.blakebr0.mysticalagriculture:MysticalAgriculture:${mystical_agriculture_version}"
 	}
 }
 
@@ -296,7 +314,9 @@ neoForge {
 
 			gameDirectory.set(project.getLayout().getProjectDirectory().dir('runs/client'))
 
-			programArguments.addAll '--username', 'Swedz', '--uuid', 'a2dca537-693e-4ded-ac4b-c4006dd4d382'
+			if (System.getenv("MC_USERNAME") && System.getenv("MC_UUID")) {
+				programArguments.addAll '--username', System.getenv("MC_USERNAME"), '--uuid', System.getenv("MC_UUID")
+			}
 
 			systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
 
@@ -348,7 +368,8 @@ tasks.withType(ProcessResources).configureEach {
 			mi_tweaks_version_range               : mi_tweaks_version_range,
 			emi_version_range                     : emi_version_range,
 			accessories_version_range             : accessories_version_range,
-			curios_version_range                  : curios_version_range
+			curios_version_range                  : curios_version_range,
+			mystical_agriculture_version_range    : mystical_agriculture_version_range
 	]
 	inputs.properties replaceProperties
 

@@ -17,7 +17,7 @@ import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIMachines;
 import net.swedz.extended_industrialization.EIText;
@@ -97,9 +97,9 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 	}
 	
 	@Override
-	public Level getCrafterWorld()
+	public ServerLevel getCrafterWorld()
 	{
-		return level;
+		return (ServerLevel) level;
 	}
 	
 	@Override

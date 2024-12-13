@@ -6,6 +6,7 @@ import aztech.modern_industrialization.items.RedstoneControlModuleItem;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.CasingComponent;
 import aztech.modern_industrialization.machines.components.DropableComponent;
+import aztech.modern_industrialization.machines.components.OverdriveComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.components.UpgradeComponent;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
@@ -19,8 +20,7 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.extended_industrialization.api.ComponentStackHolder;
-import net.swedz.extended_industrialization.mixin.mi.accessor.CasingComponentAccessor;
+import net.swedz.tesseract.neoforge.compat.mi.api.ComponentStackHolder;
 
 import java.util.List;
 import java.util.Map;
@@ -46,15 +46,17 @@ public record MachineConfigPanel(
 		
 		BiConsumer<SlotPanel.SlotType, DropableComponent> action = (slotType, component) ->
 		{
-			if(!component.getDrop().isEmpty())
+			ItemStack drop = component.getDrop().copy();
+			if(!drop.isEmpty())
 			{
-				slotItems.put(slotType, component.getDrop());
+				slotItems.put(slotType, drop);
 			}
 		};
 		
-		machine.forComponentType(RedstoneControlComponent.class, (component) -> action.accept(SlotPanel.SlotType.REDSTONE_MODULE, component));
-		machine.forComponentType(UpgradeComponent.class, (component) -> action.accept(SlotPanel.SlotType.UPGRADES, component));
-		machine.forComponentType(CasingComponent.class, (component) -> action.accept(SlotPanel.SlotType.CASINGS, component));
+		machine.components.forType(RedstoneControlComponent.class, (component) -> action.accept(SlotPanel.SlotType.REDSTONE_MODULE, component));
+		machine.components.forType(UpgradeComponent.class, (component) -> action.accept(SlotPanel.SlotType.UPGRADES, component));
+		machine.components.forType(CasingComponent.class, (component) -> action.accept(SlotPanel.SlotType.CASINGS, component));
+		machine.components.forType(OverdriveComponent.class, (component) -> action.accept(SlotPanel.SlotType.OVERDRIVE_MODULE, component));
 		
 		return new MachineConfigPanel(slotItems);
 	}
@@ -86,7 +88,7 @@ public record MachineConfigPanel(
 	@Override
 	public boolean matches(MachineBlockEntity target)
 	{
-		return target.mapComponentOrDefault(SlotPanel.Server.class, (component) -> true, false);
+		return target.components.mapOrDefault(SlotPanel.Server.class, (component) -> true, false);
 	}
 	
 	private boolean insertItemToRedstoneComponent(Player player, MachineBlockEntity target, RedstoneControlComponent component, ComponentStackHolder componentStackHolder, ItemStack item, Simulation simulation)
@@ -186,7 +188,7 @@ public record MachineConfigPanel(
 	
 	private boolean insertItemToCasingComponent(Player player, MachineBlockEntity target, CasingComponent component, ComponentStackHolder componentStackHolder, ItemStack item, Simulation simulation)
 	{
-		CableTier currentTier = ((CasingComponentAccessor) component).getCurrentTier();
+		CableTier currentTier = component.getCableTier();
 		ItemStack componentItem = componentStackHolder.getStack();
 		if(!item.isEmpty())
 		{
@@ -208,6 +210,30 @@ public record MachineConfigPanel(
 		return false;
 	}
 	
+	private boolean insertItemToOverdriveComponent(Player player, MachineBlockEntity target, OverdriveComponent component, ComponentStackHolder componentStackHolder, ItemStack item, Simulation simulation)
+	{
+		ItemStack componentItem = componentStackHolder.getStack();
+		if(MIItem.OVERDRIVE_MODULE.is(item))
+		{
+			if(simulation.isActing())
+			{
+				ItemStack insertItem;
+				if(componentItem.isEmpty())
+				{
+					insertItem = item.copyWithCount(1);
+					item.consume(1, player);
+				}
+				else
+				{
+					insertItem = componentItem.copy();
+				}
+				componentStackHolder.setStack(insertItem);
+			}
+			return true;
+		}
+		return false;
+	}
+	
 	private <T> boolean insertItemToComponent(Player player, MachineBlockEntity target, T component, ComponentStackHolder componentStackHolder, ItemStack item, Simulation simulation)
 	{
 		return switch (component)
@@ -218,6 +244,8 @@ public record MachineConfigPanel(
 					this.insertItemToUpgradeComponent(player, target, upgradeComponent, componentStackHolder, item, simulation);
 			case CasingComponent casingComponent ->
 					this.insertItemToCasingComponent(player, target, casingComponent, componentStackHolder, item, simulation);
+			case OverdriveComponent overdriveComponent ->
+					this.insertItemToOverdriveComponent(player, target, overdriveComponent, componentStackHolder, item, simulation);
 			default -> false;
 		};
 	}
@@ -230,13 +258,16 @@ public record MachineConfigPanel(
 		}
 		boolean success = false;
 		
-		ItemStack slotItem = slotItems.get(slotType);
+		ItemStack slotItem = slotItems.get(slotType).copy();
+		List<ItemStack> matchingItems = player.hasInfiniteMaterials() ? List.of(slotItem) : findItemsMatching(player.getInventory(), slotItem);
 		
-		List<ItemStack> matchingItems = player.hasInfiniteMaterials() ? List.of(slotItem.copy()) : findItemsMatching(player.getInventory(), slotItem);
-		
-		if(matchingItems.isEmpty() && componentStackHolder instanceof RedstoneControlComponent && !componentStackHolder.getStack().isEmpty())
+		if(matchingItems.isEmpty() && componentStackHolder instanceof RedstoneControlComponent)
 		{
-			matchingItems.add(componentStackHolder.getStack().copy());
+			ItemStack componentStack = componentStackHolder.getStack().copy();
+			if(!componentStack.isEmpty())
+			{
+				matchingItems.add(componentStack);
+			}
 		}
 		
 		for(ItemStack matchingItem : matchingItems)
@@ -274,7 +305,7 @@ public record MachineConfigPanel(
 		
 		Inventory inventory = player.getInventory();
 		
-		target.forComponentType(componentType, (component) ->
+		target.components.forType(componentType, (component) ->
 		{
 			if(slotItems.containsKey(slotType))
 			{
@@ -301,6 +332,7 @@ public record MachineConfigPanel(
 		boolean redstone = this.applyComponent(player, target, RedstoneControlComponent.class, SlotPanel.SlotType.REDSTONE_MODULE, simulation);
 		boolean upgrade = this.applyComponent(player, target, UpgradeComponent.class, SlotPanel.SlotType.UPGRADES, simulation);
 		boolean casing = this.applyComponent(player, target, CasingComponent.class, SlotPanel.SlotType.CASINGS, simulation);
-		return redstone || upgrade || casing;
+		boolean overdrive = this.applyComponent(player, target, OverdriveComponent.class, SlotPanel.SlotType.OVERDRIVE_MODULE, simulation);
+		return redstone || upgrade || casing || overdrive;
 	}
 }

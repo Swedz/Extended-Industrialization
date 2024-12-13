@@ -4,6 +4,10 @@
     "minecraft:apple",
     "minecraft:moss_carpet",
     "minecraft:mangrove_roots",
-    "#minecraft:saplings"
+    "#minecraft:saplings",
+    {
+      "id": "#rootsclassic:berries",
+      "required": false
+    }
   ]
 }
