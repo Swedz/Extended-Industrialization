@@ -69,7 +69,7 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 			{
 				ItemStack itemStack = item.getDefaultInstance();
 				FoodProperties foodProperties = item.getFoodProperties(itemStack, null);
-				if(foodProperties != null)
+				if(foodProperties != null && foodProperties.nutrition() > 0)
 				{
 					FoodProperties food = item.getFoodProperties(item.getDefaultInstance(), null);
 					recipes.add(this.generateCannedFood(item, food));
