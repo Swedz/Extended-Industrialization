@@ -58,7 +58,7 @@ public final class EIArmorMaterials
 						},
 						List.of(
 								new ArmorMaterial.Layer(id, "", true),
-								new ArmorMaterial.Layer(id, "_overlay", false)
+								new ArmorMaterial.Layer(id, "_overlay", quantum)
 						),
 						quantum ? 0 : 3,
 						0.1f

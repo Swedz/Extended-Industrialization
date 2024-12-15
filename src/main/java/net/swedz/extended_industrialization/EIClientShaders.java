@@ -27,6 +27,7 @@ public final class EIClientShaders
 	public static final VertexFormat QUANTUM_VERTEX_FORMAT = VertexFormat.builder()
 			.add("Position", VertexFormatElement.POSITION)
 			.add("UV0", VertexFormatElement.UV0)
+			.add("Color", VertexFormatElement.COLOR)
 			.build();
 	
 	@SubscribeEvent

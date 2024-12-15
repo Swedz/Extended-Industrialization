@@ -68,6 +68,14 @@ public class NanoArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>> 
 		return RenderType.create("quantum", EIClientShaders.QUANTUM_VERTEX_FORMAT, VertexFormat.Mode.QUADS, 1536, false, false, state);
 	}
 	
+	private static boolean isQuantumArmor(ItemStack stack)
+	{
+		return stack.is(EIItems.QUANTUM_NANO_HELMET.asItem()) ||
+			   stack.is(EIItems.QUANTUM_NANO_CHESTPLATE.asItem()) ||
+			   stack.is(EIItems.QUANTUM_NANO_LEGGINGS.asItem()) ||
+			   stack.is(EIItems.QUANTUM_NANO_BOOTS.asItem());
+	}
+	
 	public NanoArmorLayer(RenderLayerParent<T, M> renderer, NanoArmorModel<T> innerModel, NanoArmorModel<T> outerModel, ModelManager modelManager)
 	{
 		super(renderer, innerModel, outerModel, modelManager);
@@ -101,18 +109,12 @@ public class NanoArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>> 
 			for(int layerIndex = 0; layerIndex < armorMaterial.layers().size(); ++layerIndex)
 			{
 				ArmorMaterial.Layer armorMaterialLayer = armorMaterial.layers().get(layerIndex);
-				if(layerIndex == 1 && (stack.is(EIItems.QUANTUM_NANO_HELMET.asItem()) || stack.is(EIItems.QUANTUM_NANO_CHESTPLATE.asItem()) || stack.is(EIItems.QUANTUM_NANO_LEGGINGS.asItem()) || stack.is(EIItems.QUANTUM_NANO_BOOTS.asItem())))
-				{
-					ResourceLocation texture = ClientHooks.getArmorTexture(entity, stack, armorMaterialLayer, usesInnerModel, slot);
-					VertexConsumer buffer = bufferSource.getBuffer(createQuantum(texture));
-					model.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, -1);
-					continue;
-				}
 				int layerColor = extensions.getArmorLayerTintColor(stack, entity, armorMaterialLayer, layerIndex, fallbackColor);
 				if(layerColor != 0)
 				{
 					ResourceLocation texture = ClientHooks.getArmorTexture(entity, stack, armorMaterialLayer, usesInnerModel, slot);
-					VertexConsumer buffer = bufferSource.getBuffer(ARMOR_CUTOUT_WITH_TRANSPARENCY.apply(texture));
+					RenderType renderType = layerIndex == 1 && isQuantumArmor(stack) ? createQuantum(texture) : ARMOR_CUTOUT_WITH_TRANSPARENCY.apply(texture);
+					VertexConsumer buffer = bufferSource.getBuffer(renderType);
 					model.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, layerColor);
 				}
 			}

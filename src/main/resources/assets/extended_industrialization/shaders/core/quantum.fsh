@@ -10,6 +10,7 @@ uniform int StarLayers;
 
 in vec4 texProj0;
 in vec2 texCoord0;
+in vec4 shaderColor;
 
 const mat4 SCALE_TRANSLATE = mat4(
 0.5, 0.0, 0.0, 0.5,
@@ -42,6 +43,7 @@ void main() {
         for (int i = 0; i < StarLayers; i++) {
             color += textureProj(Sampler0, texProj0 * starLayer(float(i + 1))).rgb;
         }
+        color *= shaderColor.rgb;
         fragColor = vec4(color, 1.0);
     } else {
         discard;
