@@ -3,49 +3,76 @@
 #moj_import <matrix.glsl>
 
 uniform sampler2D Sampler0;
+// The quantum star textures
 uniform sampler2D Sampler1;
+uniform sampler2D Sampler2;
+uniform sampler2D Sampler3;
+uniform sampler2D Sampler4;
+uniform sampler2D Sampler5;
 
 uniform float GameTime;
 uniform int StarLayers;
 
-in vec4 texProj0;
 in vec2 texCoord0;
 in vec4 shaderColor;
 
-const mat4 SCALE_TRANSLATE = mat4(
-0.5, 0.0, 0.0, 0.5,
-0.0, 0.5, 0.0, 0.5,
-0.0, 0.0, 1, 0.0,
-0.0, 0.0, 0.0, 1
-);
+const int stars[10] = int[](4, 4, 8, 5, 4, 4, 6, 4, 7, 3);
+const int starsTime[10] = int[](1200, 1200, 600, 1200, 1200, 1200, 1200, 1200, 1200, 1200);
 
-mat4 starLayer(float layer) {
-    mat4 translate = mat4(
-    1.0, 0.0, 0.0, 17.0 / layer,
-    0.0, 1.0, 0.0, (2.0 + layer / 1.5) * (GameTime * 1.5),
-    0.0, 0.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0
-    );
+float starCount(int layer)
+{
+	return float(stars[layer]);
+}
 
-    mat2 rotate = mat2_rotate_z(radians((layer * layer * 4321.0 + layer * 9.0) * 2.0));
+vec2 starUV(int layer)
+{
+	return vec2(1.0, 1.0 / starCount(layer));
+}
 
-    mat2 scale = mat2((4.5 - layer / 4.0) * (2.0 / 3.0));
+float starState(int layer)
+{
+	float starCount = starCount(layer);
+	return round(fract(GameTime * starsTime[layer]) * starCount);
+}
 
-    return mat4(scale * rotate) * translate * SCALE_TRANSLATE;
+vec2 transformUV(vec2 uv, int layer, float state)
+{
+	vec2 starUV = starUV(layer);
+	vec2 transformedUV = uv * starUV * 2;
+	vec2 translation = vec2(0, GameTime * 20);
+	transformedUV += translation;
+	transformedUV = mod(transformedUV, starUV);
+	transformedUV.y += state / starCount(layer);
+	return fract(transformedUV);
+}
+
+vec3 starTexture(int layer, vec2 uv)
+{
+	if (layer == 0) return texture(Sampler1, uv).rgb;
+	if (layer == 1) return texture(Sampler2, uv).rgb;
+	if (layer == 2) return texture(Sampler3, uv).rgb;
+	if (layer == 3) return texture(Sampler4, uv).rgb;
+	if (layer == 4) return texture(Sampler5, uv).rgb;
+	return vec3(0.0);
 }
 
 out vec4 fragColor;
 
-void main() {
-    float mask = texture(Sampler1, texCoord0).a;
-    if (mask > 0) {
-        vec3 color = vec3(0, 0, 0);
-        for (int i = 0; i < StarLayers; i++) {
-            color += textureProj(Sampler0, texProj0 * starLayer(float(i + 1))).rgb;
-        }
-        color *= shaderColor.rgb;
-        fragColor = vec4(color, 1.0);
-    } else {
-        discard;
-    }
+void main()
+{
+	float mask = texture(Sampler0, texCoord0).a;
+	if (mask > 0)
+	{
+		vec3 color = vec3(0, 0, 0);
+		for (int layer = 0; layer < StarLayers; layer++)
+		{
+			color += starTexture(layer, transformUV(texCoord0, layer, starState(layer)));
+		}
+		color *= shaderColor.rgb;
+		fragColor = vec4(color, 1.0);
+	}
+	else
+	{
+		discard;
+	}
 }

@@ -9,7 +9,6 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -23,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.neoforged.neoforge.client.ClientHooks;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientShaders;
 import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
@@ -54,14 +54,22 @@ public class NanoArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>> 
 	
 	private static final Function<ResourceLocation, RenderType> QUANTUM = Util.memoize(NanoArmorLayer::createQuantum);
 	
+	private static MultiTextureStateShard quantumTextures(ResourceLocation maskTexture)
+	{
+		var builder = MultiTextureStateShard.builder()
+				.add(maskTexture, false, false);
+		for(int i = 1; i <= 5; i++)
+		{
+			builder.add(EI.id("textures/shaders/quantum/%d.png".formatted(i)), false, false);
+		}
+		return builder.build();
+	}
+	
 	public static RenderType createQuantum(ResourceLocation id)
 	{
 		var state = RenderType.CompositeState.builder()
 				.setShaderState(EIClientShaders.QUANTUM)
-				.setTextureState(MultiTextureStateShard.builder()
-						.add(TheEndPortalRenderer.END_PORTAL_LOCATION, false, false)
-						.add(id, false, false)
-						.build())
+				.setTextureState(quantumTextures(id))
 				.setCullState(NO_CULL)
 				.setLayeringState(VIEW_OFFSET_Z_LAYERING)
 				.createCompositeState(false);
