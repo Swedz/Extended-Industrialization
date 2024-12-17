@@ -3,57 +3,48 @@
 #moj_import <matrix.glsl>
 
 uniform sampler2D Sampler0;
-// The quantum star textures
 uniform sampler2D Sampler1;
-uniform sampler2D Sampler2;
-uniform sampler2D Sampler3;
-uniform sampler2D Sampler4;
-uniform sampler2D Sampler5;
+uniform vec4 QuantumStarUV1;
+uniform vec4 QuantumStarUV2;
+uniform vec4 QuantumStarUV3;
+uniform vec4 QuantumStarUV4;
+uniform vec4 QuantumStarUV5;
 
 uniform float GameTime;
-uniform int StarLayers;
+uniform int QuantumStarLayers;
+
+const vec2 starMotion[5] = vec2[](
+vec2(0.0, 20.0),
+vec2(0.0, 40.0),
+vec2(0.0, 10.0),
+vec2(0.0, 40.0),
+vec2(0.0, 20.0)
+);
 
 in vec2 texCoord0;
 in vec4 shaderColor;
 
-const int stars[10] = int[](4, 4, 8, 5, 4, 4, 6, 4, 7, 3);
-const int starsTime[10] = int[](1200, 1200, 600, 1200, 1200, 1200, 1200, 1200, 1200, 1200);
-
-float starCount(int layer)
+vec4 starUV(int layer)
 {
-	return float(stars[layer]);
+	if (layer == 0) return QuantumStarUV1;
+	if (layer == 1) return QuantumStarUV2;
+	if (layer == 2) return QuantumStarUV3;
+	if (layer == 3) return QuantumStarUV4;
+	if (layer == 4) return QuantumStarUV5;
+	return vec4(0);
 }
 
-vec2 starUV(int layer)
+vec2 transformUV(vec2 uv, int layer)
 {
-	return vec2(1.0, 1.0 / starCount(layer));
-}
-
-float starState(int layer)
-{
-	float starCount = starCount(layer);
-	return round(fract(GameTime * starsTime[layer]) * starCount);
-}
-
-vec2 transformUV(vec2 uv, int layer, float state)
-{
-	vec2 starUV = starUV(layer);
-	vec2 transformedUV = uv * starUV * 2;
-	vec2 translation = vec2(0, GameTime * 20);
+	vec4 starUV = starUV(layer);
+	vec2 minUV = starUV.xy;
+	vec2 maxUV = starUV.zw;
+	vec2 transformedUV = uv;
+	transformedUV.y *= 0.5;
+	vec2 translation = vec2(GameTime) * starMotion[layer];
 	transformedUV += translation;
-	transformedUV = mod(transformedUV, starUV);
-	transformedUV.y += state / starCount(layer);
+	transformedUV = mod(transformedUV - minUV, maxUV - minUV) + minUV;
 	return fract(transformedUV);
-}
-
-vec3 starTexture(int layer, vec2 uv)
-{
-	if (layer == 0) return texture(Sampler1, uv).rgb;
-	if (layer == 1) return texture(Sampler2, uv).rgb;
-	if (layer == 2) return texture(Sampler3, uv).rgb;
-	if (layer == 3) return texture(Sampler4, uv).rgb;
-	if (layer == 4) return texture(Sampler5, uv).rgb;
-	return vec3(0.0);
 }
 
 out vec4 fragColor;
@@ -64,9 +55,9 @@ void main()
 	if (mask > 0)
 	{
 		vec3 color = vec3(0, 0, 0);
-		for (int layer = 0; layer < StarLayers; layer++)
+		for (int layer = 0; layer < QuantumStarLayers; layer++)
 		{
-			color += starTexture(layer, transformUV(texCoord0, layer, starState(layer)));
+			color += texture(Sampler1, transformUV(texCoord0, layer)).rgb;
 		}
 		color *= shaderColor.rgb;
 		fragColor = vec4(color, 1.0);

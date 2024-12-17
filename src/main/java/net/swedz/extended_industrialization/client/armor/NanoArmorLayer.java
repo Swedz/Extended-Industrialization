@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.client.armor;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -25,8 +26,10 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientShaders;
 import net.swedz.extended_industrialization.EIItems;
+import net.swedz.extended_industrialization.client.shader.AtlasTextureStateShard;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 
+import java.util.List;
 import java.util.function.Function;
 
 import static net.minecraft.client.renderer.RenderStateShard.*;
@@ -54,22 +57,21 @@ public class NanoArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>> 
 	
 	private static final Function<ResourceLocation, RenderType> QUANTUM = Util.memoize(NanoArmorLayer::createQuantum);
 	
-	private static MultiTextureStateShard quantumTextures(ResourceLocation maskTexture)
+	private static RenderStateShard.EmptyTextureStateShard quantumTexture(ResourceLocation maskTexture)
 	{
-		var builder = MultiTextureStateShard.builder()
-				.add(maskTexture, false, false);
+		List<ResourceLocation> sprites = Lists.newArrayList();
 		for(int i = 1; i <= 5; i++)
 		{
-			builder.add(EI.id("textures/shaders/quantum/%d.png".formatted(i)), false, false);
+			sprites.add(EI.id("shaders/quantum/%d".formatted(i)));
 		}
-		return builder.build();
+		return new AtlasTextureStateShard(maskTexture, EI.id("textures/atlas/quantum.png"), sprites, false, false);
 	}
 	
 	public static RenderType createQuantum(ResourceLocation id)
 	{
 		var state = RenderType.CompositeState.builder()
 				.setShaderState(EIClientShaders.QUANTUM)
-				.setTextureState(quantumTextures(id))
+				.setTextureState(quantumTexture(id))
 				.setCullState(NO_CULL)
 				.setLayeringState(VIEW_OFFSET_Z_LAYERING)
 				.createCompositeState(false);
@@ -121,7 +123,7 @@ public class NanoArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>> 
 				if(layerColor != 0)
 				{
 					ResourceLocation texture = ClientHooks.getArmorTexture(entity, stack, armorMaterialLayer, usesInnerModel, slot);
-					RenderType renderType = layerIndex == 1 && isQuantumArmor(stack) ? createQuantum(texture) : ARMOR_CUTOUT_WITH_TRANSPARENCY.apply(texture);
+					RenderType renderType = layerIndex == 1 && isQuantumArmor(stack) ? QUANTUM.apply(texture) : ARMOR_CUTOUT_WITH_TRANSPARENCY.apply(texture);
 					VertexConsumer buffer = bufferSource.getBuffer(renderType);
 					model.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, layerColor);
 				}
