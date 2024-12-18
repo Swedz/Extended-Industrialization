@@ -34,7 +34,7 @@ import java.util.function.BiFunction;
 
 import static net.minecraft.client.renderer.RenderStateShard.*;
 
-public class WingNanoArmorDecoration<T extends LivingEntity> extends NanoArmorDecoration<T>
+public final class WingNanoArmorDecoration<T extends LivingEntity> extends NanoArmorDecoration<T>
 {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(EI.id("nano_armor"), "wing");
 	
@@ -121,7 +121,7 @@ public class WingNanoArmorDecoration<T extends LivingEntity> extends NanoArmorDe
 	
 	private static ResourceLocation getWingTexture(int layerIndex)
 	{
-		return EI.id("textures/models/armor/nano_quantum_wing%s.png".formatted(layerIndex == 1 ? "_overlay" : ""));
+		return EI.id("textures/models/armor/nano_decorations/wing%s.png".formatted(layerIndex == 1 ? "_overlay" : ""));
 	}
 	
 	public ModelPart leftWingFront, leftWingBack, rightWingFront, rightWingBack;

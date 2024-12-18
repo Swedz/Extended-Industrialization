@@ -36,7 +36,7 @@ import java.util.function.Function;
 
 import static net.minecraft.client.renderer.RenderStateShard.*;
 
-public class NanoArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends HumanoidArmorLayer<T, M, NanoArmorModel<T>>
+public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends HumanoidArmorLayer<T, M, NanoArmorModel<T>>
 {
 	private static final BiFunction<ResourceLocation, Boolean, RenderType> ARMOR_CUTOUT_WITH_TRANSPARENCY = Util.memoize(NanoArmorLayer::armorCutoutWithTransparency);
 	

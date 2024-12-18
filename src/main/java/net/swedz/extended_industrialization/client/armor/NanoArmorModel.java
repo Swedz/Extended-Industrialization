@@ -16,7 +16,7 @@ import net.swedz.extended_industrialization.EI;
 
 import java.util.List;
 
-public class NanoArmorModel<T extends LivingEntity> extends HumanoidArmorModel<T>
+public final class NanoArmorModel<T extends LivingEntity> extends HumanoidArmorModel<T>
 {
 	public static final ModelLayerLocation INNER_LAYER = new ModelLayerLocation(EI.id("nano_armor"), "inner_armor");
 	public static final ModelLayerLocation OUTER_LAYER = new ModelLayerLocation(EI.id("nano_armor"), "outer_armor");
