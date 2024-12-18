@@ -27,7 +27,12 @@ public abstract class NanoArmorDecoration<T extends LivingEntity> extends Humano
 		return slot;
 	}
 	
-	public abstract boolean test(T entity, EquipmentSlot slot, ItemStack stack);
+	public final boolean test(T entity, EquipmentSlot slot, ItemStack stack)
+	{
+		return this.slot == slot && this.shouldRender(entity, slot, stack);
+	}
+	
+	protected abstract boolean shouldRender(T entity, EquipmentSlot slot, ItemStack stack);
 	
 	public abstract void render(T entity, PoseStack poseStack, MultiBufferSource bufferSource, EquipmentSlot slot, int packedLight,
 								ArmorMaterial.Layer armorLayer, int armorLayerIndex, int armorLayerColor, boolean armorLayerIsColored);

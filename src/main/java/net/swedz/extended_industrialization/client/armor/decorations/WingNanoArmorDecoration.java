@@ -137,7 +137,7 @@ public final class WingNanoArmorDecoration<T extends LivingEntity> extends NanoA
 	}
 	
 	@Override
-	public boolean test(T entity, EquipmentSlot slot, ItemStack stack)
+	protected boolean shouldRender(T entity, EquipmentSlot slot, ItemStack stack)
 	{
 		return NanoArmorLayer.isQuantumArmor(stack);
 	}

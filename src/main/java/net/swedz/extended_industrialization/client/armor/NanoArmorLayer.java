@@ -117,7 +117,7 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 			{
 				this.getParentModel().copyPropertiesTo(decoration);
 				decoration.copyFrom(this.getParentModel());
-				decoration.setAllVisible(decoration.slot() == slot && decoration.test(entity, slot, stack));
+				decoration.setAllVisible(decoration.test(entity, slot, stack));
 			}
 			
 			boolean usesInnerModel = this.usesInnerModel(slot);
@@ -136,7 +136,7 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 					boolean isColored = layerColor != -1;
 					for(NanoArmorDecoration<T> decoration : decorations)
 					{
-						if(decoration.slot() == slot && decoration.test(entity, slot, stack))
+						if(decoration.test(entity, slot, stack))
 						{
 							decoration.render(entity, poseStack, bufferSource, slot, packedLight, armorMaterialLayer, layerIndex, layerColor, isColored);
 						}
