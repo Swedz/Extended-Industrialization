@@ -32,5 +32,5 @@ public abstract class NanoArmorDecoration<T extends LivingEntity> extends Humano
 	public abstract void render(T entity, PoseStack poseStack, MultiBufferSource bufferSource, EquipmentSlot slot, int packedLight,
 								ArmorMaterial.Layer armorLayer, int armorLayerIndex, int armorLayerColor, boolean armorLayerIsColored);
 	
-	public abstract void copyFromDefault(HumanoidModel model);
+	public abstract void copyFrom(HumanoidModel model);
 }

@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.client.armor;
 
 import net.minecraft.client.model.HumanoidArmorModel;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -156,13 +155,5 @@ public final class NanoArmorModel<T extends LivingEntity> extends HumanoidArmorM
 			return List.of(leftLeg, rightLeg);
 		}
 		return List.of();
-	}
-	
-	public void copyFromDefault(HumanoidModel model)
-	{
-		body.copyFrom(model.body);
-		head.copyFrom(model.head);
-		leftArm.copyFrom(model.leftArm);
-		rightArm.copyFrom(model.rightArm);
 	}
 }

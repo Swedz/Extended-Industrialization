@@ -116,6 +116,7 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 			for(NanoArmorDecoration<T> decoration : decorations)
 			{
 				this.getParentModel().copyPropertiesTo(decoration);
+				decoration.copyFrom(this.getParentModel());
 				decoration.setAllVisible(decoration.slot() == slot && decoration.test(entity, slot, stack));
 			}
 			

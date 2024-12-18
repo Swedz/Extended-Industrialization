@@ -38,9 +38,10 @@ public final class WingNanoArmorDecoration<T extends LivingEntity> extends NanoA
 {
 	public static final ModelLayerLocation LAYER = new ModelLayerLocation(EI.id("nano_armor"), "wing");
 	
+	private static float WING_ROTATION = 0.2f;
+	
 	public static LayerDefinition createLayer()
 	{
-		float rotation = 0.2f;
 		var deformation = new CubeDeformation(0);
 		var mesh = createMesh(deformation, 0);
 		var root = createHumanoidAlias(mesh);
@@ -54,7 +55,7 @@ public final class WingNanoArmorDecoration<T extends LivingEntity> extends NanoA
 								32, 32, 0,
 								Set.of(Direction.NORTH)
 						),
-				PartPose.rotation(0, -rotation, 0)
+				PartPose.rotation(0, -WING_ROTATION, 0)
 		);
 		root.addOrReplaceChild(
 				"left_wing_back",
@@ -65,7 +66,7 @@ public final class WingNanoArmorDecoration<T extends LivingEntity> extends NanoA
 								32, 32, 0,
 								Set.of(Direction.SOUTH)
 						),
-				PartPose.rotation(0, -rotation, 0)
+				PartPose.rotation(0, -WING_ROTATION, 0)
 		);
 		root.addOrReplaceChild(
 				"right_wing_front",
@@ -77,7 +78,7 @@ public final class WingNanoArmorDecoration<T extends LivingEntity> extends NanoA
 								-32, 32, 0,
 								Set.of(Direction.SOUTH)
 						),
-				PartPose.rotation(0, rotation, 0)
+				PartPose.rotation(0, WING_ROTATION, 0)
 		);
 		root.addOrReplaceChild(
 				"right_wing_back",
@@ -88,7 +89,7 @@ public final class WingNanoArmorDecoration<T extends LivingEntity> extends NanoA
 								-32, 32, 0,
 								Set.of(Direction.NORTH)
 						),
-				PartPose.rotation(0, rotation, 0)
+				PartPose.rotation(0, WING_ROTATION, 0)
 		);
 		return LayerDefinition.create(mesh, 32, 32);
 	}
@@ -164,11 +165,15 @@ public final class WingNanoArmorDecoration<T extends LivingEntity> extends NanoA
 	}
 	
 	@Override
-	public void copyFromDefault(HumanoidModel model)
+	public void copyFrom(HumanoidModel model)
 	{
 		leftWingFront.copyFrom(model.body);
+		leftWingFront.yRot = -WING_ROTATION;
 		leftWingBack.copyFrom(model.body);
+		leftWingBack.yRot = -WING_ROTATION;
 		rightWingFront.copyFrom(model.body);
+		rightWingFront.yRot = WING_ROTATION;
 		rightWingBack.copyFrom(model.body);
+		rightWingBack.yRot = WING_ROTATION;
 	}
 }
