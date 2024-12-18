@@ -15,14 +15,21 @@ import java.io.IOException;
 @EventBusSubscriber(value = Dist.CLIENT, modid = EI.ID, bus = EventBusSubscriber.Bus.MOD)
 public final class EIClientShaders
 {
+	private static ShaderInstance ARMOR_CUTOUT_GLOW_INSTANCE;
 	private static ShaderInstance QUANTUM_INSTANCE;
+	
+	public static ShaderInstance armorCutoutGlow()
+	{
+		return ARMOR_CUTOUT_GLOW_INSTANCE;
+	}
 	
 	public static ShaderInstance quantum()
 	{
 		return QUANTUM_INSTANCE;
 	}
 	
-	public static final RenderStateShard.ShaderStateShard QUANTUM = new RenderStateShard.ShaderStateShard(EIClientShaders::quantum);
+	public static final RenderStateShard.ShaderStateShard ARMOR_CUTOUT_GLOW = new RenderStateShard.ShaderStateShard(EIClientShaders::armorCutoutGlow);
+	public static final RenderStateShard.ShaderStateShard QUANTUM           = new RenderStateShard.ShaderStateShard(EIClientShaders::quantum);
 	
 	public static final VertexFormat QUANTUM_VERTEX_FORMAT = VertexFormat.builder()
 			.add("Position", VertexFormatElement.POSITION)
@@ -35,7 +42,8 @@ public final class EIClientShaders
 	{
 		try
 		{
-			event.registerShader(new ShaderInstance(event.getResourceProvider(), EI.id("quantum"), DefaultVertexFormat.POSITION), (shader) -> QUANTUM_INSTANCE = shader);
+			event.registerShader(new ShaderInstance(event.getResourceProvider(), EI.id("armor_cutout_glow"), DefaultVertexFormat.NEW_ENTITY), (shader) -> ARMOR_CUTOUT_GLOW_INSTANCE = shader);
+			event.registerShader(new ShaderInstance(event.getResourceProvider(), EI.id("quantum"), QUANTUM_VERTEX_FORMAT), (shader) -> QUANTUM_INSTANCE = shader);
 		}
 		catch (IOException ex)
 		{
