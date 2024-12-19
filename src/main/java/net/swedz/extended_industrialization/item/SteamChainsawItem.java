@@ -256,15 +256,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 		if(fuel.burnTicks() > 0)
 		{
 			stack.set(MIComponents.STEAM_DRILL_FUEL, new SteamDrillFuel(Math.max(0, fuel.burnTicks() - 5), fuel.maxBurnTicks()));
-			int water = Math.max(0, stack.get(MIComponents.WATER) - 5);
-			if(water > 0)
-			{
-				stack.set(MIComponents.WATER, water);
-			}
-			else
-			{
-				stack.remove(MIComponents.WATER);
-			}
+			stack.update(MIComponents.WATER, 0, (water) -> Math.max(0, water - 5));
 		}
 		if(fuel.burnTicks() == 0)
 		{
