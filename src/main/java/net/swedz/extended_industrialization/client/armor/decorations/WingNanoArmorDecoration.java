@@ -113,7 +113,7 @@ public final class WingNanoArmorDecoration<T extends LivingEntity> extends NanoA
 				.setTextureState(new RenderStateShard.TextureStateShard(id, false, false))
 				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
 				.setLightmapState(LIGHTMAP)
-				.setOverlayState(OVERLAY)
+				.setOverlayState(NO_OVERLAY)
 				.setLayeringState(VIEW_OFFSET_Z_LAYERING)
 				.setDepthTestState(LEQUAL_DEPTH_TEST)
 				.createCompositeState(false);
@@ -147,7 +147,7 @@ public final class WingNanoArmorDecoration<T extends LivingEntity> extends NanoA
 					   ArmorMaterial.Layer armorLayer, int armorLayerIndex, int armorLayerColor, boolean armorLayerIsColored)
 	{
 		ResourceLocation texture = getWingTexture(armorLayerIndex);
-		RenderType renderType = WING.apply(texture, armorLayerIsColored);
+		RenderType renderType = createWing(texture, armorLayerIsColored);//WING.apply(texture, armorLayerIsColored);
 		VertexConsumer buffer = bufferSource.getBuffer(renderType);
 		this.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, armorLayerColor);
 	}
