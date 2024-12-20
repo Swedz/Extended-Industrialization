@@ -147,7 +147,7 @@ public final class WingNanoArmorDecoration<T extends LivingEntity> extends NanoA
 					   ArmorMaterial.Layer armorLayer, int armorLayerIndex, int armorLayerColor, boolean armorLayerIsColored)
 	{
 		ResourceLocation texture = getWingTexture(armorLayerIndex);
-		RenderType renderType = createWing(texture, armorLayerIsColored);//WING.apply(texture, armorLayerIsColored);
+		RenderType renderType = WING.apply(texture, armorLayerIsColored);
 		VertexConsumer buffer = bufferSource.getBuffer(renderType);
 		this.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, armorLayerColor);
 	}

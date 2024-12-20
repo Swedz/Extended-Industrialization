@@ -144,7 +144,7 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 					ResourceLocation texture = ClientHooks.getArmorTexture(entity, stack, armorMaterialLayer, usesInnerModel, slot);
 					RenderType renderType = layerIndex == 1 && isQuantum ?
 							QUANTUM.apply(texture) :
-							armorCutoutWithTransparency(texture, isColored);//ARMOR_CUTOUT_WITH_TRANSPARENCY.apply(texture, isColored);
+							ARMOR_CUTOUT_WITH_TRANSPARENCY.apply(texture, isColored);
 					VertexConsumer buffer = bufferSource.getBuffer(renderType);
 					model.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, layerColor);
 				}
