@@ -10,6 +10,7 @@ import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIConfig;
@@ -31,11 +32,16 @@ public final class ProcessingArrayMachineSlot
 		return 106 - (EIConfig.allowUpgradesInProcessingArray ? 0 : 20);
 	}
 	
-	public static boolean isMachine(ItemStack itemStack)
+	public static boolean isMachine(Item item)
 	{
-		return itemStack.getItem() instanceof BlockItem blockItem &&
+		return item instanceof BlockItem blockItem &&
 			   blockItem.getBlock() instanceof MachineBlock machineBlock &&
 			   machineBlock.getBlockEntityInstance() instanceof ElectricCraftingMachineBlockEntity;
+	}
+	
+	public static boolean isMachine(ItemStack itemStack)
+	{
+		return isMachine(itemStack.getItem());
 	}
 	
 	public static ElectricCraftingMachineBlockEntity getMachine(ItemStack itemStack)
