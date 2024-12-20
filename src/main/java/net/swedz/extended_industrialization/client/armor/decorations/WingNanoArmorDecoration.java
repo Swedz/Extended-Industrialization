@@ -51,7 +51,7 @@ public final class WingNanoArmorDecoration<T extends LivingEntity> extends NanoA
 						.texOffs(0, 0)
 						.mirror()
 						.addBox(
-								0, -12, 4.1f,
+								0, -12, 5,
 								32, 32, 0,
 								Set.of(Direction.NORTH)
 						),
@@ -62,7 +62,7 @@ public final class WingNanoArmorDecoration<T extends LivingEntity> extends NanoA
 				CubeListBuilder.create()
 						.texOffs(0, 0)
 						.addBox(
-								0, -12, 4.1f,
+								0, -12, 5,
 								32, 32, 0,
 								Set.of(Direction.SOUTH)
 						),
@@ -74,7 +74,7 @@ public final class WingNanoArmorDecoration<T extends LivingEntity> extends NanoA
 						.texOffs(0, 0)
 						.mirror()
 						.addBox(
-								0, -12, 4.1f,
+								0, -12, 5,
 								-32, 32, 0,
 								Set.of(Direction.SOUTH)
 						),
@@ -85,7 +85,7 @@ public final class WingNanoArmorDecoration<T extends LivingEntity> extends NanoA
 				CubeListBuilder.create()
 						.texOffs(0, 0)
 						.addBox(
-								0, -12, 4.1f,
+								0, -12, 5,
 								-32, 32, 0,
 								Set.of(Direction.NORTH)
 						),
