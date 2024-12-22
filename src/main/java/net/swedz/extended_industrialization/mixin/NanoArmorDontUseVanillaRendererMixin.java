@@ -16,13 +16,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class NanoArmorDontUseVanillaRendererMixin
 {
 	@Inject(
-			method = "renderArmorPiece",
+			method = "renderArmorPiece(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/EquipmentSlot;ILnet/minecraft/client/model/HumanoidModel;FFFFFF)V",
 			at = @At("HEAD"),
 			cancellable = true
 	)
-	private void render(PoseStack poseStack, MultiBufferSource buffer,
+	private void render(PoseStack poseStack, MultiBufferSource bufferSource,
 						LivingEntity livingEntity, EquipmentSlot slot,
-						int packedLight, HumanoidModel originalModel,
+						int packedLight, HumanoidModel p_model,
+						float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch,
 						CallbackInfo callback)
 	{
 		if(livingEntity.getItemBySlot(slot).getItem() instanceof NanoSuitArmorItem)
