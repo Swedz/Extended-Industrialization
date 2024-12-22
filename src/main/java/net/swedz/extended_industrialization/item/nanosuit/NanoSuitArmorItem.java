@@ -5,11 +5,15 @@ import com.google.common.collect.Lists;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -162,6 +166,21 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 				ability.onActivationChange(this, player, stack, activated);
 			}
 		});
+	}
+	
+	@Override
+	public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access)
+	{
+		if(action == ClickAction.SECONDARY && other.isEmpty())
+		{
+			this.setActivated(player, stack, !this.isActivated(stack));
+			if(player.level().isClientSide())
+			{
+				player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 1, 1);
+			}
+			return true;
+		}
+		return super.overrideOtherStackedOnMe(stack, other, slot, action, player, access);
 	}
 	
 	@Override
