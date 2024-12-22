@@ -61,7 +61,7 @@ public final class EIKeybinds
 					id,
 					KeyConflictContext.IN_GAME,
 					InputConstants.Type.KEYSYM,
-					GLFW.GLFW_KEY_U,
+					GLFW.GLFW_KEY_UNKNOWN,
 					CATEGORY
 			),
 			toggleableItemAction(EquipmentSlot.MAINHAND)
@@ -73,7 +73,7 @@ public final class EIKeybinds
 					id,
 					KeyConflictContext.IN_GAME,
 					InputConstants.Type.KEYSYM,
-					GLFW.GLFW_KEY_B,
+					GLFW.GLFW_KEY_UNKNOWN,
 					CATEGORY
 			),
 			toggleableItemAction(EquipmentSlot.HEAD)
@@ -85,7 +85,7 @@ public final class EIKeybinds
 					id,
 					KeyConflictContext.IN_GAME,
 					InputConstants.Type.KEYSYM,
-					GLFW.GLFW_KEY_N,
+					GLFW.GLFW_KEY_UNKNOWN,
 					CATEGORY
 			),
 			toggleableItemAction(EquipmentSlot.CHEST)
@@ -97,7 +97,7 @@ public final class EIKeybinds
 					id,
 					KeyConflictContext.IN_GAME,
 					InputConstants.Type.KEYSYM,
-					GLFW.GLFW_KEY_M,
+					GLFW.GLFW_KEY_UNKNOWN,
 					CATEGORY
 			),
 			toggleableItemAction(EquipmentSlot.LEGS)
