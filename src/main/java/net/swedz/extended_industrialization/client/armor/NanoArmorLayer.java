@@ -18,7 +18,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.neoforged.neoforge.client.ClientHooks;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.client.armor.decorations.NanoSuitDecorationModel;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 
@@ -28,14 +27,6 @@ import static net.swedz.extended_industrialization.EIClientRenderTypes.*;
 
 public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends HumanoidArmorLayer<T, M, NanoArmorModel<T>>
 {
-	public static boolean isQuantumArmor(ItemStack stack)
-	{
-		return stack.is(EIItems.QUANTUM_NANO_HELMET.asItem()) ||
-			   stack.is(EIItems.QUANTUM_NANO_CHESTPLATE.asItem()) ||
-			   stack.is(EIItems.QUANTUM_NANO_LEGGINGS.asItem()) ||
-			   stack.is(EIItems.QUANTUM_NANO_BOOTS.asItem());
-	}
-	
 	private final List<NanoSuitDecorationModel> decorations;
 	
 	public NanoArmorLayer(RenderLayerParent<T, M> renderer, NanoArmorModel<T> innerModel, NanoArmorModel<T> outerModel, List<NanoSuitDecorationModel> decorations, ModelManager modelManager)
@@ -70,7 +61,6 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 			}
 			
 			boolean usesInnerModel = this.usesInnerModel(slot);
-			boolean isQuantum = isQuantumArmor(stack);
 			
 			ArmorMaterial armorMaterial = item.getMaterial().value();
 			IClientItemExtensions extensions = IClientItemExtensions.of(stack);
@@ -87,11 +77,11 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 					{
 						if(decoration.test(entity, slot, stack))
 						{
-							decoration.render(entity, poseStack, bufferSource, slot, packedLight, armorMaterialLayer, layerIndex, layerColor, isColored);
+							decoration.render(entity, slot, stack, item, poseStack, bufferSource, packedLight, armorMaterialLayer, layerIndex, layerColor, isColored);
 						}
 					}
 					ResourceLocation texture = ClientHooks.getArmorTexture(entity, stack, armorMaterialLayer, usesInnerModel, slot);
-					RenderType renderType = layerIndex == 1 && isQuantum ?
+					RenderType renderType = layerIndex == 1 && item.isQuantum() ?
 							QUANTUM.apply(texture) :
 							ARMOR_CUTOUT_NO_CULL_WITH_TRANSPARENCY.apply(texture, isColored);
 					VertexConsumer buffer = bufferSource.getBuffer(renderType);

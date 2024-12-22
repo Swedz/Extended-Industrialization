@@ -17,8 +17,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.client.armor.NanoArmorLayer;
+import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 import net.swedz.extended_industrialization.item.nanosuit.decoration.NanoSuitDecoration;
 
 import java.util.List;
@@ -195,11 +196,11 @@ public final class MeowNanoSuitDecorationModel<T extends LivingEntity> extends N
 	}
 	
 	@Override
-	public void render(T entity, PoseStack poseStack, MultiBufferSource bufferSource, EquipmentSlot slot, int packedLight,
+	public void render(T entity, EquipmentSlot slot, ItemStack stack, NanoSuitArmorItem item,
+					   PoseStack poseStack, MultiBufferSource bufferSource, int packedLight,
 					   ArmorMaterial.Layer armorLayer, int armorLayerIndex, int armorLayerColor, boolean armorLayerIsColored)
 	{
-		boolean isQuantum = NanoArmorLayer.isQuantumArmor(entity.getItemBySlot(slot));
-		ResourceLocation texture = getTexture(isQuantum, armorLayerIndex);
+		ResourceLocation texture = getTexture(item.isQuantum(), armorLayerIndex);
 		RenderType renderType = ARMOR_CUTOUT_CULL_WITH_TRANSPARENCY.apply(texture, armorLayerIsColored);
 		VertexConsumer buffer = bufferSource.getBuffer(renderType);
 		this.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, armorLayerColor);

@@ -29,6 +29,7 @@ public abstract class NanoSuitDecorationModel<T extends LivingEntity> extends Hu
 			   decoration.equipmentSlot() == slot && decoration.isActiveFor(item, stack);
 	}
 	
-	public abstract void render(T entity, PoseStack poseStack, MultiBufferSource bufferSource, EquipmentSlot slot, int packedLight,
+	public abstract void render(T entity, EquipmentSlot slot, ItemStack stack, NanoSuitArmorItem item,
+								PoseStack poseStack, MultiBufferSource bufferSource, int packedLight,
 								ArmorMaterial.Layer armorLayer, int armorLayerIndex, int armorLayerColor, boolean armorLayerIsColored);
 }
