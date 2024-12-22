@@ -127,7 +127,7 @@ public final class EIItems
 				.map((d) -> d.itemProperty(item))
 				.filter(Objects::nonNull)
 				.toList();
-		return create(id, englishName, (p) -> new NanoSuitArmorItem(material, armorType, p.rarity(quantum ? Rarity.EPIC : ability.map(NanoSuitAbility::rarity).orElse(Rarity.UNCOMMON)), ability, quantum), EISortOrder.GEAR)
+		return create(id, englishName, (p) -> new NanoSuitArmorItem(material, armorType, p.rarity(quantum ? Rarity.EPIC : ability.map(NanoSuitAbility::rarity).orElse(Rarity.UNCOMMON)), ability, quantum), EISortOrder.GEAR.and(quantum).and(armorType))
 				.tag(armorTag, Tags.Items.ARMORS, ItemTags.TRIMMABLE_ARMOR, ItemTags.DYEABLE, EITags.Items.RAINBOW_DYEABLE)
 				.withRegistrationListener(CommonRegistrations::cauldronClearDye)
 				.withRegistrationListener(RainbowDataComponent::cauldronClearDyeAndRainbow)
