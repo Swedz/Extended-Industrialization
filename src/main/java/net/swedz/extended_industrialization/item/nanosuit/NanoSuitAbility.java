@@ -19,6 +19,7 @@ public interface NanoSuitAbility
 	NanoSuitGravichestplateAbility GRAVICHESTPLATE = new NanoSuitGravichestplateAbility();
 	NanoSuitNightVisionAbility     NIGHT_VISION    = new NanoSuitNightVisionAbility();
 	NanoSuitSpeedAbility           SPEED           = new NanoSuitSpeedAbility();
+	NanoSuitStepAbility            STEP            = new NanoSuitStepAbility();
 	
 	default Rarity rarity()
 	{
