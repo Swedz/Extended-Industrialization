@@ -80,7 +80,7 @@ public final class NanoSuitGravichestplateAbility implements NanoSuitAbility
 	public List<Component> getHelpTooltipLines(NanoSuitArmorItem item, ItemStack stack)
 	{
 		return List.of(
-				line(EIText.NANO_SUIT_HELP_CREATIVE_FLIGHT).arg("%s.toggle_chestplate_ability".formatted(EI.ID), KEYBIND_PARSER)
+				line(EIText.NANO_SUIT_HELP_CREATIVE_FLIGHT).arg("%s.toggle_chestplate_ability".formatted(EI.ID), KEYBIND_PARSER).arg("mouse.right", KEYBIND_PARSER)
 		);
 	}
 	

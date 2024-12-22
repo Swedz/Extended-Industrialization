@@ -144,7 +144,7 @@ public final class EITooltips
 						.arg(EIText.KEY_MOUSE_SCROLL.text().withStyle(NUMBER_TEXT)));
 				if(item.getToolType().canDo3by3())
 				{
-					lines.add(line(EIText.ELECTRIC_TOOL_HELP_4).arg("%s.toggle_main_hand_ability".formatted(EI.ID), KEYBIND_PARSER));
+					lines.add(line(EIText.ELECTRIC_TOOL_HELP_4).arg("%s.toggle_main_hand_ability".formatted(EI.ID), KEYBIND_PARSER).arg("mouse.right", KEYBIND_PARSER));
 				}
 				return lines;
 			}

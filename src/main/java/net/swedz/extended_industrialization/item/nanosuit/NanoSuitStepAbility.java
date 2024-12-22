@@ -59,7 +59,7 @@ public final class NanoSuitStepAbility implements NanoSuitAbility
 	public List<Component> getHelpTooltipLines(NanoSuitArmorItem item, ItemStack stack)
 	{
 		return List.of(
-				line(EIText.NANO_SUIT_HELP_STEP).arg("%s.toggle_boots_ability".formatted(EI.ID), KEYBIND_PARSER)
+				line(EIText.NANO_SUIT_HELP_STEP).arg("%s.toggle_boots_ability".formatted(EI.ID), KEYBIND_PARSER).arg("mouse.right", KEYBIND_PARSER)
 		);
 	}
 	
