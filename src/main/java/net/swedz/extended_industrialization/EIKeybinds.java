@@ -61,7 +61,7 @@ public final class EIKeybinds
 					id,
 					KeyConflictContext.IN_GAME,
 					InputConstants.Type.KEYSYM,
-					GLFW.GLFW_KEY_U,
+					GLFW.GLFW_KEY_UNKNOWN,
 					CATEGORY
 			),
 			toggleableItemAction(EquipmentSlot.MAINHAND)
@@ -73,7 +73,7 @@ public final class EIKeybinds
 					id,
 					KeyConflictContext.IN_GAME,
 					InputConstants.Type.KEYSYM,
-					GLFW.GLFW_KEY_B,
+					GLFW.GLFW_KEY_UNKNOWN,
 					CATEGORY
 			),
 			toggleableItemAction(EquipmentSlot.HEAD)
@@ -85,22 +85,34 @@ public final class EIKeybinds
 					id,
 					KeyConflictContext.IN_GAME,
 					InputConstants.Type.KEYSYM,
-					GLFW.GLFW_KEY_N,
+					GLFW.GLFW_KEY_UNKNOWN,
 					CATEGORY
 			),
 			toggleableItemAction(EquipmentSlot.CHEST)
 	);
-	public static final Keybind TOGGLE_LEGGINGS_ABILITY = create(
+	public static final Keybind TOGGLE_LEGGINGS_ABILITY   = create(
 			"toggle_leggings_ability",
 			"Toggle Leggings Ability",
 			(id) -> new KeyMapping(
 					id,
 					KeyConflictContext.IN_GAME,
 					InputConstants.Type.KEYSYM,
-					GLFW.GLFW_KEY_M,
+					GLFW.GLFW_KEY_UNKNOWN,
 					CATEGORY
 			),
 			toggleableItemAction(EquipmentSlot.LEGS)
+	);
+	public static final Keybind TOGGLE_BOOTS_ABILITY      = create(
+			"toggle_boots_ability",
+			"Toggle Boots Ability",
+			(id) -> new KeyMapping(
+					id,
+					KeyConflictContext.IN_GAME,
+					InputConstants.Type.KEYSYM,
+					GLFW.GLFW_KEY_UNKNOWN,
+					CATEGORY
+			),
+			toggleableItemAction(EquipmentSlot.FEET)
 	);
 	
 	private static Keybind create(String id, String englishName, Function<String, KeyMapping> creator, Runnable action)
