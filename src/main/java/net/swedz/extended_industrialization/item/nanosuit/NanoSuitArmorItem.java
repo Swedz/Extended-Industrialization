@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.item.nanosuit;
 
 import aztech.modern_industrialization.api.energy.CableTier;
+import com.google.common.collect.Lists;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -21,6 +22,8 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIArmorMaterials;
 import net.swedz.extended_industrialization.item.ElectricArmorItem;
 import net.swedz.extended_industrialization.item.ToggleableItem;
+import net.swedz.extended_industrialization.item.nanosuit.ability.NanoSuitAbility;
+import net.swedz.extended_industrialization.item.nanosuit.decoration.NanoSuitDecoration;
 import net.swedz.tesseract.neoforge.helper.ColorHelper;
 import net.swedz.tesseract.neoforge.item.ArmorTickHandler;
 import net.swedz.tesseract.neoforge.item.ArmorUnequippedHandler;
@@ -28,6 +31,7 @@ import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 import net.swedz.tesseract.neoforge.item.ExtraAttributeTooltipsHandler;
 import net.swedz.tesseract.neoforge.item.ItemHurtHandler;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -72,6 +76,19 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	public boolean isQuantum()
 	{
 		return quantum;
+	}
+	
+	public List<NanoSuitDecoration> decorations(ItemStack stack)
+	{
+		List<NanoSuitDecoration> decorations = Lists.newArrayList();
+		for(NanoSuitDecoration decoration : NanoSuitDecoration.values())
+		{
+			if(decoration.armorType() == type && (stack == null || decoration.isActiveFor(this, stack)))
+			{
+				decorations.add(decoration);
+			}
+		}
+		return Collections.unmodifiableList(decorations);
 	}
 	
 	@Override
@@ -170,8 +187,27 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	}
 	
 	@Override
+	public String getDescriptionId(ItemStack stack)
+	{
+		for(NanoSuitDecoration decoration : this.decorations(stack))
+		{
+			String descriptionId = decoration.getDescriptionId(this, stack);
+			if(descriptionId != null)
+			{
+				return descriptionId;
+			}
+		}
+		return super.getDescriptionId(stack);
+	}
+	
+	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag)
 	{
+		for(NanoSuitDecoration decoration : this.decorations(stack))
+		{
+			decoration.getTooltipLines(this, stack).ifPresent(tooltip::addAll);
+		}
+		
 		ability.flatMap((a) -> a.getTooltipLines(this, stack))
 				.ifPresent(tooltip::addAll);
 	}

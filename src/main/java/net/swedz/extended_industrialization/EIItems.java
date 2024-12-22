@@ -2,7 +2,9 @@ package net.swedz.extended_industrialization;
 
 import aztech.modern_industrialization.api.energy.CableTier;
 import com.google.common.collect.Sets;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.food.FoodProperties;
@@ -11,6 +13,7 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.extended_industrialization.component.RainbowDataComponent;
@@ -18,14 +21,17 @@ import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.machineconfig.MachineConfigCardItem;
-import net.swedz.extended_industrialization.item.nanosuit.NanoSuitAbility;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
+import net.swedz.extended_industrialization.item.nanosuit.ability.NanoSuitAbility;
+import net.swedz.extended_industrialization.item.nanosuit.decoration.NanoSuitDecoration;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
 import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
 import net.swedz.tesseract.neoforge.registry.common.CommonRegistrations;
 import net.swedz.tesseract.neoforge.registry.common.MICommonCapabitilies;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -57,15 +63,15 @@ public final class EIItems
 	public static final ItemHolder<ElectricToolItem>  ELECTRIC_CHAINSAW       = create("electric_chainsaw", "Electric Chainsaw", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.CHAINSAW), EISortOrder.GEAR).tag(ItemTags.AXES, ItemTags.HOES, ItemTags.SWORDS, Tags.Items.TOOLS_SHEAR).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModelBuilder(CommonModelBuilders::handheld).register();
 	public static final ItemHolder<ElectricToolItem>  ELECTRIC_MINING_DRILL   = create("electric_mining_drill", "Electric Mining Drill", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.DRILL), EISortOrder.GEAR).tag(ItemTags.PICKAXES, ItemTags.SHOVELS).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModelBuilder(CommonModelBuilders::handheld).register();
 	public static final ItemHolder<ElectricToolItem>  ULTIMATE_LASER_DRILL    = create("ultimate_laser_drill", "Ultimate Laser Drill", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.ULTIMATE), EISortOrder.GEAR).tag(ItemTags.DYEABLE, EITags.Items.RAINBOW_DYEABLE, ItemTags.PICKAXES, ItemTags.SHOVELS, ItemTags.AXES, ItemTags.HOES, ItemTags.SWORDS, Tags.Items.TOOLS_SHEAR).withRegistrationListener(CommonRegistrations::cauldronClearDye).withRegistrationListener(RainbowDataComponent::cauldronClearDyeAndRainbow).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModelBuilder(CommonModelBuilders::handheldOverlayed).register();
-	public static final ItemHolder<NanoSuitArmorItem> NANO_HELMET             = createNanosuitArmor("nano_helmet", "Nano Helmet", ArmorItem.Type.HELMET, NanoSuitAbility.NIGHT_VISION);
-	public static final ItemHolder<NanoSuitArmorItem> NANO_CHESTPLATE         = createNanosuitArmor("nano_chestplate", "Nano Chestplate", ArmorItem.Type.CHESTPLATE);
-	public static final ItemHolder<NanoSuitArmorItem> NANO_GRAVICHESTPLATE    = createNanosuitArmor("nano_gravichestplate", "Nano Gravichestplate", ArmorItem.Type.CHESTPLATE, EIArmorMaterials.NANO_GRAVICHESTPLATE, NanoSuitAbility.GRAVICHESTPLATE);
-	public static final ItemHolder<NanoSuitArmorItem> NANO_LEGGINGS           = createNanosuitArmor("nano_leggings", "Nano Leggings", ArmorItem.Type.LEGGINGS, NanoSuitAbility.SPEED);
-	public static final ItemHolder<NanoSuitArmorItem> NANO_BOOTS              = createNanosuitArmor("nano_boots", "Nano Boots", ArmorItem.Type.BOOTS);
-	public static final ItemHolder<NanoSuitArmorItem> QUANTUM_NANO_HELMET     = createNanosuitArmor("quantum_nano_helmet", "Quantum Nano Helmet", ArmorItem.Type.HELMET, EIArmorMaterials.NANO_QUANTUM, NanoSuitAbility.NIGHT_VISION);
-	public static final ItemHolder<NanoSuitArmorItem> QUANTUM_NANO_CHESTPLATE = createNanosuitArmor("quantum_nano_chestplate", "Quantum Nano Chestplate", ArmorItem.Type.CHESTPLATE, EIArmorMaterials.NANO_QUANTUM);
-	public static final ItemHolder<NanoSuitArmorItem> QUANTUM_NANO_LEGGINGS   = createNanosuitArmor("quantum_nano_leggings", "Quantum Nano Leggings", ArmorItem.Type.LEGGINGS, EIArmorMaterials.NANO_QUANTUM, NanoSuitAbility.SPEED);
-	public static final ItemHolder<NanoSuitArmorItem> QUANTUM_NANO_BOOTS      = createNanosuitArmor("quantum_nano_boots", "Quantum Nano Boots", ArmorItem.Type.BOOTS, EIArmorMaterials.NANO_QUANTUM);
+	public static final ItemHolder<NanoSuitArmorItem> NANO_HELMET             = createNanosuitArmor("nano_helmet", "Nano Helmet", ArmorItem.Type.HELMET, NanoSuitAbility.NIGHT_VISION).register();
+	public static final ItemHolder<NanoSuitArmorItem> NANO_CHESTPLATE         = createNanosuitArmor("nano_chestplate", "Nano Chestplate", ArmorItem.Type.CHESTPLATE).register();
+	public static final ItemHolder<NanoSuitArmorItem> NANO_GRAVICHESTPLATE    = createNanosuitArmor("nano_gravichestplate", "Nano Gravichestplate", ArmorItem.Type.CHESTPLATE, EIArmorMaterials.NANO_GRAVICHESTPLATE, NanoSuitAbility.GRAVICHESTPLATE).register();
+	public static final ItemHolder<NanoSuitArmorItem> NANO_LEGGINGS           = createNanosuitArmor("nano_leggings", "Nano Leggings", ArmorItem.Type.LEGGINGS, NanoSuitAbility.SPEED).register();
+	public static final ItemHolder<NanoSuitArmorItem> NANO_BOOTS              = createNanosuitArmor("nano_boots", "Nano Boots", ArmorItem.Type.BOOTS).register();
+	public static final ItemHolder<NanoSuitArmorItem> QUANTUM_NANO_HELMET     = createNanosuitArmor("quantum_nano_helmet", "Quantum Nano Helmet", ArmorItem.Type.HELMET, EIArmorMaterials.NANO_QUANTUM, NanoSuitAbility.NIGHT_VISION).register();
+	public static final ItemHolder<NanoSuitArmorItem> QUANTUM_NANO_CHESTPLATE = createNanosuitArmor("quantum_nano_chestplate", "Quantum Nano Chestplate", ArmorItem.Type.CHESTPLATE, EIArmorMaterials.NANO_QUANTUM).register();
+	public static final ItemHolder<NanoSuitArmorItem> QUANTUM_NANO_LEGGINGS   = createNanosuitArmor("quantum_nano_leggings", "Quantum Nano Leggings", ArmorItem.Type.LEGGINGS, EIArmorMaterials.NANO_QUANTUM, NanoSuitAbility.SPEED).register();
+	public static final ItemHolder<NanoSuitArmorItem> QUANTUM_NANO_BOOTS      = createNanosuitArmor("quantum_nano_boots", "Quantum Nano Boots", ArmorItem.Type.BOOTS, EIArmorMaterials.NANO_QUANTUM).register();
 	
 	public static final ItemHolder<Item> TIN_CAN     = create("tin_can", "Tin Can", Item::new, EISortOrder.OTHER_GEAR).withModelBuilder(CommonModelBuilders::generated).register();
 	public static final ItemHolder<Item> CANNED_FOOD = create("canned_food", "Canned Food", Item::new, EISortOrder.OTHER_GEAR).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3f).fast().usingConvertsTo(TIN_CAN).build())).tag(ItemTags.WOLF_FOOD, ItemTags.CAT_FOOD).withModelBuilder(CommonModelBuilders::generated).register();
@@ -116,13 +122,43 @@ public final class EIItems
 			default ->
 					throw new IllegalArgumentException("Cannot get tag for armor type %s".formatted(armorType.name()));
 		};
+		Function<NanoSuitArmorItem, List<NanoSuitDecoration.ItemProperty>> itemProperties = (item) -> NanoSuitDecoration.values().stream()
+				.filter((d) -> d.armorType() == armorType)
+				.map((d) -> d.itemProperty(item))
+				.filter(Objects::nonNull)
+				.toList();
 		return create(id, englishName, (p) -> new NanoSuitArmorItem(material, armorType, p.rarity(quantum ? Rarity.EPIC : ability.map(NanoSuitAbility::rarity).orElse(Rarity.UNCOMMON)), ability, quantum), EISortOrder.GEAR)
 				.tag(armorTag, Tags.Items.ARMORS, ItemTags.TRIMMABLE_ARMOR, ItemTags.DYEABLE, EITags.Items.RAINBOW_DYEABLE)
 				.withRegistrationListener(CommonRegistrations::cauldronClearDye)
 				.withRegistrationListener(RainbowDataComponent::cauldronClearDyeAndRainbow)
+				.withClientRegistrationListener((item) ->
+				{
+					for(var itemProperty : itemProperties.apply(item))
+					{
+						ItemProperties.register(item, itemProperty.id(), (stack, __, ___, ____) -> stack.getOrDefault(itemProperty.component(), false) ? 1 : 0);
+					}
+				})
 				.withCapabilities(MICommonCapabitilies::simpleEnergyItem)
-				.withModelBuilder(CommonModelBuilders::generatedOverlayed)
-				.register();
+				.withModel((item) -> (provider) ->
+				{
+					String texture = item.identifier().id();
+					var baseModel = provider.getBuilder("item/%s".formatted(texture))
+							.parent(new ModelFile.UncheckedModelFile("item/generated"))
+							.texture("layer0", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + texture))
+							.texture("layer1", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + texture + "_overlay"));
+					for(var itemProperty : itemProperties.apply(item.get()))
+					{
+						String propertyTexture = itemProperty.model();
+						provider.getBuilder("item/%s".formatted(propertyTexture))
+								.parent(new ModelFile.UncheckedModelFile("item/generated"))
+								.texture("layer0", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + propertyTexture))
+								.texture("layer1", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + propertyTexture + "_overlay"));
+						baseModel.override()
+								.predicate(itemProperty.id(), 1)
+								.model(new ModelFile.UncheckedModelFile(ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + propertyTexture)))
+								.end();
+					}
+				});
 	}
 	
 	public static ItemHolder<NanoSuitArmorItem> createNanosuitArmor(String id, String englishName, ArmorItem.Type armorType, Holder<ArmorMaterial> material, NanoSuitAbility ability)

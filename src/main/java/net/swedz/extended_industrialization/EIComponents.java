@@ -42,6 +42,10 @@ public final class EIComponents
 			"rainbow",
 			(b) -> b.persistent(RainbowDataComponent.CODEC).networkSynchronized(RainbowDataComponent.STREAM_CODEC)
 	);
+	public static final Supplier<DataComponentType<Boolean>>              MEOW                = create(
+			"meow",
+			(b) -> b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL)
+	);
 	
 	public static void init(IEventBus bus)
 	{

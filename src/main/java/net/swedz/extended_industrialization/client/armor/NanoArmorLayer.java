@@ -1,14 +1,9 @@
 package net.swedz.extended_industrialization.client.armor;
 
-import com.google.common.collect.Lists;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.Util;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
@@ -23,61 +18,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.neoforged.neoforge.client.ClientHooks;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIClientShaders;
 import net.swedz.extended_industrialization.EIItems;
-import net.swedz.extended_industrialization.client.armor.decorations.NanoArmorDecoration;
-import net.swedz.extended_industrialization.client.shader.AtlasTextureStateShard;
+import net.swedz.extended_industrialization.client.armor.decorations.NanoSuitDecorationModel;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
-import static net.minecraft.client.renderer.RenderStateShard.*;
+import static net.swedz.extended_industrialization.EIClientRenderTypes.*;
 
 public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends HumanoidArmorLayer<T, M, NanoArmorModel<T>>
 {
-	private static final BiFunction<ResourceLocation, Boolean, RenderType> ARMOR_CUTOUT_WITH_TRANSPARENCY = Util.memoize(NanoArmorLayer::armorCutoutWithTransparency);
-	
-	private static RenderType armorCutoutWithTransparency(ResourceLocation id, boolean glow)
-	{
-		var state = RenderType.CompositeState.builder()
-				.setShaderState(glow ? EIClientShaders.ARMOR_CUTOUT_GLOW : RENDERTYPE_ARMOR_CUTOUT_NO_CULL_SHADER)
-				.setTextureState(new RenderStateShard.TextureStateShard(id, false, false))
-				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-				.setCullState(NO_CULL)
-				.setLightmapState(LIGHTMAP)
-				.setOverlayState(NO_OVERLAY)
-				.setLayeringState(VIEW_OFFSET_Z_LAYERING)
-				.setDepthTestState(LEQUAL_DEPTH_TEST)
-				.createCompositeState(false);
-		return RenderType.create("armor_cutout_with_transparency", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 1536, false, false, state);
-	}
-	
-	private static final Function<ResourceLocation, RenderType> QUANTUM = Util.memoize(NanoArmorLayer::createQuantum);
-	
-	private static RenderStateShard.EmptyTextureStateShard quantumTexture(ResourceLocation maskTexture)
-	{
-		List<ResourceLocation> sprites = Lists.newArrayList();
-		for(int i = 1; i <= 5; i++)
-		{
-			sprites.add(EI.id("shaders/quantum/%d".formatted(i)));
-		}
-		return new AtlasTextureStateShard(maskTexture, EI.id("textures/atlas/quantum.png"), sprites, false, false);
-	}
-	
-	public static RenderType createQuantum(ResourceLocation id)
-	{
-		var state = RenderType.CompositeState.builder()
-				.setShaderState(EIClientShaders.QUANTUM)
-				.setTextureState(quantumTexture(id))
-				.setCullState(NO_CULL)
-				.setLayeringState(VIEW_OFFSET_Z_LAYERING)
-				.createCompositeState(false);
-		return RenderType.create("quantum", EIClientShaders.QUANTUM_VERTEX_FORMAT, VertexFormat.Mode.QUADS, 1536, false, false, state);
-	}
-	
 	public static boolean isQuantumArmor(ItemStack stack)
 	{
 		return stack.is(EIItems.QUANTUM_NANO_HELMET.asItem()) ||
@@ -86,9 +36,9 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 			   stack.is(EIItems.QUANTUM_NANO_BOOTS.asItem());
 	}
 	
-	private final List<NanoArmorDecoration> decorations;
+	private final List<NanoSuitDecorationModel> decorations;
 	
-	public NanoArmorLayer(RenderLayerParent<T, M> renderer, NanoArmorModel<T> innerModel, NanoArmorModel<T> outerModel, List<NanoArmorDecoration> decorations, ModelManager modelManager)
+	public NanoArmorLayer(RenderLayerParent<T, M> renderer, NanoArmorModel<T> innerModel, NanoArmorModel<T> outerModel, List<NanoSuitDecorationModel> decorations, ModelManager modelManager)
 	{
 		super(renderer, innerModel, outerModel, modelManager);
 		this.decorations = decorations;
@@ -113,10 +63,9 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 			this.getParentModel().copyPropertiesTo(model);
 			this.setPartVisibility(model, slot);
 			model.slot = slot;
-			for(NanoArmorDecoration<T> decoration : decorations)
+			for(NanoSuitDecorationModel<T> decoration : decorations)
 			{
 				this.getParentModel().copyPropertiesTo(decoration);
-				decoration.copyFrom(this.getParentModel());
 				decoration.setAllVisible(decoration.test(entity, slot, stack));
 			}
 			
@@ -134,7 +83,7 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 				if(layerColor != 0)
 				{
 					boolean isColored = layerColor != -1;
-					for(NanoArmorDecoration<T> decoration : decorations)
+					for(NanoSuitDecorationModel<T> decoration : decorations)
 					{
 						if(decoration.test(entity, slot, stack))
 						{
@@ -144,7 +93,7 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 					ResourceLocation texture = ClientHooks.getArmorTexture(entity, stack, armorMaterialLayer, usesInnerModel, slot);
 					RenderType renderType = layerIndex == 1 && isQuantum ?
 							QUANTUM.apply(texture) :
-							ARMOR_CUTOUT_WITH_TRANSPARENCY.apply(texture, isColored);
+							ARMOR_CUTOUT_NO_CULL_WITH_TRANSPARENCY.apply(texture, isColored);
 					VertexConsumer buffer = bufferSource.getBuffer(renderType);
 					model.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, layerColor);
 				}

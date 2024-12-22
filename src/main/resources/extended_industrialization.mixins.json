@@ -5,6 +5,7 @@
     "compatibilityLevel": "JAVA_21",
     "mixins": [
         "ArmorDyeRecipeIgnoreRainbowItemsMixin",
+        "MeowTradeMixin",
         "RainbowDyedItemColorMixin",
         "RemoveRainbowWhenDyeingMixin",
         "mi.accessor.ConfigurableItemStackAccessor"
