@@ -39,10 +39,16 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 	public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity,
 					   float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float headYaw, float headPitch)
 	{
+		// This order is intentional, the head needs to render after the chestplate or else the chest becomes invisible behind the visor
 		this.renderArmorPiece(poseStack, bufferSource, entity, EquipmentSlot.CHEST, packedLight, this.getArmorModel(EquipmentSlot.CHEST), limbSwing, limbSwingAmount, partialTicks, ageInTicks, headYaw, headPitch);
+		this.renderArmorPiece(poseStack, bufferSource, entity, EquipmentSlot.HEAD, packedLight, this.getArmorModel(EquipmentSlot.HEAD), limbSwing, limbSwingAmount, partialTicks, ageInTicks, headYaw, headPitch);
 		this.renderArmorPiece(poseStack, bufferSource, entity, EquipmentSlot.LEGS, packedLight, this.getArmorModel(EquipmentSlot.LEGS), limbSwing, limbSwingAmount, partialTicks, ageInTicks, headYaw, headPitch);
 		this.renderArmorPiece(poseStack, bufferSource, entity, EquipmentSlot.FEET, packedLight, this.getArmorModel(EquipmentSlot.FEET), limbSwing, limbSwingAmount, partialTicks, ageInTicks, headYaw, headPitch);
-		this.renderArmorPiece(poseStack, bufferSource, entity, EquipmentSlot.HEAD, packedLight, this.getArmorModel(EquipmentSlot.HEAD), limbSwing, limbSwingAmount, partialTicks, ageInTicks, headYaw, headPitch);
+		
+		this.renderArmorPieceDecorations(poseStack, bufferSource, entity, EquipmentSlot.HEAD, packedLight, limbSwing, limbSwingAmount, partialTicks, ageInTicks, headYaw, headPitch);
+		this.renderArmorPieceDecorations(poseStack, bufferSource, entity, EquipmentSlot.CHEST, packedLight, limbSwing, limbSwingAmount, partialTicks, ageInTicks, headYaw, headPitch);
+		this.renderArmorPieceDecorations(poseStack, bufferSource, entity, EquipmentSlot.LEGS, packedLight, limbSwing, limbSwingAmount, partialTicks, ageInTicks, headYaw, headPitch);
+		this.renderArmorPieceDecorations(poseStack, bufferSource, entity, EquipmentSlot.FEET, packedLight, limbSwing, limbSwingAmount, partialTicks, ageInTicks, headYaw, headPitch);
 	}
 	
 	private void renderArmorPiece(PoseStack poseStack, MultiBufferSource bufferSource, T entity, EquipmentSlot slot, int packedLight, NanoArmorModel<T> model,
@@ -54,11 +60,6 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 			this.getParentModel().copyPropertiesTo(model);
 			this.setPartVisibility(model, slot);
 			model.slot = slot;
-			for(NanoSuitDecorationModel<T> decoration : decorations)
-			{
-				this.getParentModel().copyPropertiesTo(decoration);
-				decoration.setAllVisible(decoration.test(entity, slot, stack));
-			}
 			
 			boolean usesInnerModel = this.usesInnerModel(slot);
 			
@@ -66,20 +67,13 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 			IClientItemExtensions extensions = IClientItemExtensions.of(stack);
 			int fallbackColor = extensions.getDefaultDyeColor(stack);
 			
-			for(int layerIndex = 0; layerIndex < armorMaterial.layers().size(); ++layerIndex)
+			for(int layerIndex = armorMaterial.layers().size() - 1; layerIndex >= 0; --layerIndex)
 			{
 				ArmorMaterial.Layer armorMaterialLayer = armorMaterial.layers().get(layerIndex);
 				int layerColor = extensions.getArmorLayerTintColor(stack, entity, armorMaterialLayer, layerIndex, fallbackColor);
 				if(layerColor != 0)
 				{
 					boolean isColored = layerColor != -1;
-					for(NanoSuitDecorationModel<T> decoration : decorations)
-					{
-						if(decoration.test(entity, slot, stack))
-						{
-							decoration.render(entity, slot, stack, item, poseStack, bufferSource, packedLight, armorMaterialLayer, layerIndex, layerColor, isColored);
-						}
-					}
 					ResourceLocation texture = ClientHooks.getArmorTexture(entity, stack, armorMaterialLayer, usesInnerModel, slot);
 					RenderType renderType = layerIndex == 1 && item.isQuantum() ?
 							QUANTUM.apply(texture) :
@@ -98,6 +92,39 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 			if(stack.hasFoil())
 			{
 				this.renderGlint(poseStack, bufferSource, packedLight, model);
+			}
+		}
+	}
+	
+	private void renderArmorPieceDecorations(PoseStack poseStack, MultiBufferSource bufferSource, T entity, EquipmentSlot slot, int packedLight,
+											 float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float headYaw, float headPitch)
+	{
+		ItemStack stack = entity.getItemBySlot(slot);
+		if(stack.getItem() instanceof NanoSuitArmorItem item && item.getEquipmentSlot() == slot)
+		{
+			for(NanoSuitDecorationModel<T> decoration : decorations)
+			{
+				this.getParentModel().copyPropertiesTo(decoration);
+				boolean shouldRender = decoration.test(entity, slot, stack);
+				decoration.setAllVisible(shouldRender);
+				
+				if(shouldRender)
+				{
+					ArmorMaterial armorMaterial = item.getMaterial().value();
+					IClientItemExtensions extensions = IClientItemExtensions.of(stack);
+					int fallbackColor = extensions.getDefaultDyeColor(stack);
+					
+					for(int layerIndex = armorMaterial.layers().size() - 1; layerIndex >= 0; --layerIndex)
+					{
+						ArmorMaterial.Layer armorMaterialLayer = armorMaterial.layers().get(layerIndex);
+						int layerColor = extensions.getArmorLayerTintColor(stack, entity, armorMaterialLayer, layerIndex, fallbackColor);
+						if(layerColor != 0)
+						{
+							boolean isColored = layerColor != -1;
+							decoration.render(entity, slot, stack, item, poseStack, bufferSource, packedLight, armorMaterialLayer, layerIndex, layerColor, isColored);
+						}
+					}
+				}
 			}
 		}
 	}
