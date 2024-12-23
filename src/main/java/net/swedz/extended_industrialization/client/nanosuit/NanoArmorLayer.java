@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.client.armor;
+package net.swedz.extended_industrialization.client.nanosuit;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -18,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.neoforged.neoforge.client.ClientHooks;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import net.swedz.extended_industrialization.client.armor.decorations.NanoSuitDecorationModel;
+import net.swedz.extended_industrialization.client.nanosuit.decorations.NanoSuitDecorationModel;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 
 import java.util.List;

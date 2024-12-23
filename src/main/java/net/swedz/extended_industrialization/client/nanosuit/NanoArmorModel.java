@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.client.armor;
+package net.swedz.extended_industrialization.client.nanosuit;
 
 import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;

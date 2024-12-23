@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.client.armor.decorations;
+package net.swedz.extended_industrialization.client.nanosuit.decorations;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.HumanoidArmorModel;

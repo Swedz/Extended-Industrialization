@@ -8,11 +8,11 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.swedz.extended_industrialization.client.armor.NanoArmorLayer;
-import net.swedz.extended_industrialization.client.armor.NanoArmorModel;
-import net.swedz.extended_industrialization.client.armor.decorations.MeowNanoSuitDecorationModel;
-import net.swedz.extended_industrialization.client.armor.decorations.NanoSuitDecorationModel;
-import net.swedz.extended_industrialization.client.armor.decorations.WingNanoSuitDecorationModel;
+import net.swedz.extended_industrialization.client.nanosuit.NanoArmorLayer;
+import net.swedz.extended_industrialization.client.nanosuit.NanoArmorModel;
+import net.swedz.extended_industrialization.client.nanosuit.decorations.MeowNanoSuitDecorationModel;
+import net.swedz.extended_industrialization.client.nanosuit.decorations.NanoSuitDecorationModel;
+import net.swedz.extended_industrialization.client.nanosuit.decorations.WingNanoSuitDecorationModel;
 
 import java.util.Collections;
 import java.util.List;
