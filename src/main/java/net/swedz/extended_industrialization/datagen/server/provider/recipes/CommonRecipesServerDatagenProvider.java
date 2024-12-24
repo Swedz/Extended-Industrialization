@@ -251,7 +251,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				(b) -> b
 						.addItemInput(EIItems.NANO_HELMET, 1)
 						.addItemInput(MIItem.QUANTUM_UPGRADE, 1)
-						.addItemOutput(EIItems.QUANTUM_NANO_HELMET, 1),
+						.addItemOutput(EIItems.NANO_QUANTUM_HELMET, 1),
 				output
 		);
 		addMachineRecipe(
@@ -260,7 +260,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				(b) -> b
 						.addItemInput(EIItems.NANO_CHESTPLATE, 1)
 						.addItemInput(MIItem.QUANTUM_UPGRADE, 1)
-						.addItemOutput(EIItems.QUANTUM_NANO_CHESTPLATE, 1),
+						.addItemOutput(EIItems.NANO_QUANTUM_CHESTPLATE, 1),
 				output
 		);
 		addMachineRecipe(
@@ -269,7 +269,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				(b) -> b
 						.addItemInput(EIItems.NANO_LEGGINGS, 1)
 						.addItemInput(MIItem.QUANTUM_UPGRADE, 1)
-						.addItemOutput(EIItems.QUANTUM_NANO_LEGGINGS, 1),
+						.addItemOutput(EIItems.NANO_QUANTUM_LEGGINGS, 1),
 				output
 		);
 		addMachineRecipe(
@@ -278,7 +278,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				(b) -> b
 						.addItemInput(EIItems.NANO_BOOTS, 1)
 						.addItemInput(MIItem.QUANTUM_UPGRADE, 1)
-						.addItemOutput(EIItems.QUANTUM_NANO_BOOTS, 1),
+						.addItemOutput(EIItems.NANO_QUANTUM_BOOTS, 1),
 				output
 		);
 	}

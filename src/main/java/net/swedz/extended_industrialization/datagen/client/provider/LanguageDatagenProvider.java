@@ -33,7 +33,7 @@ public final class LanguageDatagenProvider extends LanguageProvider
 			this.add(item.asItem(), item.identifier().englishName());
 		}
 		this.add("item.extended_industrialization.nyano_helmet", "Nyano Helmet");
-		this.add("item.extended_industrialization.quantum_nyano_helmet", "Quantum Nyano Helmet");
+		this.add("item.extended_industrialization.nyano_quantum_helmet", "Quantum Nyano Helmet");
 		
 		for(FluidHolder fluid : EIFluids.values())
 		{

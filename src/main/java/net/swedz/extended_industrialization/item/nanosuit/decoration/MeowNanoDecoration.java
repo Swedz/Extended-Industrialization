@@ -32,7 +32,7 @@ public final class MeowNanoDecoration implements NanoSuitDecoration
 	public String getDescriptionId(NanoSuitArmorItem item, ItemStack stack)
 	{
 		return item.isQuantum() ?
-				"item.extended_industrialization.quantum_nyano_helmet" :
+				"item.extended_industrialization.nyano_quantum_helmet" :
 				"item.extended_industrialization.nyano_helmet";
 	}
 	
@@ -47,7 +47,7 @@ public final class MeowNanoDecoration implements NanoSuitDecoration
 	{
 		return new ItemProperty(
 				EI.id("meow"),
-				item.isQuantum() ? "quantum_nyano_helmet" : "nyano_helmet",
+				item.isQuantum() ? "nyano_quantum_helmet" : "nyano_helmet",
 				EIComponents.MEOW
 		);
 	}

@@ -5,9 +5,9 @@
     "extended_industrialization:nano_gravichestplate",
     "extended_industrialization:nano_helmet",
     "extended_industrialization:nano_leggings",
-    "extended_industrialization:quantum_nano_boots",
-    "extended_industrialization:quantum_nano_chestplate",
-    "extended_industrialization:quantum_nano_helmet",
-    "extended_industrialization:quantum_nano_leggings"
+    "extended_industrialization:nano_quantum_boots",
+    "extended_industrialization:nano_quantum_chestplate",
+    "extended_industrialization:nano_quantum_helmet",
+    "extended_industrialization:nano_quantum_leggings"
   ]
 }

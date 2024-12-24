@@ -35,7 +35,7 @@ public final class MeowTradeGoal extends Goal
 	private boolean isNanoHelmet(ItemStack stack)
 	{
 		return !stack.isEmpty() &&
-			   (stack.is(EIItems.NANO_HELMET.asItem()) || stack.is(EIItems.QUANTUM_NANO_HELMET.asItem())) &&
+			   (stack.is(EIItems.NANO_HELMET.asItem()) || stack.is(EIItems.NANO_QUANTUM_HELMET.asItem())) &&
 			   !stack.getOrDefault(EIComponents.MEOW, false);
 	}
 	
