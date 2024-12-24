@@ -30,7 +30,7 @@ public class AddMaterialAtlasesMixin
 	private static void init(CallbackInfo callback)
 	{
 		var newMap = new HashMap<>(VANILLA_ATLASES);
-		newMap.put(EI.id("textures/atlas/quantum.png"), EI.id("quantum"));
+		newMap.put(EI.id("textures/atlas/nano_quantum.png"), EI.id("nano_quantum"));
 		VANILLA_ATLASES = Collections.unmodifiableMap(newMap);
 	}
 }

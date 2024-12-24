@@ -32,7 +32,7 @@ public class AtlasTextureStateShard extends RenderStateShard.TextureStateShard
 		for(ResourceLocation spriteLocation : sprites)
 		{
 			var sprite = atlas.apply(spriteLocation);
-			var uniform = EIClientShaders.quantum().getUniform("QuantumStarUV" + index);
+			var uniform = EIClientShaders.nanoQuantum().getUniform("QuantumStarUV" + index);
 			uniform.setSafe(sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1());
 			index++;
 		}

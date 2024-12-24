@@ -20,13 +20,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.client.nanosuit.NanoArmorLayer;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 import net.swedz.extended_industrialization.item.nanosuit.decoration.NanoSuitDecoration;
 
 import java.util.List;
 import java.util.Set;
-
-import static net.swedz.extended_industrialization.EIClientRenderTypes.*;
 
 public final class WingNanoSuitDecorationModel<T extends LivingEntity> extends NanoSuitDecorationModel<T>
 {
@@ -120,7 +119,7 @@ public final class WingNanoSuitDecorationModel<T extends LivingEntity> extends N
 					   ArmorMaterial.Layer armorLayer, int armorLayerIndex, int armorLayerColor, boolean armorLayerIsColored)
 	{
 		ResourceLocation texture = getTexture(armorLayerIndex);
-		RenderType renderType = ARMOR_CUTOUT_CULL_WITH_TRANSPARENCY.apply(texture, armorLayerIsColored);
+		RenderType renderType = NanoArmorLayer.decorationRenderType(armorLayerIndex, item, texture, armorLayerIsColored);
 		VertexConsumer buffer = bufferSource.getBuffer(renderType);
 		this.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, armorLayerColor);
 	}

@@ -36,26 +36,26 @@ public final class EIClientRenderTypes
 		return RenderType.create("armor_cutout_%s_with_transparency".formatted(cull ? "cull" : "no_cull"), DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 1536, false, false, state);
 	}
 	
-	public static final Function<ResourceLocation, RenderType> QUANTUM = Util.memoize(EIClientRenderTypes::createQuantum);
+	public static final Function<ResourceLocation, RenderType> NANO_QUANTUM = Util.memoize(EIClientRenderTypes::createNanoQuantum);
 	
-	private static RenderStateShard.EmptyTextureStateShard quantumTexture(ResourceLocation maskTexture)
+	private static RenderStateShard.EmptyTextureStateShard nanoQuantumTexture(ResourceLocation maskTexture)
 	{
 		List<ResourceLocation> sprites = Lists.newArrayList();
 		for(int i = 1; i <= 5; i++)
 		{
-			sprites.add(EI.id("shaders/quantum/%d".formatted(i)));
+			sprites.add(EI.id("shaders/nano_quantum/%d".formatted(i)));
 		}
-		return new AtlasTextureStateShard(maskTexture, EI.id("textures/atlas/quantum.png"), sprites, false, false);
+		return new AtlasTextureStateShard(maskTexture, EI.id("textures/atlas/nano_quantum.png"), sprites, false, false);
 	}
 	
-	private static RenderType createQuantum(ResourceLocation texture)
+	private static RenderType createNanoQuantum(ResourceLocation texture)
 	{
 		var state = RenderType.CompositeState.builder()
-				.setShaderState(EIClientShaders.QUANTUM)
-				.setTextureState(quantumTexture(texture))
+				.setShaderState(EIClientShaders.NANO_QUANTUM)
+				.setTextureState(nanoQuantumTexture(texture))
 				.setCullState(NO_CULL)
 				.setLayeringState(VIEW_OFFSET_Z_LAYERING)
 				.createCompositeState(false);
-		return RenderType.create("quantum", EIClientShaders.QUANTUM_VERTEX_FORMAT, VertexFormat.Mode.QUADS, 1536, false, false, state);
+		return RenderType.create("nano_quantum", EIClientShaders.NANO_QUANTUM_VERTEX_FORMAT, VertexFormat.Mode.QUADS, 1536, false, false, state);
 	}
 }

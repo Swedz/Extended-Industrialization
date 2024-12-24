@@ -27,6 +27,28 @@ import static net.swedz.extended_industrialization.EIClientRenderTypes.*;
 
 public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends HumanoidArmorLayer<T, M, NanoArmorModel<T>>
 {
+	public static RenderType renderType(boolean useQuantumShader, boolean cull, int layerIndex, NanoSuitArmorItem item, ResourceLocation texture, boolean isColored)
+	{
+		if(layerIndex == 1)
+		{
+			return (useQuantumShader && item.isQuantum()) ? NANO_QUANTUM.apply(texture) : RenderType.armorCutoutNoCull(texture);
+		}
+		else
+		{
+			return (cull ? ARMOR_CUTOUT_CULL_WITH_TRANSPARENCY : ARMOR_CUTOUT_NO_CULL_WITH_TRANSPARENCY).apply(texture, isColored);
+		}
+	}
+	
+	public static RenderType armorRenderType(int layerIndex, NanoSuitArmorItem item, ResourceLocation texture, boolean isColored)
+	{
+		return renderType(true, false, layerIndex, item, texture, isColored);
+	}
+	
+	public static RenderType decorationRenderType(int layerIndex, NanoSuitArmorItem item, ResourceLocation texture, boolean isColored)
+	{
+		return renderType(false, true, layerIndex, item, texture, isColored);
+	}
+	
 	private final List<NanoSuitDecorationModel> decorations;
 	
 	public NanoArmorLayer(RenderLayerParent<T, M> renderer, NanoArmorModel<T> innerModel, NanoArmorModel<T> outerModel, List<NanoSuitDecorationModel> decorations, ModelManager modelManager)
@@ -75,9 +97,7 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 				{
 					boolean isColored = layerColor != -1;
 					ResourceLocation texture = ClientHooks.getArmorTexture(entity, stack, armorMaterialLayer, usesInnerModel, slot);
-					RenderType renderType = layerIndex == 1 && item.isQuantum() ?
-							QUANTUM.apply(texture) :
-							ARMOR_CUTOUT_NO_CULL_WITH_TRANSPARENCY.apply(texture, isColored);
+					RenderType renderType = armorRenderType(layerIndex, item, texture, isColored);
 					VertexConsumer buffer = bufferSource.getBuffer(renderType);
 					model.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, layerColor);
 				}

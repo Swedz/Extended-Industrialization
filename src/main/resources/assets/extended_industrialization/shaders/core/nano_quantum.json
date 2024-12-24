@@ -1,6 +1,6 @@
 {
-    "vertex": "extended_industrialization:quantum",
-    "fragment": "extended_industrialization:quantum",
+    "vertex": "extended_industrialization:nano_quantum",
+    "fragment": "extended_industrialization:nano_quantum",
     "samplers": [
         { "name": "Sampler0" },
         { "name": "Sampler1" }
