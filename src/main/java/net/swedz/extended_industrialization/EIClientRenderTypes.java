@@ -41,7 +41,7 @@ public final class EIClientRenderTypes
 	private static RenderStateShard.EmptyTextureStateShard nanoQuantumTexture(ResourceLocation maskTexture)
 	{
 		List<ResourceLocation> sprites = Lists.newArrayList();
-		for(int i = 1; i <= 5; i++)
+		for(int i = 1; i <= 4; i++)
 		{
 			sprites.add(EI.id("shaders/nano_quantum/%d".formatted(i)));
 		}

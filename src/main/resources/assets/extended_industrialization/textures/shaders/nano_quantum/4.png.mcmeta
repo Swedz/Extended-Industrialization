@@ -1,29 +1,16 @@
 {
     "animation": {
-        "width": 128,
-        "height": 64,
-        "frametime": 1,
+        "width": 64,
+        "height": 32,
+        "frametime": 2,
         "frames": [
-            {
-                "index": 0,
-                "time": 13
-            },
-            1,
             {
                 "index": 0,
                 "time": 10
             },
-            3,
-            {
-                "index": 0,
-                "time": 5
-            },
+            1,
             2,
-            {
-                "index": 0,
-                "time": 15
-            },
-            4
+            3
         ]
     }
 }
