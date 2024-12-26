@@ -13,7 +13,6 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,7 +24,6 @@ import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 import net.swedz.extended_industrialization.item.nanosuit.decoration.NanoSuitDecoration;
 
 import java.util.List;
-import java.util.Set;
 
 public final class WingNanoSuitDecorationModel<T extends LivingEntity> extends NanoSuitDecorationModel<T>
 {
@@ -42,64 +40,38 @@ public final class WingNanoSuitDecorationModel<T extends LivingEntity> extends N
 		var body = root.getChild("body");
 		
 		body.addOrReplaceChild(
-				"left_wing_front",
+				"left_wing",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
 						.mirror()
 						.addBox(
 								0, -12, 5,
-								32, 32, 0,
-								Set.of(Direction.NORTH)
-						),
-				PartPose.rotation(0, -wingRotation, 0)
-		);
-		body.addOrReplaceChild(
-				"left_wing_back",
-				CubeListBuilder.create()
-						.texOffs(0, 0)
-						.addBox(
-								0, -12, 5,
-								32, 32, 0,
-								Set.of(Direction.SOUTH)
+								32, 32, 0
 						),
 				PartPose.rotation(0, -wingRotation, 0)
 		);
 		
 		body.addOrReplaceChild(
-				"right_wing_front",
+				"right_wing",
 				CubeListBuilder.create()
 						.texOffs(0, 0)
 						.mirror()
 						.addBox(
 								0, -12, 5,
-								-32, 32, 0,
-								Set.of(Direction.SOUTH)
-						),
-				PartPose.rotation(0, wingRotation, 0)
-		);
-		body.addOrReplaceChild(
-				"right_wing_back",
-				CubeListBuilder.create()
-						.texOffs(0, 0)
-						.addBox(
-								0, -12, 5,
-								-32, 32, 0,
-								Set.of(Direction.NORTH)
+								-32, 32, 0
 						),
 				PartPose.rotation(0, wingRotation, 0)
 		);
 		
-		return LayerDefinition.create(mesh, 32, 32);
+		return LayerDefinition.create(mesh, 64, 32);
 	}
 	
 	private static PartDefinition createHumanoidAlias(MeshDefinition mesh)
 	{
 		var root = mesh.getRoot();
 		var body = root.addOrReplaceChild("body", new CubeListBuilder(), PartPose.ZERO);
-		body.addOrReplaceChild("left_wing_front", new CubeListBuilder(), PartPose.ZERO);
-		body.addOrReplaceChild("left_wing_back", new CubeListBuilder(), PartPose.ZERO);
-		body.addOrReplaceChild("right_wing_front", new CubeListBuilder(), PartPose.ZERO);
-		body.addOrReplaceChild("right_wing_back", new CubeListBuilder(), PartPose.ZERO);
+		body.addOrReplaceChild("left_wing", new CubeListBuilder(), PartPose.ZERO);
+		body.addOrReplaceChild("right_wing", new CubeListBuilder(), PartPose.ZERO);
 		return root;
 	}
 	

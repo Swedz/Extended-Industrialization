@@ -164,7 +164,7 @@ public final class MeowNanoSuitDecorationModel<T extends LivingEntity> extends N
 				)
 		);
 		
-		return LayerDefinition.create(mesh, 8, 8);
+		return LayerDefinition.create(mesh, 64, 32);
 	}
 	
 	private static PartDefinition createHumanoidAlias(MeshDefinition mesh)

@@ -27,11 +27,11 @@ import static net.swedz.extended_industrialization.EIClientRenderTypes.*;
 
 public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends HumanoidArmorLayer<T, M, NanoArmorModel<T>>
 {
-	public static RenderType renderType(boolean useQuantumShader, boolean cull, int layerIndex, NanoSuitArmorItem item, ResourceLocation texture, boolean isColored)
+	public static RenderType renderType(boolean useQuantumShader, boolean stars, boolean cull, int layerIndex, NanoSuitArmorItem item, ResourceLocation texture, boolean isColored)
 	{
-		if(layerIndex == 1)
+		if(layerIndex == 1 && useQuantumShader && item.isQuantum())
 		{
-			return (useQuantumShader && item.isQuantum()) ? NANO_QUANTUM.apply(texture) : RenderType.armorCutoutNoCull(texture);
+			return (stars ? NANO_QUANTUM_STARS : NANO_QUANTUM_NO_STARS).apply(texture, cull);
 		}
 		else
 		{
@@ -41,12 +41,12 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 	
 	public static RenderType armorRenderType(int layerIndex, NanoSuitArmorItem item, ResourceLocation texture, boolean isColored)
 	{
-		return renderType(true, false, layerIndex, item, texture, isColored);
+		return renderType(true, true, false, layerIndex, item, texture, isColored);
 	}
 	
 	public static RenderType decorationRenderType(int layerIndex, NanoSuitArmorItem item, ResourceLocation texture, boolean isColored)
 	{
-		return renderType(false, true, layerIndex, item, texture, isColored);
+		return renderType(true, false, true, layerIndex, item, texture, isColored);
 	}
 	
 	private final List<NanoSuitDecorationModel> decorations;
