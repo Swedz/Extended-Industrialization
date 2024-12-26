@@ -104,7 +104,7 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	@Override
 	public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access)
 	{
-		if(action == ClickAction.SECONDARY && other.isEmpty())
+		if(ability.isPresent() && action == ClickAction.SECONDARY && other.isEmpty())
 		{
 			this.setActivated(player, stack, !this.isActivated(stack));
 			if(player.level().isClientSide())
