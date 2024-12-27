@@ -125,7 +125,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 			{
 				newOriginState = newState;
 			}
-			level.setBlock(pos, newState, Block.UPDATE_NONE);
+			level.setBlock(pos, newState, Block.UPDATE_NONE, 0);
 		}
 		for(BlockPos pos : blockPositions)
 		{
