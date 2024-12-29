@@ -14,7 +14,10 @@ public final class PhotovoltaicCellItem extends Item
 	
 	public PhotovoltaicCellItem(Properties properties, CableTier tier, int euPerTick, int durationTicks)
 	{
-		super(properties.stacksTo(1).durability(0));
+		super(properties
+				.stacksTo(1)
+				.durability(0)
+				.component(EIComponents.SOLAR_TICKS, 0));
 		this.tier = tier;
 		this.euPerTick = euPerTick;
 		this.durationTicks = durationTicks;
@@ -101,7 +104,7 @@ public final class PhotovoltaicCellItem extends Item
 			{
 				efficiency = (-1f / 16000000f) * time * time + (1f / 1000f) * time - 3f;
 			}
-			energyProduced += (euPerTick * efficiency);
+			energyProduced += (int) (euPerTick * efficiency);
 		}
 		return energyProduced;
 	}
