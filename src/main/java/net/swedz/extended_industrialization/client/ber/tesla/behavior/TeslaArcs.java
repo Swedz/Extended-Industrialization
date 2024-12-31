@@ -1,11 +1,11 @@
-package net.swedz.extended_industrialization.client.tesla.generator;
+package net.swedz.extended_industrialization.client.ber.tesla.behavior;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
+import net.swedz.extended_industrialization.client.ber.tesla.arc.TeslaArcBuilder;
 import net.swedz.tesseract.neoforge.api.Assert;
-import team.lodestar.lodestone.systems.rendering.trail.TrailPointBuilder;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,7 +34,7 @@ public final class TeslaArcs
 	
 	private final Map<Direction.Axis, Supplier<Float>> offsetGenerators;
 	
-	private final List<TrailPointBuilder> trails = Lists.newArrayList();
+	private final List<TeslaArcBuilder> trails = Lists.newArrayList();
 	
 	public TeslaArcs(float widthScale,
 					 int arcDuration, int arcs,
@@ -136,7 +136,7 @@ public final class TeslaArcs
 		return sectionSplits;
 	}
 	
-	public List<TrailPointBuilder> getTrails()
+	public List<TeslaArcBuilder> getTrails()
 	{
 		return Collections.unmodifiableList(trails);
 	}
@@ -149,7 +149,7 @@ public final class TeslaArcs
 	
 	private void createArc()
 	{
-		TrailPointBuilder trail = TrailPointBuilder.create(arcDuration);
+		TeslaArcBuilder builder = TeslaArcBuilder.create(arcDuration);
 		int length = RANDOM.nextInt(minLength, maxLength + 1);
 		Vec3 origin = originSupplier.get();
 		double x = origin.x();
@@ -166,21 +166,21 @@ public final class TeslaArcs
 			float offsetZ = Math.abs(dirZ) * RANDOM.nextFloat();
 			for(int j = 0; j < sectionSplits; j++)
 			{
-				trail.addTrailPoint(new Vec3(x, y, z));
+				builder.add(new Vec3(x, y, z));
 				x += (sectionLength * offsetX * dirX) / sectionSplits;
 				y += (sectionLength * offsetY * dirY) / sectionSplits;
 				z += (sectionLength * offsetZ * dirZ) / sectionSplits;
 			}
 		}
-		trails.add(trail);
+		trails.add(builder);
 	}
 	
 	public void tick()
 	{
 		trails.removeIf((trail) ->
 		{
-			trail.tickTrailPoints();
-			return trail.getTrailPoints().isEmpty();
+			trail.tick();
+			return trail.points().isEmpty();
 		});
 		
 		if(trails.size() < arcs)

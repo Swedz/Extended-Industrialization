@@ -8,6 +8,7 @@ uniform float PlasmaScale;
 uniform float PlasmaSpeed;
 
 in vec2 texCoord0;
+in vec4 vertexColor;
 
 out vec4 fragColor;
 
@@ -22,10 +23,10 @@ vec2 transformUV(vec2 uv)
 
 void main()
 {
-	vec4 plasmaTexture = texture(Sampler0, transformUV(texCoord0));
+	vec4 plasmaTexture = texture(Sampler0, transformUV(texCoord0)) * vertexColor;
 	if (plasmaTexture.a > 0)
 	{
-		fragColor = vec4(plasmaTexture.rgb, 0.8);
+		fragColor = plasmaTexture;
 	}
 	else
 	{

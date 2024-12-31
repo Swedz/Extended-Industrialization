@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.client.tesla;
+package net.swedz.extended_industrialization.client.ber.tesla;
 
 import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBER;
 import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBlockEntity;

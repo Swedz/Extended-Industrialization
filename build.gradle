@@ -81,14 +81,6 @@ repositories {
 			includeGroup "com.blakebr0.mysticalagriculture"
 		}
 	}
-	maven {
-		name = "BlameJared"
-		url = "https://maven.blamejared.com/"
-		content {
-			// Lodestone
-			includeGroup "team.lodestar.lodestone"
-		}
-	}
 }
 
 dependencies {
@@ -137,14 +129,6 @@ dependencies {
 	} else {
 		compileOnly "com.blakebr0.cucumber:Cucumber:${cucumber_version}"
 		compileOnly "com.blakebr0.mysticalagriculture:MysticalAgriculture:${mystical_agriculture_version}"
-	}
-
-	jarJar(implementation("team.lodestar.lodestone:lodestone:${lodestone_version}")) {
-		version {
-			strictly lodestone_version_range
-			prefer lodestone_version
-		}
-		exclude group: 'top.theillusivec4.curios', module: 'curios-neoforge'
 	}
 }
 

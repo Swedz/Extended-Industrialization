@@ -14,12 +14,19 @@ import java.io.IOException;
 public final class EIClientShaders
 {
 	private static ShaderInstance TESLA_PLASMA_INSTANCE;
+	private static ShaderInstance TESLA_ARC_INSTANCE;
 	
 	public static ShaderInstance teslaPlasma()
 	{
 		return TESLA_PLASMA_INSTANCE;
 	}
 	
+	public static ShaderInstance teslaArc()
+	{
+		return TESLA_ARC_INSTANCE;
+	}
+	
+	public static final RenderStateShard.ShaderStateShard TESLA_ARC    = new RenderStateShard.ShaderStateShard(EIClientShaders::teslaArc);
 	public static final RenderStateShard.ShaderStateShard TESLA_PLASMA = new RenderStateShard.ShaderStateShard(EIClientShaders::teslaPlasma);
 	
 	@SubscribeEvent
@@ -28,6 +35,7 @@ public final class EIClientShaders
 		try
 		{
 			event.registerShader(new ShaderInstance(event.getResourceProvider(), EI.id("tesla_plasma"), DefaultVertexFormat.POSITION_TEX), (shader) -> TESLA_PLASMA_INSTANCE = shader);
+			event.registerShader(new ShaderInstance(event.getResourceProvider(), EI.id("tesla_arc"), DefaultVertexFormat.POSITION_TEX), (shader) -> TESLA_ARC_INSTANCE = shader);
 		}
 		catch (IOException ex)
 		{

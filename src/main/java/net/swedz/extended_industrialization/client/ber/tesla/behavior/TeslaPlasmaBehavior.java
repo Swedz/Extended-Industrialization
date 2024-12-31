@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.client.tesla.generator;
+package net.swedz.extended_industrialization.client.ber.tesla.behavior;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
