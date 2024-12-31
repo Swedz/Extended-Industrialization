@@ -21,7 +21,6 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientConfig;
@@ -31,7 +30,6 @@ import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehav
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcs;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehavior;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehaviorHolder;
-import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaShapeAdder;
 import net.swedz.extended_industrialization.machines.component.itemslot.TeslaTowerUpgradeComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
@@ -46,7 +44,6 @@ import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.matcher.SameCab
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static aztech.modern_industrialization.MITooltips.*;
 import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
@@ -187,31 +184,31 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 			@Override
 			public Vec3 getOffset()
 			{
-				return Vec3.atLowerCornerOf(TeslaTowerBlockEntity.this.getTopLoadPositionRelative());
+				return Vec3.atCenterOf(TeslaTowerBlockEntity.this.getTopLoadPositionRelative());
 			}
 			
 			@Override
-			public void getShape(TeslaPlasmaShapeAdder shapes)
+			public ResourceLocation getModelLocation()
 			{
-				double inflate = 0.1;
-				shapes.add(new AABB(-1, -2 - inflate, -1, 2, -1 - inflate, 2).inflate(inflate, 0, inflate), Set.of(Direction.UP));
-				shapes.add(new AABB(-1, 2 + inflate, -1, 2, 3 + inflate, 2).inflate(inflate, 0, inflate), Set.of(Direction.DOWN));
-				shapes.add(new AABB(2 + inflate, -1, -1, 3 + inflate, 2, 2).inflate(0, inflate, inflate), Set.of(Direction.WEST));
-				shapes.add(new AABB(-2 - inflate, -1, -1, -1 - inflate, 2, 2).inflate(0, inflate, inflate), Set.of(Direction.EAST));
-				shapes.add(new AABB(-1, -1, 2 + inflate, 2, 2, 3 + inflate).inflate(inflate, inflate, 0), Set.of(Direction.NORTH));
-				shapes.add(new AABB(-1, -1, -2 - inflate, 2, 2, -1 - inflate).inflate(inflate, inflate, 0), Set.of(Direction.SOUTH));
+				return EI.id("tesla_plasma/tesla_tower");
+			}
+			
+			@Override
+			public float getModelScale()
+			{
+				return 5.25f;
 			}
 			
 			@Override
 			public float getSpeed()
 			{
-				return 0.0075f;
+				return 60f;
 			}
 			
 			@Override
 			public float getTextureScale()
 			{
-				return 32f / 64f;
+				return 48f;
 			}
 		};
 	}

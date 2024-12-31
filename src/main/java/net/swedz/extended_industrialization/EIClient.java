@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -154,5 +155,13 @@ public final class EIClient
 	private static void registerGuiLayers(RegisterGuiLayersEvent event)
 	{
 		event.registerAbove(VanillaGuiLayers.SELECTED_ITEM_NAME, EI.id("nano_gravichestplate_activation_status"), NanoGravichestplateHudRenderer::render);
+	}
+	
+	@SubscribeEvent
+	private static void registerAdditionalModels(ModelEvent.RegisterAdditional event)
+	{
+		event.register(ModelResourceLocation.standalone(EI.id("tesla_plasma/tesla_coil")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla_plasma/tesla_hatch")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla_plasma/tesla_tower")));
 	}
 }

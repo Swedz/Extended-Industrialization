@@ -2,19 +2,19 @@ package net.swedz.extended_industrialization.client.tesla;
 
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.util.RenderHelper;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.renderable.BakedModelRenderable;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientConfig;
+import net.swedz.extended_industrialization.EIClientRenderTypes;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehavior;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehaviorHolder;
@@ -23,7 +23,6 @@ import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBe
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehaviorHolder;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
 import net.swedz.tesseract.neoforge.api.WorldPos;
-import net.swedz.tesseract.neoforge.helper.BoxRenderHelper;
 import team.lodestar.lodestone.handlers.RenderHandler;
 import team.lodestar.lodestone.registry.client.LodestoneRenderTypes;
 import team.lodestar.lodestone.systems.rendering.LodestoneRenderType;
@@ -34,8 +33,6 @@ import team.lodestar.lodestone.systems.rendering.trail.TrailPointBuilder;
 
 import java.util.List;
 import java.util.Optional;
-
-import static net.minecraft.client.renderer.RenderStateShard.*;
 
 final class TeslaPartRenderer
 {
@@ -104,25 +101,9 @@ final class TeslaPartRenderer
 		}
 	}
 	
-	private static RenderType getPlasmaRenderType(float u, float v)
+	private static BakedModelRenderable getModel(ResourceLocation location)
 	{
-		return RenderType.create(
-				"plasma",
-				DefaultVertexFormat.NEW_ENTITY,
-				VertexFormat.Mode.QUADS,
-				1536,
-				false,
-				true,
-				RenderType.CompositeState.builder()
-						.setShaderState(RENDERTYPE_ENERGY_SWIRL_SHADER)
-						.setTextureState(new RenderStateShard.TextureStateShard(EI.id("textures/vfx/plasma_overlay.png"), false, false))
-						.setTexturingState(new RenderStateShard.OffsetTexturingStateShard(u, v))
-						.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-						.setCullState(NO_CULL)
-						.setLightmapState(LIGHTMAP)
-						.setOverlayState(OVERLAY)
-						.createCompositeState(false)
-		);
+		return BakedModelRenderable.of(ModelResourceLocation.standalone(location));
 	}
 	
 	private static void renderPlasma(MachineBlockEntity machine, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
@@ -137,19 +118,13 @@ final class TeslaPartRenderer
 				Vec3 offset = behavior.getOffset();
 				matrices.translate(offset.x(), offset.y(), offset.z());
 				
-				float tick = Minecraft.getInstance().levelRenderer.getTicks() + partialTick;
-				float speed = behavior.getSpeed();
-				float u = (tick * speed) % 1f;
-				float v = (tick * speed) % 1f;
-				VertexConsumer vc = buffer.getBuffer(getPlasmaRenderType(u, v));
+				float modelScale = behavior.getModelScale();
+				matrices.scale(modelScale, modelScale, modelScale);
 				
-				behavior.getShape((box, ignoreFaces) ->
-						BoxRenderHelper.renderBox(
-								matrices, light, overlay, vc,
-								box, (d) -> !ignoreFaces.contains(d),
-								64f, 32f, behavior.getTextureScale(),
-								1f, 1f, 1f, 0.8f
-						));
+				var model = getModel(behavior.getModelLocation());
+				float textureScale = behavior.getTextureScale();
+				float speed = behavior.getSpeed();
+				model.render(matrices, buffer, (texture) -> EIClientRenderTypes.TESLA_PLASMA.apply(textureScale, speed), light, overlay, partialTick, new BakedModelRenderable.Context(ModelData.EMPTY));
 				
 				matrices.popPose();
 			}

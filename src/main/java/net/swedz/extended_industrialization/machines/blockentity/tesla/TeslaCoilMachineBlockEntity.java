@@ -20,12 +20,12 @@ import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientConfig;
@@ -36,7 +36,6 @@ import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcBehav
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaArcs;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehavior;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehaviorHolder;
-import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaShapeAdder;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
@@ -180,29 +179,31 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 			@Override
 			public Vec3 getOffset()
 			{
-				return Vec3.ZERO;
+				return new Vec3(-0.05f / 2f, -0.05f / 2f, -0.05f / 2f);
 			}
 			
 			@Override
-			public void getShape(TeslaPlasmaShapeAdder shapes)
+			public ResourceLocation getModelLocation()
 			{
-				double inflate = 0.02;
-				shapes.add(new AABB(0, 11f / 16f - inflate, 0, 1, 1 + inflate, 5f / 16f).inflate(inflate, 0, inflate), Set.of(Direction.DOWN, Direction.SOUTH));
-				shapes.add(new AABB(0, 11f / 16f - inflate, 11f / 16f, 1, 1 + inflate, 1).inflate(inflate, 0, inflate), Set.of(Direction.DOWN, Direction.NORTH));
-				shapes.add(new AABB(0, 11f / 16f - inflate, 5f / 16f + inflate + inflate, 5f / 16f, 1 + inflate, 11f / 16f - inflate - inflate).inflate(inflate, 0, inflate), Set.of(Direction.DOWN, Direction.EAST, Direction.SOUTH, Direction.NORTH));
-				shapes.add(new AABB(11f / 16f, 11f / 16f - inflate, 5f / 16f + inflate + inflate, 1, 1 + inflate, 11f / 16f - inflate - inflate).inflate(inflate, 0, inflate), Set.of(Direction.DOWN, Direction.WEST, Direction.SOUTH, Direction.NORTH));
+				return EI.id("tesla_plasma/tesla_coil");
+			}
+			
+			@Override
+			public float getModelScale()
+			{
+				return 1.05f;
 			}
 			
 			@Override
 			public float getSpeed()
 			{
-				return 0.0075f;
+				return 100f;
 			}
 			
 			@Override
 			public float getTextureScale()
 			{
-				return 8f / 64f;
+				return 32f;
 			}
 		};
 	}

@@ -15,17 +15,14 @@ import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.machines.multiblocks.HatchBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.HatchType;
-import com.google.common.collect.Sets;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehavior;
 import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaBehaviorHolder;
-import net.swedz.extended_industrialization.client.tesla.generator.TeslaPlasmaShapeAdder;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverComponent;
@@ -34,7 +31,6 @@ import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.T
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
@@ -117,49 +113,31 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 			@Override
 			public Vec3 getOffset()
 			{
-				return Vec3.ZERO;
-			}
-			
-			private static Set<Direction> only(Direction direction)
-			{
-				Set<Direction> ignoreFaces = Sets.newHashSet(Direction.values());
-				ignoreFaces.remove(direction);
-				return ignoreFaces;
+				return new Vec3(-0.05f / 2f, -0.05f / 2f, -0.05f / 2f);
 			}
 			
 			@Override
-			public void getShape(TeslaPlasmaShapeAdder shapes)
+			public ResourceLocation getModelLocation()
 			{
-				double inflate = 0.02;
-				double inflate2 = inflate * 2;
-				
-				shapes.add(new AABB(5f / 16f, 6f / 16f, 0, 6f / 16f - inflate2, 10f / 16f, 0).inflate(inflate, inflate, inflate), only(Direction.NORTH));
-				shapes.add(new AABB(6f / 16f, 5f / 16f, 0, 10f / 16f, 11f / 16f, 0).inflate(inflate, inflate, inflate), only(Direction.NORTH));
-				shapes.add(new AABB(10f / 16f + inflate2, 6f / 16f, 0, 11f / 16f, 10f / 16f, 0).inflate(inflate, inflate, inflate), only(Direction.NORTH));
-				
-				shapes.add(new AABB(5f / 16f, 6f / 16f, 1, 6f / 16f - inflate2, 10f / 16f, 1).inflate(inflate, inflate, inflate), only(Direction.SOUTH));
-				shapes.add(new AABB(6f / 16f, 5f / 16f, 1, 10f / 16f, 11f / 16f, 1).inflate(inflate, inflate, inflate), only(Direction.SOUTH));
-				shapes.add(new AABB(10f / 16f + inflate2, 6f / 16f, 1, 11f / 16f, 10f / 16f, 1).inflate(inflate, inflate, inflate), only(Direction.SOUTH));
-				
-				shapes.add(new AABB(1, 6f / 16f, 5f / 16f, 1, 10f / 16f, 6f / 16f - inflate2).inflate(inflate, inflate, inflate), only(Direction.EAST));
-				shapes.add(new AABB(1, 5f / 16f, 6f / 16f, 1, 11f / 16f, 10f / 16f).inflate(inflate, inflate, inflate), only(Direction.EAST));
-				shapes.add(new AABB(1, 6f / 16f, 10f / 16f + inflate2, 1, 10f / 16f, 11f / 16f).inflate(inflate, inflate, inflate), only(Direction.EAST));
-				
-				shapes.add(new AABB(0, 6f / 16f, 5f / 16f, 0, 10f / 16f, 6f / 16f - inflate2).inflate(inflate, inflate, inflate), only(Direction.WEST));
-				shapes.add(new AABB(0, 5f / 16f, 6f / 16f, 0, 11f / 16f, 10f / 16f).inflate(inflate, inflate, inflate), only(Direction.WEST));
-				shapes.add(new AABB(0, 6f / 16f, 10f / 16f + inflate2, 0, 10f / 16f, 11f / 16f).inflate(inflate, inflate, inflate), only(Direction.WEST));
+				return EI.id("tesla_plasma/tesla_hatch");
+			}
+			
+			@Override
+			public float getModelScale()
+			{
+				return 1.05f;
 			}
 			
 			@Override
 			public float getSpeed()
 			{
-				return 0.0075f;
+				return 100f;
 			}
 			
 			@Override
 			public float getTextureScale()
 			{
-				return 8f / 64f;
+				return 48f;
 			}
 		};
 	}

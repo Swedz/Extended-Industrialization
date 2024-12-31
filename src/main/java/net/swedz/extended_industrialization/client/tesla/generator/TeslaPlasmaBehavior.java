@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.client.tesla.generator;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
 public interface TeslaPlasmaBehavior
@@ -8,7 +9,9 @@ public interface TeslaPlasmaBehavior
 	
 	Vec3 getOffset();
 	
-	void getShape(TeslaPlasmaShapeAdder shapes);
+	ResourceLocation getModelLocation();
+	
+	float getModelScale();
 	
 	float getSpeed();
 	
