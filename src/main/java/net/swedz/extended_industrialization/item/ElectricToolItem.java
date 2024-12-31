@@ -26,8 +26,11 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -136,7 +139,13 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	
 	public ElectricToolItem(Properties properties, Type toolType)
 	{
-		super(properties.stacksTo(1).rarity(Rarity.UNCOMMON));
+		super(properties
+				.stacksTo(1)
+				.rarity(Rarity.UNCOMMON)
+				.component(EIComponents.HIDE_BAR, false)
+				.component(EIComponents.ELECTRIC_TOOL_SPEED, SPEED_MAX)
+				.component(MIComponents.SILK_TOUCH, false)
+				.component(MIComponents.ENERGY, 0L));
 		this.toolType = toolType;
 	}
 	
@@ -213,6 +222,21 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	public boolean should3By3(ItemStack stack, Player player)
 	{
 		return toolType.canDo3by3() && this.isActivated(stack) && !player.isShiftKeyDown();
+	}
+	
+	@Override
+	public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access)
+	{
+		if(toolType.canDo3by3() && action == ClickAction.SECONDARY && other.isEmpty())
+		{
+			this.setActivated(player, stack, !this.isActivated(stack));
+			if(player.level().isClientSide())
+			{
+				player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 1, 1);
+			}
+			return true;
+		}
+		return super.overrideOtherStackedOnMe(stack, other, slot, action, player, access);
 	}
 	
 	@Override

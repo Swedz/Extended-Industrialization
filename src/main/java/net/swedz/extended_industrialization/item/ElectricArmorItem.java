@@ -20,7 +20,10 @@ public class ElectricArmorItem extends ArmorItem implements ISimpleEnergyItem, I
 	public ElectricArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties,
 							 long energyCapacity, long damageCostEnergy)
 	{
-		super(material, type, properties.stacksTo(1));
+		super(material, type, properties
+				.stacksTo(1)
+				.component(EIComponents.HIDE_BAR, false)
+				.component(MIComponents.ENERGY, 0L));
 		this.energyCapacity = energyCapacity;
 		this.damageCostEnergy = damageCostEnergy;
 	}

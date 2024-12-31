@@ -2,8 +2,6 @@ package net.swedz.extended_industrialization.client.model.chainer;
 
 import aztech.modern_industrialization.machines.models.MachineCasing;
 import aztech.modern_industrialization.machines.models.MachineCasings;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -28,8 +26,6 @@ public final class MachineChainerUnbakedModel implements IUnbakedGeometry<Machin
 {
 	public static final ResourceLocation                            LOADER_ID = EI.id("machine_chainer");
 	public static final IGeometryLoader<MachineChainerUnbakedModel> LOADER    = (json, context) -> new MachineChainerUnbakedModel(json);
-	
-	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer()).create();
 	
 	private final MachineCasing              casing;
 	private final MachineChainerOverlaysJson overlaysJson;

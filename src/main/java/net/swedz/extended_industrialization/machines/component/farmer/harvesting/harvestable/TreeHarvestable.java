@@ -46,21 +46,23 @@ public final class TreeHarvestable implements LootTableHarvestableBehavior
 		trees.remove(context.pos());
 	}
 	
+	private void onTreeGrow(TreeGrowthEvent event, FarmerBlockMap blockMap)
+	{
+		BlockPos base = event.getPos();
+		if(blockMap.containsDirtAt(base.below()))
+		{
+			List<BlockPos> blocks = event.getPositions();
+			blocks.removeIf(blockMap::containsDirtAt);
+			blocks.sort(Collections.reverseOrder(Comparator.comparingInt(Vec3i::getY)));
+			trees.put(base, new FarmerTree(base, blocks));
+		}
+	}
+	
 	@Override
 	public List<FarmerListener<? extends Event>> getListeners(FarmerBlockMap blockMap)
 	{
 		return List.of(
-				new FarmerListener<>(TreeGrowthEvent.class, (event) ->
-				{
-					BlockPos base = event.getPos();
-					if(blockMap.containsDirtAt(base.below()))
-					{
-						List<BlockPos> blocks = event.getPositions();
-						blocks.removeIf(blockMap::containsDirtAt);
-						blocks.sort(Collections.reverseOrder(Comparator.comparingInt(Vec3i::getY)));
-						trees.put(base, new FarmerTree(base, blocks));
-					}
-				})
+				new FarmerListener<>(TreeGrowthEvent.class, (event) -> this.onTreeGrow(event, blockMap))
 		);
 	}
 	

@@ -89,7 +89,12 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	
 	public SteamChainsawItem(Item.Properties settings)
 	{
-		super(settings.stacksTo(1).rarity(Rarity.UNCOMMON));
+		super(settings
+				.stacksTo(1)
+				.rarity(Rarity.UNCOMMON)
+				.component(MIComponents.SILK_TOUCH, true)
+				.component(MIComponents.STEAM_DRILL_FUEL, SteamDrillFuel.EMPTY)
+				.component(MIComponents.WATER, 0));
 	}
 	
 	private static boolean isNotSilkTouch(ItemStack stack)
@@ -256,15 +261,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 		if(fuel.burnTicks() > 0)
 		{
 			stack.set(MIComponents.STEAM_DRILL_FUEL, new SteamDrillFuel(Math.max(0, fuel.burnTicks() - 5), fuel.maxBurnTicks()));
-			int water = Math.max(0, stack.get(MIComponents.WATER) - 5);
-			if(water > 0)
-			{
-				stack.set(MIComponents.WATER, water);
-			}
-			else
-			{
-				stack.remove(MIComponents.WATER);
-			}
+			stack.update(MIComponents.WATER, 0, (water) -> Math.max(0, water - 5));
 		}
 		if(fuel.burnTicks() == 0)
 		{

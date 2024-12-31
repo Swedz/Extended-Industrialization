@@ -19,15 +19,14 @@ import java.util.Optional;
 import static net.swedz.extended_industrialization.EITooltips.*;
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
-public final class NanoSuitSpeedAbility implements NanoSuitAbility
+public final class NanoSuitStepAbility implements NanoSuitAbility
 {
-	private static final long   ENERGY_COST = 2;
-	private static final double SPEED_BOOST = 0.4;
+	private static final long ENERGY_COST = 2;
 	
 	@Override
 	public ArmorItem.Type armorType()
 	{
-		return ArmorItem.Type.LEGGINGS;
+		return ArmorItem.Type.BOOTS;
 	}
 	
 	@Override
@@ -36,10 +35,10 @@ public final class NanoSuitSpeedAbility implements NanoSuitAbility
 		if(item.getStoredEnergy(stack) > 0 && item.isActivated(stack))
 		{
 			modifiers = modifiers.withModifierAdded(
-					Attributes.MOVEMENT_SPEED,
+					Attributes.STEP_HEIGHT,
 					new AttributeModifier(
-							EI.id("nano_speed_boost"),
-							SPEED_BOOST,
+							EI.id("nano_step_boost"),
+							1,
 							AttributeModifier.Operation.ADD_MULTIPLIED_BASE
 					),
 					this.equipmentSlotGroup()
@@ -52,7 +51,7 @@ public final class NanoSuitSpeedAbility implements NanoSuitAbility
 	public Optional<List<Component>> getTooltipLines(NanoSuitArmorItem item, ItemStack stack)
 	{
 		return Optional.of(List.of(
-				line(EIText.NANO_SUIT_SPEED).arg(item.isActivated(stack), EITooltips.ACTIVATED_BOOLEAN_PARSER)
+				line(EIText.NANO_SUIT_STEP).arg(item.isActivated(stack), EITooltips.ACTIVATED_BOOLEAN_PARSER)
 		));
 	}
 	
@@ -60,14 +59,14 @@ public final class NanoSuitSpeedAbility implements NanoSuitAbility
 	public List<Component> getHelpTooltipLines(NanoSuitArmorItem item, ItemStack stack)
 	{
 		return List.of(
-				line(EIText.NANO_SUIT_HELP_SPEED).arg("%s.toggle_leggings_ability".formatted(EI.ID), KEYBIND_PARSER).arg("mouse.right", KEYBIND_PARSER)
+				line(EIText.NANO_SUIT_HELP_STEP).arg("%s.toggle_boots_ability".formatted(EI.ID), KEYBIND_PARSER).arg("mouse.right", KEYBIND_PARSER)
 		);
 	}
 	
 	@Override
 	public void onActivationChange(NanoSuitArmorItem item, Player player, ItemStack stack, boolean activated)
 	{
-		player.displayClientMessage((activated ? EIText.NANO_SUIT_SPEED_TOGGLED_ON : EIText.NANO_SUIT_SPEED_TOGGLED_OFF).text(), true);
+		player.displayClientMessage((activated ? EIText.NANO_SUIT_STEP_TOGGLED_ON : EIText.NANO_SUIT_STEP_TOGGLED_OFF).text(), true);
 	}
 	
 	@Override
