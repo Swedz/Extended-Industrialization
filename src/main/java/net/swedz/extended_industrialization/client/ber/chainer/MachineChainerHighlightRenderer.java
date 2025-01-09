@@ -15,6 +15,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
+import net.swedz.tesseract.neoforge.helper.CubeOverlayRenderHelper;
 
 public final class MachineChainerHighlightRenderer extends MachineChainerBlockEntityRenderer
 {
@@ -123,7 +124,7 @@ public final class MachineChainerHighlightRenderer extends MachineChainerBlockEn
 		matrices.translate((float) offset.getX(), (float) offset.getY(), (float) offset.getZ());
 		matrices.translate(-0.005, -0.005, -0.005);
 		matrices.scale(1.01f, 1.01f, 1.01f);
-		RenderHelper.drawOverlay(matrices, buffer, red, green, blue, RenderHelper.FULL_LIGHT, overlay);
+		CubeOverlayRenderHelper.render(matrices, buffer, red, green, blue, overlay);
 		matrices.popPose();
 	}
 	
