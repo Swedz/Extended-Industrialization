@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.machines.recipe;
 
 import aztech.modern_industrialization.machines.recipe.MachineRecipe;
-import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
 import aztech.modern_industrialization.machines.recipe.ProxyableMachineRecipeType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -11,7 +10,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.datagen.api.RecipeHelper;
+import net.swedz.tesseract.neoforge.compat.mi.recipe.MIMachineRecipeBuilder;
 
 import java.util.List;
 
@@ -27,13 +26,13 @@ public final class ComposterMachineRecipeType extends ProxyableMachineRecipeType
 		ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
 		ResourceLocation id = EI.id("composter/generated/%s/%s_to_bonemeal".formatted(itemId.getNamespace(), itemId.getPath()));
 		
-		MachineRecipeBuilder recipe = new MachineRecipeBuilder(this, 2, 5 * 20);
+		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
 		
 		int amountNeeded = Math.max(1, (int) Math.floor((8 / chance) / 2));
 		recipe.addItemInput(item, amountNeeded);
 		recipe.addItemOutput(Items.BONE_MEAL, 2);
 		
-		return new RecipeHolder<>(id, RecipeHelper.getActualRecipe(recipe));
+		return new RecipeHolder<>(id, (MachineRecipe) recipe.convert());
 	}
 	
 	@Override

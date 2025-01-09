@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.machines.recipe;
 
 import aztech.modern_industrialization.machines.recipe.MachineRecipe;
-import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
 import aztech.modern_industrialization.machines.recipe.ProxyableMachineRecipeType;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import com.google.common.collect.Lists;
@@ -24,7 +23,7 @@ import net.neoforged.neoforge.common.brewing.IBrewingRecipe;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIFluids;
-import net.swedz.extended_industrialization.datagen.api.RecipeHelper;
+import net.swedz.tesseract.neoforge.compat.mi.recipe.MIMachineRecipeBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -69,14 +68,14 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 	
 	private RecipeHolder<MachineRecipe> generate(ResourceLocation id, Ingredient inputIngredient, Ingredient reagentIngredient, ItemStack outputStack)
 	{
-		MachineRecipeBuilder recipe = new MachineRecipeBuilder(this, 4, 5 * 20);
+		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(this, 4, 5 * 20);
 		
 		recipe.addItemInput(inputIngredient, 4, 1f);
 		recipe.addItemInput(reagentIngredient, 1, 1f);
 		recipe.addFluidInput(EIFluids.BLAZING_ESSENCE, 1);
 		recipe.addItemOutput(ItemVariant.of(outputStack), 4, 1f);
 		
-		return new RecipeHolder<>(id, RecipeHelper.getActualRecipe(recipe));
+		return new RecipeHolder<>(id, (MachineRecipe) recipe.convert());
 	}
 	
 	private RecipeHolder<MachineRecipe> generate(ResourceLocation id, ItemStack inputStack, Ingredient reagentIngredient, ItemStack outputStack)
