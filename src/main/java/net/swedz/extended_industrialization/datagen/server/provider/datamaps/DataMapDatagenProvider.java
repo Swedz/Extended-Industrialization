@@ -34,7 +34,7 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		this.addFluidFertilizerPotency(EIFluids.COMPOSTED_MANURE, 25, 150);
 		this.addFluidFertilizerPotency(EIFluids.NPK_FERTILIZER, 10, 30);
 		
-		this.addLargeElectricFurnaceTier(MI.id("cupronickel_coil"), 8, 0.75f);
+		this.addLargeElectricFurnaceTier(MI.id("cupronickel_coil"), 16, 0.75f);
 		this.addLargeElectricFurnaceTier(MI.id("kanthal_coil"), 32, 0.75f);
 		
 		this.addTeslaTowerTier(EI.id("copper_tesla_winding"), CableTier.LV.getMaxTransfer() * 6, 32, 64);

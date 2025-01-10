@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.machines.recipe;
 
 import aztech.modern_industrialization.machines.recipe.MachineRecipe;
-import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
 import aztech.modern_industrialization.machines.recipe.ProxyableMachineRecipeType;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -18,7 +17,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIItems;
-import net.swedz.extended_industrialization.datagen.api.RecipeHelper;
+import net.swedz.tesseract.neoforge.compat.mi.recipe.MIMachineRecipeBuilder;
 
 import java.util.List;
 import java.util.Set;
@@ -35,7 +34,7 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 		ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(foodItem);
 		ResourceLocation id = EI.id("canning_machine/generated/canned_food/%s/%s".formatted(itemId.getNamespace(), itemId.getPath()));
 		
-		MachineRecipeBuilder recipe = new MachineRecipeBuilder(this, 2, 5 * 20);
+		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
 		
 		int count = (int) Math.ceil(food.nutrition() / 2D);
 		recipe.addItemInput(EIItems.TIN_CAN, count);
@@ -56,7 +55,7 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 		}
 		recipe.addItemOutput(remainingItemStack.getItem(), remainingItemStack.getCount());
 		
-		return new RecipeHolder<>(id, RecipeHelper.getActualRecipe(recipe));
+		return new RecipeHolder<>(id, (MachineRecipe) recipe.convert());
 	}
 	
 	private List<RecipeHolder<MachineRecipe>> buildCannedFood()
@@ -84,26 +83,26 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 	{
 		ResourceLocation id = EI.id("canning_machine/generated/filling/%s/%s".formatted(itemId.getNamespace(), itemId.getPath()));
 		
-		MachineRecipeBuilder recipe = new MachineRecipeBuilder(this, 2, 5 * 20);
+		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
 		
 		recipe.addFluidInput(fluidStack.getFluid(), fluidStack.getAmount());
 		recipe.addItemInput(emptyItem, 1);
 		recipe.addItemOutput(fullItem, 1);
 		
-		return new RecipeHolder<>(id, RecipeHelper.getActualRecipe(recipe));
+		return new RecipeHolder<>(id, (MachineRecipe) recipe.convert());
 	}
 	
 	private RecipeHolder<MachineRecipe> generateEmptyingBucket(FluidStack fluidStack, ResourceLocation itemId, Item fullItem, Item emptyItem)
 	{
 		ResourceLocation id = EI.id("canning_machine/generated/emptying/%s/%s".formatted(itemId.getNamespace(), itemId.getPath()));
 		
-		MachineRecipeBuilder recipe = new MachineRecipeBuilder(this, 2, 5 * 20);
+		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
 		
 		recipe.addItemInput(fullItem, 1);
 		recipe.addItemOutput(emptyItem, 1);
 		recipe.addFluidOutput(fluidStack.getFluid(), fluidStack.getAmount());
 		
-		return new RecipeHolder<>(id, RecipeHelper.getActualRecipe(recipe));
+		return new RecipeHolder<>(id, (MachineRecipe) recipe.convert());
 	}
 	
 	private List<RecipeHolder<MachineRecipe>> buildBucket()

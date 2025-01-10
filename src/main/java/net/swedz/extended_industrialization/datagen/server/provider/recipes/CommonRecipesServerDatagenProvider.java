@@ -4,6 +4,8 @@ import aztech.modern_industrialization.MIFluids;
 import aztech.modern_industrialization.MIItem;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
+import aztech.modern_industrialization.materials.MIMaterials;
+import aztech.modern_industrialization.materials.part.MIParts;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
@@ -14,10 +16,11 @@ import net.swedz.extended_industrialization.EIBlocks;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.EITags;
-import net.swedz.extended_industrialization.datagen.api.recipe.ShapedRecipeBuilder;
 import net.swedz.extended_industrialization.material.EIMaterials;
 import net.swedz.tesseract.neoforge.compat.mi.material.MIMaterials;
 import net.swedz.tesseract.neoforge.compat.mi.material.part.MIMaterialParts;
+import net.swedz.tesseract.neoforge.compat.mi.recipe.MIMachineRecipeBuilder;
+import net.swedz.tesseract.neoforge.compat.vanilla.recipe.ShapedRecipeBuilder;
 
 import java.util.function.Consumer;
 
@@ -32,12 +35,12 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 	{
 		ShapedRecipeBuilder shapedRecipeBuilder = new ShapedRecipeBuilder();
 		crafting.accept(shapedRecipeBuilder);
-		shapedRecipeBuilder.setOutput(result, resultCount);
+		shapedRecipeBuilder.output(result, resultCount);
 		shapedRecipeBuilder.offerTo(output, EI.id(path + "/craft/" + name));
 		
 		if(assembler)
 		{
-			shapedRecipeBuilder.exportToAssembler().offerTo(output, EI.id(path + "/assembler/" + name));
+			MIMachineRecipeBuilder.fromShapedToAssembler(shapedRecipeBuilder).offerTo(output, EI.id(path + "/assembler/" + name));
 		}
 	}
 	
@@ -173,7 +176,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 		);
 	}
 	
-	private static void nanoSuitPiece(String id, ItemLike baseArmor, int pieces, ItemLike result, Consumer<MachineRecipeBuilder> recipeBuilder, RecipeOutput output)
+	private static void nanoSuitPiece(String id, ItemLike baseArmor, int pieces, ItemLike result, Consumer<MIMachineRecipeBuilder> recipeBuilder, RecipeOutput output)
 	{
 		addMachineRecipe(
 				"tool", id, MIMachineRecipeTypes.ASSEMBLER,

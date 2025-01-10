@@ -11,8 +11,9 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EITags;
-import net.swedz.extended_industrialization.datagen.api.recipe.ShapedRecipeBuilder;
-import net.swedz.extended_industrialization.datagen.api.recipe.ShapelessRecipeBuilder;
+import net.swedz.tesseract.neoforge.compat.mi.recipe.MIMachineRecipeBuilder;
+import net.swedz.tesseract.neoforge.compat.vanilla.recipe.ShapedRecipeBuilder;
+import net.swedz.tesseract.neoforge.compat.vanilla.recipe.ShapelessRecipeBuilder;
 import net.swedz.extended_industrialization.material.EIMaterials;
 
 import java.util.function.Consumer;
@@ -45,12 +46,12 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		
 		ShapedRecipeBuilder builder = new ShapedRecipeBuilder();
 		crafting.accept(builder);
-		builder.setOutput(machine(machineName, machineTier), 1);
+		builder.output(machine(machineName, machineTier), 1);
 		builder.offerTo(output, EI.id("machines/%s/craft%s".formatted(machineName, recipeId)));
 		
 		if(assembler)
 		{
-			builder.exportToAssembler().offerTo(output, EI.id("machines/%s/assembler%s".formatted(machineName, recipeId)));
+			MIMachineRecipeBuilder.fromShapedToAssembler(builder).offerTo(output, EI.id("machines/%s/assembler%s".formatted(machineName, recipeId)));
 		}
 	}
 	
@@ -89,12 +90,12 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		ShapelessRecipeBuilder builder = new ShapelessRecipeBuilder()
 				.with(machineBronze(machine))
 				.with(MIItem.STEEL_UPGRADE)
-				.setOutput(machineSteel(machine), 1);
+				.output(machineSteel(machine), 1);
 		builder.offerTo(output, EI.id("machines/%s/craft/upgrade_steel".formatted(machine)));
 		
-		builder.exportToPacker().offerTo(output, EI.id("machines/%s/packer/upgrade_steel".formatted(machine)));
+		MIMachineRecipeBuilder.fromShapelessToPacker(builder).offerTo(output, EI.id("machines/%s/packer/upgrade_steel".formatted(machine)));
 		
-		builder.exportToUnpackerAndFlip().offerTo(output, EI.id("machines/%s/unpacker/downgrade_steel".formatted(machine)));
+		MIMachineRecipeBuilder.fromShapelessToUnpackerAndFlip(builder).offerTo(output, EI.id("machines/%s/unpacker/downgrade_steel".formatted(machine)));
 	}
 	
 	private static void addBronzeAndSteelMachineRecipes(String machine, Consumer<ShapedRecipeBuilder> crafting, RecipeOutput output)
@@ -108,13 +109,13 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		String recipeBId = "from_%s".formatted(machineA);
 		new ShapelessRecipeBuilder()
 				.with(machine(machineA, null))
-				.setOutput(machine(machineB, null), 1)
+				.output(machine(machineB, null), 1)
 				.offerTo(output, EI.id("machines/%s/craft/%s".formatted(machineB, recipeBId)));
 		
 		String recipeAId = "from_%s".formatted(machineB);
 		new ShapelessRecipeBuilder()
 				.with(machine(machineB, null))
-				.setOutput(machine(machineA, null), 1)
+				.output(machine(machineA, null), 1)
 				.offerTo(output, EI.id("machines/%s/craft/%s".formatted(machineA, recipeAId)));
 	}
 	
