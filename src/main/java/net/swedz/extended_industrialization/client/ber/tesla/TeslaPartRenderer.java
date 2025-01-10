@@ -27,6 +27,7 @@ import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasm
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasmaBehaviorHolder;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
 import net.swedz.tesseract.neoforge.api.WorldPos;
+import net.swedz.tesseract.neoforge.helper.CubeOverlayRenderHelper;
 import org.joml.Vector4f;
 
 import java.util.List;
@@ -46,7 +47,7 @@ final class TeslaPartRenderer
 				matrices.pushPose();
 				matrices.translate(-0.005, -0.005, -0.005);
 				matrices.scale(1.01f, 1.01f, 1.01f);
-				RenderHelper.drawOverlay(matrices, buffer, 111f / 256, 111f / 256, 1f, RenderHelper.FULL_LIGHT, overlay);
+				CubeOverlayRenderHelper.render(matrices, buffer, 111f / 256, 111f / 256, 1f, overlay);
 				matrices.popPose();
 			}
 		});
