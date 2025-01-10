@@ -11,10 +11,10 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EITags;
+import net.swedz.extended_industrialization.material.EIMaterials;
 import net.swedz.tesseract.neoforge.compat.mi.recipe.MIMachineRecipeBuilder;
 import net.swedz.tesseract.neoforge.compat.vanilla.recipe.ShapedRecipeBuilder;
 import net.swedz.tesseract.neoforge.compat.vanilla.recipe.ShapelessRecipeBuilder;
-import net.swedz.extended_industrialization.material.EIMaterials;
 
 import java.util.function.Consumer;
 
