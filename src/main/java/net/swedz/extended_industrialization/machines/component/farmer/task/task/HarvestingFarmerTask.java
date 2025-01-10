@@ -6,8 +6,9 @@ import aztech.modern_industrialization.thirdparty.fabrictransfer.api.transaction
 import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.machines.component.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlock;
@@ -103,7 +104,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 		BlockPos origin = context.pos();
 		List<BlockPos> blockPositions = handler.getBlocks(context);
 		
-		if(blockPositions.isEmpty() || !blockPositions.contains(origin))
+		if(blockPositions.isEmpty())
 		{
 			return false;
 		}
@@ -116,7 +117,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 		
 		this.insertDrops(drops, false);
 		
-		BlockState newOriginState = null;
+		BlockState newOriginState = Blocks.AIR.defaultBlockState();
 		for(BlockPos pos : blockPositions)
 		{
 			BlockState newState = level.getFluidState(pos).createLegacyBlock();
@@ -124,12 +125,12 @@ public final class HarvestingFarmerTask extends FarmerTask
 			{
 				newOriginState = newState;
 			}
-			level.setBlock(pos, newState, 1 | 2);
-			level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(level.getBlockState(pos)));
+			level.setBlock(pos, newState, Block.UPDATE_NONE, 0);
 		}
-		if(newOriginState == null)
+		for(BlockPos pos : blockPositions)
 		{
-			throw new IllegalStateException("Didn't update origin block when harvesting?");
+			var state = level.getBlockState(pos);
+			level.sendBlockUpdated(pos, state, state, Block.UPDATE_ALL);
 		}
 		cropBlockEntry.updateState(newOriginState);
 		

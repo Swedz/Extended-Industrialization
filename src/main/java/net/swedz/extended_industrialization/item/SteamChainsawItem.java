@@ -89,7 +89,12 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	
 	public SteamChainsawItem(Item.Properties settings)
 	{
-		super(settings.stacksTo(1).rarity(Rarity.UNCOMMON));
+		super(settings
+				.stacksTo(1)
+				.rarity(Rarity.UNCOMMON)
+				.component(MIComponents.SILK_TOUCH, true)
+				.component(MIComponents.STEAM_DRILL_FUEL, SteamDrillFuel.EMPTY)
+				.component(MIComponents.WATER, 0));
 	}
 	
 	private static boolean isNotSilkTouch(ItemStack stack)

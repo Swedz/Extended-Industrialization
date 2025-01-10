@@ -1,15 +1,13 @@
 package net.swedz.extended_industrialization.datagen.server.provider.recipes;
 
-import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import aztech.modern_industrialization.materials.Material;
 import aztech.modern_industrialization.materials.part.PartTemplate;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.datagen.api.RecipeHelper;
+import net.swedz.tesseract.neoforge.compat.mi.recipe.MIMachineRecipeBuilder;
 
 import java.util.function.Consumer;
 
@@ -22,29 +20,24 @@ public abstract class RecipesServerDatagenProvider extends RecipeProvider
 		super(event.getGenerator().getPackOutput(), event.getLookupProvider());
 	}
 	
-	protected static Ingredient ingredient(String maybeTag)
-	{
-		return RecipeHelper.ingredient(maybeTag);
-	}
-	
 	protected static boolean hasPart(Material material, PartTemplate part)
 	{
 		return material.getParts().containsKey(part.key());
 	}
 	
-	protected static void addMachineRecipe(String path, String name, MachineRecipeType recipeType, int eu, int duration, Consumer<MachineRecipeBuilder> recipeBuilder, RecipeOutput output)
+	protected static void addMachineRecipe(String path, String name, MachineRecipeType recipeType, int eu, int duration, Consumer<MIMachineRecipeBuilder> recipeBuilder, RecipeOutput output)
 	{
-		MachineRecipeBuilder recipe = new MachineRecipeBuilder(recipeType, eu, duration);
+		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(recipeType, eu, duration);
 		recipeBuilder.accept(recipe);
-		output.accept(EI.id(path + "/" + name), RecipeHelper.getActualRecipe(recipe), null);
+		recipe.offerTo(output, EI.id(path + "/" + name));
 	}
 	
-	protected static void addMaterialMachineRecipe(Material material, String name, MachineRecipeType recipeType, int eu, int duration, Consumer<MachineRecipeBuilder> recipeBuilder, RecipeOutput output)
+	protected static void addMaterialMachineRecipe(Material material, String name, MachineRecipeType recipeType, int eu, int duration, Consumer<MIMachineRecipeBuilder> recipeBuilder, RecipeOutput output)
 	{
 		addMachineRecipe("materials/%s/%s".formatted(material.name, recipeType.getPath()), name, recipeType, eu, duration, recipeBuilder, output);
 	}
 	
-	protected static void addMaterialMachineRecipe(Material material, String name, MachineRecipeType recipeType, int eu, Consumer<MachineRecipeBuilder> recipeBuilder, RecipeOutput output)
+	protected static void addMaterialMachineRecipe(Material material, String name, MachineRecipeType recipeType, int eu, Consumer<MIMachineRecipeBuilder> recipeBuilder, RecipeOutput output)
 	{
 		addMaterialMachineRecipe(material, name, recipeType, eu, (int) (200 * material.get(HARDNESS).timeFactor), recipeBuilder, output);
 	}

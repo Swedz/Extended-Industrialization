@@ -139,7 +139,13 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	
 	public ElectricToolItem(Properties properties, Type toolType)
 	{
-		super(properties.stacksTo(1).rarity(Rarity.UNCOMMON));
+		super(properties
+				.stacksTo(1)
+				.rarity(Rarity.UNCOMMON)
+				.component(EIComponents.HIDE_BAR, false)
+				.component(EIComponents.ELECTRIC_TOOL_SPEED, SPEED_MAX)
+				.component(MIComponents.SILK_TOUCH, false)
+				.component(MIComponents.ENERGY, 0L));
 		this.toolType = toolType;
 	}
 	
