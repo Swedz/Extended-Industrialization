@@ -125,6 +125,8 @@ public enum EIText implements MICompatibleTranslatableTextEnum
 	TESLA_HANDHELD_LINKED("Linked to %s"),
 	TESLA_HANDHELD_SELECTED("Selected transmitter for receiving."),
 	TESLA_INTERDIMENSIONAL_UPGRADE_HELP("Removes the range limitation on a Tesla Tower and allows it to transmit energy across dimensions."),
+	TESLA_LETHAL_COIL_HELP_1("Deals damage to entities within %s blocks while powered."),
+	TESLA_LETHAL_COIL_HELP_2("Amount of damage dealt is determined by the voltage of hull provided."),
 	TESLA_NETWORK_RECEIVER_LINKED("Linked to %s"),
 	TESLA_NETWORK_RECEIVER_MISMATCHING_VOLTAGE("Cannot receive %s power"),
 	TESLA_NETWORK_RECEIVER_NO_LINK("Not linked to any transmitter"),

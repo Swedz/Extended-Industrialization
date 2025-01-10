@@ -45,7 +45,7 @@ import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.tooltip.SteamChainsawTooltipComponent;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
+import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaBlock;
 import net.swedz.extended_industrialization.network.packet.ModifyElectricToolSpeedPacket;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
@@ -131,7 +131,7 @@ public final class EIClient
 				BlockEntityRendererProvider provider = switch (blockEntity)
 				{
 					case MachineChainerMachineBlockEntity be -> MachineChainerHighlightRenderer::new;
-					case TeslaNetworkPart __ -> switch (blockEntity)
+					case TeslaBlock __ -> switch (blockEntity)
 					{
 						case MultiblockMachineBlockEntity be -> TeslaPartMultiblockRenderer::new;
 						default -> TeslaPartSingleBlockRenderer::new;

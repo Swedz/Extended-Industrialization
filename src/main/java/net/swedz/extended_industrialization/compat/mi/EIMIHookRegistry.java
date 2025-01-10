@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.extended_industrialization.EIBlocks;
 import net.swedz.extended_industrialization.EIItems;
-import net.swedz.extended_industrialization.EIOtherRegistries;
+import net.swedz.extended_industrialization.EIRecipeTypes;
 import net.swedz.extended_industrialization.EISortOrder;
 import net.swedz.tesseract.neoforge.compat.mi.hook.MIHookEntrypoint;
 import net.swedz.tesseract.neoforge.compat.mi.hook.MIHookRegistry;
@@ -40,13 +40,13 @@ public final class EIMIHookRegistry implements MIHookRegistry
 	@Override
 	public DeferredRegister<RecipeSerializer<?>> recipeSerializerRegistry()
 	{
-		return EIOtherRegistries.RECIPE_SERIALIZERS;
+		return EIRecipeTypes.RECIPE_SERIALIZERS;
 	}
 	
 	@Override
 	public DeferredRegister<RecipeType<?>> recipeTypeRegistry()
 	{
-		return EIOtherRegistries.RECIPE_TYPES;
+		return EIRecipeTypes.RECIPE_TYPES;
 	}
 	
 	@Override

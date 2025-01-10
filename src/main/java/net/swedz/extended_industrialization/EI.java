@@ -67,7 +67,8 @@ public final class EI
 		EIBlocks.init(bus);
 		EIFluids.init(bus);
 		EIMaterialRegistry.init();
-		EIOtherRegistries.init(bus);
+		EICreativeTabs.init(bus);
+		EIRecipeTypes.init(bus);
 		EIModularSlotPanelSlots.init();
 		
 		bus.register(new DatagenDelegator());

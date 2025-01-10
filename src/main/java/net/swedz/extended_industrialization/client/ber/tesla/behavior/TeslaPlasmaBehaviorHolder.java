@@ -1,6 +1,8 @@
 package net.swedz.extended_industrialization.client.ber.tesla.behavior;
 
-public interface TeslaPlasmaBehaviorHolder
+import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaBlock;
+
+public interface TeslaPlasmaBehaviorHolder extends TeslaBlock
 {
 	TeslaPlasmaBehavior getTeslaPlasmaBehavior();
 }

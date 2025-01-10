@@ -7,6 +7,7 @@ public final class EIConfig
 	private static final ModConfigSpec.Builder BUILDER;
 	
 	private static final ModConfigSpec.IntValue     TESLA_COIL_RANGE;
+	private static final ModConfigSpec.IntValue     LETHAL_TESLA_COIL_RANGE;
 	private static final ModConfigSpec.IntValue     MACHINE_CHAINER_MAX_CONNECTIONS;
 	private static final ModConfigSpec.BooleanValue ALLOW_UPGRADES_IN_PROCESSING_ARRAY;
 	private static final ModConfigSpec.IntValue     FARMER_FERTILIZER_MAX_RANDOM_TICKS;
@@ -26,7 +27,11 @@ public final class EIConfig
 		
 		TESLA_COIL_RANGE = BUILDER
 				.comment("The range for the tesla coil to transmit energy within")
-				.defineInRange("tesla_coil_range", 32, 0, Integer.MAX_VALUE);
+				.defineInRange("tesla_coil_range", 32, 1, Integer.MAX_VALUE);
+		
+		LETHAL_TESLA_COIL_RANGE = BUILDER
+				.comment("The range for the lethal tesla coil to damage entities within")
+				.defineInRange("lethal_tesla_coil_range", 3, 1, Integer.MAX_VALUE);
 		
 		MACHINE_CHAINER_MAX_CONNECTIONS = BUILDER
 				.comment("The maximum amount of connections a machine chainer can have")
@@ -75,6 +80,7 @@ public final class EIConfig
 	}
 	
 	public static int     teslaCoilRange;
+	public static int     lethalTeslaCoilRange;
 	public static int     machineChainerMaxConnections;
 	public static boolean allowUpgradesInProcessingArray;
 	public static int     farmerFertilizerMaxRandomTicks;
@@ -89,6 +95,7 @@ public final class EIConfig
 	public static void loadConfig()
 	{
 		teslaCoilRange = TESLA_COIL_RANGE.get();
+		lethalTeslaCoilRange = LETHAL_TESLA_COIL_RANGE.get();
 		machineChainerMaxConnections = MACHINE_CHAINER_MAX_CONNECTIONS.get();
 		allowUpgradesInProcessingArray = ALLOW_UPGRADES_IN_PROCESSING_ARRAY.get();
 		farmerFertilizerMaxRandomTicks = FARMER_FERTILIZER_MAX_RANDOM_TICKS.get();

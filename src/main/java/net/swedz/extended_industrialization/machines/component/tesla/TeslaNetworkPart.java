@@ -1,11 +1,12 @@
 package net.swedz.extended_industrialization.machines.component.tesla;
 
 import aztech.modern_industrialization.api.energy.CableTier;
+import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaBlock;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 
-public interface TeslaNetworkPart
+public interface TeslaNetworkPart extends TeslaBlock
 {
 	boolean hasNetwork();
 	

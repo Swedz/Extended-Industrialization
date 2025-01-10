@@ -37,6 +37,7 @@ import net.swedz.extended_industrialization.machines.blockentity.multiblock.Proc
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer.SteamFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.tesla.LethalTeslaCoilMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaCoilMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaReceiverHatchBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaReceiverMachineBlockEntity;
@@ -432,5 +433,12 @@ public final class EIMachines
 					(bep) -> new TeslaReceiverHatchBlockEntity(bep, tier)
 			);
 		}
+		
+		hook.register(
+				"Lethal Tesla Coil", "lethal_tesla_coil", "lethal_tesla_coil",
+				CableTier.LV.casing, true, true, true, true,
+				LethalTeslaCoilMachineBlockEntity::new,
+				LethalTeslaCoilMachineBlockEntity::registerEnergyApi
+		);
 	}
 }
