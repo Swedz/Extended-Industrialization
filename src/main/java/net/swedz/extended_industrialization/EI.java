@@ -100,8 +100,11 @@ public final class EI
 	
 	private static void setupConfig(IEventBus bus, ModContainer container)
 	{
-		CONFIG = new ConfigManager()
-				.includeDefaultValueComments()
+		var manager = new ConfigManager()
+				.includeDefaultValueComments();
+		manager.codecs()
+				.register(EIConfig.CableTierDamages.class, EIConfig.CableTierDamages.CODEC);
+		CONFIG = manager
 				.build(EIConfig.class)
 				.register(container, ModConfig.Type.STARTUP)
 				.load()

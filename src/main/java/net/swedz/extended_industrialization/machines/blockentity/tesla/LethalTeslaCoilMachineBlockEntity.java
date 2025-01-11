@@ -187,10 +187,14 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		);
 	}
 	
+	private long getEnergyCost()
+	{
+		return casing.getCableTier().eu / 8L;
+	}
+	
 	private float getDamageAmount()
 	{
-		// TODO scale damage based on voltage
-		return 4;
+		return (float) EI.config().lethalTeslaCoil().damage().get(casing.getCableTier());
 	}
 	
 	private long tick;
@@ -211,22 +215,18 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		
 		if(redstoneControl.doAllowNormalOperation(this))
 		{
-			active = energy.consumeEu(1, Simulation.ACT) > 0;
-			if(active && tick++ % 10L == 0)
+			float damage = this.getDamageAmount();
+			if(damage > 0)
 			{
-				var source = EIDamageTypes.tesla(level, worldPosition.getCenter());
-				float damage = this.getDamageAmount();
-				var entities = level.getEntities(null, this.getDamageArea());
-				for(var entity : entities)
+				long energyCost = this.getEnergyCost();
+				active = energy.consumeEu(energyCost, Simulation.ACT) == energyCost;
+				if(active && tick++ % (2 * 20L) == 0)
 				{
-					// TODO scale eu cost based on voltage
-					if(energy.consumeEu(1, Simulation.ACT) > 0)
+					var source = EIDamageTypes.tesla(level, worldPosition.getCenter());
+					var entities = level.getEntities(null, this.getDamageArea());
+					for(var entity : entities)
 					{
 						entity.hurt(source, damage);
-					}
-					else
-					{
-						break;
 					}
 				}
 			}

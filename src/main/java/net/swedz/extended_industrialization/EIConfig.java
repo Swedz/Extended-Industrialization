@@ -1,9 +1,15 @@
 package net.swedz.extended_industrialization;
 
+import aztech.modern_industrialization.api.energy.CableTier;
+import com.mojang.serialization.Codec;
+import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.config.annotation.ConfigComment;
 import net.swedz.tesseract.neoforge.config.annotation.ConfigKey;
 import net.swedz.tesseract.neoforge.config.annotation.Range;
 import net.swedz.tesseract.neoforge.config.annotation.SubSection;
+
+import java.util.Collections;
+import java.util.Map;
 
 public interface EIConfig
 {
@@ -49,7 +55,20 @@ public interface EIConfig
 		@Range.Integer(min = 1, max = Integer.MAX_VALUE)
 		default int range()
 		{
-			return 3;
+			return 2;
+		}
+		
+		@ConfigKey("damage")
+		@ConfigComment({
+				"The amount of damage dealt by the lethal tesla coil for a cable tier",
+				"If no value is specified for a cable tier, the cable tier's EU value is divided by 16 to determine the damage dealt",
+				"Range: >= 0.1"
+		})
+		default CableTierDamages damage()
+		{
+			return new CableTierDamages(Map.of(
+					CableTier.SUPERCONDUCTOR, (double) Integer.MAX_VALUE
+			));
 		}
 	}
 	
@@ -116,8 +135,25 @@ public interface EIConfig
 		}
 	}
 	
-	final class CableTierLethalities
+	final class CableTierDamages
 	{
-	
+		public static final Codec<CableTierDamages> CODEC = Codec.unboundedMap(
+				Codec.STRING.xmap(CableTier::getTier, (tier) -> tier.name),
+				Codec.doubleRange(0.1D, Integer.MAX_VALUE)
+		).xmap(CableTierDamages::new, (value) -> value.damages);
+		
+		private final Map<CableTier, Double> damages;
+		
+		private CableTierDamages(Map<CableTier, Double> damages)
+		{
+			this.damages = Collections.unmodifiableMap(damages);
+		}
+		
+		public double get(CableTier cableTier)
+		{
+			Assert.notNull(cableTier);
+			
+			return damages.getOrDefault(cableTier, cableTier.eu / 16D);
+		}
 	}
 }
