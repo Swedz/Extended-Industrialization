@@ -91,7 +91,7 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		
 		this.registerComponents(isActive, redstoneControl, casing, energy);
 		
-		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(61, 34), energy::getEu, energy::getCapacity));
+		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(81, 34), energy::getEu, energy::getCapacity));
 		
 		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
 				.withRedstoneModule(redstoneControl)
