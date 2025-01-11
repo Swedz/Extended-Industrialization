@@ -48,6 +48,8 @@ import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLin
 
 public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity implements Tickable, EnergyComponentHolder, TeslaArcBehaviorHolder, TeslaPlasmaBehaviorHolder
 {
+	private static final long DAMAGE_INTERVAL = 20L;
+	
 	private final IsActiveComponent isActive;
 	
 	private final RedstoneControlComponent redstoneControl;
@@ -221,9 +223,10 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 			if(damage > 0)
 			{
 				long energyCost = this.getEnergyCost();
-				active = energy.consumeEu(energyCost, Simulation.ACT) == energyCost;
-				if(active && tick++ % (2 * 20L) == 0)
+				active = energy.consumeEu(energyCost, Simulation.SIMULATE) == energyCost;
+				if(active && tick++ % DAMAGE_INTERVAL == 0)
 				{
+					energy.consumeEu(energyCost, Simulation.ACT);
 					var source = EIDamageTypes.tesla(level, worldPosition.getCenter());
 					var entities = level.getEntities(
 							(Entity) null,
