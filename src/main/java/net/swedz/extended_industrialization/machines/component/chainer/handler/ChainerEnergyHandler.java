@@ -45,8 +45,7 @@ public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, 
 			var wrapper = wrappers.get(i);
 			int remainingStorages = wrappers.size() - i;
 			long remainingAmountToReceive = maxReceive - amountReceived;
-			long amountToReceive = remainingAmountToReceive / remainingStorages;
-			amountReceived += wrapper.handler().receive(amountToReceive, simulate);
+			amountReceived += wrapper.handler().receive(remainingAmountToReceive, simulate);
 		}
 		return amountReceived;
 	}

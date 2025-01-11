@@ -20,8 +20,10 @@ import net.swedz.extended_industrialization.machines.blockentity.multiblock.tesl
 import net.swedz.extended_industrialization.machines.guicomponent.EIModularSlotPanelSlots;
 import net.swedz.extended_industrialization.material.EIMaterialRegistry;
 import net.swedz.extended_industrialization.network.EIPackets;
+import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.api.MCIdentifiable;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
+import net.swedz.tesseract.neoforge.config.ConfigManager;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
@@ -55,9 +57,7 @@ public final class EI
 	
 	public EI(IEventBus bus, ModContainer container)
 	{
-		container.registerConfig(ModConfig.Type.STARTUP, EIConfig.SPEC);
-		EIConfig.loadConfig();
-		bus.addListener(FMLCommonSetupEvent.class, (event) -> EIConfig.loadConfig());
+		setupConfig(bus, container);
 		
 		EILocalizedListeners.INSTANCE.init();
 		
@@ -88,5 +88,24 @@ public final class EI
 		NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, DataMapsUpdatedEvent.class, (event) ->
 				event.ifRegistry(Registries.BLOCK, (registry) -> LargeElectricFurnaceBlockEntity.initTiers()));
 		TeslaTowerBlockEntity.registerTieredShapes();
+	}
+	
+	private static EIConfig CONFIG;
+	
+	public static EIConfig config()
+	{
+		Assert.notNull(CONFIG, "Config not yet loaded");
+		return CONFIG;
+	}
+	
+	private static void setupConfig(IEventBus bus, ModContainer container)
+	{
+		CONFIG = new ConfigManager()
+				.includeDefaultValueComments()
+				.build(EIConfig.class)
+				.register(container, ModConfig.Type.STARTUP)
+				.load()
+				.listenToLoad(bus)
+				.config();
 	}
 }

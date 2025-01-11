@@ -16,7 +16,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIConfig;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerComponent;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
@@ -56,7 +55,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		
 		chainer = new ChainerComponent(
 				this,
-				EIConfig.machineChainerMaxConnections,
+				EI.config().machineChainerMaxConnections(),
 				() -> redstoneControl.doAllowNormalOperation(this)
 		);
 		

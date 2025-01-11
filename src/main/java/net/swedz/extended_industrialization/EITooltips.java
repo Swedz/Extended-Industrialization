@@ -196,7 +196,7 @@ public final class EITooltips
 	public static final TooltipAttachment MACHINE_CHAINER = TooltipAttachment.multilines(
 			List.of(EI.id("machine_chainer")),
 			List.of(
-					line(EIText.MACHINE_CHAINER_HELP_1).arg(EIConfig.machineChainerMaxConnections),
+					line(EIText.MACHINE_CHAINER_HELP_1).arg(EI.config().machineChainerMaxConnections()),
 					line(EIText.MACHINE_CHAINER_HELP_2),
 					line(EIText.MACHINE_CHAINER_HELP_3)
 			)
