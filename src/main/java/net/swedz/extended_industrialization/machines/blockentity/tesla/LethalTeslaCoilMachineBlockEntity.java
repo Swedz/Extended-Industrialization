@@ -23,6 +23,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.AABB;
@@ -223,7 +225,11 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 				if(active && tick++ % (2 * 20L) == 0)
 				{
 					var source = EIDamageTypes.tesla(level, worldPosition.getCenter());
-					var entities = level.getEntities(null, this.getDamageArea());
+					var entities = level.getEntities(
+							(Entity) null,
+							this.getDamageArea(),
+							(entity) -> entity.isAlive() && entity instanceof LivingEntity && !(entity instanceof Player)
+					);
 					for(var entity : entities)
 					{
 						entity.hurt(source, damage);
