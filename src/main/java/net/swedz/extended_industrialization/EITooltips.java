@@ -165,7 +165,7 @@ public final class EITooltips
 	public static final TooltipAttachment MACHINE_CHAINER = TooltipAttachment.multilines(
 			List.of(EI.id("machine_chainer")),
 			List.of(
-					line(EIText.MACHINE_CHAINER_HELP_1).arg(EIConfig.machineChainerMaxConnections),
+					line(EIText.MACHINE_CHAINER_HELP_1).arg(EI.config().machineChainerMaxConnections()),
 					line(EIText.MACHINE_CHAINER_HELP_2),
 					line(EIText.MACHINE_CHAINER_HELP_3)
 			)
@@ -190,7 +190,7 @@ public final class EITooltips
 	
 	public static final TooltipAttachment CHARGING_STATION_RANGED = TooltipAttachment.singleLine(
 			List.of(EI.id("local_wireless_charging_station")),
-			line(EIText.CHARGING_STATION_RANGED).arg(EIConfig.localWirelessChargingStationRange)
+			line(EIText.CHARGING_STATION_RANGED).arg(EI.config().localWirelessChargingStationRange())
 	);
 	
 	public static final TooltipAttachment CHARGING_STATION_GLOBAL = TooltipAttachment.singleLine(

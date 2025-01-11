@@ -12,7 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIConfig;
 import net.swedz.extended_industrialization.machines.component.craft.processingarray.ProcessingArrayMachineComponent;
 
 import java.util.function.Supplier;
@@ -28,7 +27,7 @@ public final class ProcessingArrayMachineSlot
 	
 	public static int getSlotY()
 	{
-		return 106 - (EIConfig.allowUpgradesInProcessingArray ? 0 : 20);
+		return 106 - (EI.config().allowUpgradesInProcessingArray() ? 0 : 20);
 	}
 	
 	public static boolean isMachine(ItemStack itemStack)
