@@ -29,7 +29,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientConfig;
-import net.swedz.extended_industrialization.EIConfig;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcBehavior;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcBehaviorHolder;
@@ -89,7 +88,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 				{
 					CableTier tier = casing.getCableTier();
 					long maxTransfer = tier.getMaxTransfer();
-					return TeslaTransferLimits.of(tier, maxTransfer, EIConfig.teslaCoilRange, tier.eu / 16);
+					return TeslaTransferLimits.of(tier, maxTransfer, EI.config().teslaCoilRange(), tier.eu / 16);
 				}
 		);
 		
@@ -317,7 +316,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	public List<Component> getTooltips()
 	{
 		return List.of(
-				line(EIText.TESLA_COIL_HELP_1).arg(EIConfig.teslaCoilRange),
+				line(EIText.TESLA_COIL_HELP_1).arg(EI.config().teslaCoilRange()),
 				line(EIText.TESLA_COIL_HELP_2)
 		);
 	}

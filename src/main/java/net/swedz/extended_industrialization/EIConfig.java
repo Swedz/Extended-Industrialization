@@ -7,14 +7,6 @@ import net.swedz.tesseract.neoforge.config.annotation.SubSection;
 
 public interface EIConfig
 {
-	@ConfigKey("local_wireless_charging_station_range")
-	@ConfigComment("The range for the local wireless charging station machine")
-	@Range.Integer(min = 1, max = Integer.MAX_VALUE)
-	default int localWirelessChargingStationRange()
-	{
-		return 32;
-	}
-	
 	@ConfigKey("machine_chainer_max_connections")
 	@ConfigComment("The maximum amount of connections a machine chainer can have")
 	@Range.Integer(min = 1, max = 128)
@@ -36,6 +28,29 @@ public interface EIConfig
 	default int farmerFertilizerMaxRandomTicks()
 	{
 		return 80;
+	}
+	
+	@ConfigKey("tesla_coil_range")
+	@ConfigComment("The range for the tesla coil to transmit energy within")
+	@Range.Integer(min = 1, max = Integer.MAX_VALUE)
+	default int teslaCoilRange()
+	{
+		return 32;
+	}
+	
+	@ConfigKey("lethal_tesla_coil")
+	@SubSection
+	LethalTeslaCoil lethalTeslaCoil();
+	
+	interface LethalTeslaCoil
+	{
+		@ConfigKey("range")
+		@ConfigComment("The range for the lethal tesla coil to damage entities within")
+		@Range.Integer(min = 1, max = Integer.MAX_VALUE)
+		default int range()
+		{
+			return 3;
+		}
 	}
 	
 	@ConfigKey("batching_machines")
@@ -99,5 +114,10 @@ public interface EIConfig
 		{
 			return 1;
 		}
+	}
+	
+	final class CableTierLethalities
+	{
+	
 	}
 }

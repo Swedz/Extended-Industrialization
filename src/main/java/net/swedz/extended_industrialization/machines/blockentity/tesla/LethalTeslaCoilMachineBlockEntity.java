@@ -29,7 +29,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientConfig;
-import net.swedz.extended_industrialization.EIConfig;
 import net.swedz.extended_industrialization.EIDamageTypes;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcBehavior;
@@ -180,7 +179,7 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	
 	private AABB getDamageArea()
 	{
-		int range = EIConfig.lethalTeslaCoilRange;
+		int range = EI.config().lethalTeslaCoil().range();
 		var center = worldPosition.getCenter();
 		return new AABB(
 				center.subtract(range, range, range),
@@ -255,7 +254,7 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	public List<Component> getTooltips()
 	{
 		return List.of(
-				line(EIText.TESLA_LETHAL_COIL_HELP_1).arg(EIConfig.lethalTeslaCoilRange),
+				line(EIText.TESLA_LETHAL_COIL_HELP_1).arg(EI.config().lethalTeslaCoil().range()),
 				line(EIText.TESLA_LETHAL_COIL_HELP_2)
 		);
 	}
