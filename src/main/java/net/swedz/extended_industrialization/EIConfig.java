@@ -1,103 +1,103 @@
 package net.swedz.extended_industrialization;
 
-import net.neoforged.neoforge.common.ModConfigSpec;
+import net.swedz.tesseract.neoforge.config.annotation.ConfigComment;
+import net.swedz.tesseract.neoforge.config.annotation.ConfigKey;
+import net.swedz.tesseract.neoforge.config.annotation.Range;
+import net.swedz.tesseract.neoforge.config.annotation.SubSection;
 
-public final class EIConfig
+public interface EIConfig
 {
-	private static final ModConfigSpec.Builder BUILDER;
-	
-	private static final ModConfigSpec.IntValue     LOCAL_WIRELESS_CHARGING_STATION_RANGE;
-	private static final ModConfigSpec.IntValue     MACHINE_CHAINER_MAX_CONNECTIONS;
-	private static final ModConfigSpec.BooleanValue ALLOW_UPGRADES_IN_PROCESSING_ARRAY;
-	private static final ModConfigSpec.IntValue     FARMER_FERTILIZER_MAX_RANDOM_TICKS;
-	private static final ModConfigSpec.IntValue     LARGE_STEAM_MACERATOR_SIZE;
-	private static final ModConfigSpec.DoubleValue  LARGE_STEAM_MACERATOR_EU;
-	private static final ModConfigSpec.IntValue     LARGE_STEAM_FURNACE_SIZE;
-	private static final ModConfigSpec.DoubleValue  LARGE_STEAM_FURNACE_EU;
-	private static final ModConfigSpec.IntValue     LARGE_ELECTRIC_MACERATOR_SIZE;
-	private static final ModConfigSpec.DoubleValue  LARGE_ELECTRIC_MACERATOR_EU;
-	private static final ModConfigSpec.DoubleValue  PROCESSING_ARRAY_EU;
-	
-	public static final ModConfigSpec SPEC;
-	
-	static
+	@ConfigKey("local_wireless_charging_station_range")
+	@ConfigComment("The range for the local wireless charging station machine")
+	@Range.Integer(min = 1, max = Integer.MAX_VALUE)
+	default int localWirelessChargingStationRange()
 	{
-		BUILDER = new ModConfigSpec.Builder();
-		
-		LOCAL_WIRELESS_CHARGING_STATION_RANGE = BUILDER
-				.comment("The range for the local wireless charging station machine")
-				.defineInRange("local_wireless_charging_station_range", 32, 0, Integer.MAX_VALUE);
-		
-		MACHINE_CHAINER_MAX_CONNECTIONS = BUILDER
-				.comment("The maximum amount of connections a machine chainer can have")
-				.defineInRange("machine_chainer_max_connections", 64, 1, 128);
-		
-		ALLOW_UPGRADES_IN_PROCESSING_ARRAY = BUILDER
-				.comment("Whether upgrades should be allowed in the Processing Array")
-				.define("allow_upgrades_in_processing_array", true);
-		
-		FARMER_FERTILIZER_MAX_RANDOM_TICKS = BUILDER
-				.comment("The maximum amount of random ticks the farmer can do on a crop block in a single use of fertilizer")
-				.defineInRange("farmer_fertilizer_max_random_ticks", 80, 1, 1000);
-		
-		{
-			BUILDER.push("batching_machines");
-			
-			LARGE_STEAM_MACERATOR_SIZE = BUILDER
-					.comment("The maximum batch size to use for the Large Steam Macerator")
-					.defineInRange("large_steam_macerator_size", 8, 1, Integer.MAX_VALUE);
-			LARGE_STEAM_MACERATOR_EU = BUILDER
-					.comment("The multiplier to use for the EU cost of the Large Steam Macerator")
-					.defineInRange("large_steam_macerator_eu", 0.75D, 0.1D, Double.MAX_VALUE);
-			
-			LARGE_STEAM_FURNACE_SIZE = BUILDER
-					.comment("The maximum batch size to use for the Large Steam Furnace")
-					.defineInRange("large_steam_furnace_size", 8, 1, Integer.MAX_VALUE);
-			LARGE_STEAM_FURNACE_EU = BUILDER
-					.comment("The multiplier to use for the EU cost of the Large Steam Furnace")
-					.defineInRange("large_steam_furnace_eu", 0.75D, 0.1D, Double.MAX_VALUE);
-			
-			LARGE_ELECTRIC_MACERATOR_SIZE = BUILDER
-					.comment("The maximum batch size to use for the Large Electric Macerator")
-					.defineInRange("large_electric_macerator_size", 16, 1, Integer.MAX_VALUE);
-			LARGE_ELECTRIC_MACERATOR_EU = BUILDER
-					.comment("The multiplier to use for the EU cost of the Large Electric Macerator")
-					.defineInRange("large_electric_macerator_eu", 0.75D, 0.1D, Double.MAX_VALUE);
-			
-			PROCESSING_ARRAY_EU = BUILDER
-					.comment("The multiplier to use for the EU cost of the Processing Array")
-					.defineInRange("processing_array_eu", 1D, 0.1D, Double.MAX_VALUE);
-			
-			BUILDER.pop();
-		}
-		
-		SPEC = BUILDER.build();
+		return 32;
 	}
 	
-	public static int     localWirelessChargingStationRange;
-	public static int     machineChainerMaxConnections;
-	public static boolean allowUpgradesInProcessingArray;
-	public static int     farmerFertilizerMaxRandomTicks;
-	public static int     largeSteamMaceratorBatchSize;
-	public static double  largeSteamMaceratorEuCostMultiplier;
-	public static int     largeSteamFurnaceBatchSize;
-	public static double  largeSteamFurnaceEuCostMultiplier;
-	public static int     largeElectricMaceratorBatchSize;
-	public static double  largeElectricMaceratorEuCostMultiplier;
-	public static double  processingArrayEuCostMultiplier;
-	
-	public static void loadConfig()
+	@ConfigKey("machine_chainer_max_connections")
+	@ConfigComment("The maximum amount of connections a machine chainer can have")
+	@Range.Integer(min = 1, max = 128)
+	default int machineChainerMaxConnections()
 	{
-		localWirelessChargingStationRange = LOCAL_WIRELESS_CHARGING_STATION_RANGE.get();
-		machineChainerMaxConnections = MACHINE_CHAINER_MAX_CONNECTIONS.get();
-		allowUpgradesInProcessingArray = ALLOW_UPGRADES_IN_PROCESSING_ARRAY.get();
-		farmerFertilizerMaxRandomTicks = FARMER_FERTILIZER_MAX_RANDOM_TICKS.get();
-		largeSteamMaceratorBatchSize = LARGE_STEAM_MACERATOR_SIZE.get();
-		largeSteamMaceratorEuCostMultiplier = LARGE_STEAM_MACERATOR_EU.get();
-		largeSteamFurnaceBatchSize = LARGE_STEAM_FURNACE_SIZE.get();
-		largeSteamFurnaceEuCostMultiplier = LARGE_STEAM_FURNACE_EU.get();
-		largeElectricMaceratorBatchSize = LARGE_ELECTRIC_MACERATOR_SIZE.get();
-		largeElectricMaceratorEuCostMultiplier = LARGE_ELECTRIC_MACERATOR_EU.get();
-		processingArrayEuCostMultiplier = PROCESSING_ARRAY_EU.get();
+		return 64;
+	}
+	
+	@ConfigKey("allow_upgrades_in_processing_array")
+	@ConfigComment("Whether upgrades should be allowed in the Processing Array")
+	default boolean allowUpgradesInProcessingArray()
+	{
+		return true;
+	}
+	
+	@ConfigKey("farmer_fertilizer_max_random_ticks")
+	@ConfigComment("The maximum amount of random ticks the farmer can do on a crop block in a single use of fertilizer")
+	@Range.Integer(min = 1, max = 1000)
+	default int farmerFertilizerMaxRandomTicks()
+	{
+		return 80;
+	}
+	
+	@ConfigKey("batching_machines")
+	@SubSection
+	BatchingMachines batchingMachines();
+	
+	interface BatchingMachines
+	{
+		@ConfigKey("large_steam_macerator_size")
+		@ConfigComment("The maximum batch size to use for the Large Steam Macerator")
+		@Range.Integer(min = 1, max = Integer.MAX_VALUE)
+		default int largeSteamMaceratorSize()
+		{
+			return 8;
+		}
+		
+		@ConfigKey("large_steam_macerator_eu")
+		@ConfigComment("The multiplier to use for the EU cost of the Large Steam Macerator")
+		@Range.Double(min = 0.1D, max = Double.MAX_VALUE)
+		default double largeSteamMaceratorEU()
+		{
+			return 0.75;
+		}
+		
+		@ConfigKey("large_steam_furnace_size")
+		@ConfigComment("The maximum batch size to use for the Large Steam Furnace")
+		@Range.Integer(min = 1, max = Integer.MAX_VALUE)
+		default int largeSteamFurnaceSize()
+		{
+			return 8;
+		}
+		
+		@ConfigKey("large_steam_furnace_eu")
+		@ConfigComment("The multiplier to use for the EU cost of the Large Steam Furnace")
+		@Range.Double(min = 0.1D, max = Double.MAX_VALUE)
+		default double largeSteamFurnaceEU()
+		{
+			return 0.75;
+		}
+		
+		@ConfigKey("large_electric_macerator_size")
+		@ConfigComment("The maximum batch size to use for the Large Electric Macerator")
+		@Range.Integer(min = 1, max = Integer.MAX_VALUE)
+		default int largeElectricMaceratorSize()
+		{
+			return 16;
+		}
+		
+		@ConfigKey("large_electric_macerator_eu")
+		@ConfigComment("The multiplier to use for the EU cost of the Large Electric Macerator")
+		@Range.Double(min = 0.1D, max = Double.MAX_VALUE)
+		default double largeElectricMaceratorEU()
+		{
+			return 0.75;
+		}
+		
+		@ConfigKey("processing_array_eu")
+		@ConfigComment("The multiplier to use for the EU cost of the Processing Array")
+		@Range.Double(min = 0.1D, max = Double.MAX_VALUE)
+		default double processingArrayEU()
+		{
+			return 1;
+		}
 	}
 }

@@ -18,7 +18,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIConfig;
 import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.craft.processingarray.ProcessingArrayMachineComponent;
@@ -42,7 +41,7 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 	{
 		super(bep, EI.id("processing_array"), SHAPE_TEMPLATES, MachineTier.LV);
 		
-		if(!EIConfig.allowUpgradesInProcessingArray)
+		if(!EI.config().allowUpgradesInProcessingArray())
 		{
 			var slotPanel = guiComponents.get(SlotPanel.Server.class);
 			if(slotPanel != null)
@@ -108,7 +107,7 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 	@Override
 	public EuCostTransformer getEuCostTransformer()
 	{
-		return EuCostTransformers.percentage(() -> (float) EIConfig.processingArrayEuCostMultiplier);
+		return EuCostTransformers.percentage(() -> (float) EI.config().batchingMachines().processingArrayEU());
 	}
 	
 	private int getMachineStackSize(int sizeIndex)
@@ -122,7 +121,7 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 		List<Component> lines = Lists.newArrayList();
 		lines.add(MICompatibleTextLine.line(EIText.PROCESSING_ARRAY_RECIPE));
 		lines.add(MICompatibleTextLine.line(EIText.PROCESSING_ARRAY_BATCH_SIZE));
-		if(EIConfig.processingArrayEuCostMultiplier != 1)
+		if(EI.config().batchingMachines().processingArrayEU() != 1)
 		{
 			lines.add(MICompatibleTextLine.line(EIText.PROCESSING_ARRAY_EU_COST_MULTIPLIER).arg(this.getEuCostTransformer(), EU_COST_TRANSFORMER_PARSER));
 		}
