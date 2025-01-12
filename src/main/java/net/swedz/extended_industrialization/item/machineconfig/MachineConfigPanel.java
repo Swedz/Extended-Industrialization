@@ -21,6 +21,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.tesseract.neoforge.compat.mi.api.ComponentStackHolder;
+import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ public record MachineConfigPanel(
 	public static final Codec<MachineConfigPanel> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
 					Codec.unboundedMap(
-							Codec.STRING.xmap((key) -> SlotPanel.SlotType.valueOf(key.toUpperCase()), (slotType) -> slotType.name().toLowerCase()),
+							CodecHelper.forLowercaseEnum(SlotPanel.SlotType.class),
 							ItemStack.CODEC
 					).fieldOf("items").forGetter(MachineConfigPanel::slotItems)
 			)

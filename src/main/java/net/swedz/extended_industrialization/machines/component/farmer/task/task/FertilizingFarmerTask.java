@@ -8,7 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.swedz.extended_industrialization.EIConfig;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.datamap.FertilizerPotency;
 import net.swedz.extended_industrialization.machines.component.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlock;
@@ -85,7 +85,7 @@ public final class FertilizingFarmerTask extends FarmerTask
 				modifiedState = level.getBlockState(pos);
 				randomTicks++;
 			}
-			while(randomTicks < EIConfig.farmerFertilizerMaxRandomTicks && modifiedState.isRandomlyTicking());
+			while(randomTicks < EI.config().farmerFertilizerMaxRandomTicks() && modifiedState.isRandomlyTicking());
 			
 			new FarmerFertilizeBlockPacket(pos).broadcastToClients((ServerLevel) level, pos, 32);
 			

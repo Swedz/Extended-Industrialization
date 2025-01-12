@@ -158,8 +158,8 @@ public final class EIMachines
 							bep, EI.id("large_steam_furnace"), new ShapeTemplate[]{shape},
 							OverclockComponent.getDefaultCatalysts(),
 							MIMachineRecipeTypes.FURNACE,
-							EIConfig.largeSteamFurnaceBatchSize,
-							EuCostTransformers.percentage(() -> (float) EIConfig.largeSteamFurnaceEuCostMultiplier)
+							EI.config().batchingMachines().largeSteamFurnaceSize(),
+							EuCostTransformers.percentage(() -> (float) EI.config().batchingMachines().largeSteamFurnaceEU())
 					)
 			);
 			ReiMachineRecipes.registerMultiblockShape(EI.id("large_steam_furnace"), shape);
@@ -187,8 +187,8 @@ public final class EIMachines
 							bep, EI.id("large_steam_macerator"), new ShapeTemplate[]{shape},
 							OverclockComponent.getDefaultCatalysts(),
 							MIMachineRecipeTypes.MACERATOR,
-							EIConfig.largeSteamMaceratorBatchSize,
-							EuCostTransformers.percentage(() -> (float) EIConfig.largeSteamMaceratorEuCostMultiplier)
+							EI.config().batchingMachines().largeSteamMaceratorSize(),
+							EuCostTransformers.percentage(() -> (float) EI.config().batchingMachines().largeSteamMaceratorEU())
 					)
 			);
 			ReiMachineRecipes.registerMultiblockShape(EI.id("large_steam_macerator"), shape);
@@ -207,8 +207,8 @@ public final class EIMachines
 							bep, EI.id("large_electric_macerator"), new ShapeTemplate[]{shape},
 							MachineTier.LV,
 							MIMachineRecipeTypes.MACERATOR,
-							EIConfig.largeElectricMaceratorBatchSize,
-							EuCostTransformers.percentage(() -> (float) EIConfig.largeElectricMaceratorEuCostMultiplier)
+							EI.config().batchingMachines().largeElectricMaceratorSize(),
+							EuCostTransformers.percentage(() -> (float) EI.config().batchingMachines().largeElectricMaceratorEU())
 					)
 			);
 			ReiMachineRecipes.registerMultiblockShape(EI.id("large_electric_macerator"), shape);
@@ -397,7 +397,7 @@ public final class EIMachines
 		hook.register(
 				"Local Wireless Charging Station", "local_wireless_charging_station", "wireless_charging_station/local",
 				CableTier.MV.casing, false, true, true, false,
-				(bep) -> new WirelessChargerMachineBlockEntity(bep, EI.id("local_wireless_charging_station"), CableTier.MV, (m, p) -> m.getBlockPos().closerThan(p.blockPosition(), EIConfig.localWirelessChargingStationRange)),
+				(bep) -> new WirelessChargerMachineBlockEntity(bep, EI.id("local_wireless_charging_station"), CableTier.MV, (m, p) -> m.getBlockPos().closerThan(p.blockPosition(), EI.config().localWirelessChargingStationRange())),
 				WirelessChargerMachineBlockEntity::registerEnergyApi
 		);
 		hook.register(
