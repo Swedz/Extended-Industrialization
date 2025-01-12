@@ -1,5 +1,15 @@
 {
   "parent": "minecraft:item/generated",
+  "loader": "neoforge:item_layers",
+  "neoforge_data": {
+    "layers": {
+      "0": {
+        "block_light": 15,
+        "sky_light": 15
+      }
+    }
+  },
+  "render_types": {},
   "textures": {
     "layer0": "extended_industrialization:item/nyano_helmet",
     "layer1": "extended_industrialization:item/nyano_helmet_overlay"

@@ -14,6 +14,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.loaders.ItemLayerModelBuilder;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.extended_industrialization.component.RainbowDataComponent;
@@ -141,18 +142,33 @@ public final class EIItems
 				.withCapabilities(MICommonCapabitilies::simpleEnergyItem)
 				.withModel((item) -> (provider) ->
 				{
+					int[] emissiveLayers = quantum ? new int[]{0, 2} : new int[]{0};
 					String texture = item.identifier().id();
 					var baseModel = provider.getBuilder("item/%s".formatted(texture))
 							.parent(new ModelFile.UncheckedModelFile("item/generated"))
 							.texture("layer0", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + texture))
-							.texture("layer1", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + texture + "_overlay"));
+							.texture("layer1", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + texture + "_overlay"))
+							.customLoader((parent, efh) -> ItemLayerModelBuilder.begin(parent, efh)
+									.emissive(15, 15, emissiveLayers))
+							.end();
+					if(quantum)
+					{
+						baseModel.texture("layer2", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + texture + "_quantum_overlay"));
+					}
 					for(var itemProperty : itemProperties.apply(item.get()))
 					{
 						String propertyTexture = itemProperty.model();
-						provider.getBuilder("item/%s".formatted(propertyTexture))
+						var propertyModel = provider.getBuilder("item/%s".formatted(propertyTexture))
 								.parent(new ModelFile.UncheckedModelFile("item/generated"))
 								.texture("layer0", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + propertyTexture))
-								.texture("layer1", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + propertyTexture + "_overlay"));
+								.texture("layer1", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + propertyTexture + "_overlay"))
+								.customLoader((parent, efh) -> ItemLayerModelBuilder.begin(parent, efh)
+										.emissive(15, 15, emissiveLayers))
+								.end();
+						if(quantum)
+						{
+							propertyModel.texture("layer2", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + propertyTexture + "_quantum_overlay"));
+						}
 						baseModel.override()
 								.predicate(itemProperty.id(), 1)
 								.model(new ModelFile.UncheckedModelFile(ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + propertyTexture)))
