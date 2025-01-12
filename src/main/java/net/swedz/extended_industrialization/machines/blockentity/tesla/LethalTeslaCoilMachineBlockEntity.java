@@ -1,5 +1,7 @@
 package net.swedz.extended_industrialization.machines.blockentity.tesla;
 
+import aztech.modern_industrialization.MITooltips;
+import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import aztech.modern_industrialization.api.machine.component.EnergyAccess;
@@ -17,6 +19,7 @@ import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Simulation;
 import aztech.modern_industrialization.util.Tickable;
+import com.google.common.collect.Lists;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
@@ -34,6 +37,7 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientConfig;
 import net.swedz.extended_industrialization.EIDamageTypes;
 import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcBehavior;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcBehaviorHolder;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcs;
@@ -41,6 +45,7 @@ import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasm
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasmaBehaviorHolder;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
+import net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser;
 
 import java.util.List;
 import java.util.Set;
@@ -50,6 +55,16 @@ import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLin
 public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity implements Tickable, EnergyComponentHolder, TeslaArcBehaviorHolder, TeslaPlasmaBehaviorHolder
 {
 	private static final long DAMAGE_INTERVAL = 20L;
+	
+	public static long getEnergyCost(CableTier tier)
+	{
+		return tier.eu / 8L;
+	}
+	
+	public static float getDamageAmount(CableTier tier)
+	{
+		return (float) Mth.clamp(EI.config().lethalTeslaCoil().damage().get(tier), 0, Integer.MAX_VALUE);
+	}
 	
 	private final IsActiveComponent isActive;
 	
@@ -192,16 +207,6 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		);
 	}
 	
-	private long getEnergyCost()
-	{
-		return casing.getCableTier().eu / 8L;
-	}
-	
-	private float getDamageAmount()
-	{
-		return (float) Mth.clamp(EI.config().lethalTeslaCoil().damage().get(casing.getCableTier()), 0, Integer.MAX_VALUE);
-	}
-	
 	private long tick;
 	
 	@Override
@@ -220,10 +225,10 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		
 		if(redstoneControl.doAllowNormalOperation(this))
 		{
-			float damage = this.getDamageAmount();
+			float damage = getDamageAmount(casing.getCableTier());
 			if(damage > 0)
 			{
-				long energyCost = this.getEnergyCost();
+				long energyCost = getEnergyCost(casing.getCableTier());
 				active = energy.consumeEu(energyCost, Simulation.SIMULATE) == energyCost;
 				if(active && tick++ % DAMAGE_INTERVAL == 0)
 				{
@@ -263,10 +268,17 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	@Override
 	public List<Component> getTooltips()
 	{
-		return List.of(
-				line(EIText.TESLA_LETHAL_COIL_HELP_1).arg(EI.config().lethalTeslaCoil().range()),
-				line(EIText.TESLA_LETHAL_COIL_HELP_2)
-		);
+		List<Component> lines = Lists.newArrayList();
+		lines.add(line(EIText.TESLA_LETHAL_COIL_HELP_1).arg(EI.config().lethalTeslaCoil().range()));
+		lines.add(line(EIText.TESLA_LETHAL_COIL_VALUES));
+		for(CableTier tier : CableTier.allTiers())
+		{
+			lines.add(line(EIText.TESLA_LETHAL_COIL_VOLTAGE_VALUE)
+					.arg(tier, MIParser.CABLE_TIER_SHORT.withStyle(MITooltips.HIGHLIGHT_STYLE))
+					.arg(getDamageAmount(tier), EITooltips.DAMAGE_PARSER)
+					.arg(getEnergyCost(tier), MITooltips.EU_PARSER));
+		}
+		return lines;
 	}
 	
 	public static void registerEnergyApi(BlockEntityType<?> bet)

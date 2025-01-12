@@ -17,6 +17,7 @@ import net.swedz.extended_industrialization.machines.blockentity.multiblock.Larg
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerTier;
 import net.swedz.tesseract.neoforge.api.WorldPos;
+import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
 import net.swedz.tesseract.neoforge.tooltip.BiParser;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 import net.swedz.tesseract.neoforge.tooltip.TooltipAttachment;
@@ -43,14 +44,36 @@ public final class EITooltips
 	};
 	
 	public static final Parser<Integer> NUMBERED_LIST_BULLET_PARSER = (number) ->
-			Component.literal("%d)".formatted(number)).withStyle(NUMBER_TEXT);
+			Component.literal("%d)".formatted(number)).withStyle(HIGHLIGHT_STYLE);
 	
 	public static final Parser<Boolean> ACTIVATED_BOOLEAN_PARSER = (value) ->
 			value ? EIText.ACTIVATED.text().withStyle(ChatFormatting.GREEN) : EIText.DEACTIVATED.text().withStyle(ChatFormatting.RED);
 	
 	public static final Parser<WorldPos> TESLA_NETWORK_KEY_PARSER = (key) -> Parser.GLOBAL_POS.withStyle(DEFAULT_STYLE).parse(GlobalPos.of(key.dimension(), key.pos()));
 	
-	public static final Parser<String> KEYBIND_PARSER = Parser.KEYBIND.withStyle(NUMBER_TEXT);
+	public static final Parser<String> KEYBIND_PARSER = Parser.KEYBIND.withStyle(HIGHLIGHT_STYLE);
+	
+	public static final Parser<Float> DAMAGE_PARSER = (damage) ->
+	{
+		MICompatibleTextLine line;
+		if(damage == Integer.MAX_VALUE)
+		{
+			line = EIText.DAMAGE.arg(Component.literal("\u221E").withStyle(HIGHLIGHT_STYLE));
+		}
+		else
+		{
+			damage /= 2;
+			if(damage % 1 == 0)
+			{
+				line = EIText.DAMAGE.arg(damage.intValue());
+			}
+			else
+			{
+				line = EIText.DAMAGE.arg(damage, 1, Parser.FLOAT);
+			}
+		}
+		return line.withStyle(HIGHLIGHT_STYLE);
+	};
 	
 	public static final TooltipAttachment ENERGY_STORED_ITEM = TooltipAttachment.singleLineOptional(
 			(stack, item) -> BuiltInRegistries.ITEM.getKey(item).getNamespace().equals(EI.ID),
