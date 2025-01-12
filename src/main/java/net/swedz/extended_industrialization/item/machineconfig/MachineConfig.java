@@ -11,6 +11,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
 public record MachineConfig(
 		Block machineBlock,
@@ -21,7 +22,7 @@ public record MachineConfig(
 {
 	public static final Codec<MachineConfig> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
-					BuiltInRegistries.BLOCK.byNameCodec().fieldOf("machine_block").forGetter(MachineConfig::machineBlock),
+					CodecHelper.forRegistry(BuiltInRegistries.BLOCK).fieldOf("machine_block").forGetter(MachineConfig::machineBlock),
 					MachineConfigSlots.CODEC.fieldOf("slots").forGetter(MachineConfig::slots),
 					MachineConfigOrientation.CODEC.fieldOf("orientation").forGetter(MachineConfig::orientation),
 					MachineConfigPanel.CODEC.fieldOf("panel").forGetter(MachineConfig::panel)
