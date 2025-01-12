@@ -3,6 +3,7 @@ package net.swedz.extended_industrialization;
 import aztech.modern_industrialization.api.energy.CableTier;
 import com.mojang.serialization.Codec;
 import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.neoforge.compat.mi.serialization.MICodecs;
 import net.swedz.tesseract.neoforge.config.annotation.ConfigComment;
 import net.swedz.tesseract.neoforge.config.annotation.ConfigKey;
 import net.swedz.tesseract.neoforge.config.annotation.Range;
@@ -138,7 +139,7 @@ public interface EIConfig
 	final class CableTierDamages
 	{
 		public static final Codec<CableTierDamages> CODEC = Codec.unboundedMap(
-				Codec.STRING.xmap(CableTier::getTier, (tier) -> tier.name),
+				MICodecs.CABLE_TIER,
 				Codec.doubleRange(0.1D, Integer.MAX_VALUE)
 		).xmap(CableTierDamages::new, (value) -> value.damages);
 		
