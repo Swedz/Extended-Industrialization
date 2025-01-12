@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "modern_industrialization:sodium_battery"
+    },
+    "C": {
+      "item": "modern_industrialization:aluminum_cable"
+    },
+    "E": {
+      "item": "modern_industrialization:electronic_circuit"
+    },
+    "H": {
+      "item": "modern_industrialization:advanced_machine_hull"
+    },
+    "L": {
+      "item": "extended_industrialization:silver_tesla_top_load"
+    }
+  },
+  "pattern": [
+    "CLC",
+    "CHC",
+    "EBE"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:lethal_tesla_coil"
+  }
+}

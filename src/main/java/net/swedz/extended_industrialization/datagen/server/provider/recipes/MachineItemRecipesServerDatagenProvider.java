@@ -612,6 +612,20 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 				output
 		);
 		addInterchangeableMachinesRecipes("tesla_coil", "tesla_receiver", output);
+		addBasicCraftingMachineRecipes(
+				"lethal_tesla_coil",
+				(builder) -> builder
+						.define('L', EIMaterials.SILVER.get(EIMaterials.Parts.TESLA_TOP_LOAD))
+						.define('E', MIItem.ELECTRONIC_CIRCUIT)
+						.define('H', "modern_industrialization:advanced_machine_hull")
+						.define('B', "modern_industrialization:sodium_battery")
+						.define('C', "modern_industrialization:aluminum_cable")
+						.pattern("CLC")
+						.pattern("CHC")
+						.pattern("EBE"),
+				true,
+				output
+		);
 		
 		String[] casings = {"basic", "advanced", "turbo", "highly_advanced", "quantum"};
 		String[] cables = {"tin", "electrum", "aluminum", "annealed_copper", "superconductor"};

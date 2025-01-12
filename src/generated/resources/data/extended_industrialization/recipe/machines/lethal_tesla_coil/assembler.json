@@ -1,0 +1,33 @@
+{
+  "type": "modern_industrialization:assembler",
+  "duration": 200,
+  "eu": 8,
+  "item_inputs": [
+    {
+      "amount": 1,
+      "item": "modern_industrialization:sodium_battery"
+    },
+    {
+      "amount": 4,
+      "item": "modern_industrialization:aluminum_cable"
+    },
+    {
+      "amount": 2,
+      "item": "modern_industrialization:electronic_circuit"
+    },
+    {
+      "amount": 1,
+      "item": "modern_industrialization:advanced_machine_hull"
+    },
+    {
+      "amount": 1,
+      "item": "extended_industrialization:silver_tesla_top_load"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "extended_industrialization:lethal_tesla_coil"
+    }
+  ]
+}
