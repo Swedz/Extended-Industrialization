@@ -242,6 +242,9 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 	@Override
 	public List<Component> getTooltips()
 	{
-		return List.of(line(EIText.TESLA_RECEIVER_HELP_1));
+		return List.of(
+				line(EIText.TESLA_RECEIVER_HELP_1),
+				line(EIText.TESLA_RECEIVER_HELP_2)
+		);
 	}
 }
