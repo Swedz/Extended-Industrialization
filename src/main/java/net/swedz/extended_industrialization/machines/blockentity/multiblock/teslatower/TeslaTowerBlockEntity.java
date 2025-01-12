@@ -84,6 +84,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		);
 		
 		arcs = new TeslaArcs(
+				worldPosition, true,
 				1f, 3, 6, 4, 8, 15, 10,
 				() -> Vec3.atCenterOf(this.getTopLoadPositionRelative())
 		);

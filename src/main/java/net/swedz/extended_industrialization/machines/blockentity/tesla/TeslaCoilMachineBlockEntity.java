@@ -93,6 +93,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		);
 		
 		arcs = new TeslaArcs(
+				worldPosition, true,
 				0.25f, 3, 3, 1, 3, 2, 5,
 				() ->
 				{

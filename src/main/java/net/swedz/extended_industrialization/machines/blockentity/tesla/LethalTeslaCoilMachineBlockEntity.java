@@ -20,10 +20,12 @@ import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Simulation;
 import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -43,6 +45,7 @@ import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcBe
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcs;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasmaBehavior;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasmaBehaviorHolder;
+import net.swedz.extended_industrialization.network.packet.EntitiesElectrocutedPacket;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
 import net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser;
@@ -93,7 +96,8 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		insertable = energy.buildInsertable(casing::canInsertEu);
 		
 		arcs = new TeslaArcs(
-				0.25f, 3, 3, 1, 3, 2, 5,
+				worldPosition, false,
+				0.25f, 3, 3, 2, 3, 2, 5,
 				() ->
 				{
 					double radius = 0.35;
@@ -239,9 +243,15 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 							this.getDamageArea(),
 							(entity) -> entity.isAlive() && entity instanceof LivingEntity && !(entity instanceof Player)
 					);
-					for(var entity : entities)
+					if(!entities.isEmpty())
 					{
-						entity.hurt(source, damage);
+						var entityIds = new IntArrayList();
+						for(var entity : entities)
+						{
+							entity.hurt(source, damage);
+							entityIds.add(entity.getId());
+						}
+						new EntitiesElectrocutedPacket(worldPosition, entityIds).broadcastToClients((ServerLevel) level, worldPosition, 32);
 					}
 				}
 			}

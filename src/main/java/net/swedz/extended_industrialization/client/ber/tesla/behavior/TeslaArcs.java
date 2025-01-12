@@ -2,6 +2,7 @@ package net.swedz.extended_industrialization.client.ber.tesla.behavior;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.client.ber.tesla.arc.TeslaArcBuilder;
@@ -22,13 +23,16 @@ public final class TeslaArcs
 	
 	public static final Random RANDOM = new Random();
 	
-	private final float widthScale;
-	private final int   arcDuration;
-	private final int   arcs;
-	private final int   minLength;
-	private final int   maxLength;
-	private final float maxSectionLength;
-	private final int   sectionSplits;
+	private final BlockPos worldPosition;
+	
+	private final boolean constantArcs;
+	private final float   widthScale;
+	private final int     arcDuration;
+	private final int     arcs;
+	private final int     minLength;
+	private final int     maxLength;
+	private final float   maxSectionLength;
+	private final int     sectionSplits;
 	
 	private final Supplier<Vec3> originSupplier;
 	
@@ -36,13 +40,15 @@ public final class TeslaArcs
 	
 	private final List<TeslaArcBuilder> trails = Lists.newArrayList();
 	
-	public TeslaArcs(float widthScale,
+	public TeslaArcs(BlockPos worldPosition, boolean constantArcs,
+					 float widthScale,
 					 int arcDuration, int arcs,
 					 int minLength, int maxLength,
 					 float maxSectionLength, int sectionSplits,
 					 Supplier<Vec3> originSupplier,
 					 Set<Direction> allowedDirections)
 	{
+		Assert.notNull(worldPosition);
 		Assert.that(widthScale > 0);
 		Assert.that(arcDuration > 0);
 		Assert.that(arcs > 0);
@@ -54,6 +60,8 @@ public final class TeslaArcs
 		Assert.notNull(allowedDirections);
 		Assert.that(!allowedDirections.isEmpty());
 		
+		this.worldPosition = worldPosition;
+		this.constantArcs = constantArcs;
 		this.widthScale = widthScale;
 		this.arcDuration = arcDuration;
 		this.arcs = arcs;
@@ -65,13 +73,14 @@ public final class TeslaArcs
 		this.offsetGenerators = this.buildOffsetGenerators(allowedDirections);
 	}
 	
-	public TeslaArcs(float widthScale,
+	public TeslaArcs(BlockPos worldPosition, boolean constantArcs,
+					 float widthScale,
 					 int arcDuration, int arcs,
 					 int minLength, int maxLength,
 					 float maxSectionLength, int sectionSplits,
 					 Supplier<Vec3> originSupplier)
 	{
-		this(widthScale, arcDuration, arcs, minLength, maxLength, maxSectionLength, sectionSplits, originSupplier, ALL_DIRECTIONS);
+		this(worldPosition, constantArcs, widthScale, arcDuration, arcs, minLength, maxLength, maxSectionLength, sectionSplits, originSupplier, ALL_DIRECTIONS);
 	}
 	
 	private Map<Direction.Axis, Supplier<Float>> buildOffsetGenerators(Set<Direction> allowedDirections)
@@ -175,6 +184,46 @@ public final class TeslaArcs
 		trails.add(builder);
 	}
 	
+	public void createArc(Vec3 target)
+	{
+		TeslaArcBuilder builder = TeslaArcBuilder.create(arcDuration);
+		int segments = RANDOM.nextInt(minLength, maxLength + 1);
+		Vec3 origin = originSupplier.get();
+		Vec3 worldOrigin = origin.add(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ());
+		Vec3 direction = target.subtract(worldOrigin).normalize();
+		double distance = worldOrigin.distanceTo(target);
+		double segmentLength = distance / segments;
+		for(int i = 0; i < segments; i++)
+		{
+			Vec3 directPos = direction.scale(segmentLength * i).add(origin);
+			Vec3 offset = direction.scale(segmentLength);
+			Vec3 tangent = i == segments - 1 ? Vec3.ZERO : randomTangent(direction).scale(0.25);
+			double offsetX = offset.x() + tangent.x();
+			double offsetY = offset.y() + tangent.y();
+			double offsetZ = offset.z() + tangent.z();
+			double x = directPos.x();
+			double y = directPos.y();
+			double z = directPos.z();
+			for(int j = 0; j < sectionSplits; j++)
+			{
+				builder.add(new Vec3(x, y, z));
+				x += offsetX / sectionSplits;
+				y += offsetY / sectionSplits;
+				z += offsetZ / sectionSplits;
+			}
+		}
+		trails.add(builder);
+	}
+	
+	private static Vec3 randomTangent(Vec3 vector)
+	{
+		var normal = vector.normalize();
+		var tangent = normal.cross(new Vec3(-normal.z(), normal.x(), normal.y()));
+		var bitangent = normal.cross(tangent);
+		var angle = RANDOM.nextDouble(-Math.PI, Math.PI);
+		return tangent.scale(Math.sin(angle)).add(bitangent.scale(Math.cos(angle)));
+	}
+	
 	public void tick()
 	{
 		trails.removeIf((trail) ->
@@ -183,7 +232,7 @@ public final class TeslaArcs
 			return trail.points().isEmpty();
 		});
 		
-		if(trails.size() < arcs)
+		if(constantArcs && trails.size() < arcs)
 		{
 			int maxCreate = arcs - trails.size();
 			int create = Math.max(Math.min(arcs / 2, maxCreate), 1);
