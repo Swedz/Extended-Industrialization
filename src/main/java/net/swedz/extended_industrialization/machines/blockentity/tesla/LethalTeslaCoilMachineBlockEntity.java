@@ -21,6 +21,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -198,7 +199,7 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	
 	private float getDamageAmount()
 	{
-		return (float) EI.config().lethalTeslaCoil().damage().get(casing.getCableTier());
+		return (float) Mth.clamp(EI.config().lethalTeslaCoil().damage().get(casing.getCableTier()), 0, Integer.MAX_VALUE);
 	}
 	
 	private long tick;
