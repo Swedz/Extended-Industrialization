@@ -25,13 +25,20 @@ import net.swedz.tesseract.neoforge.item.component.TooltipAdder;
 
 public record RainbowDataComponent(boolean value, boolean showInTooltip) implements DataComponentTooltipProvider
 {
-	public static final Codec<RainbowDataComponent>                CODEC        = RecordCodecBuilder.create((instance) -> instance
+	public static final Codec<RainbowDataComponent> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
 					Codec.BOOL.fieldOf("value").forGetter(RainbowDataComponent::value),
 					Codec.BOOL.optionalFieldOf("show_in_tooltip", true).forGetter(RainbowDataComponent::showInTooltip)
 			)
 			.apply(instance, RainbowDataComponent::new));
-	public static final StreamCodec<ByteBuf, RainbowDataComponent> STREAM_CODEC = ByteBufCodecs.fromCodec(CODEC);
+	
+	public static final StreamCodec<ByteBuf, RainbowDataComponent> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.BOOL,
+			RainbowDataComponent::value,
+			ByteBufCodecs.BOOL,
+			RainbowDataComponent::showInTooltip,
+			RainbowDataComponent::new
+	);
 	
 	public static <I extends Item> void cauldronClearDyeAndRainbow(I item)
 	{

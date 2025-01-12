@@ -2,6 +2,7 @@ package net.swedz.extended_industrialization;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.util.ExtraCodecs;
 import net.neoforged.bus.api.IEventBus;
@@ -17,7 +18,7 @@ import java.util.function.UnaryOperator;
 
 public final class EIComponents
 {
-	private static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(EI.ID);
+	private static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, EI.ID);
 	
 	public static final Supplier<DataComponentType<Boolean>>              HIDE_BAR               = create(
 			"hide_bar",
