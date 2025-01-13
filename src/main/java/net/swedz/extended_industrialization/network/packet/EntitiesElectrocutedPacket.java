@@ -13,6 +13,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
+import net.swedz.extended_industrialization.EIClient;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.network.EICustomPacket;
 import net.swedz.extended_industrialization.proxy.EIProxy;
@@ -44,17 +45,20 @@ public record EntitiesElectrocutedPacket(BlockPos origin, IntList entityIds) imp
 			return;
 		}
 		
-		for(int entityId : entityIds)
+		if(EIClient.config().renderTeslaAnimations())
 		{
-			var entity = level.getEntity(entityId);
-			if(entity != null)
+			for(int entityId : entityIds)
 			{
-				Vec3 pos = entity.getBoundingBox().getCenter();
-				for(int i = 0; i < 12; i++)
+				var entity = level.getEntity(entityId);
+				if(entity != null)
 				{
-					spark(level, pos);
+					Vec3 pos = entity.getBoundingBox().getCenter();
+					for(int i = 0; i < 12; i++)
+					{
+						spark(level, pos);
+					}
+					Proxies.get(EIProxy.class).createTeslaArc(origin, pos);
 				}
-				Proxies.get(EIProxy.class).createTeslaArc(origin, pos);
 			}
 		}
 		
