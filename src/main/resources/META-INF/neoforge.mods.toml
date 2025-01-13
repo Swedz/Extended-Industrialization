@@ -49,7 +49,6 @@ side = "BOTH"
 [[dependencies.${ mod_id }]]
 modId = "mi_tweaks"
 type = "optional"
-versionRange = "${mi_tweaks_version_range}"
 ordering = "AFTER"
 side = "BOTH"
 
