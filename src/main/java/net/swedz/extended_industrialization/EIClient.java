@@ -40,12 +40,13 @@ import net.swedz.extended_industrialization.client.NanoGravichestplateHudRendere
 import net.swedz.extended_industrialization.client.ber.chainer.MachineChainerHighlightRenderer;
 import net.swedz.extended_industrialization.client.ber.tesla.TeslaPartMultiblockRenderer;
 import net.swedz.extended_industrialization.client.ber.tesla.TeslaPartSingleBlockRenderer;
+import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.client.model.chainer.MachineChainerUnbakedModel;
+import net.swedz.extended_industrialization.client.model.tesla.TeslaUnbakedModel;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.tooltip.SteamChainsawTooltipComponent;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaBlock;
 import net.swedz.extended_industrialization.network.packet.ModifyElectricToolSpeedPacket;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
@@ -116,6 +117,7 @@ public final class EIClient
 	private static void registerModelLoaders(ModelEvent.RegisterGeometryLoaders event)
 	{
 		event.register(MachineChainerUnbakedModel.LOADER_ID, MachineChainerUnbakedModel.LOADER);
+		event.register(TeslaUnbakedModel.LOADER_ID, TeslaUnbakedModel.LOADER);
 	}
 	
 	@SubscribeEvent
@@ -131,7 +133,7 @@ public final class EIClient
 				BlockEntityRendererProvider provider = switch (blockEntity)
 				{
 					case MachineChainerMachineBlockEntity be -> MachineChainerHighlightRenderer::new;
-					case TeslaBlock __ -> switch (blockEntity)
+					case TeslaBehavior __ -> switch (blockEntity)
 					{
 						case MultiblockMachineBlockEntity be -> TeslaPartMultiblockRenderer::new;
 						default -> TeslaPartSingleBlockRenderer::new;
@@ -160,8 +162,10 @@ public final class EIClient
 	@SubscribeEvent
 	private static void registerAdditionalModels(ModelEvent.RegisterAdditional event)
 	{
-		event.register(ModelResourceLocation.standalone(EI.id("tesla_plasma/tesla_coil")));
-		event.register(ModelResourceLocation.standalone(EI.id("tesla_plasma/tesla_hatch")));
-		event.register(ModelResourceLocation.standalone(EI.id("tesla_plasma/tesla_tower")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla/lethal_tesla_coil")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_coil")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_hatch")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_receiver")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_tower")));
 	}
 }

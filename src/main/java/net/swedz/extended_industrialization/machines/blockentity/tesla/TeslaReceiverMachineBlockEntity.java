@@ -25,24 +25,24 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasmaBehavior;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasmaBehaviorHolder;
+import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverState;
 import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.TeslaNetworkBar;
+import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
+import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.List;
 import java.util.Optional;
 
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
-public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity implements TeslaReceiver.Delegate, Tickable, TeslaPlasmaBehaviorHolder
+public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity implements TeslaReceiver.Delegate, Tickable, TeslaBehavior
 {
 	private final IsActiveComponent isActive;
 	
@@ -121,46 +121,15 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	}
 	
 	@Override
-	public TeslaPlasmaBehavior getTeslaPlasmaBehavior()
+	public boolean shouldTeslaRender()
 	{
-		return new TeslaPlasmaBehavior()
-		{
-			@Override
-			public boolean shouldRender()
-			{
-				return isActive.isActive;
-			}
-			
-			@Override
-			public Vec3 getOffset()
-			{
-				return new Vec3(-0.05f / 2f, -0.05f / 2f, -0.05f / 2f);
-			}
-			
-			@Override
-			public ResourceLocation getModelLocation()
-			{
-				return EI.id("tesla_plasma/tesla_coil");
-			}
-			
-			@Override
-			public float getModelScale()
-			{
-				return 1.05f;
-			}
-			
-			@Override
-			public float getSpeed()
-			{
-				return 100f;
-			}
-			
-			@Override
-			public float getTextureScale()
-			{
-				return 32f;
-			}
-		};
+		return isActive.isActive;
+	}
+	
+	@Override
+	public ResourceLocation getTeslaModelLocation()
+	{
+		return EI.id("tesla/tesla_receiver");
 	}
 	
 	@Override
@@ -215,6 +184,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	{
 		if(level.isClientSide())
 		{
+			Proxies.get(EIProxy.class).tickTesla(worldPosition);
 			return;
 		}
 		

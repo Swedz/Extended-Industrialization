@@ -22,7 +22,6 @@ import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -34,28 +33,23 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIClientConfig;
 import net.swedz.extended_industrialization.EIDamageTypes;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.EITooltips;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcBehavior;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcBehaviorHolder;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcs;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasmaBehavior;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasmaBehaviorHolder;
+import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.network.packet.EntitiesElectrocutedPacket;
+import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
 import net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser;
+import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.List;
-import java.util.Set;
 
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
-public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity implements Tickable, EnergyComponentHolder, TeslaArcBehaviorHolder, TeslaPlasmaBehaviorHolder
+public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity implements Tickable, EnergyComponentHolder, TeslaBehavior
 {
 	private static final long DAMAGE_INTERVAL = 20L;
 	
@@ -77,8 +71,6 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	private final EnergyComponent energy;
 	private final MIEnergyStorage insertable;
 	
-	private final TeslaArcs arcs;
-	
 	public LethalTeslaCoilMachineBlockEntity(BEP bep)
 	{
 		super(
@@ -95,20 +87,6 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		energy = new EnergyComponent(this, () -> 30 * 20 * casing.getCableTier().eu);
 		insertable = energy.buildInsertable(casing::canInsertEu);
 		
-		arcs = new TeslaArcs(
-				worldPosition, false,
-				0.25f, 3, 3, 2, 3, 2, 5,
-				() ->
-				{
-					double radius = 0.35;
-					boolean side = TeslaArcs.RANDOM.nextBoolean();
-					double x = (side ? radius : radius * TeslaArcs.RANDOM.nextDouble()) * (TeslaArcs.RANDOM.nextBoolean() ? 1 : -1);
-					double z = (!side ? radius : radius * TeslaArcs.RANDOM.nextDouble()) * (TeslaArcs.RANDOM.nextBoolean() ? 1 : -1);
-					return Vec3.upFromBottomCenterOf(Vec3i.ZERO, 1).add(x, -0.2, z);
-				},
-				Set.of(Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST)
-		);
-		
 		this.registerComponents(isActive, redstoneControl, casing, energy);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(81, 34), energy::getEu, energy::getCapacity));
@@ -119,65 +97,15 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	}
 	
 	@Override
-	public TeslaArcBehavior getTeslaArcBehavior()
+	public boolean shouldTeslaRender()
 	{
-		return new TeslaArcBehavior()
-		{
-			@Override
-			public boolean shouldRender()
-			{
-				return isActive.isActive;
-			}
-			
-			@Override
-			public TeslaArcs getArcs()
-			{
-				return arcs;
-			}
-		};
+		return isActive.isActive;
 	}
 	
 	@Override
-	public TeslaPlasmaBehavior getTeslaPlasmaBehavior()
+	public ResourceLocation getTeslaModelLocation()
 	{
-		return new TeslaPlasmaBehavior()
-		{
-			@Override
-			public boolean shouldRender()
-			{
-				return isActive.isActive;
-			}
-			
-			@Override
-			public Vec3 getOffset()
-			{
-				return new Vec3(-0.05f / 2f, -0.05f / 2f, -0.05f / 2f);
-			}
-			
-			@Override
-			public ResourceLocation getModelLocation()
-			{
-				return EI.id("tesla_plasma/tesla_coil");
-			}
-			
-			@Override
-			public float getModelScale()
-			{
-				return 1.05f;
-			}
-			
-			@Override
-			public float getSpeed()
-			{
-				return 100f;
-			}
-			
-			@Override
-			public float getTextureScale()
-			{
-				return 32f;
-			}
-		};
+		return EI.id("tesla/lethal_tesla_coil");
 	}
 	
 	@Override
@@ -218,10 +146,7 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	{
 		if(level.isClientSide())
 		{
-			if(EIClientConfig.renderTeslaAnimations)
-			{
-				arcs.tick();
-			}
+			Proxies.get(EIProxy.class).tickTesla(worldPosition);
 			return;
 		}
 		

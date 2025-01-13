@@ -1,10 +1,14 @@
 package net.swedz.extended_industrialization.client.ber.tesla;
 
 import aztech.modern_industrialization.machines.MachineBlockEntity;
-import aztech.modern_industrialization.util.RenderHelper;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,11 +24,9 @@ import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.client.ber.tesla.arc.TeslaArcBuilder;
 import net.swedz.extended_industrialization.client.ber.tesla.arc.TeslaArcPoint;
 import net.swedz.extended_industrialization.client.ber.tesla.arc.TeslaArcRenderer;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcBehavior;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcBehaviorHolder;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcs;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasmaBehavior;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasmaBehaviorHolder;
+import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcInstance;
+import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
+import net.swedz.extended_industrialization.client.model.tesla.TeslaBakedModel;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.helper.CubeOverlayRenderHelper;
@@ -32,8 +34,10 @@ import org.joml.Vector4f;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
-final class TeslaPartRenderer
+public final class TeslaPartRenderer
 {
 	private static void renderHighlight(MachineBlockEntity machine, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
 	{
@@ -60,77 +64,101 @@ final class TeslaPartRenderer
 				player.getOffhandItem().has(EIComponents.SELECTED_TESLA_NETWORK) ? Optional.of(player.getOffhandItem().get(EIComponents.SELECTED_TESLA_NETWORK).key()) : Optional.empty();
 	}
 	
-	private static void renderArcs(MachineBlockEntity machine, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
+	private static final Cache<BlockPos, TeslaArcInstance> TESLA_ARCS = CacheBuilder.newBuilder()
+			.expireAfterAccess(1, TimeUnit.SECONDS)
+			.build();
+	
+	public static TeslaArcInstance getArcInstance(BlockPos pos)
 	{
-		if(machine instanceof TeslaArcBehaviorHolder holder)
+		var level = Minecraft.getInstance().level;
+		if(level.getBlockEntity(pos) instanceof MachineBlockEntity machine &&
+		   machine instanceof TeslaBehavior behavior)
 		{
-			TeslaArcBehavior behavior = holder.getTeslaArcBehavior();
-			if(behavior.shouldRender())
+			try
 			{
-				TeslaArcs arcs = behavior.getArcs();
-				for(TeslaArcBuilder trail : arcs.getTrails())
+				var tesla = getTeslaModel(behavior.getTeslaModelLocation());
+				if(tesla.arcs() != null)
 				{
-					List<TeslaArcPoint> points = trail.points();
-					if(points.size() < 2)
-					{
-						continue;
-					}
-					int ticks = points.getFirst().timeActive();
-					int halfPoints = points.size() / 2;
-					if(ticks == 0 || ticks == 1)
-					{
-						points = points.subList(0, (int) (halfPoints * partialTick) + (ticks == 1 ? halfPoints : 0));
-					}
-					
-					matrices.pushPose();
-					
-					var consumer = buffer.getBuffer(EIClientRenderTypes.TESLA_ARC);
-					TeslaArcRenderer.renderArc(
-							matrices, consumer, points, (i) -> (1 - i) * arcs.widthScale(),
-							1f, 1f, 1f, 0.9f * (ticks == 0 ? partialTick : ticks == arcs.duration() ? (1 - partialTick) : 1)
+					return TESLA_ARCS.get(
+							pos,
+							() -> new TeslaArcInstance(
+									pos,
+									() -> machine.orientation.facingDirection,
+									() -> getTeslaModel(behavior.getTeslaModelLocation())
+							)
 					);
-					
-					matrices.popPose();
 				}
 			}
+			catch (ExecutionException ex)
+			{
+				throw new RuntimeException(ex);
+			}
+		}
+		return null;
+	}
+	
+	private static TeslaBakedModel getTeslaModel(ResourceLocation location)
+	{
+		var modelManager = Minecraft.getInstance().getModelManager();
+		if(modelManager.getModel(ModelResourceLocation.standalone(location)) instanceof TeslaBakedModel model)
+		{
+			return model;
+		}
+		throw new IllegalArgumentException("Model \"%s\" is not a tesla model".formatted(location));
+	}
+	
+	private static void renderArcBounds(MachineBlockEntity machine, TeslaBakedModel tesla, PoseStack matrices, MultiBufferSource buffer)
+	{
+		var arcs = tesla.arcs();
+		if(arcs != null && arcs.hasRandomBounds() && Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes())
+		{
+			matrices.pushPose();
+			
+			VertexConsumer consumer = buffer.getBuffer(RenderType.lines());
+			
+			Vec3 position = machine.getBlockPos().getCenter();
+			Direction direction = machine.orientation.facingDirection;
+			
+			var box = arcs.worldIncludeBounds(position, direction).move(position.scale(-1)).move(0.5, 0.5, 0.5);
+			LevelRenderer.renderLineBox(matrices, consumer, box, 0.75f, 1, 0.75f, 1);
+			
+			box = arcs.worldExcludeBounds(position, direction).move(position.scale(-1)).move(0.5, 0.5, 0.5);
+			LevelRenderer.renderLineBox(matrices, consumer, box, 1, 0.75f, 0.75f, 1);
+			
+			matrices.popPose();
 		}
 	}
 	
-	private static BakedModelRenderable getModel(ResourceLocation location)
+	private static void renderArcs(MachineBlockEntity machine, TeslaBakedModel tesla, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
 	{
-		return BakedModelRenderable.of(ModelResourceLocation.standalone(location));
-	}
-	
-	private static void renderPlasma(MachineBlockEntity machine, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
-	{
-		if(machine instanceof TeslaPlasmaBehaviorHolder holder)
+		var arcs = tesla.arcs();
+		if(arcs != null)
 		{
-			TeslaPlasmaBehavior behavior = holder.getTeslaPlasmaBehavior();
-			if(behavior.shouldRender())
+			var arcInstance = getArcInstance(machine.getBlockPos());
+			if(arcInstance == null)
 			{
+				return;
+			}
+			for(TeslaArcBuilder trail : arcInstance.getTrails())
+			{
+				List<TeslaArcPoint> points = trail.points();
+				if(points.size() < 2)
+				{
+					continue;
+				}
+				int ticks = points.getFirst().timeActive();
+				int halfPoints = points.size() / 2;
+				if(ticks == 0 || ticks == 1)
+				{
+					points = points.subList(0, (int) (halfPoints * partialTick) + (ticks == 1 ? halfPoints : 0));
+				}
+				
 				matrices.pushPose();
 				
-				Vec3 offset = behavior.getOffset();
-				matrices.translate(offset.x(), offset.y(), offset.z());
-				
-				float modelScale = behavior.getModelScale();
-				matrices.scale(modelScale, modelScale, modelScale);
-				
-				var model = getModel(behavior.getModelLocation());
-				float textureScale = behavior.getTextureScale();
-				float speed = behavior.getSpeed();
-				model.render(
-						matrices, buffer,
-						(texture) -> EIClientRenderTypes.TESLA_PLASMA.apply(textureScale, speed),
-						light, overlay, partialTick,
-						new BakedModelRenderable.Context(
-								null,
-								new Direction[1],
-								RandomSource.create(),
-								1835364215L,
-								ModelData.EMPTY,
-								new Vector4f(1, 1, 1, 0.8f)
-						)
+				var consumer = buffer.getBuffer(EIClientRenderTypes.TESLA_ARC);
+				TeslaArcRenderer.renderArc(
+						matrices, consumer, points, (i) -> (1 - i) * arcs.widthScale(),
+						1f, 1f, 1f, 0.9f * (ticks == 0 ? partialTick : ticks == arcs.duration() ? (1 - partialTick) : 1)
 				);
 				
 				matrices.popPose();
@@ -138,13 +166,53 @@ final class TeslaPartRenderer
 		}
 	}
 	
+	private static void renderPlasma(MachineBlockEntity machine, TeslaBakedModel tesla, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
+	{
+		var plasma = tesla.plasma();
+		if(plasma != null)
+		{
+			matrices.pushPose();
+			
+			Vec3 worldPosition = machine.getBlockPos().getCenter();
+			Vec3 worldOffset = plasma.worldOffset(worldPosition, machine.orientation.facingDirection);
+			Vec3 offset = worldOffset.subtract(worldPosition).add(0.5, 0.5, 0.5);
+			matrices.translate(offset.x(), offset.y(), offset.z());
+			
+			float modelScale = plasma.scale();
+			matrices.scale(modelScale, modelScale, modelScale);
+			
+			float textureScale = plasma.textureScale();
+			float speed = plasma.speed();
+			BakedModelRenderable.of(tesla).render(
+					matrices, buffer,
+					(texture) -> EIClientRenderTypes.TESLA_PLASMA.apply(textureScale, speed),
+					light, overlay, partialTick,
+					new BakedModelRenderable.Context(
+							null,
+							new Direction[1],
+							RandomSource.create(),
+							1835364215L,
+							ModelData.EMPTY,
+							new Vector4f(1, 1, 1, 0.8f)
+					)
+			);
+			
+			matrices.popPose();
+		}
+	}
+	
 	static void render(MachineBlockEntity machine, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
 	{
 		renderHighlight(machine, partialTick, matrices, buffer, light, overlay);
-		if(EIClientConfig.renderTeslaAnimations)
+		if(EIClientConfig.renderTeslaAnimations && machine instanceof TeslaBehavior behavior)
 		{
-			renderArcs(machine, partialTick, matrices, buffer, light, overlay);
-			renderPlasma(machine, partialTick, matrices, buffer, light, overlay);
+			var tesla = getTeslaModel(behavior.getTeslaModelLocation());
+			renderArcBounds(machine, tesla, matrices, buffer);
+			if(behavior.shouldTeslaRender())
+			{
+				renderArcs(machine, tesla, partialTick, matrices, buffer, light, overlay);
+				renderPlasma(machine, tesla, partialTick, matrices, buffer, light, overlay);
+			}
 		}
 	}
 }

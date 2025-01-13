@@ -17,21 +17,21 @@ public final class TeslaArcBuilder
 {
 	private final List<TeslaArcPoint> points = Lists.newArrayList();
 	
-	public final Supplier<Integer> length;
+	public final Supplier<Integer> duration;
 	
-	private TeslaArcBuilder(Supplier<Integer> length)
+	private TeslaArcBuilder(Supplier<Integer> duration)
 	{
-		this.length = length;
+		this.duration = duration;
 	}
 	
-	public static TeslaArcBuilder create(int length)
+	public static TeslaArcBuilder create(int duration)
 	{
-		return create(() -> length);
+		return create(() -> duration);
 	}
 	
-	public static TeslaArcBuilder create(Supplier<Integer> length)
+	public static TeslaArcBuilder create(Supplier<Integer> duration)
 	{
-		return new TeslaArcBuilder(length);
+		return new TeslaArcBuilder(duration);
 	}
 	
 	public List<TeslaArcPoint> points()
@@ -66,9 +66,9 @@ public final class TeslaArcBuilder
 	
 	public TeslaArcBuilder tick()
 	{
-		int trailLength = this.length.get();
+		int trailDuration = duration.get();
 		points.forEach(TeslaArcPoint::tick);
-		points.removeIf((point) -> point.timeActive() > trailLength);
+		points.removeIf((point) -> point.timeActive() > trailDuration);
 		return this;
 	}
 	

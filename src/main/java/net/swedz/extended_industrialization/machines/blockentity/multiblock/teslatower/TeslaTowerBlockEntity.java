@@ -21,26 +21,22 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIClientConfig;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcBehavior;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcBehaviorHolder;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcs;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasmaBehavior;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasmaBehaviorHolder;
+import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.machines.component.itemslot.TeslaTowerUpgradeComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitterComponent;
 import net.swedz.extended_industrialization.machines.guicomponent.EIModularSlotPanelSlots;
+import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.BasicMultiblockMachineBlockEntity;
 import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.matcher.SameCableTierShapeMatcher;
+import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.List;
 import java.util.Map;
@@ -50,7 +46,7 @@ import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultibl
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.line;
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser.*;
 
-public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEntity implements EnergyListComponentHolder, TeslaTransmitter.Delegate, TeslaArcBehaviorHolder, TeslaPlasmaBehaviorHolder
+public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEntity implements EnergyListComponentHolder, TeslaTransmitter.Delegate, TeslaBehavior
 {
 	private final RedstoneControlComponent   redstoneControl;
 	private final TeslaTowerUpgradeComponent upgrade;
@@ -58,8 +54,6 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	private final List<EnergyComponent> energyInputs = Lists.newArrayList();
 	
 	private final TeslaTransmitterComponent transmitter;
-	
-	private final TeslaArcs arcs;
 	
 	private boolean   hasMismatchingHatches;
 	private CableTier cableTier;
@@ -81,12 +75,6 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 				energyInputs,
 				() -> TeslaTransferLimits.of(cableTier, SHAPES.tiers().get(activeShape.getActiveShapeIndex())),
 				() -> new WorldPos(level, this.getTopLoadPosition())
-		);
-		
-		arcs = new TeslaArcs(
-				worldPosition, true,
-				1f, 3, 6, 4, 8, 15, 10,
-				() -> Vec3.atCenterOf(this.getTopLoadPositionRelative())
 		);
 		
 		this.registerComponents(redstoneControl, upgrade, transmitter);
@@ -153,65 +141,15 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	}
 	
 	@Override
-	public TeslaArcBehavior getTeslaArcBehavior()
+	public boolean shouldTeslaRender()
 	{
-		return new TeslaArcBehavior()
-		{
-			@Override
-			public boolean shouldRender()
-			{
-				return isActive.isActive;
-			}
-			
-			@Override
-			public TeslaArcs getArcs()
-			{
-				return arcs;
-			}
-		};
+		return isActive.isActive;
 	}
 	
 	@Override
-	public TeslaPlasmaBehavior getTeslaPlasmaBehavior()
+	public ResourceLocation getTeslaModelLocation()
 	{
-		return new TeslaPlasmaBehavior()
-		{
-			@Override
-			public boolean shouldRender()
-			{
-				return isActive.isActive;
-			}
-			
-			@Override
-			public Vec3 getOffset()
-			{
-				return Vec3.atCenterOf(TeslaTowerBlockEntity.this.getTopLoadPositionRelative());
-			}
-			
-			@Override
-			public ResourceLocation getModelLocation()
-			{
-				return EI.id("tesla_plasma/tesla_tower");
-			}
-			
-			@Override
-			public float getModelScale()
-			{
-				return 5.25f;
-			}
-			
-			@Override
-			public float getSpeed()
-			{
-				return 60f;
-			}
-			
-			@Override
-			public float getTextureScale()
-			{
-				return 48f;
-			}
-		};
+		return EI.id("tesla/tesla_tower");
 	}
 	
 	@Override
@@ -308,10 +246,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		
 		if(level.isClientSide())
 		{
-			if(EIClientConfig.renderTeslaAnimations)
-			{
-				arcs.tick();
-			}
+			Proxies.get(EIProxy.class).tickTesla(worldPosition);
 			return;
 		}
 		

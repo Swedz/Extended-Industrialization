@@ -18,23 +18,23 @@ import aztech.modern_industrialization.machines.multiblocks.HatchType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasmaBehavior;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaPlasmaBehaviorHolder;
+import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverState;
 import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.TeslaNetworkBar;
+import net.swedz.extended_industrialization.proxy.EIProxy;
+import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.List;
 import java.util.Optional;
 
 import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
-public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implements EnergyComponentHolder, CableTierHolder, TeslaReceiver.Delegate, TeslaPlasmaBehaviorHolder
+public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implements EnergyComponentHolder, CableTierHolder, TeslaReceiver.Delegate, TeslaBehavior
 {
 	private final CableTier tier;
 	
@@ -100,46 +100,15 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 	}
 	
 	@Override
-	public TeslaPlasmaBehavior getTeslaPlasmaBehavior()
+	public boolean shouldTeslaRender()
 	{
-		return new TeslaPlasmaBehavior()
-		{
-			@Override
-			public boolean shouldRender()
-			{
-				return isActive.isActive;
-			}
-			
-			@Override
-			public Vec3 getOffset()
-			{
-				return new Vec3(-0.05f / 2f, -0.05f / 2f, -0.05f / 2f);
-			}
-			
-			@Override
-			public ResourceLocation getModelLocation()
-			{
-				return EI.id("tesla_plasma/tesla_hatch");
-			}
-			
-			@Override
-			public float getModelScale()
-			{
-				return 1.05f;
-			}
-			
-			@Override
-			public float getSpeed()
-			{
-				return 100f;
-			}
-			
-			@Override
-			public float getTextureScale()
-			{
-				return 48f;
-			}
-		};
+		return isActive.isActive;
+	}
+	
+	@Override
+	public ResourceLocation getTeslaModelLocation()
+	{
+		return EI.id("tesla/tesla_hatch");
 	}
 	
 	@Override
@@ -225,6 +194,7 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 		
 		if(level.isClientSide())
 		{
+			Proxies.get(EIProxy.class).tickTesla(worldPosition);
 			return;
 		}
 		

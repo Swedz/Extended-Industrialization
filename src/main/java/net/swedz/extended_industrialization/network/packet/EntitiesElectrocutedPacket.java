@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.network.packet;
 
+import aztech.modern_industrialization.machines.MachineBlockEntity;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -12,9 +13,11 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcBehaviorHolder;
+import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.network.EICustomPacket;
+import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
+import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 public record EntitiesElectrocutedPacket(BlockPos origin, IntList entityIds) implements EICustomPacket
 {
@@ -32,14 +35,14 @@ public record EntitiesElectrocutedPacket(BlockPos origin, IntList entityIds) imp
 		context.assertClientbound();
 		
 		var level = context.getPlayer().level();
+		var blockEntity = level.getBlockEntity(origin);
 		
 		if(entityIds.isEmpty() ||
-		   !(level.getBlockEntity(origin) instanceof TeslaArcBehaviorHolder blockEntity))
+		   !(blockEntity instanceof MachineBlockEntity) ||
+		   !(blockEntity instanceof TeslaBehavior))
 		{
 			return;
 		}
-		
-		var arcs = blockEntity.getTeslaArcBehavior().getArcs();
 		
 		for(int entityId : entityIds)
 		{
@@ -51,7 +54,7 @@ public record EntitiesElectrocutedPacket(BlockPos origin, IntList entityIds) imp
 				{
 					spark(level, pos);
 				}
-				arcs.createArc(pos);
+				Proxies.get(EIProxy.class).createTeslaArc(origin, pos);
 			}
 		}
 		
