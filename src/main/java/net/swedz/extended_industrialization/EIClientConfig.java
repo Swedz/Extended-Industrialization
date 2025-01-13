@@ -1,30 +1,14 @@
 package net.swedz.extended_industrialization;
 
-import net.neoforged.neoforge.common.ModConfigSpec;
+import net.swedz.tesseract.neoforge.config.annotation.ConfigComment;
+import net.swedz.tesseract.neoforge.config.annotation.ConfigKey;
 
-public final class EIClientConfig
+public interface EIClientConfig
 {
-	private static final ModConfigSpec.Builder BUILDER;
-	
-	private static final ModConfigSpec.BooleanValue RENDER_TESLA_ANIMATIONS;
-	
-	public static final ModConfigSpec SPEC;
-	
-	static
+	@ConfigKey("render_tesla_animations")
+	@ConfigComment("Whether tesla animations should be rendered or not")
+	default boolean renderTeslaAnimations()
 	{
-		BUILDER = new ModConfigSpec.Builder();
-		
-		RENDER_TESLA_ANIMATIONS = BUILDER
-				.comment("Whether tesla animations should be rendered or not")
-				.define("render_tesla_animations", true);
-		
-		SPEC = BUILDER.build();
-	}
-	
-	public static boolean renderTeslaAnimations;
-	
-	public static void loadConfig()
-	{
-		renderTeslaAnimations = RENDER_TESLA_ANIMATIONS.get();
+		return true;
 	}
 }

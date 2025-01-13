@@ -18,7 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.renderable.BakedModelRenderable;
-import net.swedz.extended_industrialization.EIClientConfig;
+import net.swedz.extended_industrialization.EIClient;
 import net.swedz.extended_industrialization.EIClientRenderTypes;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.client.ber.tesla.arc.TeslaArcBuilder;
@@ -204,7 +204,7 @@ public final class TeslaPartRenderer
 	static void render(MachineBlockEntity machine, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
 	{
 		renderHighlight(machine, partialTick, matrices, buffer, light, overlay);
-		if(EIClientConfig.renderTeslaAnimations && machine instanceof TeslaBehavior behavior)
+		if(EIClient.config().renderTeslaAnimations() && machine instanceof TeslaBehavior behavior)
 		{
 			var tesla = getTeslaModel(behavior.getTeslaModelLocation());
 			renderArcBounds(machine, tesla, matrices, buffer);

@@ -26,7 +26,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
@@ -48,6 +47,8 @@ import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.tooltip.SteamChainsawTooltipComponent;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.network.packet.ModifyElectricToolSpeedPacket;
+import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.neoforge.config.ConfigManager;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
@@ -57,8 +58,7 @@ public final class EIClient
 {
 	public EIClient(IEventBus bus, ModContainer container)
 	{
-		container.registerConfig(ModConfig.Type.CLIENT, EIClientConfig.SPEC);
-		bus.addListener(FMLCommonSetupEvent.class, (event) -> EIClientConfig.loadConfig());
+		setupConfig(bus, container);
 		
 		EIKeybinds.init(bus);
 		
@@ -91,6 +91,24 @@ public final class EIClient
 				}
 			}
 		});
+	}
+	
+	private static EIClientConfig CONFIG;
+	
+	public static EIClientConfig config()
+	{
+		Assert.notNull(CONFIG, "Config not yet loaded");
+		return CONFIG;
+	}
+	
+	private static void setupConfig(IEventBus bus, ModContainer container)
+	{
+		CONFIG = new ConfigManager()
+				.includeDefaultValueComments()
+				.build(EIClientConfig.class)
+				.register(container, ModConfig.Type.CLIENT)
+				.listenToLoad(bus)
+				.config();
 	}
 	
 	@SubscribeEvent
