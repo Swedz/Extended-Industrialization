@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.client.ber.tesla.arc;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.util.Mth;
@@ -27,10 +28,13 @@ public final class TeslaArcRenderer
 			return;
 		}
 		
-		List<Vector4f> positions = points.stream()
-				.map(TeslaArcPoint::matrixPosition)
-				.peek((point) -> point.mul(pose))
-				.toList();
+		List<Vector4f> positions = Lists.newArrayList();
+		for(TeslaArcPoint point : points)
+		{
+			var matrixPosition = point.matrixPosition();
+			matrixPosition.mul(pose);
+			positions.add(matrixPosition);
+		}
 		int count = points.size() - 1;
 		float increment = 1f / count;
 		

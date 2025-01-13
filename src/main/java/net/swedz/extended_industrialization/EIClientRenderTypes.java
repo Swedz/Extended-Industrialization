@@ -5,12 +5,17 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterRenderBuffersEvent;
 import net.swedz.extended_industrialization.client.shader.TeslaPlasmaTextureStateShard;
 
 import java.util.function.BiFunction;
 
 import static net.minecraft.client.renderer.RenderStateShard.*;
 
+@EventBusSubscriber(modid = EI.ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class EIClientRenderTypes
 {
 	public static final RenderType TESLA_ARC = RenderType.create(
@@ -50,5 +55,11 @@ public final class EIClientRenderTypes
 						.setOverlayState(OVERLAY)
 						.createCompositeState(false)
 		);
+	}
+	
+	@SubscribeEvent
+	private static void onRegisterRenderBuffers(RegisterRenderBuffersEvent event)
+	{
+		event.registerRenderBuffer(TESLA_ARC);
 	}
 }
