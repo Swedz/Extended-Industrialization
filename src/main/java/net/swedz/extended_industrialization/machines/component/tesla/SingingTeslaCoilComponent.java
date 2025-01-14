@@ -70,8 +70,8 @@ public final class SingingTeslaCoilComponent implements IComponent
 			buzzing = true;
 			Proxies.get(EIProxy.class).startTeslaCoilLoopSound(
 					machine.getBlockPos(), EISounds.TESLA_COIL_SINGING.get(), SoundSource.RECORDS,
-					() -> machine.isRemoved() || !machine.getSingingComponent().shouldPlay(),
-					() -> machine.getSingingComponent().getPitch(),
+					() -> machine.isRemoved() || !this.shouldPlay(),
+					this::getPitch,
 					() -> buzzing = false
 			);
 		}
