@@ -1,37 +1,31 @@
 package net.swedz.extended_industrialization.machines.component.tesla;
 
 import aztech.modern_industrialization.machines.IComponent;
+import aztech.modern_industrialization.machines.MachineBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.NoteBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.extended_industrialization.EISounds;
-import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaCoilMachineBlockEntity;
-import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.api.Assert;
-import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.function.Supplier;
 
-public final class SingingTeslaCoilComponent implements IComponent
+public final class SingingTeslaCoilComponent implements IComponent, TeslaBuzzing
 {
-	private final TeslaCoilMachineBlockEntity machine;
-	private final Supplier<Boolean>           active;
+	private final MachineBlockEntity machine;
+	private final Supplier<Boolean>  active;
 	
 	private int note = -1;
 	
-	public SingingTeslaCoilComponent(TeslaCoilMachineBlockEntity machine, Supplier<Boolean> active)
+	public SingingTeslaCoilComponent(MachineBlockEntity machine, Supplier<Boolean> active)
 	{
 		this.machine = machine;
 		this.active = active;
-	}
-	
-	public boolean shouldPlay()
-	{
-		return this.hasNote() && active.get();
 	}
 	
 	public boolean hasNote()
@@ -42,11 +36,6 @@ public final class SingingTeslaCoilComponent implements IComponent
 	public int getNote()
 	{
 		return note;
-	}
-	
-	public float getPitch()
-	{
-		return this.hasNote() ? NoteBlock.getPitchFromNote(note) : 1;
 	}
 	
 	private int getWorldNote()
@@ -60,29 +49,56 @@ public final class SingingTeslaCoilComponent implements IComponent
 		return state.is(Blocks.NOTE_BLOCK) ? state.getValue(NoteBlock.NOTE) : -1;
 	}
 	
-	private boolean buzzing;
-	
-	public void tickClient()
-	{
-		Assert.that(machine.hasLevel() && machine.getLevel().isClientSide());
-		if(!buzzing && this.shouldPlay())
-		{
-			buzzing = true;
-			Proxies.get(EIProxy.class).startTeslaCoilLoopSound(
-					machine.getBlockPos(), EISounds.TESLA_COIL_SINGING.get(), SoundSource.RECORDS,
-					() -> machine.isRemoved() || !this.shouldPlay(),
-					this::getPitch,
-					() -> buzzing = false
-			);
-		}
-	}
-	
 	public boolean updateNote()
 	{
 		Assert.that(machine.hasLevel() && !machine.getLevel().isClientSide());
 		int originalNote = note;
 		note = this.getWorldNote();
 		return originalNote != note;
+	}
+	
+	private boolean buzzing;
+	
+	@Override
+	public MachineBlockEntity getBuzzingMachine()
+	{
+		return machine;
+	}
+	
+	@Override
+	public SoundEvent getBuzzingSound()
+	{
+		return EISounds.TESLA_COIL_SINGING.get();
+	}
+	
+	@Override
+	public SoundSource getBuzzingSoundSource()
+	{
+		return SoundSource.RECORDS;
+	}
+	
+	@Override
+	public boolean isBuzzing()
+	{
+		return buzzing;
+	}
+	
+	@Override
+	public void setBuzzing(boolean buzzing)
+	{
+		this.buzzing = buzzing;
+	}
+	
+	@Override
+	public boolean shouldBuzz()
+	{
+		return this.hasNote() && active.get();
+	}
+	
+	@Override
+	public float getBuzzingPitch()
+	{
+		return this.hasNote() ? NoteBlock.getPitchFromNote(note) : 1;
 	}
 	
 	@Override

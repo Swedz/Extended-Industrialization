@@ -17,30 +17,21 @@ import aztech.modern_industrialization.machines.components.RedstoneControlCompon
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
-import aztech.modern_industrialization.util.Simulation;
 import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.phys.AABB;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIDamageTypes;
-import net.swedz.extended_industrialization.EISounds;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
-import net.swedz.extended_industrialization.network.packet.EntitiesElectrocutedPacket;
+import net.swedz.extended_industrialization.machines.component.tesla.LethalTeslaCoilComponent;
 import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
@@ -73,6 +64,8 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	private final EnergyComponent energy;
 	private final MIEnergyStorage insertable;
 	
+	private final LethalTeslaCoilComponent lethal;
+	
 	public LethalTeslaCoilMachineBlockEntity(BEP bep)
 	{
 		super(
@@ -89,7 +82,16 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		energy = new EnergyComponent(this, () -> 30 * 20 * casing.getCableTier().eu);
 		insertable = energy.buildInsertable(casing::canInsertEu);
 		
-		this.registerComponents(isActive, redstoneControl, casing, energy);
+		lethal = new LethalTeslaCoilComponent(
+				this,
+				() -> getDamageAmount(casing.getCableTier()),
+				energy,
+				() -> getEnergyCost(casing.getCableTier()),
+				() -> EI.config().lethalTeslaCoil().range(),
+				() -> DAMAGE_INTERVAL
+		);
+		
+		this.registerComponents(isActive, redstoneControl, casing, energy, lethal);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(81, 34), energy::getEu, energy::getCapacity));
 		
@@ -131,52 +133,13 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		return energy;
 	}
 	
-	private AABB getDamageArea()
-	{
-		int range = EI.config().lethalTeslaCoil().range();
-		var center = worldPosition.getCenter();
-		return new AABB(
-				center.subtract(range, range, range),
-				center.add(range, range, range)
-		);
-	}
-	
-	private List<Entity> getEntitiesInDamageArea()
-	{
-		return level.getEntities(
-				(Entity) null,
-				this.getDamageArea(),
-				(entity) -> entity.isAlive() && entity instanceof LivingEntity && !(entity instanceof Player)
-		);
-	}
-	
-	private long tick;
-	
-	private boolean buzzing;
-	
 	@Override
 	public void tick()
 	{
 		if(level.isClientSide())
 		{
-			var proxy = Proxies.get(EIProxy.class);
-			
-			proxy.tickTesla(worldPosition);
-			
-			if(!buzzing && isActive.isActive)
-			{
-				var entities = this.getEntitiesInDamageArea();
-				if(!entities.isEmpty())
-				{
-					buzzing = true;
-					proxy.startTeslaCoilLoopSound(
-							worldPosition, EISounds.TESLA_COIL_LOOP.get(), SoundSource.BLOCKS,
-							() -> this.isRemoved() || !isActive.isActive || this.getEntitiesInDamageArea().isEmpty(),
-							() -> 1f,
-							() -> buzzing = false
-					);
-				}
-			}
+			Proxies.get(EIProxy.class).tickTesla(worldPosition);
+			lethal.tickBuzzing();
 			return;
 		}
 		
@@ -184,28 +147,7 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		
 		if(redstoneControl.doAllowNormalOperation(this))
 		{
-			float damage = getDamageAmount(casing.getCableTier());
-			if(damage > 0)
-			{
-				long energyCost = getEnergyCost(casing.getCableTier());
-				active = energy.consumeEu(energyCost, Simulation.SIMULATE) == energyCost;
-				if(active && tick++ % DAMAGE_INTERVAL == 0)
-				{
-					energy.consumeEu(energyCost, Simulation.ACT);
-					var source = EIDamageTypes.tesla(level, worldPosition.getCenter());
-					var entities = this.getEntitiesInDamageArea();
-					if(!entities.isEmpty())
-					{
-						var entityIds = new IntArrayList();
-						for(var entity : entities)
-						{
-							entity.hurt(source, damage);
-							entityIds.add(entity.getId());
-						}
-						new EntitiesElectrocutedPacket(worldPosition, entityIds).broadcastToClients((ServerLevel) level, worldPosition, 32);
-					}
-				}
-			}
+			active = lethal.tick();
 		}
 		
 		isActive.updateActive(active, this);

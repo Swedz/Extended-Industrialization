@@ -211,7 +211,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		if(level.isClientSide())
 		{
 			Proxies.get(EIProxy.class).tickTesla(worldPosition);
-			singing.tickClient();
+			singing.tickBuzzing();
 			return;
 		}
 		

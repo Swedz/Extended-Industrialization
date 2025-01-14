@@ -138,6 +138,7 @@ public final class TeslaArcInstance
 					this.createArc(this.closestOrigin(target), target);
 				}
 			}
+			
 			if(arcs.hasRandomBounds() && trails.size() < arcs.count())
 			{
 				int maxCreate = arcs.count() - trails.size();
