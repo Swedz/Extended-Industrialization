@@ -5,27 +5,20 @@ import aztech.modern_industrialization.machines.MachineBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.NoteBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.swedz.extended_industrialization.EISounds;
 import net.swedz.tesseract.neoforge.api.Assert;
 
-import java.util.function.Supplier;
-
-public final class SingingTeslaCoilComponent implements IComponent, TeslaBuzzing
+public final class SingingTeslaCoilComponent implements IComponent
 {
 	private final MachineBlockEntity machine;
-	private final Supplier<Boolean>  active;
 	
 	private int note = -1;
 	
-	public SingingTeslaCoilComponent(MachineBlockEntity machine, Supplier<Boolean> active)
+	public SingingTeslaCoilComponent(MachineBlockEntity machine)
 	{
 		this.machine = machine;
-		this.active = active;
 	}
 	
 	public boolean hasNote()
@@ -36,6 +29,11 @@ public final class SingingTeslaCoilComponent implements IComponent, TeslaBuzzing
 	public int getNote()
 	{
 		return note;
+	}
+	
+	public float getPitch()
+	{
+		return this.hasNote() ? NoteBlock.getPitchFromNote(note) : 1;
 	}
 	
 	private int getWorldNote()
@@ -55,50 +53,6 @@ public final class SingingTeslaCoilComponent implements IComponent, TeslaBuzzing
 		int originalNote = note;
 		note = this.getWorldNote();
 		return originalNote != note;
-	}
-	
-	private boolean buzzing;
-	
-	@Override
-	public MachineBlockEntity getBuzzingMachine()
-	{
-		return machine;
-	}
-	
-	@Override
-	public SoundEvent getBuzzingSound()
-	{
-		return EISounds.TESLA_COIL_SINGING.get();
-	}
-	
-	@Override
-	public SoundSource getBuzzingSoundSource()
-	{
-		return SoundSource.RECORDS;
-	}
-	
-	@Override
-	public boolean isBuzzing()
-	{
-		return buzzing;
-	}
-	
-	@Override
-	public void setBuzzing(boolean buzzing)
-	{
-		this.buzzing = buzzing;
-	}
-	
-	@Override
-	public boolean shouldBuzz()
-	{
-		return this.hasNote() && active.get();
-	}
-	
-	@Override
-	public float getBuzzingPitch()
-	{
-		return this.hasNote() ? NoteBlock.getPitchFromNote(note) : 1;
 	}
 	
 	@Override

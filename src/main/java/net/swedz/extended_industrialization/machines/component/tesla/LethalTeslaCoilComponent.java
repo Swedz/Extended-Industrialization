@@ -8,21 +8,18 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIDamageTypes;
-import net.swedz.extended_industrialization.EISounds;
 import net.swedz.extended_industrialization.network.packet.EntitiesElectrocutedPacket;
 
 import java.util.List;
 import java.util.function.Supplier;
 
-public final class LethalTeslaCoilComponent implements IComponent, TeslaBuzzing
+public final class LethalTeslaCoilComponent implements IComponent
 {
 	private final MachineBlockEntity machine;
 	private final Supplier<Float>    damageAmount;
@@ -45,6 +42,11 @@ public final class LethalTeslaCoilComponent implements IComponent, TeslaBuzzing
 		this.energyCost = energyCost;
 		this.range = range;
 		this.damageInterval = damageInterval;
+	}
+	
+	public boolean hasNearbyEntities()
+	{
+		return entityCount > 0;
 	}
 	
 	private AABB getDamageArea()
@@ -105,57 +107,12 @@ public final class LethalTeslaCoilComponent implements IComponent, TeslaBuzzing
 				}
 			}
 		}
+		else
+		{
+			entityCount = 0;
+		}
 		
 		return active;
-	}
-	
-	public void reset()
-	{
-		entityCount = 0;
-	}
-	
-	private boolean buzzing;
-	
-	@Override
-	public MachineBlockEntity getBuzzingMachine()
-	{
-		return machine;
-	}
-	
-	@Override
-	public SoundEvent getBuzzingSound()
-	{
-		return EISounds.TESLA_COIL_LOOP.get();
-	}
-	
-	@Override
-	public SoundSource getBuzzingSoundSource()
-	{
-		return SoundSource.BLOCKS;
-	}
-	
-	@Override
-	public boolean isBuzzing()
-	{
-		return buzzing;
-	}
-	
-	@Override
-	public void setBuzzing(boolean buzzing)
-	{
-		this.buzzing = buzzing;
-	}
-	
-	@Override
-	public boolean shouldBuzz()
-	{
-		return entityCount > 0;
-	}
-	
-	@Override
-	public float getBuzzingPitch()
-	{
-		return 1;
 	}
 	
 	@Override

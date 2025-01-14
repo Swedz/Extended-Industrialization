@@ -22,16 +22,19 @@ import com.google.common.collect.Lists;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EISounds;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.machines.component.tesla.LethalTeslaCoilComponent;
+import net.swedz.extended_industrialization.machines.component.tesla.TeslaBuzzingComponent;
 import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
@@ -65,6 +68,7 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	private final MIEnergyStorage insertable;
 	
 	private final LethalTeslaCoilComponent lethal;
+	private final TeslaBuzzingComponent    buzzing;
 	
 	public LethalTeslaCoilMachineBlockEntity(BEP bep)
 	{
@@ -90,8 +94,14 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 				() -> EI.config().lethalTeslaCoil().range(),
 				() -> DAMAGE_INTERVAL
 		);
+		buzzing = new TeslaBuzzingComponent(
+				this,
+				EISounds.TESLA_COIL_LOOP.get(), SoundSource.BLOCKS,
+				lethal::hasNearbyEntities,
+				() -> 1f
+		);
 		
-		this.registerComponents(isActive, redstoneControl, casing, energy, lethal);
+		this.registerComponents(isActive, redstoneControl, casing, energy, lethal, buzzing);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(81, 34), energy::getEu, energy::getCapacity));
 		
@@ -139,7 +149,7 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		if(level.isClientSide())
 		{
 			Proxies.get(EIProxy.class).tickTesla(worldPosition);
-			lethal.tickBuzzing();
+			buzzing.tick();
 			return;
 		}
 		

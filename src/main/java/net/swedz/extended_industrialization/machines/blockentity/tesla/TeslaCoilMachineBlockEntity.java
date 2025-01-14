@@ -20,15 +20,18 @@ import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EISounds;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.machines.component.tesla.SingingTeslaCoilComponent;
+import net.swedz.extended_industrialization.machines.component.tesla.TeslaBuzzingComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaTransferLimits;
 import net.swedz.extended_industrialization.machines.component.tesla.network.transmitter.TeslaTransmitter;
@@ -55,6 +58,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	private final MIEnergyStorage insertable;
 	
 	private final SingingTeslaCoilComponent singing;
+	private final TeslaBuzzingComponent     buzzing;
 	
 	private final TeslaTransmitterComponent transmitter;
 	
@@ -76,7 +80,13 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		energy = new EnergyComponent(this, () -> 30 * 20 * casing.getCableTier().eu);
 		insertable = energy.buildInsertable(casing::canInsertEu);
 		
-		singing = new SingingTeslaCoilComponent(this, () -> isActive.isActive);
+		singing = new SingingTeslaCoilComponent(this);
+		buzzing = new TeslaBuzzingComponent(
+				this,
+				EISounds.TESLA_COIL_SINGING.get(), SoundSource.RECORDS,
+				() -> singing.hasNote() && isActive.isActive,
+				singing::getPitch
+		);
 		
 		transmitter = new TeslaTransmitterComponent(
 				this,
@@ -89,7 +99,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 				}
 		);
 		
-		this.registerComponents(isActive, redstoneControl, casing, energy, transmitter, singing);
+		this.registerComponents(isActive, redstoneControl, casing, energy, transmitter, singing, buzzing);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(61, 34), energy::getEu, energy::getCapacity));
 		
@@ -211,7 +221,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		if(level.isClientSide())
 		{
 			Proxies.get(EIProxy.class).tickTesla(worldPosition);
-			singing.tickBuzzing();
+			buzzing.tick();
 			return;
 		}
 		
