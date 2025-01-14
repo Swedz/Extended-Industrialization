@@ -1,8 +1,13 @@
 package net.swedz.extended_industrialization.client.ber.tesla.behavior;
 
 import com.google.common.collect.Lists;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.client.ber.tesla.arc.TeslaArcBuilder;
 import net.swedz.extended_industrialization.client.model.tesla.TeslaBakedModel;
@@ -112,14 +117,36 @@ public final class TeslaArcInstance
 		
 		var tesla = this.tesla();
 		var arcs = tesla.arcs();
-		if(arcs != null && arcs.hasRandomBounds() && trails.size() < arcs.count())
+		if(arcs != null)
 		{
-			int maxCreate = arcs.count() - trails.size();
-			int create = Math.max(Math.min(arcs.count() / 2, maxCreate), 1);
-			for(int i = 0; i < create; i++)
+			if(arcs.attachToNearbyEntitiesRange() > 0)
 			{
-				Vec3 target = tesla.arcs().worldRandomPointInBounds(RANDOM, worldPosition, facingDirection.get());
-				this.createArc(this.closestOrigin(target), target);
+				int range = arcs.attachToNearbyEntitiesRange();
+				var level = Minecraft.getInstance().level;
+				var box = new AABB(
+						worldPosition.subtract(range, range, range),
+						worldPosition.add(range, range, range)
+				);
+				var entities = level.getEntities(
+						(Entity) null,
+						box,
+						(entity) -> entity.isAlive() && entity instanceof LivingEntity && !(entity instanceof Player)
+				);
+				for(var entity : entities)
+				{
+					Vec3 target = entity.getBoundingBox().getCenter();
+					this.createArc(this.closestOrigin(target), target);
+				}
+			}
+			if(arcs.hasRandomBounds() && trails.size() < arcs.count())
+			{
+				int maxCreate = arcs.count() - trails.size();
+				int create = Math.max(Math.min(arcs.count() / 2, maxCreate), 1);
+				for(int i = 0; i < create; i++)
+				{
+					Vec3 target = tesla.arcs().worldRandomPointInBounds(RANDOM, worldPosition, facingDirection.get());
+					this.createArc(this.closestOrigin(target), target);
+				}
 			}
 		}
 	}

@@ -4,9 +4,11 @@ import aztech.modern_industrialization.machines.IComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.NoteBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.swedz.extended_industrialization.EISounds;
 import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaCoilMachineBlockEntity;
 import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.api.Assert;
@@ -58,16 +60,20 @@ public final class SingingTeslaCoilComponent implements IComponent
 		return state.is(Blocks.NOTE_BLOCK) ? state.getValue(NoteBlock.NOTE) : -1;
 	}
 	
-	private boolean running;
+	private boolean buzzing;
 	
 	public void tickClient()
 	{
 		Assert.that(machine.hasLevel() && machine.getLevel().isClientSide());
-		boolean originalRunning = running;
-		running = this.shouldPlay();
-		if(running && !originalRunning)
+		if(!buzzing && this.shouldPlay())
 		{
-			Proxies.get(EIProxy.class).startTeslaCoilSingingSound(machine);
+			buzzing = true;
+			Proxies.get(EIProxy.class).startTeslaCoilLoopSound(
+					machine.getBlockPos(), EISounds.TESLA_COIL_SINGING.get(), SoundSource.RECORDS,
+					() -> machine.isRemoved() || !machine.getSingingComponent().shouldPlay(),
+					() -> machine.getSingingComponent().getPitch(),
+					() -> buzzing = false
+			);
 		}
 	}
 	

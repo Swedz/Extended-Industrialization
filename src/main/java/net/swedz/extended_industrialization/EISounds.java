@@ -11,7 +11,8 @@ public final class EISounds
 {
 	private static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, EI.ID);
 	
-	public static final Supplier<SoundEvent> TESLA_COIL_LOOP = createVariableRangeEvent("block.tesla_coil.loop");
+	public static final Supplier<SoundEvent> TESLA_COIL_LOOP    = createVariableRangeEvent("tesla.loop");
+	public static final Supplier<SoundEvent> TESLA_COIL_SINGING = createVariableRangeEvent("tesla.singing");
 	
 	private static Supplier<SoundEvent> createVariableRangeEvent(String name)
 	{

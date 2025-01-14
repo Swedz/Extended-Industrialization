@@ -9,16 +9,12 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EIClient;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.network.EICustomPacket;
-import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
-import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 public record EntitiesElectrocutedPacket(BlockPos origin, IntList entityIds) implements EICustomPacket
 {
@@ -57,12 +53,9 @@ public record EntitiesElectrocutedPacket(BlockPos origin, IntList entityIds) imp
 					{
 						spark(level, pos);
 					}
-					Proxies.get(EIProxy.class).createTeslaArc(origin, pos);
 				}
 			}
 		}
-		
-		level.playLocalSound(origin, SoundEvents.FIREWORK_ROCKET_TWINKLE, SoundSource.BLOCKS, 1, 2, false);
 	}
 	
 	private static float sparkSpeed(LevelAccessor level)

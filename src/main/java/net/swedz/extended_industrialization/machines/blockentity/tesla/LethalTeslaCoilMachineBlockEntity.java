@@ -25,6 +25,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -35,6 +36,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.AABB;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIDamageTypes;
+import net.swedz.extended_industrialization.EISounds;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
@@ -139,14 +141,42 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		);
 	}
 	
+	private List<Entity> getEntitiesInDamageArea()
+	{
+		return level.getEntities(
+				(Entity) null,
+				this.getDamageArea(),
+				(entity) -> entity.isAlive() && entity instanceof LivingEntity && !(entity instanceof Player)
+		);
+	}
+	
 	private long tick;
+	
+	private boolean buzzing;
 	
 	@Override
 	public void tick()
 	{
 		if(level.isClientSide())
 		{
-			Proxies.get(EIProxy.class).tickTesla(worldPosition);
+			var proxy = Proxies.get(EIProxy.class);
+			
+			proxy.tickTesla(worldPosition);
+			
+			if(!buzzing && isActive.isActive)
+			{
+				var entities = this.getEntitiesInDamageArea();
+				if(!entities.isEmpty())
+				{
+					buzzing = true;
+					proxy.startTeslaCoilLoopSound(
+							worldPosition, EISounds.TESLA_COIL_LOOP.get(), SoundSource.BLOCKS,
+							() -> this.isRemoved() || !isActive.isActive || this.getEntitiesInDamageArea().isEmpty(),
+							() -> 1f,
+							() -> buzzing = false
+					);
+				}
+			}
 			return;
 		}
 		
@@ -163,11 +193,7 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 				{
 					energy.consumeEu(energyCost, Simulation.ACT);
 					var source = EIDamageTypes.tesla(level, worldPosition.getCenter());
-					var entities = level.getEntities(
-							(Entity) null,
-							this.getDamageArea(),
-							(entity) -> entity.isAlive() && entity instanceof LivingEntity && !(entity instanceof Player)
-					);
+					var entities = this.getEntitiesInDamageArea();
 					if(!entities.isEmpty())
 					{
 						var entityIds = new IntArrayList();

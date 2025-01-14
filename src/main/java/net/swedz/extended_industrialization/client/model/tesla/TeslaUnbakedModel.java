@@ -66,12 +66,15 @@ public final class TeslaUnbakedModel implements IUnbakedGeometry<TeslaUnbakedMod
 			
 			Assert.that(json.has("scale"), "A tesla model's plasma must have a \"scale\" member.", JsonParseException::new);
 			float scale = json.get("scale").getAsFloat();
+			Assert.that(scale > 0, "A tesla model's plasma must have a > 0 \"scale\" member.", JsonParseException::new);
 			
 			Assert.that(json.has("speed"), "A tesla model's plasma must have a \"speed\" member.", JsonParseException::new);
 			float speed = json.get("speed").getAsFloat();
+			Assert.that(speed >= 0, "A tesla model's plasma must have a non-negative \"speed\" member.", JsonParseException::new);
 			
 			Assert.that(json.has("texture_scale"), "A tesla model's plasma must have a \"texture_scale\" member.", JsonParseException::new);
 			float textureScale = json.get("texture_scale").getAsFloat();
+			Assert.that(textureScale > 0, "A tesla model's plasma must have a > 0 \"texture_scale\" member.", JsonParseException::new);
 			
 			return new Plasma(elements, offset, scale, speed, textureScale);
 		}
@@ -101,6 +104,7 @@ public final class TeslaUnbakedModel implements IUnbakedGeometry<TeslaUnbakedMod
 	public record Arcs(
 			Optional<ArcBounds> randomBoundsInclude,
 			Optional<ArcBounds> randomBoundsExclude,
+			int attachToNearbyEntitiesRange,
 			List<Vec3> origins,
 			float widthScale,
 			float minVariance, float maxVariance,
@@ -123,6 +127,13 @@ public final class TeslaUnbakedModel implements IUnbakedGeometry<TeslaUnbakedMod
 				randomBoundsExclude = Optional.of(ArcBounds.deserialize(randomBoundsJson.getAsJsonObject("exclude"), context));
 			}
 			
+			int attachToNearbyEntities = 0;
+			if(json.has("attach_to_nearby_entities"))
+			{
+				attachToNearbyEntities = json.get("attach_to_nearby_entities").getAsInt();
+				Assert.that(attachToNearbyEntities >= 0, "A tesla model's arcs must have a non-negative \"attach_to_nearby_entities\" member.", JsonParseException::new);
+			}
+			
 			Assert.that(json.has("origins"), "A tesla model's arcs must have an \"origins\" member.", JsonParseException::new);
 			List<Vec3> origins = Lists.newArrayList();
 			for(JsonElement element : GsonHelper.getAsJsonArray(json, "origins"))
@@ -140,20 +151,26 @@ public final class TeslaUnbakedModel implements IUnbakedGeometry<TeslaUnbakedMod
 			
 			Assert.that(json.has("duration"), "A tesla model's arcs must have a \"duration\" member.", JsonParseException::new);
 			int duration = json.get("duration").getAsInt();
+			Assert.that(duration >= 0, "A tesla model's arcs must have a non-negative \"duration\".", JsonParseException::new);
+			Assert.that(attachToNearbyEntities == 0 || duration == 0, "A tesla model's arcs must have a \"duration\" = 0 when \"attach_to_nearby_entities\" is > 0.", JsonParseException::new);
 			
 			Assert.that(json.has("count"), "A tesla model's arcs must have a \"count\" member.", JsonParseException::new);
 			int count = json.get("count").getAsInt();
+			Assert.that(count > 0, "A tesla model's arcs must have a > 0 \"count\" member.", JsonParseException::new);
 			
 			Assert.that(json.has("min_segments"), "A tesla model's arcs must have a \"min_segments\" member.", JsonParseException::new);
 			int minSegments = json.get("min_segments").getAsInt();
+			Assert.that(minSegments > 0, "A tesla model's arcs must have a > 0 \"min_segments\" member.", JsonParseException::new);
 			
 			Assert.that(json.has("max_segments"), "A tesla model's arcs must have a \"max_segments\" member.", JsonParseException::new);
 			int maxSegments = json.get("max_segments").getAsInt();
+			Assert.that(maxSegments > 0, "A tesla model's arcs must have a > 0 \"max_segments\" member.", JsonParseException::new);
 			
 			Assert.that(json.has("segment_splits"), "A tesla model's arcs must have a \"segment_splits\" member.", JsonParseException::new);
 			int segmentSplits = json.get("segment_splits").getAsInt();
+			Assert.that(segmentSplits > 0, "A tesla model's arcs must have a > 0 \"segment_splits\" member.", JsonParseException::new);
 			
-			return new Arcs(randomBoundsInclude, randomBoundsExclude, origins, widthScale, minVariance, maxVariance, duration, count, minSegments, maxSegments, segmentSplits);
+			return new Arcs(randomBoundsInclude, randomBoundsExclude, attachToNearbyEntities, origins, widthScale, minVariance, maxVariance, duration, count, minSegments, maxSegments, segmentSplits);
 		}
 		
 		public Arcs

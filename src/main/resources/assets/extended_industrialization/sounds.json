@@ -1,8 +1,13 @@
 {
-    "block.tesla_coil.loop": {
+    "tesla.loop": {
+        "sounds": [
+            "extended_industrialization:tesla/loop"
+        ]
+    },
+    "tesla.singing": {
         "sounds": [
             {
-                "name": "extended_industrialization:block/tesla_coil/loop",
+                "name": "extended_industrialization:tesla/loop",
                 "attenuation_distance": 48
             }
         ]

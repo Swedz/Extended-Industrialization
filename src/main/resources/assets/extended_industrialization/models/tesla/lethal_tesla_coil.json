@@ -57,6 +57,7 @@
 		"texture_scale": 32
 	},
 	"arcs": {
+		"attach_to_nearby_entities": 2,
 		"origins": [
 			{
 				"x": 0.35,
@@ -102,7 +103,7 @@
 		"width_scale": 0.25,
 		"min_variance": 0.2,
 		"max_variance": 0.3,
-		"duration": 3,
+		"duration": 0,
 		"count": 3,
 		"min_segments": 2,
 		"max_segments": 4,

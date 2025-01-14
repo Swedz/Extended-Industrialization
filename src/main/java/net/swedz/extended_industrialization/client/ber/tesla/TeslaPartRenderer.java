@@ -146,11 +146,17 @@ public final class TeslaPartRenderer
 				{
 					continue;
 				}
-				int ticks = points.getFirst().timeActive();
-				int halfPoints = points.size() / 2;
-				if(ticks == 0 || ticks == 1)
+				boolean instant = arcs.duration() == 0;
+				float alpha = 0.9f;
+				if(!instant)
 				{
-					points = points.subList(0, (int) (halfPoints * partialTick) + (ticks == 1 ? halfPoints : 0));
+					int ticks = points.getFirst().timeActive();
+					int halfPoints = points.size() / 2;
+					if(ticks == 0 || ticks == 1)
+					{
+						points = points.subList(0, (int) (halfPoints * partialTick) + (ticks == 1 ? halfPoints : 0));
+					}
+					alpha *= (ticks == 0 ? partialTick : ticks == arcs.duration() ? (1 - partialTick) : 1);
 				}
 				
 				matrices.pushPose();
@@ -158,7 +164,7 @@ public final class TeslaPartRenderer
 				var consumer = buffer.getBuffer(EIClientRenderTypes.TESLA_ARC);
 				TeslaArcRenderer.renderArc(
 						matrices, consumer, points, (i) -> (1 - i) * arcs.widthScale(),
-						1f, 1f, 1f, 0.9f * (ticks == 0 ? partialTick : ticks == arcs.duration() ? (1 - partialTick) : 1)
+						1f, 1f, 1f, alpha
 				);
 				
 				matrices.popPose();
