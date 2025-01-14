@@ -124,8 +124,8 @@ public final class TeslaArcInstance
 				int range = arcs.attachToNearbyEntitiesRange();
 				var level = Minecraft.getInstance().level;
 				var box = new AABB(
-						worldPosition.subtract(range, range, range),
-						worldPosition.add(range, range, range)
+						worldPosition.subtract(range, range, range).subtract(0.5, 0.5, 0.5),
+						worldPosition.add(range, range, range).add(0.5, 0.5, 0.5)
 				);
 				var entities = level.getEntities(
 						(Entity) null,

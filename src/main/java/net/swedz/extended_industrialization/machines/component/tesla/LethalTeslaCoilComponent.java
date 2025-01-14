@@ -52,8 +52,8 @@ public final class LethalTeslaCoilComponent implements IComponent, TeslaBuzzing
 		int range = EI.config().lethalTeslaCoil().range();
 		var center = machine.getBlockPos().getCenter();
 		return new AABB(
-				center.subtract(range, range, range),
-				center.add(range, range, range)
+				center.subtract(range, range, range).subtract(0.5, 0.5, 0.5),
+				center.add(range, range, range).add(0.5, 0.5, 0.5)
 		);
 	}
 	
