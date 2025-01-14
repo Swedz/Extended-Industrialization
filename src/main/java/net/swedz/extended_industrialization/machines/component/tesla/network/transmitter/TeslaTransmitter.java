@@ -1,8 +1,8 @@
-package net.swedz.extended_industrialization.machines.component.tesla.transmitter;
+package net.swedz.extended_industrialization.machines.component.tesla.network.transmitter;
 
 import aztech.modern_industrialization.api.energy.CableTier;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
+import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetworkPart;
+import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaTransferLimits;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 
 public interface TeslaTransmitter extends TeslaNetworkPart, TeslaTransferLimits

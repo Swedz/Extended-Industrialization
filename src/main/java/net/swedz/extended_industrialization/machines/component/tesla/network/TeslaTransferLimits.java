@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.component.tesla;
+package net.swedz.extended_industrialization.machines.component.tesla.network;
 
 import aztech.modern_industrialization.api.energy.CableTier;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerTier;

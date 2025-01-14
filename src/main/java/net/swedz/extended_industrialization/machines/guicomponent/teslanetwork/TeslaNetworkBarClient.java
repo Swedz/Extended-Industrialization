@@ -13,7 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiverState;
+import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiverState;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.helper.ComponentHelper;
 

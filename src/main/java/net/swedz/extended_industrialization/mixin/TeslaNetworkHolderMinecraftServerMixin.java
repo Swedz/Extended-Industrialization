@@ -1,8 +1,8 @@
 package net.swedz.extended_industrialization.mixin;
 
 import net.minecraft.server.MinecraftServer;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkCache;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkHolder;
+import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetworkCache;
+import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetworkHolder;
 import org.spongepowered.asm.mixin.Implements;
 import org.spongepowered.asm.mixin.Interface;
 import org.spongepowered.asm.mixin.Mixin;

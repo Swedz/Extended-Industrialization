@@ -27,7 +27,7 @@ import net.swedz.extended_industrialization.client.ber.tesla.arc.TeslaArcRendere
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcInstance;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.client.model.tesla.TeslaBakedModel;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
+import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetworkPart;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.helper.CubeOverlayRenderHelper;
 import org.joml.Vector4f;

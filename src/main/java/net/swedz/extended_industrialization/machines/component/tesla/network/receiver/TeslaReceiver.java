@@ -1,9 +1,9 @@
-package net.swedz.extended_industrialization.machines.component.tesla.receiver;
+package net.swedz.extended_industrialization.machines.component.tesla.network.receiver;
 
 import aztech.modern_industrialization.api.energy.CableTier;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
-import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
+import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
+import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetworkPart;
+import net.swedz.extended_industrialization.machines.component.tesla.network.transmitter.TeslaTransmitter;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 
 public interface TeslaReceiver extends TeslaNetworkPart

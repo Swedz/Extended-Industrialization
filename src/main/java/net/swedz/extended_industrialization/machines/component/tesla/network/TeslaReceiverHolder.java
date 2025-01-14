@@ -1,6 +1,6 @@
-package net.swedz.extended_industrialization.machines.component.tesla;
+package net.swedz.extended_industrialization.machines.component.tesla.network;
 
-import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
+import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiver;
 
 import java.util.Collection;
 

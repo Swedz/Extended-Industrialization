@@ -1,10 +1,10 @@
-package net.swedz.extended_industrialization.machines.component.tesla;
+package net.swedz.extended_industrialization.machines.component.tesla.network;
 
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import com.google.common.collect.Sets;
-import net.swedz.extended_industrialization.machines.component.tesla.receiver.TeslaReceiver;
-import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
+import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiver;
+import net.swedz.extended_industrialization.machines.component.tesla.network.transmitter.TeslaTransmitter;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 
 import java.util.Optional;

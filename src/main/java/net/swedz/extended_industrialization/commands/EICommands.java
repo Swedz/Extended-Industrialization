@@ -11,9 +11,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkCache;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetworkPart;
+import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
+import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetworkCache;
+import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetworkPart;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 
 import static net.minecraft.commands.Commands.*;

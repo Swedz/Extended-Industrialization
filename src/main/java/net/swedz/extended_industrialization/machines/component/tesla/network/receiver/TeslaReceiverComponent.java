@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.component.tesla.receiver;
+package net.swedz.extended_industrialization.machines.component.tesla.network.receiver;
 
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
@@ -8,7 +8,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
+import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;

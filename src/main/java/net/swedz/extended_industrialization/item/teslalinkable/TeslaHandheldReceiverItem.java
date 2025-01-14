@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
+import net.swedz.extended_industrialization.machines.component.tesla.network.transmitter.TeslaTransmitter;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.tooltip.component.ItemStackTooltipComponent;
 

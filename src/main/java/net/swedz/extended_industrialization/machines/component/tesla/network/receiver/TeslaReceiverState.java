@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.component.tesla.receiver;
+package net.swedz.extended_industrialization.machines.component.tesla.network.receiver;
 
 public enum TeslaReceiverState
 {

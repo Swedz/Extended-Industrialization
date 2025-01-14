@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.machines.component.tesla;
+package net.swedz.extended_industrialization.machines.component.tesla.network;
 
 import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
