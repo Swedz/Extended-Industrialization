@@ -110,7 +110,7 @@ public final class TeslaPartRenderer
 	private static void renderArcBounds(MachineBlockEntity machine, TeslaBakedModel tesla, PoseStack matrices, MultiBufferSource buffer)
 	{
 		var arcs = tesla.arcs();
-		if(arcs != null && arcs.hasRandomBounds() && Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes())
+		if(arcs != null && (arcs.hasRandomBounds() || arcs.attachesToNearbyEntities()) && Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes())
 		{
 			matrices.pushPose();
 			
@@ -119,11 +119,19 @@ public final class TeslaPartRenderer
 			Vec3 position = machine.getBlockPos().getCenter();
 			Direction direction = machine.orientation.facingDirection;
 			
-			var box = arcs.worldIncludeBounds(position, direction).move(position.scale(-1)).move(0.5, 0.5, 0.5);
-			LevelRenderer.renderLineBox(matrices, consumer, box, 0.75f, 1, 0.75f, 1);
-			
-			box = arcs.worldExcludeBounds(position, direction).move(position.scale(-1)).move(0.5, 0.5, 0.5);
-			LevelRenderer.renderLineBox(matrices, consumer, box, 1, 0.75f, 0.75f, 1);
+			if(arcs.hasRandomBounds())
+			{
+				var box = arcs.worldIncludeBounds(position, direction).move(position.scale(-1)).move(0.5, 0.5, 0.5);
+				LevelRenderer.renderLineBox(matrices, consumer, box, 0.75f, 1, 0.75f, 1);
+				
+				box = arcs.worldExcludeBounds(position, direction).move(position.scale(-1)).move(0.5, 0.5, 0.5);
+				LevelRenderer.renderLineBox(matrices, consumer, box, 1, 0.75f, 0.75f, 1);
+			}
+			if(arcs.attachesToNearbyEntities())
+			{
+				var box = arcs.worldNearbyEntitiesBounds(position, direction).move(position.scale(-1)).move(0.5, 0.5, 0.5);
+				LevelRenderer.renderLineBox(matrices, consumer, box, 0.75f, 0.75f, 1, 1);
+			}
 			
 			matrices.popPose();
 		}

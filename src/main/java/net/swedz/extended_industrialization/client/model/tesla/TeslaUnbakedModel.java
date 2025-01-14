@@ -214,6 +214,20 @@ public final class TeslaUnbakedModel implements IUnbakedGeometry<TeslaUnbakedMod
 			}
 		}
 		
+		public boolean attachesToNearbyEntities()
+		{
+			return attachToNearbyEntitiesRange > 0;
+		}
+		
+		public AABB worldNearbyEntitiesBounds(Vec3 machinePosition, Direction machineDirection)
+		{
+			int range = attachToNearbyEntitiesRange;
+			return convertToWorld(machinePosition, machineDirection, new AABB(
+					new Vec3(-range, -range, -range).subtract(0.5, 0.5, 0.5),
+					new Vec3(range, range, range).add(0.5, 0.5, 0.5)
+			));
+		}
+		
 		public List<Vec3> worldOrigins(Vec3 machinePosition, Direction machineDirection)
 		{
 			List<Vec3> converted = Lists.newArrayList();

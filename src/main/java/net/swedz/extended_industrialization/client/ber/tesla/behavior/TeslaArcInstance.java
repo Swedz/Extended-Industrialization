@@ -7,7 +7,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.client.ber.tesla.arc.TeslaArcBuilder;
 import net.swedz.extended_industrialization.client.model.tesla.TeslaBakedModel;
@@ -119,14 +118,10 @@ public final class TeslaArcInstance
 		var arcs = tesla.arcs();
 		if(arcs != null)
 		{
-			if(arcs.attachToNearbyEntitiesRange() > 0)
+			if(arcs.attachesToNearbyEntities())
 			{
-				int range = arcs.attachToNearbyEntitiesRange();
 				var level = Minecraft.getInstance().level;
-				var box = new AABB(
-						worldPosition.subtract(range, range, range).subtract(0.5, 0.5, 0.5),
-						worldPosition.add(range, range, range).add(0.5, 0.5, 0.5)
-				);
+				var box = arcs.worldNearbyEntitiesBounds(worldPosition, facingDirection.get());
 				var entities = level.getEntities(
 						(Entity) null,
 						box,
