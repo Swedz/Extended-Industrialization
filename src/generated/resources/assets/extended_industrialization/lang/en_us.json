@@ -251,6 +251,7 @@
   "text.extended_industrialization.tesla_network_receiver_no_link": "Not linked to any transmitter",
   "text.extended_industrialization.tesla_network_receiver_too_far": "Transmitter is too far",
   "text.extended_industrialization.tesla_network_receiver_unloaded": "Transmitter is not loaded",
+  "text.extended_industrialization.tesla_network_singing_note": "Note: %s",
   "text.extended_industrialization.tesla_network_transmitter_consuming": "Consuming: %s",
   "text.extended_industrialization.tesla_network_transmitter_drain": "Drain: %s",
   "text.extended_industrialization.tesla_network_transmitter_receivers": "Receivers: %d",

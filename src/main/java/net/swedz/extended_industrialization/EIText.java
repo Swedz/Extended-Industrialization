@@ -134,6 +134,7 @@ public enum EIText implements MICompatibleTranslatableTextEnum
 	TESLA_NETWORK_RECEIVER_NO_LINK("Not linked to any transmitter"),
 	TESLA_NETWORK_RECEIVER_TOO_FAR("Transmitter is too far"),
 	TESLA_NETWORK_RECEIVER_UNLOADED("Transmitter is not loaded"),
+	TESLA_NETWORK_SINGING_NOTE("Note: %s"),
 	TESLA_NETWORK_TRANSMITTER_CONSUMING("Consuming: %s"),
 	TESLA_NETWORK_TRANSMITTER_DRAIN("Drain: %s"),
 	TESLA_NETWORK_TRANSMITTER_RECEIVERS("Receivers: %d"),

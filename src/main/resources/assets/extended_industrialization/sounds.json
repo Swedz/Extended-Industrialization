@@ -1,0 +1,10 @@
+{
+    "block.tesla_coil.loop": {
+        "sounds": [
+            {
+                "name": "extended_industrialization:block/tesla_coil/loop",
+                "attenuation_distance": 48
+            }
+        ]
+    }
+}

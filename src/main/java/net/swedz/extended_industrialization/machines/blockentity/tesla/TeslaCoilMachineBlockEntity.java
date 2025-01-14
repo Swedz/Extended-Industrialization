@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
+import net.swedz.extended_industrialization.machines.component.tesla.SingingTeslaCoilComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaTransferLimits;
 import net.swedz.extended_industrialization.machines.component.tesla.transmitter.TeslaTransmitter;
@@ -53,6 +54,8 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	private final EnergyComponent energy;
 	private final MIEnergyStorage insertable;
 	
+	private final SingingTeslaCoilComponent singing;
+	
 	private final TeslaTransmitterComponent transmitter;
 	
 	private long lastEnergyTransmitted;
@@ -73,6 +76,8 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		energy = new EnergyComponent(this, () -> 30 * 20 * casing.getCableTier().eu);
 		insertable = energy.buildInsertable(casing::canInsertEu);
 		
+		singing = new SingingTeslaCoilComponent(this, () -> isActive.isActive);
+		
 		transmitter = new TeslaTransmitterComponent(
 				this,
 				List.of(energy),
@@ -80,11 +85,11 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 				{
 					CableTier tier = casing.getCableTier();
 					long maxTransfer = tier.getMaxTransfer();
-					return TeslaTransferLimits.of(tier, maxTransfer, EI.config().teslaCoilRange(), tier.eu / 16);
+					return TeslaTransferLimits.of(tier, maxTransfer, EI.config().teslaCoilRange(), singing.hasNote() ? 1 : tier.eu / 16);
 				}
 		);
 		
-		this.registerComponents(isActive, redstoneControl, casing, energy, transmitter);
+		this.registerComponents(isActive, redstoneControl, casing, energy, transmitter, singing);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(61, 34), energy::getEu, energy::getCapacity));
 		
@@ -92,7 +97,11 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 				new TeslaNetworkBar.Parameters(101, 34),
 				() ->
 				{
-					if(this.hasNetwork())
+					if(singing.hasNote())
+					{
+						return Optional.of(new TeslaNetworkBar.SingingData(singing.getNote(), this.getPassiveDrain()));
+					}
+					else if(this.hasNetwork())
 					{
 						TeslaNetwork network = this.getNetwork();
 						if(network.isTransmitterLoaded())
@@ -122,6 +131,11 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		{
 			transmitter.getNetwork().updateAll();
 		}
+	}
+	
+	public SingingTeslaCoilComponent getSingingComponent()
+	{
+		return singing;
 	}
 	
 	@Override
@@ -197,7 +211,14 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		if(level.isClientSide())
 		{
 			Proxies.get(EIProxy.class).tickTesla(worldPosition);
+			singing.tickClient();
 			return;
+		}
+		
+		// TODO only update when the noteblock below is updated...
+		if(singing.updateNote())
+		{
+			this.sync(false);
 		}
 		
 		TeslaNetwork network = this.getNetwork();
@@ -215,7 +236,10 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 			long drained = this.extractEnergy(amountToDrain, false);
 			if(drained == amountToDrain)
 			{
-				lastEnergyTransmitted = this.transmitEnergy(this.getMaxTransfer());
+				if(!singing.hasNote())
+				{
+					lastEnergyTransmitted = this.transmitEnergy(this.getMaxTransfer());
+				}
 				active = true;
 			}
 		}

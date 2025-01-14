@@ -41,8 +41,8 @@ public final class TeslaNetworkBarClient implements GuiComponentClient
 	{
 		if(buf.readBoolean())
 		{
-			boolean transmitter = buf.readBoolean();
-			if(transmitter)
+			int type = buf.readVarInt();
+			if(type == 0)
 			{
 				int receivers = buf.readVarInt();
 				long energyTransmitting = buf.readVarLong();
@@ -51,7 +51,7 @@ public final class TeslaNetworkBarClient implements GuiComponentClient
 				long energyConsuming = buf.readVarLong();
 				data = Optional.of(new TeslaNetworkBar.TransmitterData(receivers, energyTransmitting, cableTier, energyDrain, energyConsuming));
 			}
-			else
+			else if(type == 1)
 			{
 				TeslaReceiverState state = buf.readEnum(TeslaReceiverState.class);
 				Optional<WorldPos> linked = buf.readOptional(WorldPos.STREAM_CODEC);
@@ -61,6 +61,12 @@ public final class TeslaNetworkBarClient implements GuiComponentClient
 					networkCableTier = Optional.of(CableTier.getTier(buf.readUtf()));
 				}
 				data = Optional.of(new TeslaNetworkBar.ReceiverData(state, linked, networkCableTier));
+			}
+			else if(type == 2)
+			{
+				int note = buf.readVarInt();
+				long energyConsuming = buf.readVarLong();
+				data = Optional.of(new TeslaNetworkBar.SingingData(note, energyConsuming));
 			}
 		}
 		else
@@ -85,7 +91,7 @@ public final class TeslaNetworkBarClient implements GuiComponentClient
 				guiGraphics.blit(
 						TESLA_NETWORK_BAR,
 						x + params.renderX(), y + params.renderY(),
-						iconIndex * 18, 0, WIDTH, HEIGHT, 18 * 6, 18
+						iconIndex * 18, 0, WIDTH, HEIGHT, 18 * 7, 18
 				);
 			}
 			
@@ -122,6 +128,11 @@ public final class TeslaNetworkBarClient implements GuiComponentClient
 									case TOO_FAR -> lines.add(EIText.TESLA_NETWORK_RECEIVER_TOO_FAR.text());
 								}
 							}
+						}
+						else if(data.get() instanceof TeslaNetworkBar.SingingData singing)
+						{
+							lines.add(EIText.TESLA_NETWORK_SINGING_NOTE.arg(singing.getReadableNote()));
+							lines.add(EIText.TESLA_NETWORK_TRANSMITTER_CONSUMING.arg(singing.energyConsuming(), EU_PER_TICK_PARSER));
 						}
 					}
 					if(!lines.isEmpty())

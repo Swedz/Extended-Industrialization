@@ -80,7 +80,7 @@ public final class TeslaNetworkBar
 		@Override
 		public void write(RegistryFriendlyByteBuf buf)
 		{
-			buf.writeBoolean(true);
+			buf.writeVarInt(0);
 			
 			buf.writeVarInt(receivers);
 			buf.writeVarLong(energyTransmitting);
@@ -103,7 +103,7 @@ public final class TeslaNetworkBar
 		@Override
 		public void write(RegistryFriendlyByteBuf buf)
 		{
-			buf.writeBoolean(false);
+			buf.writeVarInt(1);
 			
 			buf.writeEnum(state);
 			buf.writeOptional(linked, WorldPos.STREAM_CODEC);
@@ -130,6 +130,41 @@ public final class TeslaNetworkBar
 				};
 			}
 			return 1;
+		}
+	}
+	
+	public record SingingData(
+			int note, long energyConsuming
+	) implements Data
+	{
+		private static final char ZERO = '\u2080';
+		private static final char ONE  = '\u2081';
+		private static final char TWO  = '\u2082';
+		
+		private static final String[] READABLE_NOTES = {
+				"F#" + ZERO, "G" + ZERO, "G#" + ZERO, "A" + ZERO, "A#" + ZERO, "B" + ZERO, "C" + ZERO, "C#" + ZERO, "D" + ZERO, "D#" + ZERO, "E" + ZERO, "F" + ZERO,
+				"F#" + ONE, "G" + ONE, "G#" + ONE, "A" + ONE, "A#" + ONE, "B" + ONE, "C" + ONE, "C#" + ONE, "D" + ONE, "D#" + ONE, "E" + ONE, "F" + ONE,
+				"F#" + TWO
+		};
+		
+		public String getReadableNote()
+		{
+			return READABLE_NOTES[note];
+		}
+		
+		@Override
+		public void write(RegistryFriendlyByteBuf buf)
+		{
+			buf.writeVarInt(2);
+			
+			buf.writeVarInt(note);
+			buf.writeVarLong(energyConsuming);
+		}
+		
+		@Override
+		public int iconIndex()
+		{
+			return 6;
 		}
 	}
 }
