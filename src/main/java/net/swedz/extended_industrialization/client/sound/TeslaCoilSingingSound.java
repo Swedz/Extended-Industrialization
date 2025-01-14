@@ -12,7 +12,7 @@ public final class TeslaCoilSingingSound extends AbstractTickableSoundInstance
 	
 	public TeslaCoilSingingSound(TeslaCoilMachineBlockEntity machine)
 	{
-		super(EISounds.TESLA_COIL_LOOP.get(), SoundSource.BLOCKS, SoundInstance.createUnseededRandom());
+		super(EISounds.TESLA_COIL_LOOP.get(), SoundSource.RECORDS, SoundInstance.createUnseededRandom());
 		
 		var pos = machine.getBlockPos().getCenter();
 		
