@@ -21,6 +21,7 @@ For any questions, please ask in the `#extended-industrialization` channel on [m
   - Tesla Coil
   - Tesla Receiver (and also a hatch)
   - Tesla Tower
+  - Lethal Tesla Coil
 - Generators
   - Solar Boiler
   - Solar Panel
@@ -30,7 +31,7 @@ For any questions, please ask in the `#extended-industrialization` channel on [m
   - Steam Chainsaw
   - Electric Drill & Chainsaw
   - Ultimate Laser Drill
-  - Nano Suit
+  - Nano Suit (and Quantum variant!)
   - Tesla Calibrator
   - Tesla Handheld Receiver
 - Resources
