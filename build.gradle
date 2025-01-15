@@ -39,6 +39,7 @@ repositories {
 		name = "shedaniel"
 		url "https://maven.shedaniel.me"
 		content {
+			// Cloth Config API
 			includeGroup "me.shedaniel.cloth"
 		}
 	}
@@ -64,8 +65,8 @@ repositories {
 		}
 	}
 	maven {
-		name = "OctoStudios"
-		url = "https://maven.octo-studios.com/releases"
+		name = "Illusive Soulwork"
+		url = "https://maven.theillusivec4.top/"
 		content {
 			// Curios
 			includeGroup "top.theillusivec4.curios"
@@ -120,7 +121,7 @@ dependencies {
 	if (project.runtime_include_curios.toBoolean()) {
 		localImplementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 	} else {
-		compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+		compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
 	}
 
 	if (project.runtime_include_mystical_agriculture.toBoolean()) {
