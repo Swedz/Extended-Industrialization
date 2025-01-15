@@ -7,11 +7,11 @@ import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import net.swedz.extended_industrialization.client.shader.NanoQuantumTextureStateShard;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterRenderBuffersEvent;
+import net.swedz.extended_industrialization.client.shader.NanoQuantumTextureStateShard;
 import net.swedz.extended_industrialization.client.shader.TeslaPlasmaTextureStateShard;
 
 import java.util.List;

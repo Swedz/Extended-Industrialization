@@ -118,12 +118,6 @@ public final class EIClient
 	}
 	
 	@SubscribeEvent
-	private static void registerItemProperties(FMLClientSetupEvent event)
-	{
-		event.enqueueWork(() -> EIItems.values().forEach(ItemHolder::triggerClientRegistrationListener));
-	}
-	
-	@SubscribeEvent
 	private static void onRegisterColorItems(RegisterColorHandlersEvent.Item event)
 	{
 		event.register(
