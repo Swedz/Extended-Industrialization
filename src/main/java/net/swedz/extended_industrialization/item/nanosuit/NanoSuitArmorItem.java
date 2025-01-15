@@ -1,12 +1,16 @@
 package net.swedz.extended_industrialization.item.nanosuit;
 
+import aztech.modern_industrialization.MIRegistries;
 import aztech.modern_industrialization.api.energy.CableTier;
+import com.google.common.collect.Lists;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
@@ -15,15 +19,20 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIArmorMaterials;
 import net.swedz.extended_industrialization.item.ElectricArmorItem;
 import net.swedz.extended_industrialization.item.ToggleableItem;
+import net.swedz.extended_industrialization.item.nanosuit.ability.NanoSuitAbility;
+import net.swedz.extended_industrialization.item.nanosuit.decoration.NanoSuitDecoration;
 import net.swedz.tesseract.neoforge.helper.ColorHelper;
 import net.swedz.tesseract.neoforge.item.ArmorTickHandler;
 import net.swedz.tesseract.neoforge.item.ArmorUnequippedHandler;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 import net.swedz.tesseract.neoforge.item.ItemHurtHandler;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +42,12 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	private static final long DAMAGE_ENERGY           = 1024;
 	
 	private final Optional<NanoSuitAbility> ability;
+	private final boolean                   quantum;
 	
-	public NanoSuitArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties, Optional<NanoSuitAbility> ability)
+	public NanoSuitArmorItem(
+			Holder<ArmorMaterial> material, Type type, Properties properties,
+			Optional<NanoSuitAbility> ability, boolean quantum
+	)
 	{
 		super(
 				material, type, properties,
@@ -46,6 +59,7 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 			throw new IllegalArgumentException("Mismatching armor type for item and ability");
 		}
 		this.ability = ability;
+		this.quantum = quantum;
 	}
 	
 	public Optional<NanoSuitAbility> ability()
@@ -58,6 +72,42 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 		return ability.filter((a) -> abilityClass.isAssignableFrom(a.getClass())).isPresent();
 	}
 	
+	public boolean isQuantum()
+	{
+		return quantum;
+	}
+	
+	public List<NanoSuitDecoration> decorations(ItemStack stack)
+	{
+		List<NanoSuitDecoration> decorations = Lists.newArrayList();
+		for(NanoSuitDecoration decoration : NanoSuitDecoration.values())
+		{
+			if(decoration.armorType() == type && (stack == null || decoration.isActiveFor(this, stack)))
+			{
+				decorations.add(decoration);
+			}
+		}
+		return Collections.unmodifiableList(decorations);
+	}
+	
+	@Override
+	public boolean isBarVisible(ItemStack stack)
+	{
+		return !quantum && super.isBarVisible(stack);
+	}
+	
+	@Override
+	public long getEnergyCapacity(ItemStack stack)
+	{
+		return quantum ? 0 : super.getEnergyCapacity(stack);
+	}
+	
+	@Override
+	public boolean hasEnergy(ItemStack stack)
+	{
+		return quantum || super.hasEnergy(stack);
+	}
+	
 	@Override
 	public ItemAttributeModifiers getModifiedDefaultAttributeModifiers(ItemStack stack, ItemAttributeModifiers modifiers)
 	{
@@ -65,6 +115,30 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 		{
 			NanoSuitAbility ability = this.ability.get();
 			modifiers = ability.getModifiedDefaultAttributeModifiers(this, stack, modifiers);
+		}
+		if(quantum)
+		{
+			modifiers = modifiers.withModifierAdded(
+					MIRegistries.QUANTUM_ARMOR,
+					new AttributeModifier(
+							EI.id("nano_quantum_armor_%s".formatted(type.getName())),
+							1,
+							AttributeModifier.Operation.ADD_VALUE
+					),
+					EquipmentSlotGroup.bySlot(this.getEquipmentSlot())
+			);
+			if(type == Type.CHESTPLATE)
+			{
+				modifiers = modifiers.withModifierAdded(
+						NeoForgeMod.CREATIVE_FLIGHT,
+						new AttributeModifier(
+								EI.id("nano_quantum_flight"),
+								1,
+								AttributeModifier.Operation.ADD_VALUE
+						),
+						EquipmentSlotGroup.CHEST
+				);
+			}
 		}
 		return modifiers;
 	}
@@ -139,8 +213,27 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	}
 	
 	@Override
+	public String getDescriptionId(ItemStack stack)
+	{
+		for(NanoSuitDecoration decoration : this.decorations(stack))
+		{
+			String descriptionId = decoration.getDescriptionId(this, stack);
+			if(descriptionId != null)
+			{
+				return descriptionId;
+			}
+		}
+		return super.getDescriptionId(stack);
+	}
+	
+	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag)
 	{
+		for(NanoSuitDecoration decoration : this.decorations(stack))
+		{
+			decoration.getTooltipLines(this, stack).ifPresent(tooltip::addAll);
+		}
+		
 		ability.flatMap((a) -> a.getTooltipLines(this, stack))
 				.ifPresent(tooltip::addAll);
 	}

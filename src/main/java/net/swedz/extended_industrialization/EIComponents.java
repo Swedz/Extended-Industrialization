@@ -48,6 +48,10 @@ public final class EIComponents
 			"selected_tesla_network",
 			(b) -> b.persistent(SelectedTeslaNetwork.CODEC).networkSynchronized(SelectedTeslaNetwork.STREAM_CODEC)
 	);
+	public static final Supplier<DataComponentType<Boolean>>              MEOW                   = create(
+			"meow",
+			(b) -> b.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL)
+	);
 	
 	public static void init(IEventBus bus)
 	{

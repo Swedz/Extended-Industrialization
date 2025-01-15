@@ -6,6 +6,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.network.packet.EntitiesElectrocutedPacket;
+import net.swedz.extended_industrialization.network.packet.CatHammerPacket;
 import net.swedz.extended_industrialization.network.packet.FarmerFertilizeBlockPacket;
 import net.swedz.extended_industrialization.network.packet.ModifyElectricToolSpeedPacket;
 import net.swedz.extended_industrialization.network.packet.ToggleToggleableItemPacket;
@@ -27,6 +28,7 @@ public final class EIPackets
 	
 	static
 	{
+		create("cat_hammer", CatHammerPacket.class, CatHammerPacket.STREAM_CODEC);
 		create("entities_electrocuted", EntitiesElectrocutedPacket.class, EntitiesElectrocutedPacket.STREAM_CODEC);
 		create("farmer_fertilize_block", FarmerFertilizeBlockPacket.class, FarmerFertilizeBlockPacket.STREAM_CODEC);
 		create("modify_electric_tool_speed", ModifyElectricToolSpeedPacket.class, ModifyElectricToolSpeedPacket.STREAM_CODEC);

@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:item/generated",
+  "loader": "neoforge:item_layers",
+  "neoforge_data": {
+    "layers": {
+      "0": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "2": {
+        "block_light": 15,
+        "sky_light": 15
+      }
+    }
+  },
+  "render_types": {},
+  "textures": {
+    "layer0": "extended_industrialization:item/nyano_quantum_helmet",
+    "layer1": "extended_industrialization:item/nyano_quantum_helmet_overlay",
+    "layer2": "extended_industrialization:item/nyano_quantum_helmet_quantum_overlay"
+  }
+}

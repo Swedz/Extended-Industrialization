@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.item.nanosuit;
+package net.swedz.extended_industrialization.item.nanosuit.ability;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.swedz.extended_industrialization.EIArmorMaterials;
+import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 
 import java.util.List;
 import java.util.Optional;

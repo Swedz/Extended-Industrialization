@@ -5,6 +5,7 @@
     "compatibilityLevel": "JAVA_21",
     "mixins": [
         "ArmorDyeRecipeIgnoreRainbowItemsMixin",
+        "MeowTradeMixin",
         "RainbowDyedItemColorMixin",
         "RemoveRainbowWhenDyeingMixin",
         "TeslaNetworkHolderMinecraftServerMixin",
@@ -12,7 +13,8 @@
         "mi.accessor.ConfigurableItemStackAccessor"
     ],
     "client": [
-        "client.NanoArmorRenderVisorTransparentMixin"
+        "AddMaterialAtlasesMixin",
+        "NanoArmorDontUseVanillaRendererMixin"
     ],
     "injectors": {
         "defaultRequire": 1

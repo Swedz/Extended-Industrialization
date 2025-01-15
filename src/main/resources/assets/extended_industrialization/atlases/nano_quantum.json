@@ -1,0 +1,9 @@
+{
+    "sources": [
+        {
+            "type": "directory",
+            "source": "shaders/nano_quantum",
+            "prefix": "shaders/nano_quantum/"
+        }
+    ]
+}
