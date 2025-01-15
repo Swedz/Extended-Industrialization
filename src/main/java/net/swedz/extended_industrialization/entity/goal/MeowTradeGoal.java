@@ -71,6 +71,14 @@ public final class MeowTradeGoal extends Goal
 			   ticks < 5 * 20;
 	}
 	
+	private void enforceSitting()
+	{
+		if(!cat.isOrderedToSit())
+		{
+			cat.setOrderedToSit(true);
+		}
+	}
+	
 	@Override
 	public void start()
 	{
@@ -79,11 +87,14 @@ public final class MeowTradeGoal extends Goal
 		poof2 = false;
 		poof3 = false;
 		turn = false;
+		this.enforceSitting();
 	}
 	
 	@Override
 	public void tick()
 	{
+		this.enforceSitting();
+		
 		if(!hammered && ticks > 1.5 * 20)
 		{
 			cat.playSound(SoundEvents.ANVIL_USE, 1, 1);
