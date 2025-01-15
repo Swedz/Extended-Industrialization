@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "modern_industrialization:aluminum_cable"
+    },
+    "C": {
+      "item": "modern_industrialization:clean_stainless_steel_machine_casing"
+    },
+    "D": {
+      "item": "modern_industrialization:digital_circuit"
+    },
+    "H": {
+      "item": "modern_industrialization:turbo_machine_hull"
+    }
+  },
+  "pattern": [
+    "ACA",
+    "DHD",
+    "ACA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:tesla_tower"
+  }
+}

@@ -47,7 +47,8 @@ public final class EIBlocks
 	}
 	
 	public static final BlockHolder<Block> MACHINE_CHAINER_RELAY = create("machine_chainer_relay", "Machine Chainer Relay", Block::new, BlockItem::new, EISortOrder.MACHINES).withProperties((p) -> p.mapColor(MapColor.METAL).destroyTime(4f).requiresCorrectToolForDrops()).tag(TagHelper.getMiningLevelTag(1)).tag(EITags.Blocks.MACHINE_CHAINER_RELAY).withLootTable(CommonLootTableBuilders::self).withModel(CommonModelBuilders::blockstateOnly).register();
-	public static final BlockHolder<Block> STEEL_PLATED_BRICKS   = create("steel_plated_bricks", "Steel Plated Bricks", Block::new, BlockItem::new, EISortOrder.CASINGS).withProperties((p) -> p.destroyTime(5f).explosionResistance(6f).requiresCorrectToolForDrops()).tag(TagHelper.getMiningLevelTag(1)).withLootTable(CommonLootTableBuilders::self).withModel(CommonModelBuilders::blockCubeAll).register();
+	
+	public static final BlockHolder<Block> STEEL_PLATED_BRICKS = createSimple("steel_plated_bricks", "Steel Plated Bricks", EISortOrder.CASINGS, MapColor.METAL, 5f, 6f).withModel(CommonModelBuilders::blockCubeAll).register();
 	
 	public static Set<BlockHolder> values()
 	{
@@ -86,5 +87,13 @@ public final class EIBlocks
 		Registry.include(holder);
 		EIItems.Registry.include(holder.item());
 		return holder;
+	}
+	
+	public static BlockHolder<Block> createSimple(String id, String englishName, SortOrder sortOrder, MapColor mapColor, float destroyTime, float explosionResistance)
+	{
+		return create(id, englishName, Block::new, BlockItem::new, sortOrder)
+				.withProperties((p) -> p.mapColor(mapColor).destroyTime(destroyTime).explosionResistance(explosionResistance).requiresCorrectToolForDrops())
+				.tag(TagHelper.getMiningLevelTag(1))
+				.withLootTable(CommonLootTableBuilders::self);
 	}
 }

@@ -14,6 +14,7 @@ import net.swedz.extended_industrialization.datagen.server.provider.recipes.Cann
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.CommonRecipesServerDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.ComposterRecipesServerDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.MachineItemRecipesServerDatagenProvider;
+import net.swedz.extended_industrialization.datagen.server.provider.recipes.MaterialRecipesServerDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.NPKProcessingRecipesServerDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.VanillaCompatRecipesServerDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.tags.BlockTagDatagenProvider;
@@ -37,6 +38,7 @@ public final class DatagenDelegatorServer
 		add(event, CommonRecipesServerDatagenProvider::new);
 		add(event, ComposterRecipesServerDatagenProvider::new);
 		add(event, MachineItemRecipesServerDatagenProvider::new);
+		add(event, MaterialRecipesServerDatagenProvider::new);
 		add(event, NPKProcessingRecipesServerDatagenProvider::new);
 		add(event, VanillaCompatRecipesServerDatagenProvider::new);
 		

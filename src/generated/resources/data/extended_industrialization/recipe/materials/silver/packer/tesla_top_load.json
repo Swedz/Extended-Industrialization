@@ -1,0 +1,17 @@
+{
+  "type": "modern_industrialization:packer",
+  "duration": 100,
+  "eu": 8,
+  "item_inputs": [
+    {
+      "amount": 8,
+      "item": "extended_industrialization:silver_curved_plate"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "extended_industrialization:silver_tesla_top_load"
+    }
+  ]
+}

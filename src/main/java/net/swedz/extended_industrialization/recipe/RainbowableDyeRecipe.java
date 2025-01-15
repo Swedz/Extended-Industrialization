@@ -14,7 +14,7 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.EIComponents;
-import net.swedz.extended_industrialization.EIOtherRegistries;
+import net.swedz.extended_industrialization.EIRecipeTypes;
 import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.component.RainbowDataComponent;
 
@@ -81,7 +81,7 @@ public final class RainbowableDyeRecipe extends CustomRecipe
 	@Override
 	public RecipeSerializer<?> getSerializer()
 	{
-		return EIOtherRegistries.RAINBOWABLE_DYE_SERIALIZER.get();
+		return EIRecipeTypes.RAINBOWABLE_DYE_SERIALIZER.get();
 	}
 	
 	private record Match(ItemStack dyeableItem, List<DyeItem> dyeItems)

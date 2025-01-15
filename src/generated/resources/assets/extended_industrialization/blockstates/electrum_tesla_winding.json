@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "extended_industrialization:block/electrum_tesla_winding"
+    }
+  }
+}

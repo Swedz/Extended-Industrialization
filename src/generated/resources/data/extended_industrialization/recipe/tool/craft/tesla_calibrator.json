@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "modern_industrialization:electronic_circuit"
+    },
+    "D": {
+      "item": "modern_industrialization:diode"
+    },
+    "G": {
+      "tag": "c:glass_panes"
+    },
+    "S": {
+      "item": "modern_industrialization:silver_wire"
+    },
+    "T": {
+      "item": "modern_industrialization:transistor"
+    }
+  },
+  "pattern": [
+    " S ",
+    "TGT",
+    "DCD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:tesla_calibrator"
+  }
+}

@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.compat.mi;
 
+import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -7,7 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.extended_industrialization.EIBlocks;
 import net.swedz.extended_industrialization.EIItems;
-import net.swedz.extended_industrialization.EIOtherRegistries;
+import net.swedz.extended_industrialization.EIRecipeTypes;
 import net.swedz.extended_industrialization.EISortOrder;
 import net.swedz.tesseract.neoforge.compat.mi.hook.MIHookEntrypoint;
 import net.swedz.tesseract.neoforge.compat.mi.hook.MIHookRegistry;
@@ -39,13 +40,13 @@ public final class EIMIHookRegistry implements MIHookRegistry
 	@Override
 	public DeferredRegister<RecipeSerializer<?>> recipeSerializerRegistry()
 	{
-		return EIOtherRegistries.RECIPE_SERIALIZERS;
+		return EIRecipeTypes.RECIPE_SERIALIZERS;
 	}
 	
 	@Override
 	public DeferredRegister<RecipeType<?>> recipeTypeRegistry()
 	{
-		return EIOtherRegistries.RECIPE_TYPES;
+		return EIRecipeTypes.RECIPE_TYPES;
 	}
 	
 	@Override
@@ -63,6 +64,13 @@ public final class EIMIHookRegistry implements MIHookRegistry
 	public void onItemRegister(ItemHolder itemHolder)
 	{
 		EIItems.Registry.include(itemHolder);
+		
+		String id = itemHolder.identifier().id();
+		if(id.endsWith("_tesla_receiver_hatch"))
+		{
+			CableTier tier = CableTier.getTier(id.substring(0, id.indexOf("_tesla_receiver_hatch")));
+			itemHolder.sorted(EISortOrder.HATCHES.and(tier));
+		}
 	}
 	
 	@Override

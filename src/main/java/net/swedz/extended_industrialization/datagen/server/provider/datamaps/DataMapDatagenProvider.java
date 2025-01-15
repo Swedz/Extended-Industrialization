@@ -1,17 +1,20 @@
 package net.swedz.extended_industrialization.datagen.server.provider.datamaps;
 
 import aztech.modern_industrialization.MI;
+import aztech.modern_industrialization.api.energy.CableTier;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIDataMaps;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.datamap.FarmerSimpleTallCropSize;
 import net.swedz.extended_industrialization.datamap.FertilizerPotency;
 import net.swedz.extended_industrialization.datamap.LargeElectricFurnaceTier;
+import net.swedz.extended_industrialization.datamap.TeslaTowerTierData;
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
 
 public final class DataMapDatagenProvider extends DataMapProvider
@@ -33,6 +36,12 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		
 		this.addLargeElectricFurnaceTier(MI.id("cupronickel_coil"), 16, 0.75f);
 		this.addLargeElectricFurnaceTier(MI.id("kanthal_coil"), 32, 0.75f);
+		
+		this.addTeslaTowerTier(EI.id("copper_tesla_winding"), CableTier.LV.getMaxTransfer() * 6, 32, 64);
+		this.addTeslaTowerTier(EI.id("electrum_tesla_winding"), CableTier.MV.getMaxTransfer() * 6, 32 * 2, 64 * 4);
+		this.addTeslaTowerTier(EI.id("aluminum_tesla_winding"), CableTier.HV.getMaxTransfer() * 6, 32 * 2 * 2, 64 * 4 * 4);
+		this.addTeslaTowerTier(EI.id("annealed_copper_tesla_winding"), CableTier.EV.getMaxTransfer() * 6, 32 * 2 * 2 * 2, 64 * 4 * 4 * 4);
+		this.addTeslaTowerTier(EI.id("superconductor_tesla_winding"), CableTier.SUPERCONDUCTOR.getMaxTransfer() * 6, 32 * 2 * 2 * 2 * 2, 64 * 4 * 4 * 4 * 4);
 	}
 	
 	private void addFarmerSimpleTallCropSize(ResourceLocation block, int maxHeight)
@@ -53,6 +62,11 @@ public final class DataMapDatagenProvider extends DataMapProvider
 	private void addLargeElectricFurnaceTier(ResourceLocation block, int batchSize, float euCostMultiplier)
 	{
 		this.builder(EIDataMaps.LARGE_ELECTRIC_FURNACE_TIER).add(block, new LargeElectricFurnaceTier(batchSize, euCostMultiplier), false);
+	}
+	
+	private void addTeslaTowerTier(ResourceLocation block, long maxTransfer, int maxDistance, long drain)
+	{
+		this.builder(EIDataMaps.TESLA_TOWER_TIER).add(block, new TeslaTowerTierData(maxTransfer, maxDistance, drain), false);
 	}
 	
 	@Override

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "modern_industrialization:electronic_circuit"
+    },
+    "D": {
+      "item": "modern_industrialization:diode"
+    },
+    "S": {
+      "item": "extended_industrialization:silver_tesla_top_load"
+    },
+    "T": {
+      "item": "modern_industrialization:transistor"
+    },
+    "W": {
+      "item": "extended_industrialization:annealed_copper_tesla_winding"
+    }
+  },
+  "pattern": [
+    "S  ",
+    "WTT",
+    "CDD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:tesla_handheld_receiver"
+  }
+}

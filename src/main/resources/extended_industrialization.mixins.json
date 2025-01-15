@@ -7,6 +7,8 @@
         "ArmorDyeRecipeIgnoreRainbowItemsMixin",
         "RainbowDyedItemColorMixin",
         "RemoveRainbowWhenDyeingMixin",
+        "TeslaNetworkHolderMinecraftServerMixin",
+        "TeslaNetworkReceiversPlayerMixin",
         "mi.accessor.ConfigurableItemStackAccessor"
     ],
     "client": [
