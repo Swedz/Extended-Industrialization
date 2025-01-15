@@ -1,10 +1,8 @@
 package net.swedz.extended_industrialization.network.packet;
 
-import aztech.modern_industrialization.machines.MachineBlockEntity;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -12,19 +10,18 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.EIClient;
-import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.network.EICustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
-public record EntitiesElectrocutedPacket(BlockPos origin, IntList entityIds) implements EICustomPacket
+public record EntitiesElectrocutedPacket(IntList entityIds) implements EICustomPacket
 {
 	public static final StreamCodec<FriendlyByteBuf, EntitiesElectrocutedPacket> STREAM_CODEC = StreamCodec.composite(
-			BlockPos.STREAM_CODEC,
-			EntitiesElectrocutedPacket::origin,
 			ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()).map(IntArrayList::new, Lists::newArrayList),
 			EntitiesElectrocutedPacket::entityIds,
 			EntitiesElectrocutedPacket::new
 	);
+	
+	private static final int SPARK_COUNT = 3;
 	
 	@Override
 	public void handle(PacketContext context)
@@ -32,27 +29,22 @@ public record EntitiesElectrocutedPacket(BlockPos origin, IntList entityIds) imp
 		context.assertClientbound();
 		
 		var level = context.getPlayer().level();
-		var blockEntity = level.getBlockEntity(origin);
 		
 		if(entityIds.isEmpty() ||
-		   !(blockEntity instanceof MachineBlockEntity) ||
-		   !(blockEntity instanceof TeslaBehavior))
+		   !EIClient.config().renderTeslaAnimations())
 		{
 			return;
 		}
 		
-		if(EIClient.config().renderTeslaAnimations())
+		for(int entityId : entityIds)
 		{
-			for(int entityId : entityIds)
+			var entity = level.getEntity(entityId);
+			if(entity != null)
 			{
-				var entity = level.getEntity(entityId);
-				if(entity != null)
+				Vec3 pos = entity.getBoundingBox().getCenter();
+				for(int i = 0; i < SPARK_COUNT; i++)
 				{
-					Vec3 pos = entity.getBoundingBox().getCenter();
-					for(int i = 0; i < 12; i++)
-					{
-						spark(level, pos);
-					}
+					spark(level, pos);
 				}
 			}
 		}

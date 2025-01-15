@@ -103,7 +103,7 @@ public final class LethalTeslaCoilComponent implements IComponent
 						entity.hurt(source, damage);
 						entityIds.add(entity.getId());
 					}
-					new EntitiesElectrocutedPacket(worldPosition, entityIds).broadcastToClients((ServerLevel) level, worldPosition, 32);
+					new EntitiesElectrocutedPacket(entityIds).broadcastToClients((ServerLevel) level, worldPosition, 32);
 				}
 			}
 		}
