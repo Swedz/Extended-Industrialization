@@ -1,5 +1,10 @@
 package net.swedz.extended_industrialization.compat.mi;
 
+import aztech.modern_industrialization.compat.rei.machines.ReiMachineRecipes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIMachines;
 import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.compat.viewer.common.FluidFertilizerCategory;
@@ -80,5 +85,23 @@ public final class EIMIHookListener implements MIHookListener
 	public void viewerSetup(ViewerSetupMIHookContext hook)
 	{
 		hook.register(new FluidFertilizerCategory());
+		
+		ReiMachineRecipes.categories.forEach((__, params) ->
+		{
+			boolean isValidForProcessingArray = false;
+			for(ResourceLocation workstationId : params.workstations)
+			{
+				Item workstationItem = BuiltInRegistries.ITEM.get(workstationId);
+				if(ProcessingArrayMachineSlot.isMachine(workstationItem))
+				{
+					isValidForProcessingArray = true;
+					break;
+				}
+			}
+			if(isValidForProcessingArray)
+			{
+				params.workstations.add(EI.id("processing_array"));
+			}
+		});
 	}
 }
