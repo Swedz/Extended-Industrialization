@@ -220,12 +220,16 @@ public final class TeslaPartRenderer
 		renderHighlight(machine, partialTick, matrices, buffer, light, overlay);
 		if(EIClient.config().renderTeslaAnimations() && machine instanceof TeslaBehavior behavior)
 		{
-			var tesla = getTeslaModel(behavior.getTeslaModelLocation());
-			renderArcBounds(machine, tesla, matrices, buffer);
-			if(behavior.shouldTeslaRender())
+			int renderDistance = EIClient.config().teslaAnimationsRenderDistance();
+			if(renderDistance == 0 || Minecraft.getInstance().player.position().closerThan(machine.getBlockPos().getCenter(), renderDistance))
 			{
-				renderArcs(machine, tesla, partialTick, matrices, buffer, light, overlay);
-				renderPlasma(machine, tesla, partialTick, matrices, buffer, light, overlay);
+				var tesla = getTeslaModel(behavior.getTeslaModelLocation());
+				renderArcBounds(machine, tesla, matrices, buffer);
+				if(behavior.shouldTeslaRender())
+				{
+					renderArcs(machine, tesla, partialTick, matrices, buffer, light, overlay);
+					renderPlasma(machine, tesla, partialTick, matrices, buffer, light, overlay);
+				}
 			}
 		}
 	}
