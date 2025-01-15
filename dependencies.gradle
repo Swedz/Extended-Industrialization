@@ -1,0 +1,112 @@
+repositories {
+	mavenLocal()
+	mavenCentral()
+	maven {
+		name "Modmaven"
+		url "https://modmaven.dev"
+		content {
+			// GrandPower
+			includeGroup "dev.technici4n"
+			// Modern Industrialization
+			includeGroup "aztech"
+			// Tesseract
+			includeGroup "net.swedz"
+		}
+	}
+	maven {
+		name = "shedaniel"
+		url "https://maven.shedaniel.me"
+		content {
+			// Cloth Config API
+			includeGroup "me.shedaniel.cloth"
+		}
+	}
+	maven {
+		name = "TerraformersMC"
+		url = "https://maven.terraformersmc.com/releases/"
+		content {
+			// EMI
+			includeGroup "dev.emi"
+		}
+	}
+	maven {
+		name = "Wisp Forest"
+		url = "https://maven.wispforest.io/releases"
+		// Accessories
+	}
+	maven {
+		name = "Su5eD"
+		url = "https://maven.su5ed.dev/releases"
+		content {
+			// Forgified Fabric API - Required by Accessories
+			includeGroup "org.sinytra.forgified-fabric-api"
+		}
+	}
+	maven {
+		name = "Illusive Soulwork"
+		url = "https://maven.theillusivec4.top/"
+		content {
+			// Curios
+			includeGroup "top.theillusivec4.curios"
+		}
+	}
+	maven {
+		name = "Blakebr0"
+		url = "https://maven.blakesmods.com/releases"
+		content {
+			// Cucumber
+			includeGroup "com.blakebr0.cucumber"
+			// Mystical Agriculture
+			includeGroup "com.blakebr0.mysticalagriculture"
+		}
+	}
+}
+
+dependencies {
+	implementation "aztech:Modern-Industrialization:${modern_industrialization_version}"
+
+	implementation "dev.technici4n:GrandPower:${grandpower_version}"
+
+	implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
+
+	if (project.runtime_include_emi.toBoolean()) {
+		localImplementation "dev.emi:emi-neoforge:${emi_version}"
+	} else {
+		compileOnly "dev.emi:emi-neoforge:${emi_version}"
+	}
+
+	implementation "net.swedz:tesseract-api-neoforge:${tesseract_version}"
+
+	if (project.runtime_include_mi_tweaks.toBoolean()) {
+		localImplementation "net.swedz:mi-tweaks:${mi_tweaks_version}"
+	} else {
+		compileOnly "net.swedz:mi-tweaks:${mi_tweaks_version}"
+	}
+
+	jarJar(implementation("io.github.llamalad7:mixinextras-neoforge:${mixinextras_version}")) {
+		version {
+			strictly "[${mixinextras_version},)"
+			prefer mixinextras_version
+		}
+	}
+
+	if (project.runtime_include_accessories.toBoolean()) {
+		localImplementation "io.wispforest:accessories-neoforge:${accessories_version}"
+	} else {
+		compileOnly "io.wispforest:accessories-neoforge:${accessories_version}"
+	}
+
+	if (project.runtime_include_curios.toBoolean()) {
+		localImplementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+	} else {
+		compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
+	}
+
+	if (project.runtime_include_mystical_agriculture.toBoolean()) {
+		localImplementation "com.blakebr0.cucumber:Cucumber:${cucumber_version}"
+		localImplementation "com.blakebr0.mysticalagriculture:MysticalAgriculture:${mystical_agriculture_version}"
+	} else {
+		compileOnly "com.blakebr0.cucumber:Cucumber:${cucumber_version}"
+		compileOnly "com.blakebr0.mysticalagriculture:MysticalAgriculture:${mystical_agriculture_version}"
+	}
+}

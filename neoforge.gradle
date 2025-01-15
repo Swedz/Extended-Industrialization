@@ -1,0 +1,98 @@
+neoForge {
+	version = neoforge_version
+
+	mods {
+		"${mod_id}" {
+			sourceSet sourceSets.main
+		}
+	}
+
+	validateAccessTransformers = true
+	accessTransformers = [
+			"src/main/resources/${mod_id}.accesstransformer.cfg"
+	]
+	interfaceInjectionData.from "src/main/resources/interfaces.json"
+
+	parchment {
+		mappingsVersion = project.parchment_mappings_version
+		minecraftVersion = project.parchment_mappings_minecraft_version
+	}
+
+	runs {
+		configureEach {
+			mods = [neoForge.mods."${mod_id}"]
+
+			systemProperty 'forge.logging.markers', 'REGISTRIES'
+
+			systemProperty 'forge.logging.console.level', 'debug'
+
+			sourceSet = project.sourceSets.main
+		}
+
+		client {
+			client()
+
+			gameDirectory.set(project.getLayout().getProjectDirectory().dir('runs/client'))
+
+			if (System.getenv("MC_USERNAME") && System.getenv("MC_UUID")) {
+				programArguments.addAll '--username', System.getenv("MC_USERNAME"), '--uuid', System.getenv("MC_UUID")
+			}
+
+			systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+
+			systemProperty 'mixin.env.remapRefMap', 'true'
+			systemProperty 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+			systemProperty 'mixin.debug.export', 'true'
+			systemProperty 'mixin.debug.verbose', 'true'
+		}
+
+		server {
+			server()
+
+			gameDirectory.set(project.getLayout().getProjectDirectory().dir('runs/server'))
+
+			systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+			programArgument '--nogui'
+		}
+
+		data {
+			data()
+
+			gameDirectory.set(project.getLayout().getProjectDirectory().dir('runs/data'))
+
+			programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+
+			systemProperty 'mixin.env.remapRefMap', 'true'
+			systemProperty 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+			systemProperty 'mixin.debug.export', 'true'
+			systemProperty 'mixin.debug.verbose', 'true'
+		}
+	}
+}
+
+tasks.withType(ProcessResources).configureEach {
+	var replaceProperties = [
+			minecraft_version                     : minecraft_version,
+			minecraft_version_range               : minecraft_version_range,
+			neoforge_version                      : neoforge_version,
+			neoforge_version_range                : neoforge_version_range,
+			loader_version_range                  : loader_version_range,
+			mod_id                                : mod_id,
+			mod_name                              : mod_name,
+			mod_version                           : version,
+			mod_authors                           : mod_authors,
+			mod_description                       : mod_description,
+			mod_github                            : mod_github,
+			modern_industrialization_version_range: modern_industrialization_version_range,
+			tesseract_version_range               : tesseract_version_range,
+			emi_version_range                     : emi_version_range,
+			accessories_version_range             : accessories_version_range,
+			curios_version_range                  : curios_version_range,
+			mystical_agriculture_version_range    : mystical_agriculture_version_range
+	]
+	inputs.properties replaceProperties
+
+	filesMatching(['META-INF/neoforge.mods.toml']) {
+		expand replaceProperties
+	}
+}

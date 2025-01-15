@@ -1,0 +1,158 @@
+static def trimChangelog(String changelog, int maxLength, boolean discordFormat) {
+	if (discordFormat) {
+		changelog = changelog.replaceAll(/## What's Changed\r?\n/, '')
+
+		changelog = changelog.replaceAll(/## New Contributors/, '**New Contributors**')
+	}
+
+	changelog = changelog.replaceAll(/@([a-zA-Z0-9_]+)/, '`@$1`')
+
+	changelog = changelog.replaceAll(/https:\/\/github.com\/([^ ]+)\/pull\/([0-9]+)/, '[#\$2](https://github.com/\$1/pull/\$2)')
+
+	changelog = changelog.replaceAll(/\*\*Full Changelog\*\*: (https:\/\/github.com\/[^ ]+\/compare\/[^\s]+)/, '[Full Changelog](\$1)')
+
+	if (discordFormat) {
+		changelog = changelog.replaceAll(/\r?\n/, '\\\\n')
+		def previous = null
+		while (changelog != previous) {
+			previous = changelog
+			changelog = changelog.replaceAll(/\\n\\n/, '\\\\n')
+		}
+	}
+
+	if (maxLength > 0) {
+		def changelogLines = changelog.split('\\\\n')
+		def lastLine = changelogLines[-1]
+		def trimmedChangelog = []
+		def currentLength = lastLine.length()
+
+		for (int i = 0; i < changelogLines.size() - 1; i++) {
+			def line = changelogLines[i]
+			if (currentLength + line.length() + 2 + 5 > maxLength) {
+				trimmedChangelog << '...'
+				break
+			}
+			trimmedChangelog << line
+			currentLength += line.length() + 2
+		}
+
+		trimmedChangelog << lastLine
+
+		return trimmedChangelog.join('\\n')
+	} else {
+		return changelog
+	}
+}
+
+tasks.register('buildChangelog') {
+	doLast {
+		def githubEnvFile = new File(System.getenv("GITHUB_ENV"))
+
+		def changelog = System.getenv("MOD_CHANGELOG")
+
+		def changelogTrimmedDiscord = trimChangelog(changelog, 1024, true)
+		githubEnvFile.append("MOD_CHANGELOG_TRIMMED_DISCORD<<EOF\n${changelogTrimmedDiscord}\nEOF\n")
+
+		def changelogTrimmedPublish = trimChangelog(changelog, 0, false)
+		githubEnvFile.append("MOD_CHANGELOG_TRIMMED_PUBLISH<<EOF\n${changelogTrimmedPublish}\nEOF\n")
+	}
+}
+
+publishing {
+	publications {
+		register('mavenJava', MavenPublication) {
+			from components.java
+			artifactId = project.artifact_name
+
+			artifact(sourceJar) {
+				classifier "sources"
+			}
+		}
+	}
+
+	repositories {
+		mavenLocal()
+
+		maven {
+			credentials {
+				username = System.getenv("MODMAVEN_USERNAME")
+				password = System.getenv("MODMAVEN_PASSWORD")
+			}
+			name = "modmaven"
+			url = "https://modmaven.dev/artifactory/local-releases/"
+		}
+	}
+}
+
+if (System.getenv("CURSEFORGE_API_KEY")) {
+	curseforge {
+		apiKey = System.getenv("CURSEFORGE_API_KEY")
+
+		project {
+			id = project.curseforge_project
+			releaseType = System.getenv("RELEASE_TYPE")
+			changelogType = "markdown"
+			delegate.changelog = System.getenv("MOD_CHANGELOG_TRIMMED_PUBLISH")
+
+			def compatible_minecraft_versions = project.compatible_minecraft_versions.split(",")
+			compatible_minecraft_versions.each { addGameVersion it }
+			addGameVersion "NeoForge"
+			addGameVersion "Java 21"
+
+			relations {
+				def relations = project.curseforge_project_relations.split(",")
+				relations.each {
+					def split = it.split(":")
+					def dependency = split[0]
+					def requirementType = split[1]
+					if (requirementType == "required") {
+						requiredDependency dependency
+					} else if (requirementType == "optional") {
+						optionalDependency dependency
+					} else if (requirementType == "incompatibility") {
+						incompatible dependency
+					}
+				}
+			}
+
+			mainArtifact(tasks.named("jar").flatMap { it.archiveFile })
+		}
+
+		options {
+			forgeGradleIntegration = false
+		}
+	}
+}
+
+if (System.getenv("MODRINTH_API_KEY")) {
+	modrinth {
+		token = System.getenv("MODRINTH_API_KEY")
+
+		projectId = project.modrinth_project
+		versionNumber = "${version}"
+		versionName = "${project.mod_name} ${version}"
+		versionType = System.getenv("RELEASE_TYPE")
+		delegate.changelog = System.getenv("MOD_CHANGELOG_TRIMMED_PUBLISH")
+
+		gameVersions = project.compatible_minecraft_versions.split(",").collect { it }
+		loaders = ["neoforge"]
+
+		dependencies {
+			def relations = project.modrinth_project_relations.split(",")
+			relations.each {
+				def split = it.split(":")
+				def dependency = split[0]
+				def requirementType = split[1]
+				if (requirementType == "required") {
+					required.project dependency
+				} else if (requirementType == "optional") {
+					optional.project dependency
+				} else if (requirementType == "incompatibility") {
+					incompatible.project dependency
+				}
+			}
+		}
+
+		uploadFile = tasks.jar
+	}
+}

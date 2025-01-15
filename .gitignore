@@ -19,6 +19,7 @@ build
 
 # other
 .env
+.secrets
 eclipse
 run
 runs
