@@ -8,6 +8,7 @@ import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.swedz.extended_industrialization.datamap.FarmerSimpleTallCropSize;
 import net.swedz.extended_industrialization.datamap.FertilizerPotency;
 import net.swedz.extended_industrialization.datamap.LargeElectricFurnaceTier;
+import net.swedz.extended_industrialization.datamap.TeslaTowerTierData;
 
 public final class EIDataMaps
 {
@@ -26,10 +27,16 @@ public final class EIDataMaps
 			.synced(LargeElectricFurnaceTier.CODEC, true)
 			.build();
 	
+	public static final DataMapType<Block, TeslaTowerTierData> TESLA_TOWER_TIER = DataMapType
+			.builder(EI.id("tesla_tower_tier"), Registries.BLOCK, TeslaTowerTierData.CODEC)
+			.synced(TeslaTowerTierData.CODEC, true)
+			.build();
+	
 	public static void init(RegisterDataMapTypesEvent event)
 	{
 		event.register(FARMER_SIMPLE_TALL_CROP_SIZE);
 		event.register(FERTILIZER_POTENCY);
 		event.register(LARGE_ELECTRIC_FURNACE_TIER);
+		event.register(TESLA_TOWER_TIER);
 	}
 }

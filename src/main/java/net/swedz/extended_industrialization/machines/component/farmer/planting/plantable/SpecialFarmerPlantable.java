@@ -4,8 +4,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.SpecialPlantable;
 import net.swedz.extended_industrialization.EITags;
-import net.swedz.extended_industrialization.machines.component.farmer.planting.PlantingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.planting.FarmerPlantable;
+import net.swedz.extended_industrialization.machines.component.farmer.planting.PlantingContext;
 
 public final class SpecialFarmerPlantable implements FarmerPlantable
 {

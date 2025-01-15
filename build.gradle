@@ -39,6 +39,7 @@ repositories {
 		name = "shedaniel"
 		url "https://maven.shedaniel.me"
 		content {
+			// Cloth Config API
 			includeGroup "me.shedaniel.cloth"
 		}
 	}
@@ -64,8 +65,8 @@ repositories {
 		}
 	}
 	maven {
-		name = "OctoStudios"
-		url = "https://maven.octo-studios.com/releases"
+		name = "Illusive Soulwork"
+		url = "https://maven.theillusivec4.top/"
 		content {
 			// Curios
 			includeGroup "top.theillusivec4.curios"
@@ -120,7 +121,7 @@ dependencies {
 	if (project.runtime_include_curios.toBoolean()) {
 		localImplementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 	} else {
-		compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+		compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
 	}
 
 	if (project.runtime_include_mystical_agriculture.toBoolean()) {
@@ -292,6 +293,7 @@ neoForge {
 	accessTransformers = [
 			"src/main/resources/${mod_id}.accesstransformer.cfg"
 	]
+	interfaceInjectionData.from "src/main/resources/interfaces.json"
 
 	parchment {
 		mappingsVersion = project.parchment_mappings_version
@@ -365,7 +367,6 @@ tasks.withType(ProcessResources).configureEach {
 			mod_github                            : mod_github,
 			modern_industrialization_version_range: modern_industrialization_version_range,
 			tesseract_version_range               : tesseract_version_range,
-			mi_tweaks_version_range               : mi_tweaks_version_range,
 			emi_version_range                     : emi_version_range,
 			accessories_version_range             : accessories_version_range,
 			curios_version_range                  : curios_version_range,

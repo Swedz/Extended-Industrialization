@@ -16,6 +16,9 @@ import net.neoforged.neoforge.registries.datamaps.DataMapsUpdatedEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.swedz.extended_industrialization.datagen.DatagenDelegator;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
+import net.swedz.extended_industrialization.machines.guicomponent.EIModularSlotPanelSlots;
+import net.swedz.extended_industrialization.material.EIMaterialRegistry;
 import net.swedz.extended_industrialization.network.EIPackets;
 import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.api.MCIdentifiable;
@@ -63,7 +66,11 @@ public final class EI
 		EIItems.init(bus);
 		EIBlocks.init(bus);
 		EIFluids.init(bus);
-		EIOtherRegistries.init(bus);
+		EIMaterialRegistry.init();
+		EICreativeTabs.init(bus);
+		EIRecipeTypes.init(bus);
+		EISounds.init(bus);
+		EIModularSlotPanelSlots.init();
 		
 		bus.register(new DatagenDelegator());
 		
@@ -81,6 +88,7 @@ public final class EI
 		
 		NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, DataMapsUpdatedEvent.class, (event) ->
 				event.ifRegistry(Registries.BLOCK, (registry) -> LargeElectricFurnaceBlockEntity.initTiers()));
+		TeslaTowerBlockEntity.registerTieredShapes();
 	}
 	
 	private static EIConfig CONFIG;
@@ -93,8 +101,11 @@ public final class EI
 	
 	private static void setupConfig(IEventBus bus, ModContainer container)
 	{
-		CONFIG = new ConfigManager()
-				.includeDefaultValueComments()
+		var manager = new ConfigManager()
+				.includeDefaultValueComments();
+		manager.codecs()
+				.register(EIConfig.CableTierDamages.class, EIConfig.CableTierDamages.CODEC);
+		CONFIG = manager
 				.build(EIConfig.class)
 				.register(container, ModConfig.Type.STARTUP)
 				.load()

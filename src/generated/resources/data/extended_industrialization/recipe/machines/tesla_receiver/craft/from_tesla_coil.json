@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "extended_industrialization:tesla_coil"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:tesla_receiver"
+  }
+}

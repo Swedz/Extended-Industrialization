@@ -28,7 +28,6 @@ import net.swedz.extended_industrialization.machines.blockentity.MachineChainerM
 import net.swedz.extended_industrialization.machines.blockentity.SolarBoilerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.SolarPanelMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.UniversalTransformerMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentity.WirelessChargerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.brewery.ElectricBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.brewery.SteamBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.fluidharvesting.ElectricFluidHarvestingMachineBlockEntity;
@@ -37,6 +36,11 @@ import net.swedz.extended_industrialization.machines.blockentity.multiblock.Larg
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.ProcessingArrayBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer.SteamFarmerBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.tesla.LethalTeslaCoilMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaCoilMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaReceiverHatchBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaReceiverMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.wastecollector.WasteCollectorBehavior;
 import net.swedz.extended_industrialization.machines.recipe.BreweryMachineRecipeType;
@@ -216,6 +220,12 @@ public final class EIMachines
 			ReiMachineRecipes.registerWorkstation(MI.id("steel_macerator"), EI.id("large_electric_macerator"));
 			ReiMachineRecipes.registerWorkstation(MI.id("electric_macerator"), EI.id("large_electric_macerator"));
 		}
+		
+		hook.register(
+				"Tesla Tower", "tesla_tower", "tesla_tower",
+				CLEAN_STAINLESS_STEEL, true, false, false,
+				TeslaTowerBlockEntity::new
+		);
 	}
 	
 	public static void singleBlockCrafting(SingleBlockCraftingMachinesMIHookContext hook)
@@ -395,29 +405,40 @@ public final class EIMachines
 		}
 		
 		hook.register(
-				"Local Wireless Charging Station", "local_wireless_charging_station", "wireless_charging_station/local",
-				CableTier.MV.casing, false, true, true, false,
-				(bep) -> new WirelessChargerMachineBlockEntity(bep, EI.id("local_wireless_charging_station"), CableTier.MV, (m, p) -> m.getBlockPos().closerThan(p.blockPosition(), EI.config().localWirelessChargingStationRange())),
-				WirelessChargerMachineBlockEntity::registerEnergyApi
-		);
-		hook.register(
-				"Global Wireless Charging Station", "global_wireless_charging_station", "wireless_charging_station/global",
-				CableTier.HV.casing, false, true, true, false,
-				(bep) -> new WirelessChargerMachineBlockEntity(bep, EI.id("global_wireless_charging_station"), CableTier.HV, (m, p) -> m.getLevel() == p.level()),
-				WirelessChargerMachineBlockEntity::registerEnergyApi
-		);
-		hook.register(
-				"Interdimensional Wireless Charging Station", "interdimensional_wireless_charging_station", "wireless_charging_station/interdimensional",
-				CableTier.EV.casing, false, true, true, false,
-				(bep) -> new WirelessChargerMachineBlockEntity(bep, EI.id("interdimensional_wireless_charging_station"), CableTier.EV, (m, p) -> true),
-				WirelessChargerMachineBlockEntity::registerEnergyApi
-		);
-		
-		hook.register(
 				"Large Configurable Chest", "large_configurable_chest", "large_configurable_chest",
 				Casings.LARGE_STEEL_CRATE, false, false, false, false,
 				LargeConfigurableChestMachineBlockEntity::new,
 				MachineBlockEntity::registerItemApi
+		);
+		
+		hook.register(
+				"Tesla Coil", "tesla_coil", "tesla_coil",
+				CableTier.LV.casing, true, true, true, true,
+				TeslaCoilMachineBlockEntity::new,
+				TeslaCoilMachineBlockEntity::registerEnergyApi
+		);
+		
+		hook.register(
+				"Tesla Receiver", "tesla_receiver", "tesla_receiver",
+				CableTier.LV.casing, true, true, true, true,
+				TeslaReceiverMachineBlockEntity::new,
+				TeslaReceiverMachineBlockEntity::registerEnergyApi
+		);
+		
+		for(CableTier tier : CableTier.allTiers())
+		{
+			hook.register(
+					"%s Tesla Receiver Hatch".formatted(tier.shortEnglishName), "%s_tesla_receiver_hatch".formatted(tier.name), "tesla_receiver_hatch",
+					tier.casing, true, false, true, false,
+					(bep) -> new TeslaReceiverHatchBlockEntity(bep, tier)
+			);
+		}
+		
+		hook.register(
+				"Lethal Tesla Coil", "lethal_tesla_coil", "lethal_tesla_coil",
+				CableTier.LV.casing, true, true, true, true,
+				LethalTeslaCoilMachineBlockEntity::new,
+				LethalTeslaCoilMachineBlockEntity::registerEnergyApi
 		);
 	}
 }

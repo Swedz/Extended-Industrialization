@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "extended_industrialization:block/superconductor_tesla_winding_end",
+    "side": "extended_industrialization:block/superconductor_tesla_winding_side"
+  }
+}

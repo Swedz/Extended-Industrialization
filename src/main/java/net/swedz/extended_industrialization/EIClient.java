@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -20,8 +21,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
@@ -34,12 +37,18 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.swedz.extended_industrialization.client.NanoGravichestplateHudRenderer;
 import net.swedz.extended_industrialization.client.ber.chainer.MachineChainerHighlightRenderer;
+import net.swedz.extended_industrialization.client.ber.tesla.TeslaPartMultiblockRenderer;
+import net.swedz.extended_industrialization.client.ber.tesla.TeslaPartSingleBlockRenderer;
+import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.client.model.chainer.MachineChainerUnbakedModel;
+import net.swedz.extended_industrialization.client.model.tesla.TeslaUnbakedModel;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.tooltip.SteamChainsawTooltipComponent;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
 import net.swedz.extended_industrialization.network.packet.ModifyElectricToolSpeedPacket;
+import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.neoforge.config.ConfigManager;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
@@ -47,8 +56,10 @@ import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 @EventBusSubscriber(value = Dist.CLIENT, modid = EI.ID, bus = EventBusSubscriber.Bus.MOD)
 public final class EIClient
 {
-	public EIClient(IEventBus bus)
+	public EIClient(IEventBus bus, ModContainer container)
 	{
+		setupConfig(bus, container);
+		
 		EIKeybinds.init(bus);
 		
 		NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, (event) ->
@@ -82,6 +93,30 @@ public final class EIClient
 		});
 	}
 	
+	private static EIClientConfig CONFIG;
+	
+	public static EIClientConfig config()
+	{
+		Assert.notNull(CONFIG, "Config not yet loaded");
+		return CONFIG;
+	}
+	
+	private static void setupConfig(IEventBus bus, ModContainer container)
+	{
+		CONFIG = new ConfigManager()
+				.includeDefaultValueComments()
+				.build(EIClientConfig.class)
+				.register(container, ModConfig.Type.CLIENT)
+				.listenToLoad(bus)
+				.config();
+	}
+	
+	@SubscribeEvent
+	private static void registerItemProperties(FMLClientSetupEvent event)
+	{
+		event.enqueueWork(() -> EIItems.values().forEach(ItemHolder::triggerClientRegistrationListener));
+	}
+	
 	@SubscribeEvent
 	private static void registerItemProperties(FMLClientSetupEvent event)
 	{
@@ -110,6 +145,7 @@ public final class EIClient
 	private static void registerModelLoaders(ModelEvent.RegisterGeometryLoaders event)
 	{
 		event.register(MachineChainerUnbakedModel.LOADER_ID, MachineChainerUnbakedModel.LOADER);
+		event.register(TeslaUnbakedModel.LOADER_ID, TeslaUnbakedModel.LOADER);
 	}
 	
 	@SubscribeEvent
@@ -125,6 +161,11 @@ public final class EIClient
 				BlockEntityRendererProvider provider = switch (blockEntity)
 				{
 					case MachineChainerMachineBlockEntity be -> MachineChainerHighlightRenderer::new;
+					case TeslaBehavior __ -> switch (blockEntity)
+					{
+						case MultiblockMachineBlockEntity be -> TeslaPartMultiblockRenderer::new;
+						default -> TeslaPartSingleBlockRenderer::new;
+					};
 					case LargeTankMultiblockBlockEntity be -> MultiblockTankBER::new;
 					case MultiblockMachineBlockEntity be -> MultiblockMachineBER::new;
 					default -> MachineBlockEntityRenderer::new;
@@ -144,5 +185,15 @@ public final class EIClient
 	private static void registerGuiLayers(RegisterGuiLayersEvent event)
 	{
 		event.registerAbove(VanillaGuiLayers.SELECTED_ITEM_NAME, EI.id("nano_gravichestplate_activation_status"), NanoGravichestplateHudRenderer::render);
+	}
+	
+	@SubscribeEvent
+	private static void registerAdditionalModels(ModelEvent.RegisterAdditional event)
+	{
+		event.register(ModelResourceLocation.standalone(EI.id("tesla/lethal_tesla_coil")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_coil")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_hatch")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_receiver")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_tower")));
 	}
 }

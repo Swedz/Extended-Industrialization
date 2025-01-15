@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "extended_industrialization:item/tesla_handheld_receiver_active"
+    }
+}

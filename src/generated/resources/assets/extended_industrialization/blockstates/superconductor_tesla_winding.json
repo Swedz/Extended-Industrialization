@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "extended_industrialization:block/superconductor_tesla_winding"
+    }
+  }
+}

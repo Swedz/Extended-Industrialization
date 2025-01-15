@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "c": {
+      "item": "extended_industrialization:silver_curved_plate"
+    },
+    "p": {
+      "tag": "c:plates/silver"
+    }
+  },
+  "pattern": [
+    "cpc",
+    "cpc",
+    "cpc"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:polished_silver_machine_casing"
+  }
+}

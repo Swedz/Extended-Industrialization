@@ -18,7 +18,9 @@ For any questions, please ask in the `#extended-industrialization` channel on [m
   - Processing Array
   - Universal Transformer
   - Waste Collector
-  - Wireless Charging Station
+  - Tesla Coil
+  - Tesla Receiver (and also a hatch)
+  - Tesla Tower
 - Generators
   - Solar Boiler
   - Solar Panel
@@ -29,6 +31,8 @@ For any questions, please ask in the `#extended-industrialization` channel on [m
   - Electric Drill & Chainsaw
   - Ultimate Laser Drill
   - Nano Suit
+  - Tesla Calibrator
+  - Tesla Handheld Receiver
 - Resources
   - Mulch
   - Manure

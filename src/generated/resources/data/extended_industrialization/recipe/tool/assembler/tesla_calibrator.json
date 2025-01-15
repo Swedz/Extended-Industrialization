@@ -1,0 +1,33 @@
+{
+  "type": "modern_industrialization:assembler",
+  "duration": 200,
+  "eu": 8,
+  "item_inputs": [
+    {
+      "amount": 1,
+      "item": "modern_industrialization:silver_wire"
+    },
+    {
+      "amount": 1,
+      "item": "modern_industrialization:electronic_circuit"
+    },
+    {
+      "amount": 2,
+      "item": "modern_industrialization:transistor"
+    },
+    {
+      "amount": 2,
+      "item": "modern_industrialization:diode"
+    },
+    {
+      "amount": 1,
+      "tag": "c:glass_panes"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "extended_industrialization:tesla_calibrator"
+    }
+  ]
+}

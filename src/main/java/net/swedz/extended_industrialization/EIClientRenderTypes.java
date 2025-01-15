@@ -8,6 +8,11 @@ import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.client.shader.NanoQuantumTextureStateShard;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterRenderBuffersEvent;
+import net.swedz.extended_industrialization.client.shader.TeslaPlasmaTextureStateShard;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -15,6 +20,7 @@ import java.util.function.BiFunction;
 import static net.minecraft.client.renderer.RenderStateShard.*;
 import static net.swedz.extended_industrialization.EIClientShaders.*;
 
+@EventBusSubscriber(modid = EI.ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class EIClientRenderTypes
 {
 	public static final BiFunction<ResourceLocation, Boolean, RenderType> ARMOR_CUTOUT_NO_CULL_WITH_TRANSPARENCY = Util.memoize((texture, glow) -> armorCutoutWithTransparency(texture, glow, false));
@@ -57,5 +63,50 @@ public final class EIClientRenderTypes
 				.setLayeringState(VIEW_OFFSET_Z_LAYERING)
 				.createCompositeState(false);
 		return RenderType.create("nano_quantum_%s".formatted(stars ? "stars" : "no_stars"), EIClientShaders.NANO_QUANTUM_VERTEX_FORMAT, VertexFormat.Mode.QUADS, 1536, false, false, state);
+	}
+	
+	public static final RenderType TESLA_ARC = RenderType.create(
+			"tesla_arc",
+			DefaultVertexFormat.POSITION_TEX_COLOR,
+			VertexFormat.Mode.QUADS,
+			256,
+			false,
+			true,
+			RenderType.CompositeState.builder()
+					.setShaderState(EIClientShaders.TESLA_ARC)
+					.setTextureState(new RenderStateShard.TextureStateShard(EI.id("textures/vfx/tesla_arc.png"), false, false))
+					.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+					.setCullState(CULL)
+					.setLightmapState(LIGHTMAP)
+					.setOverlayState(OVERLAY)
+					.createCompositeState(false)
+	);
+	
+	public static final BiFunction<Float, Float, RenderType> TESLA_PLASMA = Util.memoize(EIClientRenderTypes::createTeslaPlasma);
+	
+	private static RenderType createTeslaPlasma(float scale, float speed)
+	{
+		return RenderType.create(
+				"plasma",
+				DefaultVertexFormat.POSITION_TEX_COLOR,
+				VertexFormat.Mode.QUADS,
+				1536,
+				false,
+				true,
+				RenderType.CompositeState.builder()
+						.setShaderState(EIClientShaders.TESLA_PLASMA)
+						.setTextureState(new TeslaPlasmaTextureStateShard(EI.id("textures/vfx/tesla_plasma.png"), scale, speed))
+						.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+						.setCullState(CULL)
+						.setLightmapState(LIGHTMAP)
+						.setOverlayState(OVERLAY)
+						.createCompositeState(false)
+		);
+	}
+	
+	@SubscribeEvent
+	private static void onRegisterRenderBuffers(RegisterRenderBuffersEvent event)
+	{
+		event.registerRenderBuffer(TESLA_ARC);
 	}
 }

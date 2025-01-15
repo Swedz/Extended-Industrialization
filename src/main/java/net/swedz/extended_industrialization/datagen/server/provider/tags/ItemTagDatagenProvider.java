@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.datagen.server.provider.tags;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -55,6 +56,20 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 				);
 	}
 	
+	private IntrinsicTagAppender<Item> curiosTag(String path)
+	{
+		return this.tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("curios", path)));
+	}
+	
+	private void addCuriosTags()
+	{
+		this.curiosTag("belt")
+				.add(EIItems.TESLA_HANDHELD_RECEIVER.asItem());
+		
+		this.curiosTag("hands")
+				.add(EIItems.TESLA_HANDHELD_RECEIVER.asItem());
+	}
+	
 	@Override
 	protected void addTags(HolderLookup.Provider provider)
 	{
@@ -68,6 +83,8 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 		
 		this.addFarmerVoidableDropTag();
 		this.addFarmerStandardPlantableTag();
+		
+		this.addCuriosTags();
 	}
 	
 	@Override

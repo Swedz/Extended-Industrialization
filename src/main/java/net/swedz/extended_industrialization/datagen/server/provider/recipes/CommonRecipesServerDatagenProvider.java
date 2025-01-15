@@ -3,8 +3,6 @@ package net.swedz.extended_industrialization.datagen.server.provider.recipes;
 import aztech.modern_industrialization.MIFluids;
 import aztech.modern_industrialization.MIItem;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
-import aztech.modern_industrialization.materials.MIMaterials;
-import aztech.modern_industrialization.materials.part.MIParts;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
@@ -15,6 +13,9 @@ import net.swedz.extended_industrialization.EIBlocks;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.EITags;
+import net.swedz.extended_industrialization.material.EIMaterials;
+import net.swedz.tesseract.neoforge.compat.mi.material.MIMaterials;
+import net.swedz.tesseract.neoforge.compat.mi.material.part.MIMaterialParts;
 import net.swedz.tesseract.neoforge.compat.mi.recipe.MIMachineRecipeBuilder;
 import net.swedz.tesseract.neoforge.compat.vanilla.recipe.ShapedRecipeBuilder;
 
@@ -283,6 +284,51 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 		);
 	}
 	
+	private static void tesla(RecipeOutput output)
+	{
+		addBasicCraftingRecipes(
+				"tool", "tesla_calibrator", true,
+				EIItems.TESLA_CALIBRATOR, 1,
+				(r) -> r
+						.define('S', MIMaterials.SILVER.get(MIMaterialParts.WIRE))
+						.define('T', MIItem.TRANSISTOR)
+						.define('G', EITags.itemCommon("glass_panes"))
+						.define('D', MIItem.DIODE)
+						.define('C', MIItem.ELECTRONIC_CIRCUIT)
+						.pattern(" S ")
+						.pattern("TGT")
+						.pattern("DCD"),
+				output
+		);
+		
+		addBasicCraftingRecipes(
+				"tool", "tesla_handheld_receiver", true,
+				EIItems.TESLA_HANDHELD_RECEIVER, 1,
+				(r) -> r
+						.define('S', "%s:silver_tesla_top_load".formatted(EI.ID))
+						.define('W', EIMaterials.ANNEALED_COPPER.get(EIMaterials.Parts.TESLA_WINDING))
+						.define('T', MIItem.TRANSISTOR)
+						.define('D', MIItem.DIODE)
+						.define('C', MIItem.ELECTRONIC_CIRCUIT)
+						.pattern("S  ")
+						.pattern("WTT")
+						.pattern("CDD"),
+				output
+		);
+		
+		addMachineRecipe(
+				"upgrade", "tesla_interdimensional_upgrade", MIMachineRecipeTypes.ASSEMBLER,
+				32, 60 * 20,
+				(r) -> r
+						.addItemInput("%s:superconductor_tesla_winding".formatted(EI.ID), 8)
+						.addItemInput(MIItem.HIGHLY_ADVANCED_UPGRADE, 4)
+						.addItemInput(MIItem.PROCESSING_UNIT, 1)
+						.addFluidInput(MIFluids.POLYVINYL_CHLORIDE, 1000)
+						.addItemOutput(EIItems.TESLA_INTERDIMENSIONAL_UPGRADE, 1),
+				output
+		);
+	}
+	
 	@Override
 	protected void buildRecipes(RecipeOutput output)
 	{
@@ -326,7 +372,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				"casing", "steel_plated_bricks", true,
 				EIBlocks.STEEL_PLATED_BRICKS.get().asItem(), 1,
 				(r) -> r
-						.define('S', MIMaterials.STEEL.getPart(MIParts.PLATE))
+						.define('S', MIMaterials.STEEL.get(MIMaterialParts.PLATE))
 						.define('B', "modern_industrialization:fire_clay_bricks")
 						.pattern("SSS")
 						.pattern("SBS")
@@ -426,5 +472,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 		);
 		
 		nanoSuit(output);
+		
+		tesla(output);
 	}
 }

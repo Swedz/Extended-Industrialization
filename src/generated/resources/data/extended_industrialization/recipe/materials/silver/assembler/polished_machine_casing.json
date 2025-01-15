@@ -1,0 +1,21 @@
+{
+  "type": "modern_industrialization:assembler",
+  "duration": 200,
+  "eu": 8,
+  "item_inputs": [
+    {
+      "amount": 3,
+      "tag": "c:plates/silver"
+    },
+    {
+      "amount": 6,
+      "item": "extended_industrialization:silver_curved_plate"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "extended_industrialization:polished_silver_machine_casing"
+    }
+  ]
+}
