@@ -5,6 +5,8 @@ import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTranslatableTe
 public enum EIText implements MICompatibleTranslatableTextEnum
 {
 	ACTIVATED("Activated"),
+	BLAZING_ESSENCE_USES_1("Blazing Essence is used in the brewery to brew potions."),
+	BLAZING_ESSENCE_USES_2("1mb of Blazing Essence is used every time the brewery brews a set of potions."),
 	BREWERY_BREWS_MULTIPLE("Brews %s potions at a time."),
 	BREWERY_REQUIRES_BLAZING_ESSENCE("Requires %s to brew potions."),
 	CALCIFICATION_PERCENTAGE("Calcification: %d %%"),

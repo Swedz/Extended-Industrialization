@@ -128,6 +128,8 @@
   "teslatower_tier.extended_industrialization.extended_industrialization.electrum_tesla_winding": "Electrum",
   "teslatower_tier.extended_industrialization.extended_industrialization.superconductor_tesla_winding": "Superconductor",
   "text.extended_industrialization.activated": "Activated",
+  "text.extended_industrialization.blazing_essence_uses_1": "Blazing Essence is used in the brewery to brew potions.",
+  "text.extended_industrialization.blazing_essence_uses_2": "1mb of Blazing Essence is used every time the brewery brews a set of potions.",
   "text.extended_industrialization.brewery_brews_multiple": "Brews %s potions at a time.",
   "text.extended_industrialization.brewery_requires_blazing_essence": "Requires %s to brew potions.",
   "text.extended_industrialization.calcification_percentage": "Calcification: %d %%",
