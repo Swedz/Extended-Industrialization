@@ -7,13 +7,16 @@ import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.blockentities.ElectricCraftingMachineBlockEntity;
 import aztech.modern_industrialization.machines.gui.GuiComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.machines.component.craft.processingarray.ProcessingArrayMachineComponent;
+import net.swedz.tesseract.neoforge.helper.RegistryHelper;
 
 import java.util.function.Supplier;
 
@@ -33,7 +36,8 @@ public final class ProcessingArrayMachineSlot
 	
 	public static boolean isMachine(Item item)
 	{
-		return item instanceof BlockItem blockItem &&
+		return !RegistryHelper.holder(BuiltInRegistries.ITEM, item).is(EITags.Items.PROCESSING_ARRAY_BLACKLIST) &&
+			   item instanceof BlockItem blockItem &&
 			   blockItem.getBlock() instanceof MachineBlock machineBlock &&
 			   machineBlock.getBlockEntityInstance() instanceof ElectricCraftingMachineBlockEntity;
 	}
