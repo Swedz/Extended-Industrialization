@@ -121,6 +121,7 @@
   "tag.item.extended_industrialization.farmer_plantable": "Farmer Plantable",
   "tag.item.extended_industrialization.farmer_voidable": "Farmer Voidable",
   "tag.item.extended_industrialization.photovoltaic_cell": "Photovoltaic Cells",
+  "tag.item.extended_industrialization.processing_array_blacklist": "Processing Array Blacklist",
   "tag.item.extended_industrialization.rainbow_dyeable": "Rainbow Dyeable",
   "teslatower_tier.extended_industrialization.extended_industrialization.aluminum_tesla_winding": "Aluminum",
   "teslatower_tier.extended_industrialization.extended_industrialization.annealed_copper_tesla_winding": "Annealed Copper",

@@ -21,10 +21,11 @@ public final class EITags
 	
 	public static final class Items
 	{
-		public static final TagKey<Item> FARMER_PLANTABLE  = item("farmer_plantable", "Farmer Plantable");
-		public static final TagKey<Item> FARMER_VOIDABLE   = item("farmer_voidable", "Farmer Voidable");
-		public static final TagKey<Item> PHOTOVOLTAIC_CELL = item("photovoltaic_cell", "Photovoltaic Cells");
-		public static final TagKey<Item> RAINBOW_DYEABLE   = item("rainbow_dyeable", "Rainbow Dyeable");
+		public static final TagKey<Item> FARMER_PLANTABLE           = item("farmer_plantable", "Farmer Plantable");
+		public static final TagKey<Item> FARMER_VOIDABLE            = item("farmer_voidable", "Farmer Voidable");
+		public static final TagKey<Item> PHOTOVOLTAIC_CELL          = item("photovoltaic_cell", "Photovoltaic Cells");
+		public static final TagKey<Item> RAINBOW_DYEABLE            = item("rainbow_dyeable", "Rainbow Dyeable");
+		public static final TagKey<Item> PROCESSING_ARRAY_BLACKLIST = item("processing_array_blacklist", "Processing Array Blacklist");
 	}
 	
 	public static final class Blocks
