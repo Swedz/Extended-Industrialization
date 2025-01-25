@@ -30,7 +30,7 @@ public final class EIEmiPlugin implements EmiPlugin
 						Component.literal(" "),
 						EIText.BLAZING_ESSENCE_USES_2.text()
 				),
-				EI.id("emi_info/blazing_essence")
+				EI.id("/emi_info/blazing_essence")
 		));
 	}
 }
