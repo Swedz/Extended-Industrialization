@@ -32,7 +32,7 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 	private RecipeHolder<MachineRecipe> generateCannedFood(Item foodItem, FoodProperties food)
 	{
 		ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(foodItem);
-		ResourceLocation id = EI.id("canning_machine/generated/canned_food/%s/%s".formatted(itemId.getNamespace(), itemId.getPath()));
+		ResourceLocation id = EI.id("/canning_machine/generated/canned_food/%s/%s".formatted(itemId.getNamespace(), itemId.getPath()));
 		
 		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
 		
@@ -81,7 +81,7 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 	
 	private RecipeHolder<MachineRecipe> generateFillingBucket(FluidStack fluidStack, ResourceLocation itemId, Item fullItem, Item emptyItem)
 	{
-		ResourceLocation id = EI.id("canning_machine/generated/filling/%s/%s".formatted(itemId.getNamespace(), itemId.getPath()));
+		ResourceLocation id = EI.id("/canning_machine/generated/filling/%s/%s".formatted(itemId.getNamespace(), itemId.getPath()));
 		
 		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
 		
@@ -94,7 +94,7 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 	
 	private RecipeHolder<MachineRecipe> generateEmptyingBucket(FluidStack fluidStack, ResourceLocation itemId, Item fullItem, Item emptyItem)
 	{
-		ResourceLocation id = EI.id("canning_machine/generated/emptying/%s/%s".formatted(itemId.getNamespace(), itemId.getPath()));
+		ResourceLocation id = EI.id("/canning_machine/generated/emptying/%s/%s".formatted(itemId.getNamespace(), itemId.getPath()));
 		
 		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
 		

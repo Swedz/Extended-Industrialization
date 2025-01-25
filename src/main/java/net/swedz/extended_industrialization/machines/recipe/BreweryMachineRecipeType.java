@@ -91,7 +91,7 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 		ItemStack outputStack = stack.copy();
 		outputStack.set(DataComponents.POTION_CONTENTS, new PotionContents(mix.to()));
 		
-		ResourceLocation id = EI.id("brewery/generated/mix/%s/%s/%s/%s".formatted(
+		ResourceLocation id = EI.id("/brewery/generated/mix/%s/%s/%s/%s".formatted(
 				id(stack),
 				idPotion(mix.from()),
 				id(reagentIngredient),
@@ -130,7 +130,7 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 		ItemStack outputStack = new ItemStack(mix.to().value());
 		outputStack.set(DataComponents.POTION_CONTENTS, new PotionContents(potion));
 		
-		ResourceLocation id = EI.id("brewery/generated/container/%s/%s/%s/%s".formatted(
+		ResourceLocation id = EI.id("/brewery/generated/container/%s/%s/%s/%s".formatted(
 				id(potion.unwrapKey().orElseThrow().location()),
 				idItem(mix.from()),
 				id(reagentIngredient),
@@ -174,7 +174,7 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 	
 	private RecipeHolder<MachineRecipe> generateModded(ItemStack inputStack, Ingredient reagentIngredient, ItemStack outputStack)
 	{
-		ResourceLocation id = EI.id("brewery/generated/modded_improper/%s/%s/%s".formatted(
+		ResourceLocation id = EI.id("/brewery/generated/modded_improper/%s/%s/%s".formatted(
 				id(inputStack),
 				id(reagentIngredient),
 				id(outputStack)
@@ -186,7 +186,7 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 			Optional<Holder<Potion>> outputPotion = outputStack.get(DataComponents.POTION_CONTENTS).potion();
 			if(inputPotion.isPresent() && outputPotion.isPresent())
 			{
-				id = EI.id("brewery/generated/modded/%s/%s/%s".formatted(
+				id = EI.id("/brewery/generated/modded/%s/%s/%s".formatted(
 						idPotion(inputPotion.get()),
 						id(reagentIngredient),
 						idPotion(outputPotion.get())

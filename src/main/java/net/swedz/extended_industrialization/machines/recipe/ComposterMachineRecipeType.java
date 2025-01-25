@@ -24,7 +24,7 @@ public final class ComposterMachineRecipeType extends ProxyableMachineRecipeType
 	private RecipeHolder<MachineRecipe> generate(Item item, float chance)
 	{
 		ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
-		ResourceLocation id = EI.id("composter/generated/%s/%s_to_bonemeal".formatted(itemId.getNamespace(), itemId.getPath()));
+		ResourceLocation id = EI.id("/composter/generated/%s/%s_to_bonemeal".formatted(itemId.getNamespace(), itemId.getPath()));
 		
 		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
 		
