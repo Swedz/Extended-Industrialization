@@ -28,7 +28,7 @@ public final class FluidFertilizerCategory extends ViewerCategory<Fluid>
 	public ResourceLocation getRecipeId(Fluid fluid)
 	{
 		ResourceLocation key = BuiltInRegistries.FLUID.getKey(fluid);
-		return EI.id("fluid_fertilizer/%s/%s".formatted(key.getNamespace(), key.getPath()));
+		return EI.id("/fluid_fertilizer/%s/%s".formatted(key.getNamespace(), key.getPath()));
 	}
 	
 	@Override
