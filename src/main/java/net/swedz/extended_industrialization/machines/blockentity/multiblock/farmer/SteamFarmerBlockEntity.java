@@ -32,7 +32,7 @@ public final class SteamFarmerBlockEntity extends FarmerBlockEntity
 	
 	public SteamFarmerBlockEntity(BEP bep)
 	{
-		super(bep, EI.id("steam_farmer"), 8, PlantingMode.AS_NEEDED, false, PROCESS_RATES, SHAPES);
+		super(bep, EI.id("steam_farmer"), 32, PlantingMode.AS_NEEDED, false, PROCESS_RATES, SHAPES);
 	}
 	
 	public static void registerReiShapes()
