@@ -94,7 +94,7 @@ public final class LethalTeslaCoilComponent implements IComponent
 			if(active && tick++ % damageInterval.get() == 0)
 			{
 				energy.consumeEu(energyCost, Simulation.ACT);
-				var source = EIDamageTypes.tesla(level, worldPosition.getCenter());
+				var source = EIDamageTypes.teslaFakePlayer(level, worldPosition.getCenter(), machine.placedBy.placerId);
 				if(!entities.isEmpty())
 				{
 					var entityIds = new IntArrayList();
