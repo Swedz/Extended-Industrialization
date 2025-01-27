@@ -24,6 +24,11 @@ public final class EIDamageTypes
 		return registry.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(TESLA);
 	}
 	
+	public static DamageSource tesla(Level level, Vec3 origin)
+	{
+		return new DamageSource(tesla(level.registryAccess()), origin);
+	}
+	
 	public static DamageSource tesla(Level level, Vec3 origin, Entity damager)
 	{
 		return new DamageSource(tesla(level.registryAccess()), damager, damager, origin);
