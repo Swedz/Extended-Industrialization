@@ -51,7 +51,7 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 	
 	public ElectricFarmerBlockEntity(BEP bep)
 	{
-		super(bep, EI.id("electric_farmer"), 16, PlantingMode.ALTERNATING_LINES, true, PROCESS_RATES, SHAPES);
+		super(bep, EI.id("electric_farmer"), 64, PlantingMode.ALTERNATING_LINES, true, PROCESS_RATES, SHAPES);
 		
 		this.redstoneControl = new RedstoneControlComponent();
 		this.registerComponents(redstoneControl);
