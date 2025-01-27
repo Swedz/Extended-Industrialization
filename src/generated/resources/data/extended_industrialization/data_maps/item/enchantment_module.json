@@ -1,0 +1,8 @@
+{
+  "values": {
+    "extended_industrialization:silk_touch_module": {
+      "enchantment": "minecraft:silk_touch",
+      "level": 1
+    }
+  }
+}

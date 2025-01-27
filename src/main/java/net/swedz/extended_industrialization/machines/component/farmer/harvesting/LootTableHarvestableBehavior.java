@@ -28,11 +28,11 @@ public interface LootTableHarvestableBehavior extends HarvestableBehavior
 		List<ItemStack> drops = Lists.newArrayList();
 		for(BlockPos block : blocks)
 		{
-			HarvestingContext blockContext = new HarvestingContext(context.level(), block, context.level().getBlockState(block));
+			HarvestingContext blockContext = new HarvestingContext(context.level(), block, context.level().getBlockState(block), context.enchantment());
 			LootTable lootTable = this.getLootTable(blockContext);
 			LootParams lootParams = new LootParams.Builder((ServerLevel) context.level())
 					.withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(block))
-					.withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
+					.withParameter(LootContextParams.TOOL, blockContext.enchantedItem())
 					.withParameter(LootContextParams.BLOCK_STATE, blockContext.state())
 					.create(LootContextParamSets.BLOCK);
 			drops.addAll(lootTable.getRandomItems(lootParams));

@@ -4,6 +4,7 @@ import aztech.modern_industrialization.api.energy.CableTier;
 import com.google.common.collect.Sets;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -96,6 +97,8 @@ public final class EIItems
 	public static final ItemHolder<PhotovoltaicCellItem> LV_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("lv", "LV", CableTier.LV, 16, 10 * 60 * 20);
 	public static final ItemHolder<PhotovoltaicCellItem> MV_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("mv", "MV", CableTier.MV, 64, 10 * 60 * 20);
 	public static final ItemHolder<PhotovoltaicCellItem> HV_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("hv", "HV", CableTier.HV, 256, 10 * 60 * 20);
+	
+	public static final ItemHolder<Item> SILK_TOUCH_MODULE = createEnchantmentModule("silk_touch", "Silk Touch").register();
 	
 	public static Set<ItemHolder> values()
 	{
@@ -209,6 +212,16 @@ public final class EIItems
 				.tag(EITags.Items.PHOTOVOLTAIC_CELL)
 				.withModelBuilder(CommonModelBuilders::generated)
 				.register();
+	}
+	
+	public static ItemHolder<Item> createEnchantmentModule(String id, String name)
+	{
+		return create(id + "_module", name + " Module", Item::new, EISortOrder.OTHER_GEAR)
+				.withProperties((p) -> p
+						.stacksTo(1)
+						.rarity(Rarity.RARE)
+						.component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true))
+				.withModelBuilder(CommonModelBuilders::generated);
 	}
 	
 	public static void itemPropertyTeslaNetworkSelected(Item item)

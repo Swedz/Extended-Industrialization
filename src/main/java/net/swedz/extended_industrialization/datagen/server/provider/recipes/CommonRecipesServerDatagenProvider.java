@@ -3,6 +3,7 @@ package net.swedz.extended_industrialization.datagen.server.provider.recipes;
 import aztech.modern_industrialization.MIFluids;
 import aztech.modern_industrialization.MIItem;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
@@ -330,7 +331,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 	}
 	
 	@Override
-	protected void buildRecipes(RecipeOutput output)
+	protected void buildRecipes(RecipeOutput output, HolderLookup.Provider registries)
 	{
 		addMachineRecipe(
 				"mixer", "mulch", MIMachineRecipeTypes.MIXER,
@@ -474,5 +475,17 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 		nanoSuit(output);
 		
 		tesla(output);
+		
+		addMachineRecipe(
+				"assembler", "silk_touch_module", MIMachineRecipeTypes.ASSEMBLER,
+				8, 10 * 20,
+				(r) -> r
+						.addItemInput("#c:plates/stainless_steel", 8)
+						.addItemInput(MIItem.INVAR_ROTARY_BLADE, 2)
+						.addItemInput(MIItem.ROBOT_ARM, 4)
+						.addFluidInput(MIFluids.POLYETHYLENE, 1000)
+						.addItemOutput(EIItems.SILK_TOUCH_MODULE, 1),
+				output
+		);
 	}
 }

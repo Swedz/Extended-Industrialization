@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.machines.component.enchantmentmodule.EnchantmentModuleComponent;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
 
 import java.util.function.Predicate;
@@ -20,6 +21,12 @@ public final class EIModularSlotPanelSlots
 			"tesla_tower_upgrade", SlotGroup.UPGRADES, 64,
 			(stack) -> stack.is(EIItems.TESLA_INTERDIMENSIONAL_UPGRADE.asItem()),
 			2, 0, () -> line(EIText.TESLA_TOWER_UPGRADE)
+	);
+	
+	public static final ResourceLocation ENCHANTMENT_MODULE = register(
+			"enchantment_module", SlotGroup.CONFIGURABLE_STACKS, 1,
+			EnchantmentModuleComponent::is,
+			3, 0, () -> line(EIText.ENCHANTMENT_MODULE_INPUT)
 	);
 	
 	public static void init()
