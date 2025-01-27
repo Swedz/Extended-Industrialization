@@ -10,6 +10,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.extended_industrialization.EITags;
+import net.swedz.extended_industrialization.datamap.EnchantmentModule;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.component.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlock;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerTile;
@@ -139,6 +141,13 @@ public final class HarvestingFarmerTask extends FarmerTask
 		return true;
 	}
 	
+	private Optional<EnchantmentModule> getActiveEnchantment()
+	{
+		return farmer.getMachine() instanceof ElectricFarmerBlockEntity electric ?
+				electric.getEnchantmentModuleComponent().getActiveEnchantment() :
+				Optional.empty();
+	}
+	
 	@Override
 	protected boolean run()
 	{
@@ -148,7 +157,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 			BlockPos pos = crop.pos();
 			BlockState state = crop.state(level);
 			
-			HarvestingContext context = new HarvestingContext(level, pos, state);
+			HarvestingContext context = new HarvestingContext(level, pos, state, this.getActiveEnchantment());
 			Optional<HarvestableBehavior> handlerOptional = harvestingHandlers.behavior(context);
 			
 			if(handlerOptional.isPresent())

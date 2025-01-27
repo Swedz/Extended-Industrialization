@@ -9,7 +9,6 @@ import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.components.UpgradeComponent;
-import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.multiblocks.HatchBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
@@ -22,9 +21,12 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIMachines;
+import net.swedz.extended_industrialization.machines.component.enchantmentmodule.EnchantmentModuleComponent;
 import net.swedz.extended_industrialization.machines.component.farmer.PlantingMode;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerProcessRates;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTaskType;
+import net.swedz.extended_industrialization.machines.guicomponent.EIModularSlotPanelSlots;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
 
 import java.util.List;
 
@@ -47,17 +49,29 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 			.with(FarmerTaskType.PLANTING, 1, 5);
 	
 	private final RedstoneControlComponent redstoneControl;
-	private final List<EnergyComponent>    energyInputs = Lists.newArrayList();
+	
+	private final EnchantmentModuleComponent enchantmentModule;
+	
+	private final List<EnergyComponent> energyInputs = Lists.newArrayList();
 	
 	public ElectricFarmerBlockEntity(BEP bep)
 	{
 		super(bep, EI.id("electric_farmer"), 64, PlantingMode.ALTERNATING_LINES, true, PROCESS_RATES, SHAPES);
 		
-		this.redstoneControl = new RedstoneControlComponent();
-		this.registerComponents(redstoneControl);
+		redstoneControl = new RedstoneControlComponent();
 		
-		this.registerGuiComponent(new SlotPanel.Server(this)
-				.withRedstoneControl(redstoneControl));
+		enchantmentModule = new EnchantmentModuleComponent();
+		
+		this.registerComponents(redstoneControl, enchantmentModule);
+		
+		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
+				.withRedstoneModule(redstoneControl)
+				.with(EIModularSlotPanelSlots.ENCHANTMENT_MODULE, enchantmentModule));
+	}
+	
+	public EnchantmentModuleComponent getEnchantmentModuleComponent()
+	{
+		return enchantmentModule;
 	}
 	
 	public static void registerReiShapes()
@@ -113,6 +127,10 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 		if(!result.consumesAction())
 		{
 			result = redstoneControl.onUse(this, player, hand);
+		}
+		if(!result.consumesAction())
+		{
+			result = enchantmentModule.onUse(this, player, hand);
 		}
 		return result;
 	}

@@ -31,6 +31,7 @@ public enum EIText implements MICompatibleTranslatableTextEnum
 	ELECTRIC_TOOL_HELP_2_LOOTING("- Press %s + %s to swap between Fortune/Looting and Silk Touch."),
 	ELECTRIC_TOOL_HELP_3("- Use %s + %s to change mining speed."),
 	ELECTRIC_TOOL_HELP_4("- Press %s while held or %s while hovered to toggle 3x3 mining."),
+	ENCHANTMENT_MODULE_INPUT("Insert an enchantment module to make the machine use the enchantment."),
 	FARMER_NOT_TILLING("Not Tilling"),
 	FARMER_PLANTING_ALTERNATING_LINES("Alternating Lines"),
 	FARMER_PLANTING_AS_NEEDED("As Needed"),

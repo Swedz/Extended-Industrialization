@@ -10,8 +10,11 @@ import net.swedz.extended_industrialization.machines.component.farmer.block.Farm
 
 public abstract class FarmerTask
 {
-	protected final FarmerTaskType                 type;
-	protected final MultiblockInventoryComponent   inventory;
+	protected final FarmerTaskType type;
+	
+	protected final FarmerComponent              farmer;
+	protected final MultiblockInventoryComponent inventory;
+	
 	protected final FarmerBlockMap                 blockMap;
 	protected final FarmerComponentPlantableStacks plantableStacks;
 	protected final FarmerTaskOperations           operations;
@@ -24,14 +27,17 @@ public abstract class FarmerTask
 	protected int     processTick;
 	protected boolean hasWater;
 	
-	public FarmerTask(FarmerTaskType type, FarmerComponent component)
+	public FarmerTask(FarmerTaskType type, FarmerComponent farmer)
 	{
 		this.type = type;
-		this.inventory = component.getInventory();
-		this.blockMap = component.getBlockMap();
-		this.plantableStacks = component.getPlantableStacks();
-		this.operations = new FarmerTaskOperations(component.getProcessRates().maxOperations(type));
-		this.processInterval = component.getProcessRates().interval(type);
+		
+		this.farmer = farmer;
+		this.inventory = farmer.getInventory();
+		
+		this.blockMap = farmer.getBlockMap();
+		this.plantableStacks = farmer.getPlantableStacks();
+		this.operations = new FarmerTaskOperations(farmer.getProcessRates().maxOperations(type));
+		this.processInterval = farmer.getProcessRates().interval(type);
 	}
 	
 	public FarmerTaskType type()

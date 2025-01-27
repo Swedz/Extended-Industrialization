@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.machines.component.farmer;
 
 import aztech.modern_industrialization.machines.IComponent;
-import aztech.modern_industrialization.machines.components.IsActiveComponent;
 import aztech.modern_industrialization.machines.components.MultiblockInventoryComponent;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import aztech.modern_industrialization.util.Simulation;
@@ -16,6 +15,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.neoforged.bus.api.Event;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.swedz.extended_industrialization.EILocalizedListeners;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer.FarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlockMap;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.FarmerListener;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestableBehavior;
@@ -77,8 +77,9 @@ public final class FarmerComponent implements IComponent
 		registerHarvestable(TreeHarvestable::new);
 	}
 	
-	private final MultiblockInventoryComponent   inventory;
-	private final IsActiveComponent              isActive;
+	private final FarmerBlockEntity            machine;
+	private final MultiblockInventoryComponent inventory;
+	
 	private final FarmerComponentPlantableStacks plantableStacks;
 	private final PlantingMode                   defaultPlantingMode;
 	private final FarmerProcessRates             processRates;
@@ -98,10 +99,11 @@ public final class FarmerComponent implements IComponent
 	
 	private int processTick;
 	
-	public FarmerComponent(MultiblockInventoryComponent inventory, IsActiveComponent isActive, PlantingMode defaultPlantingMode, FarmerProcessRates processRates)
+	public FarmerComponent(FarmerBlockEntity machine, MultiblockInventoryComponent inventory, PlantingMode defaultPlantingMode, FarmerProcessRates processRates)
 	{
+		this.machine = machine;
 		this.inventory = inventory;
-		this.isActive = isActive;
+		
 		this.plantableStacks = new FarmerComponentPlantableStacks(this);
 		this.defaultPlantingMode = defaultPlantingMode;
 		this.plantingMode = defaultPlantingMode;
@@ -131,6 +133,11 @@ public final class FarmerComponent implements IComponent
 			}
 		}));
 		listeners.addAll(harvestableBehaviorHolder.listeners(blockMap));
+	}
+	
+	public FarmerBlockEntity getMachine()
+	{
+		return machine;
 	}
 	
 	public MultiblockInventoryComponent getInventory()

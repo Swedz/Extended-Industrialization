@@ -3,7 +3,10 @@ package net.swedz.extended_industrialization.datagen.server.provider.datamaps;
 import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.api.energy.CableTier;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.DataMapProvider;
@@ -11,11 +14,14 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIDataMaps;
 import net.swedz.extended_industrialization.EIFluids;
+import net.swedz.extended_industrialization.EIItems;
+import net.swedz.extended_industrialization.datamap.EnchantmentModule;
 import net.swedz.extended_industrialization.datamap.FarmerSimpleTallCropSize;
 import net.swedz.extended_industrialization.datamap.FertilizerPotency;
 import net.swedz.extended_industrialization.datamap.LargeElectricFurnaceTier;
 import net.swedz.extended_industrialization.datamap.TeslaTowerTierData;
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
+import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 public final class DataMapDatagenProvider extends DataMapProvider
 {
@@ -42,6 +48,8 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		this.addTeslaTowerTier(EI.id("aluminum_tesla_winding"), CableTier.HV.getMaxTransfer() * 6, 32 * 2 * 2, 64 * 4 * 4);
 		this.addTeslaTowerTier(EI.id("annealed_copper_tesla_winding"), CableTier.EV.getMaxTransfer() * 6, 32 * 2 * 2 * 2, 64 * 4 * 4 * 4);
 		this.addTeslaTowerTier(EI.id("superconductor_tesla_winding"), CableTier.SUPERCONDUCTOR.getMaxTransfer() * 6, 32 * 2 * 2 * 2 * 2, 64 * 4 * 4 * 4 * 4);
+		
+		this.addEnchantmentModule(EIItems.SILK_TOUCH_MODULE, Enchantments.SILK_TOUCH, 1);
 	}
 	
 	private void addFarmerSimpleTallCropSize(ResourceLocation block, int maxHeight)
@@ -67,6 +75,11 @@ public final class DataMapDatagenProvider extends DataMapProvider
 	private void addTeslaTowerTier(ResourceLocation block, long maxTransfer, int maxDistance, long drain)
 	{
 		this.builder(EIDataMaps.TESLA_TOWER_TIER).add(block, new TeslaTowerTierData(maxTransfer, maxDistance, drain), false);
+	}
+	
+	private void addEnchantmentModule(ItemHolder item, ResourceKey<Enchantment> enchantment, int level)
+	{
+		this.builder(EIDataMaps.ENCHANTMENT_MODULE).add(item.identifier().location(), new EnchantmentModule(enchantment, level), false);
 	}
 	
 	@Override
