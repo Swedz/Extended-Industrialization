@@ -283,22 +283,25 @@ public final class TeslaUnbakedModel implements IUnbakedGeometry<TeslaUnbakedMod
 			postTransform = UnbakedGeometryHelper.applyRootTransform(modelState, rootTransform);
 		}
 		
-		for(BlockElement element : plasma.elements())
+		if(plasma != null)
 		{
-			for(Direction direction : element.faces.keySet())
+			for(BlockElement element : plasma.elements())
 			{
-				var face = element.faces.get(direction);
-				var sprite = spriteGetter.apply(context.getMaterial(face.texture()));
-				var quad = BlockModel.bakeFace(element, face, sprite, direction, modelState);
-				postTransform.processInPlace(quad);
-				
-				if(face.cullForDirection() == null)
+				for(Direction direction : element.faces.keySet())
 				{
-					modelBuilder.addUnculledFace(quad);
-				}
-				else
-				{
-					modelBuilder.addCulledFace(modelState.getRotation().rotateTransform(face.cullForDirection()), quad);
+					var face = element.faces.get(direction);
+					var sprite = spriteGetter.apply(context.getMaterial(face.texture()));
+					var quad = BlockModel.bakeFace(element, face, sprite, direction, modelState);
+					postTransform.processInPlace(quad);
+					
+					if(face.cullForDirection() == null)
+					{
+						modelBuilder.addUnculledFace(quad);
+					}
+					else
+					{
+						modelBuilder.addCulledFace(modelState.getRotation().rotateTransform(face.cullForDirection()), quad);
+					}
 				}
 			}
 		}

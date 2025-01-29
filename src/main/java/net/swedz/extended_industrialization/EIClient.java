@@ -41,6 +41,7 @@ import net.swedz.extended_industrialization.client.ber.tesla.TeslaPartMultiblock
 import net.swedz.extended_industrialization.client.ber.tesla.TeslaPartSingleBlockRenderer;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.client.model.chainer.MachineChainerUnbakedModel;
+import net.swedz.extended_industrialization.client.model.tesla.TeslaParticleGeneratorModel;
 import net.swedz.extended_industrialization.client.model.tesla.TeslaUnbakedModel;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
@@ -140,6 +141,7 @@ public final class EIClient
 	{
 		event.register(MachineChainerUnbakedModel.LOADER_ID, MachineChainerUnbakedModel.LOADER);
 		event.register(TeslaUnbakedModel.LOADER_ID, TeslaUnbakedModel.LOADER);
+		event.register(TeslaParticleGeneratorModel.LOADER_ID, TeslaParticleGeneratorModel.LOADER);
 	}
 	
 	@SubscribeEvent
@@ -190,6 +192,7 @@ public final class EIClient
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_particle_generator/medium")));
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_particle_generator/large")));
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_particle_generator/extreme")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_particle_generator/immense")));
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_hatch")));
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_receiver")));
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_tower")));

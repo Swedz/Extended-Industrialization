@@ -328,6 +328,14 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 						.addItemOutput(EIItems.TESLA_INTERDIMENSIONAL_UPGRADE, 1),
 				output
 		);
+		
+		new ShapedRecipeBuilder()
+				.output("%s:tesla_particle_generator".formatted(EI.ID), 1)
+				.define('T', "%s:silver_tesla_top_load".formatted(EI.ID))
+				.define('C', MIItem.ELECTRONIC_CIRCUIT)
+				.pattern("T")
+				.pattern("C")
+				.offerTo(output, EI.id("craft/tesla_particle_generator"));
 	}
 	
 	@Override

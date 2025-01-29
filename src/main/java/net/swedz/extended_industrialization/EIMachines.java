@@ -20,8 +20,10 @@ import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import aztech.modern_industrialization.materials.MIMaterials;
 import aztech.modern_industrialization.materials.part.MIParts;
+import aztech.modern_industrialization.util.MobSpawning;
 import com.google.common.collect.Maps;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.machines.blockentity.LargeConfigurableChestMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
@@ -39,6 +41,7 @@ import net.swedz.extended_industrialization.machines.blockentity.multiblock.farm
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.tesla.LethalTeslaCoilMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaCoilMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaParticleGeneratorMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaReceiverHatchBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaReceiverMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.honeyextractor.HoneyExtractorBehavior;
@@ -439,6 +442,19 @@ public final class EIMachines
 				CableTier.LV.casing, true, true, true, true,
 				LethalTeslaCoilMachineBlockEntity::new,
 				LethalTeslaCoilMachineBlockEntity::registerEnergyApi
+		);
+		
+		hook.register(
+				"Tesla Particle Generator", "tesla_particle_generator",
+				(b) -> b.item().withoutModel(),
+				(p) -> p
+						.mapColor(MapColor.METAL)
+						.isValidSpawn(MobSpawning.NO_SPAWN)
+						.noCollission()
+						.noOcclusion()
+						.instabreak(),
+				false,
+				TeslaParticleGeneratorMachineBlockEntity::new
 		);
 	}
 }
