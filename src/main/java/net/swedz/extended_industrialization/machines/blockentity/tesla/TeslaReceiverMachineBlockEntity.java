@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.machines.blockentity.tesla;
 
+import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
@@ -28,6 +29,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
+import net.swedz.extended_industrialization.machines.component.tesla.AestheticTeslaCoilComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiverComponent;
@@ -35,7 +37,9 @@ import net.swedz.extended_industrialization.machines.component.tesla.network.rec
 import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.TeslaNetworkBar;
 import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.configurationpanel.ConfigurationPanelBuilder;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +56,8 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	private final EnergyComponent energy;
 	private final MIEnergyStorage insertable;
 	private final MIEnergyStorage extractable;
+	
+	private final AestheticTeslaCoilComponent aesthetic;
 	
 	private final TeslaReceiverComponent receiver;
 	
@@ -72,6 +78,8 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		insertable = energy.buildInsertable(casing::canInsertEu);
 		extractable = energy.buildExtractable(casing::canInsertEu);
 		
+		aesthetic = new AestheticTeslaCoilComponent();
+		
 		receiver = new TeslaReceiverComponent(
 				this,
 				insertable,
@@ -79,7 +87,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 				casing::getCableTier
 		);
 		
-		this.registerComponents(isActive, redstoneControl, casing, energy, receiver);
+		this.registerComponents(isActive, redstoneControl, casing, energy, aesthetic, receiver);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(61, 34), energy::getEu, energy::getCapacity));
 		
@@ -110,6 +118,14 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		this.registerGuiComponent(new SlotPanel.Server(this)
 				.withRedstoneControl(redstoneControl)
 				.withCasing(casing));
+		
+		var configPanel = new ConfigurationPanelBuilder(
+				EIText.CONFIGURATION_PANEL.text(),
+				EIText.CONFIGURATION_PANEL_DESCRIPTION.text().withStyle(MITooltips.DEFAULT_STYLE.withItalic(true)),
+				(lineIndex, delta) -> this.sync()
+		);
+		aesthetic.appendSelectionPanel(this, configPanel);
+		this.registerGuiComponent(configPanel.build());
 	}
 	
 	private void onCasingUpdate(CableTier from, CableTier to)
@@ -130,6 +146,12 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	public ResourceLocation getTeslaModelLocation()
 	{
 		return EI.id("tesla/tesla_receiver");
+	}
+	
+	@Override
+	public Vector3f getTeslaColor()
+	{
+		return aesthetic.getColor();
 	}
 	
 	@Override
@@ -215,6 +237,10 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		if(!result.consumesAction())
 		{
 			result = casing.onUse(this, player, hand);
+		}
+		if(!result.consumesAction())
+		{
+			result = aesthetic.onUse(this, player, hand);
 		}
 		return result;
 	}

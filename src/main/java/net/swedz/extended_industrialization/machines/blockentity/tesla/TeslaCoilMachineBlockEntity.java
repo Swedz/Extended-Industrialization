@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.machines.blockentity.tesla;
 
+import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
@@ -30,6 +31,7 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EISounds;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
+import net.swedz.extended_industrialization.machines.component.tesla.AestheticTeslaCoilComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.SingingTeslaCoilComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaBuzzingComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
@@ -39,8 +41,10 @@ import net.swedz.extended_industrialization.machines.component.tesla.network.tra
 import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.TeslaNetworkBar;
 import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.configurationpanel.ConfigurationPanelBuilder;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,8 +61,9 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	private final EnergyComponent energy;
 	private final MIEnergyStorage insertable;
 	
-	private final SingingTeslaCoilComponent singing;
-	private final TeslaBuzzingComponent     buzzing;
+	private final SingingTeslaCoilComponent   singing;
+	private final TeslaBuzzingComponent       buzzing;
+	private final AestheticTeslaCoilComponent aesthetic;
 	
 	private final TeslaTransmitterComponent transmitter;
 	
@@ -87,6 +92,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 				() -> singing.hasNote() && isActive.isActive,
 				singing::getPitch
 		);
+		aesthetic = new AestheticTeslaCoilComponent();
 		
 		transmitter = new TeslaTransmitterComponent(
 				this,
@@ -99,7 +105,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 				}
 		);
 		
-		this.registerComponents(isActive, redstoneControl, casing, energy, transmitter, singing, buzzing);
+		this.registerComponents(isActive, redstoneControl, casing, energy, transmitter, singing, buzzing, aesthetic);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(61, 34), energy::getEu, energy::getCapacity));
 		
@@ -133,6 +139,14 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
 				.withRedstoneModule(redstoneControl)
 				.withCasings(casing));
+		
+		var configPanel = new ConfigurationPanelBuilder(
+				EIText.CONFIGURATION_PANEL.text(),
+				EIText.CONFIGURATION_PANEL_DESCRIPTION.text().withStyle(MITooltips.DEFAULT_STYLE.withItalic(true)),
+				(lineIndex, delta) -> this.sync()
+		);
+		aesthetic.appendSelectionPanel(this, configPanel);
+		this.registerGuiComponent(configPanel.build());
 	}
 	
 	private void onCasingUpdate(CableTier from, CableTier to)
@@ -158,6 +172,12 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	public ResourceLocation getTeslaModelLocation()
 	{
 		return EI.id("tesla/tesla_coil");
+	}
+	
+	@Override
+	public Vector3f getTeslaColor()
+	{
+		return aesthetic.getColor();
 	}
 	
 	@Override
@@ -268,6 +288,10 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		if(!result.consumesAction())
 		{
 			result = casing.onUse(this, player, hand);
+		}
+		if(!result.consumesAction())
+		{
+			result = aesthetic.onUse(this, player, hand);
 		}
 		return result;
 	}

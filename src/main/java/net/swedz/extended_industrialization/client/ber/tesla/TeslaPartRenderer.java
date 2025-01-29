@@ -30,6 +30,7 @@ import net.swedz.extended_industrialization.client.model.tesla.TeslaBakedModel;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetworkPart;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.helper.CubeOverlayRenderHelper;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.util.List;
@@ -137,7 +138,7 @@ public final class TeslaPartRenderer
 		}
 	}
 	
-	private static void renderArcs(MachineBlockEntity machine, TeslaBakedModel tesla, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
+	private static void renderArcs(MachineBlockEntity machine, TeslaBakedModel tesla, Vector3f color, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
 	{
 		var arcs = tesla.arcs();
 		if(arcs != null)
@@ -172,7 +173,7 @@ public final class TeslaPartRenderer
 				var consumer = buffer.getBuffer(EIClientRenderTypes.TESLA_ARC);
 				TeslaArcRenderer.renderArc(
 						matrices, consumer, points, (i) -> (1 - i) * arcs.widthScale(),
-						1f, 1f, 1f, alpha
+						color.x(), color.y(), color.z(), alpha
 				);
 				
 				matrices.popPose();
@@ -180,7 +181,7 @@ public final class TeslaPartRenderer
 		}
 	}
 	
-	private static void renderPlasma(MachineBlockEntity machine, TeslaBakedModel tesla, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
+	private static void renderPlasma(MachineBlockEntity machine, TeslaBakedModel tesla, Vector3f color, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
 	{
 		var plasma = tesla.plasma();
 		if(plasma != null)
@@ -207,7 +208,7 @@ public final class TeslaPartRenderer
 							RandomSource.create(),
 							1835364215L,
 							ModelData.EMPTY,
-							new Vector4f(1, 1, 1, 0.8f)
+							new Vector4f(color.x(), color.y(), color.z(), 0.8f)
 					)
 			);
 			
@@ -224,11 +225,12 @@ public final class TeslaPartRenderer
 			if(renderDistance == 0 || Minecraft.getInstance().player.position().closerThan(machine.getBlockPos().getCenter(), renderDistance))
 			{
 				var tesla = getTeslaModel(behavior.getTeslaModelLocation());
+				var color = behavior.getTeslaColor();
 				renderArcBounds(machine, tesla, matrices, buffer);
 				if(behavior.shouldTeslaRender())
 				{
-					renderArcs(machine, tesla, partialTick, matrices, buffer, light, overlay);
-					renderPlasma(machine, tesla, partialTick, matrices, buffer, light, overlay);
+					renderArcs(machine, tesla, color, partialTick, matrices, buffer, light, overlay);
+					renderPlasma(machine, tesla, color, partialTick, matrices, buffer, light, overlay);
 				}
 			}
 		}

@@ -186,6 +186,10 @@ public final class EIClient
 	{
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/lethal_tesla_coil")));
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_coil")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_particle_generator/small")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_particle_generator/medium")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_particle_generator/large")));
+		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_particle_generator/extreme")));
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_hatch")));
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_receiver")));
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_tower")));
