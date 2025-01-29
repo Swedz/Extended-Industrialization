@@ -620,7 +620,8 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 						.define('H', "modern_industrialization:advanced_machine_hull")
 						.define('B', "modern_industrialization:sodium_battery")
 						.define('C', "modern_industrialization:aluminum_cable")
-						.pattern("CLC")
+						.define('P', "modern_industrialization:tungsten_large_plate")
+						.pattern("PLP")
 						.pattern("CHC")
 						.pattern("EBE"),
 				true,
