@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.machines.blockentity.tesla;
 
+import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.CableTierHolder;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
@@ -15,19 +16,26 @@ import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.machines.multiblocks.HatchBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.HatchType;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
+import net.swedz.extended_industrialization.machines.component.tesla.AestheticTeslaCoilComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiverComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiverState;
 import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.TeslaNetworkBar;
 import net.swedz.extended_industrialization.proxy.EIProxy;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.configurationpanel.ConfigurationPanelBuilder;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +50,8 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 	
 	private final EnergyComponent energy;
 	private final MIEnergyStorage insertable;
+	
+	private final AestheticTeslaCoilComponent aesthetic;
 	
 	private final TeslaReceiverComponent receiver;
 	
@@ -60,9 +70,11 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 		energy = new EnergyComponent(this, () -> 30 * 20 * tier.getEu());
 		insertable = energy.buildInsertable((other) -> other == tier);
 		
+		aesthetic = new AestheticTeslaCoilComponent();
+		
 		receiver = new TeslaReceiverComponent(this, insertable, () -> true, () -> tier);
 		
-		this.registerComponents(isActive, energy, receiver);
+		this.registerComponents(isActive, energy, aesthetic, receiver);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(61, 34), energy::getEu, energy::getCapacity));
 		
@@ -89,6 +101,14 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 					}
 				}
 		));
+		
+		var configPanel = new ConfigurationPanelBuilder(
+				EIText.CONFIGURATION_PANEL.text(),
+				EIText.CONFIGURATION_PANEL_DESCRIPTION.text().withStyle(MITooltips.DEFAULT_STYLE.withItalic(true)),
+				(lineIndex, delta) -> this.sync()
+		);
+		aesthetic.appendSelectionPanel(this, configPanel);
+		this.registerGuiComponent(configPanel.build());
 	}
 	
 	private void onCasingUpdate(CableTier from, CableTier to)
@@ -109,6 +129,12 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 	public ResourceLocation getTeslaModelLocation()
 	{
 		return EI.id("tesla/tesla_hatch");
+	}
+	
+	@Override
+	public Vector3f getTeslaColor()
+	{
+		return aesthetic.getColor();
 	}
 	
 	@Override
@@ -207,6 +233,17 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 		{
 			isActive.updateActive(false, this);
 		}
+	}
+	
+	@Override
+	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
+	{
+		ItemInteractionResult result = super.useItemOn(player, hand, face);
+		if(!result.consumesAction())
+		{
+			result = aesthetic.onUse(this, player, hand);
+		}
+		return result;
 	}
 	
 	@Override

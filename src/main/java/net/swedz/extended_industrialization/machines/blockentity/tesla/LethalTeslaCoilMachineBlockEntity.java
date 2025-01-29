@@ -33,13 +33,16 @@ import net.swedz.extended_industrialization.EISounds;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
+import net.swedz.extended_industrialization.machines.component.tesla.AestheticTeslaCoilComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.LethalTeslaCoilComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaBuzzingComponent;
 import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.configurationpanel.ConfigurationPanelBuilder;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
 import net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
+import org.joml.Vector3f;
 
 import java.util.List;
 
@@ -67,8 +70,9 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	private final EnergyComponent energy;
 	private final MIEnergyStorage insertable;
 	
-	private final LethalTeslaCoilComponent lethal;
-	private final TeslaBuzzingComponent    buzzing;
+	private final LethalTeslaCoilComponent    lethal;
+	private final TeslaBuzzingComponent       buzzing;
+	private final AestheticTeslaCoilComponent aesthetic;
 	
 	public LethalTeslaCoilMachineBlockEntity(BEP bep)
 	{
@@ -100,14 +104,23 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 				lethal::hasNearbyEntities,
 				() -> 1f
 		);
+		aesthetic = new AestheticTeslaCoilComponent();
 		
-		this.registerComponents(isActive, redstoneControl, casing, energy, lethal, buzzing);
+		this.registerComponents(isActive, redstoneControl, casing, energy, lethal, buzzing, aesthetic);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(81, 34), energy::getEu, energy::getCapacity));
 		
 		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
 				.withRedstoneModule(redstoneControl)
 				.withCasings(casing));
+		
+		var configPanel = new ConfigurationPanelBuilder(
+				EIText.CONFIGURATION_PANEL.text(),
+				EIText.CONFIGURATION_PANEL_DESCRIPTION.text().withStyle(MITooltips.DEFAULT_STYLE.withItalic(true)),
+				(lineIndex, delta) -> this.sync()
+		);
+		aesthetic.appendSelectionPanel(this, configPanel);
+		this.registerGuiComponent(configPanel.build());
 	}
 	
 	@Override
@@ -120,6 +133,12 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	public ResourceLocation getTeslaModelLocation()
 	{
 		return EI.id("tesla/lethal_tesla_coil");
+	}
+	
+	@Override
+	public Vector3f getTeslaColor()
+	{
+		return aesthetic.getColor();
 	}
 	
 	@Override
@@ -174,6 +193,10 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		if(!result.consumesAction())
 		{
 			result = casing.onUse(this, player, hand);
+		}
+		if(!result.consumesAction())
+		{
+			result = aesthetic.onUse(this, player, hand);
 		}
 		return result;
 	}

@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower;
 
 import aztech.modern_industrialization.MIText;
+import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.machine.component.EnergyAccess;
 import aztech.modern_industrialization.api.machine.holder.EnergyListComponentHolder;
@@ -25,6 +26,7 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.machines.component.itemslot.TeslaTowerUpgradeComponent;
+import net.swedz.extended_industrialization.machines.component.tesla.AestheticTeslaCoilComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaTransferLimits;
 import net.swedz.extended_industrialization.machines.component.tesla.network.transmitter.TeslaTransmitter;
@@ -32,11 +34,13 @@ import net.swedz.extended_industrialization.machines.component.tesla.network.tra
 import net.swedz.extended_industrialization.machines.guicomponent.EIModularSlotPanelSlots;
 import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.api.WorldPos;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.configurationpanel.ConfigurationPanelBuilder;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.BasicMultiblockMachineBlockEntity;
 import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.matcher.SameCableTierShapeMatcher;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Map;
@@ -54,6 +58,8 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	private final List<EnergyComponent> energyInputs = Lists.newArrayList();
 	
 	private final TeslaTransmitterComponent transmitter;
+	
+	private final AestheticTeslaCoilComponent aesthetic;
 	
 	private boolean   hasMismatchingHatches;
 	private CableTier cableTier;
@@ -77,7 +83,9 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 				() -> new WorldPos(level, this.getTopLoadPosition())
 		);
 		
-		this.registerComponents(redstoneControl, upgrade, transmitter);
+		aesthetic = new AestheticTeslaCoilComponent();
+		
+		this.registerComponents(redstoneControl, upgrade, transmitter, aesthetic);
 		
 		this.registerGuiComponent(new ModularMultiblockGui.Server(0, ModularMultiblockGui.HEIGHT, (content) ->
 		{
@@ -112,11 +120,18 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 			}
 		}));
 		
-		this.registerGuiComponent(SHAPES.createShapeSelectionGuiComponent(this, activeShape, true));
-		
 		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
 				.withRedstoneModule(redstoneControl)
 				.with(EIModularSlotPanelSlots.TESLA_TOWER_UPGRADE, upgrade));
+		
+		var configPanel = new ConfigurationPanelBuilder(
+				EIText.CONFIGURATION_PANEL.text(),
+				EIText.CONFIGURATION_PANEL_DESCRIPTION.text().withStyle(MITooltips.DEFAULT_STYLE.withItalic(true)),
+				(lineIndex, delta) -> this.sync()
+		);
+		SHAPES.appendConfigurationPanel(configPanel, this, activeShape, true);
+		aesthetic.appendSelectionPanel(this, configPanel);
+		this.registerGuiComponent(configPanel.build());
 	}
 	
 	private void onUpgradeUpdate(ItemStack from, ItemStack to)
@@ -150,6 +165,12 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	public ResourceLocation getTeslaModelLocation()
 	{
 		return EI.id("tesla/tesla_tower");
+	}
+	
+	@Override
+	public Vector3f getTeslaColor()
+	{
+		return aesthetic.getColor();
 	}
 	
 	@Override
@@ -226,6 +247,10 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		if(!result.consumesAction())
 		{
 			result = upgrade.onUse(this, player, hand);
+		}
+		if(!result.consumesAction())
+		{
+			result = aesthetic.onUse(this, player, hand);
 		}
 		return result;
 	}
