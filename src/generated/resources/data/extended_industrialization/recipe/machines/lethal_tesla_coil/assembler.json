@@ -4,11 +4,15 @@
   "eu": 8,
   "item_inputs": [
     {
+      "amount": 2,
+      "item": "modern_industrialization:tungsten_plate"
+    },
+    {
       "amount": 1,
       "item": "modern_industrialization:sodium_battery"
     },
     {
-      "amount": 4,
+      "amount": 2,
       "item": "modern_industrialization:aluminum_cable"
     },
     {

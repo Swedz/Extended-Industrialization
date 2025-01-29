@@ -23,6 +23,7 @@ import aztech.modern_industrialization.materials.part.MIParts;
 import aztech.modern_industrialization.util.MobSpawning;
 import com.google.common.collect.Maps;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.machines.blockentity.LargeConfigurableChestMachineBlockEntity;
@@ -440,6 +441,13 @@ public final class EIMachines
 		hook.register(
 				"Lethal Tesla Coil", "lethal_tesla_coil", "lethal_tesla_coil",
 				CableTier.LV.casing, true, true, true, true,
+				(b) -> b.tag(BlockTags.WITHER_IMMUNE, BlockTags.DRAGON_IMMUNE),
+				(p) -> p
+						.mapColor(MapColor.METAL)
+						.destroyTime(4)
+						.requiresCorrectToolForDrops()
+						.isValidSpawn(MobSpawning.NO_SPAWN)
+						.explosionResistance(3600000),
 				LethalTeslaCoilMachineBlockEntity::new,
 				LethalTeslaCoilMachineBlockEntity::registerEnergyApi
 		);

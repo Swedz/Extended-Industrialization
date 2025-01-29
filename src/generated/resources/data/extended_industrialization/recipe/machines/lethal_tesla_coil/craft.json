@@ -16,10 +16,13 @@
     },
     "L": {
       "item": "extended_industrialization:silver_tesla_top_load"
+    },
+    "P": {
+      "item": "modern_industrialization:tungsten_plate"
     }
   },
   "pattern": [
-    "CLC",
+    "PLP",
     "CHC",
     "EBE"
   ],
