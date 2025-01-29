@@ -1,0 +1,46 @@
+{
+	"loader": "extended_industrialization:tesla",
+	"arcs": {
+		"random_bounds": {
+			"include": {
+				"min": {
+					"x": -10,
+					"y": -10,
+					"z": -10
+				},
+				"max": {
+					"x": 10,
+					"y": 10,
+					"z": 10
+				}
+			},
+			"exclude": {
+				"min": {
+					"x": -5,
+					"y": -5,
+					"z": -5
+				},
+				"max": {
+					"x": 5,
+					"y": 5,
+					"z": 5
+				}
+			}
+		},
+		"origins": [
+			{
+				"x": 0,
+				"y": 0,
+				"z": 0
+			}
+		],
+		"width_scale": 1,
+		"min_variance": 0.5,
+		"max_variance": 1.5,
+		"duration": 3,
+		"count": 6,
+		"min_segments": 3,
+		"max_segments": 5,
+		"segment_splits": 10
+	}
+}

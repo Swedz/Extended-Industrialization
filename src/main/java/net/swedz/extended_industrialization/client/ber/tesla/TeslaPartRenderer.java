@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.client.ber.tesla;
 
+import aztech.modern_industrialization.MITags;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -27,6 +28,7 @@ import net.swedz.extended_industrialization.client.ber.tesla.arc.TeslaArcRendere
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcInstance;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.client.model.tesla.TeslaBakedModel;
+import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaParticleGeneratorMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetworkPart;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.helper.CubeOverlayRenderHelper;
@@ -44,18 +46,31 @@ public final class TeslaPartRenderer
 	{
 		BlockPos pos = machine.getBlockPos();
 		
-		getHeldNetworkKey().ifPresent((networkKey) ->
+		if(machine instanceof TeslaNetworkPart part)
 		{
-			if(machine instanceof TeslaNetworkPart part &&
-			   part.hasNetwork() && part.getNetworkKey().equals(networkKey))
+			getHeldNetworkKey().ifPresent((networkKey) ->
+			{
+				if(part.hasNetwork() && part.getNetworkKey().equals(networkKey))
+				{
+					matrices.pushPose();
+					matrices.translate(-0.005, -0.005, -0.005);
+					matrices.scale(1.01f, 1.01f, 1.01f);
+					CubeOverlayRenderHelper.render(matrices, buffer, 111f / 256, 111f / 256, 1f, overlay);
+					matrices.popPose();
+				}
+			});
+		}
+		else if(machine instanceof TeslaParticleGeneratorMachineBlockEntity)
+		{
+			if(isHoldingWrench())
 			{
 				matrices.pushPose();
 				matrices.translate(-0.005, -0.005, -0.005);
 				matrices.scale(1.01f, 1.01f, 1.01f);
-				CubeOverlayRenderHelper.render(matrices, buffer, 111f / 256, 111f / 256, 1f, overlay);
+				CubeOverlayRenderHelper.render(matrices, buffer, 1f, 1f, 1f, overlay);
 				matrices.popPose();
 			}
-		});
+		}
 	}
 	
 	private static Optional<WorldPos> getHeldNetworkKey()
@@ -63,6 +78,13 @@ public final class TeslaPartRenderer
 		Player player = Minecraft.getInstance().player;
 		return player.getMainHandItem().has(EIComponents.SELECTED_TESLA_NETWORK) ? Optional.of(player.getMainHandItem().get(EIComponents.SELECTED_TESLA_NETWORK).key()) :
 				player.getOffhandItem().has(EIComponents.SELECTED_TESLA_NETWORK) ? Optional.of(player.getOffhandItem().get(EIComponents.SELECTED_TESLA_NETWORK).key()) : Optional.empty();
+	}
+	
+	private static boolean isHoldingWrench()
+	{
+		Player player = Minecraft.getInstance().player;
+		return player.getMainHandItem().is(MITags.WRENCHES) ||
+			   player.getOffhandItem().is(MITags.WRENCHES);
 	}
 	
 	private static final Cache<BlockPos, TeslaArcInstance> TESLA_ARCS = CacheBuilder.newBuilder()
