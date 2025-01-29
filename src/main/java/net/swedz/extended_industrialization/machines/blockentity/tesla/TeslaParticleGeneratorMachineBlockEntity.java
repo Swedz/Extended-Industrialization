@@ -105,6 +105,17 @@ public final class TeslaParticleGeneratorMachineBlockEntity extends MachineBlock
 	}
 	
 	@Override
+	public void setRemoved()
+	{
+		super.setRemoved();
+		
+		if(level.isClientSide())
+		{
+			Proxies.get(EIProxy.class).removeTesla(worldPosition);
+		}
+	}
+	
+	@Override
 	public void tick()
 	{
 		if(level.isClientSide())

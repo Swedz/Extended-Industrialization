@@ -47,4 +47,10 @@ public class EIClientProxy extends EIProxy
 	{
 		Minecraft.getInstance().getSoundManager().queueTickingSound(new TeslaCoilLoopSound(origin, sound, source, shouldStop, getPitch, onStop));
 	}
+	
+	@Override
+	public void removeTesla(BlockPos blockPos)
+	{
+		TeslaPartRenderer.removeArcInstance(blockPos);
+	}
 }

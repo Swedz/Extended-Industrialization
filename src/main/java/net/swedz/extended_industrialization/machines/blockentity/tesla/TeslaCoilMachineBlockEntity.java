@@ -61,8 +61,8 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	private final EnergyComponent energy;
 	private final MIEnergyStorage insertable;
 	
-	private final SingingTeslaCoilComponent   singing;
-	private final TeslaBuzzingComponent       buzzing;
+	private final SingingTeslaCoilComponent singing;
+	private final TeslaBuzzingComponent buzzing;
 	private final AestheticTeslaCoilComponent aesthetic;
 	
 	private final TeslaTransmitterComponent transmitter;
@@ -222,6 +222,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		
 		if(level.isClientSide())
 		{
+			Proxies.get(EIProxy.class).removeTesla(worldPosition);
 			return;
 		}
 		

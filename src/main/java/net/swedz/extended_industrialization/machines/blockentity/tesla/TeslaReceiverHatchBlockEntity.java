@@ -207,6 +207,7 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 		
 		if(level.isClientSide())
 		{
+			Proxies.get(EIProxy.class).removeTesla(worldPosition);
 			return;
 		}
 		
