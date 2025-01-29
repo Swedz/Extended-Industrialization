@@ -30,4 +30,8 @@ public class EIProxy implements Proxy
 		{
 		});
 	}
+	
+	public void removeTesla(BlockPos blockPos)
+	{
+	}
 }

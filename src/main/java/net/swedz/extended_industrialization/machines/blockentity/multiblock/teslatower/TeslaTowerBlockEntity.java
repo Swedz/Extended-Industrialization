@@ -265,6 +265,27 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	}
 	
 	@Override
+	public void setRemoved()
+	{
+		super.setRemoved();
+		
+		if(level.isClientSide())
+		{
+			Proxies.get(EIProxy.class).removeTesla(worldPosition);
+			return;
+		}
+		
+		if(this.hasNetwork())
+		{
+			this.getNetwork().unloadTransmitter();
+		}
+		else
+		{
+			EI.LOGGER.error("Failed to unload transmitter into the network because no network was set yet");
+		}
+	}
+	
+	@Override
 	public void tick()
 	{
 		super.tick();
@@ -293,26 +314,6 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		}
 		
 		this.updateActive(active);
-	}
-	
-	@Override
-	public void setRemoved()
-	{
-		super.setRemoved();
-		
-		if(level.isClientSide())
-		{
-			return;
-		}
-		
-		if(this.hasNetwork())
-		{
-			this.getNetwork().unloadTransmitter();
-		}
-		else
-		{
-			EI.LOGGER.error("Failed to unload transmitter into the network because no network was set yet");
-		}
 	}
 	
 	@Override

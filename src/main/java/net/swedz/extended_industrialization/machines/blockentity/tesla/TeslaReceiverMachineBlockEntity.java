@@ -195,6 +195,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		
 		if(level.isClientSide())
 		{
+			Proxies.get(EIProxy.class).removeTesla(worldPosition);
 			return;
 		}
 		

@@ -2,8 +2,7 @@ package net.swedz.extended_industrialization.client.ber.tesla;
 
 import aztech.modern_industrialization.MITags;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
@@ -17,8 +16,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.renderable.BakedModelRenderable;
+import net.neoforged.neoforge.event.level.LevelEvent;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClient;
 import net.swedz.extended_industrialization.EIClientRenderTypes;
 import net.swedz.extended_industrialization.EIComponents;
@@ -36,10 +40,10 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
+@EventBusSubscriber(modid = EI.ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class TeslaPartRenderer
 {
 	private static void renderHighlight(MachineBlockEntity machine, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
@@ -87,9 +91,18 @@ public final class TeslaPartRenderer
 			   player.getOffhandItem().is(MITags.WRENCHES);
 	}
 	
-	private static final Cache<BlockPos, TeslaArcInstance> TESLA_ARCS = CacheBuilder.newBuilder()
-			.expireAfterAccess(1, TimeUnit.SECONDS)
-			.build();
+	private static final Map<BlockPos, TeslaArcInstance> TESLA_ARCS = Maps.newConcurrentMap();
+	
+	@SubscribeEvent
+	private static void onLevelUnload(LevelEvent.Unload event)
+	{
+		TESLA_ARCS.clear();
+	}
+	
+	public static void removeArcInstance(BlockPos pos)
+	{
+		TESLA_ARCS.remove(pos);
+	}
 	
 	public static TeslaArcInstance getArcInstance(BlockPos pos)
 	{
@@ -97,24 +110,17 @@ public final class TeslaPartRenderer
 		if(level.getBlockEntity(pos) instanceof MachineBlockEntity machine &&
 		   machine instanceof TeslaBehavior behavior)
 		{
-			try
+			var tesla = getTeslaModel(behavior.getTeslaModelLocation());
+			if(tesla.arcs() != null)
 			{
-				var tesla = getTeslaModel(behavior.getTeslaModelLocation());
-				if(tesla.arcs() != null)
-				{
-					return TESLA_ARCS.get(
-							pos,
-							() -> new TeslaArcInstance(
-									pos,
-									() -> machine.orientation.facingDirection,
-									() -> getTeslaModel(behavior.getTeslaModelLocation())
-							)
-					);
-				}
-			}
-			catch (ExecutionException ex)
-			{
-				throw new RuntimeException(ex);
+				return TESLA_ARCS.computeIfAbsent(
+						pos,
+						(__) -> new TeslaArcInstance(
+								pos,
+								() -> machine.orientation.facingDirection,
+								() -> getTeslaModel(behavior.getTeslaModelLocation())
+						)
+				);
 			}
 		}
 		return null;

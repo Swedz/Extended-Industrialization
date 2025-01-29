@@ -70,8 +70,8 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	private final EnergyComponent energy;
 	private final MIEnergyStorage insertable;
 	
-	private final LethalTeslaCoilComponent    lethal;
-	private final TeslaBuzzingComponent       buzzing;
+	private final LethalTeslaCoilComponent lethal;
+	private final TeslaBuzzingComponent buzzing;
 	private final AestheticTeslaCoilComponent aesthetic;
 	
 	public LethalTeslaCoilMachineBlockEntity(BEP bep)
@@ -160,6 +160,17 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	public EnergyAccess getEnergyComponent()
 	{
 		return energy;
+	}
+	
+	@Override
+	public void setRemoved()
+	{
+		super.setRemoved();
+		
+		if(level.isClientSide())
+		{
+			Proxies.get(EIProxy.class).removeTesla(worldPosition);
+		}
 	}
 	
 	@Override
