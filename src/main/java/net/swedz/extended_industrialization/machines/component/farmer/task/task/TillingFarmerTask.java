@@ -1,10 +1,15 @@
 package net.swedz.extended_industrialization.machines.component.farmer.task.task;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.swedz.extended_industrialization.machines.component.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlock;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerTile;
@@ -16,6 +21,22 @@ public final class TillingFarmerTask extends FarmerTask
 	public TillingFarmerTask(FarmerComponent component)
 	{
 		super(FarmerTaskType.TILLING, component);
+	}
+	
+	private UseOnContext createFakeContext(BlockPos pos)
+	{
+		return new UseOnContext(
+				level,
+				null,
+				InteractionHand.MAIN_HAND,
+				Items.DIAMOND_HOE.getDefaultInstance(),
+				new BlockHitResult(
+						pos.getBottomCenter().add(0, 1, 0),
+						Direction.UP,
+						pos,
+						false
+				)
+		);
 	}
 	
 	@Override
@@ -33,8 +54,8 @@ public final class TillingFarmerTask extends FarmerTask
 			BlockState state = dirt.state(level);
 			if(state.is(BlockTags.DIRT))
 			{
-				BlockState newState = Blocks.FARMLAND.defaultBlockState();
-				if(newState.canSurvive(level, pos))
+				BlockState newState = state.getToolModifiedState(this.createFakeContext(pos), ItemAbilities.HOE_TILL, true);
+				if(newState != null && newState.canSurvive(level, pos))
 				{
 					dirt.setBlock(level, newState, 1 | 2 | 8, GameEvent.BLOCK_CHANGE, newState);
 					
