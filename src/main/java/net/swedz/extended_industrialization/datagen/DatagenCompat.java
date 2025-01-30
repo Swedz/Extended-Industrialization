@@ -8,4 +8,9 @@ public final class DatagenCompat
 	{
 		return ResourceLocation.fromNamespaceAndPath("mysticalagriculture", path);
 	}
+	
+	public static ResourceLocation farmersDelight(String path)
+	{
+		return ResourceLocation.fromNamespaceAndPath("farmersdelight", path);
+	}
 }
