@@ -18,6 +18,8 @@ import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 
 import java.util.Comparator;
 
+import static net.swedz.extended_industrialization.datagen.DatagenCompat.*;
+
 public final class BlockTagDatagenProvider extends BlockTagsProvider
 {
 	public BlockTagDatagenProvider(GatherDataEvent event)
@@ -35,7 +37,12 @@ public final class BlockTagDatagenProvider extends BlockTagsProvider
 						BlockTags.DIRT,
 						Tags.Blocks.SANDS,
 						Tags.Blocks.VILLAGER_FARMLANDS
-				);
+				)
+				.addOptional(mysticalAgriculture("inferium_farmland"))
+				.addOptional(mysticalAgriculture("prudentium_farmland"))
+				.addOptional(mysticalAgriculture("tertium_farmland"))
+				.addOptional(mysticalAgriculture("imperium_farmland"))
+				.addOptional(mysticalAgriculture("supremium_farmland"));
 	}
 	
 	private void addChainerLinkables()
