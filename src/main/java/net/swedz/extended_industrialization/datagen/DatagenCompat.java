@@ -18,4 +18,9 @@ public final class DatagenCompat
 	{
 		return ResourceLocation.fromNamespaceAndPath("eternal_starlight", path);
 	}
+	
+	public static ResourceLocation biomesWeveGone(String path)
+	{
+		return ResourceLocation.fromNamespaceAndPath("biomeswevegone", path);
+	}
 }
