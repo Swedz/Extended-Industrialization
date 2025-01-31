@@ -13,4 +13,9 @@ public final class DatagenCompat
 	{
 		return ResourceLocation.fromNamespaceAndPath("farmersdelight", path);
 	}
+	
+	public static ResourceLocation eternalStarlight(String path)
+	{
+		return ResourceLocation.fromNamespaceAndPath("eternal_starlight", path);
+	}
 }

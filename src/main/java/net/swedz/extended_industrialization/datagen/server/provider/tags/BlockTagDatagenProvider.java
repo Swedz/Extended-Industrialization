@@ -44,7 +44,8 @@ public final class BlockTagDatagenProvider extends BlockTagsProvider
 				.addOptional(mysticalAgriculture("imperium_farmland"))
 				.addOptional(mysticalAgriculture("supremium_farmland"))
 				.addOptional(farmersDelight("rich_soil"))
-				.addOptional(farmersDelight("rich_soil_farmland"));
+				.addOptional(farmersDelight("rich_soil_farmland"))
+				.addOptional(eternalStarlight("nightfall_farmland"));
 	}
 	
 	private void addChainerLinkables()

@@ -31,6 +31,10 @@
     {
       "id": "farmersdelight:rich_soil_farmland",
       "required": false
+    },
+    {
+      "id": "eternal_starlight:nightfall_farmland",
+      "required": false
     }
   ]
 }
