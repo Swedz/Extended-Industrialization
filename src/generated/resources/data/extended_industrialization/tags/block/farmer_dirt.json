@@ -35,6 +35,14 @@
     {
       "id": "eternal_starlight:nightfall_farmland",
       "required": false
+    },
+    {
+      "id": "biomeswevegone:sandy_farmland",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:lush_farmland",
+      "required": false
     }
   ]
 }
