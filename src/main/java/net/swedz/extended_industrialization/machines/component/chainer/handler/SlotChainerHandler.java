@@ -14,8 +14,13 @@ public abstract class SlotChainerHandler<H> extends ChainerHandler<H, SlotInvent
 	
 	protected Optional<SlotInventoryWrapper<H>> getWrapper(int globalSlot)
 	{
-		return wrappers.stream()
-				.filter((wrapper) -> wrapper.contains(globalSlot))
-				.findFirst();
+		for(var wrapper : wrappers)
+		{
+			if(wrapper.contains(globalSlot))
+			{
+				return Optional.of(wrapper);
+			}
+		}
+		return Optional.empty();
 	}
 }
