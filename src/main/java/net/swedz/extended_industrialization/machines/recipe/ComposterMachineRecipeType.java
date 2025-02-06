@@ -10,7 +10,9 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EITags;
 import net.swedz.tesseract.neoforge.compat.mi.recipe.MIMachineRecipeBuilder;
+import net.swedz.tesseract.neoforge.helper.RegistryHelper;
 
 import java.util.List;
 
@@ -44,11 +46,14 @@ public final class ComposterMachineRecipeType extends ProxyableMachineRecipeType
 		{
 			for(Item item : BuiltInRegistries.ITEM)
 			{
-				float chance = ComposterBlock.getValue(item.getDefaultInstance());
-				if(chance > 0f)
+				if(!RegistryHelper.holder(BuiltInRegistries.ITEM, item).is(EITags.GeneratedRecipesBlacklist.COMPOSTING))
 				{
-					RecipeHolder<MachineRecipe> recipe = this.generate(item, chance);
-					recipeList.add(recipe);
+					float chance = ComposterBlock.getValue(item.getDefaultInstance());
+					if(chance > 0f)
+					{
+						RecipeHolder<MachineRecipe> recipe = this.generate(item, chance);
+						recipeList.add(recipe);
+					}
 				}
 			}
 		}

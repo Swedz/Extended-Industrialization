@@ -56,6 +56,13 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 				);
 	}
 	
+	private void addGeneratedRecipesBlacklistTags()
+	{
+		this.tag(EITags.GeneratedRecipesBlacklist.CANNING_FOOD)
+				.add(EIItems.CANNED_FOOD.asItem())
+				.add(Items.OMINOUS_BOTTLE);
+	}
+	
 	private IntrinsicTagAppender<Item> curiosTag(String path)
 	{
 		return this.tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("curios", path)));
@@ -83,6 +90,8 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 		
 		this.addFarmerVoidableDropTag();
 		this.addFarmerStandardPlantableTag();
+		
+		this.addGeneratedRecipesBlacklistTags();
 		
 		this.addCuriosTags();
 	}

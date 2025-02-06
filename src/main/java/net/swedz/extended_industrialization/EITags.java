@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 
 import java.util.Collections;
 import java.util.Map;
@@ -35,6 +36,13 @@ public final class EITags
 		public static final TagKey<Block> MACHINE_CHAINER_RELAY    = block("machine_chainer/relay");
 	}
 	
+	public static final class GeneratedRecipesBlacklist
+	{
+		public static final TagKey<Item>  CANNING_FOOD    = item("generated_recipes_blacklist/canning_food", "Canning Food Generated Recipes Blacklist");
+		public static final TagKey<Fluid> CANNING_BUCKETS = fluid("generated_recipes_blacklist/canning_buckets");
+		public static final TagKey<Item>  COMPOSTING      = item("generated_recipes_blacklist/composting", "Composting Generated Recipes Blacklist");
+	}
+	
 	public static TagKey<Item> item(String path, String englishName)
 	{
 		TagKey<Item> tag = TagKey.create(BuiltInRegistries.ITEM.key(), EI.id(path));
@@ -45,6 +53,11 @@ public final class EITags
 	public static TagKey<Item> itemCommon(String path)
 	{
 		return TagKey.create(BuiltInRegistries.ITEM.key(), ResourceLocation.fromNamespaceAndPath("c", path));
+	}
+	
+	public static TagKey<Fluid> fluid(String path)
+	{
+		return TagKey.create(BuiltInRegistries.FLUID.key(), EI.id(path));
 	}
 	
 	public static TagKey<Block> block(String path)
