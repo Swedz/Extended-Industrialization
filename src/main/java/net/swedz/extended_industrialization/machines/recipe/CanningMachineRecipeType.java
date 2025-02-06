@@ -17,7 +17,9 @@ import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIItems;
+import net.swedz.extended_industrialization.EITags;
 import net.swedz.tesseract.neoforge.compat.mi.recipe.MIMachineRecipeBuilder;
+import net.swedz.tesseract.neoforge.helper.RegistryHelper;
 
 import java.util.List;
 import java.util.Set;
@@ -64,7 +66,7 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 		
 		for(Item item : BuiltInRegistries.ITEM)
 		{
-			if(item != EIItems.CANNED_FOOD.asItem() && item != Items.OMINOUS_BOTTLE)
+			if(!RegistryHelper.holder(BuiltInRegistries.ITEM, item).is(EITags.GeneratedRecipesBlacklist.CANNING_FOOD))
 			{
 				ItemStack itemStack = item.getDefaultInstance();
 				FoodProperties foodProperties = item.getFoodProperties(itemStack, null);
@@ -113,7 +115,7 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 		for(Fluid fluid : BuiltInRegistries.FLUID)
 		{
 			Fluid processedFluid = fluid instanceof FlowingFluid flowingFluid ? flowingFluid.getSource() : fluid;
-			if(uniqueFluids.add(processedFluid))
+			if(uniqueFluids.add(processedFluid) && !RegistryHelper.holder(BuiltInRegistries.FLUID, processedFluid).is(EITags.GeneratedRecipesBlacklist.CANNING_BUCKETS))
 			{
 				Item fullItem = processedFluid.getBucket();
 				if(fullItem != Items.AIR)
