@@ -3,6 +3,10 @@
     {
       "id": "#modern_industrialization:barrels",
       "required": false
+    },
+    {
+      "id": "#modern_industrialization:tanks",
+      "required": false
     }
   ]
 }
