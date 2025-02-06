@@ -40,13 +40,16 @@ public final class ComposterMachineRecipeType extends ProxyableMachineRecipeType
 	{
 		recipeList.addAll(this.getManagerRecipes(level));
 		
-		for(Item item : BuiltInRegistries.ITEM)
+		if(EI.config().runtimeGeneratedRecipes().composter())
 		{
-			float chance = ComposterBlock.getValue(item.getDefaultInstance());
-			if(chance > 0f)
+			for(Item item : BuiltInRegistries.ITEM)
 			{
-				RecipeHolder<MachineRecipe> recipe = this.generate(item, chance);
-				recipeList.add(recipe);
+				float chance = ComposterBlock.getValue(item.getDefaultInstance());
+				if(chance > 0f)
+				{
+					RecipeHolder<MachineRecipe> recipe = this.generate(item, chance);
+					recipeList.add(recipe);
+				}
 			}
 		}
 	}

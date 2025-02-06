@@ -138,7 +138,10 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 	{
 		recipeList.addAll(this.getManagerRecipes(level));
 		
-		recipeList.addAll(this.buildCannedFood());
-		recipeList.addAll(this.buildBucket());
+		if(EI.config().runtimeGeneratedRecipes().canningMachine())
+		{
+			recipeList.addAll(this.buildCannedFood());
+			recipeList.addAll(this.buildBucket());
+		}
 	}
 }
