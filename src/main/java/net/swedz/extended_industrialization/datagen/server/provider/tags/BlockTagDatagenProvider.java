@@ -53,7 +53,8 @@ public final class BlockTagDatagenProvider extends BlockTagsProvider
 	private void addChainerLinkables()
 	{
 		this.tag(EITags.Blocks.MACHINE_CHAINER_LINKABLE)
-				.addOptionalTag(TagHelper.convert(MITags.BARRELS, BuiltInRegistries.BLOCK));
+				.addOptionalTag(TagHelper.convert(MITags.BARRELS, BuiltInRegistries.BLOCK))
+				.addOptionalTag(TagHelper.convert(MITags.TANKS, BuiltInRegistries.BLOCK));
 	}
 	
 	@Override
