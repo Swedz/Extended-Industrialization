@@ -136,6 +136,27 @@ public interface EIConfig
 		}
 	}
 	
+	@ConfigKey("runtime_generated_recipes")
+	@SubSection
+	RuntimeGeneratedRecipes runtimeGeneratedRecipes();
+	
+	interface RuntimeGeneratedRecipes
+	{
+		@ConfigKey("canning_machine")
+		@ConfigComment("Whether canning machine recipes should be generated automatically at runtime or not")
+		default boolean canningMachine()
+		{
+			return true;
+		}
+		
+		@ConfigKey("composter")
+		@ConfigComment("Whether composter recipes should be generated automatically at runtime or not")
+		default boolean composter()
+		{
+			return true;
+		}
+	}
+	
 	final class CableTierDamages
 	{
 		public static final Codec<CableTierDamages> CODEC = Codec.unboundedMap(
