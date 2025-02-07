@@ -45,16 +45,15 @@ public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTr
 			@Override
 			public long extract(long maxExtract, boolean simulate)
 			{
-				long remaining = maxExtract;
 				long extracted = 0;
 				for(EnergyComponent energyComponent : energyInputs)
 				{
+					long remaining = maxExtract - extracted;
 					if(remaining == 0)
 					{
 						break;
 					}
 					extracted += energyComponent.consumeEu(remaining, simulate ? Simulation.SIMULATE : Simulation.ACT);
-					remaining -= extracted;
 				}
 				return extracted;
 			}
