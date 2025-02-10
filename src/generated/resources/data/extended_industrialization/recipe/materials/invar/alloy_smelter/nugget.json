@@ -5,33 +5,33 @@
   "item_inputs": [
     {
       "type": "neoforge:compound",
-      "amount": 1,
+      "amount": 18,
       "children": [
         {
-          "tag": "c:dusts/copper"
+          "tag": "c:tiny_dusts/iron"
         },
         {
-          "tag": "c:ingots/copper"
+          "tag": "c:nuggets/iron"
         }
       ]
     },
     {
       "type": "neoforge:compound",
-      "amount": 1,
+      "amount": 9,
       "children": [
         {
-          "tag": "c:dusts/nickel"
+          "tag": "c:tiny_dusts/nickel"
         },
         {
-          "tag": "c:ingots/nickel"
+          "tag": "c:nuggets/nickel"
         }
       ]
     }
   ],
   "item_outputs": [
     {
-      "amount": 2,
-      "item": "modern_industrialization:cupronickel_ingot"
+      "amount": 3,
+      "item": "modern_industrialization:invar_ingot"
     }
   ]
 }

@@ -4,12 +4,28 @@
   "eu": 4,
   "item_inputs": [
     {
+      "type": "neoforge:compound",
       "amount": 2,
-      "tag": "c:ingots/iron"
+      "children": [
+        {
+          "tag": "c:dusts/iron"
+        },
+        {
+          "tag": "c:ingots/iron"
+        }
+      ]
     },
     {
+      "type": "neoforge:compound",
       "amount": 1,
-      "tag": "c:ingots/nickel"
+      "children": [
+        {
+          "tag": "c:dusts/nickel"
+        },
+        {
+          "tag": "c:ingots/nickel"
+        }
+      ]
     }
   ],
   "item_outputs": [

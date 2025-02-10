@@ -4,12 +4,28 @@
   "eu": 4,
   "item_inputs": [
     {
+      "type": "neoforge:compound",
       "amount": 1,
-      "tag": "c:ingots/gold"
+      "children": [
+        {
+          "tag": "c:dusts/gold"
+        },
+        {
+          "tag": "c:ingots/gold"
+        }
+      ]
     },
     {
+      "type": "neoforge:compound",
       "amount": 1,
-      "tag": "c:ingots/silver"
+      "children": [
+        {
+          "tag": "c:dusts/silver"
+        },
+        {
+          "tag": "c:ingots/silver"
+        }
+      ]
     }
   ],
   "item_outputs": [

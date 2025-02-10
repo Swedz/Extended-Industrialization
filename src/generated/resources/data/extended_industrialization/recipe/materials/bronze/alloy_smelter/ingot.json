@@ -4,12 +4,28 @@
   "eu": 4,
   "item_inputs": [
     {
+      "type": "neoforge:compound",
       "amount": 1,
-      "tag": "c:ingots/tin"
+      "children": [
+        {
+          "tag": "c:dusts/tin"
+        },
+        {
+          "tag": "c:ingots/tin"
+        }
+      ]
     },
     {
+      "type": "neoforge:compound",
       "amount": 3,
-      "tag": "c:ingots/copper"
+      "children": [
+        {
+          "tag": "c:dusts/copper"
+        },
+        {
+          "tag": "c:ingots/copper"
+        }
+      ]
     }
   ],
   "item_outputs": [

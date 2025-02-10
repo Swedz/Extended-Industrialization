@@ -2,9 +2,13 @@ package net.swedz.extended_industrialization.datagen.server.provider.recipes;
 
 import aztech.modern_industrialization.materials.Material;
 import aztech.modern_industrialization.materials.MaterialRegistry;
+import com.google.common.collect.Lists;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EIMachines;
+
+import java.util.List;
 
 import static aztech.modern_industrialization.materials.part.MIParts.*;
 
@@ -15,32 +19,33 @@ public final class AlloySmelterRecipesServerDatagenProvider extends RecipesServe
 		super(event);
 	}
 	
+	private static Ingredient combine(Ingredient... ingredients)
+	{
+		List<Ingredient.Value> values = Lists.newArrayList();
+		for(var ingredient : ingredients)
+		{
+			values.addAll(List.of(ingredient.getValues()));
+		}
+		return Ingredient.fromValues(values.stream());
+	}
+	
 	private static void addAlloySmelterRecipes(Material componentA, int amountA, Material componentB, int amountB, Material result, int amountResult, RecipeOutput output)
 	{
-		addMaterialMachineRecipe(
-				result, "dust", EIMachines.RecipeTypes.ALLOY_SMELTER,
-				4, 10 * 20,
-				(r) -> r
-						.addItemInput(componentA.getPart(DUST).getTaggedIngredient(), amountA, 1)
-						.addItemInput(componentB.getPart(DUST).getTaggedIngredient(), amountB, 1)
-						.addItemOutput(result.getPart(INGOT), amountResult),
-				output
-		);
-		addMaterialMachineRecipe(
-				result, "tiny_dust", EIMachines.RecipeTypes.ALLOY_SMELTER,
-				4, 10 * 20,
-				(r) -> r
-						.addItemInput(componentA.getPart(TINY_DUST).getTaggedIngredient(), amountA * 9, 1)
-						.addItemInput(componentB.getPart(TINY_DUST).getTaggedIngredient(), amountB * 9, 1)
-						.addItemOutput(result.getPart(INGOT), amountResult),
-				output
-		);
 		addMaterialMachineRecipe(
 				result, "ingot", EIMachines.RecipeTypes.ALLOY_SMELTER,
 				4, 10 * 20,
 				(r) -> r
-						.addItemInput(componentA.getPart(INGOT).getTaggedIngredient(), amountA, 1)
-						.addItemInput(componentB.getPart(INGOT).getTaggedIngredient(), amountB, 1)
+						.addItemInput(combine(componentA.getPart(DUST).getTaggedIngredient(), componentA.getPart(INGOT).getTaggedIngredient()), amountA, 1)
+						.addItemInput(combine(componentB.getPart(DUST).getTaggedIngredient(), componentB.getPart(INGOT).getTaggedIngredient()), amountB, 1)
+						.addItemOutput(result.getPart(INGOT), amountResult),
+				output
+		);
+		addMaterialMachineRecipe(
+				result, "nugget", EIMachines.RecipeTypes.ALLOY_SMELTER,
+				4, 10 * 20,
+				(r) -> r
+						.addItemInput(combine(componentA.getPart(TINY_DUST).getTaggedIngredient(), componentA.getPart(NUGGET).getTaggedIngredient()), amountA * 9, 1)
+						.addItemInput(combine(componentB.getPart(TINY_DUST).getTaggedIngredient(), componentB.getPart(NUGGET).getTaggedIngredient()), amountB * 9, 1)
 						.addItemOutput(result.getPart(INGOT), amountResult),
 				output
 		);
