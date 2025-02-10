@@ -144,6 +144,11 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 							decoration.render(entity, slot, stack, item, poseStack, bufferSource, packedLight, armorMaterialLayer, layerIndex, layerColor, isColored);
 						}
 					}
+					
+					if(stack.hasFoil())
+					{
+						this.renderGlint(poseStack, bufferSource, packedLight, decoration);
+					}
 				}
 			}
 		}
