@@ -32,6 +32,10 @@
     {
       "amount": 4,
       "item": "modern_industrialization:large_motor"
+    },
+    {
+      "amount": 1,
+      "item": "modern_industrialization:redstone_control_module"
     }
   ],
   "item_outputs": [
