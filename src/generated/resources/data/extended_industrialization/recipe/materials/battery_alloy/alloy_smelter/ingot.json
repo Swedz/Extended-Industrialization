@@ -4,12 +4,28 @@
   "eu": 4,
   "item_inputs": [
     {
+      "type": "neoforge:compound",
       "amount": 1,
-      "tag": "c:ingots/lead"
+      "children": [
+        {
+          "tag": "c:dusts/lead"
+        },
+        {
+          "tag": "c:ingots/lead"
+        }
+      ]
     },
     {
+      "type": "neoforge:compound",
       "amount": 1,
-      "tag": "c:ingots/antimony"
+      "children": [
+        {
+          "tag": "c:dusts/antimony"
+        },
+        {
+          "tag": "c:ingots/antimony"
+        }
+      ]
     }
   ],
   "item_outputs": [
