@@ -76,6 +76,7 @@ public enum EIText implements MICompatibleTranslatableTextEnum
 	MACHINE_CONFIG_CARD_HELP_3("- (Optional) Hold in off-hand when placing machines to automatically apply settings."),
 	MACHINE_CONFIG_CARD_HELP_4("- Clear using %s + %s on air."),
 	MACHINE_CONFIG_CARD_SAVE("Saved machine configuration to card."),
+	MANURE_OBTAINING("Manure can be collected by placing a Waste Collector underneath an animal."),
 	MEOW("Meow :3"),
 	MINING_AREA("Area: %s"),
 	MINING_AREA_1_BY_1("1x1"),

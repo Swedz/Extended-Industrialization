@@ -32,5 +32,13 @@ public final class EIEmiPlugin implements EmiPlugin
 				),
 				EI.id("/emi_info/blazing_essence")
 		));
+		
+		registry.addRecipe(new EmiInfoRecipe(
+				List.of(EmiStack.of(EIFluids.MANURE.asFluid())),
+				List.of(
+						EIText.MANURE_OBTAINING.text()
+				),
+				EI.id("/emi_info/manure")
+		));
 	}
 }

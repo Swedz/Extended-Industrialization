@@ -202,6 +202,7 @@
   "text.extended_industrialization.machine_config_card_help_3": "- (Optional) Hold in off-hand when placing machines to automatically apply settings.",
   "text.extended_industrialization.machine_config_card_help_4": "- Clear using %s + %s on air.",
   "text.extended_industrialization.machine_config_card_save": "Saved machine configuration to card.",
+  "text.extended_industrialization.manure_obtaining": "Manure can be collected by placing a Waste Collector underneath an animal.",
   "text.extended_industrialization.meow": "Meow :3",
   "text.extended_industrialization.mining_area": "Area: %s",
   "text.extended_industrialization.mining_area_1_by_1": "1x1",
