@@ -218,13 +218,13 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 		nanoSuitPiece(
 				"nano_suit_leggings",
 				Items.NETHERITE_LEGGINGS, 7, EIItems.NANO_LEGGINGS,
-				null,
+				(r) -> r.addItemInput(MIItem.REDSTONE_CONTROL_MODULE, 1),
 				output
 		);
 		nanoSuitPiece(
 				"nano_suit_boots",
 				Items.NETHERITE_BOOTS, 4, EIItems.NANO_BOOTS,
-				null,
+				(r) -> r.addItemInput(MIItem.REDSTONE_CONTROL_MODULE, 1),
 				output
 		);
 		
