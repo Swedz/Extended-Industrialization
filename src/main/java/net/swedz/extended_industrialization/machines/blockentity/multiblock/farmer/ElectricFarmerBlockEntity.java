@@ -2,10 +2,12 @@ package net.swedz.extended_industrialization.machines.blockentity.multiblock.far
 
 import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.MIBlock;
+import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.machine.component.EnergyAccess;
 import aztech.modern_industrialization.api.machine.holder.EnergyListComponentHolder;
 import aztech.modern_industrialization.compat.rei.machines.ReiMachineRecipes;
 import aztech.modern_industrialization.machines.BEP;
+import aztech.modern_industrialization.machines.blockentities.hatches.EnergyHatch;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.components.UpgradeComponent;
@@ -21,6 +23,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIMachines;
+import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.machines.component.enchantmentmodule.EnchantmentModuleComponent;
 import net.swedz.extended_industrialization.machines.component.farmer.PlantingMode;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerProcessRates;
@@ -54,19 +57,21 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 	
 	private final List<EnergyComponent> energyInputs = Lists.newArrayList();
 	
+	private CableTier highestCableTier;
+	
 	public ElectricFarmerBlockEntity(BEP bep)
 	{
 		super(bep, EI.id("electric_farmer"), 64, PlantingMode.ALTERNATING_LINES, true, PROCESS_RATES, SHAPES);
 		
 		redstoneControl = new RedstoneControlComponent();
 		
-		enchantmentModule = new EnchantmentModuleComponent();
+		enchantmentModule = new EnchantmentModuleComponent(EITags.Items.EnchantmentModules.FARMER);
 		
 		this.registerComponents(redstoneControl, enchantmentModule);
 		
 		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
 				.withRedstoneModule(redstoneControl)
-				.with(EIModularSlotPanelSlots.ENCHANTMENT_MODULE, enchantmentModule));
+				.with(EIModularSlotPanelSlots.FARMER_ENCHANTMENT_MODULE, enchantmentModule));
 	}
 	
 	public EnchantmentModuleComponent getEnchantmentModuleComponent()
@@ -82,6 +87,18 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 			ReiMachineRecipes.registerMultiblockShape(EI.id("electric_farmer"), shapeTemplate, "" + index);
 			index++;
 		}
+	}
+	
+	@Override
+	public CableTier getHighestCableTier()
+	{
+		return highestCableTier;
+	}
+	
+	@Override
+	public long getEuCost()
+	{
+		return super.getEuCost() + enchantmentModule.getAdditionalEuCost(highestCableTier);
 	}
 	
 	@Override
@@ -109,9 +126,17 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 		if(shapeMatcher.isMatchSuccessful())
 		{
 			energyInputs.clear();
+			highestCableTier = null;
+			
 			for(HatchBlockEntity hatch : shapeMatcher.getMatchedHatches())
 			{
 				hatch.appendEnergyInputs(energyInputs);
+				
+				if(hatch instanceof EnergyHatch energyHatch &&
+				   (highestCableTier == null || energyHatch.getCableTier().getEu() > highestCableTier.getEu()))
+				{
+					highestCableTier = energyHatch.getCableTier();
+				}
 			}
 		}
 	}

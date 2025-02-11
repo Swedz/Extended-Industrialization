@@ -265,6 +265,8 @@ public final class EITooltips
 			)
 	);
 	
+	// TODO enchantment modules :)
+	
 	public static void init()
 	{
 	}

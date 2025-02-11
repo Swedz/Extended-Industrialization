@@ -157,7 +157,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 			BlockPos pos = crop.pos();
 			BlockState state = crop.state(level);
 			
-			HarvestingContext context = new HarvestingContext(level, pos, state, this.getActiveEnchantment());
+			HarvestingContext context = new HarvestingContext(level, pos, state, this.getActiveEnchantment(), farmer.getMachine().getHighestCableTier());
 			Optional<HarvestableBehavior> handlerOptional = harvestingHandlers.behavior(context);
 			
 			if(handlerOptional.isPresent())

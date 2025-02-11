@@ -8,12 +8,12 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIDamageTypes;
 import net.swedz.extended_industrialization.network.packet.EntitiesElectrocutedPacket;
 
 import java.util.List;
@@ -26,14 +26,15 @@ public final class LethalTeslaCoilComponent implements IComponent
 	private final EnergyComponent    energy;
 	private final Supplier<Long>     energyCost;
 	
-	private final Supplier<Integer> range;
-	private final Supplier<Long>    damageInterval;
+	private final Supplier<Integer>      range;
+	private final Supplier<Long>         damageInterval;
+	private final Supplier<DamageSource> damageSource;
 	
 	private int entityCount;
 	
 	public LethalTeslaCoilComponent(
 			MachineBlockEntity machine, Supplier<Float> damageAmount, EnergyComponent energy, Supplier<Long> energyCost,
-			Supplier<Integer> range, Supplier<Long> damageInterval
+			Supplier<Integer> range, Supplier<Long> damageInterval, Supplier<DamageSource> damageSource
 	)
 	{
 		this.machine = machine;
@@ -42,6 +43,7 @@ public final class LethalTeslaCoilComponent implements IComponent
 		this.energyCost = energyCost;
 		this.range = range;
 		this.damageInterval = damageInterval;
+		this.damageSource = damageSource;
 	}
 	
 	public boolean hasNearbyEntities()
@@ -94,7 +96,7 @@ public final class LethalTeslaCoilComponent implements IComponent
 			if(active && tick++ % damageInterval.get() == 0)
 			{
 				energy.consumeEu(energyCost, Simulation.ACT);
-				var source = EIDamageTypes.teslaFakePlayer(level, worldPosition.getCenter(), machine.placedBy.placerId);
+				var source = damageSource.get();
 				if(!entities.isEmpty())
 				{
 					var entityIds = new IntArrayList();

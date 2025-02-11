@@ -101,6 +101,7 @@ public final class EIItems
 	public static final ItemHolder<PhotovoltaicCellItem> HV_PHOTOVOLTAIC_CELL = createPhotovoltaicCell("hv", "HV", CableTier.HV, 256, 10 * 60 * 20);
 	
 	public static final ItemHolder<Item> SILK_TOUCH_MODULE = createEnchantmentModule("silk_touch", "Silk Touch").register();
+	public static final ItemHolder<Item> LOOTING_MODULE    = createEnchantmentModule("looting", "Looting").register();
 	
 	public static Set<ItemHolder> values()
 	{

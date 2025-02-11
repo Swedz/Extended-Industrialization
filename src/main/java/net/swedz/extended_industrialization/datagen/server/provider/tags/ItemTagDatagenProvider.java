@@ -56,6 +56,15 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 				);
 	}
 	
+	private void addEnchantmentModuleTags()
+	{
+		this.tag(EITags.Items.EnchantmentModules.FARMER)
+				.add(EIItems.SILK_TOUCH_MODULE.asItem());
+		
+		this.tag(EITags.Items.EnchantmentModules.LETHAL_TESLA_COIL)
+				.add(EIItems.LOOTING_MODULE.asItem());
+	}
+	
 	private void addGeneratedRecipesBlacklistTags()
 	{
 		this.tag(EITags.GeneratedRecipesBlacklist.CANNING_FOOD)
@@ -93,6 +102,8 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 		
 		this.addFarmerVoidableDropTag();
 		this.addFarmerStandardPlantableTag();
+		
+		this.addEnchantmentModuleTags();
 		
 		this.addGeneratedRecipesBlacklistTags();
 		
