@@ -27,6 +27,12 @@ public final class EITags
 		public static final TagKey<Item> PHOTOVOLTAIC_CELL          = item("photovoltaic_cell", "Photovoltaic Cells");
 		public static final TagKey<Item> RAINBOW_DYEABLE            = item("rainbow_dyeable", "Rainbow Dyeable");
 		public static final TagKey<Item> PROCESSING_ARRAY_BLACKLIST = item("processing_array_blacklist", "Processing Array Blacklist");
+		
+		public static final class EnchantmentModules
+		{
+			public static final TagKey<Item> FARMER            = item("enchantment_modules/farmer", "Farmer Enchantment Modules");
+			public static final TagKey<Item> LETHAL_TESLA_COIL = item("enchantment_modules/lethal_tesla_coil", "Lethal Tesla Coil Enchantment Modules");
+		}
 	}
 	
 	public static final class Blocks

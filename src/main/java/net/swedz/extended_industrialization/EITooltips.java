@@ -1,27 +1,38 @@
 package net.swedz.extended_industrialization;
 
 import aztech.modern_industrialization.MIText;
+import aztech.modern_industrialization.MITooltips;
+import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import dev.technici4n.grandpower.api.ILongEnergyStorage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.swedz.extended_industrialization.datamap.EnchantmentModule;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerTier;
+import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.api.WorldPos;
+import net.swedz.tesseract.neoforge.api.tuple.Pair;
 import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
+import net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser;
 import net.swedz.tesseract.neoforge.tooltip.BiParser;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 import net.swedz.tesseract.neoforge.tooltip.TooltipAttachment;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,7 +88,7 @@ public final class EITooltips
 	
 	public static final TooltipAttachment ENERGY_STORED_ITEM = TooltipAttachment.singleLineOptional(
 			(stack, item) -> BuiltInRegistries.ITEM.getKey(item).getNamespace().equals(EI.ID),
-			(stack, item) ->
+			(flags, context, stack, item) ->
 			{
 				ILongEnergyStorage energyStorage = stack.getCapability(EnergyApi.ITEM);
 				if(energyStorage != null)
@@ -107,7 +118,7 @@ public final class EITooltips
 			(stack, item) ->
 					item instanceof BlockItem blockItem &&
 					LargeElectricFurnaceBlockEntity.getTiersByCoil().containsKey(BuiltInRegistries.BLOCK.getKey(blockItem.getBlock())),
-			(stack, item) ->
+			(flags, context, stack, item) ->
 			{
 				LargeElectricFurnaceBlockEntity.Tier tier = LargeElectricFurnaceBlockEntity.getTiersByCoil()
 						.get(BuiltInRegistries.BLOCK.getKey(((BlockItem) stack.getItem()).getBlock()));
@@ -121,7 +132,7 @@ public final class EITooltips
 			(stack, item) ->
 					item instanceof BlockItem blockItem &&
 					TeslaTowerBlockEntity.getTiersByWinding().containsKey(BuiltInRegistries.BLOCK.getKey(blockItem.getBlock())),
-			(stack, item) ->
+			(flags, context, stack, item) ->
 			{
 				TeslaTowerTier tier = TeslaTowerBlockEntity.getTiersByWinding()
 						.get(BuiltInRegistries.BLOCK.getKey(((BlockItem) stack.getItem()).getBlock()));
@@ -134,7 +145,7 @@ public final class EITooltips
 	
 	public static final TooltipAttachment PHOTOVOLTAIC_CELLS = TooltipAttachment.multilines(
 			PhotovoltaicCellItem.class,
-			(stack, item) ->
+			(flags, context, stack, item) ->
 			{
 				int euPerTick = item.getEuPerTick();
 				List<Component> lines = Lists.newArrayList();
@@ -191,7 +202,7 @@ public final class EITooltips
 	
 	public static final TooltipAttachment ELECTRIC_TOOL_HELP = TooltipAttachment.multilines(
 			ElectricToolItem.class,
-			(stack, item) ->
+			(flags, context, stack, item) ->
 			{
 				List<Component> lines = Lists.newArrayList();
 				lines.add(line(EIText.ELECTRIC_TOOL_HELP_1));
@@ -214,7 +225,7 @@ public final class EITooltips
 	
 	public static final TooltipAttachment NANO_SUIT_HELP = TooltipAttachment.multilines(
 			NanoSuitArmorItem.class,
-			(stack, item) ->
+			(flags, context, stack, item) ->
 			{
 				List<Component> lines = Lists.newArrayList();
 				lines.add(line(EIText.NANO_SUIT_HELP_1));
@@ -263,6 +274,65 @@ public final class EITooltips
 					line(EIText.TESLA_HANDHELD_HELP_3).arg("use", KEYBIND_PARSER),
 					line(EIText.TESLA_HANDHELD_HELP_4).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
 			)
+	);
+	
+	private static final LinkedHashMap<TagKey<Item>, ResourceLocation> ENCHANTMENT_MODULE_MACHINES = Maps.newLinkedHashMap();
+	
+	public static void registerEnchantmentModuleMachine(TagKey<Item> tag, ResourceLocation machineId)
+	{
+		Assert.noneNull(tag, machineId);
+		if(ENCHANTMENT_MODULE_MACHINES.put(tag, machineId) != null)
+		{
+			throw new IllegalArgumentException("Enchantment module machine already registered for tag " + tag.location());
+		}
+	}
+	
+	static
+	{
+		registerEnchantmentModuleMachine(EITags.Items.EnchantmentModules.FARMER, EI.id("electric_farmer"));
+		registerEnchantmentModuleMachine(EITags.Items.EnchantmentModules.LETHAL_TESLA_COIL, EI.id("lethal_tesla_coil"));
+	}
+	
+	public static final TooltipAttachment ENCHANTMENT_MODULE = TooltipAttachment.multilinesOptional(
+			(flags, context, stack, item) ->
+			{
+				var module = EnchantmentModule.getFor(item);
+				if(module != null)
+				{
+					List<Component> lines = Lists.newArrayList();
+					
+					for(var entry : ENCHANTMENT_MODULE_MACHINES.sequencedEntrySet())
+					{
+						if(stack.is(entry.getKey()))
+						{
+							lines.add(line(EIText.ENCHANTMENT_MODULE_MACHINE)
+									.arg(BuiltInRegistries.BLOCK.get(entry.getValue()), Parser.BLOCK.withStyle(HIGHLIGHT_STYLE)));
+						}
+					}
+					
+					if(module.values().isEmpty())
+					{
+						lines.add(line(EIText.ENCHANTMENT_MODULE_SINGLE_VALUE)
+								.arg(context.registries(), new Pair<>(module.enchantment(), module.fallback().level()), Parser.ENCHANTMENT_AND_LEVEL.withStyle(HIGHLIGHT_STYLE))
+								.arg(module.fallback().euCost(), MITooltips.EU_PER_TICK_PARSER));
+					}
+					else
+					{
+						lines.add(line(EIText.ENCHANTMENT_MODULE_VALUES)
+								.arg(context.registries(), module.enchantment(), Parser.ENCHANTMENT.withStyle(HIGHLIGHT_STYLE)));
+						for(var tier : CableTier.allTiers())
+						{
+							var value = module.get(tier);
+							lines.add(line(EIText.VOLTAGE_VALUE_FOR_COST)
+									.arg(tier, MIParser.CABLE_TIER_SHORT.withStyle(HIGHLIGHT_STYLE))
+									.arg(value.level(), Parser.ENCHANTMENT_LEVEL.withStyle(HIGHLIGHT_STYLE))
+									.arg(value.euCost(), MITooltips.EU_PER_TICK_PARSER));
+						}
+					}
+					return Optional.of(lines);
+				}
+				return Optional.empty();
+			}
 	);
 	
 	public static void init()

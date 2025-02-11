@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer;
 
 import aztech.modern_industrialization.MIText;
+import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.ShapeSelection;
@@ -46,11 +47,11 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	
 	protected final ShapeWrapper shapes;
 	
-	protected final long euCost;
+	protected final long baseEuCost;
 	
 	protected final FarmerComponent farmer;
 	
-	public FarmerBlockEntity(BEP bep, ResourceLocation blockId, long euCost, PlantingMode defaultPlantingMode, boolean canChoosePlantingMode, FarmerProcessRates processRates, ShapeWrapper shapes)
+	public FarmerBlockEntity(BEP bep, ResourceLocation blockId, long baseEuCost, PlantingMode defaultPlantingMode, boolean canChoosePlantingMode, FarmerProcessRates processRates, ShapeWrapper shapes)
 	{
 		super(
 				bep,
@@ -60,7 +61,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		
 		this.shapes = shapes;
 		
-		this.euCost = euCost;
+		this.baseEuCost = baseEuCost;
 		
 		this.farmer = new FarmerComponent(this, inventory, defaultPlantingMode, processRates);
 		
@@ -138,6 +139,16 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		));
 	}
 	
+	public CableTier getHighestCableTier()
+	{
+		return null;
+	}
+	
+	public long getEuCost()
+	{
+		return baseEuCost;
+	}
+	
 	public abstract long consumeEu(long max);
 	
 	@Override
@@ -177,7 +188,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		
 		if(this.isEnabled() && this.isShapeValid())
 		{
-			long eu = this.consumeEu(euCost);
+			long eu = this.consumeEu(this.getEuCost());
 			boolean active = eu > 0;
 			this.updateActive(active);
 			
@@ -196,7 +207,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	public List<Component> getTooltips()
 	{
 		List<Component> lines = Lists.newArrayList();
-		lines.add(MICompatibleTextLine.line(EIText.FARMER_TASK_TOOLTIP).arg(euCost, EU_PER_TICK_PARSER));
+		lines.add(MICompatibleTextLine.line(EIText.FARMER_TASK_TOOLTIP).arg(baseEuCost, EU_PER_TICK_PARSER));
 		lines.addAll(farmer.getTaskTooltipLines());
 		return lines;
 	}

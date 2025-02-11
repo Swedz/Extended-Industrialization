@@ -29,13 +29,17 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EIDamageTypes;
 import net.swedz.extended_industrialization.EISounds;
+import net.swedz.extended_industrialization.EITags;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
+import net.swedz.extended_industrialization.machines.component.enchantmentmodule.EnchantmentModuleComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.AestheticTeslaCoilComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.LethalTeslaCoilComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.TeslaBuzzingComponent;
+import net.swedz.extended_industrialization.machines.guicomponent.EIModularSlotPanelSlots;
 import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.configurationpanel.ConfigurationPanelBuilder;
@@ -64,14 +68,15 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	
 	private final IsActiveComponent isActive;
 	
-	private final RedstoneControlComponent redstoneControl;
-	private final CasingComponent          casing;
+	private final RedstoneControlComponent   redstoneControl;
+	private final CasingComponent            casing;
+	private final EnchantmentModuleComponent enchantmentModule;
 	
 	private final EnergyComponent energy;
 	private final MIEnergyStorage insertable;
 	
-	private final LethalTeslaCoilComponent lethal;
-	private final TeslaBuzzingComponent buzzing;
+	private final LethalTeslaCoilComponent    lethal;
+	private final TeslaBuzzingComponent       buzzing;
 	private final AestheticTeslaCoilComponent aesthetic;
 	
 	public LethalTeslaCoilMachineBlockEntity(BEP bep)
@@ -86,6 +91,7 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		
 		redstoneControl = new RedstoneControlComponent();
 		casing = new CasingComponent();
+		enchantmentModule = new EnchantmentModuleComponent(EITags.Items.EnchantmentModules.LETHAL_TESLA_COIL);
 		
 		energy = new EnergyComponent(this, () -> 30 * 20 * casing.getCableTier().eu);
 		insertable = energy.buildInsertable(casing::canInsertEu);
@@ -94,9 +100,10 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 				this,
 				() -> getDamageAmount(casing.getCableTier()),
 				energy,
-				() -> getEnergyCost(casing.getCableTier()),
+				() -> getEnergyCost(casing.getCableTier()) + enchantmentModule.getAdditionalEuCost(casing.getCableTier()),
 				() -> EI.config().lethalTeslaCoil().range(),
-				() -> DAMAGE_INTERVAL
+				() -> DAMAGE_INTERVAL,
+				() -> EIDamageTypes.teslaFakePlayer(level, worldPosition.getCenter(), placedBy.placerId, enchantmentModule.getActiveEnchantment(), casing.getCableTier())
 		);
 		buzzing = new TeslaBuzzingComponent(
 				this,
@@ -106,13 +113,14 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		);
 		aesthetic = new AestheticTeslaCoilComponent();
 		
-		this.registerComponents(isActive, redstoneControl, casing, energy, lethal, buzzing, aesthetic);
+		this.registerComponents(isActive, redstoneControl, casing, enchantmentModule, energy, lethal, buzzing, aesthetic);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(81, 34), energy::getEu, energy::getCapacity));
 		
 		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
 				.withRedstoneModule(redstoneControl)
-				.withCasings(casing));
+				.withCasings(casing)
+				.with(EIModularSlotPanelSlots.LETHAL_TESLA_COIL_ENCHANTMENT_MODULE, enchantmentModule));
 		
 		var configPanel = new ConfigurationPanelBuilder(
 				EIText.CONFIGURATION_PANEL.text(),
@@ -218,9 +226,9 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		List<Component> lines = Lists.newArrayList();
 		lines.add(line(EIText.TESLA_LETHAL_COIL_HELP_1).arg(EI.config().lethalTeslaCoil().range()));
 		lines.add(line(EIText.TESLA_LETHAL_COIL_VALUES));
-		for(CableTier tier : CableTier.allTiers())
+		for(var tier : CableTier.allTiers())
 		{
-			lines.add(line(EIText.TESLA_LETHAL_COIL_VOLTAGE_VALUE)
+			lines.add(line(EIText.VOLTAGE_VALUE_FOR_COST)
 					.arg(tier, MIParser.CABLE_TIER_SHORT.withStyle(MITooltips.HIGHLIGHT_STYLE))
 					.arg(getDamageAmount(tier), EITooltips.DAMAGE_PARSER)
 					.arg(getEnergyCost(tier), MITooltips.EU_PARSER));
