@@ -4,7 +4,7 @@ import aztech.modern_industrialization.api.energy.CableTier;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -45,9 +45,14 @@ public record EnchantmentModule(ResourceKey<Enchantment> enchantment, Value fall
 		values = Collections.unmodifiableMap(values);
 	}
 	
-	public Holder<Enchantment> enchantment(RegistryAccess access)
+	public Holder<Enchantment> enchantment(HolderLookup.Provider access)
 	{
 		return access.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(enchantment);
+	}
+	
+	public boolean has(CableTier tier)
+	{
+		return tier != null && values.containsKey(tier);
 	}
 	
 	public Value get(CableTier tier)
@@ -65,7 +70,7 @@ public record EnchantmentModule(ResourceKey<Enchantment> enchantment, Value fall
 		return this.get(tier).euCost();
 	}
 	
-	public void applyEnchantment(RegistryAccess access, ItemStack stack, CableTier tier)
+	public void applyEnchantment(HolderLookup.Provider access, ItemStack stack, CableTier tier)
 	{
 		var currentEnchantments = stack.get(DataComponents.ENCHANTMENTS);
 		if(currentEnchantments == null)

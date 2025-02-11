@@ -37,6 +37,9 @@ public enum EIText implements MICompatibleTranslatableTextEnum
 	ELECTRIC_TOOL_HELP_3("- Use %s + %s to change mining speed."),
 	ELECTRIC_TOOL_HELP_4("- Press %s while held or %s while hovered to toggle 3x3 mining."),
 	ENCHANTMENT_MODULE_INPUT("Insert an enchantment module to make the machine use the enchantment."),
+	ENCHANTMENT_MODULE_MACHINE("Can be used in the %s."),
+	ENCHANTMENT_MODULE_SINGLE_VALUE("Applies %s in the machine for %s."),
+	ENCHANTMENT_MODULE_VALUES("Voltage determines the level of %s applied in the machine."),
 	FARMER_NOT_TILLING("Not Tilling"),
 	FARMER_PLANTING_ALTERNATING_LINES("Alternating Lines"),
 	FARMER_PLANTING_AS_NEEDED("As Needed"),
@@ -140,7 +143,6 @@ public enum EIText implements MICompatibleTranslatableTextEnum
 	TESLA_INTERDIMENSIONAL_UPGRADE_HELP("Removes the range limitation on a Tesla Tower and allows it to transmit energy across dimensions."),
 	TESLA_LETHAL_COIL_HELP_1("Deals damage to entities within %s blocks while powered."),
 	TESLA_LETHAL_COIL_VALUES("Voltage determines the amount of damage dealt and energy required:"),
-	TESLA_LETHAL_COIL_VOLTAGE_VALUE("  - %s: %s for %s"),
 	TESLA_NETWORK_RECEIVER_LINKED("Linked to %s"),
 	TESLA_NETWORK_RECEIVER_MISMATCHING_VOLTAGE("Cannot receive %s power"),
 	TESLA_NETWORK_RECEIVER_NO_LINK("Not linked to any transmitter"),
@@ -167,6 +169,7 @@ public enum EIText implements MICompatibleTranslatableTextEnum
 	TESLA_TOWER_UPGRADE("Add tesla upgrades to increase maximum range."),
 	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Hull for cable tier to convert from (LV by default)."),
 	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Hull for cable tier to convert to (LV by default)."),
+	VOLTAGE_VALUE_FOR_COST("  - %s: %s for %s"),
 	WASTE_COLLECTOR_HELP("When placed underneath animals, manure will be collected."),
 	WINDINGS_TESLA_TOWER_TIER("Allows the Tesla Tower to transmit up to %s within %s blocks with a passive drain of %s.");
 	

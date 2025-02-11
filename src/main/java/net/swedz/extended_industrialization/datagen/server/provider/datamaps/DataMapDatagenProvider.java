@@ -51,16 +51,15 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		this.addTeslaTowerTier(EI.id("annealed_copper_tesla_winding"), CableTier.EV.getMaxTransfer() * 6, 32 * 2 * 2 * 2, 64 * 4 * 4 * 4);
 		this.addTeslaTowerTier(EI.id("superconductor_tesla_winding"), CableTier.SUPERCONDUCTOR.getMaxTransfer() * 6, 32 * 2 * 2 * 2 * 2, 64 * 4 * 4 * 4 * 4);
 		
-		this.addEnchantmentModule(EIItems.SILK_TOUCH_MODULE, Enchantments.SILK_TOUCH, 1, 8);
-		// TODO adjust looting values
+		this.addEnchantmentModule(EIItems.SILK_TOUCH_MODULE, Enchantments.SILK_TOUCH, 1, 16);
 		this.addEnchantmentModule(
 				EIItems.LOOTING_MODULE, Enchantments.LOOTING,
 				1, 32,
 				Map.of(
-						CableTier.MV, new EnchantmentModule.Value(2, 32 * 2),
-						CableTier.HV, new EnchantmentModule.Value(3, 32 * 2 * 2),
-						CableTier.EV, new EnchantmentModule.Value(4, 32 * 2 * 2 * 2),
-						CableTier.SUPERCONDUCTOR, new EnchantmentModule.Value(5, 32 * 2 * 2 * 2 * 2)
+						CableTier.MV, new EnchantmentModule.Value(3, 32 * 4),
+						CableTier.HV, new EnchantmentModule.Value(5, 32 * 4 * 4),
+						CableTier.EV, new EnchantmentModule.Value(7, 32 * 4 * 4 * 4 * 4),
+						CableTier.SUPERCONDUCTOR, new EnchantmentModule.Value(10, 32 * 4 * 4 * 4 * 4 * 4)
 				)
 		);
 	}

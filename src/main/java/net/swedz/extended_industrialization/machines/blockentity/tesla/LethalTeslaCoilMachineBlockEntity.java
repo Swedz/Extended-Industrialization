@@ -226,9 +226,9 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		List<Component> lines = Lists.newArrayList();
 		lines.add(line(EIText.TESLA_LETHAL_COIL_HELP_1).arg(EI.config().lethalTeslaCoil().range()));
 		lines.add(line(EIText.TESLA_LETHAL_COIL_VALUES));
-		for(CableTier tier : CableTier.allTiers())
+		for(var tier : CableTier.allTiers())
 		{
-			lines.add(line(EIText.TESLA_LETHAL_COIL_VOLTAGE_VALUE)
+			lines.add(line(EIText.VOLTAGE_VALUE_FOR_COST)
 					.arg(tier, MIParser.CABLE_TIER_SHORT.withStyle(MITooltips.HIGHLIGHT_STYLE))
 					.arg(getDamageAmount(tier), EITooltips.DAMAGE_PARSER)
 					.arg(getEnergyCost(tier), MITooltips.EU_PARSER));
