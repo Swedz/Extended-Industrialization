@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "modern_industrialization:bronze_curved_plate"
+    },
+    "C": {
+      "item": "modern_industrialization:electronic_circuit"
+    },
+    "M": {
+      "item": "modern_industrialization:motor"
+    },
+    "R": {
+      "item": "modern_industrialization:robot_arm"
+    },
+    "b": {
+      "item": "modern_industrialization:redstone_battery"
+    }
+  },
+  "pattern": [
+    "MBM",
+    "BRB",
+    "bCb"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:robot_auto_feeder"
+  }
+}

@@ -109,6 +109,8 @@ public enum EIText implements MICompatibleTranslatableTextEnum
 	PROCESSING_ARRAY_RECIPE("Can run recipes of any single block electric crafting machine provided to it in batches."),
 	PROCESSING_ARRAY_SIZE("Machines: %d"),
 	RAINBOW("Rainbow"),
+	ROBOT_AUTO_FEEDER_HELP_1("Automatically grabs Canned Food from your inventory and feeds it to you."),
+	ROBOT_AUTO_FEEDER_HELP_2("Works with item containing items such as backpacks."),
 	SOLAR_BOILER_CALCIFICATION("Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Using an axe on the boiler will reset its calcification."),
 	SOLAR_EFFICIENCY("Solar Efficiency: %d %%"),
 	SOLAR_PANEL_DISTILLED_WATER("By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long!"),
