@@ -62,5 +62,7 @@ public final class LanguageDatagenProvider extends LanguageProvider
 		this.add("teslatower_tier.%s.%s.%s".formatted(EI.ID, EI.ID, "superconductor_tesla_winding"), "Superconductor");
 		
 		this.add(EI.id("tesla").toLanguageKey("death.attack"), "%1$s was electrocuted to death");
+		
+		this.add("curios.identifier.shoulders", "Shoulders");
 	}
 }

@@ -161,6 +161,14 @@ public final class EITooltips
 			)
 	);
 	
+	public static final TooltipAttachment ROBOT_AUTO_FEEDER = TooltipAttachment.multilines(
+			EIItems.ROBOT_AUTO_FEEDER,
+			List.of(
+					line(EIText.ROBOT_AUTO_FEEDER_HELP_1),
+					line(EIText.ROBOT_AUTO_FEEDER_HELP_2)
+			)
+	);
+	
 	public static final TooltipAttachment MACHINE_CONFIG_CARD = TooltipAttachment.multilines(
 			EIItems.MACHINE_CONFIG_CARD,
 			List.of(

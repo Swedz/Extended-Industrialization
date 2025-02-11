@@ -70,6 +70,9 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 	
 	private void addCuriosTags()
 	{
+		this.curiosTag("shoulders")
+				.add(EIItems.ROBOT_AUTO_FEEDER.asItem());
+		
 		this.curiosTag("belt")
 				.add(EIItems.TESLA_HANDHELD_RECEIVER.asItem());
 		

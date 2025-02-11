@@ -449,6 +449,21 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 		);
 		
 		addBasicCraftingRecipes(
+				"tool", "robot_auto_feeder", false,
+				EIItems.ROBOT_AUTO_FEEDER, 1,
+				(r) -> r
+						.define('M', MIItem.MOTOR)
+						.define('B', "modern_industrialization:bronze_curved_plate")
+						.define('R', MIItem.ROBOT_ARM)
+						.define('b', "modern_industrialization:redstone_battery")
+						.define('C', "modern_industrialization:electronic_circuit")
+						.pattern("MBM")
+						.pattern("BRB")
+						.pattern("bCb"),
+				output
+		);
+		
+		addBasicCraftingRecipes(
 				"tool", "machine_config_card", false,
 				EIItems.MACHINE_CONFIG_CARD, 1,
 				(r) -> r

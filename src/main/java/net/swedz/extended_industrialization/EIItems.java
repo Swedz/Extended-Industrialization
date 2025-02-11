@@ -21,6 +21,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.extended_industrialization.component.RainbowDataComponent;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
+import net.swedz.extended_industrialization.item.RobotAutoFeederItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.machineconfig.MachineConfigCardItem;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
@@ -77,8 +78,9 @@ public final class EIItems
 	public static final ItemHolder<NanoSuitArmorItem> NANO_QUANTUM_LEGGINGS   = createNanosuitArmor("nano_quantum_leggings", "Quantum Nano Leggings", ArmorItem.Type.LEGGINGS, EIArmorMaterials.NANO_QUANTUM, NanoSuitAbility.SPEED).register();
 	public static final ItemHolder<NanoSuitArmorItem> NANO_QUANTUM_BOOTS      = createNanosuitArmor("nano_quantum_boots", "Quantum Nano Boots", ArmorItem.Type.BOOTS, EIArmorMaterials.NANO_QUANTUM, NanoSuitAbility.STEP).register();
 	
-	public static final ItemHolder<Item> TIN_CAN     = create("tin_can", "Tin Can", Item::new, EISortOrder.OTHER_GEAR).withModelBuilder(CommonModelBuilders::generated).register();
-	public static final ItemHolder<Item> CANNED_FOOD = create("canned_food", "Canned Food", Item::new, EISortOrder.OTHER_GEAR).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3f).fast().usingConvertsTo(TIN_CAN).build())).tag(ItemTags.WOLF_FOOD, ItemTags.CAT_FOOD).withModelBuilder(CommonModelBuilders::generated).register();
+	public static final ItemHolder<Item>                TIN_CAN           = create("tin_can", "Tin Can", Item::new, EISortOrder.OTHER_GEAR).withModelBuilder(CommonModelBuilders::generated).register();
+	public static final ItemHolder<Item>                CANNED_FOOD       = create("canned_food", "Canned Food", Item::new, EISortOrder.OTHER_GEAR).withProperties((p) -> p.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3f).fast().usingConvertsTo(TIN_CAN).build())).tag(ItemTags.WOLF_FOOD, ItemTags.CAT_FOOD).withModelBuilder(CommonModelBuilders::generated).register();
+	public static final ItemHolder<RobotAutoFeederItem> ROBOT_AUTO_FEEDER = create("robot_auto_feeder", "Robot Auto Feeder", RobotAutoFeederItem::new, EISortOrder.OTHER_GEAR).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModelBuilder(CommonModelBuilders::generated).register();
 	
 	public static final ItemHolder<MachineConfigCardItem>     MACHINE_CONFIG_CARD     = create("machine_config_card", "Machine Config Card", MachineConfigCardItem::new, EISortOrder.OTHER_GEAR).withModelBuilder(CommonModelBuilders::generated).register();
 	public static final ItemHolder<TeslaCalibratorItem>       TESLA_CALIBRATOR        = create("tesla_calibrator", "Tesla Calibrator", TeslaCalibratorItem::new, EISortOrder.OTHER_GEAR).withModelBuilder(CommonModelBuilders::generated).withClientRegistrationListener(EIItems::itemPropertyTeslaNetworkSelected).register();
