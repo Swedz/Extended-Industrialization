@@ -62,10 +62,11 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 		this.tier = tier;
 		this.capacity = capacity;
 		
-		this.inventory = this.buildInventory();
-		this.crafter = new CrafterComponent(this, inventory, this);
+		inventory = this.buildInventory();
+		crafter = new CrafterComponent(this, inventory, this);
 		
-		this.isActiveComponent = new IsActiveComponent();
+		isActiveComponent = new IsActiveComponent();
+		
 		this.registerGuiComponent(new ProgressBar.Server(
 				new ProgressBar.Parameters(PROGRESS_BAR_X, PROGRESS_BAR_Y, "triple_arrow"),
 				crafter::getProgress
