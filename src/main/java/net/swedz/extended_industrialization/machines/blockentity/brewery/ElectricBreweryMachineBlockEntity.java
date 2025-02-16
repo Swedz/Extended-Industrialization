@@ -13,6 +13,7 @@ import aztech.modern_industrialization.machines.components.CasingComponent;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.LubricantHelper;
 import aztech.modern_industrialization.machines.components.MachineInventoryComponent;
+import aztech.modern_industrialization.machines.components.OverdriveComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.components.UpgradeComponent;
 import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
@@ -43,6 +44,7 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 	private final RedstoneControlComponent redstoneControl;
 	private final CasingComponent          casing;
 	private final UpgradeComponent         upgrades;
+	private final OverdriveComponent       overdrive;
 	
 	private final EnergyComponent energy;
 	private final MIEnergyStorage insertable;
@@ -51,21 +53,23 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 	{
 		super(bep, "electric_brewery", MachineTier.LV, 32 * FluidType.BUCKET_VOLUME);
 		
-		this.redstoneControl = new RedstoneControlComponent();
-		this.casing = new CasingComponent();
-		this.upgrades = new UpgradeComponent();
+		redstoneControl = new RedstoneControlComponent();
+		casing = new CasingComponent();
+		upgrades = new UpgradeComponent();
+		overdrive = new OverdriveComponent();
 		
-		this.energy = new EnergyComponent(this, casing::getEuCapacity);
-		this.insertable = energy.buildInsertable(casing::canInsertEu);
+		energy = new EnergyComponent(this, casing::getEuCapacity);
+		insertable = energy.buildInsertable(casing::canInsertEu);
 		
 		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(ENERGY_BAR_X, ENERGY_BAR_Y), energy::getEu, energy::getCapacity));
 		this.registerGuiComponent(new RecipeEfficiencyBar.Server(new RecipeEfficiencyBar.Parameters(EFFICIENCY_BAR_X, EFFICIENCY_BAR_Y), crafter));
 		this.registerGuiComponent(new SlotPanel.Server(this)
 				.withRedstoneControl(redstoneControl)
 				.withUpgrades(upgrades)
-				.withCasing(casing));
+				.withCasing(casing)
+				.withOverdrive(overdrive));
 		
-		this.registerComponents(energy, redstoneControl, casing, upgrades);
+		this.registerComponents(energy, redstoneControl, casing, upgrades, overdrive);
 	}
 	
 	@Override
@@ -118,6 +122,12 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 	public EnergyAccess getEnergyComponent()
 	{
 		return energy;
+	}
+	
+	@Override
+	public boolean isOverdriving()
+	{
+		return overdrive.shouldOverdrive();
 	}
 	
 	@Override
