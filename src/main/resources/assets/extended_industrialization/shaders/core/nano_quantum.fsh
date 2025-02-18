@@ -58,14 +58,15 @@ out vec4 fragColor;
 
 void main()
 {
-	float mask = texture(Sampler0, texCoord0).a;
+	vec4 textureColor = texture(Sampler0, texCoord0);
+	float mask = textureColor.a;
 	if (mask > 0)
 	{
-		vec3 color = vec3(0, 0, 0);
+		vec3 color = textureColor.rgb;
 		vec4 glintTexture = texture(Sampler1, transformGlintUV(texCoord0));
 		if (glintTexture.a > 0)
 		{
-			color = glintTexture.rgb;
+			color += glintTexture.rgb * shaderColor.rgb;
 		}
 		if (RenderStars == 1)
 		{
@@ -74,11 +75,10 @@ void main()
 				vec4 starTexture = texture(Sampler2, transformStarUV(texCoord0, layer));
 				if (starTexture.a > 0)
 				{
-					color = starTexture.rgb;
+					color = starTexture.rgb * shaderColor.rgb;
 				}
 			}
 		}
-		color *= shaderColor.rgb;
 		fragColor = vec4(color, 1.0);
 	}
 	else

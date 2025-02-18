@@ -8,7 +8,7 @@ import net.swedz.extended_industrialization.EIClientShaders;
 
 import java.util.List;
 
-public class NanoQuantumTextureStateShard extends RenderStateShard.TextureStateShard
+public final class NanoQuantumTextureStateShard extends RenderStateShard.TextureStateShard
 {
 	private final ResourceLocation       glint;
 	private final boolean                renderStars;
