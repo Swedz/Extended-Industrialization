@@ -110,6 +110,7 @@ public final class NanoArmorModel<T extends LivingEntity> extends HumanoidArmorM
 	{
 		var root = mesh.getRoot();
 		root.addOrReplaceChild("head", new CubeListBuilder(), PartPose.ZERO);
+		root.addOrReplaceChild("hat", new CubeListBuilder(), PartPose.ZERO);
 		root.addOrReplaceChild("body", new CubeListBuilder(), PartPose.ZERO);
 		root.addOrReplaceChild("left_arm", new CubeListBuilder(), PartPose.ZERO);
 		root.addOrReplaceChild("right_arm", new CubeListBuilder(), PartPose.ZERO);
@@ -119,13 +120,14 @@ public final class NanoArmorModel<T extends LivingEntity> extends HumanoidArmorM
 	}
 	
 	public EquipmentSlot slot;
-	public ModelPart     root, head, body, leftArm, rightArm, leftLeg, rightLeg;
+	public ModelPart     root, head, hat, body, leftArm, rightArm, leftLeg, rightLeg;
 	
 	public NanoArmorModel(ModelPart root)
 	{
 		super(root);
 		this.root = root;
 		this.head = root.getChild("head");
+		this.hat = root.getChild("hat");
 		this.body = root.getChild("body");
 		this.leftArm = root.getChild("left_arm");
 		this.rightArm = root.getChild("right_arm");
@@ -136,7 +138,7 @@ public final class NanoArmorModel<T extends LivingEntity> extends HumanoidArmorM
 	@Override
 	protected Iterable<ModelPart> headParts()
 	{
-		return slot == EquipmentSlot.HEAD ? List.of(head) : List.of();
+		return slot == EquipmentSlot.HEAD ? List.of(head, hat) : List.of();
 	}
 	
 	@Override
