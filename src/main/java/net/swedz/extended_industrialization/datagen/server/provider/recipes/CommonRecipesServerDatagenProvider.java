@@ -510,5 +510,16 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 						.addItemOutput(EIItems.SILK_TOUCH_MODULE, 1),
 				output
 		);
+		addMachineRecipe(
+				"assembler", "looting_module", MIMachineRecipeTypes.ASSEMBLER,
+				8, 10 * 20,
+				(r) -> r
+						.addItemInput("#c:plates/stainless_steel", 8)
+						.addItemInput(EIItems.NETHERITE_ROTARY_BLADE, 2)
+						.addItemInput(MIItem.ROBOT_ARM, 4)
+						.addFluidInput(MIFluids.POLYETHYLENE, 1000)
+						.addItemOutput(EIItems.LOOTING_MODULE, 1),
+				output
+		);
 	}
 }
