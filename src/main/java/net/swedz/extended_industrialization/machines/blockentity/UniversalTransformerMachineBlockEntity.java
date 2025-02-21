@@ -14,9 +14,11 @@ import aztech.modern_industrialization.machines.components.RedstoneControlCompon
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
+import aztech.modern_industrialization.machines.helper.EnergyHelper;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.transaction.Transaction;
 import aztech.modern_industrialization.util.Simulation;
+import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -26,7 +28,7 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.machines.component.TransformerTierComponent;
 import net.swedz.extended_industrialization.machines.guicomponent.universaltransformer.UniversalTransformerSlots;
 
-public final class UniversalTransformerMachineBlockEntity extends MachineBlockEntity implements EnergyComponentHolder
+public final class UniversalTransformerMachineBlockEntity extends MachineBlockEntity implements Tickable, EnergyComponentHolder
 {
 	private final RedstoneControlComponent redstoneControl;
 	
@@ -88,6 +90,30 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 	private boolean isExtractableOnOutputDirection()
 	{
 		return transformerFrom.getTier().getEu() < transformerTo.getTier().getEu();
+	}
+	
+	@Override
+	public void tick()
+	{
+		if(level.isClientSide())
+		{
+			return;
+		}
+		
+		if(this.isExtractableOnOutputDirection())
+		{
+			EnergyHelper.autoOutput(this, orientation, transformerTo.getTier(), extractable);
+		}
+		else
+		{
+			for(var direction : Direction.values())
+			{
+				if(direction != orientation.outputDirection)
+				{
+					EnergyHelper.autoOutput(this, direction, transformerTo.getTier(), extractable);
+				}
+			}
+		}
 	}
 	
 	@Override
