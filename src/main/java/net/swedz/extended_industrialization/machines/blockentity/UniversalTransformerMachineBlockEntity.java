@@ -52,7 +52,7 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 		
 		redstoneControl = new RedstoneControlComponent();
 		
-		energy = new EnergyComponent(this, () -> 200 * Math.min(transformerFrom.getTier().getEu(), transformerTo.getTier().getEu()));
+		energy = new EnergyComponent(this, () -> 200 * Math.max(transformerFrom.getTier().getEu(), transformerTo.getTier().getEu()));
 		insertable = energy.buildInsertable(transformerFrom::canInsertEu);
 		extractable = energy.buildExtractable((tier) -> transformerTo.canInsertEu(tier) && redstoneControl.doAllowNormalOperation(this));
 		
