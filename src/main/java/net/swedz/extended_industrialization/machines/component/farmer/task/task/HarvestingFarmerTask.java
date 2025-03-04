@@ -119,20 +119,27 @@ public final class HarvestingFarmerTask extends FarmerTask
 		
 		this.insertDrops(drops, false);
 		
+		BlockState[] oldStates = new BlockState[blockPositions.size()];
+		BlockState[] newStates = new BlockState[blockPositions.size()];
 		BlockState newOriginState = Blocks.AIR.defaultBlockState();
-		for(BlockPos pos : blockPositions)
+		for(int index = 0; index < blockPositions.size(); index++)
 		{
+			var pos = blockPositions.get(index);
+			oldStates[index] = level.getBlockState(pos);
 			BlockState newState = level.getFluidState(pos).createLegacyBlock();
+			newStates[index] = newState;
 			if(pos.equals(origin))
 			{
 				newOriginState = newState;
 			}
 			level.setBlock(pos, newState, Block.UPDATE_NONE, 0);
 		}
-		for(BlockPos pos : blockPositions)
+		for(int index = 0; index < blockPositions.size(); index++)
 		{
-			var state = level.getBlockState(pos);
-			level.sendBlockUpdated(pos, state, state, Block.UPDATE_ALL);
+			var pos = blockPositions.get(index);
+			var oldState = oldStates[index];
+			var newState = newStates[index];
+			level.markAndNotifyBlock(pos, level.getChunkAt(pos), oldState, newState, Block.UPDATE_ALL, Block.UPDATE_LIMIT);
 		}
 		cropBlockEntry.updateState(newOriginState);
 		
