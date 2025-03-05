@@ -212,19 +212,17 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 			return;
 		}
 		
-		if(this.hasNetwork() && this.getNetwork().isTransmitterLoaded())
+		if(this.hasNetwork() && this.getNetwork().isTransmitterLoaded() &&
+		   redstoneControl.doAllowNormalOperation(this))
 		{
 			TeslaNetwork network = this.getNetwork();
 			isActive.updateActive(network.isTransmitterLoaded() && this.checkReceiveFrom(network).isSuccess(), this);
+			
+			EnergyHelper.autoOutput(this, orientation, casing.getCableTier(), extractable);
 		}
 		else
 		{
 			isActive.updateActive(false, this);
-		}
-		
-		if(redstoneControl.doAllowNormalOperation(this))
-		{
-			EnergyHelper.autoOutput(this, orientation, casing.getCableTier(), extractable);
 		}
 	}
 	

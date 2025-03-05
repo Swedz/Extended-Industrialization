@@ -28,6 +28,7 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 	
 	private final MachineBlockEntity machine;
 	private final MIEnergyStorage insertable;
+	private final Supplier<Boolean> canOperate;
 	private final Supplier<CableTier> cableTier;
 	
 	private Optional<WorldPos> networkKey = Optional.empty();
@@ -39,6 +40,7 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 	{
 		this.machine = machine;
 		this.insertable = energyInsertable;
+		this.canOperate = canOperate;
 		this.cableTier = cableTier;
 	}
 	
@@ -113,6 +115,10 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 	@Override
 	public long receiveEnergy(long maxReceive, boolean simulate)
 	{
+		if(!canOperate.get())
+		{
+			return 0;
+		}
 		return insertable.receive(maxReceive, simulate);
 	}
 	
