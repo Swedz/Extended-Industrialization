@@ -106,6 +106,7 @@ public enum EIText implements MICompatibleTranslatableTextEnum
 	PHOTOVOLTAIC_CELL_EU("Will produce up to %s when placed in a Solar Panel."),
 	PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME("Remaining Operation Time: %s"),
 	PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_MINUTES("Remaining Operation Time: %s minute(s)"),
+	PRIORITY("Priority: "),
 	PROCESSING_ARRAY_BATCH_SIZE("Batch size is determined by the amount of machines provided to it."),
 	PROCESSING_ARRAY_EU_COST_MULTIPLIER("Runs at %s the EU cost."),
 	PROCESSING_ARRAY_MACHINE_INPUT("Insert electric crafting machines to run in parallel."),

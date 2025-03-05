@@ -4,31 +4,48 @@ import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import com.google.common.collect.Lists;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
 import net.swedz.tesseract.neoforge.api.WorldPos;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.configurationpanel.ConfigurationPanelBuilder;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
 public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 {
-	private final MachineBlockEntity  machine;
-	private final MIEnergyStorage     insertable;
+	private static final int PRIORITY_RANGE = 16;
+	
+	private final MachineBlockEntity machine;
+	private final MIEnergyStorage insertable;
 	private final Supplier<CableTier> cableTier;
 	
 	private Optional<WorldPos> networkKey = Optional.empty();
 	
-	public TeslaReceiverComponent(MachineBlockEntity machine, MIEnergyStorage energyInsertable, Supplier<Boolean> canOperate, Supplier<CableTier> cableTier)
+	private int priority = 0;
+	
+	public TeslaReceiverComponent(MachineBlockEntity machine, MIEnergyStorage energyInsertable,
+								  Supplier<Boolean> canOperate, Supplier<CableTier> cableTier)
 	{
 		this.machine = machine;
 		this.insertable = energyInsertable;
 		this.cableTier = cableTier;
+	}
+	
+	@Override
+	public int getPriority()
+	{
+		return priority;
 	}
 	
 	@Override
@@ -127,6 +144,32 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 		}
 	}
 	
+	private List<Component> createPriorityTranslations()
+	{
+		List<Component> lines = Lists.newArrayList();
+		for(int priority = -PRIORITY_RANGE; priority <= PRIORITY_RANGE; priority++)
+		{
+			lines.add(EIText.PRIORITY.text().append(Integer.toString(priority)));
+		}
+		return lines;
+	}
+	
+	public void appendSelectionPanel(MachineBlockEntity machine, ConfigurationPanelBuilder builder)
+	{
+		builder.add(
+				this.createPriorityTranslations(), false,
+				(delta) ->
+				{
+					int newPriority = priority + delta;
+					if(newPriority >= -PRIORITY_RANGE && newPriority <= PRIORITY_RANGE)
+					{
+						priority = newPriority;
+					}
+				},
+				() -> priority + PRIORITY_RANGE
+		);
+	}
+	
 	@Override
 	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{
@@ -135,6 +178,8 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 			WorldPos key = this.getNetworkKey();
 			WorldPos.CODEC.encodeStart(NbtOps.INSTANCE, key).result().ifPresent((t) -> tag.put("network_key", t));
 		}
+		
+		tag.putInt("priority", priority);
 	}
 	
 	@Override
@@ -149,6 +194,8 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 		{
 			this.setNetwork(null);
 		}
+		
+		priority = Mth.clamp(tag.getInt("priority"), -PRIORITY_RANGE, PRIORITY_RANGE);
 	}
 	
 	@Override
@@ -163,5 +210,7 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 		{
 			networkKey = Optional.empty();
 		}
+		
+		priority = Mth.clamp(tag.getInt("priority"), -PRIORITY_RANGE, PRIORITY_RANGE);
 	}
 }

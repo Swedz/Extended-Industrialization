@@ -107,6 +107,7 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 				EIText.CONFIGURATION_PANEL_DESCRIPTION.text().withStyle(MITooltips.DEFAULT_STYLE.withItalic(true)),
 				(lineIndex, delta) -> this.sync()
 		);
+		receiver.appendSelectionPanel(this, configPanel);
 		aesthetic.appendSelectionPanel(this, configPanel);
 		this.registerGuiComponent(configPanel.build());
 	}
