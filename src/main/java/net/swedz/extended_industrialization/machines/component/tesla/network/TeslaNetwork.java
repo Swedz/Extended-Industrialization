@@ -2,11 +2,14 @@ package net.swedz.extended_industrialization.machines.component.tesla.network;
 
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.network.transmitter.TeslaTransmitter;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -15,8 +18,8 @@ public final class TeslaNetwork implements MIEnergyStorage, TeslaTransferLimits.
 	private final TeslaNetworkCache cache;
 	private final WorldPos          key;
 	
-	private final Set<TeslaReceiver> loadedReceivers = Sets.newHashSet();
-	private final Set<TeslaReceiver> receivers       = Sets.newHashSet();
+	private final Set<TeslaReceiver>  loadedReceivers = Sets.newHashSet();
+	private final List<TeslaReceiver> receivers       = Lists.newArrayList();
 	
 	private Optional<TeslaTransmitter> transmitter = Optional.empty();
 	
@@ -88,7 +91,10 @@ public final class TeslaNetwork implements MIEnergyStorage, TeslaTransferLimits.
 	{
 		if(this.isTransmitterLoaded() && (receiver.isMobile() || receiver.checkReceiveFrom(this).isSuccess()))
 		{
-			receivers.add(receiver);
+			if(!receivers.contains(receiver))
+			{
+				receivers.add(receiver);
+			}
 		}
 		else
 		{
@@ -138,6 +144,7 @@ public final class TeslaNetwork implements MIEnergyStorage, TeslaTransferLimits.
 		{
 			return 0;
 		}
+		Collections.sort(receivers);
 		long amountReceived = 0;
 		long remaining = maxReceive;
 		for(TeslaReceiver receiver : receivers)

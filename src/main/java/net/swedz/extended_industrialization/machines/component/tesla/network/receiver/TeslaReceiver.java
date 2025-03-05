@@ -6,11 +6,22 @@ import net.swedz.extended_industrialization.machines.component.tesla.network.Tes
 import net.swedz.extended_industrialization.machines.component.tesla.network.transmitter.TeslaTransmitter;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 
-public interface TeslaReceiver extends TeslaNetworkPart
+public interface TeslaReceiver extends TeslaNetworkPart, Comparable<TeslaReceiver>
 {
 	default boolean isMobile()
 	{
 		return false;
+	}
+	
+	default int getPriority()
+	{
+		return 0;
+	}
+	
+	@Override
+	default int compareTo(TeslaReceiver other)
+	{
+		return Integer.compare(other.getPriority(), this.getPriority());
 	}
 	
 	default TeslaReceiverState checkReceiveFrom(TeslaNetwork network)
