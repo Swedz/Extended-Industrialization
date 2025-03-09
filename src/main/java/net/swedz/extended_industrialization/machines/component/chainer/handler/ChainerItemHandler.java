@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.machines.component.chainer.handler;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
@@ -30,6 +31,7 @@ public final class ChainerItemHandler extends SlotChainerHandler<IItemHandler> i
 		}
 		
 		this.wrappers = Collections.unmodifiableList(wrappers);
+		this.wrappersSlotMap = Maps.newConcurrentMap();
 		this.slots = slots;
 	}
 	
@@ -42,7 +44,8 @@ public final class ChainerItemHandler extends SlotChainerHandler<IItemHandler> i
 	@Override
 	public ItemStack getStackInSlot(int slot)
 	{
-		return this.getWrapper(slot).map((wrapper) -> wrapper.handler().getStackInSlot(wrapper.toLocalSlot(slot))).orElse(ItemStack.EMPTY);
+		var wrapper = this.getWrapper(slot);
+		return wrapper != null ? wrapper.handler().getStackInSlot(wrapper.toLocalSlot(slot)) : ItemStack.EMPTY;
 	}
 	
 	@Override
@@ -52,7 +55,8 @@ public final class ChainerItemHandler extends SlotChainerHandler<IItemHandler> i
 		{
 			return stack;
 		}
-		return this.getWrapper(slot).map((wrapper) -> wrapper.handler().insertItem(wrapper.toLocalSlot(slot), stack, simulate)).orElse(stack);
+		var wrapper = this.getWrapper(slot);
+		return wrapper != null ? wrapper.handler().insertItem(wrapper.toLocalSlot(slot), stack, simulate) : stack;
 	}
 	
 	@Override
@@ -62,18 +66,21 @@ public final class ChainerItemHandler extends SlotChainerHandler<IItemHandler> i
 		{
 			return ItemStack.EMPTY;
 		}
-		return this.getWrapper(slot).map((wrapper) -> wrapper.handler().extractItem(wrapper.toLocalSlot(slot), amount, simulate)).orElse(ItemStack.EMPTY);
+		var wrapper = this.getWrapper(slot);
+		return wrapper != null ? wrapper.handler().extractItem(wrapper.toLocalSlot(slot), amount, simulate) : ItemStack.EMPTY;
 	}
 	
 	@Override
 	public int getSlotLimit(int slot)
 	{
-		return this.getWrapper(slot).map((wrapper) -> wrapper.handler().getSlotLimit(wrapper.toLocalSlot(slot))).orElse(0);
+		var wrapper = this.getWrapper(slot);
+		return wrapper != null ? wrapper.handler().getSlotLimit(wrapper.toLocalSlot(slot)) : 0;
 	}
 	
 	@Override
 	public boolean isItemValid(int slot, ItemStack stack)
 	{
-		return this.getWrapper(slot).map((wrapper) -> wrapper.handler().isItemValid(wrapper.toLocalSlot(slot), stack)).orElse(false);
+		var wrapper = this.getWrapper(slot);
+		return wrapper != null && wrapper.handler().isItemValid(wrapper.toLocalSlot(slot), stack);
 	}
 }
