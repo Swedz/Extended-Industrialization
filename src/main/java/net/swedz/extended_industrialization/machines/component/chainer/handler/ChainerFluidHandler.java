@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.machines.component.chainer.handler;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -31,6 +32,7 @@ public final class ChainerFluidHandler extends SlotChainerHandler<IFluidHandler>
 		}
 		
 		this.wrappers = Collections.unmodifiableList(wrappers);
+		this.wrappersSlotMap = Maps.newConcurrentMap();
 		this.slots = slots;
 	}
 	
@@ -43,19 +45,22 @@ public final class ChainerFluidHandler extends SlotChainerHandler<IFluidHandler>
 	@Override
 	public FluidStack getFluidInTank(int tank)
 	{
-		return this.getWrapper(tank).map((wrapper) -> wrapper.handler().getFluidInTank(wrapper.toLocalSlot(tank))).orElse(FluidStack.EMPTY);
+		var wrapper = this.getWrapper(tank);
+		return wrapper != null ? wrapper.handler().getFluidInTank(wrapper.toLocalSlot(tank)) : FluidStack.EMPTY;
 	}
 	
 	@Override
 	public int getTankCapacity(int tank)
 	{
-		return this.getWrapper(tank).map((wrapper) -> wrapper.handler().getTankCapacity(wrapper.toLocalSlot(tank))).orElse(0);
+		var wrapper = this.getWrapper(tank);
+		return wrapper != null ? wrapper.handler().getTankCapacity(wrapper.toLocalSlot(tank)) : 0;
 	}
 	
 	@Override
 	public boolean isFluidValid(int tank, FluidStack stack)
 	{
-		return this.getWrapper(tank).map((wrapper) -> wrapper.handler().isFluidValid(wrapper.toLocalSlot(tank), stack)).orElse(false);
+		var wrapper = this.getWrapper(tank);
+		return wrapper != null && wrapper.handler().isFluidValid(wrapper.toLocalSlot(tank), stack);
 	}
 	
 	@Override

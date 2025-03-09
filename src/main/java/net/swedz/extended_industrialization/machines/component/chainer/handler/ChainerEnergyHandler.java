@@ -3,6 +3,7 @@ package net.swedz.extended_industrialization.machines.component.chainer.handler;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 import net.swedz.extended_industrialization.machines.component.chainer.wrapper.InventoryWrapper;
 
@@ -30,6 +31,7 @@ public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, 
 		}
 		
 		this.wrappers = Collections.unmodifiableList(wrappers);
+		this.wrappersSlotMap = Maps.newConcurrentMap();
 	}
 	
 	@Override
