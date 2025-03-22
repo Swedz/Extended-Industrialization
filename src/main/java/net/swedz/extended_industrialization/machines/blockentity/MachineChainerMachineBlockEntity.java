@@ -1,10 +1,13 @@
 package net.swedz.extended_industrialization.machines.blockentity;
 
 import aztech.modern_industrialization.MICapabilities;
+import aztech.modern_industrialization.api.energy.CableTier;
+import aztech.modern_industrialization.api.energy.CableTierHolder;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.machines.components.CasingComponent;
 import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
@@ -12,6 +15,10 @@ import aztech.modern_industrialization.machines.guicomponents.AutoExtract;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -27,9 +34,10 @@ import net.swedz.tesseract.neoforge.helper.transfer.ItemTransferCache;
 import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
 import static net.swedz.tesseract.neoforge.tooltip.Parser.*;
 
-public final class MachineChainerMachineBlockEntity extends MachineBlockEntity implements Tickable
+public final class MachineChainerMachineBlockEntity extends MachineBlockEntity implements Tickable, CableTierHolder
 {
 	private final RedstoneControlComponent redstoneControl;
+	private final CasingComponent          casing;
 	
 	private final ChainerComponent chainer;
 	
@@ -59,12 +67,15 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 				() -> redstoneControl.doAllowNormalOperation(this)
 		);
 		
+		casing = new CasingComponent((from, to) -> chainer.invalidate());
+		
 		transferItem = new ItemTransferCache(chainer::itemHandler);
 		transferFluid = new FluidTransferCache(chainer::fluidHandler);
 		transferEnergy = new MIEnergyTransferCache(chainer::extractableEnergyHandler);
 		
 		this.registerGuiComponent(new SlotPanel.Server(this)
-				.withRedstoneControl(redstoneControl));
+				.withRedstoneControl(redstoneControl)
+				.withCasing(casing));
 		
 		this.registerGuiComponent(new AutoExtract.Server(orientation));
 		
@@ -82,7 +93,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			}
 		}));
 		
-		this.registerComponents(chainer, redstoneControl);
+		this.registerComponents(chainer, redstoneControl, casing);
 	}
 	
 	public ChainerComponent getChainerComponent()
@@ -121,6 +132,12 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	}
 	
 	@Override
+	public CableTier getCableTier()
+	{
+		return casing.getCableTier();
+	}
+	
+	@Override
 	public MIInventory getInventory()
 	{
 		return MIInventory.EMPTY;
@@ -129,7 +146,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	@Override
 	protected MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData();
+		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
 		orientation.writeModelData(data);
 		return data;
 	}
@@ -185,7 +202,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			{
 				transferFluid.autoExtract(level, worldPosition, orientation.outputDirection);
 			}
-			if(transferEnergy.autoExtract(level, worldPosition, orientation.outputDirection))
+			if(transferEnergy.autoExtract(level, worldPosition, orientation.outputDirection, this.getCableTier()))
 			{
 				this.setChanged();
 			}
@@ -196,6 +213,21 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			EI.LOGGER.warn("Prevented Machine Chainer in dimension '{}' at ({}) from rebuilding links {} times in the same tick!", level.dimension().location(), worldPosition.toShortString(), rebuildsThisTick);
 		}
 		rebuildsThisTick = 0;
+	}
+	
+	@Override
+	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
+	{
+		ItemInteractionResult result = super.useItemOn(player, hand, face);
+		if(!result.consumesAction())
+		{
+			result = redstoneControl.onUse(this, player, hand);
+		}
+		if(!result.consumesAction())
+		{
+			result = casing.onUse(this, player, hand);
+		}
+		return result;
 	}
 	
 	public static void registerCapabilities(BlockEntityType<?> bet)
