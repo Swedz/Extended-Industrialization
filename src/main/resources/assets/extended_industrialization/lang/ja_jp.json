@@ -241,7 +241,7 @@
   "text.extended_industrialization.processing_array_batch_size": "バッチサイズは提供される機械の数によって決まる。",
   "text.extended_industrialization.processing_array_eu_cost_multiplier": "%s のEUコストで動作する。",
   "text.extended_industrialization.processing_array_machine_input": "電動機械を挿入して並列処理を行う。",
-  "text.extended_industrialization.processing_array_recipe": "任意の単一の電動機械が提供するレシピをバッチ処理で実行できる。。",
+  "text.extended_industrialization.processing_array_recipe": "任意の単一の電動機械が提供するレシピをバッチ処理で実行できる。",
   "text.extended_industrialization.processing_array_size": "機械数: %d",
   "text.extended_industrialization.rainbow": "レインボー",
   "text.extended_industrialization.robot_auto_feeder_help_1": "インベントリから缶詰の食料を自動的に取り出して食べさせる。",
