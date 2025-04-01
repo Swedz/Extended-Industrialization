@@ -35,6 +35,11 @@ public final class EITags
 		}
 	}
 	
+	public static final class Fluids
+	{
+		public static final TagKey<Fluid> HONEY = fluidCommon("honey");
+	}
+	
 	public static final class Blocks
 	{
 		public static final TagKey<Block> FARMER_DIRT              = block("farmer_dirt");
@@ -64,6 +69,11 @@ public final class EITags
 	public static TagKey<Fluid> fluid(String path)
 	{
 		return TagKey.create(BuiltInRegistries.FLUID.key(), EI.id(path));
+	}
+	
+	public static TagKey<Fluid> fluidCommon(String path)
+	{
+		return TagKey.create(BuiltInRegistries.FLUID.key(), ResourceLocation.fromNamespaceAndPath("c", path));
 	}
 	
 	public static TagKey<Block> block(String path)

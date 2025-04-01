@@ -23,7 +23,7 @@ public final class VanillaCompatRecipesServerDatagenProvider extends RecipesServ
 				"vanilla_recipes/mixer/waxing_with_honey", BuiltInRegistries.ITEM.getKey(from).getPath(), MIMachineRecipeTypes.MIXER,
 				2, 5 * 20,
 				(r) -> r
-						.addFluidInput(EIFluids.HONEY, 1)
+						.addFluidInput(EITags.Fluids.HONEY, 1)
 						.addItemInput(from, 1)
 						.addItemOutput(to, 1),
 				output
@@ -46,7 +46,7 @@ public final class VanillaCompatRecipesServerDatagenProvider extends RecipesServ
 				"vanilla_recipes/blast_furnace", "crystallized_honey", MIMachineRecipeTypes.BLAST_FURNACE,
 				2, 10 * 20,
 				(r) -> r
-						.addFluidInput(EIFluids.HONEY, 250)
+						.addFluidInput(EITags.Fluids.HONEY, 250)
 						.addItemOutput(EIItems.CRYSTALLIZED_HONEY, 3),
 				output
 		);
@@ -91,7 +91,7 @@ public final class VanillaCompatRecipesServerDatagenProvider extends RecipesServ
 				"vanilla_recipes/vacuum_freezer", "honey_block", MIMachineRecipeTypes.VACUUM_FREEZER,
 				16, 10 * 20,
 				(r) -> r
-						.addFluidInput(EIFluids.HONEY, 1000)
+						.addFluidInput(EITags.Fluids.HONEY, 1000)
 						.addItemOutput(Items.HONEY_BLOCK, 1),
 				output
 		);
