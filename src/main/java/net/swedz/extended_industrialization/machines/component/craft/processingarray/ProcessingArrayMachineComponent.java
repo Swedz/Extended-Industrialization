@@ -10,8 +10,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.machines.guicomponent.processingarraymachineslot.ProcessingArrayMachineSlot;
+import net.swedz.tesseract.neoforge.compat.mi.api.ComponentStackHolder;
 
-public final class ProcessingArrayMachineComponent implements IComponent.ServerOnly, DropableComponent
+public final class ProcessingArrayMachineComponent implements IComponent.ServerOnly, DropableComponent, ComponentStackHolder
 {
 	public static final ResourceLocation ID = EI.id("processing_array_machine");
 	
@@ -41,8 +42,7 @@ public final class ProcessingArrayMachineComponent implements IComponent.ServerO
 	
 	public void setMachines(MachineBlockEntity be, ItemStack machines)
 	{
-		this.machines = machines;
-		this.machineRecipeType = machines.isEmpty() ? null : ProcessingArrayMachineSlot.getMachine(machines).recipeType();
+		this.setStack(machines);
 		be.setChanged();
 		be.sync();
 	}
@@ -67,5 +67,18 @@ public final class ProcessingArrayMachineComponent implements IComponent.ServerO
 	public ItemStack getDrop()
 	{
 		return machines;
+	}
+	
+	@Override
+	public ItemStack getStack()
+	{
+		return machines;
+	}
+	
+	@Override
+	public void setStack(ItemStack stack)
+	{
+		machines = stack;
+		machineRecipeType = machines.isEmpty() ? null : ProcessingArrayMachineSlot.getMachine(machines).recipeType();
 	}
 }
