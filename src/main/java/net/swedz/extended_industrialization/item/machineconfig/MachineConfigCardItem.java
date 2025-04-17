@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.item.machineconfig;
 
 import aztech.modern_industrialization.machines.MachineBlockEntity;
-import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBlockEntity;
 import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -49,8 +48,7 @@ public final class MachineConfigCardItem extends Item
 				MachineConfig config = offhand.get(EIComponents.MACHINE_CONFIG);
 				
 				BlockEntity blockEntity = event.getLevel().getBlockEntity(event.getPos());
-				if(blockEntity instanceof MachineBlockEntity machine &&
-				   !(blockEntity instanceof MultiblockMachineBlockEntity))
+				if(blockEntity instanceof MachineBlockEntity machine)
 				{
 					if(config.apply(player, machine, Simulation.SIMULATE))
 					{
@@ -75,8 +73,7 @@ public final class MachineConfigCardItem extends Item
 			InteractionHand usedHand = context.getHand();
 			ItemStack itemStack = player.getItemInHand(usedHand);
 			BlockEntity hitBlockEntity = context.getLevel().getBlockEntity(context.getClickedPos());
-			if(hitBlockEntity instanceof MachineBlockEntity machine &&
-			   !(hitBlockEntity instanceof MultiblockMachineBlockEntity))
+			if(hitBlockEntity instanceof MachineBlockEntity machine)
 			{
 				if(!context.getLevel().isClientSide())
 				{
