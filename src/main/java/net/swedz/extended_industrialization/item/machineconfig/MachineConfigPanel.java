@@ -19,12 +19,14 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.machines.component.craft.processingarray.ProcessingArrayMachineComponent;
+import net.swedz.extended_industrialization.machines.component.enchantmentmodule.EnchantmentModuleComponent;
 import net.swedz.extended_industrialization.machines.guicomponent.processingarraymachineslot.ProcessingArrayMachineSlot;
 import net.swedz.tesseract.neoforge.compat.mi.api.ComponentStackHolder;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 public record MachineConfigPanel(
 		Map<String, ItemStack> slotItems
@@ -70,38 +72,13 @@ public record MachineConfigPanel(
 	static
 	{
 		register("redstone_module", RedstoneControlComponent.class, (player, target, component, holder, slotItem, item, simulation) ->
-		{
-			ItemStack componentItem = holder.getStack();
-			if(MIItem.REDSTONE_CONTROL_MODULE.is(item))
-			{
-				if(simulation.isActing())
-				{
-					ItemStack insertItem;
-					if(componentItem.isEmpty())
-					{
-						insertItem = item.copyWithCount(1);
-						item.consume(1, player);
-					}
-					else
-					{
-						insertItem = componentItem.copy();
-					}
-					RedstoneControlModuleItem.setRequiresLowSignal(insertItem, RedstoneControlModuleItem.isRequiresLowSignal(slotItem));
-					holder.setStack(insertItem);
-				}
-				return true;
-			}
-			return false;
-		});
+				MIItem.REDSTONE_CONTROL_MODULE.is(item) && ComponentTypeHandler.insertSingle(
+						player, holder, slotItem, item, simulation,
+						(insert) -> RedstoneControlModuleItem.setRequiresLowSignal(insert, RedstoneControlModuleItem.isRequiresLowSignal(slotItem))
+				));
 		
 		register("upgrades", UpgradeComponent.class, (player, target, component, holder, slotItem, item, simulation) ->
-		{
-			if(UpgradeComponent.getExtraEu(item.getItem()) > 0)
-			{
-				return ComponentTypeHandler.insertStack(player, target, holder, slotItem, item, simulation);
-			}
-			return false;
-		});
+				UpgradeComponent.getExtraEu(item.getItem()) > 0 && ComponentTypeHandler.insertStack(player, target, holder, slotItem, item, simulation));
 		
 		register("casings", CasingComponent.class, (player, target, component, holder, slotItem, item, simulation) ->
 		{
@@ -128,37 +105,13 @@ public record MachineConfigPanel(
 		});
 		
 		register("overdrive_module", OverdriveComponent.class, (player, target, component, holder, slotItem, item, simulation) ->
-		{
-			ItemStack componentItem = holder.getStack();
-			if(MIItem.OVERDRIVE_MODULE.is(item))
-			{
-				if(simulation.isActing())
-				{
-					ItemStack insertItem;
-					if(componentItem.isEmpty())
-					{
-						insertItem = item.copyWithCount(1);
-						item.consume(1, player);
-					}
-					else
-					{
-						insertItem = componentItem.copy();
-					}
-					holder.setStack(insertItem);
-				}
-				return true;
-			}
-			return false;
-		});
+				MIItem.OVERDRIVE_MODULE.is(item) && ComponentTypeHandler.insertStack(player, target, holder, slotItem, item, simulation));
 		
 		register("processing_array_machines", ProcessingArrayMachineComponent.class, (player, target, component, holder, slotItem, item, simulation) ->
-		{
-			if(ProcessingArrayMachineSlot.isMachine(item))
-			{
-				return ComponentTypeHandler.insertStack(player, target, holder, slotItem, item, simulation);
-			}
-			return false;
-		});
+				ProcessingArrayMachineSlot.isMachine(item) && ComponentTypeHandler.insertStack(player, target, holder, slotItem, item, simulation));
+		
+		register("enchantment_module", EnchantmentModuleComponent.class, (player, target, component, holder, slotItem, item, simulation) ->
+				component.is(item) && ComponentTypeHandler.insertSingle(player, holder, slotItem, item, simulation));
 	}
 	
 	private record RegisteredComponentType<T>(Class<T> componentType, ComponentTypeHandler<T> handler)
@@ -177,6 +130,35 @@ public record MachineConfigPanel(
 					blockPos.getX(), blockPos.getY(), blockPos.getZ(),
 					stack
 			);
+		}
+		
+		static boolean insertSingle(Player player, ComponentStackHolder holder, ItemStack slotItem, ItemStack item, Simulation simulation, Consumer<ItemStack> itemMutator)
+		{
+			if(simulation.isActing())
+			{
+				ItemStack componentItem = holder.getStack();
+				ItemStack insertItem;
+				if(componentItem.isEmpty())
+				{
+					insertItem = item.copyWithCount(1);
+					item.consume(1, player);
+				}
+				else
+				{
+					insertItem = componentItem.copy();
+				}
+				if(itemMutator != null)
+				{
+					itemMutator.accept(insertItem);
+				}
+				holder.setStack(insertItem);
+			}
+			return true;
+		}
+		
+		static boolean insertSingle(Player player, ComponentStackHolder holder, ItemStack slotItem, ItemStack item, Simulation simulation)
+		{
+			return insertSingle(player, holder, slotItem, item, simulation, null);
 		}
 		
 		static boolean insertStack(Player player, MachineBlockEntity target, ComponentStackHolder holder, ItemStack slotItem, ItemStack item, Simulation simulation)

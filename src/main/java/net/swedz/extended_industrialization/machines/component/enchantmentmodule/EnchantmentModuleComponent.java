@@ -28,6 +28,11 @@ public final class EnchantmentModuleComponent extends SimpleItemStackComponent
 		this(tag, null);
 	}
 	
+	public boolean is(ItemStack stack)
+	{
+		return stack.is(tag);
+	}
+	
 	public Optional<EnchantmentModule> getActiveEnchantment()
 	{
 		return Optional.ofNullable(EnchantmentModule.getFor(stack.getItem()));
@@ -41,7 +46,7 @@ public final class EnchantmentModuleComponent extends SimpleItemStackComponent
 	public ItemInteractionResult onUse(MachineBlockEntity blockEntity, Player player, InteractionHand hand)
 	{
 		ItemStack stack = player.getItemInHand(hand);
-		if(!stack.is(tag))
+		if(!this.is(stack))
 		{
 			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 		}
