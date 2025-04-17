@@ -98,7 +98,7 @@ public record MachineConfigPanel(
 		{
 			if(UpgradeComponent.getExtraEu(item.getItem()) > 0)
 			{
-				return ComponentTypeHandler.multiInsert(player, target, holder, slotItem, item, simulation);
+				return ComponentTypeHandler.insertStack(player, target, holder, slotItem, item, simulation);
 			}
 			return false;
 		});
@@ -155,7 +155,7 @@ public record MachineConfigPanel(
 		{
 			if(ProcessingArrayMachineSlot.isMachine(item))
 			{
-				return ComponentTypeHandler.multiInsert(player, target, holder, slotItem, item, simulation);
+				return ComponentTypeHandler.insertStack(player, target, holder, slotItem, item, simulation);
 			}
 			return false;
 		});
@@ -179,7 +179,7 @@ public record MachineConfigPanel(
 			);
 		}
 		
-		static boolean multiInsert(Player player, MachineBlockEntity target, ComponentStackHolder holder, ItemStack slotItem, ItemStack item, Simulation simulation)
+		static boolean insertStack(Player player, MachineBlockEntity target, ComponentStackHolder holder, ItemStack slotItem, ItemStack item, Simulation simulation)
 		{
 			int desiredCount = slotItem.getCount();
 			ItemStack componentItem = holder.getStack();
