@@ -59,7 +59,8 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 	private void addEnchantmentModuleTags()
 	{
 		this.tag(EITags.Items.EnchantmentModules.FARMER)
-				.add(EIItems.SILK_TOUCH_MODULE.asItem());
+				.add(EIItems.SILK_TOUCH_MODULE.asItem())
+				.add(EIItems.LOOTING_MODULE.asItem());
 		
 		this.tag(EITags.Items.EnchantmentModules.LETHAL_TESLA_COIL)
 				.add(EIItems.LOOTING_MODULE.asItem());
