@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.item.machineconfig;
 
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBlockEntity;
 import aztech.modern_industrialization.util.Simulation;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -13,11 +14,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
+import java.util.Optional;
+
 public record MachineConfig(
 		Block machineBlock,
 		MachineConfigSlots slots,
 		MachineConfigOrientation orientation,
-		MachineConfigPanel panel
+		MachineConfigPanel panel,
+		Optional<MachineConfigActiveShape> activeShape
 ) implements MachineConfigApplicable<MachineBlockEntity>
 {
 	public static final Codec<MachineConfig> CODEC = RecordCodecBuilder.create((instance) -> instance
@@ -25,7 +29,8 @@ public record MachineConfig(
 					CodecHelper.forRegistry(BuiltInRegistries.BLOCK).fieldOf("machine_block").forGetter(MachineConfig::machineBlock),
 					MachineConfigSlots.CODEC.fieldOf("slots").forGetter(MachineConfig::slots),
 					MachineConfigOrientation.CODEC.fieldOf("orientation").forGetter(MachineConfig::orientation),
-					MachineConfigPanel.CODEC.fieldOf("panel").forGetter(MachineConfig::panel)
+					MachineConfigPanel.CODEC.fieldOf("panel").forGetter(MachineConfig::panel),
+					MachineConfigActiveShape.CODEC.optionalFieldOf("active_shape").forGetter(MachineConfig::activeShape)
 			)
 			.apply(instance, MachineConfig::new));
 	
@@ -37,7 +42,8 @@ public record MachineConfig(
 				machine.getBlockState().getBlock(),
 				MachineConfigSlots.from(machine),
 				MachineConfigOrientation.from(machine.orientation),
-				MachineConfigPanel.from(machine)
+				MachineConfigPanel.from(machine),
+				MachineConfigActiveShape.from(machine)
 		);
 	}
 	
@@ -59,6 +65,7 @@ public record MachineConfig(
 		   orientation.apply(player, target.orientation, simulation))
 		{
 			panel.apply(player, target, simulation);
+			activeShape.ifPresent((activeShape) -> activeShape.apply(player, target, simulation));
 			if(simulation.isActing())
 			{
 				target.invalidateCapabilities();
@@ -66,6 +73,10 @@ public record MachineConfig(
 				target.setChanged();
 				if(!target.getLevel().isClientSide())
 				{
+					if(target instanceof MultiblockMachineBlockEntity multiblockTarget)
+					{
+						multiblockTarget.unlink();
+					}
 					target.sync();
 				}
 			}

@@ -10,6 +10,7 @@
         "RemoveRainbowWhenDyeingMixin",
         "TeslaNetworkHolderMinecraftServerMixin",
         "TeslaNetworkReceiversPlayerMixin",
+        "mi.accessor.ActiveShapeComponentAccessor",
         "mi.accessor.ConfigurableItemStackAccessor"
     ],
     "client": [
