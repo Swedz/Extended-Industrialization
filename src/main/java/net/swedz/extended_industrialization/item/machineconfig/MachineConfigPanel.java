@@ -40,7 +40,8 @@ public record MachineConfigPanel(
 	private static Map<Class<?>, String>                REGISTERED_COMPONENT_TYPES_BY_TYPE = Maps.newHashMap();
 	
 	/**
-	 * Register a component for slot handling. Use this if you have custom component types that hold items you want supported by the machine config card. All component types to be registered should be registered on startup.
+	 * Register a component for slot handling. Use this if you have custom component types that hold items you want
+	 * supported by the machine config card. All component types to be registered should be registered on startup.
 	 *
 	 * @param key           the unique string key used in the config card item component
 	 * @param componentType the machine component type to register for
