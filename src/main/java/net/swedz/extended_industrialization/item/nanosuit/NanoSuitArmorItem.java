@@ -19,7 +19,6 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.neoforged.neoforge.common.NeoForgeMod;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIArmorMaterials;
 import net.swedz.extended_industrialization.item.ElectricArmorItem;
@@ -127,18 +126,6 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 					),
 					EquipmentSlotGroup.bySlot(this.getEquipmentSlot())
 			);
-			if(type == Type.CHESTPLATE)
-			{
-				modifiers = modifiers.withModifierAdded(
-						NeoForgeMod.CREATIVE_FLIGHT,
-						new AttributeModifier(
-								EI.id("nano_quantum_flight"),
-								1,
-								AttributeModifier.Operation.ADD_VALUE
-						),
-						EquipmentSlotGroup.CHEST
-				);
-			}
 		}
 		return modifiers;
 	}
