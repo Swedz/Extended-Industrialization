@@ -74,7 +74,7 @@ public final class EIItems
 	public static final ItemHolder<NanoSuitArmorItem> NANO_LEGGINGS           = createNanosuitArmor("nano_leggings", "Nano Leggings", ArmorItem.Type.LEGGINGS, NanoSuitAbility.SPEED).register();
 	public static final ItemHolder<NanoSuitArmorItem> NANO_BOOTS              = createNanosuitArmor("nano_boots", "Nano Boots", ArmorItem.Type.BOOTS, NanoSuitAbility.STEP).register();
 	public static final ItemHolder<NanoSuitArmorItem> NANO_QUANTUM_HELMET     = createNanosuitArmor("nano_quantum_helmet", "Quantum Nano Helmet", ArmorItem.Type.HELMET, EIArmorMaterials.NANO_QUANTUM, NanoSuitAbility.NIGHT_VISION).register();
-	public static final ItemHolder<NanoSuitArmorItem> NANO_QUANTUM_CHESTPLATE = createNanosuitArmor("nano_quantum_chestplate", "Quantum Nano Chestplate", ArmorItem.Type.CHESTPLATE, EIArmorMaterials.NANO_QUANTUM).register();
+	public static final ItemHolder<NanoSuitArmorItem> NANO_QUANTUM_CHESTPLATE = createNanosuitArmor("nano_quantum_chestplate", "Quantum Nano Chestplate", ArmorItem.Type.CHESTPLATE, EIArmorMaterials.NANO_QUANTUM, NanoSuitAbility.QUANTUM_FLIGHT).register();
 	public static final ItemHolder<NanoSuitArmorItem> NANO_QUANTUM_LEGGINGS   = createNanosuitArmor("nano_quantum_leggings", "Quantum Nano Leggings", ArmorItem.Type.LEGGINGS, EIArmorMaterials.NANO_QUANTUM, NanoSuitAbility.SPEED).register();
 	public static final ItemHolder<NanoSuitArmorItem> NANO_QUANTUM_BOOTS      = createNanosuitArmor("nano_quantum_boots", "Quantum Nano Boots", ArmorItem.Type.BOOTS, EIArmorMaterials.NANO_QUANTUM, NanoSuitAbility.STEP).register();
 	

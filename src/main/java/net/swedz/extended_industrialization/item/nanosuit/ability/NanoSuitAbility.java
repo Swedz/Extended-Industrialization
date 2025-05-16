@@ -17,6 +17,7 @@ import java.util.Optional;
 
 public interface NanoSuitAbility
 {
+	NanoSuitQuantumFlightAbility   QUANTUM_FLIGHT  = new NanoSuitQuantumFlightAbility();
 	NanoSuitGravichestplateAbility GRAVICHESTPLATE = new NanoSuitGravichestplateAbility();
 	NanoSuitNightVisionAbility     NIGHT_VISION    = new NanoSuitNightVisionAbility();
 	NanoSuitSpeedAbility           SPEED           = new NanoSuitSpeedAbility();
