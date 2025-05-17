@@ -40,8 +40,8 @@ public final class ChainerComponent implements IComponent, ChainerElement
 		
 		this.itemHandler = new ChainerItemHandler(links);
 		this.fluidHandler = new ChainerFluidHandler(links);
-		this.insertableEnergyHandler = new ChainerEnergyHandler(links, true);
-		this.extractableEnergyHandler = new ChainerEnergyHandler(links, false);
+		this.insertableEnergyHandler = new ChainerEnergyHandler(links, machine::getCableTier, true);
+		this.extractableEnergyHandler = new ChainerEnergyHandler(links, machine::getCableTier, false);
 		
 		this.listenerNeighborNotify = (event) ->
 		{

@@ -9,14 +9,17 @@ import net.swedz.extended_industrialization.machines.component.chainer.wrapper.I
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, InventoryWrapper<MIEnergyStorage>> implements MIEnergyStorage
 {
-	private final boolean insertable;
+	private final Supplier<CableTier> cableTier;
+	private final boolean             insertable;
 	
-	public ChainerEnergyHandler(ChainerLinks chainerLinks, boolean insertable)
+	public ChainerEnergyHandler(ChainerLinks chainerLinks, Supplier<CableTier> cableTier, boolean insertable)
 	{
 		super(chainerLinks);
+		this.cableTier = cableTier;
 		this.insertable = insertable;
 	}
 	
@@ -27,7 +30,10 @@ public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, 
 		
 		for(MIEnergyStorage handler : this.getMachineLinks().energyHandlers())
 		{
-			wrappers.add(new InventoryWrapper<>(handler));
+			if(handler.canConnect(cableTier.get()))
+			{
+				wrappers.add(new InventoryWrapper<>(handler));
+			}
 		}
 		
 		this.wrappers = Collections.unmodifiableList(wrappers);
@@ -97,8 +103,8 @@ public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, 
 	}
 	
 	@Override
-	public boolean canConnect(CableTier cableTier)
+	public boolean canConnect(CableTier other)
 	{
-		return true;
+		return cableTier.get() == other;
 	}
 }

@@ -484,7 +484,6 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 	{
 		new MachineRecipeBuilder(MIMachineRecipeTypes.ASSEMBLER, 8, 10 * 20)
 				.addItemInput(MIBlock.ADVANCED_MACHINE_HULL, 1)
-				.addItemInput("extended_industrialization:universal_transformer", 2)
 				.addItemInput(MIItem.LARGE_MOTOR, 2)
 				.addItemInput(MIItem.LARGE_PUMP, 2)
 				.addItemInput(MITags.ITEM_PIPES, 64)

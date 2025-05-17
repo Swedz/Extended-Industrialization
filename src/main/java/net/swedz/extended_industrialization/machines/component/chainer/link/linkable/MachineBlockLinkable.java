@@ -45,7 +45,7 @@ public final class MachineBlockLinkable implements ChainerLinkable
 			@Override
 			public boolean canConnect(CableTier cableTier)
 			{
-				return true;
+				return input != null ? input.canConnect(cableTier) : output.canConnect(cableTier);
 			}
 			
 			@Override
