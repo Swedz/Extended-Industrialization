@@ -230,10 +230,11 @@ public final class MachineChainerHighlightRenderer extends MachineChainerBlockEn
 			
 			matrices.pushPose();
 			
+			float stepAmount = 0.52f;
 			matrices.translate(
-					(float) center.x() + (renderDirection.getStepX() * 0.51f),
-					(float) center.y() + (renderDirection.getStepY() * 0.51f),
-					(float) center.z() + (renderDirection.getStepZ() * 0.51f)
+					(float) center.x() + (renderDirection.getStepX() * stepAmount),
+					(float) center.y() + (renderDirection.getStepY() * stepAmount),
+					(float) center.z() + (renderDirection.getStepZ() * stepAmount)
 			);
 			matrices.translate(-0.005, -0.005, -0.005);
 			matrices.scale(0.03f, 0.03f, 0.03f);
