@@ -55,7 +55,10 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 				remainingItemStack = foodItemStack.getCraftingRemainingItem();
 			}
 		}
-		recipe.addItemOutput(remainingItemStack.getItem(), remainingItemStack.getCount());
+		if(!remainingItemStack.isEmpty())
+		{
+			recipe.addItemOutput(remainingItemStack.getItem(), remainingItemStack.getCount());
+		}
 		
 		return new RecipeHolder<>(id, (MachineRecipe) recipe.convert());
 	}
