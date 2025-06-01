@@ -26,7 +26,7 @@ public final class TaggedLinkable implements ChainerLinkable
 		{
 			return LinkResult.success();
 		}
-		else
+		else if(context.hasBlockEntity())
 		{
 			IItemHandler itemHandler = context.level().getCapability(Capabilities.ItemHandler.BLOCK, context.pos(), context.blockState(), context.blockEntity(), null);
 			IFluidHandler fluidHandler = context.level().getCapability(Capabilities.FluidHandler.BLOCK, context.pos(), context.blockState(), context.blockEntity(), null);
@@ -35,7 +35,7 @@ public final class TaggedLinkable implements ChainerLinkable
 			{
 				return LinkResult.success(itemHandler, fluidHandler, energyHandler);
 			}
-			return LinkResult.fail(false);
 		}
+		return LinkResult.fail(false);
 	}
 }
