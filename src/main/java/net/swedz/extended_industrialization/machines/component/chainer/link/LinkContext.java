@@ -1,6 +1,5 @@
 package net.swedz.extended_industrialization.machines.component.chainer.link;
 
-import aztech.modern_industrialization.machines.MachineBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -52,16 +51,11 @@ public final class LinkContext
 		if(itemStack.getItem() instanceof BlockItem blockItem)
 		{
 			Block block = blockItem.getBlock();
-			BlockEntity blockEntity = null;
-			if(block instanceof MachineBlock machineBlock)
-			{
-				blockEntity = machineBlock.getBlockEntityInstance();
-			}
 			context = new LinkContext(
 					links,
 					BlockPos.ZERO,
 					Optional.of(block.defaultBlockState()),
-					Optional.ofNullable(blockEntity),
+					Optional.empty(),
 					Optional.of(itemStack)
 			);
 		}

@@ -89,9 +89,11 @@ public final class MachineBlockLinkable implements ChainerLinkable
 	@Override
 	public LinkResult test(LinkContext context)
 	{
-		Direction outputDirection = null;
-		
-		if(!context.hasItemStack() && context.hasBlockEntity())
+		if(context.hasItemStack())
+		{
+			return LinkResult.success();
+		}
+		else if(context.hasBlockEntity())
 		{
 			if(context.blockEntity() instanceof MachineChainerMachineBlockEntity chainerBlockEntity)
 			{
@@ -106,23 +108,24 @@ public final class MachineBlockLinkable implements ChainerLinkable
 				}
 			}
 			
+			Direction outputDirection = null;
 			MachineBlockEntity machineBlockEntity = (MachineBlockEntity) context.blockEntity();
 			if(machineBlockEntity.orientation.params.hasOutput)
 			{
 				outputDirection = machineBlockEntity.orientation.outputDirection;
 			}
-		}
-		
-		IItemHandler itemHandler = context.level().getCapability(Capabilities.ItemHandler.BLOCK, context.pos(), context.blockState(), context.blockEntity(), null);
-		IFluidHandler fluidHandler = context.level().getCapability(Capabilities.FluidHandler.BLOCK, context.pos(), context.blockState(), context.blockEntity(), null);
-		MIEnergyStorage energyHandlerA = context.level().getCapability(EnergyApi.SIDED, context.pos(), context.blockState(), context.blockEntity(), null);
-		MIEnergyStorage energyHandlerB = outputDirection != null ? context.level().getCapability(EnergyApi.SIDED, context.pos(), context.blockState(), context.blockEntity(), outputDirection) : null;
-		MIEnergyStorage inputEnergyHandler = this.pickEnergyHandler(true, energyHandlerA, energyHandlerB);
-		MIEnergyStorage outputEnergyHandler = this.pickEnergyHandler(false, energyHandlerA, energyHandlerB);
-		MIEnergyStorage energyHandler = this.combine(inputEnergyHandler, outputEnergyHandler);
-		if(itemHandler != null || fluidHandler != null || energyHandler != null)
-		{
-			return LinkResult.success(itemHandler, fluidHandler, energyHandler);
+			
+			IItemHandler itemHandler = context.level().getCapability(Capabilities.ItemHandler.BLOCK, context.pos(), context.blockState(), context.blockEntity(), null);
+			IFluidHandler fluidHandler = context.level().getCapability(Capabilities.FluidHandler.BLOCK, context.pos(), context.blockState(), context.blockEntity(), null);
+			MIEnergyStorage energyHandlerA = context.level().getCapability(EnergyApi.SIDED, context.pos(), context.blockState(), context.blockEntity(), null);
+			MIEnergyStorage energyHandlerB = outputDirection != null ? context.level().getCapability(EnergyApi.SIDED, context.pos(), context.blockState(), context.blockEntity(), outputDirection) : null;
+			MIEnergyStorage inputEnergyHandler = this.pickEnergyHandler(true, energyHandlerA, energyHandlerB);
+			MIEnergyStorage outputEnergyHandler = this.pickEnergyHandler(false, energyHandlerA, energyHandlerB);
+			MIEnergyStorage energyHandler = this.combine(inputEnergyHandler, outputEnergyHandler);
+			if(itemHandler != null || fluidHandler != null || energyHandler != null)
+			{
+				return LinkResult.success(itemHandler, fluidHandler, energyHandler);
+			}
 		}
 		
 		return LinkResult.fail(false);
