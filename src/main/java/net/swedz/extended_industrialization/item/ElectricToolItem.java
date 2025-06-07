@@ -70,6 +70,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.helper.ColorHelper;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
@@ -525,6 +526,21 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	public int getBarColor(ItemStack stack)
 	{
 		return 0xFF0000;
+	}
+	
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
+	{
+		return !newStack.is(this) ||
+			   slotChanged;
+	}
+	
+	@Override
+	public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack)
+	{
+		return !newStack.is(this) ||
+			   this.getStoredEnergy(newStack) == 0 ||
+			   Proxies.get(EIProxy.class).shouldCauseElectricToolBreakReset();
 	}
 	
 	@Override

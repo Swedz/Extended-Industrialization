@@ -34,4 +34,9 @@ public class EIProxy implements Proxy
 	public void removeTesla(BlockPos blockPos)
 	{
 	}
+	
+	public boolean shouldCauseElectricToolBreakReset()
+	{
+		return false;
+	}
 }
