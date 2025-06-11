@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization;
 
 import com.google.common.collect.Lists;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
@@ -17,6 +18,7 @@ import net.swedz.extended_industrialization.client.nanosuit.decorations.WingNano
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 @EventBusSubscriber(modid = EI.ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public final class EIClientModels
@@ -34,11 +36,14 @@ public final class EIClientModels
 		event.registerLayerDefinition(MeowNanoSuitDecorationModel.LAYER, MeowNanoSuitDecorationModel::createLayer);
 	}
 	
-	private static void addGlobalLayer(EntityRenderersEvent.AddLayers event, Function<LivingEntityRenderer, RenderLayer> layer)
+	private static void addGlobalLayer(EntityRenderersEvent.AddLayers event,
+									   Function<LivingEntityRenderer, RenderLayer> layer,
+									   Predicate<LivingEntityRenderer> rendererFilter)
 	{
 		for(var entityType : event.getEntityTypes())
 		{
-			if(event.getRenderer(entityType) instanceof LivingEntityRenderer renderer)
+			if(event.getRenderer(entityType) instanceof LivingEntityRenderer renderer &&
+			   rendererFilter.test(renderer))
 			{
 				renderer.addLayer(layer.apply(renderer));
 			}
@@ -63,6 +68,10 @@ public final class EIClientModels
 		NANO_ARMOR_DECORATIONS.add(new WingNanoSuitDecorationModel(context.bakeLayer(WingNanoSuitDecorationModel.LAYER)));
 		NANO_ARMOR_DECORATIONS.add(new MeowNanoSuitDecorationModel(context.bakeLayer(MeowNanoSuitDecorationModel.LAYER)));
 		NANO_ARMOR_DECORATIONS = Collections.unmodifiableList(NANO_ARMOR_DECORATIONS);
-		addGlobalLayer(event, (r) -> new NanoArmorLayer<>(r, NANO_ARMOR_INNER, NANO_ARMOR_OUTER, NANO_ARMOR_DECORATIONS, context.getModelManager()));
+		addGlobalLayer(
+				event,
+				(r) -> new NanoArmorLayer<>(r, NANO_ARMOR_INNER, NANO_ARMOR_OUTER, NANO_ARMOR_DECORATIONS, context.getModelManager()),
+				(r) -> r.getModel() instanceof HumanoidModel<?>
+		);
 	}
 }
