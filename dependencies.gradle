@@ -11,6 +11,8 @@ repositories {
 			includeGroup "aztech"
 			// Tesseract
 			includeGroup "net.swedz"
+			// Almost Unified
+			includeGroup "com.almostreliable.mods"
 		}
 	}
 	maven {
@@ -109,4 +111,6 @@ dependencies {
 		compileOnly "com.blakebr0.cucumber:Cucumber:${cucumber_version}"
 		compileOnly "com.blakebr0.mysticalagriculture:MysticalAgriculture:${mystical_agriculture_version}"
 	}
+
+	compileOnly "com.almostreliable.mods:almostunified-neoforge:${project.minecraft_version}-${project.au_version}:api"
 }
