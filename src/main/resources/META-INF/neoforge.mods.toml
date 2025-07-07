@@ -21,7 +21,7 @@ file = "${mod_id}.accesstransformer.cfg"
 [[dependencies.${ mod_id }]]
 modId = "neoforge"
 type = "required"
-versionRange = "${neoforge_version_range}"
+versionRange = "[${neoforge_version},)"
 ordering = "NONE"
 side = "BOTH"
 

@@ -5,5 +5,8 @@ package net.swedz.extended_industrialization.machines.component.tesla.network;
  */
 public interface TeslaNetworkHolder
 {
-	TeslaNetworkCache getTeslaNetworks();
+	default TeslaNetworkCache getTeslaNetworks()
+	{
+		throw new UnsupportedOperationException("getTeslaNetworks() must be implemented");
+	}
 }

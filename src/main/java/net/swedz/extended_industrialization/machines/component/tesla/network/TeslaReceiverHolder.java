@@ -9,5 +9,8 @@ import java.util.Collection;
  */
 public interface TeslaReceiverHolder
 {
-	Collection<TeslaReceiver> getTeslaReceivers();
+	default Collection<TeslaReceiver> getTeslaReceivers()
+	{
+		throw new UnsupportedOperationException("getTeslaReceivers() must be implemented");
+	}
 }
