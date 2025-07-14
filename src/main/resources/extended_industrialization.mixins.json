@@ -5,6 +5,7 @@
     "compatibilityLevel": "JAVA_21",
     "mixins": [
         "ArmorDyeRecipeIgnoreRainbowItemsMixin",
+        "ElectricToolBreakSpeedMixin",
         "MeowTradeMixin",
         "RainbowDyedItemColorMixin",
         "RemoveRainbowWhenDyeingMixin",
