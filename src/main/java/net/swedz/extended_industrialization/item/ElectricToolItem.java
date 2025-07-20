@@ -73,7 +73,7 @@ import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EISounds;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.component.RainbowDataComponent;
-import net.swedz.extended_industrialization.entity.NanoSwipeEntity;
+import net.swedz.extended_industrialization.entity.NanoSaberSweepEntity;
 import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.helper.ColorHelper;
@@ -731,7 +731,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		{
 			if(!player.getCooldowns().isOnCooldown(this))
 			{
-				level.playSound(player, player.blockPosition(), EISounds.NANO_SWIPE_SWING.get(), SoundSource.PLAYERS, 1, 1);
+				level.playSound(player, player.blockPosition(), EISounds.NANO_SABER_SWEEP_SWING.get(), SoundSource.PLAYERS, 1, 1);
 				
 				if(!level.isClientSide())
 				{
@@ -745,9 +745,9 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 					Vec3 spawnPos = player.position().add(0, player.getEyeHeight() / 2f, 0).add(look.multiply(0.25, 0.25, 0.25));
 					Vec3 target = player.getEyePosition().add(look.multiply(100, 100, 100));
 					Vec3 motion = target.subtract(spawnPos).normalize();
-					NanoSwipeEntity swipe = new NanoSwipeEntity(level, player, motion, colorRGB, rainbow, toolType.damage(), getMode(stack) == Mode.BEHEADING);
-					swipe.setPosRaw(spawnPos.x(), spawnPos.y(), spawnPos.z());
-					level.addFreshEntity(swipe);
+					NanoSaberSweepEntity sweep = new NanoSaberSweepEntity(level, player, motion, colorRGB, rainbow, toolType.damage(), getMode(stack) == Mode.BEHEADING);
+					sweep.setPosRaw(spawnPos.x(), spawnPos.y(), spawnPos.z());
+					level.addFreshEntity(sweep);
 				}
 				
 				player.getCooldowns().addCooldown(this, 20);

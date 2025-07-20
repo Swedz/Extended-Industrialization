@@ -50,8 +50,8 @@ public final class EITags
 	
 	public static final class DamageTypes
 	{
-		public static final TagKey<DamageType> NANO_SWIPE           = damageType("nano_swipe");
-		public static final TagKey<DamageType> NANO_SWIPE_BEHEADING = damageType("nano_swipe/beheading");
+		public static final TagKey<DamageType> NANO_SABER_SWEEP           = damageType("nano_saber_sweep");
+		public static final TagKey<DamageType> NANO_SABER_SWEEP_BEHEADING = damageType("nano_saber_sweep/beheading");
 	}
 	
 	public static final class GeneratedRecipesBlacklist

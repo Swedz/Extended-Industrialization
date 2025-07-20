@@ -59,7 +59,7 @@
   "block.extended_industrialization.tesla_tower": "Tesla Tower",
   "block.extended_industrialization.universal_transformer": "Universal Transformer",
   "curios.identifier.shoulders": "Shoulders",
-  "death.attack.extended_industrialization.nano_swipe": "%1$s was vaporized",
+  "death.attack.extended_industrialization.nano_saber_sweep": "%1$s was vaporized",
   "death.attack.extended_industrialization.tesla": "%1$s was electrocuted to death",
   "item.extended_industrialization.blazing_essence_bucket": "Blazing Essence Bucket",
   "item.extended_industrialization.canned_food": "Canned Food",

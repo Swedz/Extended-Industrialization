@@ -12,36 +12,36 @@
             }
         ]
     },
-    "nano_swipe.swing": {
+    "nano_saber_sweep.swing": {
         "sounds": [
-            "extended_industrialization:nano_swipe/swing1",
-            "extended_industrialization:nano_swipe/swing2",
-            "extended_industrialization:nano_swipe/swing3",
-            "extended_industrialization:nano_swipe/swing4",
-            "extended_industrialization:nano_swipe/swing5",
-            "extended_industrialization:nano_swipe/swing6",
-            "extended_industrialization:nano_swipe/swing7",
-            "extended_industrialization:nano_swipe/swing8",
-            "extended_industrialization:nano_swipe/swing9",
-            "extended_industrialization:nano_swipe/swing10",
-            "extended_industrialization:nano_swipe/swing11",
-            "extended_industrialization:nano_swipe/swing12",
-            "extended_industrialization:nano_swipe/swing13",
-            "extended_industrialization:nano_swipe/swing14",
-            "extended_industrialization:nano_swipe/swing15",
-            "extended_industrialization:nano_swipe/swing16",
-            "extended_industrialization:nano_swipe/swing17",
-            "extended_industrialization:nano_swipe/swing18",
-            "extended_industrialization:nano_swipe/swing19",
-            "extended_industrialization:nano_swipe/swing20",
-            "extended_industrialization:nano_swipe/swing21"
+            "extended_industrialization:nano_saber_sweep/swing1",
+            "extended_industrialization:nano_saber_sweep/swing2",
+            "extended_industrialization:nano_saber_sweep/swing3",
+            "extended_industrialization:nano_saber_sweep/swing4",
+            "extended_industrialization:nano_saber_sweep/swing5",
+            "extended_industrialization:nano_saber_sweep/swing6",
+            "extended_industrialization:nano_saber_sweep/swing7",
+            "extended_industrialization:nano_saber_sweep/swing8",
+            "extended_industrialization:nano_saber_sweep/swing9",
+            "extended_industrialization:nano_saber_sweep/swing10",
+            "extended_industrialization:nano_saber_sweep/swing11",
+            "extended_industrialization:nano_saber_sweep/swing12",
+            "extended_industrialization:nano_saber_sweep/swing13",
+            "extended_industrialization:nano_saber_sweep/swing14",
+            "extended_industrialization:nano_saber_sweep/swing15",
+            "extended_industrialization:nano_saber_sweep/swing16",
+            "extended_industrialization:nano_saber_sweep/swing17",
+            "extended_industrialization:nano_saber_sweep/swing18",
+            "extended_industrialization:nano_saber_sweep/swing19",
+            "extended_industrialization:nano_saber_sweep/swing20",
+            "extended_industrialization:nano_saber_sweep/swing21"
         ]
     },
-    "nano_swipe.end": {
+    "nano_saber_sweep.end": {
         "sounds": [
-            "extended_industrialization:nano_swipe/end1",
-            "extended_industrialization:nano_swipe/end2",
-            "extended_industrialization:nano_swipe/end3"
+            "extended_industrialization:nano_saber_sweep/end1",
+            "extended_industrialization:nano_saber_sweep/end2",
+            "extended_industrialization:nano_saber_sweep/end3"
         ]
     }
 }

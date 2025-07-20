@@ -42,7 +42,7 @@ import net.swedz.extended_industrialization.client.ber.chainer.MachineChainerHig
 import net.swedz.extended_industrialization.client.ber.tesla.TeslaPartMultiblockRenderer;
 import net.swedz.extended_industrialization.client.ber.tesla.TeslaPartSingleBlockRenderer;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
-import net.swedz.extended_industrialization.client.entity.NanoSwipeEntityRenderer;
+import net.swedz.extended_industrialization.client.entity.NanoSaberSweepEntityRenderer;
 import net.swedz.extended_industrialization.client.model.chainer.MachineChainerUnbakedModel;
 import net.swedz.extended_industrialization.client.model.tesla.TeslaParticleGeneratorModel;
 import net.swedz.extended_industrialization.client.model.tesla.TeslaUnbakedModel;
@@ -178,7 +178,7 @@ public final class EIClient
 	@SubscribeEvent
 	private static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event)
 	{
-		event.registerEntityRenderer(EIEntities.NANO_SWIPE.get(), NanoSwipeEntityRenderer::new);
+		event.registerEntityRenderer(EIEntities.NANO_SABER_SWEEP.get(), NanoSaberSweepEntityRenderer::new);
 	}
 	
 	@SubscribeEvent
@@ -206,12 +206,12 @@ public final class EIClient
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_hatch")));
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_receiver")));
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_tower")));
-		event.register(ModelResourceLocation.standalone(EI.id("entity/nano_swipe")));
+		event.register(ModelResourceLocation.standalone(EI.id("entity/nano_saber_sweep")));
 	}
 	
 	@SubscribeEvent
 	private static void registerAtlases(RegisterMaterialAtlasesEvent event)
 	{
-		event.register(EIClientSheets.NANO_SWIPE, EI.id("nano_swipe"));
+		event.register(EIClientSheets.NANO_SABER_SWEEP, EI.id("nano_saber_sweep"));
 	}
 }

@@ -4,5 +4,5 @@ import net.minecraft.resources.ResourceLocation;
 
 public final class EIClientSheets
 {
-	public static final ResourceLocation NANO_SWIPE = EI.id("textures/atlas/nano_swipe.png");
+	public static final ResourceLocation NANO_SABER_SWEEP = EI.id("textures/atlas/nano_saber_sweep.png");
 }

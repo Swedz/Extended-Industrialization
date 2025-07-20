@@ -19,30 +19,30 @@ import net.neoforged.neoforge.client.model.renderable.BakedModelRenderable;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClientSheets;
 import net.swedz.extended_industrialization.component.RainbowDataComponent;
-import net.swedz.extended_industrialization.entity.NanoSwipeEntity;
+import net.swedz.extended_industrialization.entity.NanoSaberSweepEntity;
 import org.joml.Vector4f;
 
-public final class NanoSwipeEntityRenderer extends EntityRenderer<NanoSwipeEntity>
+public final class NanoSaberSweepEntityRenderer extends EntityRenderer<NanoSaberSweepEntity>
 {
 	private final RandomSource random;
 	
-	public NanoSwipeEntityRenderer(EntityRendererProvider.Context context)
+	public NanoSaberSweepEntityRenderer(EntityRendererProvider.Context context)
 	{
 		super(context);
 		random = RandomSource.create();
 	}
 	
 	@Override
-	public ResourceLocation getTextureLocation(NanoSwipeEntity nanoSwipeEntity)
+	public ResourceLocation getTextureLocation(NanoSaberSweepEntity nanoSaberSweepEntity)
 	{
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	public void render(NanoSwipeEntity entity, float entityYaw, float partialTick, PoseStack matrices, MultiBufferSource bufferSource, int packedLight)
+	public void render(NanoSaberSweepEntity entity, float entityYaw, float partialTick, PoseStack matrices, MultiBufferSource bufferSource, int packedLight)
 	{
 		var modelManager = Minecraft.getInstance().getModelManager();
-		var model = modelManager.getModel(ModelResourceLocation.standalone(EI.id("entity/nano_swipe")));
+		var model = modelManager.getModel(ModelResourceLocation.standalone(EI.id("entity/nano_saber_sweep")));
 		
 		matrices.pushPose();
 		
@@ -62,7 +62,7 @@ public final class NanoSwipeEntityRenderer extends EntityRenderer<NanoSwipeEntit
 		
 		BakedModelRenderable.of(model).render(
 				matrices, bufferSource,
-				(__) -> RenderType.entityCutout(EIClientSheets.NANO_SWIPE),
+				(__) -> RenderType.entityCutout(EIClientSheets.NANO_SABER_SWEEP),
 				packedLight, OverlayTexture.NO_OVERLAY, partialTick,
 				new BakedModelRenderable.Context(
 						null,

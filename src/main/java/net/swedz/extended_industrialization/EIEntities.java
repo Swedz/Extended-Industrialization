@@ -6,7 +6,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.swedz.extended_industrialization.entity.NanoSwipeEntity;
+import net.swedz.extended_industrialization.entity.NanoSaberSweepEntity;
 
 import java.util.function.Supplier;
 
@@ -14,8 +14,8 @@ public final class EIEntities
 {
 	private static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, EI.ID);
 	
-	public static final Supplier<EntityType<NanoSwipeEntity>> NANO_SWIPE = create("nano_swipe", () -> EntityType.Builder
-			.<NanoSwipeEntity>of(NanoSwipeEntity::new, MobCategory.MISC)
+	public static final Supplier<EntityType<NanoSaberSweepEntity>> NANO_SABER_SWEEP = create("nano_saber_sweep", () -> EntityType.Builder
+			.<NanoSaberSweepEntity>of(NanoSaberSweepEntity::new, MobCategory.MISC)
 			.sized(1.5f, 6f / 16f)
 			.clientTrackingRange(4)
 			.updateInterval(10));

@@ -1,9 +1,0 @@
-{
-    "sources": [
-        {
-            "type": "directory",
-            "source": "entity/nano_swipe",
-            "prefix": "entity/nano_swipe/"
-        }
-    ]
-}

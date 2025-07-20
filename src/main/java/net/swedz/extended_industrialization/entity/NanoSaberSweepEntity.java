@@ -34,10 +34,10 @@ import net.swedz.tesseract.neoforge.api.tuple.Pair;
 import java.util.List;
 import java.util.function.Predicate;
 
-public final class NanoSwipeEntity extends Projectile
+public final class NanoSaberSweepEntity extends Projectile
 {
-	private static final EntityDataAccessor<Integer> DATA_COLOR   = SynchedEntityData.defineId(NanoSwipeEntity.class, EntityDataSerializers.INT);
-	private static final EntityDataAccessor<Boolean> DATA_RAINBOW = SynchedEntityData.defineId(NanoSwipeEntity.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Integer> DATA_COLOR   = SynchedEntityData.defineId(NanoSaberSweepEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Boolean> DATA_RAINBOW = SynchedEntityData.defineId(NanoSaberSweepEntity.class, EntityDataSerializers.BOOLEAN);
 	
 	private long ticks;
 	
@@ -46,16 +46,16 @@ public final class NanoSwipeEntity extends Projectile
 	private float   power;
 	private boolean beheading;
 	
-	public NanoSwipeEntity(EntityType<? extends NanoSwipeEntity> type, Level level)
+	public NanoSaberSweepEntity(EntityType<? extends NanoSaberSweepEntity> type, Level level)
 	{
 		super(type, level);
 	}
 	
-	public NanoSwipeEntity(Level level, LivingEntity owner, Vec3 movement,
-						   int color, boolean rainbow,
-						   float power, boolean beheading)
+	public NanoSaberSweepEntity(Level level, LivingEntity owner, Vec3 movement,
+								int color, boolean rainbow,
+								float power, boolean beheading)
 	{
-		super(EIEntities.NANO_SWIPE.get(), level);
+		super(EIEntities.NANO_SABER_SWEEP.get(), level);
 		
 		this.setOwner(owner);
 		this.setDeltaMovement(movement.normalize().multiply(3, 3, 3));
@@ -152,7 +152,7 @@ public final class NanoSwipeEntity extends Projectile
 		if(ticks >= 10 * 20)
 		{
 			this.discard();
-			level.playSound(null, this.blockPosition(), EISounds.NANO_SWIPE_END.get(), SoundSource.PLAYERS, 1, 1);
+			level.playSound(null, this.blockPosition(), EISounds.NANO_SABER_SWEEP_EXTINGUISH.get(), SoundSource.PLAYERS, 1, 1);
 			return;
 		}
 		
@@ -181,7 +181,7 @@ public final class NanoSwipeEntity extends Projectile
 		else
 		{
 			this.discard();
-			level.playSound(null, this.blockPosition(), EISounds.NANO_SWIPE_END.get(), SoundSource.PLAYERS, 1, 1);
+			level.playSound(null, this.blockPosition(), EISounds.NANO_SABER_SWEEP_EXTINGUISH.get(), SoundSource.PLAYERS, 1, 1);
 		}
 		
 		ticks++;
@@ -222,7 +222,7 @@ public final class NanoSwipeEntity extends Projectile
 			var hitPos = result.getBlockPos().getCenter().relative(result.getDirection(), 0.6);
 			level.sendParticles(ParticleTypes.LARGE_SMOKE, hitPos.x(), hitPos.y(), hitPos.z(), 10, 0.1, 0.1, 0.1, 0.1);
 			
-			level.playSound(null, this.blockPosition(), EISounds.NANO_SWIPE_END.get(), SoundSource.PLAYERS, 1, 1);
+			level.playSound(null, this.blockPosition(), EISounds.NANO_SABER_SWEEP_EXTINGUISH.get(), SoundSource.PLAYERS, 1, 1);
 		}
 	}
 	

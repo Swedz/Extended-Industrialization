@@ -54,12 +54,12 @@ public final class EIDamageTypes
 		return tesla(level, origin, damager);
 	}
 	
-	public static final ResourceKey<DamageType> NANO_SWIPE        = create("nano_swipe");
-	public static final ResourceKey<DamageType> NANO_SWIPE_BEHEAD = create("nano_swipe_behead");
+	public static final ResourceKey<DamageType> NANO_SABER_SWEEP           = create("nano_saber_sweep");
+	public static final ResourceKey<DamageType> NANO_SABER_SWEEP_BEHEADING = create("nano_saber_sweep_beheading");
 	
 	private static Holder<DamageType> nanoSwipe(RegistryAccess registry, boolean behead)
 	{
-		return registry.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(behead ? NANO_SWIPE_BEHEAD : NANO_SWIPE);
+		return registry.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(behead ? NANO_SABER_SWEEP_BEHEADING : NANO_SABER_SWEEP);
 	}
 	
 	public static DamageSource nanoSwipe(Level level, Entity damager, boolean behead)

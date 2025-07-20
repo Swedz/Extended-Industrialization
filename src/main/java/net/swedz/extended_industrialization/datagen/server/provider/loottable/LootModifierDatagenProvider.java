@@ -47,7 +47,7 @@ public final class LootModifierDatagenProvider extends GlobalLootModifierProvide
 								LootItemRandomChanceCondition.randomChance(chance).build(),
 								AnyOfCondition.anyOf(
 										DamageSourceCondition.hasDamageSource(new DamageSourcePredicate.Builder()
-												.tag(new TagPredicate<>(EITags.DamageTypes.NANO_SWIPE_BEHEADING, true))),
+												.tag(new TagPredicate<>(EITags.DamageTypes.NANO_SABER_SWEEP_BEHEADING, true))),
 										LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.DIRECT_ATTACKER, new EntityPredicate.Builder().equipment(new EntityEquipmentPredicate.Builder()
 												.mainhand(ItemPredicate.Builder.item()
 														.of(EIItems.NANO_SABER.asItem())
@@ -69,7 +69,7 @@ public final class LootModifierDatagenProvider extends GlobalLootModifierProvide
 						new LootItemCondition[]{
 								AnyOfCondition.anyOf(
 										DamageSourceCondition.hasDamageSource(new DamageSourcePredicate.Builder()
-												.tag(new TagPredicate<>(EITags.DamageTypes.NANO_SWIPE, true))),
+												.tag(new TagPredicate<>(EITags.DamageTypes.NANO_SABER_SWEEP, true))),
 										LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.DIRECT_ATTACKER, new EntityPredicate.Builder().equipment(new EntityEquipmentPredicate.Builder()
 												.mainhand(ItemPredicate.Builder.item()
 														.of(EIItems.NANO_SABER.asItem())
