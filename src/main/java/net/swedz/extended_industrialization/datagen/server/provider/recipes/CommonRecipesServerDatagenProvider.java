@@ -448,6 +448,24 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				output
 		);
 		
+		addMachineRecipe(
+				"tool", "nano_saber", MIMachineRecipeTypes.ASSEMBLER,
+				8, 10 * 20,
+				(builder) -> builder
+						.addItemInput(Items.NETHERITE_SWORD, 1)
+						.addItemInput(EITags.itemCommon("plates/carbon"), 4)
+						.addItemInput(EITags.itemCommon("plates/stainless_steel"), 8)
+						.addItemInput(MIItem.ELECTRONIC_CIRCUIT, 4)
+						.addItemInput("modern_industrialization:silicon_battery", 2)
+						.addItemInput(Items.NETHER_STAR, 1)
+						.addItemInput(MIItem.COOLING_CELL, 1)
+						.addItemInput(MIItem.REDSTONE_CONTROL_MODULE, 1)
+						.addFluidInput(MIFluids.POLYETHYLENE, 4000)
+						.addFluidInput(MIFluids.NYLON, 2000)
+						.addItemOutput(EIItems.NANO_SABER, 1),
+				output
+		);
+		
 		addBasicCraftingRecipes(
 				"tool", "robot_auto_feeder", false,
 				EIItems.ROBOT_AUTO_FEEDER, 1,

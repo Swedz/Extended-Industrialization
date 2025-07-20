@@ -1,0 +1,55 @@
+{
+  "type": "modern_industrialization:assembler",
+  "duration": 200,
+  "eu": 8,
+  "fluid_inputs": [
+    {
+      "amount": 4000,
+      "fluid": "modern_industrialization:polyethylene"
+    },
+    {
+      "amount": 2000,
+      "fluid": "modern_industrialization:nylon"
+    }
+  ],
+  "item_inputs": [
+    {
+      "amount": 1,
+      "item": "minecraft:netherite_sword"
+    },
+    {
+      "amount": 4,
+      "tag": "c:plates/carbon"
+    },
+    {
+      "amount": 8,
+      "tag": "c:plates/stainless_steel"
+    },
+    {
+      "amount": 4,
+      "item": "modern_industrialization:electronic_circuit"
+    },
+    {
+      "amount": 2,
+      "item": "modern_industrialization:silicon_battery"
+    },
+    {
+      "amount": 1,
+      "item": "minecraft:nether_star"
+    },
+    {
+      "amount": 1,
+      "item": "modern_industrialization:cooling_cell"
+    },
+    {
+      "amount": 1,
+      "item": "modern_industrialization:redstone_control_module"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 1,
+      "item": "extended_industrialization:nano_saber"
+    }
+  ]
+}
