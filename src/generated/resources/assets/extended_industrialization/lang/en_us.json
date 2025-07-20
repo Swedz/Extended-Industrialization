@@ -61,6 +61,7 @@
   "curios.identifier.shoulders": "Shoulders",
   "death.attack.extended_industrialization.nano_saber_sweep": "%1$s was vaporized",
   "death.attack.extended_industrialization.tesla": "%1$s was electrocuted to death",
+  "entity.extended_industrialization.nano_saber_sweep": "Nano Saber Sweep",
   "item.extended_industrialization.blazing_essence_bucket": "Blazing Essence Bucket",
   "item.extended_industrialization.canned_food": "Canned Food",
   "item.extended_industrialization.composted_manure_bucket": "Composted Manure Bucket",
