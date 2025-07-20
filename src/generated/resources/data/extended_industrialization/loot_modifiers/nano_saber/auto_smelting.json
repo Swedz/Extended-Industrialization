@@ -23,7 +23,7 @@
               "mainhand": {
                 "items": "extended_industrialization:nano_saber",
                 "predicates": {
-                  "extended_industrialization:simple_energy_item_has_charge": {}
+                  "tesseract_api:simple_energy_item_has_charge": {}
                 }
               }
             }

@@ -26,7 +26,8 @@ import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.lootmodifier.AutoSmeltLootModifier;
 import net.swedz.extended_industrialization.lootmodifier.BeheadingLootModifier;
 import net.swedz.extended_industrialization.lootmodifier.ElectricToolModePredicate;
-import net.swedz.extended_industrialization.lootmodifier.SimpleEnergyItemHasChargePredicate;
+import net.swedz.tesseract.neoforge.compat.mi.TesseractMILootConditions;
+import net.swedz.tesseract.neoforge.compat.mi.loot.itempredicate.SimpleEnergyItemHasChargePredicate;
 
 public final class LootModifierDatagenProvider extends GlobalLootModifierProvider
 {
@@ -50,7 +51,7 @@ public final class LootModifierDatagenProvider extends GlobalLootModifierProvide
 										LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.DIRECT_ATTACKER, new EntityPredicate.Builder().equipment(new EntityEquipmentPredicate.Builder()
 												.mainhand(ItemPredicate.Builder.item()
 														.of(EIItems.NANO_SABER.asItem())
-														.withSubPredicate(EILootModifiers.ItemSubPredicates.SIMPLE_ENERGY_ITEM_HAS_CHARGE.get(), new SimpleEnergyItemHasChargePredicate())
+														.withSubPredicate(TesseractMILootConditions.ItemSubPredicates.SIMPLE_ENERGY_ITEM_HAS_CHARGE.get(), new SimpleEnergyItemHasChargePredicate())
 														.withSubPredicate(EILootModifiers.ItemSubPredicates.ELECTRIC_TOOL_MODE.get(), new ElectricToolModePredicate(ElectricToolItem.Mode.BEHEADING)))))
 								).build()
 						},
@@ -72,7 +73,7 @@ public final class LootModifierDatagenProvider extends GlobalLootModifierProvide
 										LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.DIRECT_ATTACKER, new EntityPredicate.Builder().equipment(new EntityEquipmentPredicate.Builder()
 												.mainhand(ItemPredicate.Builder.item()
 														.of(EIItems.NANO_SABER.asItem())
-														.withSubPredicate(EILootModifiers.ItemSubPredicates.SIMPLE_ENERGY_ITEM_HAS_CHARGE.get(), new SimpleEnergyItemHasChargePredicate()))))
+														.withSubPredicate(TesseractMILootConditions.ItemSubPredicates.SIMPLE_ENERGY_ITEM_HAS_CHARGE.get(), new SimpleEnergyItemHasChargePredicate()))))
 								).build()
 						}
 				)
