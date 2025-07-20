@@ -74,11 +74,11 @@ import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.component.RainbowDataComponent;
 import net.swedz.extended_industrialization.entity.NanoSwipeEntity;
 import net.swedz.extended_industrialization.proxy.EIProxy;
+import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.helper.ColorHelper;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
-import net.swedz.tesseract.neoforge.tooltip.Parser;
 
 import java.util.List;
 import java.util.Map;
@@ -101,24 +101,51 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	
 	public enum Type
 	{
-		DRILL(60 * 20 * CableTier.HV.getMaxTransfer(), 8, false, false, true),
-		CHAINSAW(60 * 20 * CableTier.HV.getMaxTransfer(), 10, false, true, false),
-		SABER(60 * 20 * CableTier.HV.getMaxTransfer(), 12, true, true, false),
-		ULTIMATE(60 * 20 * CableTier.EV.getMaxTransfer(), 20, false, true, true);
+		DRILL(
+				60 * 20 * CableTier.HV.getMaxTransfer(),
+				8,
+				true, true,
+				EIText.ELECTRIC_TOOL_HELP_2_FORTUNE_SILK_TOUCH,
+				Mode.SILK_TOUCH, Mode.FORTUNE
+		),
+		CHAINSAW(
+				60 * 20 * CableTier.HV.getMaxTransfer(),
+				10,
+				true, false,
+				EIText.ELECTRIC_TOOL_HELP_2_FORTUNE_LOOTING,
+				Mode.SILK_TOUCH, Mode.FORTUNE_LOOTING
+		),
+		SABER(
+				60 * 20 * CableTier.HV.getMaxTransfer(),
+				12,
+				false, false,
+				EIText.ELECTRIC_TOOL_HELP_2_LOOTING_BEHEADING,
+				Mode.LOOTING, Mode.BEHEADING
+		),
+		ULTIMATE(
+				60 * 20 * CableTier.EV.getMaxTransfer(),
+				20,
+				true, true,
+				EIText.ELECTRIC_TOOL_HELP_2_FORTUNE_LOOTING,
+				Mode.SILK_TOUCH, Mode.FORTUNE_LOOTING
+		);
 		
-		private final long    energyCapacity;
-		private final int     damage;
-		private final boolean isWeaponOnly;
-		private final boolean includeLooting;
-		private final boolean canDo3by3;
+		private final long       energyCapacity;
+		private final int        damage;
+		private final boolean    adjustableSpeed;
+		private final boolean    canDo3by3;
+		private final EIText     helpText;
+		private final List<Mode> modes;
 		
-		Type(long energyCapacity, int damage, boolean isWeaponOnly, boolean includeLooting, boolean canDo3by3)
+		Type(long energyCapacity, int damage, boolean adjustableSpeed, boolean canDo3by3, EIText helpText, Mode... modes)
 		{
+			Assert.that(modes.length > 0, "Electric tool type must have at least one mode");
 			this.energyCapacity = energyCapacity;
 			this.damage = damage;
-			this.isWeaponOnly = isWeaponOnly;
-			this.includeLooting = includeLooting;
+			this.adjustableSpeed = adjustableSpeed;
 			this.canDo3by3 = canDo3by3;
+			this.helpText = helpText;
+			this.modes = List.of(modes);
 		}
 		
 		public long energyCapacity()
@@ -131,19 +158,104 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			return damage;
 		}
 		
-		public boolean isWeaponOnly()
+		public boolean hasAdjustableSpeed()
 		{
-			return isWeaponOnly;
-		}
-		
-		public boolean includeLooting()
-		{
-			return includeLooting;
+			return adjustableSpeed;
 		}
 		
 		public boolean canDo3by3()
 		{
 			return canDo3by3;
+		}
+		
+		public EIText helpText()
+		{
+			return helpText;
+		}
+		
+		public List<Mode> modes()
+		{
+			return modes;
+		}
+		
+		public Mode nextMode(Mode current)
+		{
+			Assert.notNull(current);
+			int index = modes.indexOf(current);
+			Assert.that(index >= 0, "The type does not support the mode " + current);
+			int nextIndex = index + 1;
+			return nextIndex < modes.size() ? modes.get(nextIndex) : modes.getFirst();
+		}
+		
+		public Mode defaultMode()
+		{
+			return modes.getFirst();
+		}
+	}
+	
+	public enum Mode
+	{
+		SILK_TOUCH(
+				new Text(
+						EIText.TOOL_MODE_SILK_TOUCH,
+						EIText.TOOL_SWITCHED_SILK_TOUCH
+				),
+				Enchantments.SILK_TOUCH
+		),
+		FORTUNE(
+				new Text(
+						EIText.TOOL_MODE_FORTUNE,
+						EIText.TOOL_SWITCHED_FORTUNE
+				),
+				Enchantments.FORTUNE
+		),
+		FORTUNE_LOOTING(
+				new Text(
+						EIText.TOOL_MODE_FORTUNE_LOOTING,
+						EIText.TOOL_SWITCHED_FORTUNE
+				),
+				Enchantments.FORTUNE, Enchantments.LOOTING
+		),
+		LOOTING(
+				new Text(
+						EIText.TOOL_MODE_LOOTING,
+						EIText.TOOL_SWITCHED_LOOTING
+				),
+				Enchantments.LOOTING
+		),
+		BEHEADING(
+				new Text(
+						EIText.TOOL_MODE_BEHEADING,
+						EIText.TOOL_SWITCHED_BEHEADING
+				)
+		);
+		
+		private final Text                       text;
+		private final ResourceKey<Enchantment>[] enchantments;
+		
+		@SafeVarargs
+		Mode(Text text,
+			 ResourceKey<Enchantment>... enchantments)
+		{
+			this.text = text;
+			this.enchantments = enchantments;
+		}
+		
+		public Text text()
+		{
+			return text;
+		}
+		
+		public ResourceKey<Enchantment>[] enchantments()
+		{
+			return enchantments;
+		}
+		
+		public record Text(
+				EIText name,
+				EIText switched
+		)
+		{
 		}
 	}
 	
@@ -155,8 +267,8 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 				.stacksTo(1)
 				.rarity(Rarity.UNCOMMON)
 				.component(EIComponents.HIDE_BAR, false)
+				.component(EIComponents.ELECTRIC_TOOL_MODE, toolType.defaultMode())
 				.component(EIComponents.ELECTRIC_TOOL_SPEED, SPEED_MAX)
-				.component(MIComponents.SILK_TOUCH, false)
 				.component(MIComponents.ENERGY, 0L));
 		this.toolType = toolType;
 	}
@@ -164,6 +276,21 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	public Type getToolType()
 	{
 		return toolType;
+	}
+	
+	public static Mode getMode(ItemStack stack)
+	{
+		if(!(stack.getItem() instanceof ElectricToolItem item))
+		{
+			throw new IllegalArgumentException("Cannot get tool mode for a non electric tool item");
+		}
+		return stack.getOrDefault(EIComponents.ELECTRIC_TOOL_MODE, item.getToolType().defaultMode());
+	}
+	
+	public static void setMode(ItemStack stack, Mode mode)
+	{
+		Assert.notNull(mode);
+		stack.set(EIComponents.ELECTRIC_TOOL_MODE, mode);
 	}
 	
 	public static int getToolSpeed(ItemStack stack)
@@ -179,16 +306,6 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	{
 		speed = Mth.clamp(speed, SPEED_MIN, SPEED_MAX);
 		stack.set(EIComponents.ELECTRIC_TOOL_SPEED, speed);
-	}
-	
-	public static boolean isFortune(ItemStack stack)
-	{
-		return !stack.getOrDefault(MIComponents.SILK_TOUCH, false);
-	}
-	
-	public static void setFortune(ItemStack stack, boolean fortune)
-	{
-		stack.set(MIComponents.SILK_TOUCH, !fortune);
 	}
 	
 	@Override
@@ -577,34 +694,21 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag)
 	{
-		if(!toolType.isWeaponOnly())
+		if(toolType.hasAdjustableSpeed())
 		{
-			tooltip.add(line(EIText.MINING_SPEED)
+			tooltip.add(line(EIText.TOOL_MINING_SPEED)
 					.arg((float) ElectricToolItem.getToolSpeed(stack) / ElectricToolItem.SPEED_MAX, SPACED_PERCENTAGE_PARSER));
 		}
 		
 		if(toolType.canDo3by3())
 		{
-			tooltip.add(line(EIText.MINING_AREA)
-					.arg((this.isActivated(stack) ? EIText.MINING_AREA_3_BY_3 : EIText.MINING_AREA_1_BY_1).text().withStyle(NUMBER_TEXT)));
+			tooltip.add(line(EIText.TOOL_MINING_AREA)
+					.arg((this.isActivated(stack) ? EIText.TOOL_MINING_AREA_3_BY_3 : EIText.TOOL_MINING_AREA_1_BY_1).text().withStyle(NUMBER_TEXT)));
 		}
 		
 		if(context.registries() != null)
 		{
-			boolean isFortune = isFortune(stack);
-			var enchantment = toolType.isWeaponOnly() ?
-					(isFortune ? Enchantments.LOOTING : null) :
-					(isFortune ? Enchantments.FORTUNE : Enchantments.SILK_TOUCH);
-			var line = line(EIText.MINING_MODE);
-			if(enchantment != null)
-			{
-				line.arg(context.registries(), enchantment, Parser.ENCHANTMENT.withStyle(NUMBER_TEXT));
-			}
-			else
-			{
-				line.arg(EIText.NANO_SABER_BEHEADING.text().withStyle(NUMBER_TEXT));
-			}
-			tooltip.add(line);
+			tooltip.add(line(EIText.TOOL_MODE).arg(getMode(stack).text().name().text().withStyle(NUMBER_TEXT)));
 		}
 	}
 	
@@ -614,14 +718,11 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		var stack = player.getItemInHand(hand);
 		if(hand == InteractionHand.MAIN_HAND && player.isShiftKeyDown())
 		{
-			setFortune(stack, !isFortune(stack));
+			var mode = toolType.nextMode(getMode(stack));
+			setMode(stack, mode);
 			if(!level.isClientSide())
 			{
-				boolean isFortune = isFortune(stack);
-				var text = toolType.isWeaponOnly() ?
-						(isFortune ? EIText.TOOL_SWITCHED_LOOTING : EIText.TOOL_SWITCHED_BEHEADING) :
-						(isFortune ? EIText.TOOL_SWITCHED_FORTUNE : EIText.TOOL_SWITCHED_SILK_TOUCH);
-				player.displayClientMessage(text.text(), true);
+				player.displayClientMessage(mode.text().switched().text(), true);
 			}
 			return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
 		}
@@ -645,7 +746,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 					Vec3 spawnPos = player.position().add(0, player.getEyeHeight() / 2f, 0).add(look.multiply(0.25, 0.25, 0.25));
 					Vec3 target = player.getEyePosition().add(look.multiply(100, 100, 100));
 					Vec3 motion = target.subtract(spawnPos).normalize();
-					NanoSwipeEntity swipe = new NanoSwipeEntity(level, player, motion, colorRGB, rainbow, toolType.damage(), !isFortune(stack));
+					NanoSwipeEntity swipe = new NanoSwipeEntity(level, player, motion, colorRGB, rainbow, toolType.damage(), getMode(stack) == Mode.BEHEADING);
 					swipe.setPosRaw(spawnPos.x(), spawnPos.y(), spawnPos.z());
 					level.addFreshEntity(swipe);
 				}
@@ -747,24 +848,9 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		ItemEnchantments.Mutable enchantments = new ItemEnchantments.Mutable(super.getAllEnchantments(stack, lookup));
 		if(this.getStoredEnergy(stack) > 0)
 		{
-			if(toolType.isWeaponOnly())
+			for(var enchantment : getMode(stack).enchantments())
 			{
-				if(isFortune(stack) && toolType.includeLooting())
-				{
-					includeEnchantment(lookup, enchantments, Enchantments.LOOTING);
-				}
-			}
-			else if(isFortune(stack))
-			{
-				includeEnchantment(lookup, enchantments, Enchantments.FORTUNE);
-				if(toolType.includeLooting())
-				{
-					includeEnchantment(lookup, enchantments, Enchantments.LOOTING);
-				}
-			}
-			else
-			{
-				includeEnchantment(lookup, enchantments, Enchantments.SILK_TOUCH);
+				includeEnchantment(lookup, enchantments, enchantment);
 			}
 		}
 		return enchantments.toImmutable();

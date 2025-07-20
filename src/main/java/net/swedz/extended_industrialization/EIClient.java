@@ -83,7 +83,7 @@ public final class EIClient
 			{
 				Player player = Minecraft.getInstance().player;
 				ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
-				if(stack.getItem() instanceof ElectricToolItem tool && !tool.getToolType().isWeaponOnly())
+				if(stack.getItem() instanceof ElectricToolItem tool && tool.getToolType().hasAdjustableSpeed())
 				{
 					boolean increase = event.getScrollDeltaY() > 0;
 					int speed = ElectricToolItem.getToolSpeed(stack);

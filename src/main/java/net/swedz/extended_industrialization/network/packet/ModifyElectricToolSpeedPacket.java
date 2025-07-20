@@ -29,7 +29,7 @@ public record ModifyElectricToolSpeedPacket(boolean increase) implements EICusto
 		Player player = context.getPlayer();
 		ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
 		
-		if(stack.getItem() instanceof ElectricToolItem item && !item.getToolType().isWeaponOnly())
+		if(stack.getItem() instanceof ElectricToolItem item && item.getToolType().hasAdjustableSpeed())
 		{
 			int originalSpeed = ElectricToolItem.getToolSpeed(stack);
 			
@@ -42,7 +42,7 @@ public record ModifyElectricToolSpeedPacket(boolean increase) implements EICusto
 				ElectricToolItem.setToolSpeed(stack, speed);
 				
 				player.displayClientMessage(
-						line(EIText.MINING_SPEED, Style.EMPTY)
+						line(EIText.TOOL_MINING_SPEED, Style.EMPTY)
 								.arg((float) speed / ElectricToolItem.SPEED_MAX, EITooltips.SPACED_PERCENTAGE_PARSER.withStyle(Style.EMPTY)),
 						true
 				);

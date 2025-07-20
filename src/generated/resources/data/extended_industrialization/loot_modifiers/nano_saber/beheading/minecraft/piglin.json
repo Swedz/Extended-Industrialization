@@ -9,7 +9,7 @@
       }
     },
     {
-      "chance": 0.175,
+      "chance": 0.125,
       "condition": "minecraft:random_chance"
     },
     {
@@ -21,7 +21,7 @@
             "tags": [
               {
                 "expected": true,
-                "id": "extended_industrialization:beheading"
+                "id": "extended_industrialization:nano_swipe/beheading"
               }
             ]
           }
@@ -34,9 +34,7 @@
               "mainhand": {
                 "items": "extended_industrialization:nano_saber",
                 "predicates": {
-                  "extended_industrialization:electric_tool_mode": {
-                    "fortune": false
-                  },
+                  "extended_industrialization:electric_tool_mode": "beheading",
                   "extended_industrialization:simple_energy_item_has_charge": {}
                 }
               }

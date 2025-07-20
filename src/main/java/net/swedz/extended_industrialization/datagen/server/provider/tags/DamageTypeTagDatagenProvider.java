@@ -17,10 +17,11 @@ public final class DamageTypeTagDatagenProvider extends DamageTypeTagsProvider
 	@Override
 	protected void addTags(HolderLookup.Provider provider)
 	{
-		this.tag(EITags.DamageTypes.AUTO_SMELT)
-				.add(EIDamageTypes.NANO_SWIPE_SMELT);
+		this.tag(EITags.DamageTypes.NANO_SWIPE)
+				.add(EIDamageTypes.NANO_SWIPE)
+				.add(EIDamageTypes.NANO_SWIPE_BEHEAD);
 		
-		this.tag(EITags.DamageTypes.BEHEADING)
+		this.tag(EITags.DamageTypes.NANO_SWIPE_BEHEADING)
 				.add(EIDamageTypes.NANO_SWIPE_BEHEAD);
 	}
 	
