@@ -746,7 +746,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 					Vec3 target = player.getEyePosition().add(look.multiply(100, 100, 100));
 					Vec3 motion = target.subtract(spawnPos).normalize();
 					NanoSaberSweepEntity sweep = new NanoSaberSweepEntity(level, player, motion, colorRGB, rainbow, toolType.damage(), getMode(stack) == Mode.BEHEADING);
-					sweep.setPosRaw(spawnPos.x(), spawnPos.y(), spawnPos.z());
+					sweep.setPos(spawnPos.x(), spawnPos.y(), spawnPos.z());
 					level.addFreshEntity(sweep);
 					
 					player.getCooldowns().addCooldown(this, 20);

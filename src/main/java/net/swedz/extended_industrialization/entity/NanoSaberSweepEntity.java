@@ -1,6 +1,5 @@
 package net.swedz.extended_industrialization.entity;
 
-import com.google.common.collect.Lists;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -116,29 +115,20 @@ public final class NanoSaberSweepEntity extends Projectile
 		return false;
 	}
 	
-	private static Pair<BlockHitResult, List<Entity>> getHitResult(Projectile projectile, ClipContext.Block context, Predicate<Entity> filter, float margin)
+	private static Pair<BlockHitResult, List<Entity>> getHitResult(Projectile projectile, ClipContext.Block context, Predicate<Entity> filter)
 	{
 		Vec3 movement = projectile.getDeltaMovement();
 		Vec3 start = projectile.position();
 		Vec3 end = start.add(movement);
 		return new Pair<>(
 				projectile.level().clip(new ClipContext(start, end, context, ClipContext.Fluid.ANY, projectile)),
-				getEntityHitResult(projectile, start, end, projectile.getBoundingBox().expandTowards(movement).inflate(1), filter, margin)
+				getEntityHitResult(projectile, projectile.getBoundingBox().expandTowards(movement), filter)
 		);
 	}
 	
-	private static List<Entity> getEntityHitResult(Entity projectile, Vec3 startVec, Vec3 endVec, AABB boundingBox, Predicate<Entity> filter, float inflationAmount)
+	private static List<Entity> getEntityHitResult(Entity projectile, AABB boundingBox, Predicate<Entity> filter)
 	{
-		List<Entity> entities = Lists.newArrayList();
-		for(Entity entity : projectile.level().getEntities(projectile, boundingBox, filter))
-		{
-			AABB entityBounds = entity.getBoundingBox().inflate(inflationAmount);
-			if(entityBounds.clip(startVec, endVec).isPresent())
-			{
-				entities.add(entity);
-			}
-		}
-		return entities;
+		return projectile.level().getEntities(projectile, boundingBox, filter);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -159,7 +149,7 @@ public final class NanoSaberSweepEntity extends Projectile
 		Entity owner = this.getOwner();
 		if(level.isClientSide() || (owner == null || !owner.isRemoved()) && level.hasChunkAt(this.blockPosition()))
 		{
-			var hitResult = getHitResult(this, ClipContext.Block.COLLIDER, this::canHitEntity, 1);
+			var hitResult = getHitResult(this, ClipContext.Block.COLLIDER, this::canHitEntity);
 			var blockHitResult = hitResult.a();
 			if(blockHitResult.getType() != HitResult.Type.MISS && !EventHooks.onProjectileImpact(this, blockHitResult))
 			{
@@ -172,11 +162,7 @@ public final class NanoSaberSweepEntity extends Projectile
 			
 			this.checkInsideBlocks();
 			
-			Vec3 movement = this.getDeltaMovement();
-			double x = this.getX() + movement.x;
-			double y = this.getY() + movement.y;
-			double z = this.getZ() + movement.z;
-			this.setPos(x, y, z);
+			this.setPos(this.position().add(this.getDeltaMovement()));
 		}
 		else
 		{
