@@ -37,11 +37,11 @@
             "extended_industrialization:nano_saber_sweep/swing21"
         ]
     },
-    "nano_saber_sweep.end": {
+    "nano_saber_sweep.extinguish": {
         "sounds": [
-            "extended_industrialization:nano_saber_sweep/end1",
-            "extended_industrialization:nano_saber_sweep/end2",
-            "extended_industrialization:nano_saber_sweep/end3"
+            "extended_industrialization:nano_saber_sweep/extinguish1",
+            "extended_industrialization:nano_saber_sweep/extinguish2",
+            "extended_industrialization:nano_saber_sweep/extinguish3"
         ]
     }
 }
