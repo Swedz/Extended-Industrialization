@@ -66,6 +66,8 @@ public final class EI
 		EIItems.init(bus);
 		EIBlocks.init(bus);
 		EIFluids.init(bus);
+		EIEntities.init(bus);
+		EILootModifiers.init(bus);
 		EIMaterialRegistry.init();
 		EICreativeTabs.init(bus);
 		EIRecipeTypes.init(bus);

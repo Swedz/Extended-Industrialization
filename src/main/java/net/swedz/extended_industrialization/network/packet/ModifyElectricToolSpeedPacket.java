@@ -29,7 +29,7 @@ public record ModifyElectricToolSpeedPacket(boolean increase) implements EICusto
 		Player player = context.getPlayer();
 		ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
 		
-		if(stack.getItem() instanceof ElectricToolItem item)
+		if(stack.getItem() instanceof ElectricToolItem item && !item.getToolType().isWeaponOnly())
 		{
 			int originalSpeed = ElectricToolItem.getToolSpeed(stack);
 			

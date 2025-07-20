@@ -210,7 +210,7 @@ public final class EITooltips
 				{
 					lines.add(line(EIText.DYEABLE_HELP));
 				}
-				lines.add(line(item.getToolType().includeLooting() ? EIText.ELECTRIC_TOOL_HELP_2_LOOTING : EIText.ELECTRIC_TOOL_HELP_2)
+				lines.add(line(item.getToolType() == ElectricToolItem.Type.SABER ? EIText.ELECTRIC_TOOL_HELP_2_SABER : (item.getToolType().includeLooting() ? EIText.ELECTRIC_TOOL_HELP_2_LOOTING : EIText.ELECTRIC_TOOL_HELP_2))
 						.arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER));
 				lines.add(line(EIText.ELECTRIC_TOOL_HELP_3)
 						.arg(EIText.KEY_ALT.text().withStyle(NUMBER_TEXT))

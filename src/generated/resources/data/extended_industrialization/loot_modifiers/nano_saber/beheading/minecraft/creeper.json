@@ -1,0 +1,53 @@
+{
+  "type": "extended_industrialization:beheading",
+  "conditions": [
+    {
+      "condition": "minecraft:entity_properties",
+      "entity": "this",
+      "predicate": {
+        "type": "minecraft:creeper"
+      }
+    },
+    {
+      "chance": 0.175,
+      "condition": "minecraft:random_chance"
+    },
+    {
+      "condition": "minecraft:any_of",
+      "terms": [
+        {
+          "condition": "minecraft:damage_source_properties",
+          "predicate": {
+            "tags": [
+              {
+                "expected": true,
+                "id": "extended_industrialization:beheading"
+              }
+            ]
+          }
+        },
+        {
+          "condition": "minecraft:entity_properties",
+          "entity": "direct_attacker",
+          "predicate": {
+            "equipment": {
+              "mainhand": {
+                "items": "extended_industrialization:nano_saber",
+                "predicates": {
+                  "extended_industrialization:electric_tool_mode": {
+                    "fortune": false
+                  },
+                  "extended_industrialization:simple_energy_item_has_charge": {}
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "drop": {
+    "count": 1,
+    "id": "minecraft:creeper_head"
+  }
+}

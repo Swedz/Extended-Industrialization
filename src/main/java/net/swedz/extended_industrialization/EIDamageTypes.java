@@ -23,7 +23,7 @@ import java.util.UUID;
 
 public final class EIDamageTypes
 {
-	private static final ResourceKey<DamageType> TESLA = ResourceKey.create(Registries.DAMAGE_TYPE, EI.id("tesla"));
+	public static final ResourceKey<DamageType> TESLA = ResourceKey.create(Registries.DAMAGE_TYPE, EI.id("tesla"));
 	
 	private static Holder<DamageType> tesla(RegistryAccess registry)
 	{
@@ -52,5 +52,18 @@ public final class EIDamageTypes
 		}
 		damager.setItemInHand(InteractionHand.MAIN_HAND, item);
 		return tesla(level, origin, damager);
+	}
+	
+	public static final ResourceKey<DamageType> NANO_SWIPE_SMELT = ResourceKey.create(Registries.DAMAGE_TYPE, EI.id("nano_swipe_smelt"));
+	public static final ResourceKey<DamageType> NANO_SWIPE_BEHEAD = ResourceKey.create(Registries.DAMAGE_TYPE, EI.id("nano_swipe_behead"));
+	
+	private static Holder<DamageType> nanoSwipe(RegistryAccess registry, boolean behead)
+	{
+		return registry.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(behead ? NANO_SWIPE_BEHEAD : NANO_SWIPE_SMELT);
+	}
+	
+	public static DamageSource nanoSwipe(Level level, Entity damager, boolean behead)
+	{
+		return new DamageSource(nanoSwipe(level.registryAccess(), behead), damager);
 	}
 }

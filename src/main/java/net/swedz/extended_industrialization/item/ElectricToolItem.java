@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.item;
 
 import aztech.modern_industrialization.MIComponents;
-import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.items.DynamicToolItem;
 import aztech.modern_industrialization.items.ItemHelper;
@@ -13,6 +12,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -68,8 +68,11 @@ import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EIArmorMaterials;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.component.RainbowDataComponent;
+import net.swedz.extended_industrialization.entity.NanoSwipeEntity;
 import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.helper.ColorHelper;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
@@ -98,19 +101,22 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	
 	public enum Type
 	{
-		DRILL(60 * 20 * CableTier.HV.getMaxTransfer(), 8, false, true),
-		CHAINSAW(60 * 20 * CableTier.HV.getMaxTransfer(), 10, true, false),
-		ULTIMATE(60 * 20 * CableTier.EV.getMaxTransfer(), 20, true, true);
+		DRILL(60 * 20 * CableTier.HV.getMaxTransfer(), 8, false, false, true),
+		CHAINSAW(60 * 20 * CableTier.HV.getMaxTransfer(), 10, false, true, false),
+		SABER(60 * 20 * CableTier.HV.getMaxTransfer(), 12, true, true, false),
+		ULTIMATE(60 * 20 * CableTier.EV.getMaxTransfer(), 20, false, true, true);
 		
 		private final long    energyCapacity;
 		private final int     damage;
+		private final boolean isWeaponOnly;
 		private final boolean includeLooting;
 		private final boolean canDo3by3;
 		
-		Type(long energyCapacity, int damage, boolean includeLooting, boolean canDo3by3)
+		Type(long energyCapacity, int damage, boolean isWeaponOnly, boolean includeLooting, boolean canDo3by3)
 		{
 			this.energyCapacity = energyCapacity;
 			this.damage = damage;
+			this.isWeaponOnly = isWeaponOnly;
 			this.includeLooting = includeLooting;
 			this.canDo3by3 = canDo3by3;
 		}
@@ -123,6 +129,11 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		public int damage()
 		{
 			return damage;
+		}
+		
+		public boolean isWeaponOnly()
+		{
+			return isWeaponOnly;
 		}
 		
 		public boolean includeLooting()
@@ -183,27 +194,22 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public int getDyeColor(DyeColor dyeColor)
 	{
-		if(toolType == Type.ULTIMATE)
+		return switch (toolType)
 		{
-			return ColorHelper.getVibrantColor(dyeColor);
-		}
-		else
-		{
-			throw new UnsupportedOperationException();
-		}
+			case SABER, ULTIMATE -> ColorHelper.getVibrantColor(dyeColor);
+			default -> throw new UnsupportedOperationException();
+		};
 	}
 	
 	@Override
 	public int getDefaultDyeColor()
 	{
-		if(toolType == Type.ULTIMATE)
+		return switch (toolType)
 		{
-			return 0xFFFF0000;
-		}
-		else
-		{
-			throw new UnsupportedOperationException();
-		}
+			case SABER -> EIArmorMaterials.NANO_COLOR;
+			case ULTIMATE -> 0xFFFF0000;
+			default -> throw new UnsupportedOperationException();
+		};
 	}
 	
 	@Override
@@ -571,8 +577,11 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag)
 	{
-		tooltip.add(line(EIText.MINING_SPEED)
-				.arg((float) ElectricToolItem.getToolSpeed(stack) / ElectricToolItem.SPEED_MAX, SPACED_PERCENTAGE_PARSER));
+		if(!toolType.isWeaponOnly())
+		{
+			tooltip.add(line(EIText.MINING_SPEED)
+					.arg((float) ElectricToolItem.getToolSpeed(stack) / ElectricToolItem.SPEED_MAX, SPACED_PERCENTAGE_PARSER));
+		}
 		
 		if(toolType.canDo3by3())
 		{
@@ -582,28 +591,75 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		
 		if(context.registries() != null)
 		{
-			tooltip.add(line(EIText.MINING_MODE)
-					.arg(context.registries(), isFortune(stack) ? Enchantments.FORTUNE : Enchantments.SILK_TOUCH, Parser.ENCHANTMENT.withStyle(NUMBER_TEXT)));
+			boolean isFortune = isFortune(stack);
+			var enchantment = toolType.isWeaponOnly() ?
+					(isFortune ? Enchantments.LOOTING : null) :
+					(isFortune ? Enchantments.FORTUNE : Enchantments.SILK_TOUCH);
+			var line = line(EIText.MINING_MODE);
+			if(enchantment != null)
+			{
+				line.arg(context.registries(), enchantment, Parser.ENCHANTMENT.withStyle(NUMBER_TEXT));
+			}
+			else
+			{
+				line.arg(EIText.NANO_SABER_BEHEADING.text().withStyle(NUMBER_TEXT));
+			}
+			tooltip.add(line);
 		}
 	}
 	
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand)
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
 	{
-		if(hand == InteractionHand.MAIN_HAND && user.isShiftKeyDown())
+		var stack = player.getItemInHand(hand);
+		if(hand == InteractionHand.MAIN_HAND && player.isShiftKeyDown())
 		{
-			ItemStack stack = user.getItemInHand(hand);
 			setFortune(stack, !isFortune(stack));
-			if(!world.isClientSide)
+			if(!level.isClientSide())
 			{
-				user.displayClientMessage(
-						(isFortune(stack) ? MIText.ToolSwitchedFortune : MIText.ToolSwitchedSilkTouch).text(),
-						true
-				);
+				boolean isFortune = isFortune(stack);
+				var text = toolType.isWeaponOnly() ?
+						(isFortune ? EIText.TOOL_SWITCHED_LOOTING : EIText.TOOL_SWITCHED_BEHEADING) :
+						(isFortune ? EIText.TOOL_SWITCHED_FORTUNE : EIText.TOOL_SWITCHED_SILK_TOUCH);
+				player.displayClientMessage(text.text(), true);
 			}
-			return InteractionResultHolder.sidedSuccess(stack, world.isClientSide);
+			return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
 		}
-		return super.use(world, user, hand);
+		else if(toolType == Type.SABER && this.getStoredEnergy(stack) > 0)
+		{
+			if(!player.getCooldowns().isOnCooldown(this))
+			{
+				// TODO change these to modded sounds that are copies of them
+				level.playSound(player, player.blockPosition(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1, 1);
+				level.playSound(player, player.blockPosition(), SoundEvents.BEACON_POWER_SELECT, SoundSource.PLAYERS, 0.5f, 2);
+				
+				if(!level.isClientSide())
+				{
+					this.tryUseEnergy(stack, ENERGY_COST * 4);
+					
+					var color = stack.get(DataComponents.DYED_COLOR);
+					int colorRGB = color == null ? -1 : color.rgb();
+					boolean rainbow = stack.getOrDefault(EIComponents.RAINBOW, new RainbowDataComponent(false, true)).value();
+					
+					Vec3 look = player.getLookAngle().normalize();
+					Vec3 spawnPos = player.position().add(0, player.getEyeHeight() / 2f, 0).add(look.multiply(0.25, 0.25, 0.25));
+					Vec3 target = player.getEyePosition().add(look.multiply(100, 100, 100));
+					Vec3 motion = target.subtract(spawnPos).normalize();
+					NanoSwipeEntity swipe = new NanoSwipeEntity(level, player, motion, colorRGB, rainbow, toolType.damage(), !isFortune(stack));
+					swipe.setPosRaw(spawnPos.x(), spawnPos.y(), spawnPos.z());
+					level.addFreshEntity(swipe);
+				}
+				
+				player.getCooldowns().addCooldown(this, 20);
+				
+				return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+			}
+			else
+			{
+				return InteractionResultHolder.consume(stack);
+			}
+		}
+		return super.use(level, player, hand);
 	}
 	
 	@Override
@@ -691,7 +747,14 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		ItemEnchantments.Mutable enchantments = new ItemEnchantments.Mutable(super.getAllEnchantments(stack, lookup));
 		if(this.getStoredEnergy(stack) > 0)
 		{
-			if(isFortune(stack))
+			if(toolType.isWeaponOnly())
+			{
+				if(isFortune(stack) && toolType.includeLooting())
+				{
+					includeEnchantment(lookup, enchantments, Enchantments.LOOTING);
+				}
+			}
+			else if(isFortune(stack))
 			{
 				includeEnchantment(lookup, enchantments, Enchantments.FORTUNE);
 				if(toolType.includeLooting())

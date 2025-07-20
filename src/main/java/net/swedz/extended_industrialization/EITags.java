@@ -1,9 +1,10 @@
 package net.swedz.extended_industrialization;
 
 import com.google.common.collect.Maps;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
@@ -47,6 +48,12 @@ public final class EITags
 		public static final TagKey<Block> MACHINE_CHAINER_RELAY    = block("machine_chainer/relay");
 	}
 	
+	public static final class DamageTypes
+	{
+		public static final TagKey<DamageType> AUTO_SMELT = damageType("auto_smelt");
+		public static final TagKey<DamageType> BEHEADING  = damageType("beheading");
+	}
+	
 	public static final class GeneratedRecipesBlacklist
 	{
 		public static final TagKey<Item>  CANNING_FOOD    = item("generated_recipes_blacklist/canning_food", "Canning Food Generated Recipes Blacklist");
@@ -56,33 +63,38 @@ public final class EITags
 	
 	public static TagKey<Item> item(String path, String englishName)
 	{
-		TagKey<Item> tag = TagKey.create(BuiltInRegistries.ITEM.key(), EI.id(path));
+		TagKey<Item> tag = TagKey.create(Registries.ITEM, EI.id(path));
 		TRANSLATIONS.put(tag, englishName);
 		return tag;
 	}
 	
 	public static TagKey<Item> itemCommon(String path)
 	{
-		return TagKey.create(BuiltInRegistries.ITEM.key(), ResourceLocation.fromNamespaceAndPath("c", path));
+		return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", path));
 	}
 	
 	public static TagKey<Fluid> fluid(String path)
 	{
-		return TagKey.create(BuiltInRegistries.FLUID.key(), EI.id(path));
+		return TagKey.create(Registries.FLUID, EI.id(path));
 	}
 	
 	public static TagKey<Fluid> fluidCommon(String path)
 	{
-		return TagKey.create(BuiltInRegistries.FLUID.key(), ResourceLocation.fromNamespaceAndPath("c", path));
+		return TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("c", path));
 	}
 	
 	public static TagKey<Block> block(String path)
 	{
-		return TagKey.create(BuiltInRegistries.BLOCK.key(), EI.id(path));
+		return TagKey.create(Registries.BLOCK, EI.id(path));
 	}
 	
 	public static TagKey<Block> blockCommon(String path)
 	{
-		return TagKey.create(BuiltInRegistries.BLOCK.key(), ResourceLocation.fromNamespaceAndPath("c", path));
+		return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", path));
+	}
+	
+	public static TagKey<DamageType> damageType(String path)
+	{
+		return TagKey.create(Registries.DAMAGE_TYPE, EI.id(path));
 	}
 }
