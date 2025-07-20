@@ -748,9 +748,9 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 					NanoSaberSweepEntity sweep = new NanoSaberSweepEntity(level, player, motion, colorRGB, rainbow, toolType.damage(), getMode(stack) == Mode.BEHEADING);
 					sweep.setPosRaw(spawnPos.x(), spawnPos.y(), spawnPos.z());
 					level.addFreshEntity(sweep);
+					
+					player.getCooldowns().addCooldown(this, 20);
 				}
-				
-				player.getCooldowns().addCooldown(this, 20);
 				
 				return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
 			}
