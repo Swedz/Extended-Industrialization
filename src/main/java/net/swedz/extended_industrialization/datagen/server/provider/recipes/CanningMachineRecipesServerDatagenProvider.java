@@ -3,18 +3,21 @@ package net.swedz.extended_industrialization.datagen.server.provider.recipes;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIMachines;
+import net.swedz.extended_industrialization.EITags;
 
 public final class CanningMachineRecipesServerDatagenProvider extends RecipesServerDatagenProvider
 {
@@ -45,13 +48,13 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 		);
 	}
 	
-	private static void addFillingAndEmptyingRecipes(String id, FluidStack fluidStack, Item emptyItem, Item fullItem, RecipeOutput output)
+	private static void addFillingAndEmptyingRecipes(String id, TagKey<Fluid> fluidTag, FluidStack fluidStack, Item emptyItem, Item fullItem, RecipeOutput output)
 	{
 		addMachineRecipe(
 				"canning_machine/filling", id, EIMachines.RecipeTypes.CANNING_MACHINE,
 				2, 5 * 20,
 				(r) -> r
-						.addFluidInput(fluidStack.getFluid(), fluidStack.getAmount())
+						.addFluidInput(fluidTag, fluidStack.getAmount())
 						.addItemInput(emptyItem, 1)
 						.addItemOutput(fullItem, 1),
 				output
@@ -80,6 +83,7 @@ public final class CanningMachineRecipesServerDatagenProvider extends RecipesSer
 		);
 		addFillingAndEmptyingRecipes(
 				"minecraft/honey_bottle",
+				EITags.Fluids.HONEY,
 				new FluidStack(EIFluids.HONEY.asFluid(), 250),
 				Items.GLASS_BOTTLE,
 				Items.HONEY_BOTTLE,
