@@ -23,7 +23,7 @@ import java.util.UUID;
 
 public final class EIDamageTypes
 {
-	public static final ResourceKey<DamageType> TESLA = ResourceKey.create(Registries.DAMAGE_TYPE, EI.id("tesla"));
+	public static final ResourceKey<DamageType> TESLA = create("tesla");
 	
 	private static Holder<DamageType> tesla(RegistryAccess registry)
 	{
@@ -54,8 +54,8 @@ public final class EIDamageTypes
 		return tesla(level, origin, damager);
 	}
 	
-	public static final ResourceKey<DamageType> NANO_SWIPE        = ResourceKey.create(Registries.DAMAGE_TYPE, EI.id("nano_swipe"));
-	public static final ResourceKey<DamageType> NANO_SWIPE_BEHEAD = ResourceKey.create(Registries.DAMAGE_TYPE, EI.id("nano_swipe_behead"));
+	public static final ResourceKey<DamageType> NANO_SWIPE        = create("nano_swipe");
+	public static final ResourceKey<DamageType> NANO_SWIPE_BEHEAD = create("nano_swipe_behead");
 	
 	private static Holder<DamageType> nanoSwipe(RegistryAccess registry, boolean behead)
 	{
@@ -65,5 +65,10 @@ public final class EIDamageTypes
 	public static DamageSource nanoSwipe(Level level, Entity damager, boolean behead)
 	{
 		return new DamageSource(nanoSwipe(level.registryAccess(), behead), damager);
+	}
+	
+	private static ResourceKey<DamageType> create(String name)
+	{
+		return ResourceKey.create(Registries.DAMAGE_TYPE, EI.id(name));
 	}
 }

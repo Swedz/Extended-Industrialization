@@ -22,13 +22,13 @@ public final class EIDataMaps
 {
 	private static final Set<DataMapType<?, ?>> DATA_MAPS = Sets.newHashSet();
 	
-	public static final DataMapType<Block, FarmerSimpleTallCropSize> FARMER_SIMPLE_TALL_CROP_SIZE = register("farmer_simple_tall_crop_size", Registries.BLOCK, FarmerSimpleTallCropSize.CODEC, true);
-	public static final DataMapType<Fluid, FertilizerPotency>        FERTILIZER_POTENCY           = register("fertilizer_potency", Registries.FLUID, FertilizerPotency.CODEC, true);
-	public static final DataMapType<Block, LargeElectricFurnaceTier> LARGE_ELECTRIC_FURNACE_TIER  = register("large_electric_furnace_tier", Registries.BLOCK, LargeElectricFurnaceTier.CODEC, true);
-	public static final DataMapType<Block, TeslaTowerTierData>       TESLA_TOWER_TIER             = register("tesla_tower_tier", Registries.BLOCK, TeslaTowerTierData.CODEC, true);
-	public static final DataMapType<Item, EnchantmentModule>         ENCHANTMENT_MODULE           = register("enchantment_module", Registries.ITEM, EnchantmentModule.CODEC, true);
+	public static final DataMapType<Block, FarmerSimpleTallCropSize> FARMER_SIMPLE_TALL_CROP_SIZE = create("farmer_simple_tall_crop_size", Registries.BLOCK, FarmerSimpleTallCropSize.CODEC, true);
+	public static final DataMapType<Fluid, FertilizerPotency>        FERTILIZER_POTENCY           = create("fertilizer_potency", Registries.FLUID, FertilizerPotency.CODEC, true);
+	public static final DataMapType<Block, LargeElectricFurnaceTier> LARGE_ELECTRIC_FURNACE_TIER  = create("large_electric_furnace_tier", Registries.BLOCK, LargeElectricFurnaceTier.CODEC, true);
+	public static final DataMapType<Block, TeslaTowerTierData>       TESLA_TOWER_TIER             = create("tesla_tower_tier", Registries.BLOCK, TeslaTowerTierData.CODEC, true);
+	public static final DataMapType<Item, EnchantmentModule>         ENCHANTMENT_MODULE           = create("enchantment_module", Registries.ITEM, EnchantmentModule.CODEC, true);
 	
-	private static <R, T> DataMapType<R, T> register(String name, ResourceKey<Registry<R>> registry, Codec<T> codec, boolean sync)
+	private static <R, T> DataMapType<R, T> create(String name, ResourceKey<Registry<R>> registry, Codec<T> codec, boolean sync)
 	{
 		var builder = DataMapType.builder(EI.id(name), registry, codec);
 		if(sync)
