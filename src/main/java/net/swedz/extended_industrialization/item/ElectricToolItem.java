@@ -867,6 +867,12 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		return MIComponents.ENERGY.get();
 	}
 	
+	@Override
+	public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player)
+	{
+		return toolType != Type.SABER || !player.isCreative();
+	}
+	
 	private static class StrippingAccess extends AxeItem
 	{
 		private StrippingAccess(Tier material, Properties properties)
