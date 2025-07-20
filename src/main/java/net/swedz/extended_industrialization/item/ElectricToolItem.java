@@ -118,7 +118,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		),
 		SABER(
 				60 * 20 * CableTier.HV.getMaxTransfer(),
-				12,
+				14,
 				false, false,
 				EIText.ELECTRIC_TOOL_HELP_2_LOOTING_BEHEADING,
 				Mode.LOOTING, Mode.BEHEADING
