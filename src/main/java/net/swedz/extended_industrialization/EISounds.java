@@ -13,6 +13,8 @@ public final class EISounds
 	
 	public static final Supplier<SoundEvent> TESLA_COIL_LOOP    = createVariableRangeEvent("tesla.loop");
 	public static final Supplier<SoundEvent> TESLA_COIL_SINGING = createVariableRangeEvent("tesla.singing");
+	public static final Supplier<SoundEvent> NANO_SWIPE_SWING   = createVariableRangeEvent("nano_swipe.swing");
+	public static final Supplier<SoundEvent> NANO_SWIPE_END     = createVariableRangeEvent("nano_swipe.end");
 	
 	private static Supplier<SoundEvent> createVariableRangeEvent(String name)
 	{

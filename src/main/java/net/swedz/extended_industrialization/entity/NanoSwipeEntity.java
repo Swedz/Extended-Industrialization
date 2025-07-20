@@ -11,7 +11,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -29,6 +28,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.EventHooks;
 import net.swedz.extended_industrialization.EIDamageTypes;
 import net.swedz.extended_industrialization.EIEntities;
+import net.swedz.extended_industrialization.EISounds;
 import net.swedz.tesseract.neoforge.api.tuple.Pair;
 
 import java.util.List;
@@ -152,7 +152,7 @@ public final class NanoSwipeEntity extends Projectile
 		if(ticks >= 10 * 20)
 		{
 			this.discard();
-			level.playSound(null, this.blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.25f, 2);
+			level.playSound(null, this.blockPosition(), EISounds.NANO_SWIPE_END.get(), SoundSource.PLAYERS, 1, 1);
 			return;
 		}
 		
@@ -181,7 +181,7 @@ public final class NanoSwipeEntity extends Projectile
 		else
 		{
 			this.discard();
-			level.playSound(null, this.blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.25f, 2);
+			level.playSound(null, this.blockPosition(), EISounds.NANO_SWIPE_END.get(), SoundSource.PLAYERS, 1, 1);
 		}
 		
 		ticks++;
@@ -222,7 +222,7 @@ public final class NanoSwipeEntity extends Projectile
 			var hitPos = result.getBlockPos().getCenter().relative(result.getDirection(), 0.6);
 			level.sendParticles(ParticleTypes.LARGE_SMOKE, hitPos.x(), hitPos.y(), hitPos.z(), 10, 0.1, 0.1, 0.1, 0.1);
 			
-			level.playSound(null, this.blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.25f, 2);
+			level.playSound(null, this.blockPosition(), EISounds.NANO_SWIPE_END.get(), SoundSource.PLAYERS, 1, 1);
 		}
 	}
 	

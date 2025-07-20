@@ -11,5 +11,37 @@
                 "attenuation_distance": 48
             }
         ]
+    },
+    "nano_swipe.swing": {
+        "sounds": [
+            "extended_industrialization:nano_swipe/swing1",
+            "extended_industrialization:nano_swipe/swing2",
+            "extended_industrialization:nano_swipe/swing3",
+            "extended_industrialization:nano_swipe/swing4",
+            "extended_industrialization:nano_swipe/swing5",
+            "extended_industrialization:nano_swipe/swing6",
+            "extended_industrialization:nano_swipe/swing7",
+            "extended_industrialization:nano_swipe/swing8",
+            "extended_industrialization:nano_swipe/swing9",
+            "extended_industrialization:nano_swipe/swing10",
+            "extended_industrialization:nano_swipe/swing11",
+            "extended_industrialization:nano_swipe/swing12",
+            "extended_industrialization:nano_swipe/swing13",
+            "extended_industrialization:nano_swipe/swing14",
+            "extended_industrialization:nano_swipe/swing15",
+            "extended_industrialization:nano_swipe/swing16",
+            "extended_industrialization:nano_swipe/swing17",
+            "extended_industrialization:nano_swipe/swing18",
+            "extended_industrialization:nano_swipe/swing19",
+            "extended_industrialization:nano_swipe/swing20",
+            "extended_industrialization:nano_swipe/swing21"
+        ]
+    },
+    "nano_swipe.end": {
+        "sounds": [
+            "extended_industrialization:nano_swipe/end1",
+            "extended_industrialization:nano_swipe/end2",
+            "extended_industrialization:nano_swipe/end3"
+        ]
     }
 }

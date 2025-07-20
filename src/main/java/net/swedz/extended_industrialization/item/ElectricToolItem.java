@@ -70,6 +70,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIArmorMaterials;
 import net.swedz.extended_industrialization.EIComponents;
+import net.swedz.extended_industrialization.EISounds;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.component.RainbowDataComponent;
 import net.swedz.extended_industrialization.entity.NanoSwipeEntity;
@@ -730,9 +731,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		{
 			if(!player.getCooldowns().isOnCooldown(this))
 			{
-				// TODO change these to modded sounds that are copies of them
-				level.playSound(player, player.blockPosition(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1, 1);
-				level.playSound(player, player.blockPosition(), SoundEvents.BEACON_POWER_SELECT, SoundSource.PLAYERS, 0.5f, 2);
+				level.playSound(player, player.blockPosition(), EISounds.NANO_SWIPE_SWING.get(), SoundSource.PLAYERS, 1, 1);
 				
 				if(!level.isClientSide())
 				{
