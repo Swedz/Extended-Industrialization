@@ -84,6 +84,7 @@ public enum EIText implements MICompatibleTranslatableTextEnum
 	MEOW("Meow :3"),
 	MULCH_GANG_FOR_LIFE_0("I love mulch!"),
 	MULCH_GANG_FOR_LIFE_1("Mulch is my favorite food!"),
+	NANO_SABER_HELP("- Press %s to make a long ranged sweep attack."),
 	NANO_SUIT_CREATIVE_FLIGHT("Creative Flight: %s"),
 	NANO_SUIT_HELP_1("Armor information:"),
 	NANO_SUIT_HELP_CREATIVE_FLIGHT("- Press %s while equipped or %s while hovered to toggle Creative Flight."),

@@ -222,6 +222,10 @@ public final class EITooltips
 				{
 					lines.add(line(EIText.ELECTRIC_TOOL_HELP_4).arg("%s.toggle_main_hand_ability".formatted(EI.ID), KEYBIND_PARSER).arg("mouse.right", KEYBIND_PARSER));
 				}
+				if(item.getToolType() == ElectricToolItem.Type.SABER)
+				{
+					lines.add(line(EIText.NANO_SABER_HELP).arg("use", KEYBIND_PARSER));
+				}
 				return lines;
 			}
 	);
