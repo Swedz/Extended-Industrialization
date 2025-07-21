@@ -31,16 +31,14 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.ShovelItem;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -49,7 +47,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -62,6 +60,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.IShearable;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
@@ -81,11 +81,14 @@ import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static aztech.modern_industrialization.MITooltips.*;
 import static net.swedz.extended_industrialization.EITooltips.*;
@@ -107,46 +110,96 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 				8,
 				true, true,
 				EIText.ELECTRIC_TOOL_HELP_2_FORTUNE_SILK_TOUCH,
-				Mode.SILK_TOUCH, Mode.FORTUNE
+				Stream.of(
+						ItemAbilities.DEFAULT_PICKAXE_ACTIONS,
+						ItemAbilities.DEFAULT_SHOVEL_ACTIONS
+				).flatMap(Set::stream).toList(),
+				List.of(Mode.SILK_TOUCH, Mode.FORTUNE),
+				() -> new Tool(
+						List.of(),
+						1, 1
+				)
 		),
 		CHAINSAW(
 				60 * 20 * CableTier.HV.getMaxTransfer(),
 				10,
 				true, false,
 				EIText.ELECTRIC_TOOL_HELP_2_FORTUNE_LOOTING,
-				Mode.SILK_TOUCH, Mode.FORTUNE_LOOTING
+				Stream.of(
+						ItemAbilities.DEFAULT_AXE_ACTIONS,
+						ItemAbilities.DEFAULT_SHEARS_ACTIONS
+				).flatMap(Set::stream).toList(),
+				List.of(Mode.SILK_TOUCH, Mode.FORTUNE_LOOTING),
+				() -> new Tool(
+						List.of(
+								Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), 0)
+						),
+						1, 1
+				)
 		),
 		SABER(
 				60 * 20 * CableTier.HV.getMaxTransfer(),
 				14,
 				false, false,
 				EIText.ELECTRIC_TOOL_HELP_2_LOOTING_BEHEADING,
-				Mode.LOOTING, Mode.BEHEADING
+				Stream.of(
+						ItemAbilities.DEFAULT_SWORD_ACTIONS
+				).flatMap(Set::stream).toList(),
+				List.of(Mode.LOOTING, Mode.BEHEADING),
+				() -> new Tool(
+						List.of(
+								Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), 0)
+						),
+						1, 2
+				)
 		),
 		ULTIMATE(
 				60 * 20 * CableTier.EV.getMaxTransfer(),
 				20,
 				true, true,
 				EIText.ELECTRIC_TOOL_HELP_2_FORTUNE_LOOTING,
-				Mode.SILK_TOUCH, Mode.FORTUNE_LOOTING
+				Stream.of(
+						ItemAbilities.DEFAULT_PICKAXE_ACTIONS,
+						ItemAbilities.DEFAULT_SHOVEL_ACTIONS,
+						ItemAbilities.DEFAULT_AXE_ACTIONS,
+						ItemAbilities.DEFAULT_SHEARS_ACTIONS,
+						ItemAbilities.DEFAULT_SWORD_ACTIONS
+				).flatMap(Set::stream).toList(),
+				List.of(Mode.SILK_TOUCH, Mode.FORTUNE_LOOTING),
+				() -> new Tool(
+						List.of(
+								Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), 0)
+						),
+						1, 2
+				)
 		);
 		
-		private final long       energyCapacity;
-		private final int        damage;
-		private final boolean    adjustableSpeed;
-		private final boolean    canDo3by3;
-		private final EIText     helpText;
-		private final List<Mode> modes;
+		private final long              energyCapacity;
+		private final int               damage;
+		private final boolean           adjustableSpeed;
+		private final boolean           canDo3by3;
+		private final EIText            helpText;
+		private final List<ItemAbility> abilities;
+		private final List<Mode>        modes;
+		private final Supplier<Tool>    tool;
 		
-		Type(long energyCapacity, int damage, boolean adjustableSpeed, boolean canDo3by3, EIText helpText, Mode... modes)
+		Type(long energyCapacity,
+			 int damage,
+			 boolean adjustableSpeed, boolean canDo3by3,
+			 EIText helpText,
+			 List<ItemAbility> abilities,
+			 List<Mode> modes,
+			 Supplier<Tool> tool)
 		{
-			Assert.that(modes.length > 0, "Electric tool type must have at least one mode");
+			Assert.that(!modes.isEmpty(), "Electric tool type must have at least one mode");
 			this.energyCapacity = energyCapacity;
 			this.damage = damage;
 			this.adjustableSpeed = adjustableSpeed;
 			this.canDo3by3 = canDo3by3;
 			this.helpText = helpText;
-			this.modes = List.of(modes);
+			this.abilities = Collections.unmodifiableList(abilities);
+			this.modes = Collections.unmodifiableList(modes);
+			this.tool = tool;
 		}
 		
 		public long energyCapacity()
@@ -174,6 +227,23 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			return helpText;
 		}
 		
+		public List<ItemAbility> abilities()
+		{
+			return abilities;
+		}
+		
+		public boolean canPerformAction(ItemAbility ability)
+		{
+			for(var other : abilities)
+			{
+				if(other.name().equals(ability.name()))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		
 		public List<Mode> modes()
 		{
 			return modes;
@@ -191,6 +261,11 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		public Mode defaultMode()
 		{
 			return modes.getFirst();
+		}
+		
+		public Tool createToolProperties()
+		{
+			return tool.get();
 		}
 	}
 	
@@ -270,7 +345,8 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 				.component(EIComponents.HIDE_BAR, false)
 				.component(EIComponents.ELECTRIC_TOOL_MODE, toolType.defaultMode())
 				.component(EIComponents.ELECTRIC_TOOL_SPEED, SPEED_MAX)
-				.component(MIComponents.ENERGY, 0L));
+				.component(MIComponents.ENERGY, 0L)
+				.component(DataComponents.TOOL, toolType.createToolProperties()));
 		this.toolType = toolType;
 	}
 	
@@ -608,7 +684,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	{
 		if(this.getStoredEnergy(stack) > 0)
 		{
-			if(this.isValidForBlock(stack, state))
+			if(this.isCorrectToolForDrops(stack, state))
 			{
 				float speed = getToolSpeed(stack) * SPEED_MULTIPLIER;
 				
@@ -774,13 +850,13 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		{
 			if(stack.is(ItemTags.AXES))
 			{
-				Block newBlock = StrippingAccess.getStrippedBlocks().get(state.getBlock());
-				if(newBlock != null)
+				var result = state.getToolModifiedState(context, ItemAbilities.AXE_STRIP, false);
+				if(result != null)
 				{
 					level.playSound(player, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1, 1);
 					if(!level.isClientSide)
 					{
-						level.setBlock(pos, newBlock.defaultBlockState().setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS)), 11);
+						level.setBlock(pos, result, Block.UPDATE_ALL_IMMEDIATE);
 						this.tryUseEnergy(stack, ENERGY_COST);
 					}
 					return InteractionResult.sidedSuccess(level.isClientSide);
@@ -788,13 +864,13 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			}
 			if(stack.is(ItemTags.SHOVELS))
 			{
-				BlockState newState = PathingAccess.getPathStates().get(state.getBlock());
-				if(newState != null)
+				var result = state.getToolModifiedState(context, ItemAbilities.SHOVEL_FLATTEN, false);
+				if(result != null)
 				{
 					level.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1, 1);
 					if(!level.isClientSide)
 					{
-						level.setBlock(pos, newState, 11);
+						level.setBlock(pos, result, Block.UPDATE_ALL_IMMEDIATE);
 						this.tryUseEnergy(stack, ENERGY_COST);
 					}
 					return InteractionResult.sidedSuccess(level.isClientSide);
@@ -873,29 +949,9 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		return toolType != Type.SABER || !player.isCreative();
 	}
 	
-	private static class StrippingAccess extends AxeItem
+	@Override
+	public boolean canPerformAction(ItemStack stack, ItemAbility ability)
 	{
-		private StrippingAccess(Tier material, Properties properties)
-		{
-			super(material, properties);
-		}
-		
-		public static Map<Block, Block> getStrippedBlocks()
-		{
-			return AxeItem.STRIPPABLES;
-		}
-	}
-	
-	private static class PathingAccess extends ShovelItem
-	{
-		private PathingAccess(Tier material, Properties properties)
-		{
-			super(material, properties);
-		}
-		
-		public static Map<Block, BlockState> getPathStates()
-		{
-			return ShovelItem.FLATTENABLES;
-		}
+		return toolType.canPerformAction(ability);
 	}
 }
