@@ -454,7 +454,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				(builder) -> builder
 						.addItemInput(Items.NETHERITE_SWORD, 1)
 						.addItemInput(EITags.itemCommon("plates/carbon"), 4)
-						.addItemInput(EITags.itemCommon("plates/stainless_steel"), 8)
+						.addItemInput(EITags.itemCommon("plates/stainless_steel"), 12)
 						.addItemInput(MIItem.ELECTRONIC_CIRCUIT, 4)
 						.addItemInput("modern_industrialization:silicon_battery", 2)
 						.addItemInput(Items.NETHER_STAR, 1)
