@@ -8,8 +8,8 @@
       "fluid": "modern_industrialization:polyethylene"
     },
     {
-      "amount": 2000,
-      "fluid": "modern_industrialization:nylon"
+      "amount": 1000,
+      "fluid": "modern_industrialization:cryofluid"
     }
   ],
   "item_inputs": [
@@ -38,8 +38,8 @@
       "item": "minecraft:nether_star"
     },
     {
-      "amount": 1,
-      "item": "modern_industrialization:cooling_cell"
+      "amount": 2,
+      "item": "modern_industrialization:large_motor"
     },
     {
       "amount": 1,

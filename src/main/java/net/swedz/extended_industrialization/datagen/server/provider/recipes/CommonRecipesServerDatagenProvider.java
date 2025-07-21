@@ -458,10 +458,10 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 						.addItemInput(MIItem.ELECTRONIC_CIRCUIT, 4)
 						.addItemInput("modern_industrialization:silicon_battery", 2)
 						.addItemInput(Items.NETHER_STAR, 1)
-						.addItemInput(MIItem.COOLING_CELL, 1)
+						.addItemInput(MIItem.LARGE_MOTOR, 2)
 						.addItemInput(MIItem.REDSTONE_CONTROL_MODULE, 1)
 						.addFluidInput(MIFluids.POLYETHYLENE, 4000)
-						.addFluidInput(MIFluids.NYLON, 2000)
+						.addFluidInput(MIFluids.CRYOFLUID, 1000)
 						.addItemOutput(EIItems.NANO_SABER, 1),
 				output
 		);
