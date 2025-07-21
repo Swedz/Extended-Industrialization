@@ -205,18 +205,11 @@ public final class NanoSaberSweepEntity extends Projectile
 		{
 			this.discard();
 			
-			var hitPos = result.getBlockPos().getCenter().relative(result.getDirection(), 0.6);
+			var hitPos = result.getLocation();
 			level.sendParticles(ParticleTypes.LARGE_SMOKE, hitPos.x(), hitPos.y(), hitPos.z(), 10, 0.1, 0.1, 0.1, 0.1);
 			
 			level.playSound(null, this.blockPosition(), EISounds.NANO_SABER_SWEEP_EXTINGUISH.get(), SoundSource.PLAYERS, 1, 1);
 		}
-	}
-	
-	@Override
-	public void onRemovedFromLevel()
-	{
-		super.onRemovedFromLevel();
-		
 	}
 	
 	@Override
