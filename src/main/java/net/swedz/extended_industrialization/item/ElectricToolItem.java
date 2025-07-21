@@ -738,7 +738,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 					this.tryUseEnergy(stack, ENERGY_COST * 4);
 					
 					var color = stack.get(DataComponents.DYED_COLOR);
-					int colorRGB = color == null ? -1 : color.rgb();
+					int colorRGB = color == null ? this.getDefaultDyeColor() : color.rgb();
 					boolean rainbow = stack.getOrDefault(EIComponents.RAINBOW, new RainbowDataComponent(false, true)).value();
 					
 					Vec3 look = player.getLookAngle().normalize();
