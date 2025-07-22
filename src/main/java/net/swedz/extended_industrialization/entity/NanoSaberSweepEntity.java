@@ -186,7 +186,7 @@ public final class NanoSaberSweepEntity extends Projectile
 			
 			if(this.getOwner() instanceof LivingEntity owner)
 			{
-				var source = EIDamageTypes.nanoSwipe(level, owner, beheading);
+				var source = EIDamageTypes.nanoSweep(level, this, owner, beheading);
 				hitEntity.hurt(source, power);
 				if(hitEntity.isAlive())
 				{

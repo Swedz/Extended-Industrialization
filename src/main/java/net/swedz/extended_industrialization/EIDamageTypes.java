@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import net.swedz.extended_industrialization.datamap.EnchantmentModule;
+import net.swedz.extended_industrialization.entity.NanoSaberSweepEntity;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -57,14 +58,14 @@ public final class EIDamageTypes
 	public static final ResourceKey<DamageType> NANO_SABER_SWEEP           = create("nano_saber_sweep");
 	public static final ResourceKey<DamageType> NANO_SABER_SWEEP_BEHEADING = create("nano_saber_sweep_beheading");
 	
-	private static Holder<DamageType> nanoSwipe(RegistryAccess registry, boolean behead)
+	private static Holder<DamageType> nanoSweep(RegistryAccess registry, boolean behead)
 	{
 		return registry.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(behead ? NANO_SABER_SWEEP_BEHEADING : NANO_SABER_SWEEP);
 	}
 	
-	public static DamageSource nanoSwipe(Level level, Entity damager, boolean behead)
+	public static DamageSource nanoSweep(Level level, NanoSaberSweepEntity sweep, Entity damager, boolean behead)
 	{
-		return new DamageSource(nanoSwipe(level.registryAccess(), behead), damager);
+		return new DamageSource(nanoSweep(level.registryAccess(), behead), sweep, damager);
 	}
 	
 	private static ResourceKey<DamageType> create(String name)

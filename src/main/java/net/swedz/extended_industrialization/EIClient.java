@@ -127,6 +127,7 @@ public final class EIClient
 		event.register(
 				(stack, color) -> color > 0 ? -1 : DyedItemColor.getOrDefault(stack, ((DynamicDyedItem) stack.getItem()).getDefaultDyeColor()),
 				EIItems.NANO_SABER,
+				EIItems.NANO_QUANTUM_SABER,
 				EIItems.ULTIMATE_LASER_DRILL,
 				EIItems.NANO_HELMET,
 				EIItems.NANO_CHESTPLATE,

@@ -1,9 +1,11 @@
 package net.swedz.extended_industrialization.item;
 
 import aztech.modern_industrialization.MIComponents;
+import aztech.modern_industrialization.MIRegistries;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.items.DynamicToolItem;
 import aztech.modern_industrialization.items.ItemHelper;
+import aztech.modern_industrialization.items.tools.QuantumSword;
 import aztech.modern_industrialization.util.GeometryHelper;
 import com.google.common.collect.Lists;
 import dev.technici4n.grandpower.api.ISimpleEnergyItem;
@@ -24,9 +26,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -335,9 +339,10 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		}
 	}
 	
-	private final Type toolType;
+	private final Type    toolType;
+	private final boolean quantum;
 	
-	public ElectricToolItem(Properties properties, Type toolType)
+	public ElectricToolItem(Properties properties, Type toolType, boolean quantum)
 	{
 		super(properties
 				.stacksTo(1)
@@ -348,11 +353,22 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 				.component(MIComponents.ENERGY, 0L)
 				.component(DataComponents.TOOL, toolType.createToolProperties()));
 		this.toolType = toolType;
+		this.quantum = quantum;
+	}
+	
+	public ElectricToolItem(Properties properties, Type toolType)
+	{
+		this(properties, toolType, false);
 	}
 	
 	public Type getToolType()
 	{
 		return toolType;
+	}
+	
+	public boolean isQuantum()
+	{
+		return quantum;
 	}
 	
 	public static Mode getMode(ItemStack stack)
@@ -672,17 +688,22 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			   !state.is(Tiers.NETHERITE.getIncorrectBlocksForDrops());
 	}
 	
+	private boolean hasEnergy(ItemStack stack)
+	{
+		return quantum || this.getStoredEnergy(stack) > 0;
+	}
+	
 	@Override
 	public boolean isCorrectToolForDrops(ItemStack stack, BlockState state)
 	{
-		return (this.getStoredEnergy(stack) > 0 && this.isValidForBlock(stack, state)) ||
+		return (this.hasEnergy(stack) && this.isValidForBlock(stack, state)) ||
 			   super.isCorrectToolForDrops(stack, state);
 	}
 	
 	@Override
 	public float getDestroySpeed(ItemStack stack, BlockState state)
 	{
-		if(this.getStoredEnergy(stack) > 0)
+		if(this.hasEnergy(stack))
 		{
 			if(this.isCorrectToolForDrops(stack, state))
 			{
@@ -707,13 +728,23 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack)
 	{
-		return this.getStoredEnergy(stack) > 0 ? ItemHelper.getToolModifiers(toolType.damage()) : ItemAttributeModifiers.EMPTY;
+		if(quantum)
+		{
+			return ItemAttributeModifiers.builder()
+					.add(
+							MIRegistries.INFINITE_DAMAGE,
+							new AttributeModifier(QuantumSword.BASE_INFINITE_DAMAGE, 1, AttributeModifier.Operation.ADD_VALUE),
+							EquipmentSlotGroup.MAINHAND
+					)
+					.build();
+		}
+		return this.hasEnergy(stack) ? ItemHelper.getToolModifiers(toolType.damage()) : ItemAttributeModifiers.EMPTY;
 	}
 	
 	@Override
 	public boolean isBarVisible(ItemStack stack)
 	{
-		return !stack.getOrDefault(EIComponents.HIDE_BAR, false);
+		return !quantum && !stack.getOrDefault(EIComponents.HIDE_BAR, false);
 	}
 	
 	@Override
@@ -739,7 +770,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack)
 	{
 		return !newStack.is(this) ||
-			   this.getStoredEnergy(newStack) == 0 ||
+			   !this.hasEnergy(newStack) ||
 			   Proxies.get(EIProxy.class).shouldCauseElectricToolBreakReset();
 	}
 	
@@ -789,6 +820,23 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		}
 	}
 	
+	private void sweep(Level level, Player player, ItemStack stack)
+	{
+		Assert.that(!level.isClientSide(), "Cannot call sweep() on the client!");
+		
+		var color = stack.get(DataComponents.DYED_COLOR);
+		int colorRGB = color == null ? this.getDefaultDyeColor() : color.rgb();
+		boolean rainbow = stack.getOrDefault(EIComponents.RAINBOW, new RainbowDataComponent(false, true)).value();
+		
+		Vec3 look = player.getLookAngle().normalize();
+		Vec3 spawnPos = player.position().add(0, player.getEyeHeight() / 2f, 0).add(look.multiply(0.25, 0.25, 0.25));
+		Vec3 target = player.getEyePosition().add(look.multiply(100, 100, 100));
+		Vec3 motion = target.subtract(spawnPos).normalize();
+		NanoSaberSweepEntity sweep = new NanoSaberSweepEntity(level, player, motion, colorRGB, rainbow, quantum ? (float) Integer.MAX_VALUE : toolType.damage(), getMode(stack) == Mode.BEHEADING);
+		sweep.setPos(spawnPos.x(), spawnPos.y(), spawnPos.z());
+		level.addFreshEntity(sweep);
+	}
+	
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
 	{
@@ -803,31 +851,17 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			}
 			return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
 		}
-		else if(toolType == Type.SABER && this.getStoredEnergy(stack) > 0)
+		else if(toolType == Type.SABER && this.hasEnergy(stack))
 		{
 			if(!player.getCooldowns().isOnCooldown(this))
 			{
 				level.playSound(player, player.blockPosition(), EISounds.NANO_SABER_SWEEP_SWING.get(), SoundSource.PLAYERS, 1, 1);
-				
 				if(!level.isClientSide())
 				{
 					this.tryUseEnergy(stack, ENERGY_COST * 4);
-					
-					var color = stack.get(DataComponents.DYED_COLOR);
-					int colorRGB = color == null ? this.getDefaultDyeColor() : color.rgb();
-					boolean rainbow = stack.getOrDefault(EIComponents.RAINBOW, new RainbowDataComponent(false, true)).value();
-					
-					Vec3 look = player.getLookAngle().normalize();
-					Vec3 spawnPos = player.position().add(0, player.getEyeHeight() / 2f, 0).add(look.multiply(0.25, 0.25, 0.25));
-					Vec3 target = player.getEyePosition().add(look.multiply(100, 100, 100));
-					Vec3 motion = target.subtract(spawnPos).normalize();
-					NanoSaberSweepEntity sweep = new NanoSaberSweepEntity(level, player, motion, colorRGB, rainbow, toolType.damage(), getMode(stack) == Mode.BEHEADING);
-					sweep.setPos(spawnPos.x(), spawnPos.y(), spawnPos.z());
-					level.addFreshEntity(sweep);
-					
+					this.sweep(level, player, stack);
 					player.getCooldowns().addCooldown(this, 20);
 				}
-				
 				return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
 			}
 			else
@@ -846,7 +880,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		BlockPos pos = context.getClickedPos();
 		BlockState state = level.getBlockState(pos);
 		Player player = context.getPlayer();
-		if(this.getStoredEnergy(stack) > 0)
+		if(this.hasEnergy(stack))
 		{
 			if(stack.is(ItemTags.AXES))
 			{
@@ -885,7 +919,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	{
 		Level level = interactionTarget.level();
 		BlockPos blockPos = interactionTarget.blockPosition();
-		if(this.getStoredEnergy(stack) > 0 &&
+		if(this.hasEnergy(stack) &&
 		   stack.is(Tags.Items.TOOLS_SHEAR) && interactionTarget instanceof IShearable shearable)
 		{
 			if(!level.isClientSide && shearable.isShearable(player, stack, level, blockPos))
@@ -921,7 +955,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	public ItemEnchantments getAllEnchantments(ItemStack stack, HolderLookup.RegistryLookup<Enchantment> lookup)
 	{
 		ItemEnchantments.Mutable enchantments = new ItemEnchantments.Mutable(super.getAllEnchantments(stack, lookup));
-		if(this.getStoredEnergy(stack) > 0)
+		if(this.hasEnergy(stack))
 		{
 			for(var enchantment : getMode(stack).enchantments())
 			{
@@ -934,7 +968,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public boolean isFoil(ItemStack stack)
 	{
-		return this.getStoredEnergy(stack) > 0;
+		return !quantum && this.hasEnergy(stack);
 	}
 	
 	@Override
