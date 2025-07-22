@@ -853,21 +853,14 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		}
 		else if(toolType == Type.SABER && this.hasEnergy(stack))
 		{
-			if(!player.getCooldowns().isOnCooldown(this))
+			level.playSound(player, player.blockPosition(), EISounds.NANO_SABER_SWEEP_SWING.get(), SoundSource.PLAYERS, 1, 1);
+			if(!level.isClientSide())
 			{
-				level.playSound(player, player.blockPosition(), EISounds.NANO_SABER_SWEEP_SWING.get(), SoundSource.PLAYERS, 1, 1);
-				if(!level.isClientSide())
-				{
-					this.tryUseEnergy(stack, ENERGY_COST * 4);
-					this.sweep(level, player, stack);
-					player.getCooldowns().addCooldown(this, 20);
-				}
-				return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+				this.tryUseEnergy(stack, ENERGY_COST * 4);
+				this.sweep(level, player, stack);
+				player.getCooldowns().addCooldown(this, 20);
 			}
-			else
-			{
-				return InteractionResultHolder.consume(stack);
-			}
+			return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
 		}
 		return super.use(level, player, hand);
 	}
