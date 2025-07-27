@@ -7,15 +7,18 @@ import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterNamedRenderTypesEvent;
 import net.neoforged.neoforge.client.event.RegisterRenderBuffersEvent;
 import net.swedz.extended_industrialization.client.shader.NanoQuantumTextureStateShard;
 import net.swedz.extended_industrialization.client.shader.TeslaPlasmaTextureStateShard;
 
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static net.minecraft.client.renderer.RenderStateShard.*;
 import static net.swedz.extended_industrialization.EIClientShaders.*;
@@ -28,41 +31,61 @@ public final class EIClientRenderTypes
 	
 	private static RenderType armorCutoutWithTransparency(ResourceLocation texture, boolean glow, boolean cull)
 	{
-		var state = RenderType.CompositeState.builder()
-				.setShaderState(glow ? ARMOR_CUTOUT_GLOW : RENDERTYPE_ARMOR_CUTOUT_NO_CULL_SHADER)
-				.setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-				.setCullState(cull ? CULL : NO_CULL)
-				.setLightmapState(LIGHTMAP)
-				.setOverlayState(NO_OVERLAY)
-				.setLayeringState(VIEW_OFFSET_Z_LAYERING)
-				.setDepthTestState(LEQUAL_DEPTH_TEST)
-				.createCompositeState(false);
-		return RenderType.create("armor_cutout_%s_with_transparency".formatted(cull ? "cull" : "no_cull"), DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 1536, false, false, state);
+		return RenderType.create(
+				"armor_cutout_%s_with_transparency".formatted(cull ? "cull" : "no_cull"),
+				DefaultVertexFormat.NEW_ENTITY,
+				VertexFormat.Mode.QUADS,
+				1536,
+				false,
+				false,
+				RenderType.CompositeState.builder()
+						.setShaderState(glow ? ARMOR_CUTOUT_GLOW : RENDERTYPE_ARMOR_CUTOUT_NO_CULL_SHADER)
+						.setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+						.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+						.setCullState(cull ? CULL : NO_CULL)
+						.setLightmapState(LIGHTMAP)
+						.setOverlayState(NO_OVERLAY)
+						.setLayeringState(VIEW_OFFSET_Z_LAYERING)
+						.setDepthTestState(LEQUAL_DEPTH_TEST)
+						.createCompositeState(false)
+		);
 	}
 	
-	public static final BiFunction<ResourceLocation, Boolean, RenderType> NANO_QUANTUM_STARS    = Util.memoize((mask, cull) -> createNanoQuantum(mask, true, cull));
-	public static final BiFunction<ResourceLocation, Boolean, RenderType> NANO_QUANTUM_NO_STARS = Util.memoize((mask, cull) -> createNanoQuantum(mask, false, cull));
+	public record NanoQuantumState(
+			ResourceLocation mask, boolean stars, float starScaleX, float starScaleY, boolean cull
+	)
+	{
+	}
 	
-	private static RenderStateShard.EmptyTextureStateShard nanoQuantumTexture(ResourceLocation mask, boolean stars)
+	public static final Function<NanoQuantumState, RenderType> NANO_QUANTUM = Util.memoize(EIClientRenderTypes::createNanoQuantum);
+	
+	private static RenderStateShard.EmptyTextureStateShard nanoQuantumTexture(NanoQuantumState state)
 	{
 		List<ResourceLocation> sprites = Lists.newArrayList();
 		for(int i = 1; i <= 4; i++)
 		{
 			sprites.add(EI.id("shaders/nano_quantum/%d".formatted(i)));
 		}
-		return new NanoQuantumTextureStateShard(mask, EI.id("textures/shaders/nano_quantum/glint.png"), stars, EI.id("textures/atlas/nano_quantum.png"), sprites, false, false);
+		return new NanoQuantumTextureStateShard(state.mask(), EI.id("textures/shaders/nano_quantum/glint.png"), state.stars(), state.starScaleX(), state.starScaleY(), EI.id("textures/atlas/nano_quantum.png"), sprites, false, false);
 	}
 	
-	private static RenderType createNanoQuantum(ResourceLocation mask, boolean stars, boolean cull)
+	private static RenderType createNanoQuantum(NanoQuantumState state)
 	{
-		var state = RenderType.CompositeState.builder()
-				.setShaderState(EIClientShaders.NANO_QUANTUM)
-				.setTextureState(nanoQuantumTexture(mask, stars))
-				.setCullState(cull ? CULL : NO_CULL)
-				.setLayeringState(VIEW_OFFSET_Z_LAYERING)
-				.createCompositeState(false);
-		return RenderType.create("nano_quantum_%s".formatted(stars ? "stars" : "no_stars"), EIClientShaders.NANO_QUANTUM_VERTEX_FORMAT, VertexFormat.Mode.QUADS, 1536, false, false, state);
+		return RenderType.create(
+				"nano_quantum_%s".formatted(state.stars() ? "stars" : "no_stars"),
+				DefaultVertexFormat.NEW_ENTITY,
+				VertexFormat.Mode.QUADS,
+				1536,
+				true,
+				false,
+				RenderType.CompositeState.builder()
+						.setShaderState(EIClientShaders.NANO_QUANTUM)
+						.setTextureState(nanoQuantumTexture(state))
+						.setCullState(state.cull() ? CULL : NO_CULL)
+						.setLayeringState(VIEW_OFFSET_Z_LAYERING)
+						.setTransparencyState(NO_TRANSPARENCY)
+						.createCompositeState(true)
+		);
 	}
 	
 	public static final RenderType TESLA_ARC = RenderType.create(
@@ -108,5 +131,11 @@ public final class EIClientRenderTypes
 	private static void onRegisterRenderBuffers(RegisterRenderBuffersEvent event)
 	{
 		event.registerRenderBuffer(TESLA_ARC);
+	}
+	
+	@SubscribeEvent
+	private static void registerNamedRenderTypes(RegisterNamedRenderTypesEvent event)
+	{
+		event.register(EI.id("nano_quantum_item_stars_cull"), RenderType.cutout(), NANO_QUANTUM.apply(new NanoQuantumState(InventoryMenu.BLOCK_ATLAS, true, 24, 24, true)));
 	}
 }

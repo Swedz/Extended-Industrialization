@@ -31,7 +31,7 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 	{
 		if(layerIndex == 1 && useQuantumShader && item.isQuantum())
 		{
-			return (stars ? NANO_QUANTUM_STARS : NANO_QUANTUM_NO_STARS).apply(texture, cull);
+			return NANO_QUANTUM.apply(new NanoQuantumState(texture, stars, 1, 0.5f, cull));
 		}
 		else
 		{

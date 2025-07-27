@@ -10,16 +10,21 @@ import java.util.List;
 
 public final class NanoQuantumTextureStateShard extends RenderStateShard.TextureStateShard
 {
-	private final ResourceLocation       glint;
-	private final boolean                renderStars;
+	private final ResourceLocation glint;
+	
+	private final boolean renderStars;
+	private final float   starScaleX, starScaleY;
+	
 	private final ResourceLocation       starAtlas;
 	private final List<ResourceLocation> sprites;
 	
-	public NanoQuantumTextureStateShard(ResourceLocation mask, ResourceLocation glint, boolean renderStars, ResourceLocation starAtlas, List<ResourceLocation> sprites, boolean blur, boolean mipmap)
+	public NanoQuantumTextureStateShard(ResourceLocation mask, ResourceLocation glint, boolean renderStars, float starScaleX, float starScaleY, ResourceLocation starAtlas, List<ResourceLocation> sprites, boolean blur, boolean mipmap)
 	{
 		super(mask, blur, mipmap);
 		this.glint = glint;
 		this.renderStars = renderStars;
+		this.starScaleX = starScaleX;
+		this.starScaleY = starScaleY;
 		this.starAtlas = starAtlas;
 		this.sprites = sprites;
 	}
@@ -30,6 +35,8 @@ public final class NanoQuantumTextureStateShard extends RenderStateShard.Texture
 		super.setupRenderState();
 		
 		EIClientShaders.nanoQuantum().getUniform("RenderStars").set(renderStars ? 1 : 0);
+		
+		EIClientShaders.nanoQuantum().getUniform("StarScale").set(new float[]{starScaleX, starScaleY});
 		
 		RenderSystem.setShaderTexture(1, glint);
 		

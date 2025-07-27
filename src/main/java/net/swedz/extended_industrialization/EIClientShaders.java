@@ -1,8 +1,6 @@
 package net.swedz.extended_industrialization;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormatElement;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.neoforged.api.distmarker.Dist;
@@ -48,19 +46,13 @@ public final class EIClientShaders
 	public static final RenderStateShard.ShaderStateShard TESLA_ARC         = new RenderStateShard.ShaderStateShard(EIClientShaders::teslaArc);
 	public static final RenderStateShard.ShaderStateShard TESLA_PLASMA      = new RenderStateShard.ShaderStateShard(EIClientShaders::teslaPlasma);
 	
-	public static final VertexFormat NANO_QUANTUM_VERTEX_FORMAT = VertexFormat.builder()
-			.add("Position", VertexFormatElement.POSITION)
-			.add("UV0", VertexFormatElement.UV0)
-			.add("Color", VertexFormatElement.COLOR)
-			.build();
-	
 	@SubscribeEvent
 	private static void registerShaders(RegisterShadersEvent event)
 	{
 		try
 		{
 			event.registerShader(new ShaderInstance(event.getResourceProvider(), EI.id("armor_cutout_glow"), DefaultVertexFormat.NEW_ENTITY), (shader) -> ARMOR_CUTOUT_GLOW_INSTANCE = shader);
-			event.registerShader(new ShaderInstance(event.getResourceProvider(), EI.id("nano_quantum"), NANO_QUANTUM_VERTEX_FORMAT), (shader) -> NANO_QUANTUM_INSTANCE = shader);
+			event.registerShader(new ShaderInstance(event.getResourceProvider(), EI.id("nano_quantum"), DefaultVertexFormat.NEW_ENTITY), (shader) -> NANO_QUANTUM_INSTANCE = shader);
 			event.registerShader(new ShaderInstance(event.getResourceProvider(), EI.id("tesla_plasma"), DefaultVertexFormat.POSITION_TEX), (shader) -> TESLA_PLASMA_INSTANCE = shader);
 			event.registerShader(new ShaderInstance(event.getResourceProvider(), EI.id("tesla_arc"), DefaultVertexFormat.POSITION_TEX), (shader) -> TESLA_ARC_INSTANCE = shader);
 		}

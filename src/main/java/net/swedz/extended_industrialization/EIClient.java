@@ -127,7 +127,6 @@ public final class EIClient
 		event.register(
 				(stack, color) -> color > 0 ? -1 : DyedItemColor.getOrDefault(stack, ((DynamicDyedItem) stack.getItem()).getDefaultDyeColor()),
 				EIItems.NANO_SABER,
-				EIItems.NANO_QUANTUM_SABER,
 				EIItems.ULTIMATE_LASER_DRILL,
 				EIItems.NANO_HELMET,
 				EIItems.NANO_CHESTPLATE,
@@ -138,6 +137,10 @@ public final class EIClient
 				EIItems.NANO_QUANTUM_CHESTPLATE,
 				EIItems.NANO_QUANTUM_LEGGINGS,
 				EIItems.NANO_QUANTUM_BOOTS
+		);
+		event.register(
+				(stack, color) -> color == 0 || color == 2 ? DyedItemColor.getOrDefault(stack, ((DynamicDyedItem) stack.getItem()).getDefaultDyeColor()) : -1,
+				EIItems.NANO_QUANTUM_SABER
 		);
 	}
 	

@@ -3,6 +3,7 @@ package net.swedz.extended_industrialization.client.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -55,7 +56,7 @@ public final class NanoSaberSweepEntityRenderer extends EntityRenderer<NanoSaber
 		
 		int color = entity.isRainbow() ?
 				RainbowDataComponent.getCurrentRainbowColor() :
-				entity.getColor() | 0xFF000000;
+				(entity.getColor() | 0xFF000000);
 		float red = FastColor.ARGB32.red(color) / 255f;
 		float green = FastColor.ARGB32.green(color) / 255f;
 		float blue = FastColor.ARGB32.blue(color) / 255f;
@@ -63,7 +64,7 @@ public final class NanoSaberSweepEntityRenderer extends EntityRenderer<NanoSaber
 		BakedModelRenderable.of(model).render(
 				matrices, bufferSource,
 				(__) -> RenderType.entityCutout(EIClientSheets.NANO_SABER_SWEEP),
-				packedLight, OverlayTexture.NO_OVERLAY, partialTick,
+				LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, partialTick,
 				new BakedModelRenderable.Context(
 						null,
 						new Direction[1],
