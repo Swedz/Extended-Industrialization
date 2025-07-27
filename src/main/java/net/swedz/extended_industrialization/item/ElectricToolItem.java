@@ -769,9 +769,18 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack)
 	{
-		return !newStack.is(this) ||
-			   !this.hasEnergy(newStack) ||
-			   Proxies.get(EIProxy.class).shouldCauseElectricToolBreakReset();
+		if(!newStack.is(this) ||
+		   !this.hasEnergy(newStack))
+		{
+			return true;
+		}
+		else
+		{
+			var proxy = Proxies.get(TesseractProxy.class);
+			return proxy.isClient() &&
+				   this.should3By3(newStack, proxy.getClientPlayer()) &&
+				   Proxies.get(EIProxy.class).shouldCauseElectricToolBreakReset();
+		}
 	}
 	
 	@Override
