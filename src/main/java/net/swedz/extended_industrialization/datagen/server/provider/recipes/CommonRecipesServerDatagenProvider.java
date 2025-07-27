@@ -465,6 +465,15 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 						.addItemOutput(EIItems.NANO_SABER, 1),
 				output
 		);
+		addMachineRecipe(
+				"tool", "nano_saber_quantum_upgrade", MIMachineRecipeTypes.PACKER,
+				1000000, 10 * 20,
+				(b) -> b
+						.addItemInput(EIItems.NANO_SABER, 1)
+						.addItemInput(MIItem.QUANTUM_UPGRADE, 1)
+						.addItemOutput(EIItems.NANO_QUANTUM_SABER, 1),
+				output
+		);
 		
 		addBasicCraftingRecipes(
 				"tool", "robot_auto_feeder", false,
