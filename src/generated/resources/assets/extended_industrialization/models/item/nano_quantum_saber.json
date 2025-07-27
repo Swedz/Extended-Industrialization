@@ -1,0 +1,26 @@
+{
+  "parent": "minecraft:item/handheld",
+  "loader": "neoforge:item_layers",
+  "neoforge_data": {
+    "layers": {
+      "0": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "2": {
+        "block_light": 15,
+        "sky_light": 15
+      }
+    }
+  },
+  "render_types": {
+    "extended_industrialization:nano_quantum_item_stars_cull": [
+      2
+    ]
+  },
+  "textures": {
+    "layer0": "extended_industrialization:item/nano_quantum_saber",
+    "layer1": "extended_industrialization:item/nano_quantum_saber_overlay",
+    "layer2": "extended_industrialization:item/nano_quantum_saber_quantum_overlay"
+  }
+}

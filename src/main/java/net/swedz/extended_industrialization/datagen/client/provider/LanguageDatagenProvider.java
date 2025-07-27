@@ -4,6 +4,7 @@ import aztech.modern_industrialization.MI;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EIEntities;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.EIKeybinds;
@@ -61,7 +62,10 @@ public final class LanguageDatagenProvider extends LanguageProvider
 		this.add("teslatower_tier.%s.%s.%s".formatted(EI.ID, EI.ID, "annealed_copper_tesla_winding"), "Annealed Copper");
 		this.add("teslatower_tier.%s.%s.%s".formatted(EI.ID, EI.ID, "superconductor_tesla_winding"), "Superconductor");
 		
+		this.add(EIEntities.NANO_SABER_SWEEP.get(), "Nano Saber Sweep");
+		
 		this.add(EI.id("tesla").toLanguageKey("death.attack"), "%1$s was electrocuted to death");
+		this.add(EI.id("nano_saber_sweep").toLanguageKey("death.attack"), "%1$s was vaporized");
 		
 		this.add("curios.identifier.shoulders", "Shoulders");
 	}

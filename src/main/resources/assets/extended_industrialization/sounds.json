@@ -11,5 +11,37 @@
                 "attenuation_distance": 48
             }
         ]
+    },
+    "nano_saber_sweep.swing": {
+        "sounds": [
+            "extended_industrialization:nano_saber_sweep/swing1",
+            "extended_industrialization:nano_saber_sweep/swing2",
+            "extended_industrialization:nano_saber_sweep/swing3",
+            "extended_industrialization:nano_saber_sweep/swing4",
+            "extended_industrialization:nano_saber_sweep/swing5",
+            "extended_industrialization:nano_saber_sweep/swing6",
+            "extended_industrialization:nano_saber_sweep/swing7",
+            "extended_industrialization:nano_saber_sweep/swing8",
+            "extended_industrialization:nano_saber_sweep/swing9",
+            "extended_industrialization:nano_saber_sweep/swing10",
+            "extended_industrialization:nano_saber_sweep/swing11",
+            "extended_industrialization:nano_saber_sweep/swing12",
+            "extended_industrialization:nano_saber_sweep/swing13",
+            "extended_industrialization:nano_saber_sweep/swing14",
+            "extended_industrialization:nano_saber_sweep/swing15",
+            "extended_industrialization:nano_saber_sweep/swing16",
+            "extended_industrialization:nano_saber_sweep/swing17",
+            "extended_industrialization:nano_saber_sweep/swing18",
+            "extended_industrialization:nano_saber_sweep/swing19",
+            "extended_industrialization:nano_saber_sweep/swing20",
+            "extended_industrialization:nano_saber_sweep/swing21"
+        ]
+    },
+    "nano_saber_sweep.extinguish": {
+        "sounds": [
+            "extended_industrialization:nano_saber_sweep/extinguish1",
+            "extended_industrialization:nano_saber_sweep/extinguish2",
+            "extended_industrialization:nano_saber_sweep/extinguish3"
+        ]
     }
 }

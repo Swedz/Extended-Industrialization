@@ -8,6 +8,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.datagen.server.provider.datamaps.DataMapDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.loottable.BlockLootTableDatagenProvider;
+import net.swedz.extended_industrialization.datagen.server.provider.loottable.LootModifierDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.AlloySmelterRecipesServerDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.BendingMachineRecipesServerDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.CanningMachineRecipesServerDatagenProvider;
@@ -18,6 +19,7 @@ import net.swedz.extended_industrialization.datagen.server.provider.recipes.Mate
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.NPKProcessingRecipesServerDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.recipes.VanillaCompatRecipesServerDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.tags.BlockTagDatagenProvider;
+import net.swedz.extended_industrialization.datagen.server.provider.tags.DamageTypeTagDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.tags.FluidTagDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.tags.ItemTagDatagenProvider;
 
@@ -32,6 +34,7 @@ public final class DatagenDelegatorServer
 		add(event, DataMapDatagenProvider::new);
 		
 		addLootTable(event, BlockLootTableDatagenProvider::new);
+		add(event, LootModifierDatagenProvider::new);
 		
 		add(event, AlloySmelterRecipesServerDatagenProvider::new);
 		add(event, BendingMachineRecipesServerDatagenProvider::new);
@@ -44,6 +47,7 @@ public final class DatagenDelegatorServer
 		add(event, VanillaCompatRecipesServerDatagenProvider::new);
 		
 		add(event, BlockTagDatagenProvider::new);
+		add(event, DamageTypeTagDatagenProvider::new);
 		add(event, FluidTagDatagenProvider::new);
 		add(event, ItemTagDatagenProvider::new);
 	}

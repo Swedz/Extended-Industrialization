@@ -14,6 +14,8 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.loaders.ItemLayerModelBuilder;
 import net.neoforged.neoforge.common.Tags;
@@ -39,6 +41,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public final class EIItems
@@ -67,6 +71,8 @@ public final class EIItems
 	public static final ItemHolder<SteamChainsawItem> STEAM_CHAINSAW          = create("steam_chainsaw", "Steam Chainsaw", SteamChainsawItem::new, EISortOrder.GEAR).tag(ItemTags.AXES, ItemTags.HOES, ItemTags.SWORDS, Tags.Items.TOOLS_SHEAR).withModelBuilder(CommonModelBuilders::handheld).register();
 	public static final ItemHolder<ElectricToolItem>  ELECTRIC_CHAINSAW       = create("electric_chainsaw", "Electric Chainsaw", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.CHAINSAW), EISortOrder.GEAR).tag(ItemTags.AXES, ItemTags.HOES, ItemTags.SWORDS, Tags.Items.TOOLS_SHEAR).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModelBuilder(CommonModelBuilders::handheld).register();
 	public static final ItemHolder<ElectricToolItem>  ELECTRIC_MINING_DRILL   = create("electric_mining_drill", "Electric Mining Drill", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.DRILL), EISortOrder.GEAR).tag(ItemTags.PICKAXES, ItemTags.SHOVELS).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModelBuilder(CommonModelBuilders::handheld).register();
+	public static final ItemHolder<ElectricToolItem>  NANO_SABER              = create("nano_saber", "Nano Saber", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.SABER), EISortOrder.GEAR).tag(ItemTags.DYEABLE, EITags.Items.RAINBOW_DYEABLE, ItemTags.SWORDS).withRegistrationListener(CommonRegistrations::cauldronClearDye).withRegistrationListener(RainbowDataComponent::cauldronClearDyeAndRainbow).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModel(nanoItemModel(false, false, false)).register();
+	public static final ItemHolder<ElectricToolItem>  NANO_QUANTUM_SABER      = create("nano_quantum_saber", "Quantum Nano Saber", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.SABER, true), EISortOrder.GEAR).tag(ItemTags.DYEABLE, EITags.Items.RAINBOW_DYEABLE, ItemTags.SWORDS).withRegistrationListener(CommonRegistrations::cauldronClearDye).withRegistrationListener(RainbowDataComponent::cauldronClearDyeAndRainbow).withModel(nanoItemModel(false, true, true)).register();
 	public static final ItemHolder<ElectricToolItem>  ULTIMATE_LASER_DRILL    = create("ultimate_laser_drill", "Ultimate Laser Drill", (p) -> new ElectricToolItem(p, ElectricToolItem.Type.ULTIMATE), EISortOrder.GEAR).tag(ItemTags.DYEABLE, EITags.Items.RAINBOW_DYEABLE, ItemTags.PICKAXES, ItemTags.SHOVELS, ItemTags.AXES, ItemTags.HOES, ItemTags.SWORDS, Tags.Items.TOOLS_SHEAR).withRegistrationListener(CommonRegistrations::cauldronClearDye).withRegistrationListener(RainbowDataComponent::cauldronClearDyeAndRainbow).withCapabilities(MICommonCapabitilies::simpleEnergyItem).withModelBuilder(CommonModelBuilders::handheldOverlayed).register();
 	public static final ItemHolder<NanoSuitArmorItem> NANO_HELMET             = createNanosuitArmor("nano_helmet", "Nano Helmet", ArmorItem.Type.HELMET, NanoSuitAbility.NIGHT_VISION).register();
 	public static final ItemHolder<NanoSuitArmorItem> NANO_CHESTPLATE         = createNanosuitArmor("nano_chestplate", "Nano Chestplate", ArmorItem.Type.CHESTPLATE).register();
@@ -123,6 +129,47 @@ public final class EIItems
 		return holder;
 	}
 	
+	private static int[] getNanoEmissiveLayers(boolean quantum)
+	{
+		return quantum ? new int[]{0, 2} : new int[]{0};
+	}
+	
+	private static <T extends Item> Function<ItemHolder<T>, Consumer<ItemModelProvider>> nanoItemModel(boolean generated, boolean quantum, boolean starry, BiFunction<ItemHolder<T>, ItemModelBuilder, Consumer<ItemModelProvider>> extra)
+	{
+		return (item) -> (provider) ->
+		{
+			String texture = item.identifier().id();
+			var baseModel = provider.getBuilder("item/%s".formatted(texture))
+					.parent(new ModelFile.UncheckedModelFile("item/%s".formatted(generated ? "generated" : "handheld")))
+					.texture("layer0", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + texture))
+					.texture("layer1", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + texture + "_overlay"))
+					.customLoader((parent, efh) ->
+					{
+						var builder = ItemLayerModelBuilder.begin(parent, efh)
+								.emissive(15, 15, getNanoEmissiveLayers(quantum));
+						if(starry)
+						{
+							builder.renderType(EI.id("nano_quantum_item_stars_cull"), 2);
+						}
+						return builder;
+					})
+					.end();
+			if(quantum)
+			{
+				baseModel.texture("layer2", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + texture + "_quantum_overlay"));
+			}
+			if(extra != null)
+			{
+				extra.apply(item, baseModel).accept(provider);
+			}
+		};
+	}
+	
+	private static <T extends Item> Function<ItemHolder<T>, Consumer<ItemModelProvider>> nanoItemModel(boolean generated, boolean quantum, boolean starry)
+	{
+		return nanoItemModel(generated, quantum, starry, null);
+	}
+	
 	public static ItemHolder<NanoSuitArmorItem> createNanosuitArmor(String id, String englishName, ArmorItem.Type armorType, Holder<ArmorMaterial> material, Optional<NanoSuitAbility> ability)
 	{
 		boolean quantum = material == EIArmorMaterials.NANO_QUANTUM;
@@ -152,21 +199,8 @@ public final class EIItems
 					}
 				})
 				.withCapabilities(MICommonCapabitilies::simpleEnergyItem)
-				.withModel((item) -> (provider) ->
+				.withModel(nanoItemModel(true, quantum, false, (item, baseModel) -> (provider) ->
 				{
-					int[] emissiveLayers = quantum ? new int[]{0, 2} : new int[]{0};
-					String texture = item.identifier().id();
-					var baseModel = provider.getBuilder("item/%s".formatted(texture))
-							.parent(new ModelFile.UncheckedModelFile("item/generated"))
-							.texture("layer0", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + texture))
-							.texture("layer1", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + texture + "_overlay"))
-							.customLoader((parent, efh) -> ItemLayerModelBuilder.begin(parent, efh)
-									.emissive(15, 15, emissiveLayers))
-							.end();
-					if(quantum)
-					{
-						baseModel.texture("layer2", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + texture + "_quantum_overlay"));
-					}
 					for(var itemProperty : itemProperties.apply(item.get()))
 					{
 						String propertyTexture = itemProperty.model();
@@ -175,7 +209,7 @@ public final class EIItems
 								.texture("layer0", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + propertyTexture))
 								.texture("layer1", ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + propertyTexture + "_overlay"))
 								.customLoader((parent, efh) -> ItemLayerModelBuilder.begin(parent, efh)
-										.emissive(15, 15, emissiveLayers))
+										.emissive(15, 15, getNanoEmissiveLayers(quantum)))
 								.end();
 						if(quantum)
 						{
@@ -186,7 +220,7 @@ public final class EIItems
 								.model(new ModelFile.UncheckedModelFile(ResourceLocation.fromNamespaceAndPath(item.identifier().modId(), "item/" + propertyTexture)))
 								.end();
 					}
-				});
+				}));
 	}
 	
 	public static ItemHolder<NanoSuitArmorItem> createNanosuitArmor(String id, String englishName, ArmorItem.Type armorType, Holder<ArmorMaterial> material, NanoSuitAbility ability)

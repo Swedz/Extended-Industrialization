@@ -12,6 +12,7 @@ uniform vec4 QuantumStarUV4;
 
 uniform float GameTime;
 uniform int RenderStars;
+uniform vec2 StarScale;
 uniform int QuantumStarLayers;
 
 const vec2 starMotion[4] = vec2[](
@@ -39,7 +40,7 @@ vec2 transformStarUV(vec2 uv, int layer)
 	vec2 minUV = starUV.xy;
 	vec2 maxUV = starUV.zw;
 	vec2 transformedUV = uv;
-	transformedUV.y *= 0.5;
+	transformedUV *= StarScale;
 	vec2 translation = vec2(GameTime) * starMotion[layer];
 	transformedUV += translation;
 	transformedUV = mod(transformedUV - minUV, maxUV - minUV) + minUV;

@@ -210,14 +210,21 @@ public final class EITooltips
 				{
 					lines.add(line(EIText.DYEABLE_HELP));
 				}
-				lines.add(line(item.getToolType().includeLooting() ? EIText.ELECTRIC_TOOL_HELP_2_LOOTING : EIText.ELECTRIC_TOOL_HELP_2)
+				lines.add(line(item.getToolType().helpText())
 						.arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER));
-				lines.add(line(EIText.ELECTRIC_TOOL_HELP_3)
-						.arg(EIText.KEY_ALT.text().withStyle(NUMBER_TEXT))
-						.arg(EIText.KEY_MOUSE_SCROLL.text().withStyle(NUMBER_TEXT)));
+				if(item.getToolType().hasAdjustableSpeed())
+				{
+					lines.add(line(EIText.ELECTRIC_TOOL_HELP_3)
+							.arg(EIText.KEY_ALT.text().withStyle(NUMBER_TEXT))
+							.arg(EIText.KEY_MOUSE_SCROLL.text().withStyle(NUMBER_TEXT)));
+				}
 				if(item.getToolType().canDo3by3())
 				{
 					lines.add(line(EIText.ELECTRIC_TOOL_HELP_4).arg("%s.toggle_main_hand_ability".formatted(EI.ID), KEYBIND_PARSER).arg("mouse.right", KEYBIND_PARSER));
+				}
+				if(item.getToolType() == ElectricToolItem.Type.SABER)
+				{
+					lines.add(line(EIText.NANO_SABER_HELP).arg("use", KEYBIND_PARSER));
 				}
 				return lines;
 			}

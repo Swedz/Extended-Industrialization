@@ -27,11 +27,13 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.RegisterMaterialAtlasesEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -40,6 +42,7 @@ import net.swedz.extended_industrialization.client.ber.chainer.MachineChainerHig
 import net.swedz.extended_industrialization.client.ber.tesla.TeslaPartMultiblockRenderer;
 import net.swedz.extended_industrialization.client.ber.tesla.TeslaPartSingleBlockRenderer;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
+import net.swedz.extended_industrialization.client.entity.NanoSaberSweepEntityRenderer;
 import net.swedz.extended_industrialization.client.model.chainer.MachineChainerUnbakedModel;
 import net.swedz.extended_industrialization.client.model.tesla.TeslaParticleGeneratorModel;
 import net.swedz.extended_industrialization.client.model.tesla.TeslaUnbakedModel;
@@ -80,7 +83,7 @@ public final class EIClient
 			{
 				Player player = Minecraft.getInstance().player;
 				ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
-				if(stack.getItem() instanceof ElectricToolItem)
+				if(stack.getItem() instanceof ElectricToolItem tool && tool.getToolType().hasAdjustableSpeed())
 				{
 					boolean increase = event.getScrollDeltaY() > 0;
 					int speed = ElectricToolItem.getToolSpeed(stack);
@@ -123,6 +126,7 @@ public final class EIClient
 	{
 		event.register(
 				(stack, color) -> color > 0 ? -1 : DyedItemColor.getOrDefault(stack, ((DynamicDyedItem) stack.getItem()).getDefaultDyeColor()),
+				EIItems.NANO_SABER,
 				EIItems.ULTIMATE_LASER_DRILL,
 				EIItems.NANO_HELMET,
 				EIItems.NANO_CHESTPLATE,
@@ -133,6 +137,10 @@ public final class EIClient
 				EIItems.NANO_QUANTUM_CHESTPLATE,
 				EIItems.NANO_QUANTUM_LEGGINGS,
 				EIItems.NANO_QUANTUM_BOOTS
+		);
+		event.register(
+				(stack, color) -> color == 0 || color == 2 ? DyedItemColor.getOrDefault(stack, ((DynamicDyedItem) stack.getItem()).getDefaultDyeColor()) : -1,
+				EIItems.NANO_QUANTUM_SABER
 		);
 	}
 	
@@ -172,6 +180,12 @@ public final class EIClient
 	}
 	
 	@SubscribeEvent
+	private static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event)
+	{
+		event.registerEntityRenderer(EIEntities.NANO_SABER_SWEEP.get(), NanoSaberSweepEntityRenderer::new);
+	}
+	
+	@SubscribeEvent
 	private static void registerClientTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event)
 	{
 		event.register(SteamChainsawItem.SteamChainsawTooltipData.class, SteamChainsawTooltipComponent::new);
@@ -196,5 +210,12 @@ public final class EIClient
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_hatch")));
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_receiver")));
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_tower")));
+		event.register(ModelResourceLocation.standalone(EI.id("entity/nano_saber_sweep")));
+	}
+	
+	@SubscribeEvent
+	private static void registerAtlases(RegisterMaterialAtlasesEvent event)
+	{
+		event.register(EIClientSheets.NANO_SABER_SWEEP, EI.id("nano_saber_sweep"));
 	}
 }

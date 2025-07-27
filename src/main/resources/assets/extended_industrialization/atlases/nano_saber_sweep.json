@@ -1,0 +1,9 @@
+{
+    "sources": [
+        {
+            "type": "directory",
+            "source": "entity/nano_saber_sweep",
+            "prefix": "entity/nano_saber_sweep/"
+        }
+    ]
+}
