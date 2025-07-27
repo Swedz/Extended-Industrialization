@@ -11,11 +11,9 @@ import aztech.modern_industrialization.items.SteamDrillFuel;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import aztech.modern_industrialization.util.Simulation;
 import aztech.modern_industrialization.util.TextHelper;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -426,7 +424,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag)
 	{
-		SteamChainsawTooltipData data = (SteamChainsawTooltipData) this.getTooltipImage(stack).orElseThrow();
+		var data = (SteamChainsawTooltipData) this.getTooltipImage(stack).orElseThrow();
 		
 		tooltip.add(MIText.WaterPercent.text(data.waterLevel).setStyle(TextHelper.WATER_TEXT));
 		int barWater = (int) Math.ceil(data.waterLevel / 5d);
@@ -439,13 +437,9 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 			tooltip.add(MIText.SecondsLeft.text(data.burnTicks / 100).setStyle(TextHelper.GRAY_TEXT));
 		}
 		
-		if(context.registries() != null)
-		{
-			for(Object2IntMap.Entry<Holder<Enchantment>> entry : this.getAllEnchantments(stack, context.registries().lookupOrThrow(Registries.ENCHANTMENT)).entrySet())
-			{
-				tooltip.add(Enchantment.getFullname(entry.getKey(), entry.getIntValue()));
-			}
-		}
+		tooltip.add(MIText.SilkTouchState
+				.text(isNotSilkTouch(stack) ? MIText.Deactivated.text().setStyle(TextHelper.RED) : MIText.Activated.text().setStyle(TextHelper.GREEN))
+				.setStyle(TextHelper.GRAY_TEXT.withItalic(false)));
 	}
 	
 	@Override
