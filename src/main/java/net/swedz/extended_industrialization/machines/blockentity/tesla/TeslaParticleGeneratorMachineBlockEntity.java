@@ -20,6 +20,7 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.machines.component.tesla.AestheticTeslaCoilComponent;
+import net.swedz.extended_industrialization.machines.component.tesla.ForceHideTeslaComponent;
 import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.configurationpanel.ConfigurationPanelBuilder;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
@@ -37,6 +38,7 @@ public final class TeslaParticleGeneratorMachineBlockEntity extends MachineBlock
 	private final RedstoneControlComponent redstoneControl;
 	
 	private final AestheticTeslaCoilComponent aesthetic;
+	private final ForceHideTeslaComponent     forceHideRender;
 	
 	public TeslaParticleGeneratorMachineBlockEntity(BEP bep)
 	{
@@ -57,7 +59,9 @@ public final class TeslaParticleGeneratorMachineBlockEntity extends MachineBlock
 				.with(EI.id("tesla/tesla_particle_generator/extreme"), EIText.TESLA_PARTICLE_GENERATOR_SIZE_EXTREME.text())
 				.with(EI.id("tesla/tesla_particle_generator/immense"), EIText.TESLA_PARTICLE_GENERATOR_SIZE_IMMENSE.text());
 		
-		this.registerComponents(isActive, redstoneControl, aesthetic);
+		forceHideRender = new ForceHideTeslaComponent();
+		
+		this.registerComponents(isActive, redstoneControl, aesthetic, forceHideRender);
 		
 		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
 				.withRedstoneModule(redstoneControl));
@@ -74,7 +78,7 @@ public final class TeslaParticleGeneratorMachineBlockEntity extends MachineBlock
 	@Override
 	public boolean shouldTeslaRender()
 	{
-		return isActive.isActive;
+		return isActive.isActive && !forceHideRender.isHidden();
 	}
 	
 	@Override
