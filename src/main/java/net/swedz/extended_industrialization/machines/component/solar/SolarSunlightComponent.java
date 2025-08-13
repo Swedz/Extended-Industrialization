@@ -4,7 +4,7 @@ import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Level;
+import net.swedz.extended_industrialization.EITags;
 
 public final class SolarSunlightComponent implements IComponent.ServerOnly
 {
@@ -53,9 +53,10 @@ public final class SolarSunlightComponent implements IComponent.ServerOnly
 	
 	public boolean hasSunlight()
 	{
-		Level level = machine.getLevel();
+		var level = machine.getLevel();
 		return !level.isRaining() && !level.isThundering() &&
-			   level.canSeeSky(machine.getBlockPos().above());
+			   level.canSeeSky(machine.getBlockPos().above()) &&
+			   !level.dimensionTypeRegistration().is(EITags.DimensionTypes.SOLAR_BLACKLIST);
 	}
 	
 	public boolean canOperate()
