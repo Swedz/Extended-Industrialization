@@ -114,7 +114,7 @@ public enum EIText implements MICompatibleTranslatableTextEnum
 	ROBOT_AUTO_FEEDER_HELP_2("Works with item containing items such as backpacks."),
 	SOLAR_BOILER_CALCIFICATION("Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Using an axe on the boiler will reset its calcification."),
 	SOLAR_EFFICIENCY("Solar Efficiency: %d %%"),
-	SOLAR_PANEL_DISTILLED_WATER("By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long!"),
+	SOLAR_PANEL_DISTILLED_WATER("By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long and produce 1.5x as much energy!"),
 	SOLAR_PANEL_PHOTOVOLTAIC_CELL("To produce energy, the Solar Panel needs a matching tier Photovoltaic Cell in its inventory."),
 	SOLAR_PANEL_SUNLIGHT("Energy generation rates are determined by how high the sun is in the sky and if the sky is visible."),
 	STEAM_CHAINSAW_1("- Press %s on still or flowing water to fill."),

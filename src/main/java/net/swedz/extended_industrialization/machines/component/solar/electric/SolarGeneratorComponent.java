@@ -30,6 +30,8 @@ public final class SolarGeneratorComponent implements IComponent.ServerOnly
 	
 	private PhotovoltaicCellItem photovoltaicCell;
 	
+	private boolean usedDistilledWater;
+	
 	public SolarGeneratorComponent(MIInventory inventory, EnergyComponent energy, Supplier<Float> energyEfficiency, Predicate<PhotovoltaicCellItem> photovoltaicCellTest)
 	{
 		this.inventory = inventory;
@@ -50,7 +52,7 @@ public final class SolarGeneratorComponent implements IComponent.ServerOnly
 	
 	public long getEnergyPerTick()
 	{
-		return photovoltaicCell != null ? (long) (photovoltaicCell.getEuPerTick() * energyEfficiency.get()) : 0;
+		return photovoltaicCell != null ? (long) (photovoltaicCell.getEuPerTick() * energyEfficiency.get() * (usedDistilledWater ? 1.5 : 1)) : 0;
 	}
 	
 	private boolean tryUseDistilledWater()
@@ -75,6 +77,7 @@ public final class SolarGeneratorComponent implements IComponent.ServerOnly
 		else
 		{
 			photovoltaicCell = null;
+			usedDistilledWater = false;
 			slotCell.setAmount(0);
 			slotCell.setKey(ItemVariant.blank());
 		}
@@ -92,7 +95,7 @@ public final class SolarGeneratorComponent implements IComponent.ServerOnly
 		{
 			photovoltaicCell = cellItem;
 			
-			boolean usedDistilledWater = this.tryUseDistilledWater();
+			usedDistilledWater = this.tryUseDistilledWater();
 			boolean deterioratePhotovoltaicCell = !usedDistilledWater || tick % 2 == 0;
 			
 			if(deterioratePhotovoltaicCell)
@@ -100,11 +103,13 @@ public final class SolarGeneratorComponent implements IComponent.ServerOnly
 				this.deterioratePhotovoltaicCell();
 			}
 			
-			energy.insertEu(this.getEnergyPerTick(), Simulation.ACT);
+			energy.insertEu((long) (this.getEnergyPerTick() * (usedDistilledWater ? 1.5f : 1f)), Simulation.ACT);
 		}
 		else
 		{
 			photovoltaicCell = null;
+			
+			usedDistilledWater = false;
 		}
 	}
 	
