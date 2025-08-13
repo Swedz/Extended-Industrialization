@@ -7,6 +7,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.material.Fluid;
 
 import java.util.Collections;
@@ -46,6 +47,11 @@ public final class EITags
 		public static final TagKey<Block> FARMER_DIRT              = block("farmer_dirt");
 		public static final TagKey<Block> MACHINE_CHAINER_LINKABLE = block("machine_chainer/linkable");
 		public static final TagKey<Block> MACHINE_CHAINER_RELAY    = block("machine_chainer/relay");
+	}
+	
+	public static final class Dimension
+	{
+		public static final TagKey<DimensionType> SOLAR_BLACKLIST = dimensionType("solar_blacklist");
 	}
 	
 	public static final class DamageTypes
@@ -91,6 +97,11 @@ public final class EITags
 	public static TagKey<Block> blockCommon(String path)
 	{
 		return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", path));
+	}
+	
+	public static TagKey<DimensionType> dimensionType(String path)
+	{
+		return TagKey.create(Registries.DIMENSION_TYPE, EI.id(path));
 	}
 	
 	public static TagKey<DamageType> damageType(String path)
