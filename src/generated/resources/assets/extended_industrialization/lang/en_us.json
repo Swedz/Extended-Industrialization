@@ -249,7 +249,7 @@
   "text.extended_industrialization.robot_auto_feeder_help_2": "Works with item containing items such as backpacks.",
   "text.extended_industrialization.solar_boiler_calcification": "Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Using an axe on the boiler will reset its calcification.",
   "text.extended_industrialization.solar_efficiency": "Solar Efficiency: %d %%",
-  "text.extended_industrialization.solar_panel_distilled_water": "By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long!",
+  "text.extended_industrialization.solar_panel_distilled_water": "By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long and produce 1.5x as much energy!",
   "text.extended_industrialization.solar_panel_photovoltaic_cell": "To produce energy, the Solar Panel needs a matching tier Photovoltaic Cell in its inventory.",
   "text.extended_industrialization.solar_panel_sunlight": "Energy generation rates are determined by how high the sun is in the sky and if the sky is visible.",
   "text.extended_industrialization.steam_chainsaw_1": "- Press %s on still or flowing water to fill.",
