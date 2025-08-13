@@ -49,7 +49,7 @@ public final class EITags
 		public static final TagKey<Block> MACHINE_CHAINER_RELAY    = block("machine_chainer/relay");
 	}
 	
-	public static final class Dimension
+	public static final class DimensionTypes
 	{
 		public static final TagKey<DimensionType> SOLAR_BLACKLIST = dimensionType("solar_blacklist");
 	}

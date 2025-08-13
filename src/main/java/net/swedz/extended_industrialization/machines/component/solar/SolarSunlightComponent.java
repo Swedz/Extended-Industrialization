@@ -56,7 +56,7 @@ public final class SolarSunlightComponent implements IComponent.ServerOnly
 		var level = machine.getLevel();
 		return !level.isRaining() && !level.isThundering() &&
 			   level.canSeeSky(machine.getBlockPos().above()) &&
-			   !level.dimensionTypeRegistration().is(EITags.Dimension.SOLAR_BLACKLIST);
+			   !level.dimensionTypeRegistration().is(EITags.DimensionTypes.SOLAR_BLACKLIST);
 	}
 	
 	public boolean canOperate()
