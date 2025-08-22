@@ -44,9 +44,10 @@ public final class EITags
 	
 	public static final class Blocks
 	{
-		public static final TagKey<Block> FARMER_DIRT              = block("farmer_dirt");
-		public static final TagKey<Block> MACHINE_CHAINER_LINKABLE = block("machine_chainer/linkable");
-		public static final TagKey<Block> MACHINE_CHAINER_RELAY    = block("machine_chainer/relay");
+		public static final TagKey<Block> FARMER_DIRT               = block("farmer_dirt");
+		public static final TagKey<Block> MACHINE_CHAINER_LINKABLE  = block("machine_chainer/linkable");
+		public static final TagKey<Block> MACHINE_CHAINER_RELAY     = block("machine_chainer/relay");
+		public static final TagKey<Block> MACHINE_CHAINER_BLACKLIST = block("machine_chainer/blacklist");
 	}
 	
 	public static final class DimensionTypes
