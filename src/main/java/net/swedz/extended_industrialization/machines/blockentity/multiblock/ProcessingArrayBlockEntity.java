@@ -9,7 +9,7 @@ import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.init.MachineTier;
 import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.multiblocks.HatchFlags;
-import aztech.modern_industrialization.machines.multiblocks.HatchType;
+import aztech.modern_industrialization.machines.multiblocks.HatchTypes;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
@@ -142,9 +142,9 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 		SimpleMember casing = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("clean_stainless_steel_machine_casing")));
 		SimpleMember pipe = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("stainless_steel_machine_casing_pipe")));
 		SimpleMember glass = new PredicateSimpleMember((state) -> state.is(EITags.blockCommon("glass_blocks")), Blocks.GLASS);
-		HatchFlags front = new HatchFlags.Builder().with(HatchType.ENERGY_INPUT).build();
-		HatchFlags top = new HatchFlags.Builder().with(HatchType.ITEM_INPUT, HatchType.FLUID_INPUT).build();
-		HatchFlags bottom = new HatchFlags.Builder().with(HatchType.ITEM_OUTPUT, HatchType.FLUID_OUTPUT).build();
+		HatchFlags front = new HatchFlags.Builder().with(HatchTypes.ENERGY_INPUT).build();
+		HatchFlags top = new HatchFlags.Builder().with(HatchTypes.ITEM_INPUT, HatchTypes.FLUID_INPUT).build();
+		HatchFlags bottom = new HatchFlags.Builder().with(HatchTypes.ITEM_OUTPUT, HatchTypes.FLUID_OUTPUT).build();
 		
 		for(int
 			i = 0, size = 3, machines = BASE_MACHINES;

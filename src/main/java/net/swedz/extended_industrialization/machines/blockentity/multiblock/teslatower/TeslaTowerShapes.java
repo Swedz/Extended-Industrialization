@@ -3,7 +3,7 @@ package net.swedz.extended_industrialization.machines.blockentity.multiblock.tes
 import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.multiblocks.HatchFlags;
-import aztech.modern_industrialization.machines.multiblocks.HatchType;
+import aztech.modern_industrialization.machines.multiblocks.HatchTypes;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import net.swedz.extended_industrialization.EI;
@@ -110,7 +110,7 @@ public final class TeslaTowerShapes extends DataMapMultiblockTieredShapes<TeslaT
 					MachineCasings.CLEAN_STAINLESS_STEEL,
 					layersConvertFromVertical(this.pattern())
 			);
-			builder.key('S', SimpleMember.forBlockId(MI.id("clean_stainless_steel_machine_casing")), new HatchFlags.Builder().with(HatchType.ENERGY_INPUT).build());
+			builder.key('S', SimpleMember.forBlockId(MI.id("clean_stainless_steel_machine_casing")), new HatchFlags.Builder().with(HatchTypes.ENERGY_INPUT).build());
 			builder.key('P', SimpleMember.forBlockId(MI.id("stainless_steel_machine_casing_pipe")), HatchFlags.NO_HATCH);
 			builder.key('T', SimpleMember.forBlockId(EI.id("polished_silver_machine_casing")), HatchFlags.NO_HATCH);
 			builder.key('W', SimpleMember.forBlockId(tier.blockId()), HatchFlags.NO_HATCH);

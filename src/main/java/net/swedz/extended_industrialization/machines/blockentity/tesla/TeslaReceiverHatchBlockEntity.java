@@ -16,6 +16,7 @@ import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.machines.multiblocks.HatchBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.HatchType;
+import aztech.modern_industrialization.machines.multiblocks.HatchTypes;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -167,7 +168,7 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 	@Override
 	public HatchType getHatchType()
 	{
-		return HatchType.ENERGY_INPUT;
+		return HatchTypes.ENERGY_INPUT;
 	}
 	
 	@Override
