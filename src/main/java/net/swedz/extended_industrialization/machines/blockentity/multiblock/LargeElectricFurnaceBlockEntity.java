@@ -7,7 +7,7 @@ import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
 import aztech.modern_industrialization.machines.init.MachineTier;
 import aztech.modern_industrialization.machines.multiblocks.HatchFlags;
-import aztech.modern_industrialization.machines.multiblocks.HatchType;
+import aztech.modern_industrialization.machines.multiblocks.HatchTypes;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
@@ -118,7 +118,7 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 		SHAPE_TEMPLATES = new ShapeTemplate[TIERS.size()];
 		
 		SimpleMember heatproofMachineCasing = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("heatproof_machine_casing")));
-		HatchFlags hatches = new HatchFlags.Builder().with(HatchType.ITEM_INPUT, HatchType.ITEM_OUTPUT, HatchType.ENERGY_INPUT).build();
+		HatchFlags hatches = new HatchFlags.Builder().with(HatchTypes.ITEM_INPUT, HatchTypes.ITEM_OUTPUT, HatchTypes.ENERGY_INPUT).build();
 		
 		for(int i = 0; i < TIERS.size(); i++)
 		{

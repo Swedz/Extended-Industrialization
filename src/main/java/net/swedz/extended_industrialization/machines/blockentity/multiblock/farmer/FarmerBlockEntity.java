@@ -7,7 +7,7 @@ import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.ShapeSelection;
 import aztech.modern_industrialization.machines.models.MachineCasing;
 import aztech.modern_industrialization.machines.multiblocks.HatchFlags;
-import aztech.modern_industrialization.machines.multiblocks.HatchType;
+import aztech.modern_industrialization.machines.multiblocks.HatchTypes;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
@@ -260,9 +260,9 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 			HatchFlags.Builder hatchFlagsBuilder = new HatchFlags.Builder();
 			if(electric)
 			{
-				hatchFlagsBuilder.with(HatchType.ENERGY_INPUT);
+				hatchFlagsBuilder.with(HatchTypes.ENERGY_INPUT);
 			}
-			HatchFlags hatchFlags = hatchFlagsBuilder.with(HatchType.ITEM_INPUT, HatchType.ITEM_OUTPUT, HatchType.FLUID_INPUT).build();
+			HatchFlags hatchFlags = hatchFlagsBuilder.with(HatchTypes.ITEM_INPUT, HatchTypes.ITEM_OUTPUT, HatchTypes.FLUID_INPUT).build();
 			
 			for(int i = 0; i < shapeTemplates.length; i++)
 			{
