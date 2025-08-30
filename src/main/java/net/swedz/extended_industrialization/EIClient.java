@@ -159,22 +159,29 @@ public final class EIClient
 		{
 			if(blockDef.get() instanceof MachineBlock machine)
 			{
-				MachineBlockEntity blockEntity = machine.getBlockEntityInstance();
-				BlockEntityType type = blockEntity.getType();
-				
-				BlockEntityRendererProvider provider = switch (blockEntity)
+				try
 				{
-					case MachineChainerMachineBlockEntity be -> MachineChainerHighlightRenderer::new;
-					case TeslaBehavior __ -> switch (blockEntity)
+					MachineBlockEntity blockEntity = machine.getBlockEntityInstance();
+					BlockEntityType type = blockEntity.getType();
+					
+					BlockEntityRendererProvider provider = switch (blockEntity)
 					{
-						case MultiblockMachineBlockEntity be -> TeslaPartMultiblockRenderer::new;
-						default -> TeslaPartSingleBlockRenderer::new;
+						case MachineChainerMachineBlockEntity be -> MachineChainerHighlightRenderer::new;
+						case TeslaBehavior __ -> switch (blockEntity)
+						{
+							case MultiblockMachineBlockEntity be -> TeslaPartMultiblockRenderer::new;
+							default -> TeslaPartSingleBlockRenderer::new;
+						};
+						case LargeTankMultiblockBlockEntity be -> MultiblockTankBER::new;
+						case MultiblockMachineBlockEntity be -> MultiblockMachineBER::new;
+						default -> MachineBlockEntityRenderer::new;
 					};
-					case LargeTankMultiblockBlockEntity be -> MultiblockTankBER::new;
-					case MultiblockMachineBlockEntity be -> MultiblockMachineBER::new;
-					default -> MachineBlockEntityRenderer::new;
-				};
-				BlockEntityRenderers.register(type, provider);
+					BlockEntityRenderers.register(type, provider);
+				}
+				catch (Exception ex)
+				{
+					throw new RuntimeException("Failed to register BER for %s".formatted(blockDef.getId()), ex);
+				}
 			}
 		}
 	}
