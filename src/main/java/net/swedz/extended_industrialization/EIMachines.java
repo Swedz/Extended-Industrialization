@@ -217,46 +217,53 @@ public final class EIMachines
 	{
 		hook.builder("bending_machine", "Bending Machine", RecipeTypes.BENDING_MACHINE)
 				.bronze().steel().electric()
-				.fluids(16)
-				.recipeCategory(SteamMode.BOTH, (category) -> category
+				.gui(SteamMode.BOTH, (gui) -> gui
+						.slots((s) -> s
+								.itemInput(56, 35)
+								.itemOutput(102, 35))
 						.progressBar(77, 34, "compress")
-						.items((s) -> s.addSlot(56, 35), (s) -> s.addSlot(102, 35)))
-				.efficiencyBar(38, 62)
-				.energyBar(18, 30)
+						.efficiencyBar(38, 62)
+						.energyBar(14, 34))
 				.builtinModel("bending_machine", (model) -> model.front(true))
 				.build();
 		
 		hook.builder("alloy_smelter", "Alloy Smelter", RecipeTypes.ALLOY_SMELTER)
 				.steel().electric()
-				.recipeCategory(SteamMode.BOTH, (category) -> category
+				.gui(SteamMode.BOTH, (gui) -> gui
+						.slots((s) -> s
+								.itemInputs(40, 35, 2, 1)
+								.itemOutput(120, 35))
 						.progressBar(88, 33, "arrow")
-						.items((s) -> s.addSlots(40, 35, 2, 1), (s) -> s.addSlot(120, 35)))
-				.efficiencyBar(38, 62)
-				.energyBar(14, 34)
+						.efficiencyBar(38, 62)
+						.energyBar(14, 34))
 				.builtinModel("alloy_smelter", (model) -> model.front(true))
 				.build();
 		
 		hook.builder("canning_machine", "Canning Machine", RecipeTypes.CANNING_MACHINE)
 				.steel().electric()
-				.fluids(16)
-				.recipeCategory(SteamMode.BOTH, (category) -> category
+				.gui(SteamMode.BOTH, (gui) -> gui
+						.slots((s) -> s
+								.itemInputs(58, 27, 1, 2)
+								.itemOutputs(102, 27, 1, 2)
+								.fluidInput(38, 27, 16)
+								.fluidOutput(122, 27, 16))
 						.progressBar(79, 34, "canning")
-						.items((s) -> s.addSlots(58, 27, 1, 2), (s) -> s.addSlots(102, 27, 1, 2))
-						.fluids((s) -> s.addSlot(38, 27), (s) -> s.addSlot(122, 27)))
-				.efficiencyBar(38, 66)
-				.energyBar(14, 35)
+						.efficiencyBar(38, 66)
+						.energyBar(14, 35))
 				.builtinModel("canning_machine", (model) -> model.front(true).side(true))
 				.build();
 		
 		hook.builder("composter", "Composter", RecipeTypes.COMPOSTER)
 				.bronze().steel().electric()
-				.fluids(16)
-				.recipeCategory(SteamMode.BOTH, (category) -> category
+				.gui(SteamMode.BOTH, (gui) -> gui
+						.slots((s) -> s
+								.itemInputs(58, 27, 1, 2)
+								.itemOutputs(102, 27, 1, 2)
+								.fluidInput(38, 27, 16)
+								.fluidOutput(122, 27, 16))
 						.progressBar(78, 34, "centrifuge")
-						.items((s) -> s.addSlots(58, 27, 1, 2), (s) -> s.addSlots(102, 27, 1, 2))
-						.fluids((s) -> s.addSlot(38, 27), (s) -> s.addSlot(122, 27)))
-				.efficiencyBar(38, 66)
-				.energyBar(14, 35)
+						.efficiencyBar(38, 66)
+						.energyBar(14, 35))
 				.builtinModel("composter", (model) -> model.front(true).top(true))
 				.build();
 	}
