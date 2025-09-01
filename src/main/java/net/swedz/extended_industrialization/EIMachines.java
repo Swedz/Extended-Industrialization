@@ -2,8 +2,8 @@ package net.swedz.extended_industrialization;
 
 import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.MIBlock;
+import aztech.modern_industrialization.MIFluids;
 import aztech.modern_industrialization.api.energy.CableTier;
-import aztech.modern_industrialization.compat.rei.machines.ReiMachineRecipes;
 import aztech.modern_industrialization.compat.rei.machines.SteamMode;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.components.OverclockComponent;
@@ -129,17 +129,17 @@ public final class EIMachines
 		hook.builder("steam_farmer", "Steam Farmer", SteamFarmerBlockEntity::new)
 				.builtinModel(BRONZE_PLATED_BRICKS, "farmer", (model) -> model.front(true).top(true).active(true))
 				.registrator((__) -> SteamFarmerBlockEntity.registerReiShapes())
-				.build();
+				.registerMachine();
 		
 		hook.builder("electric_farmer", "Electric Farmer", ElectricFarmerBlockEntity::new)
 				.builtinModel(STEEL, "farmer", (model) -> model.front(true).top(true).active(true))
 				.registrator((__) -> ElectricFarmerBlockEntity.registerReiShapes())
-				.build();
+				.registerMachine();
 		
 		hook.builder("processing_array", "Processing Array", ProcessingArrayBlockEntity::new)
 				.builtinModel(CLEAN_STAINLESS_STEEL, "processing_array", (model) -> model.front(true).active(true))
 				.registrator((__) -> ProcessingArrayBlockEntity.registerReiShapes())
-				.build();
+				.registerMachine();
 		
 		{
 			SimpleMember fireClayBricks = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("fire_clay_bricks")));
@@ -158,18 +158,18 @@ public final class EIMachines
 							EuCostTransformers.percentage(() -> (float) EI.config().batchingMachines().largeSteamFurnaceEU())
 					))
 					.builtinModel(BRONZE_PLATED_BRICKS, "large_furnace", (model) -> model.front(true).active(true))
-					.build();
-			ReiMachineRecipes.registerMultiblockShape(EI.id("large_steam_furnace"), shape);
-			ReiMachineRecipes.registerWorkstation(MI.id("bronze_furnace"), EI.id("large_steam_furnace"));
-			ReiMachineRecipes.registerWorkstation(MI.id("steel_furnace"), EI.id("large_steam_furnace"));
+					.registerMachine()
+					.registerMultiblockShape(shape)
+					.registerAsWorkstationFor(MI.id("bronze_furnace"))
+					.registerAsWorkstationFor(MI.id("steel_furnace"));
 		}
 		
 		hook.builder("large_electric_furnace", "Large Electric Furnace", LargeElectricFurnaceBlockEntity::new)
 				.builtinModel(HEATPROOF, "large_furnace", (model) -> model.front(true).active(true))
-				.build();
-		ReiMachineRecipes.registerWorkstation(MI.id("bronze_furnace"), EI.id("large_electric_furnace"));
-		ReiMachineRecipes.registerWorkstation(MI.id("steel_furnace"), EI.id("large_electric_furnace"));
-		ReiMachineRecipes.registerWorkstation(MI.id("electric_furnace"), EI.id("large_electric_furnace"));
+				.registerMachine()
+				.registerAsWorkstationFor(MI.id("bronze_furnace"))
+				.registerAsWorkstationFor(MI.id("steel_furnace"))
+				.registerAsWorkstationFor(MI.id("electric_furnace"));
 		
 		{
 			SimpleMember bronzePlatedBricks = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("bronze_plated_bricks")));
@@ -183,10 +183,10 @@ public final class EIMachines
 							EuCostTransformers.percentage(() -> (float) EI.config().batchingMachines().largeSteamMaceratorEU())
 					))
 					.builtinModel(BRONZE_PLATED_BRICKS, "large_macerator", (model) -> model.front(true).active(true))
-					.build();
-			ReiMachineRecipes.registerMultiblockShape(EI.id("large_steam_macerator"), shape);
-			ReiMachineRecipes.registerWorkstation(MI.id("bronze_macerator"), EI.id("large_steam_macerator"));
-			ReiMachineRecipes.registerWorkstation(MI.id("steel_macerator"), EI.id("large_steam_macerator"));
+					.registerMachine()
+					.registerMultiblockShape(shape)
+					.registerAsWorkstationFor(MI.id("bronze_macerator"))
+					.registerAsWorkstationFor(MI.id("steel_macerator"));
 		}
 		
 		{
@@ -201,16 +201,16 @@ public final class EIMachines
 							EuCostTransformers.percentage(() -> (float) EI.config().batchingMachines().largeElectricMaceratorEU())
 					))
 					.builtinModel(Casings.STEEL_PLATED_BRICKS, "large_macerator", (model) -> model.front(true).active(true))
-					.build();
-			ReiMachineRecipes.registerMultiblockShape(EI.id("large_electric_macerator"), shape);
-			ReiMachineRecipes.registerWorkstation(MI.id("bronze_macerator"), EI.id("large_electric_macerator"));
-			ReiMachineRecipes.registerWorkstation(MI.id("steel_macerator"), EI.id("large_electric_macerator"));
-			ReiMachineRecipes.registerWorkstation(MI.id("electric_macerator"), EI.id("large_electric_macerator"));
+					.registerMachine()
+					.registerMultiblockShape(shape)
+					.registerAsWorkstationFor(MI.id("bronze_macerator"))
+					.registerAsWorkstationFor(MI.id("steel_macerator"))
+					.registerAsWorkstationFor(MI.id("electric_macerator"));
 		}
 		
 		hook.builder("tesla_tower", "Tesla Tower", TeslaTowerBlockEntity::new)
 				.builtinModel(CLEAN_STAINLESS_STEEL, "tesla_tower", (model) -> model.front(true).active(true))
-				.build();
+				.registerMachine();
 	}
 	
 	public static void singleBlockCrafting(SingleBlockCraftingMachinesMIHookContext hook)
@@ -225,7 +225,7 @@ public final class EIMachines
 						.efficiencyBar(38, 62)
 						.energyBar(14, 34))
 				.builtinModel("bending_machine", (model) -> model.front(true))
-				.build();
+				.registerMachine();
 		
 		hook.builder("alloy_smelter", "Alloy Smelter", RecipeTypes.ALLOY_SMELTER)
 				.steel().electric()
@@ -237,7 +237,7 @@ public final class EIMachines
 						.efficiencyBar(38, 62)
 						.energyBar(14, 34))
 				.builtinModel("alloy_smelter", (model) -> model.front(true))
-				.build();
+				.registerMachine();
 		
 		hook.builder("canning_machine", "Canning Machine", RecipeTypes.CANNING_MACHINE)
 				.steel().electric()
@@ -251,7 +251,7 @@ public final class EIMachines
 						.efficiencyBar(38, 66)
 						.energyBar(14, 35))
 				.builtinModel("canning_machine", (model) -> model.front(true).side(true))
-				.build();
+				.registerMachine();
 		
 		hook.builder("composter", "Composter", RecipeTypes.COMPOSTER)
 				.bronze().steel().electric()
@@ -265,7 +265,7 @@ public final class EIMachines
 						.efficiencyBar(38, 66)
 						.energyBar(14, 35))
 				.builtinModel("composter", (model) -> model.front(true).top(true))
-				.build();
+				.registerMachine();
 	}
 	
 	public static void singleBlockSpecial(SingleBlockSpecialMachinesMIHookContext hook)
@@ -273,11 +273,11 @@ public final class EIMachines
 		hook.builder("bronze_solar_boiler", "Bronze Solar Boiler", (bep) -> new SolarBoilerMachineBlockEntity(bep, true))
 				.builtinModel(MachineCasings.BRICKED_BRONZE, "solar_boiler", (model) -> model.front(true).top(true).active(true))
 				.registrator(MachineBlockEntity::registerFluidApi)
-				.build();
+				.registerMachine();
 		hook.builder("steel_solar_boiler", "Steel Solar Boiler", (bep) -> new SolarBoilerMachineBlockEntity(bep, false))
 				.builtinModel(MachineCasings.BRICKED_STEEL, "solar_boiler", (model) -> model.front(true).top(true).active(true))
 				.registrator(MachineBlockEntity::registerFluidApi)
-				.build();
+				.registerMachine();
 		
 		hook.builder("steel_honey_extractor", "Steel Honey Extractor", (bep) -> new SteamFluidHarvestingMachineBlockEntity(
 						bep, "steel_honey_extractor",
@@ -286,7 +286,7 @@ public final class EIMachines
 				))
 				.builtinModel(MachineCasings.STEEL, "honey_extractor", (model) -> model.front(true).side(true).active(true))
 				.registrator(MachineBlockEntity::registerFluidApi)
-				.build();
+				.registerMachine();
 		hook.builder("electric_honey_extractor", "Electric Honey Extractor", (bep) -> new ElectricFluidHarvestingMachineBlockEntity(
 						bep, "electric_honey_extractor",
 						4, HoneyExtractorBehavior.ELECTRIC,
@@ -295,19 +295,38 @@ public final class EIMachines
 				.builtinModel(CableTier.LV.casing, "honey_extractor", (model) -> model.front(true).side(true).active(true))
 				.registrator(MachineBlockEntity::registerFluidApi)
 				.registrator(ElectricFluidHarvestingMachineBlockEntity::registerEnergyApi)
-				.build();
+				.registerMachine();
 		
-		hook.builder("steel_brewery", "Steel Brewery", (bep) -> new SteamBreweryMachineBlockEntity(bep, false))
+		hook.builder("steel_brewery", "Steel Brewery", (bep, gui) -> new SteamBreweryMachineBlockEntity(bep, gui, false))
 				.builtinModel(MachineCasings.STEEL, "brewery", (model) -> model.front(true).side(true).active(true))
+				.gui((gui) -> gui
+						.guiHeight(186)
+						.inventoryOnlySlots((s) -> s
+								.fluidInput(5, 45, MIFluids.STEAM::asFluid, 16)
+								.fluidInput(24, 45, EIFluids.BLAZING_ESSENCE::asFluid, 16))
+						.slots((s) -> s
+								.itemInputs(43, 27, 3, 3)
+								.itemOutputs(119, 27, 3, 3))
+						.progressBar(97, 43, "triple_arrow"))
 				.registrator(MachineBlockEntity::registerItemApi)
 				.registrator(MachineBlockEntity::registerFluidApi)
-				.build();
+				.registerMachine();
 		hook.builder("electric_brewery", "Electric Brewery", ElectricBreweryMachineBlockEntity::new)
 				.builtinModel(CableTier.LV.casing, "brewery", (model) -> model.front(true).side(true).active(true))
+				.gui((gui) -> gui
+						.guiHeight(186)
+						.inventoryOnlySlots((s) -> s
+								.fluidInput(24, 45, EIFluids.BLAZING_ESSENCE::asFluid, 32))
+						.slots((s) -> s
+								.itemInputs(43, 27, 3, 3)
+								.itemOutputs(119, 27, 3, 3))
+						.progressBar(97, 43, "triple_arrow")
+						.energyBar(7, 44)
+						.efficiencyBar(57, 86))
 				.registrator(MachineBlockEntity::registerItemApi)
 				.registrator(MachineBlockEntity::registerFluidApi)
 				.registrator(ElectricBreweryMachineBlockEntity::registerEnergyApi)
-				.build();
+				.registerMachine();
 		
 		
 		hook.builder("bronze_waste_collector", "Bronze Waste Collector", (bep) -> new SteamFluidHarvestingMachineBlockEntity(
@@ -317,7 +336,7 @@ public final class EIMachines
 				))
 				.builtinModel(MachineCasings.BRONZE, "waste_collector", (model) -> model.top(true).active(true))
 				.registrator(MachineBlockEntity::registerFluidApi)
-				.build();
+				.registerMachine();
 		hook.builder("steel_waste_collector", "Steel Waste Collector", (bep) -> new SteamFluidHarvestingMachineBlockEntity(
 						bep, "steel_waste_collector",
 						2, WasteCollectorBehavior.STEEL,
@@ -325,7 +344,7 @@ public final class EIMachines
 				))
 				.builtinModel(MachineCasings.STEEL, "waste_collector", (model) -> model.top(true).active(true))
 				.registrator(MachineBlockEntity::registerFluidApi)
-				.build();
+				.registerMachine();
 		hook.builder("electric_waste_collector", "Electric Waste Collector", (bep) -> new ElectricFluidHarvestingMachineBlockEntity(
 						bep, "electric_waste_collector",
 						4, WasteCollectorBehavior.ELECTRIC,
@@ -334,16 +353,16 @@ public final class EIMachines
 				.builtinModel(CableTier.LV.casing, "waste_collector", (model) -> model.top(true).active(true))
 				.registrator(MachineBlockEntity::registerFluidApi)
 				.registrator(ElectricFluidHarvestingMachineBlockEntity::registerEnergyApi)
-				.build();
+				.registerMachine();
 		
 		hook.builder("machine_chainer", "Machine Chainer", MachineChainerMachineBlockEntity::new)
 				.registrator(MachineChainerMachineBlockEntity::registerCapabilities)
-				.build();
+				.registerMachine();
 		
 		hook.builder("universal_transformer", "Universal Transformer", UniversalTransformerMachineBlockEntity::new)
 				.builtinModel(CableTier.LV.casing, "universal_transformer", (model) -> model.top(true).side(true))
 				.registrator(UniversalTransformerMachineBlockEntity::registerEnergyApi)
-				.build();
+				.registerMachine();
 		
 		for(CableTier tier : new CableTier[]{CableTier.LV, CableTier.MV, CableTier.HV})
 		{
@@ -355,30 +374,30 @@ public final class EIMachines
 					.registrator(MachineBlockEntity::registerItemApi)
 					.registrator(MachineBlockEntity::registerFluidApi)
 					.registrator(SolarPanelMachineBlockEntity::registerEnergyApi)
-					.build();
+					.registerMachine();
 		}
 		
 		hook.builder("large_configurable_chest", "Large Configurable Chest", LargeConfigurableChestMachineBlockEntity::new)
 				.builtinModel(Casings.LARGE_STEEL_CRATE, "large_configurable_chest")
 				.registrator(MachineBlockEntity::registerItemApi)
-				.build();
+				.registerMachine();
 		
 		hook.builder("tesla_coil", "Tesla Coil", TeslaCoilMachineBlockEntity::new)
 				.builtinModel(CableTier.LV.casing, "tesla_coil", (model) -> model.front(true).top(true).side(true).active(true))
 				.registrator(TeslaCoilMachineBlockEntity::registerEnergyApi)
-				.build();
+				.registerMachine();
 		
 		hook.builder("tesla_receiver", "Tesla Receiver", TeslaReceiverMachineBlockEntity::new)
 				.builtinModel(CableTier.LV.casing, "tesla_receiver", (model) -> model.front(true).top(true).side(true).active(true))
 				.registrator(TeslaReceiverMachineBlockEntity::registerEnergyApi)
-				.build();
+				.registerMachine();
 		
 		for(CableTier tier : CableTier.allTiers())
 		{
 			hook.builder("%s_tesla_receiver_hatch".formatted(tier.name), "%s Tesla Receiver Hatch".formatted(tier.shortEnglishName), (bep) -> new TeslaReceiverHatchBlockEntity(bep, tier))
 					.builtinModel(tier.casing, "tesla_receiver_hatch", (model) -> model.front(true).side(true))
 					.registrator(TeslaReceiverMachineBlockEntity::registerEnergyApi)
-					.build();
+					.registerMachine();
 		}
 		
 		hook.builder("lethal_tesla_coil", "Lethal Tesla Coil", LethalTeslaCoilMachineBlockEntity::new)
@@ -391,7 +410,7 @@ public final class EIMachines
 						.explosionResistance(3600000))
 				.builtinModel(CableTier.LV.casing, "lethal_tesla_coil", (model) -> model.front(true).top(true).side(true).active(true))
 				.registrator(LethalTeslaCoilMachineBlockEntity::registerEnergyApi)
-				.build();
+				.registerMachine();
 		
 		hook.builder("tesla_particle_generator", "Tesla Particle Generator", TeslaParticleGeneratorMachineBlockEntity::new)
 				.modify((block) -> block.item().withoutModel())
@@ -402,6 +421,6 @@ public final class EIMachines
 						.noOcclusion()
 						.instabreak())
 				.excludeDefaultMineableTags()
-				.build();
+				.registerMachine();
 	}
 }

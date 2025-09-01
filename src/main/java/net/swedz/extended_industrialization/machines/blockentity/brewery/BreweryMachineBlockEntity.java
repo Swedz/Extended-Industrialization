@@ -11,7 +11,6 @@ import aztech.modern_industrialization.machines.components.MachineInventoryCompo
 import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.AutoExtract;
-import aztech.modern_industrialization.machines.guicomponents.ProgressBar;
 import aztech.modern_industrialization.machines.init.MachineTier;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
@@ -28,56 +27,28 @@ import java.util.UUID;
 
 public abstract class BreweryMachineBlockEntity extends MachineBlockEntity implements Tickable, CrafterComponentHolder, CrafterComponent.Behavior
 {
-	protected static final int STEAM_SLOT_X = 5;
-	protected static final int STEAM_SLOT_Y = 45;
-	
-	protected static final int BLAZING_ESSENCE_SLOT_X = 24;
-	protected static final int BLAZING_ESSENCE_SLOT_Y = 45;
-	
-	protected static final int INPUT_SLOTS_X = 43;
-	protected static final int INPUT_SLOTS_Y = 27;
-	
-	protected static final int OUTPUT_SLOTS_X = 119;
-	protected static final int OUTPUT_SLOTS_Y = 27;
-	
-	protected static final int PROGRESS_BAR_X = 97;
-	protected static final int PROGRESS_BAR_Y = 43;
-	
 	protected final MachineTier tier;
-	protected final int         capacity;
 	
 	protected final MachineInventoryComponent inventory;
 	protected final CrafterComponent          crafter;
 	
 	protected IsActiveComponent isActiveComponent;
 	
-	public BreweryMachineBlockEntity(BEP bep, String blockName, MachineTier tier, int capacity)
+	public BreweryMachineBlockEntity(BEP bep, MachineTier tier, MachineGuiParameters guiParams, MachineInventoryComponent inventory)
 	{
-		super(
-				bep,
-				new MachineGuiParameters.Builder(blockName, true).backgroundHeight(186).build(),
-				new OrientationComponent.Params(true, true, false)
-		);
+		super(bep, guiParams, new OrientationComponent.Params(true, true, false));
 		
 		this.tier = tier;
-		this.capacity = capacity;
 		
-		inventory = this.buildInventory();
-		crafter = new CrafterComponent(this, inventory, this);
+		this.inventory = inventory;
+		this.crafter = new CrafterComponent(this, inventory, this);
 		
-		isActiveComponent = new IsActiveComponent();
-		
-		this.registerGuiComponent(new ProgressBar.Server(
-				new ProgressBar.Parameters(PROGRESS_BAR_X, PROGRESS_BAR_Y, "triple_arrow"),
-				crafter::getProgress
-		));
+		this.isActiveComponent = new IsActiveComponent();
 		
 		this.registerComponents(isActiveComponent, inventory, crafter);
 		
 		this.registerGuiComponent(new AutoExtract.Server(orientation));
 	}
-	
-	protected abstract MachineInventoryComponent buildInventory();
 	
 	@Override
 	public MIInventory getInventory()
