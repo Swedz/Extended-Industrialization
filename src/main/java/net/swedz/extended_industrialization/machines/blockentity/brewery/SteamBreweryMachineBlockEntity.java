@@ -1,11 +1,6 @@
 package net.swedz.extended_industrialization.machines.blockentity.brewery;
 
-import aztech.modern_industrialization.MIFluids;
-import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
-import aztech.modern_industrialization.inventory.ConfigurableItemStack;
-import aztech.modern_industrialization.inventory.SlotPositions;
 import aztech.modern_industrialization.machines.BEP;
-import aztech.modern_industrialization.machines.components.MachineInventoryComponent;
 import aztech.modern_industrialization.machines.components.OverclockComponent;
 import aztech.modern_industrialization.machines.guicomponents.GunpowderOverclockGui;
 import aztech.modern_industrialization.machines.helper.SteamHelper;
@@ -17,54 +12,25 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.fluids.FluidType;
-import net.swedz.extended_industrialization.EIFluids;
+import net.swedz.extended_industrialization.EI;
+import net.swedz.tesseract.neoforge.compat.mi.machine.builder.MachineGuiConfiguration;
 
-import java.util.Arrays;
 import java.util.List;
 
 public final class SteamBreweryMachineBlockEntity extends BreweryMachineBlockEntity
 {
 	private final OverclockComponent overclockComponent;
 	
-	public SteamBreweryMachineBlockEntity(BEP bep, boolean bronze)
+	public SteamBreweryMachineBlockEntity(BEP bep, MachineGuiConfiguration gui, boolean bronze)
 	{
-		super(bep, (bronze ? "bronze" : "steel") + "_brewery", bronze ? MachineTier.BRONZE : MachineTier.STEEL, (bronze ? 8 : 16) * FluidType.BUCKET_VOLUME);
+		super(bep, bronze ? MachineTier.BRONZE : MachineTier.STEEL, gui.createGuiParams(EI.id((bronze ? "bronze" : "steel") + "_brewery")), gui.buildInventory());
+		
+		gui.registerProgressBar(this, crafter::getProgress);
 		
 		this.overclockComponent = new OverclockComponent(OverclockComponent.getDefaultCatalysts()); // TODO allow kjs to hook into this
-		GunpowderOverclockGui.Parameters gunpowderOverclockGuiParams = new GunpowderOverclockGui.Parameters(PROGRESS_BAR_X, PROGRESS_BAR_Y + 20);
+		GunpowderOverclockGui.Parameters gunpowderOverclockGuiParams = new GunpowderOverclockGui.Parameters(gui.getProgressBar().renderX, gui.getProgressBar().renderY + 20);
 		this.registerGuiComponent(new GunpowderOverclockGui.Server(gunpowderOverclockGuiParams, overclockComponent::getTicks));
 		this.registerComponents(overclockComponent);
-	}
-	
-	@Override
-	protected MachineInventoryComponent buildInventory()
-	{
-		List<ConfigurableItemStack> itemInputs = Lists.newArrayList();
-		List<ConfigurableItemStack> itemOutputs = Lists.newArrayList();
-		for(int i = 0; i < 9; i++)
-		{
-			itemInputs.add(ConfigurableItemStack.standardInputSlot());
-		}
-		for(int i = 0; i < 9; i++)
-		{
-			itemOutputs.add(ConfigurableItemStack.standardOutputSlot());
-		}
-		SlotPositions itemPositions = new SlotPositions.Builder()
-				.addSlots(INPUT_SLOTS_X, INPUT_SLOTS_Y, 3, 3)
-				.addSlots(OUTPUT_SLOTS_X, OUTPUT_SLOTS_Y, 3, 3)
-				.build();
-		
-		List<ConfigurableFluidStack> fluidInputs = Arrays.asList(
-				ConfigurableFluidStack.lockedInputSlot(capacity, MIFluids.STEAM.asFluid()),
-				ConfigurableFluidStack.lockedInputSlot(capacity, EIFluids.BLAZING_ESSENCE.asFluid())
-		);
-		SlotPositions fluidPositions = new SlotPositions.Builder()
-				.addSlot(STEAM_SLOT_X, STEAM_SLOT_Y)
-				.addSlot(BLAZING_ESSENCE_SLOT_X, BLAZING_ESSENCE_SLOT_Y)
-				.build();
-		
-		return new MachineInventoryComponent(itemInputs, itemOutputs, fluidInputs, List.of(), itemPositions, fluidPositions);
 	}
 	
 	@Override

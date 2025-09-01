@@ -5,42 +5,27 @@ import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
 import aztech.modern_industrialization.api.machine.component.EnergyAccess;
 import aztech.modern_industrialization.api.machine.holder.EnergyComponentHolder;
-import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
-import aztech.modern_industrialization.inventory.ConfigurableItemStack;
-import aztech.modern_industrialization.inventory.SlotPositions;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.components.CasingComponent;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.LubricantHelper;
-import aztech.modern_industrialization.machines.components.MachineInventoryComponent;
 import aztech.modern_industrialization.machines.components.OverdriveComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.components.UpgradeComponent;
-import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
-import aztech.modern_industrialization.machines.guicomponents.RecipeEfficiencyBar;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
 import aztech.modern_industrialization.machines.init.MachineTier;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Simulation;
-import com.google.common.collect.Lists;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.neoforge.fluids.FluidType;
-import net.swedz.extended_industrialization.EIFluids;
-
-import java.util.List;
+import net.swedz.extended_industrialization.EI;
+import net.swedz.tesseract.neoforge.compat.mi.machine.builder.MachineGuiConfiguration;
 
 public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlockEntity implements EnergyComponentHolder
 {
-	private static final int ENERGY_BAR_X = 7;
-	private static final int ENERGY_BAR_Y = 44;
-	
-	private static final int EFFICIENCY_BAR_X = 57;
-	private static final int EFFICIENCY_BAR_Y = 86;
-	
 	private final RedstoneControlComponent redstoneControl;
 	private final CasingComponent          casing;
 	private final UpgradeComponent         upgrades;
@@ -49,9 +34,9 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 	private final EnergyComponent energy;
 	private final MIEnergyStorage insertable;
 	
-	public ElectricBreweryMachineBlockEntity(BEP bep)
+	public ElectricBreweryMachineBlockEntity(BEP bep, MachineGuiConfiguration gui)
 	{
-		super(bep, "electric_brewery", MachineTier.LV, 32 * FluidType.BUCKET_VOLUME);
+		super(bep, MachineTier.LV, gui.createGuiParams(EI.id("electric_brewery")), gui.buildInventory());
 		
 		redstoneControl = new RedstoneControlComponent();
 		casing = new CasingComponent();
@@ -61,8 +46,10 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 		energy = new EnergyComponent(this, casing::getEuCapacity);
 		insertable = energy.buildInsertable(casing::canInsertEu);
 		
-		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(ENERGY_BAR_X, ENERGY_BAR_Y), energy::getEu, energy::getCapacity));
-		this.registerGuiComponent(new RecipeEfficiencyBar.Server(new RecipeEfficiencyBar.Parameters(EFFICIENCY_BAR_X, EFFICIENCY_BAR_Y), crafter));
+		gui.registerProgressBar(this, crafter::getProgress);
+		gui.registerEnergyBar(this, energy::getEu, energy::getCapacity);
+		gui.registerEfficiencyBar(this, crafter);
+		
 		this.registerGuiComponent(new SlotPanel.Server(this)
 				.withRedstoneControl(redstoneControl)
 				.withUpgrades(upgrades)
@@ -70,34 +57,6 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 				.withOverdrive(overdrive));
 		
 		this.registerComponents(energy, redstoneControl, casing, upgrades, overdrive);
-	}
-	
-	@Override
-	protected MachineInventoryComponent buildInventory()
-	{
-		List<ConfigurableItemStack> itemInputs = Lists.newArrayList();
-		List<ConfigurableItemStack> itemOutputs = Lists.newArrayList();
-		for(int i = 0; i < 9; i++)
-		{
-			itemInputs.add(ConfigurableItemStack.standardInputSlot());
-		}
-		for(int i = 0; i < 9; i++)
-		{
-			itemOutputs.add(ConfigurableItemStack.standardOutputSlot());
-		}
-		SlotPositions itemPositions = new SlotPositions.Builder()
-				.addSlots(INPUT_SLOTS_X, INPUT_SLOTS_Y, 3, 3)
-				.addSlots(OUTPUT_SLOTS_X, OUTPUT_SLOTS_Y, 3, 3)
-				.build();
-		
-		List<ConfigurableFluidStack> fluidInputs = List.of(
-				ConfigurableFluidStack.lockedInputSlot(capacity, EIFluids.BLAZING_ESSENCE.asFluid())
-		);
-		SlotPositions fluidPositions = new SlotPositions.Builder()
-				.addSlot(BLAZING_ESSENCE_SLOT_X, BLAZING_ESSENCE_SLOT_Y)
-				.build();
-		
-		return new MachineInventoryComponent(itemInputs, itemOutputs, fluidInputs, List.of(), itemPositions, fluidPositions);
 	}
 	
 	@Override
