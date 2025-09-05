@@ -249,7 +249,7 @@
   "text.extended_industrialization.robot_auto_feeder_help_2": "Funciona com itens que contêm itens, como mochilas.",
   "text.extended_industrialization.solar_boiler_calcification": "Irá calcificar e perder eficiência com o tempo até um mínimo de %s de eficiência quando não estiver usando %s. Usar um machado na caldeira irá resetar sua calcificação.",
   "text.extended_industrialization.solar_efficiency": "Eficiência Solar: %d %%",
-  "text.extended_industrialization.solar_panel_distilled_water": "Ao fornecer %s ao Painel Solar, a Célula Fotovoltaica em seu slot durará 2x mais!",
+  "text.extended_industrialization.solar_panel_distilled_water": "Ao fornecer %s ao Painel Solar, a Célula Fotovoltaica em seu slot durará 2x mais e produzirá 1.5x mais energia!",
   "text.extended_industrialization.solar_panel_photovoltaic_cell": "Para produzir energia, o Painel Solar precisa de uma Célula Fotovoltaica de nível correspondente em seu inventário.",
   "text.extended_industrialization.solar_panel_sunlight": "As taxas de geração de energia são determinadas pela altura do sol no céu e se o céu está visível.",
   "text.extended_industrialization.steam_chainsaw_1": "- Pressione %s em água parada ou corrente para encher.",
