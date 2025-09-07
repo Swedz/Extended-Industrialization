@@ -6,6 +6,7 @@ import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.inventory.SlotPositions;
 import aztech.modern_industrialization.machines.BEP;
+import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.FluidHarvestingBehaviorCreator;
 import net.swedz.tesseract.neoforge.compat.mi.helper.EuConsumerBehavior;
 
@@ -17,7 +18,7 @@ public final class SteamFluidHarvestingMachineBlockEntity extends FluidHarvestin
 {
 	private final MIInventory inventory;
 	
-	public SteamFluidHarvestingMachineBlockEntity(BEP bep, String blockName, long euCost, FluidHarvestingBehaviorCreator behaviorCreator, long capacity, FluidLike fluid)
+	public SteamFluidHarvestingMachineBlockEntity(BEP bep, ResourceLocation blockName, long euCost, FluidHarvestingBehaviorCreator behaviorCreator, long capacity, FluidLike fluid)
 	{
 		super(bep, blockName, euCost, behaviorCreator);
 		
