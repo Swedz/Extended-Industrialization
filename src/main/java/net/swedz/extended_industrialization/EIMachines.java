@@ -280,7 +280,7 @@ public final class EIMachines
 				.registerMachine();
 		
 		hook.builder("steel_honey_extractor", "Steel Honey Extractor", (bep) -> new SteamFluidHarvestingMachineBlockEntity(
-						bep, "steel_honey_extractor",
+						bep, EI.id("steel_honey_extractor"),
 						2, HoneyExtractorBehavior.STEEL,
 						16 * FluidType.BUCKET_VOLUME, EIFluids.HONEY
 				))
@@ -288,7 +288,7 @@ public final class EIMachines
 				.registrator(MachineBlockEntity::registerFluidApi)
 				.registerMachine();
 		hook.builder("electric_honey_extractor", "Electric Honey Extractor", (bep) -> new ElectricFluidHarvestingMachineBlockEntity(
-						bep, "electric_honey_extractor",
+						bep, EI.id("electric_honey_extractor"),
 						4, HoneyExtractorBehavior.ELECTRIC,
 						32 * FluidType.BUCKET_VOLUME, EIFluids.HONEY
 				))
@@ -330,7 +330,7 @@ public final class EIMachines
 		
 		
 		hook.builder("bronze_waste_collector", "Bronze Waste Collector", (bep) -> new SteamFluidHarvestingMachineBlockEntity(
-						bep, "bronze_waste_collector",
+						bep, EI.id("bronze_waste_collector"),
 						1, WasteCollectorBehavior.BRONZE,
 						8 * FluidType.BUCKET_VOLUME, EIFluids.MANURE
 				))
@@ -338,7 +338,7 @@ public final class EIMachines
 				.registrator(MachineBlockEntity::registerFluidApi)
 				.registerMachine();
 		hook.builder("steel_waste_collector", "Steel Waste Collector", (bep) -> new SteamFluidHarvestingMachineBlockEntity(
-						bep, "steel_waste_collector",
+						bep, EI.id("steel_waste_collector"),
 						2, WasteCollectorBehavior.STEEL,
 						16 * FluidType.BUCKET_VOLUME, EIFluids.MANURE
 				))
@@ -346,7 +346,7 @@ public final class EIMachines
 				.registrator(MachineBlockEntity::registerFluidApi)
 				.registerMachine();
 		hook.builder("electric_waste_collector", "Electric Waste Collector", (bep) -> new ElectricFluidHarvestingMachineBlockEntity(
-						bep, "electric_waste_collector",
+						bep, EI.id("electric_waste_collector"),
 						4, WasteCollectorBehavior.ELECTRIC,
 						32 * FluidType.BUCKET_VOLUME, EIFluids.MANURE
 				))

@@ -12,6 +12,7 @@ import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.FluidHarvestingBehavior;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.FluidHarvestingBehaviorCreator;
 import net.swedz.tesseract.neoforge.compat.mi.helper.EuConsumerBehavior;
@@ -31,7 +32,7 @@ public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEnti
 	
 	protected int pumpingTicks;
 	
-	public FluidHarvestingMachineBlockEntity(BEP bep, String blockName, long euCost, FluidHarvestingBehaviorCreator behaviorCreator)
+	public FluidHarvestingMachineBlockEntity(BEP bep, ResourceLocation blockName, long euCost, FluidHarvestingBehaviorCreator behaviorCreator)
 	{
 		super(
 				bep,

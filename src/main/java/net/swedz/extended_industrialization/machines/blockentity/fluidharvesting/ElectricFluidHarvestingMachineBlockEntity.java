@@ -15,6 +15,7 @@ import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.FluidHarvestingBehaviorCreator;
 import net.swedz.tesseract.neoforge.compat.mi.helper.EuConsumerBehavior;
@@ -30,7 +31,7 @@ public final class ElectricFluidHarvestingMachineBlockEntity extends FluidHarves
 	private final MIEnergyStorage          insertable;
 	private final RedstoneControlComponent redstoneControl;
 	
-	public ElectricFluidHarvestingMachineBlockEntity(BEP bep, String blockName, long euCost, FluidHarvestingBehaviorCreator behaviorCreator, long capacity, FluidLike fluid)
+	public ElectricFluidHarvestingMachineBlockEntity(BEP bep, ResourceLocation blockName, long euCost, FluidHarvestingBehaviorCreator behaviorCreator, long capacity, FluidLike fluid)
 	{
 		super(bep, blockName, euCost, behaviorCreator);
 		
