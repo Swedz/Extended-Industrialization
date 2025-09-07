@@ -60,6 +60,12 @@ public final class ElectricFluidHarvestingMachineBlockEntity extends FluidHarves
 	}
 	
 	@Override
+	public boolean isEnabled()
+	{
+		return redstoneControl.doAllowNormalOperation(this);
+	}
+	
+	@Override
 	public MIInventory getInventory()
 	{
 		return inventory;

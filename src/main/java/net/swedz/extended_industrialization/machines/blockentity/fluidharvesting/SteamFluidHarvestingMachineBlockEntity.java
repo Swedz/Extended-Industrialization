@@ -39,6 +39,12 @@ public final class SteamFluidHarvestingMachineBlockEntity extends FluidHarvestin
 	}
 	
 	@Override
+	public boolean isEnabled()
+	{
+		return true;
+	}
+	
+	@Override
 	public MIInventory getInventory()
 	{
 		return inventory;

@@ -78,6 +78,8 @@ public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEnti
 		return behavior;
 	}
 	
+	public abstract boolean isEnabled();
+	
 	@Override
 	public void tick()
 	{
@@ -88,7 +90,7 @@ public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEnti
 		
 		boolean active = false;
 		
-		if(this.getFluidHarvestingBehavior().canOperate())
+		if(this.isEnabled() && this.getFluidHarvestingBehavior().canOperate())
 		{
 			long eu = this.getFluidHarvestingBehavior().consumeEu(euCost);
 			active = eu > 0;
@@ -100,10 +102,6 @@ public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEnti
 				this.getFluidHarvestingBehavior().operate();
 				pumpingTicks = 0;
 			}
-		}
-		else
-		{
-			pumpingTicks = 0;
 		}
 		
 		if(orientation.extractFluids)
