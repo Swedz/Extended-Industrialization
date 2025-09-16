@@ -396,7 +396,6 @@ public final class EIMachines
 		{
 			hook.builder("%s_tesla_receiver_hatch".formatted(tier.name), "%s Tesla Receiver Hatch".formatted(tier.shortEnglishName), (bep) -> new TeslaReceiverHatchBlockEntity(bep, tier))
 					.builtinModel(tier.casing, "tesla_receiver_hatch", (model) -> model.front(true).side(true))
-					.registrator(TeslaReceiverMachineBlockEntity::registerEnergyApi)
 					.registerMachine();
 		}
 		
