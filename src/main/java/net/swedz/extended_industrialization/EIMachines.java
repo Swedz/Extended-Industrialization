@@ -334,7 +334,7 @@ public final class EIMachines
 						1, WasteCollectorBehavior.BRONZE,
 						8 * FluidType.BUCKET_VOLUME, EIFluids.MANURE
 				))
-				.builtinModel(MachineCasings.BRONZE, "waste_collector", (model) -> model.top(true).active(true))
+				.builtinModel(MachineCasings.BRONZE, "waste_collector", (model) -> model.top(true).front(false).active(true))
 				.registrator(MachineBlockEntity::registerFluidApi)
 				.registerMachine();
 		hook.builder("steel_waste_collector", "Steel Waste Collector", (bep) -> new SteamFluidHarvestingMachineBlockEntity(
@@ -342,7 +342,7 @@ public final class EIMachines
 						2, WasteCollectorBehavior.STEEL,
 						16 * FluidType.BUCKET_VOLUME, EIFluids.MANURE
 				))
-				.builtinModel(MachineCasings.STEEL, "waste_collector", (model) -> model.top(true).active(true))
+				.builtinModel(MachineCasings.STEEL, "waste_collector", (model) -> model.top(true).front(false).active(true))
 				.registrator(MachineBlockEntity::registerFluidApi)
 				.registerMachine();
 		hook.builder("electric_waste_collector", "Electric Waste Collector", (bep) -> new ElectricFluidHarvestingMachineBlockEntity(
@@ -350,7 +350,7 @@ public final class EIMachines
 						4, WasteCollectorBehavior.ELECTRIC,
 						32 * FluidType.BUCKET_VOLUME, EIFluids.MANURE
 				))
-				.builtinModel(CableTier.LV.casing, "waste_collector", (model) -> model.top(true).active(true))
+				.builtinModel(CableTier.LV.casing, "waste_collector", (model) -> model.top(true).front(false).active(true))
 				.registrator(MachineBlockEntity::registerFluidApi)
 				.registrator(ElectricFluidHarvestingMachineBlockEntity::registerEnergyApi)
 				.registerMachine();
@@ -360,7 +360,7 @@ public final class EIMachines
 				.registerMachine();
 		
 		hook.builder("universal_transformer", "Universal Transformer", UniversalTransformerMachineBlockEntity::new)
-				.builtinModel(CableTier.LV.casing, "universal_transformer", (model) -> model.top(true).side(true))
+				.builtinModel(CableTier.LV.casing, "universal_transformer", (model) -> model.top(true).side(true).front(false).active(false))
 				.registrator(UniversalTransformerMachineBlockEntity::registerEnergyApi)
 				.registerMachine();
 		
@@ -370,7 +370,7 @@ public final class EIMachines
 			String englishName = "%s Solar Panel".formatted(tier.shortEnglishName);
 			String overlayFolder = "solar_panel/%s".formatted(tier.name);
 			hook.builder(name, englishName, (bep) -> new SolarPanelMachineBlockEntity(bep, EI.id(name), tier))
-					.builtinModel(tier.casing, overlayFolder, (model) -> model.top(true).side(true))
+					.builtinModel(tier.casing, overlayFolder, (model) -> model.top(true).side(true).front(false).active(false))
 					.registrator(MachineBlockEntity::registerItemApi)
 					.registrator(MachineBlockEntity::registerFluidApi)
 					.registrator(SolarPanelMachineBlockEntity::registerEnergyApi)
@@ -378,7 +378,7 @@ public final class EIMachines
 		}
 		
 		hook.builder("large_configurable_chest", "Large Configurable Chest", LargeConfigurableChestMachineBlockEntity::new)
-				.builtinModel(Casings.LARGE_STEEL_CRATE, "large_configurable_chest")
+				.builtinModel(Casings.LARGE_STEEL_CRATE, "large_configurable_chest", (model) -> model.front(false).active(false))
 				.registrator(MachineBlockEntity::registerItemApi)
 				.registerMachine();
 		
@@ -395,7 +395,7 @@ public final class EIMachines
 		for(CableTier tier : CableTier.allTiers())
 		{
 			hook.builder("%s_tesla_receiver_hatch".formatted(tier.name), "%s Tesla Receiver Hatch".formatted(tier.shortEnglishName), (bep) -> new TeslaReceiverHatchBlockEntity(bep, tier))
-					.builtinModel(tier.casing, "tesla_receiver_hatch", (model) -> model.front(true).side(true))
+					.builtinModel(tier.casing, "tesla_receiver_hatch", (model) -> model.front(true).side(true).active(false))
 					.registerMachine();
 		}
 		
