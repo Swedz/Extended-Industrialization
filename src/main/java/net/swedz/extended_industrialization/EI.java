@@ -23,6 +23,7 @@ import net.swedz.extended_industrialization.network.EIPackets;
 import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.api.MCIdentifiable;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
+import net.swedz.tesseract.neoforge.compat.mi.TesseractMI;
 import net.swedz.tesseract.neoforge.config.ConfigManager;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
@@ -61,6 +62,7 @@ public final class EI
 		
 		EILocalizedListeners.INSTANCE.init();
 		
+		TesseractMI.init(ID);
 		EIComponents.init(bus);
 		EIArmorMaterials.init(bus);
 		EIItems.init(bus);
