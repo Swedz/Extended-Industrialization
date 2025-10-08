@@ -57,7 +57,7 @@ import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 @Mod(value = EI.ID, dist = Dist.CLIENT)
-@EventBusSubscriber(value = Dist.CLIENT, modid = EI.ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = EI.ID, value = Dist.CLIENT)
 public final class EIClient
 {
 	public EIClient(IEventBus bus, ModContainer container)

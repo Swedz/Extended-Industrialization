@@ -23,7 +23,7 @@ import java.util.function.Function;
 import static net.minecraft.client.renderer.RenderStateShard.*;
 import static net.swedz.extended_industrialization.EIClientShaders.*;
 
-@EventBusSubscriber(modid = EI.ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = EI.ID, value = Dist.CLIENT)
 public final class EIClientRenderTypes
 {
 	public static final BiFunction<ResourceLocation, Boolean, RenderType> ARMOR_CUTOUT_NO_CULL_WITH_TRANSPARENCY = Util.memoize((texture, glow) -> armorCutoutWithTransparency(texture, glow, false));

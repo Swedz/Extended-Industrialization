@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@EventBusSubscriber(modid = EI.ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+@EventBusSubscriber(modid = EI.ID, value = Dist.CLIENT)
 public final class TeslaPartRenderer
 {
 	private static void renderHighlight(MachineBlockEntity machine, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)

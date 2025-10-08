@@ -407,6 +407,7 @@ public final class EIMachines
 						.requiresCorrectToolForDrops()
 						.isValidSpawn(MobSpawning.NO_SPAWN)
 						.explosionResistance(3600000))
+				.excludeDefaultBlockProperties()
 				.builtinModel(CableTier.LV.casing, "lethal_tesla_coil", (model) -> model.front(true).top(true).side(true).active(true))
 				.registrator(LethalTeslaCoilMachineBlockEntity::registerEnergyApi)
 				.registerMachine();
@@ -419,6 +420,7 @@ public final class EIMachines
 						.noCollission()
 						.noOcclusion()
 						.instabreak())
+				.excludeDefaultBlockProperties()
 				.excludeDefaultMineableTags()
 				.registerMachine();
 	}

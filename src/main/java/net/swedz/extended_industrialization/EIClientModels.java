@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-@EventBusSubscriber(modid = EI.ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = EI.ID, value = Dist.CLIENT)
 public final class EIClientModels
 {
 	private static NanoArmorModel                NANO_ARMOR_INNER;
