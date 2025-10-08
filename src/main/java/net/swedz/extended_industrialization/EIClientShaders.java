@@ -10,7 +10,7 @@ import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 
 import java.io.IOException;
 
-@EventBusSubscriber(value = Dist.CLIENT, modid = EI.ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = EI.ID, value = Dist.CLIENT)
 public final class EIClientShaders
 {
 	private static ShaderInstance ARMOR_CUTOUT_GLOW_INSTANCE;

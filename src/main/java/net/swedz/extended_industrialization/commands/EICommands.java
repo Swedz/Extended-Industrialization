@@ -20,7 +20,7 @@ import static net.minecraft.commands.Commands.*;
 import static net.minecraft.commands.arguments.DimensionArgument.*;
 import static net.minecraft.commands.arguments.coordinates.BlockPosArgument.*;
 
-@EventBusSubscriber(modid = EI.ID, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = EI.ID)
 public final class EICommands
 {
 	@SubscribeEvent
