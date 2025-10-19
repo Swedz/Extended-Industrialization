@@ -46,7 +46,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 	
 	private boolean insertDrops(List<ItemStack> drops, boolean simulate)
 	{
-		try (Transaction transaction = Transaction.openOuter())
+		try (Transaction transaction = Transaction.openRoot())
 		{
 			MIItemStorage itemOutput = new MIItemStorage(inventory.getItemOutputs());
 			
