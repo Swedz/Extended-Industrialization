@@ -29,9 +29,9 @@ public final class ContinuityModelUnwrapper
 				var unwrap = wrapperBakedModel.getMethod("unwrap", BakedModel.class);
 				unwrapBakedModel = MethodHandles.lookup().unreflect(unwrap);
 			}
-			catch (ReflectiveOperationException e)
+			catch (ReflectiveOperationException ex)
 			{
-				LogUtils.getLogger().error("Failed to reflect WrapperBakedModel.unwrap method", e);
+				LogUtils.getLogger().error("Failed to reflect WrapperBakedModel.unwrap method", ex);
 			}
 		}
 		UNWRAP_BAKED_MODEL = unwrapBakedModel;
