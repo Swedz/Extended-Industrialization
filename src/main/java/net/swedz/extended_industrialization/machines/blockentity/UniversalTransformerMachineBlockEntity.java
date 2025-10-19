@@ -129,7 +129,7 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 				
 				for(int i = 0; i < 10000; ++i)
 				{
-					try (Transaction transaction = Transaction.openOuter())
+					try (Transaction transaction = Transaction.openRoot())
 					{
 						long inserted = energyItem.receive(energy.getEu() / stackSize, false);
 						
@@ -151,7 +151,7 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 				{
 					for(int i = 0; i < 10000; ++i)
 					{
-						try (Transaction transaction = Transaction.openOuter())
+						try (Transaction transaction = Transaction.openRoot())
 						{
 							long extracted = energyItem.extract(energy.getRemainingCapacity() / stackSize, false);
 							

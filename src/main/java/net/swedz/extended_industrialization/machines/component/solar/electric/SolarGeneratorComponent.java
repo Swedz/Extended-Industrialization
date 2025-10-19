@@ -57,7 +57,7 @@ public final class SolarGeneratorComponent implements IComponent.ServerOnly
 	
 	private boolean tryUseDistilledWater()
 	{
-		try (Transaction transaction = Transaction.openOuter())
+		try (Transaction transaction = Transaction.openRoot())
 		{
 			boolean usedDistilledWater = this.getSlotWater().extractDirect(FluidVariant.of(EIFluids.DISTILLED_WATER.asFluid()), 1, transaction) > 0;
 			transaction.commit();
