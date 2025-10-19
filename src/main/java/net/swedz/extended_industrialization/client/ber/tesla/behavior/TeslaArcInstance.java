@@ -45,9 +45,14 @@ public final class TeslaArcInstance
 	
 	public Vec3 closestOrigin(Vec3 target)
 	{
+		var tesla = this.tesla();
+		if(tesla == null)
+		{
+			return null;
+		}
 		Vec3 closest = null;
 		double closestDistance = 0;
-		for(Vec3 origin : this.tesla().arcs().worldOrigins(worldPosition, facingDirection.get()))
+		for(Vec3 origin : tesla.arcs().worldOrigins(worldPosition, facingDirection.get()))
 		{
 			double distance = origin.distanceTo(target);
 			if(closest == null || distance < closestDistance)
@@ -66,6 +71,15 @@ public final class TeslaArcInstance
 	
 	private void createArc(Vec3 worldOrigin, Vec3 target, int duration, int segments, int segmentSplits)
 	{
+		if(worldOrigin == null)
+		{
+			return;
+		}
+		var tesla = this.tesla();
+		if(tesla == null)
+		{
+			return;
+		}
 		TeslaArcBuilder builder = TeslaArcBuilder.create(duration);
 		Vec3 origin = worldOrigin.subtract(worldPosition).add(0.5, 0.5, 0.5);
 		Vec3 direction = target.subtract(worldOrigin).normalize();
@@ -75,7 +89,7 @@ public final class TeslaArcInstance
 		for(int i = 0; i < segments; i++)
 		{
 			Vec3 direct = direction.scale(segmentLength * i).add(origin);
-			Vec3 tangent = i == segments - 1 ? Vec3.ZERO : randomTangent(RANDOM, direction).scale(this.tesla().arcs().randomVariance(RANDOM));
+			Vec3 tangent = i == segments - 1 ? Vec3.ZERO : randomTangent(RANDOM, direction).scale(tesla.arcs().randomVariance(RANDOM));
 			tangent = tangent.add(offset);
 			double x = direct.x();
 			double y = direct.y();
@@ -93,7 +107,12 @@ public final class TeslaArcInstance
 	
 	public void createArc(Vec3 origin, Vec3 target)
 	{
-		var arcs = this.tesla().arcs();
+		var tesla = this.tesla();
+		if(tesla == null)
+		{
+			return;
+		}
+		var arcs = tesla.arcs();
 		this.createArc(origin, target, arcs.duration(), RANDOM.nextInt(arcs.minSegments(), arcs.maxSegments() + 1), arcs.segmentSplits());
 	}
 	
@@ -115,33 +134,36 @@ public final class TeslaArcInstance
 		});
 		
 		var tesla = this.tesla();
-		var arcs = tesla.arcs();
-		if(arcs != null)
+		if(tesla != null)
 		{
-			if(arcs.attachesToNearbyEntities())
+			var arcs = tesla.arcs();
+			if(arcs != null)
 			{
-				var level = Minecraft.getInstance().level;
-				var box = arcs.worldNearbyEntitiesBounds(worldPosition, facingDirection.get());
-				var entities = level.getEntities(
-						(Entity) null,
-						box,
-						(entity) -> entity.isAlive() && entity instanceof LivingEntity && !(entity instanceof Player)
-				);
-				for(var entity : entities)
+				if(arcs.attachesToNearbyEntities())
 				{
-					Vec3 target = entity.getBoundingBox().getCenter();
-					this.createArc(this.closestOrigin(target), target);
+					var level = Minecraft.getInstance().level;
+					var box = arcs.worldNearbyEntitiesBounds(worldPosition, facingDirection.get());
+					var entities = level.getEntities(
+							(Entity) null,
+							box,
+							(entity) -> entity.isAlive() && entity instanceof LivingEntity && !(entity instanceof Player)
+					);
+					for(var entity : entities)
+					{
+						Vec3 target = entity.getBoundingBox().getCenter();
+						this.createArc(this.closestOrigin(target), target);
+					}
 				}
-			}
-			
-			if(arcs.hasRandomBounds() && trails.size() < arcs.count())
-			{
-				int maxCreate = arcs.count() - trails.size();
-				int create = Math.max(Math.min(arcs.count() / 2, maxCreate), 1);
-				for(int i = 0; i < create; i++)
+				
+				if(arcs.hasRandomBounds() && trails.size() < arcs.count())
 				{
-					Vec3 target = tesla.arcs().worldRandomPointInBounds(RANDOM, worldPosition, facingDirection.get());
-					this.createArc(this.closestOrigin(target), target);
+					int maxCreate = arcs.count() - trails.size();
+					int create = Math.max(Math.min(arcs.count() / 2, maxCreate), 1);
+					for(int i = 0; i < create; i++)
+					{
+						Vec3 target = tesla.arcs().worldRandomPointInBounds(RANDOM, worldPosition, facingDirection.get());
+						this.createArc(this.closestOrigin(target), target);
+					}
 				}
 			}
 		}
