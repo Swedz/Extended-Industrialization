@@ -32,6 +32,7 @@ import net.swedz.extended_industrialization.client.ber.tesla.arc.TeslaArcRendere
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcInstance;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.client.model.tesla.TeslaBakedModel;
+import net.swedz.extended_industrialization.compat.continuity.ContinuityModelUnwrapper;
 import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaParticleGeneratorMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetworkPart;
 import net.swedz.tesseract.neoforge.api.WorldPos;
@@ -111,7 +112,7 @@ public final class TeslaPartRenderer
 		   machine instanceof TeslaBehavior behavior)
 		{
 			var tesla = getTeslaModel(behavior.getTeslaModelLocation());
-			if(tesla.arcs() != null)
+			if(tesla != null && tesla.arcs() != null)
 			{
 				return TESLA_ARCS.computeIfAbsent(
 						pos,
@@ -129,11 +130,14 @@ public final class TeslaPartRenderer
 	private static TeslaBakedModel getTeslaModel(ResourceLocation location)
 	{
 		var modelManager = Minecraft.getInstance().getModelManager();
-		if(modelManager.getModel(ModelResourceLocation.standalone(location)) instanceof TeslaBakedModel model)
+		var model = modelManager.getModel(ModelResourceLocation.standalone(location));
+		model = ContinuityModelUnwrapper.unwrap(model);
+		if(model instanceof TeslaBakedModel teslaModel)
 		{
-			return model;
+			return teslaModel;
 		}
-		throw new IllegalArgumentException("Model \"%s\" is not a tesla model".formatted(location));
+		EI.LOGGER.warn("Model {} should have been a TeslaBakedModel, but was {}", location, model.getClass());
+		return null;
 	}
 	
 	private static void renderArcBounds(MachineBlockEntity machine, TeslaBakedModel tesla, PoseStack matrices, MultiBufferSource buffer)
@@ -253,12 +257,15 @@ public final class TeslaPartRenderer
 			if(renderDistance == 0 || Minecraft.getInstance().player.position().closerThan(machine.getBlockPos().getCenter(), renderDistance))
 			{
 				var tesla = getTeslaModel(behavior.getTeslaModelLocation());
-				var color = behavior.getTeslaColor();
-				renderArcBounds(machine, tesla, matrices, buffer);
-				if(behavior.shouldTeslaRender())
+				if(tesla != null)
 				{
-					renderArcs(machine, tesla, color, partialTick, matrices, buffer, light, overlay);
-					renderPlasma(machine, tesla, color, partialTick, matrices, buffer, light, overlay);
+					var color = behavior.getTeslaColor();
+					renderArcBounds(machine, tesla, matrices, buffer);
+					if(behavior.shouldTeslaRender())
+					{
+						renderArcs(machine, tesla, color, partialTick, matrices, buffer, light, overlay);
+						renderPlasma(machine, tesla, color, partialTick, matrices, buffer, light, overlay);
+					}
 				}
 			}
 		}

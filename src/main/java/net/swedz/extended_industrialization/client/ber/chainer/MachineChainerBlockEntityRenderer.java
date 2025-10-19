@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.client.model.chainer.MachineChainerBakedModel;
+import net.swedz.extended_industrialization.compat.continuity.ContinuityModelUnwrapper;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
 
 /**
@@ -62,15 +63,14 @@ public sealed class MachineChainerBlockEntityRenderer implements BlockEntityRend
 	
 	private MachineChainerBakedModel getMachineModel(BlockState state)
 	{
-		if(blockModels.getBlockModel(state) instanceof MachineChainerBakedModel mbm)
+		var model = blockModels.getBlockModel(state);
+		model = ContinuityModelUnwrapper.unwrap(model);
+		if(model instanceof MachineChainerBakedModel machineModel)
 		{
-			return mbm;
+			return machineModel;
 		}
-		else
-		{
-			EI.LOGGER.warn("Model {} should have been a MachineChainerBakedModel, but was {}", state, blockModels.getBlockModel(state).getClass());
-			return null;
-		}
+		EI.LOGGER.warn("Model {} should have been a MachineChainerBakedModel, but was {}", state, model.getClass());
+		return null;
 	}
 	
 	@Override
