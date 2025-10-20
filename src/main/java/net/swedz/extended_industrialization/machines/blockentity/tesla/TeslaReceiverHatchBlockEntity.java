@@ -56,11 +56,11 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 	
 	private final TeslaReceiverComponent receiver;
 	
-	public TeslaReceiverHatchBlockEntity(BEP bep, CableTier tier)
+	public TeslaReceiverHatchBlockEntity(BEP bep, ResourceLocation id, CableTier tier)
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder(EI.id("tesla_receiver_hatch"), false).build(),
+				new MachineGuiParameters.Builder(id, false).build(),
 				new OrientationComponent.Params(false, false, false)
 		);
 		
