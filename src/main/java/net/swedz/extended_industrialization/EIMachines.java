@@ -394,7 +394,8 @@ public final class EIMachines
 		
 		for(CableTier tier : CableTier.allTiers())
 		{
-			hook.builder("%s_tesla_receiver_hatch".formatted(tier.name), "%s Tesla Receiver Hatch".formatted(tier.shortEnglishName), (bep) -> new TeslaReceiverHatchBlockEntity(bep, tier))
+			var name = "%s_tesla_receiver_hatch".formatted(tier.name);
+			hook.builder(name, "%s Tesla Receiver Hatch".formatted(tier.shortEnglishName), (bep) -> new TeslaReceiverHatchBlockEntity(bep, EI.id(name), tier))
 					.builtinModel(tier.casing, "tesla_receiver_hatch", (model) -> model.front(true).side(true).active(false))
 					.registerMachine();
 		}
