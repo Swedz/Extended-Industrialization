@@ -10,6 +10,7 @@ import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.AutoExtract;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIMachines;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public final class LargeConfigurableChestMachineBlockEntity extends MachineBlock
 	{
 		super(
 				bep,
-				new MachineGuiParameters.Builder("large_configurable_chest", true).backgroundHeight(180 + 54).build(),
+				new MachineGuiParameters.Builder(EI.id("large_configurable_chest"), true).backgroundHeight(180 + 54).build(),
 				new OrientationComponent.Params(true, true, false)
 		);
 		
