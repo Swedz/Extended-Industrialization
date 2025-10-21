@@ -3,12 +3,14 @@ package net.swedz.extended_industrialization.machines.component.chainer.handler;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 import net.swedz.extended_industrialization.machines.component.chainer.wrapper.SlotInventoryWrapper;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public final class ChainerFluidHandler extends SlotChainerHandler<IFluidHandler> implements IFluidHandler
@@ -63,6 +65,18 @@ public final class ChainerFluidHandler extends SlotChainerHandler<IFluidHandler>
 		return wrapper != null && wrapper.handler().isFluidValid(wrapper.toLocalSlot(tank), stack);
 	}
 	
+	private static final class Bucket
+	{
+		private final SlotInventoryWrapper<IFluidHandler> wrapper;
+		private final int                                 simulationResult;
+		
+		private Bucket(SlotInventoryWrapper<IFluidHandler> wrapper, int simulationResult)
+		{
+			this.wrapper = wrapper;
+			this.simulationResult = simulationResult;
+		}
+	}
+	
 	@Override
 	public int fill(FluidStack resource, FluidAction action)
 	{
@@ -70,11 +84,21 @@ public final class ChainerFluidHandler extends SlotChainerHandler<IFluidHandler>
 		{
 			return 0;
 		}
-		int amountFilled = 0;
-		for(int index = 0; index < wrappers.size(); index++)
+		
+		List<Bucket> buckets = Lists.newArrayList();
+		var shuffledWrappers = Lists.newArrayList(wrappers);
+		Collections.shuffle(shuffledWrappers);
+		for(var wrapper : shuffledWrappers)
 		{
-			var wrapper = wrappers.get(index);
-			int remainingStorages = wrappers.size() - index;
+			buckets.add(new Bucket(wrapper, wrapper.handler().fill(resource, FluidAction.SIMULATE)));
+		}
+		buckets.sort(Comparator.comparingInt((bucket) -> bucket.simulationResult));
+		
+		int amountFilled = 0;
+		for(int index = 0; index < buckets.size(); index++)
+		{
+			var wrapper = buckets.get(index).wrapper;
+			int remainingStorages = buckets.size() - index;
 			int remainingAmountToInsert = resource.getAmount() - amountFilled;
 			int amountToInsert = remainingAmountToInsert / remainingStorages;
 			amountFilled += wrapper.handler().fill(resource.copyWithAmount(amountToInsert), action);
@@ -88,23 +112,40 @@ public final class ChainerFluidHandler extends SlotChainerHandler<IFluidHandler>
 		{
 			return FluidStack.EMPTY;
 		}
-		int amountTransferred = 0;
-		for(int index = 0; index < wrappers.size(); index++)
+		
+		List<Bucket> buckets = Lists.newArrayList();
+		var shuffledWrappers = Lists.newArrayList(wrappers);
+		Collections.shuffle(shuffledWrappers);
+		for(var wrapper : shuffledWrappers)
 		{
-			var wrapper = wrappers.get(index);
-			int remainingStorages = wrappers.size() - index;
+			var simulationResult = fluid == null ?
+					wrapper.handler().drain(maxAmount, FluidAction.SIMULATE) :
+					wrapper.handler().drain(new FluidStack(fluid, maxAmount), FluidAction.SIMULATE);
+			if(!simulationResult.isEmpty())
+			{
+				fluid = simulationResult.getFluid();
+			}
+			buckets.add(new Bucket(wrapper, simulationResult.getAmount()));
+		}
+		
+		if(fluid == null || fluid == Fluids.EMPTY)
+		{
+			return FluidStack.EMPTY;
+		}
+		
+		buckets.sort(Comparator.comparingInt((bucket) -> bucket.simulationResult));
+		
+		int amountTransferred = 0;
+		for(int index = 0; index < buckets.size(); index++)
+		{
+			var wrapper = buckets.get(index).wrapper;
+			int remainingStorages = buckets.size() - index;
 			int remainingAmountToTransfer = maxAmount - amountTransferred;
 			int amountToTansfer = remainingAmountToTransfer / remainingStorages;
-			FluidStack transferred = fluid == null ?
-					wrapper.handler().drain(amountToTansfer, action) :
-					wrapper.handler().drain(new FluidStack(fluid, amountToTansfer), action);
-			if(!transferred.isEmpty())
-			{
-				fluid = transferred.getFluid();
-				amountTransferred += transferred.getAmount();
-			}
+			FluidStack transferred = wrapper.handler().drain(new FluidStack(fluid, amountToTansfer), action);
+			amountTransferred += transferred.getAmount();
 		}
-		return fluid == null ? FluidStack.EMPTY : new FluidStack(fluid, amountTransferred);
+		return new FluidStack(fluid, amountTransferred);
 	}
 	
 	@Override
