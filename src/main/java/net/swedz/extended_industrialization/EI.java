@@ -146,7 +146,6 @@ public final class EI
 				.parser("activated", boolean.class, () -> EITooltips.ACTIVATED_BOOLEAN_PARSER)
 				.parser(Fluid.class, () -> (fluid) -> fluid.getFluidType().getDescription())
 				.parser("percentage", float.class, () -> EITooltips.PERCENTAGE_PARSER)
-				.parser("spaced_percentage", float.class, () -> EITooltips.SPACED_PERCENTAGE_PARSER)
 				.parser(BlockPos.class, () -> (pos) -> Component.literal(pos.toShortString()))
 				.parser(WorldPos.class, () -> (pos) -> Component.literal("%s (%s)".formatted(pos.pos().toShortString(), pos.dimension().location().toString())))
 				.parser("eu_per_tick", long.class, () -> MITooltips.EU_PER_TICK_PARSER::parse)

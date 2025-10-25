@@ -43,7 +43,7 @@ public interface EIText
 	
 	@LangKey(text = "Runs LEF in batches of up to %s at %s the EU cost.")
 	@WithStyle("tooltip")
-	MutableComponent coilsLEFTier(int batchSize, @Parsed("percentage") float euCostMultiplier);
+	MutableComponent coilsLEFTier(int batchSize, @Parsed("percentage") @WithStyle("highlighted") float euCostMultiplier);
 	
 	@LangKey(text = "Blue: ")
 	MutableComponent colorBlue();
@@ -432,7 +432,7 @@ public interface EIText
 	
 	@LangKey(text = "Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Using an axe on the boiler will reset its calcification.")
 	@WithStyle("tooltip")
-	MutableComponent solarBoilerCalcification(@Parsed("percentage") float efficiency, Fluid fluid);
+	MutableComponent solarBoilerCalcification(@Parsed("percentage") @WithStyle("highlighted") float efficiency, Fluid fluid);
 	
 	@LangKey(text = "Solar Efficiency: %s %%")
 	MutableComponent solarEfficiency(int percentage);
@@ -630,7 +630,7 @@ public interface EIText
 	
 	@LangKey(text = "Speed: %s")
 	@WithStyle("tooltip")
-	MutableComponent toolMiningSpeed(@Parsed("spaced_percentage") @WithStyle("clear") float speed);
+	MutableComponent toolMiningSpeed(@Parsed("percentage") float speed);
 	
 	@LangKey(text = "Mode: %s")
 	@WithStyle("tooltip")
