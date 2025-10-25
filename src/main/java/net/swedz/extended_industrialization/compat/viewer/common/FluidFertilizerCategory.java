@@ -5,14 +5,12 @@ import aztech.modern_industrialization.thirdparty.fabrictransfer.api.fluid.Fluid
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.material.Fluid;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIItems;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.datamap.FertilizerPotency;
 
 import java.util.function.Consumer;
@@ -21,7 +19,7 @@ public final class FluidFertilizerCategory extends ViewerCategory<Fluid>
 {
 	public FluidFertilizerCategory()
 	{
-		super(Fluid.class, EI.id("fluid_fertilizers"), EIText.FLUID_FERTILIZERS.text(), EIFluids.NPK_FERTILIZER.asFluid().getBucket().getDefaultInstance(), 150, 45);
+		super(Fluid.class, EI.id("fluid_fertilizers"), EI.text().fluidFertilizers(), EIFluids.NPK_FERTILIZER.asFluid().getBucket().getDefaultInstance(), 150, 45);
 	}
 	
 	@Override
@@ -59,9 +57,9 @@ public final class FluidFertilizerCategory extends ViewerCategory<Fluid>
 	public void buildWidgets(Fluid recipe, WidgetList widgets)
 	{
 		FertilizerPotency fertilizerPotency = FertilizerPotency.getFor(recipe);
-		Component rate = EIText.FLUID_FERTILIZERS_TIME.text(fertilizerPotency.tickRate() / 20f);
+		var rate = EI.text().fluidFertilizersTime(fertilizerPotency.tickRate() / 20f);
 		widgets.secondaryText(rate, 40, 14);
-		Component cost = EIText.FLUID_FERTILIZERS_CONSUMES.text(fertilizerPotency.mbToConsumePerFertilizerTick());
+		var cost = EI.text().fluidFertilizersConsumes(fertilizerPotency.mbToConsumePerFertilizerTick());
 		widgets.secondaryText(cost, 40, 24);
 	}
 }

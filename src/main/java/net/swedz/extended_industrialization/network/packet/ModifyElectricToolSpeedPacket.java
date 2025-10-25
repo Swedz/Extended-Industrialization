@@ -1,20 +1,16 @@
 package net.swedz.extended_industrialization.network.packet;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Style;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.EITooltips;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.network.EICustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
-
-import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
 public record ModifyElectricToolSpeedPacket(boolean increase) implements EICustomPacket
 {
@@ -41,11 +37,7 @@ public record ModifyElectricToolSpeedPacket(boolean increase) implements EICusto
 			{
 				ElectricToolItem.setToolSpeed(stack, speed);
 				
-				player.displayClientMessage(
-						line(EIText.TOOL_MINING_SPEED, Style.EMPTY)
-								.arg((float) speed / ElectricToolItem.SPEED_MAX, EITooltips.SPACED_PERCENTAGE_PARSER.withStyle(Style.EMPTY)),
-						true
-				);
+				player.displayClientMessage(EI.text().toolMiningSpeed((float) speed / ElectricToolItem.SPEED_MAX), true);
 			}
 		}
 	}

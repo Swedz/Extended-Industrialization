@@ -1,8 +1,16 @@
 package net.swedz.extended_industrialization;
 
-import com.google.common.collect.Sets;
+import aztech.modern_industrialization.MITooltips;
+import aztech.modern_industrialization.api.energy.CableTier;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.material.Fluid;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -14,24 +22,32 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.datamaps.DataMapsUpdatedEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
+import net.swedz.extended_industrialization.component.RainbowDataComponent;
 import net.swedz.extended_industrialization.datagen.DatagenDelegator;
+import net.swedz.extended_industrialization.datagen.client.provider.LanguageDatagenProvider;
+import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
 import net.swedz.extended_industrialization.machines.guicomponent.EIModularSlotPanelSlots;
 import net.swedz.extended_industrialization.material.EIMaterialRegistry;
 import net.swedz.extended_industrialization.network.EIPackets;
 import net.swedz.tesseract.neoforge.api.Assert;
-import net.swedz.tesseract.neoforge.api.MCIdentifiable;
+import net.swedz.tesseract.neoforge.api.WorldPos;
+import net.swedz.tesseract.neoforge.api.tuple.Pair;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 import net.swedz.tesseract.neoforge.compat.mi.TesseractMI;
+import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformer;
+import net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser;
 import net.swedz.tesseract.neoforge.config.ConfigManager;
+import net.swedz.tesseract.neoforge.lang.LangManager;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
+import net.swedz.tesseract.neoforge.tooltip.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Set;
+import static aztech.modern_industrialization.MITooltips.*;
 
 @Mod(EI.ID)
 public final class EI
@@ -46,18 +62,9 @@ public final class EI
 	
 	public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
 	
-	// TODO use this for translation generating
-	public static Set<MCIdentifiable> getAllIdentifiables()
-	{
-		Set<MCIdentifiable> identifiables = Sets.newHashSet();
-		identifiables.addAll(EIItems.values());
-		identifiables.addAll(EIBlocks.values());
-		identifiables.addAll(EIFluids.values());
-		return identifiables;
-	}
-	
 	public EI(IEventBus bus, ModContainer container)
 	{
+		setupText();
 		setupConfig(bus, container);
 		
 		EILocalizedListeners.INSTANCE.init();
@@ -115,5 +122,50 @@ public final class EI
 				.load()
 				.listenToLoad(bus)
 				.config();
+	}
+	
+	private static EIText TEXT;
+	
+	public static EIText text()
+	{
+		Assert.notNull(TEXT, "Text not yet loaded");
+		return TEXT;
+	}
+	
+	private static void setupText()
+	{
+		var instance = new LangManager(ID)
+				.style("clear", () -> Style.EMPTY)
+				.style("tooltip", () -> DEFAULT_STYLE)
+				.style("tooltip_subtext", () -> DEFAULT_STYLE.withItalic(true))
+				.style("highlighted", () -> HIGHLIGHT_STYLE)
+				.style("green", () -> Style.EMPTY.withColor(ChatFormatting.GREEN))
+				.style("red", () -> Style.EMPTY.withColor(ChatFormatting.RED))
+				.style("rainbow", () -> Style.EMPTY.withColor(RainbowDataComponent.getCurrentRainbowColor()))
+				
+				.parser("activated", boolean.class, () -> EITooltips.ACTIVATED_BOOLEAN_PARSER)
+				.parser(Fluid.class, () -> (fluid) -> fluid.getFluidType().getDescription())
+				.parser("percentage", float.class, () -> EITooltips.PERCENTAGE_PARSER)
+				.parser("spaced_percentage", float.class, () -> EITooltips.SPACED_PERCENTAGE_PARSER)
+				.parser(BlockPos.class, () -> (pos) -> Component.literal(pos.toShortString()))
+				.parser(WorldPos.class, () -> (pos) -> Component.literal("%s (%s)".formatted(pos.pos().toShortString(), pos.dimension().location().toString())))
+				.parser("eu_per_tick", long.class, () -> MITooltips.EU_PER_TICK_PARSER::parse)
+				.parser("eu", long.class, () -> MITooltips.EU_PARSER::parse)
+				.parser("short", CableTier.class, () -> MIParser.CABLE_TIER_SHORT)
+				.parser("damage", float.class, () -> EITooltips.DAMAGE_PARSER)
+				.parser("ticks_to_minutes", long.class, () -> EITooltips.TICKS_TO_MINUTES_PARSER)
+				.parser("keybind", String.class, () -> EITooltips.KEYBIND_PARSER)
+				.parser("block", ResourceLocation.class, () -> (id) -> Parser.BLOCK.withStyle(HIGHLIGHT_STYLE).parse(BuiltInRegistries.BLOCK.get(id)))
+				.parser(Item.class, () -> Parser.ITEM)
+				.parser(EIText.EnchantmentWithLevelField.class, () -> (value) -> Parser.ENCHANTMENT_AND_LEVEL.withStyle(HIGHLIGHT_STYLE).parse(value.registry(), new Pair<>(value.enchantment(), value.level())))
+				.parser(EIText.EnchantmentField.class, () -> (value) -> Parser.ENCHANTMENT.withStyle(HIGHLIGHT_STYLE).parse(value.registry(), value.enchantment()))
+				.parser("enchantment_level", int.class, () -> Parser.ENCHANTMENT_LEVEL.withStyle(HIGHLIGHT_STYLE))
+				.parser(EuCostTransformer.class, () -> MIParser.EU_COST_TRANSFORMER_PARSER)
+				.parser(ElectricToolItem.Mode.class, () -> (mode) -> mode.text().name().copy().withStyle(NUMBER_TEXT))
+				
+				.build(EIText.class)
+				.load();
+		LanguageDatagenProvider.include(instance);
+		TEXT = instance.lang();
 	}
 }

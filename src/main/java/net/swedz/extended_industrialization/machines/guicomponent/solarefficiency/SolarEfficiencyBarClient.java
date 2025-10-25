@@ -12,7 +12,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIText;
 
 import java.util.List;
 import java.util.Optional;
@@ -92,14 +91,14 @@ public final class SolarEfficiencyBarClient implements GuiComponentClient
 			if(RenderHelper.isPointWithinRectangle(params.renderX(), params.renderY(), WIDTH, HEIGHT, cursorX - x, cursorY - y))
 			{
 				List<Component> lines = Lists.newArrayList();
-				lines.add(EIText.SOLAR_EFFICIENCY.text(efficiency));
+				lines.add(EI.text().solarEfficiency(efficiency));
 				if(hasCalcification)
 				{
-					lines.add(EIText.CALCIFICATION_PERCENTAGE.text(calcification));
+					lines.add(EI.text().calcificationPercentage(calcification));
 				}
 				if(hasEnergyProduced)
 				{
-					lines.add(EIText.GENERATING_EU_PER_TICK.text(energyProduced));
+					lines.add(EI.text().generatingEuPerTick(energyProduced));
 				}
 				guiGraphics.renderTooltip(font, lines, Optional.empty(), cursorX, cursorY);
 			}

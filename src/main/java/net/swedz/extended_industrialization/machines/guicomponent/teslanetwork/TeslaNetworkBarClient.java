@@ -12,17 +12,12 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiverState;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.helper.ComponentHelper;
 
 import java.util.List;
 import java.util.Optional;
-
-import static aztech.modern_industrialization.MITooltips.*;
-import static net.swedz.extended_industrialization.EITooltips.*;
-import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser.*;
 
 public final class TeslaNetworkBarClient implements GuiComponentClient
 {
@@ -105,34 +100,33 @@ public final class TeslaNetworkBarClient implements GuiComponentClient
 					{
 						if(data.get() instanceof TeslaNetworkBar.TransmitterData transmitter)
 						{
-							lines.add(EIText.TESLA_NETWORK_TRANSMITTER_RECEIVERS.arg(transmitter.receivers()));
-							lines.add(EIText.TESLA_NETWORK_TRANSMITTER_TRANSMITTING.arg(transmitter.energyTransmitting(), EU_PER_TICK_PARSER).arg(transmitter.cableTier(), CABLE_TIER_SHORT));
-							lines.add(EIText.TESLA_NETWORK_TRANSMITTER_DRAIN.arg(transmitter.energyDrain(), EU_PER_TICK_PARSER));
-							lines.add(EIText.TESLA_NETWORK_TRANSMITTER_CONSUMING.arg(transmitter.energyConsuming(), EU_PER_TICK_PARSER));
+							lines.add(EI.text().teslaNetworkTransmitterReceivers(transmitter.receivers()));
+							lines.add(EI.text().teslaNetworkTransmitterTransmitting(transmitter.energyTransmitting(), transmitter.cableTier()));
+							lines.add(EI.text().teslaNetworkTransmitterDrain(transmitter.energyDrain()));
+							lines.add(EI.text().teslaNetworkTransmitterConsuming(transmitter.energyConsuming()));
 						}
 						else if(data.get() instanceof TeslaNetworkBar.ReceiverData receiver)
 						{
 							if(receiver.linked().isPresent())
 							{
-								lines.add(EIText.TESLA_NETWORK_RECEIVER_LINKED.arg(receiver.linked().get(), TESLA_NETWORK_KEY_PARSER));
+								lines.add(EI.text().teslaNetworkReceiverLinked(receiver.linked().get()));
 							}
 							if(receiver.state().isFailure())
 							{
 								switch (receiver.state())
 								{
-									case NO_LINK -> lines.add(EIText.TESLA_NETWORK_RECEIVER_NO_LINK.text());
-									case UNLOADED_TRANSMITTER ->
-											lines.add(EIText.TESLA_NETWORK_RECEIVER_UNLOADED.text());
+									case NO_LINK -> EI.text().teslaNetworkReceiverNoLink();
+									case UNLOADED_TRANSMITTER -> EI.text().teslaNetworkReceiverUnloaded();
 									case MISMATCHING_VOLTAGE ->
-											lines.add(EIText.TESLA_NETWORK_RECEIVER_MISMATCHING_VOLTAGE.arg(receiver.networkCableTier().orElseThrow(), CABLE_TIER_SHORT));
-									case TOO_FAR -> lines.add(EIText.TESLA_NETWORK_RECEIVER_TOO_FAR.text());
+											EI.text().teslaNetworkReceiverMismatchingVoltage(receiver.networkCableTier().orElseThrow());
+									case TOO_FAR -> EI.text().teslaNetworkReceiverTooFar();
 								}
 							}
 						}
 						else if(data.get() instanceof TeslaNetworkBar.SingingData singing)
 						{
-							lines.add(EIText.TESLA_NETWORK_SINGING_NOTE.arg(singing.getReadableNote()));
-							lines.add(EIText.TESLA_NETWORK_TRANSMITTER_CONSUMING.arg(singing.energyConsuming(), EU_PER_TICK_PARSER));
+							lines.add(EI.text().teslaNetworkSingingNote(singing.getReadableNote()));
+							lines.add(EI.text().teslaNetworkTransmitterConsuming(singing.energyConsuming()));
 						}
 					}
 					if(!lines.isEmpty())

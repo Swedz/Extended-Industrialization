@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower;
 
 import aztech.modern_industrialization.MIText;
-import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.machine.component.EnergyAccess;
 import aztech.modern_industrialization.api.machine.holder.EnergyListComponentHolder;
@@ -23,7 +22,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.machines.component.itemslot.TeslaTowerUpgradeComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.AestheticTeslaCoilComponent;
@@ -45,10 +43,7 @@ import org.joml.Vector3f;
 import java.util.List;
 import java.util.Map;
 
-import static aztech.modern_industrialization.MITooltips.*;
 import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
-import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.line;
-import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser.*;
 
 public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEntity implements EnergyListComponentHolder, TeslaTransmitter.Delegate, TeslaBehavior
 {
@@ -98,16 +93,16 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 					TeslaNetwork network = this.getNetwork();
 					if(network.isTransmitterLoaded())
 					{
-						content.add(EIText.TESLA_NETWORK_TRANSMITTER_RECEIVERS.arg(network.receiverCount()));
+						content.add(EI.text().teslaNetworkTransmitterReceivers(network.receiverCount()));
 						
-						content.add(EIText.TESLA_NETWORK_TRANSMITTER_TRANSMITTING.arg(lastEnergyTransmitted, EU_PER_TICK_PARSER).arg(network.getCableTier(), CABLE_TIER_SHORT));
+						content.add(EI.text().teslaNetworkTransmitterTransmitting(lastEnergyTransmitted, network.getCableTier()));
 						long drain = this.getPassiveDrain();
-						content.add(EIText.TESLA_NETWORK_TRANSMITTER_DRAIN.arg(drain, EU_PER_TICK_PARSER));
-						content.add(EIText.TESLA_NETWORK_TRANSMITTER_CONSUMING.arg(lastEnergyTransmitted + drain, EU_PER_TICK_PARSER));
+						content.add(EI.text().teslaNetworkTransmitterDrain(drain));
+						content.add(EI.text().teslaNetworkTransmitterConsuming(lastEnergyTransmitted + drain));
 					}
 					else if(this.getCableTier() == null)
 					{
-						content.add(EIText.TESLA_TOWER_NO_ENERGY_HATCHES, RED);
+						content.add(EI.text().teslaTowerNoEnergyHatches(), RED);
 					}
 				}
 			}
@@ -115,7 +110,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 			{
 				if(hasMismatchingHatches)
 				{
-					content.add(EIText.TESLA_TOWER_MISMATCHING_HATCHES, RED, true);
+					content.add(EI.text().teslaTowerMismatchingHatches(), RED, true);
 				}
 			}
 		}));
@@ -125,8 +120,8 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 				.with(EIModularSlotPanelSlots.TESLA_TOWER_UPGRADE, upgrade));
 		
 		var configPanel = new ConfigurationPanelBuilder(
-				EIText.CONFIGURATION_PANEL.text(),
-				EIText.CONFIGURATION_PANEL_DESCRIPTION.text().withStyle(MITooltips.DEFAULT_STYLE.withItalic(true)),
+				EI.text().configurationPanel(),
+				EI.text().configurationPanelDescription(),
 				(lineIndex, delta) -> this.sync()
 		);
 		SHAPES.appendConfigurationPanel(configPanel, this, activeShape, true);
@@ -320,9 +315,9 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	public List<Component> getTooltips()
 	{
 		return List.of(
-				line(EIText.TESLA_TOWER_HELP_1),
-				line(EIText.TESLA_TOWER_HELP_2),
-				line(EIText.TESLA_TOWER_HELP_3)
+				EI.text().teslaTowerHelp1(),
+				EI.text().teslaTowerHelp2(),
+				EI.text().teslaTowerHelp3()
 		);
 	}
 	

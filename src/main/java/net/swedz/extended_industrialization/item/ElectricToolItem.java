@@ -75,7 +75,6 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIArmorMaterials;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EISounds;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.component.RainbowDataComponent;
 import net.swedz.extended_industrialization.entity.NanoSaberSweepEntity;
 import net.swedz.extended_industrialization.proxy.EIProxy;
@@ -91,12 +90,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static aztech.modern_industrialization.MITooltips.*;
-import static net.swedz.extended_industrialization.EITooltips.*;
-import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.line;
 
 @EventBusSubscriber(modid = EI.ID)
 public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEnergyItem, DynamicDyedItem, ToggleableItem
@@ -113,7 +111,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 				60 * 20 * CableTier.HV.getMaxTransfer(),
 				8,
 				true, true,
-				EIText.ELECTRIC_TOOL_HELP_2_FORTUNE_SILK_TOUCH,
+				EI.text()::electricToolHelp2FortuneSilkTouch,
 				Stream.of(
 						ItemAbilities.DEFAULT_PICKAXE_ACTIONS,
 						ItemAbilities.DEFAULT_SHOVEL_ACTIONS
@@ -128,7 +126,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 				60 * 20 * CableTier.HV.getMaxTransfer(),
 				10,
 				true, false,
-				EIText.ELECTRIC_TOOL_HELP_2_FORTUNE_LOOTING,
+				EI.text()::electricToolHelp2FortuneLooting,
 				Stream.of(
 						ItemAbilities.DEFAULT_AXE_ACTIONS,
 						ItemAbilities.DEFAULT_SHEARS_ACTIONS
@@ -145,7 +143,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 				60 * 20 * CableTier.HV.getMaxTransfer(),
 				14,
 				false, false,
-				EIText.ELECTRIC_TOOL_HELP_2_LOOTING_BEHEADING,
+				EI.text()::electricToolHelp2LootingBeheading,
 				Stream.of(
 						ItemAbilities.DEFAULT_SWORD_ACTIONS
 				).flatMap(Set::stream).toList(),
@@ -161,7 +159,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 				60 * 20 * CableTier.EV.getMaxTransfer(),
 				20,
 				true, true,
-				EIText.ELECTRIC_TOOL_HELP_2_FORTUNE_LOOTING,
+				EI.text()::electricToolHelp2FortuneLooting,
 				Stream.of(
 						ItemAbilities.DEFAULT_PICKAXE_ACTIONS,
 						ItemAbilities.DEFAULT_SHOVEL_ACTIONS,
@@ -182,7 +180,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		private final int               damage;
 		private final boolean           adjustableSpeed;
 		private final boolean           canDo3by3;
-		private final EIText            helpText;
+		private final Component         helpText;
 		private final List<ItemAbility> abilities;
 		private final List<Mode>        modes;
 		private final Supplier<Tool>    tool;
@@ -190,7 +188,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		Type(long energyCapacity,
 			 int damage,
 			 boolean adjustableSpeed, boolean canDo3by3,
-			 EIText helpText,
+			 BiFunction<String, String, Component> helpText,
 			 List<ItemAbility> abilities,
 			 List<Mode> modes,
 			 Supplier<Tool> tool)
@@ -200,7 +198,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			this.damage = damage;
 			this.adjustableSpeed = adjustableSpeed;
 			this.canDo3by3 = canDo3by3;
-			this.helpText = helpText;
+			this.helpText = helpText.apply("sneak", "use");
 			this.abilities = Collections.unmodifiableList(abilities);
 			this.modes = Collections.unmodifiableList(modes);
 			this.tool = tool;
@@ -226,7 +224,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			return canDo3by3;
 		}
 		
-		public EIText helpText()
+		public Component helpText()
 		{
 			return helpText;
 		}
@@ -277,36 +275,36 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	{
 		SILK_TOUCH(
 				new Text(
-						EIText.TOOL_MODE_SILK_TOUCH,
-						EIText.TOOL_SWITCHED_SILK_TOUCH
+						EI.text().toolModeSilkTouch(),
+						EI.text().toolSwitchedSilkTouch()
 				),
 				Enchantments.SILK_TOUCH
 		),
 		FORTUNE(
 				new Text(
-						EIText.TOOL_MODE_FORTUNE,
-						EIText.TOOL_SWITCHED_FORTUNE
+						EI.text().toolModeFortune(),
+						EI.text().toolSwitchedFortune()
 				),
 				Enchantments.FORTUNE
 		),
 		FORTUNE_LOOTING(
 				new Text(
-						EIText.TOOL_MODE_FORTUNE_LOOTING,
-						EIText.TOOL_SWITCHED_FORTUNE
+						EI.text().toolModeFortuneLooting(),
+						EI.text().toolSwitchedFortune()
 				),
 				Enchantments.FORTUNE, Enchantments.LOOTING
 		),
 		LOOTING(
 				new Text(
-						EIText.TOOL_MODE_LOOTING,
-						EIText.TOOL_SWITCHED_LOOTING
+						EI.text().toolModeLooting(),
+						EI.text().toolSwitchedLooting()
 				),
 				Enchantments.LOOTING
 		),
 		BEHEADING(
 				new Text(
-						EIText.TOOL_MODE_BEHEADING,
-						EIText.TOOL_SWITCHED_BEHEADING
+						EI.text().toolModeBeheading(),
+						EI.text().toolSwitchedBeheading()
 				)
 		);
 		
@@ -332,8 +330,8 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		}
 		
 		public record Text(
-				EIText name,
-				EIText switched
+				Component name,
+				Component switched
 		)
 		{
 		}
@@ -431,7 +429,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			
 			if(!player.level().isClientSide())
 			{
-				player.displayClientMessage((activated ? EIText.ELECTRIC_TOOL_3_BY_3_TOGGLED_ON : EIText.ELECTRIC_TOOL_3_BY_3_TOGGLED_OFF).text(), true);
+				player.displayClientMessage(activated ? EI.text().electricTool3By3ToggledOn() : EI.text().electricTool3By3ToggledOff(), true);
 			}
 		}
 	}
@@ -813,19 +811,17 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	{
 		if(toolType.hasAdjustableSpeed())
 		{
-			tooltip.add(line(EIText.TOOL_MINING_SPEED)
-					.arg((float) ElectricToolItem.getToolSpeed(stack) / ElectricToolItem.SPEED_MAX, SPACED_PERCENTAGE_PARSER));
+			tooltip.add(EI.text().toolMiningSpeed((float) ElectricToolItem.getToolSpeed(stack) / ElectricToolItem.SPEED_MAX));
 		}
 		
 		if(toolType.canDo3by3())
 		{
-			tooltip.add(line(EIText.TOOL_MINING_AREA)
-					.arg((this.isActivated(stack) ? EIText.TOOL_MINING_AREA_3_BY_3 : EIText.TOOL_MINING_AREA_1_BY_1).text().withStyle(NUMBER_TEXT)));
+			tooltip.add(EI.text().toolMiningArea((this.isActivated(stack) ? EI.text().toolMiningArea3By3() : EI.text().toolMiningArea1By1()).withStyle(NUMBER_TEXT)));
 		}
 		
 		if(context.registries() != null)
 		{
-			tooltip.add(line(EIText.TOOL_MODE).arg(getMode(stack).text().name().text().withStyle(NUMBER_TEXT)));
+			tooltip.add(EI.text().toolMode(getMode(stack)));
 		}
 	}
 	
@@ -856,7 +852,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			setMode(stack, mode);
 			if(!level.isClientSide())
 			{
-				player.displayClientMessage(mode.text().switched().text(), true);
+				player.displayClientMessage(mode.text().switched(), true);
 			}
 			return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
 		}

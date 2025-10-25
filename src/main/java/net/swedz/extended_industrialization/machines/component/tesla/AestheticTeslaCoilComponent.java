@@ -13,7 +13,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.configurationpanel.ConfigurationPanelBuilder;
 import net.swedz.tesseract.neoforge.helper.ColorHelper;
 import org.joml.Vector3f;
@@ -179,8 +179,8 @@ public final class AestheticTeslaCoilComponent implements IComponent
 			);
 		}
 		
-		this.appendColorLine(builder, EIText.COLOR_RED.text(), this::redInt, (color) -> red = color);
-		this.appendColorLine(builder, EIText.COLOR_GREEN.text(), this::greenInt, (color) -> green = color);
-		this.appendColorLine(builder, EIText.COLOR_BLUE.text(), this::blueInt, (color) -> blue = color);
+		this.appendColorLine(builder, EI.text().colorRed(), this::redInt, (color) -> red = color);
+		this.appendColorLine(builder, EI.text().colorGreen(), this::greenInt, (color) -> green = color);
+		this.appendColorLine(builder, EI.text().colorBlue(), this::blueInt, (color) -> blue = color);
 	}
 }

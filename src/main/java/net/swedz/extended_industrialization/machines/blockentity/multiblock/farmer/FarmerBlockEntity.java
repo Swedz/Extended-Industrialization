@@ -17,21 +17,18 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EITags;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.component.farmer.PlantingMode;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerProcessRates;
 import net.swedz.tesseract.neoforge.compat.mi.helper.CommonGuiComponents;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.BasicMultiblockMachineBlockEntity;
 import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.member.PredicateSimpleMember;
-import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
-
-import static aztech.modern_industrialization.MITooltips.*;
 
 public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntity
 {
@@ -78,7 +75,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		lines.add(new ShapeSelection.LineInfo(sizes.size(), sizes, true));
 		lines.add(new ShapeSelection.LineInfo(
 				2,
-				List.of(EIText.FARMER_NOT_TILLING.text(), EIText.FARMER_TILLING.text()),
+				List.of(EI.text().farmerNotTilling(), EI.text().farmerTilling()),
 				true
 		));
 		if(canChoosePlantingMode)
@@ -207,7 +204,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	public List<Component> getTooltips()
 	{
 		List<Component> lines = Lists.newArrayList();
-		lines.add(MICompatibleTextLine.line(EIText.FARMER_TASK_TOOLTIP).arg(baseEuCost, EU_PER_TICK_PARSER));
+		lines.add(EI.text().farmerTaskTooltip(baseEuCost));
 		lines.addAll(farmer.getTaskTooltipLines());
 		return lines;
 	}

@@ -1,16 +1,15 @@
 package net.swedz.extended_industrialization;
 
 import aztech.modern_industrialization.MIText;
-import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import dev.technici4n.grandpower.api.ILongEnergyStorage;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -25,9 +24,6 @@ import net.swedz.extended_industrialization.machines.blockentity.multiblock.tesl
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerTier;
 import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.api.WorldPos;
-import net.swedz.tesseract.neoforge.api.tuple.Pair;
-import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
-import net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser;
 import net.swedz.tesseract.neoforge.tooltip.BiParser;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 import net.swedz.tesseract.neoforge.tooltip.TooltipAttachment;
@@ -37,7 +33,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static aztech.modern_industrialization.MITooltips.*;
-import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.line;
 
 public final class EITooltips
 {
@@ -57,31 +52,36 @@ public final class EITooltips
 	public static final Parser<Integer> NUMBERED_LIST_BULLET_PARSER = (number) ->
 			Component.literal("%d)".formatted(number)).withStyle(HIGHLIGHT_STYLE);
 	
-	public static final Parser<Boolean> ACTIVATED_BOOLEAN_PARSER = (value) ->
-			value ? EIText.ACTIVATED.text().withStyle(ChatFormatting.GREEN) : EIText.DEACTIVATED.text().withStyle(ChatFormatting.RED);
+	public static final Parser<Boolean> ACTIVATED_BOOLEAN_PARSER = (value) -> value ? EI.text().activated() : EI.text().deactivated();
 	
 	public static final Parser<WorldPos> TESLA_NETWORK_KEY_PARSER = (key) -> Parser.GLOBAL_POS.withStyle(DEFAULT_STYLE).parse(GlobalPos.of(key.dimension(), key.pos()));
 	
-	public static final Parser<String> KEYBIND_PARSER = Parser.KEYBIND.withStyle(HIGHLIGHT_STYLE);
+	public static final Parser<String> KEYBIND_PARSER = (key) ->
+	{
+		if(key.equals("alt"))
+		{
+			return EI.text().keyAlt().withStyle(HIGHLIGHT_STYLE);
+		}
+		else if(key.equals("mouse_scroll"))
+		{
+			return EI.text().keyMouseScroll().withStyle(HIGHLIGHT_STYLE);
+		}
+		return Parser.KEYBIND.withStyle(HIGHLIGHT_STYLE).parse(key);
+	};
 	
 	public static final Parser<Float> DAMAGE_PARSER = (damage) ->
 	{
-		MICompatibleTextLine line;
+		MutableComponent line;
 		if(damage == Integer.MAX_VALUE)
 		{
-			line = EIText.DAMAGE.arg(Component.literal("\u221E").withStyle(HIGHLIGHT_STYLE));
+			line = EI.text().damage(EI.text().infinity());
 		}
 		else
 		{
 			damage /= 2;
-			if(damage % 1 == 0)
-			{
-				line = EIText.DAMAGE.arg(damage.intValue());
-			}
-			else
-			{
-				line = EIText.DAMAGE.arg(damage, 1, Parser.FLOAT);
-			}
+			line = damage % 1 == 0 ?
+					EI.text().damage(damage.intValue()) :
+					EI.text().damage(damage);
 		}
 		return line.withStyle(HIGHLIGHT_STYLE);
 	};
@@ -96,10 +96,7 @@ public final class EITooltips
 					long capacity = energyStorage.getCapacity();
 					if(capacity > 0)
 					{
-						return Optional.of(
-								line(MIText.EnergyStored)
-										.arg(new NumberWithMax(energyStorage.getAmount(), capacity), EU_MAXED_PARSER)
-						);
+						return Optional.of(MIText.EnergyStored.text(EU_MAXED_PARSER.parse(new NumberWithMax(energyStorage.getAmount(), capacity))).withStyle(DEFAULT_STYLE));
 					}
 				}
 				return Optional.empty();
@@ -109,8 +106,8 @@ public final class EITooltips
 	public static final TooltipAttachment MULCH_GANG_FOR_LIFE = TooltipAttachment.multilines(
 			EIItems.MULCH,
 			List.of(
-					line(EIText.MULCH_GANG_FOR_LIFE_0, DEFAULT_STYLE.withItalic(true)),
-					line(EIText.MULCH_GANG_FOR_LIFE_1, DEFAULT_STYLE.withItalic(true))
+					EI.text().mulchGangForLife0(),
+					EI.text().mulchGangForLife1()
 			)
 	).noShiftRequired();
 	
@@ -124,7 +121,7 @@ public final class EITooltips
 						.get(BuiltInRegistries.BLOCK.getKey(((BlockItem) stack.getItem()).getBlock()));
 				int batchSize = tier.batchSize();
 				float euCostMultiplier = tier.euCostMultiplier();
-				return line(EIText.COILS_LEF_TIER).arg(batchSize).arg(euCostMultiplier, PERCENTAGE_PARSER);
+				return EI.text().coilsLEFTier(batchSize, euCostMultiplier);
 			}
 	);
 	
@@ -136,10 +133,7 @@ public final class EITooltips
 			{
 				TeslaTowerTier tier = TeslaTowerBlockEntity.getTiersByWinding()
 						.get(BuiltInRegistries.BLOCK.getKey(((BlockItem) stack.getItem()).getBlock()));
-				return line(EIText.WINDINGS_TESLA_TOWER_TIER)
-						.arg(tier.maxTransfer(), EU_PER_TICK_PARSER)
-						.arg(tier.maxDistance())
-						.arg(tier.drain(), EU_PER_TICK_PARSER);
+				return EI.text().windingsTeslaTowerTier(tier.maxTransfer(), tier.maxDistance(), tier.drain());
 			}
 	);
 	
@@ -149,15 +143,15 @@ public final class EITooltips
 			{
 				int euPerTick = item.getEuPerTick();
 				List<Component> lines = Lists.newArrayList();
-				lines.add(line(EIText.PHOTOVOLTAIC_CELL_EU).arg(euPerTick, EU_PER_TICK_PARSER));
+				lines.add(EI.text().photovoltaicCellEU(euPerTick));
 				if(!item.lastsForever())
 				{
 					int solarTicksRemaining = item.getSolarTicksRemaining(stack);
-					lines.add(line(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_MINUTES).arg((long) solarTicksRemaining, TICKS_TO_MINUTES_PARSER));
+					lines.add(EI.text().photovoltaicCellRemainingOperationTimeMinutes(solarTicksRemaining));
 				}
 				else
 				{
-					lines.add(line(EIText.PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME).arg(Component.literal("\u221E").withStyle(NUMBER_TEXT)));
+					lines.add(EI.text().photovoltaicCellRemainingOperationTime(EI.text().infinity()));
 				}
 				return lines;
 			}
@@ -166,37 +160,37 @@ public final class EITooltips
 	public static final TooltipAttachment STEAM_CHAINSAW = TooltipAttachment.multilines(
 			EIItems.STEAM_CHAINSAW,
 			List.of(
-					line(EIText.STEAM_CHAINSAW_1).arg("use", KEYBIND_PARSER),
-					line(EIText.STEAM_CHAINSAW_2).arg("use", KEYBIND_PARSER),
-					line(EIText.STEAM_CHAINSAW_3).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
+					EI.text().steamChainsaw1("use"),
+					EI.text().steamChainsaw2("use"),
+					EI.text().steamChainsaw3("sneak", "use")
 			)
 	);
 	
 	public static final TooltipAttachment ROBOT_AUTO_FEEDER = TooltipAttachment.multilines(
 			EIItems.ROBOT_AUTO_FEEDER,
 			List.of(
-					line(EIText.ROBOT_AUTO_FEEDER_HELP_1),
-					line(EIText.ROBOT_AUTO_FEEDER_HELP_2)
+					EI.text().robotAutoFeederHelp1(),
+					EI.text().robotAutoFeederHelp2()
 			)
 	);
 	
 	public static final TooltipAttachment MACHINE_CONFIG_CARD = TooltipAttachment.multilines(
 			EIItems.MACHINE_CONFIG_CARD,
 			List.of(
-					line(EIText.MACHINE_CONFIG_CARD_HELP_1).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER),
-					line(EIText.MACHINE_CONFIG_CARD_HELP_2).arg("use", KEYBIND_PARSER),
-					line(EIText.MACHINE_CONFIG_CARD_HELP_3),
-					line(EIText.MACHINE_CONFIG_CARD_HELP_4).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
+					EI.text().machineConfigCardHelp1("sneak", "use"),
+					EI.text().machineConfigCardHelp2("use"),
+					EI.text().machineConfigCardHelp3(),
+					EI.text().machineConfigCardHelp4("sneak", "use")
 			)
 	);
 	
 	public static final TooltipAttachment TESLA_CALIBRATOR = TooltipAttachment.multilines(
 			EIItems.TESLA_CALIBRATOR,
 			List.of(
-					line(EIText.TESLA_CALIBRATOR_HELP_1).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER),
-					line(EIText.TESLA_CALIBRATOR_HELP_2).arg("use", KEYBIND_PARSER),
-					line(EIText.TESLA_CALIBRATOR_HELP_3),
-					line(EIText.TESLA_CALIBRATOR_HELP_4).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
+					EI.text().teslaCalibratorHelp1("sneak", "use"),
+					EI.text().teslaCalibratorHelp2("use"),
+					EI.text().teslaCalibratorHelp3(),
+					EI.text().teslaCalibratorHelp4("sneak", "use")
 			)
 	);
 	
@@ -205,26 +199,23 @@ public final class EITooltips
 			(flags, context, stack, item) ->
 			{
 				List<Component> lines = Lists.newArrayList();
-				lines.add(line(EIText.ELECTRIC_TOOL_HELP_1));
+				lines.add(EI.text().electricToolHelp1());
 				if(stack.is(ItemTags.DYEABLE))
 				{
-					lines.add(line(EIText.DYEABLE_HELP));
+					lines.add(EI.text().dyeableHelp());
 				}
-				lines.add(line(item.getToolType().helpText())
-						.arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER));
+				lines.add(item.getToolType().helpText());
 				if(item.getToolType().hasAdjustableSpeed())
 				{
-					lines.add(line(EIText.ELECTRIC_TOOL_HELP_3)
-							.arg(EIText.KEY_ALT.text().withStyle(NUMBER_TEXT))
-							.arg(EIText.KEY_MOUSE_SCROLL.text().withStyle(NUMBER_TEXT)));
+					lines.add(EI.text().electricToolHelp3("alt", "mouse_scroll"));
 				}
 				if(item.getToolType().canDo3by3())
 				{
-					lines.add(line(EIText.ELECTRIC_TOOL_HELP_4).arg("%s.toggle_main_hand_ability".formatted(EI.ID), KEYBIND_PARSER).arg("mouse.right", KEYBIND_PARSER));
+					lines.add(EI.text().electricToolHelp4("%s.toggle_main_hand_ability".formatted(EI.ID), "mouse.right"));
 				}
 				if(item.getToolType() == ElectricToolItem.Type.SABER)
 				{
-					lines.add(line(EIText.NANO_SABER_HELP).arg("use", KEYBIND_PARSER));
+					lines.add(EI.text().nanoSaberHelp("use"));
 				}
 				return lines;
 			}
@@ -235,8 +226,8 @@ public final class EITooltips
 			(flags, context, stack, item) ->
 			{
 				List<Component> lines = Lists.newArrayList();
-				lines.add(line(EIText.NANO_SUIT_HELP_1));
-				lines.add(line(EIText.DYEABLE_AND_TRIMMABLE_HELP));
+				lines.add(EI.text().nanoSuitHelp1());
+				lines.add(EI.text().dyeableAndTrimmableHelp());
 				item.ability().ifPresent((ability) -> lines.addAll(ability.getHelpTooltipLines(item, stack)));
 				return lines;
 			}
@@ -245,9 +236,9 @@ public final class EITooltips
 	public static final TooltipAttachment MACHINE_CHAINER = TooltipAttachment.multilines(
 			List.of(EI.id("machine_chainer")),
 			List.of(
-					line(EIText.MACHINE_CHAINER_HELP_1).arg(EI.config().machineChainerMaxConnections()),
-					line(EIText.MACHINE_CHAINER_HELP_2),
-					line(EIText.MACHINE_CHAINER_HELP_3)
+					EI.text().machineChainerHelp1(EI.config().machineChainerMaxConnections()),
+					EI.text().machineChainerHelp2(),
+					EI.text().machineChainerHelp3()
 			)
 	);
 	
@@ -256,7 +247,7 @@ public final class EITooltips
 					EI.id("steel_honey_extractor"),
 					EI.id("electric_honey_extractor")
 			),
-			line(EIText.HONEY_EXTRACTOR_HELP)
+			EI.text().honeyExtractorHelp()
 	);
 	
 	public static final TooltipAttachment WASTE_COLLECTOR = TooltipAttachment.singleLine(
@@ -265,21 +256,21 @@ public final class EITooltips
 					EI.id("steel_waste_collector"),
 					EI.id("electric_waste_collector")
 			),
-			line(EIText.WASTE_COLLECTOR_HELP)
+			EI.text().wasteCollectorHelp()
 	);
 	
 	public static final TooltipAttachment TESLA_INTERDIMENSIONAL_UPGRADE = TooltipAttachment.singleLine(
 			List.of(EI.id("tesla_interdimensional_upgrade")),
-			line(EIText.TESLA_INTERDIMENSIONAL_UPGRADE_HELP)
+			EI.text().teslaInterdimensionalUpgradeHelp()
 	);
 	
 	public static final TooltipAttachment TESLA_HANDHELD_RECEIVER = TooltipAttachment.multilines(
 			List.of(EI.id("tesla_handheld_receiver")),
 			List.of(
-					line(EIText.TESLA_HANDHELD_HELP_1),
-					line(EIText.TESLA_HANDHELD_HELP_2),
-					line(EIText.TESLA_HANDHELD_HELP_3).arg("use", KEYBIND_PARSER),
-					line(EIText.TESLA_HANDHELD_HELP_4).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER)
+					EI.text().teslaHandheldHelp1(),
+					EI.text().teslaHandheldHelp2(),
+					EI.text().teslaHandheldHelp3("use"),
+					EI.text().teslaHandheldHelp4("sneak", "use")
 			)
 	);
 	
@@ -312,28 +303,21 @@ public final class EITooltips
 					{
 						if(stack.is(entry.getKey()))
 						{
-							lines.add(line(EIText.ENCHANTMENT_MODULE_MACHINE)
-									.arg(BuiltInRegistries.BLOCK.get(entry.getValue()), Parser.BLOCK.withStyle(HIGHLIGHT_STYLE)));
+							lines.add(EI.text().enchantmentModuleMachine(entry.getValue()));
 						}
 					}
 					
 					if(module.values().isEmpty())
 					{
-						lines.add(line(EIText.ENCHANTMENT_MODULE_SINGLE_VALUE)
-								.arg(context.registries(), new Pair<>(module.enchantment(), module.fallback().level()), Parser.ENCHANTMENT_AND_LEVEL.withStyle(HIGHLIGHT_STYLE))
-								.arg(module.fallback().euCost(), MITooltips.EU_PER_TICK_PARSER));
+						lines.add(EI.text().enchantmentModuleSingleValue(context.registries(), module.enchantment(), module.fallback().level(), module.fallback().euCost()));
 					}
 					else
 					{
-						lines.add(line(EIText.ENCHANTMENT_MODULE_VALUES)
-								.arg(context.registries(), module.enchantment(), Parser.ENCHANTMENT.withStyle(HIGHLIGHT_STYLE)));
+						lines.add(EI.text().enchantmentModuleValues(context.registries(), module.enchantment()));
 						for(var tier : CableTier.allTiers())
 						{
 							var value = module.get(tier);
-							lines.add(line(EIText.VOLTAGE_VALUE_FOR_COST)
-									.arg(tier, MIParser.CABLE_TIER_SHORT.withStyle(HIGHLIGHT_STYLE))
-									.arg(value.level(), Parser.ENCHANTMENT_LEVEL.withStyle(HIGHLIGHT_STYLE))
-									.arg(value.euCost(), MITooltips.EU_PER_TICK_PARSER));
+							lines.add(EI.text().voltageEnchantmentLevelForCost(tier, value.level(), value.euCost()));
 						}
 					}
 					return Optional.of(lines);

@@ -23,7 +23,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerComponent;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
@@ -32,7 +31,6 @@ import net.swedz.tesseract.neoforge.helper.transfer.FluidTransferCache;
 import net.swedz.tesseract.neoforge.helper.transfer.ItemTransferCache;
 
 import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
-import static net.swedz.tesseract.neoforge.tooltip.Parser.*;
 
 public final class MachineChainerMachineBlockEntity extends MachineBlockEntity implements Tickable, CableTierHolder
 {
@@ -85,11 +83,11 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			
 			if(!links.hasConnections() && links.failPosition().isPresent())
 			{
-				content.add(EIText.MACHINE_CHAINER_PROBLEM_AT.arg(links.failPosition().get(), BLOCK_POS), RED);
+				content.add(EI.text().machineChainerProblemAt(links.failPosition().get()), RED);
 			}
 			else
 			{
-				content.add(EIText.MACHINE_CHAINER_CONNECTED_MACHINES.arg(links.count()).arg(links.maxConnections()));
+				content.add(EI.text().machineChainerConnectedMachines(links.count(), links.maxConnections()));
 			}
 		}));
 		

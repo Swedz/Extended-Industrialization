@@ -20,7 +20,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.network.transmitter.TeslaTransmitter;
 import net.swedz.tesseract.neoforge.api.WorldPos;
@@ -28,9 +27,6 @@ import net.swedz.tesseract.neoforge.tooltip.component.ItemStackTooltipComponent;
 
 import java.util.List;
 import java.util.Optional;
-
-import static aztech.modern_industrialization.MITooltips.*;
-import static net.swedz.extended_industrialization.EITooltips.*;
 
 @EventBusSubscriber(modid = EI.ID)
 public final class TeslaCalibratorItem extends Item
@@ -57,7 +53,7 @@ public final class TeslaCalibratorItem extends Item
 					receiver.setNetwork(key);
 					machine.setChanged();
 					machine.sync();
-					player.displayClientMessage(EIText.TESLA_CALIBRATOR_LINK_SUCCESS.text(), true);
+					player.displayClientMessage(EI.text().teslaCalibratorLinkSuccess(), true);
 				}
 			}
 		}
@@ -79,7 +75,7 @@ public final class TeslaCalibratorItem extends Item
 				if(!client)
 				{
 					itemStack.set(EIComponents.SELECTED_TESLA_NETWORK, new SelectedTeslaNetwork(transmitter.getPosition(), context.getLevel().getBlockState(context.getClickedPos()).getBlock()));
-					player.displayClientMessage(EIText.TESLA_CALIBRATOR_SELECTED.text(), true);
+					player.displayClientMessage(EI.text().teslaCalibratorSelected(), true);
 				}
 				return InteractionResult.sidedSuccess(client);
 			}
@@ -95,11 +91,11 @@ public final class TeslaCalibratorItem extends Item
 						receiver.setNetwork(key);
 						machine.setChanged();
 						machine.sync();
-						player.displayClientMessage(EIText.TESLA_CALIBRATOR_LINK_SUCCESS.text(), true);
+						player.displayClientMessage(EI.text().teslaCalibratorLinkSuccess(), true);
 					}
 					else
 					{
-						player.displayClientMessage(EIText.TESLA_CALIBRATOR_LINK_FAILED_NO_SELECTION.text(), true);
+						player.displayClientMessage(EI.text().teslaCalibratorLinkFailedNoSelection(), true);
 					}
 				}
 				return InteractionResult.sidedSuccess(client);
@@ -114,19 +110,19 @@ public final class TeslaCalibratorItem extends Item
 		if(player.isShiftKeyDown())
 		{
 			player.getItemInHand(usedHand).remove(EIComponents.SELECTED_TESLA_NETWORK);
-			player.displayClientMessage(EIText.TESLA_CALIBRATOR_CLEAR.text(), true);
+			player.displayClientMessage(EI.text().teslaCalibratorClear(), true);
 			return InteractionResultHolder.sidedSuccess(player.getItemInHand(usedHand), level.isClientSide());
 		}
 		return super.use(level, player, usedHand);
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag isAdvanced)
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag isAdvanced)
 	{
 		if(stack.has(EIComponents.SELECTED_TESLA_NETWORK))
 		{
-			WorldPos key = stack.get(EIComponents.SELECTED_TESLA_NETWORK).key();
-			tooltipComponents.add(EIText.TESLA_CALIBRATOR_LINKED.text(TESLA_NETWORK_KEY_PARSER.parse(key)).withStyle(DEFAULT_STYLE));
+			var key = stack.get(EIComponents.SELECTED_TESLA_NETWORK).key();
+			lines.add(EI.text().teslaCalibratorLinked(key));
 		}
 	}
 	

@@ -1,6 +1,5 @@
 package net.swedz.extended_industrialization.machines.blockentity.tesla;
 
-import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.CableTierHolder;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
@@ -25,7 +24,6 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.machines.component.tesla.AestheticTeslaCoilComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
@@ -40,8 +38,6 @@ import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Optional;
-
-import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
 public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implements EnergyComponentHolder, CableTierHolder, TeslaReceiver.Delegate, TeslaBehavior
 {
@@ -104,8 +100,8 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 		));
 		
 		var configPanel = new ConfigurationPanelBuilder(
-				EIText.CONFIGURATION_PANEL.text(),
-				EIText.CONFIGURATION_PANEL_DESCRIPTION.text().withStyle(MITooltips.DEFAULT_STYLE.withItalic(true)),
+				EI.text().configurationPanel(),
+				EI.text().configurationPanelDescription(),
 				(lineIndex, delta) -> this.sync()
 		);
 		receiver.appendSelectionPanel(this, configPanel);
@@ -253,8 +249,8 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 	public List<Component> getTooltips()
 	{
 		return List.of(
-				line(EIText.TESLA_RECEIVER_HELP_1),
-				line(EIText.TESLA_RECEIVER_HELP_2)
+				EI.text().teslaReceiverHelp1(),
+				EI.text().teslaReceiverHelp2()
 		);
 	}
 }

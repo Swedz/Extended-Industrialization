@@ -34,15 +34,12 @@ import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIFluids;
-import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.machines.component.solar.SolarSunlightComponent;
 import net.swedz.extended_industrialization.machines.component.solar.boiler.SolarBoilerCalcificationComponent;
 import net.swedz.extended_industrialization.machines.guicomponent.solarefficiency.SolarEfficiencyBar;
 import net.swedz.tesseract.neoforge.compat.mi.component.SteamProductionComponent;
-import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
 
 import java.util.List;
 
@@ -238,16 +235,8 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 	public List<Component> getTooltips()
 	{
 		List<Component> tooltips = Lists.newArrayList();
-		tooltips.add(
-				MICompatibleTextLine.line(MIText.MaxEuProductionSteam)
-						.arg(maxEuProduction, MITooltips.EU_PER_TICK_PARSER)
-						.arg(MIFluids.STEAM)
-		);
-		tooltips.add(
-				MICompatibleTextLine.line(EIText.SOLAR_BOILER_CALCIFICATION)
-						.arg(SolarBoilerCalcificationComponent.MINIMUM_EFFICIENCY, EITooltips.PERCENTAGE_PARSER)
-						.arg(EIFluids.DISTILLED_WATER.asFluid())
-		);
+		tooltips.add(MIText.MaxEuProductionSteam.text(MITooltips.EU_PER_TICK_PARSER.parse(maxEuProduction), MITooltips.FLUID_PARSER.parse(MIFluids.STEAM.asFluid())).withStyle(MITooltips.DEFAULT_STYLE));
+		tooltips.add(EI.text().solarBoilerCalcification(SolarBoilerCalcificationComponent.MINIMUM_EFFICIENCY, EIFluids.DISTILLED_WATER.asFluid()));
 		return tooltips;
 	}
 }
