@@ -3,14 +3,9 @@ package net.swedz.extended_industrialization;
 import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.api.energy.CableTier;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.material.Fluid;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -32,7 +27,6 @@ import net.swedz.extended_industrialization.machines.guicomponent.EIModularSlotP
 import net.swedz.extended_industrialization.material.EIMaterialRegistry;
 import net.swedz.extended_industrialization.network.EIPackets;
 import net.swedz.tesseract.neoforge.api.Assert;
-import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.api.tuple.Pair;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 import net.swedz.tesseract.neoforge.compat.mi.TesseractMI;
@@ -143,24 +137,28 @@ public final class EI
 				.style("red", () -> Style.EMPTY.withColor(ChatFormatting.RED))
 				.style("rainbow", () -> Style.EMPTY.withColor(RainbowDataComponent.getCurrentRainbowColor()))
 				
-				.parser("activated", boolean.class, () -> EITooltips.ACTIVATED_BOOLEAN_PARSER)
-				.parser(Fluid.class, () -> (fluid) -> fluid.getFluidType().getDescription())
+				.builtinParsers()
+				.parser("keybind", String.class, () -> EITooltips.KEYBIND_PARSER)
+				.parser("item", ResourceLocation.class, () -> Parser.ITEM_ID.withStyle(HIGHLIGHT_STYLE))
+				.parser("block", ResourceLocation.class, () -> Parser.BLOCK_ID.withStyle(HIGHLIGHT_STYLE))
+				
 				.parser("percentage", float.class, () -> EITooltips.PERCENTAGE_PARSER)
-				.parser(BlockPos.class, () -> (pos) -> Component.literal(pos.toShortString()))
-				.parser(WorldPos.class, () -> (pos) -> Component.literal("%s (%s)".formatted(pos.pos().toShortString(), pos.dimension().location().toString())))
+				
 				.parser("eu_per_tick", long.class, () -> MITooltips.EU_PER_TICK_PARSER::parse)
 				.parser("eu", long.class, () -> MITooltips.EU_PARSER::parse)
-				.parser("short", CableTier.class, () -> MIParser.CABLE_TIER_SHORT)
+				
 				.parser("damage", float.class, () -> EITooltips.DAMAGE_PARSER)
+				
 				.parser("ticks_to_minutes", long.class, () -> EITooltips.TICKS_TO_MINUTES_PARSER)
-				.parser("keybind", String.class, () -> EITooltips.KEYBIND_PARSER)
-				.parser("block", ResourceLocation.class, () -> (id) -> Parser.BLOCK.withStyle(HIGHLIGHT_STYLE).parse(BuiltInRegistries.BLOCK.get(id)))
-				.parser(Item.class, () -> Parser.ITEM)
+				
+				.parser("activated", boolean.class, () -> EITooltips.ACTIVATED_BOOLEAN_PARSER)
+				.parser("short", CableTier.class, () -> MIParser.CABLE_TIER_SHORT)
+				.parser(EuCostTransformer.class, () -> MIParser.EU_COST_TRANSFORMER_PARSER)
+				.parser(ElectricToolItem.Mode.class, () -> (mode) -> mode.text().name().copy().withStyle(NUMBER_TEXT))
+				
 				.parser(EIText.EnchantmentWithLevelField.class, () -> (value) -> Parser.ENCHANTMENT_AND_LEVEL.withStyle(HIGHLIGHT_STYLE).parse(value.registry(), new Pair<>(value.enchantment(), value.level())))
 				.parser(EIText.EnchantmentField.class, () -> (value) -> Parser.ENCHANTMENT.withStyle(HIGHLIGHT_STYLE).parse(value.registry(), value.enchantment()))
 				.parser("enchantment_level", int.class, () -> Parser.ENCHANTMENT_LEVEL.withStyle(HIGHLIGHT_STYLE))
-				.parser(EuCostTransformer.class, () -> MIParser.EU_COST_TRANSFORMER_PARSER)
-				.parser(ElectricToolItem.Mode.class, () -> (mode) -> mode.text().name().copy().withStyle(NUMBER_TEXT))
 				
 				.build(EIText.class)
 				.load();
