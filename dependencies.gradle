@@ -52,16 +52,6 @@ repositories {
 			includeGroup "top.theillusivec4.curios"
 		}
 	}
-	maven {
-		name = "Blakebr0"
-		url = "https://maven.blakesmods.com/releases"
-		content {
-			// Cucumber
-			includeGroup "com.blakebr0.cucumber"
-			// Mystical Agriculture
-			includeGroup "com.blakebr0.mysticalagriculture"
-		}
-	}
 }
 
 dependencies {
@@ -102,14 +92,6 @@ dependencies {
 		localImplementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 	} else {
 		compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
-	}
-
-	if (project.runtime_include_mystical_agriculture.toBoolean()) {
-		localImplementation "com.blakebr0.cucumber:Cucumber:${cucumber_version}"
-		localImplementation "com.blakebr0.mysticalagriculture:MysticalAgriculture:${mystical_agriculture_version}"
-	} else {
-		compileOnly "com.blakebr0.cucumber:Cucumber:${cucumber_version}"
-		compileOnly "com.blakebr0.mysticalagriculture:MysticalAgriculture:${mystical_agriculture_version}"
 	}
 
 	compileOnly "com.almostreliable.mods:almostunified-neoforge:${project.minecraft_version}-${project.au_version}:api"
