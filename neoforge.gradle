@@ -86,8 +86,7 @@ tasks.withType(ProcessResources).configureEach {
 			tesseract_version_range               : tesseract_version_range,
 			emi_version_range                     : emi_version_range,
 			accessories_version_range             : accessories_version_range,
-			curios_version_range                  : curios_version_range,
-			mystical_agriculture_version_range    : mystical_agriculture_version_range
+			curios_version_range                  : curios_version_range
 	]
 	inputs.properties replaceProperties
 
