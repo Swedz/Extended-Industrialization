@@ -784,7 +784,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public long getEnergyCapacity(ItemStack stack)
 	{
-		return toolType.energyCapacity();
+		return quantum ? 0 : toolType.energyCapacity();
 	}
 	
 	@Override

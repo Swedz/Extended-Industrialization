@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization;
 
+import dev.technici4n.grandpower.api.ISimpleEnergyItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -29,7 +30,21 @@ public final class EICreativeTabs
 				Comparator<ItemHolder> compareByName = Comparator.comparing((i) -> i.identifier().id());
 				EIItems.values().stream()
 						.sorted(compareBySortOrder.thenComparing(compareByName))
-						.forEach(output::accept);
+						.forEach((item) ->
+						{
+							output.accept(item);
+							
+							// Include full energy copies of items too
+							if(item.get() instanceof ISimpleEnergyItem energyItem)
+							{
+								var chargedStack = item.get().getDefaultInstance();
+								if(energyItem.getEnergyCapacity(chargedStack) > 0)
+								{
+									energyItem.setStoredEnergy(chargedStack, energyItem.getEnergyCapacity(chargedStack));
+									output.accept(chargedStack);
+								}
+							}
+						});
 			})
 			.build());
 	

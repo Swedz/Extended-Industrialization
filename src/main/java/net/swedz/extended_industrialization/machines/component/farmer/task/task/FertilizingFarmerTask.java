@@ -3,9 +3,9 @@ package net.swedz.extended_industrialization.machines.component.farmer.task.task
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.machines.components.MultiblockInventoryComponent;
 import aztech.modern_industrialization.util.Simulation;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.swedz.extended_industrialization.EI;
@@ -66,7 +66,9 @@ public final class FertilizingFarmerTask extends FarmerTask
 		{
 			List<FarmerBlock> crops = blockMap.tiles().stream()
 					.map(FarmerTile::crop)
-					.filter((cropBlock) -> cropBlock.state(level).isRandomlyTicking())
+					.filter((cropBlock) ->
+							cropBlock.state(level).getBlock() instanceof BonemealableBlock ||
+							cropBlock.state(level).isRandomlyTicking())
 					.toList();
 			
 			if(crops.isEmpty())
@@ -74,26 +76,44 @@ public final class FertilizingFarmerTask extends FarmerTask
 				return false;
 			}
 			
-			FarmerBlock crop = crops.get(level.getRandom().nextInt(crops.size()));
-			BlockPos pos = crop.pos();
-			BlockState state = crop.state(level);
-			int randomTicks = 0;
-			BlockState modifiedState = state;
-			do
+			boolean success = false;
+			
+			var crop = crops.get(level.getRandom().nextInt(crops.size()));
+			var pos = crop.pos();
+			var state = crop.state(level);
+			// Try to bonemeal the block first because it is more performant
+			if(state.getBlock() instanceof BonemealableBlock bonemealable &&
+			   bonemealable.isValidBonemealTarget(level, pos, state))
 			{
-				modifiedState.randomTick((ServerLevel) level, pos, level.getRandom());
-				modifiedState = level.getBlockState(pos);
-				randomTicks++;
+				bonemealable.performBonemeal((ServerLevel) level, level.getRandom(), pos, state);
+				success = true;
 			}
-			while(randomTicks < EI.config().farmerFertilizerMaxRandomTicks() && modifiedState.isRandomlyTicking());
-			
-			new FarmerFertilizeBlockPacket(pos).broadcastToClients((ServerLevel) level, pos, 32);
-			
-			fertilizerTicks--;
-			
-			if(operations.operate())
+			// If we can't bonemeal the block, random tick it until the state changes
+			else if(state.isRandomlyTicking())
 			{
-				return true;
+				int randomTicks = 0;
+				BlockState modifiedState = state;
+				do
+				{
+					modifiedState.randomTick((ServerLevel) level, pos, level.getRandom());
+					modifiedState = level.getBlockState(pos);
+					randomTicks++;
+				}
+				while(randomTicks < EI.config().farmerFertilizerMaxRandomTicks() &&
+					  modifiedState == state);
+				success = true;
+			}
+			
+			if(success)
+			{
+				new FarmerFertilizeBlockPacket(pos).broadcastToClients((ServerLevel) level, pos, 32);
+				
+				fertilizerTicks--;
+				
+				if(operations.operate())
+				{
+					return true;
+				}
 			}
 		}
 		

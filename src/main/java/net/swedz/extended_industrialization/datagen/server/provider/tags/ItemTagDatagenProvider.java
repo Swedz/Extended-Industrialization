@@ -32,7 +32,11 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 						Items.STICK,
 						Items.APPLE,
 						Items.MOSS_CARPET,
-						Items.MANGROVE_ROOTS
+						Items.MANGROVE_ROOTS,
+						Items.WEEPING_VINES,
+						Items.NETHER_WART_BLOCK,
+						Items.WARPED_WART_BLOCK,
+						Items.SHROOMLIGHT
 				)
 				.addTags(
 						ItemTags.SAPLINGS
@@ -43,7 +47,12 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 	private void addFarmerStandardPlantableTag()
 	{
 		this.tag(EITags.Items.FARMER_PLANTABLE)
-				.add(Items.KELP)
+				.add(
+						Items.KELP,
+						Items.CRIMSON_FUNGUS,
+						Items.WARPED_FUNGUS,
+						Items.SWEET_BERRIES
+				)
 				.addTags(
 						Tags.Items.SEEDS,
 						Tags.Items.CROPS,

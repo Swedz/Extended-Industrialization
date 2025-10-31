@@ -21,10 +21,8 @@ import net.swedz.extended_industrialization.machines.component.farmer.harvesting
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestableBehavior;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestableBehaviorHolder;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
-import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.CropBlockHarvestable;
+import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.BushBlockHarvestable;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.GrowingPlantHarvestable;
-import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.MysticalAgricultureHarvestable;
-import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.NetherWartHarvestable;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.SimpleTallCropHarvestable;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.harvestable.TreeHarvestable;
 import net.swedz.extended_industrialization.machines.component.farmer.planting.FarmerPlantable;
@@ -36,7 +34,6 @@ import net.swedz.extended_industrialization.machines.component.farmer.task.Farme
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTaskType;
 import net.swedz.tesseract.neoforge.behavior.BehaviorRegistry;
-import net.swedz.tesseract.neoforge.compat.ModLoadedHelper;
 import net.swedz.tesseract.neoforge.compat.mi.helper.MachineInventoryHelper;
 import net.swedz.tesseract.neoforge.event.FarmlandLoseMoistureEvent;
 
@@ -65,14 +62,8 @@ public final class FarmerComponent implements IComponent
 		registerPlantable(StandardFarmerPlantable::new);
 		registerPlantable(SpecialFarmerPlantable::new);
 		
-		if(ModLoadedHelper.isLoaded("mysticalagriculture"))
-		{
-			registerHarvestable(MysticalAgricultureHarvestable::new);
-		}
-		
-		registerHarvestable(CropBlockHarvestable::new);
+		registerHarvestable(BushBlockHarvestable::new);
 		registerHarvestable(GrowingPlantHarvestable::new);
-		registerHarvestable(NetherWartHarvestable::new);
 		registerHarvestable(SimpleTallCropHarvestable::new);
 		registerHarvestable(TreeHarvestable::new);
 	}
