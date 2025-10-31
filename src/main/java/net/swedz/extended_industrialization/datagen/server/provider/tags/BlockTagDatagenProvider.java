@@ -31,7 +31,8 @@ public final class BlockTagDatagenProvider extends BlockTagsProvider
 	{
 		this.tag(EITags.Blocks.FARMER_DIRT)
 				.add(
-						Blocks.SOUL_SAND
+						Blocks.SOUL_SAND,
+						Blocks.NETHERRACK
 				)
 				.addTags(
 						BlockTags.DIRT,

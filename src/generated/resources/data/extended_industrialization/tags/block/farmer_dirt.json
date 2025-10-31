@@ -1,6 +1,7 @@
 {
   "values": [
     "minecraft:soul_sand",
+    "minecraft:netherrack",
     "#minecraft:dirt",
     "#c:sands",
     "#neoforge:villager_farmlands",
