@@ -32,7 +32,7 @@ public interface EIText
 	
 	@LangKey(text = "Brews %s potions at a time.")
 	@WithStyle("tooltip")
-	MutableComponent breweryBrewsMultiple(int amount);
+	MutableComponent breweryBrewsMultiple(@WithStyle("highlighted") int amount);
 	
 	@LangKey(text = "Requires %s to brew potions.")
 	@WithStyle("tooltip")
@@ -43,7 +43,10 @@ public interface EIText
 	
 	@LangKey(text = "Runs LEF in batches of up to %s at %s the EU cost.")
 	@WithStyle("tooltip")
-	MutableComponent coilsLEFTier(int batchSize, @Parsed("percentage") @WithStyle("highlighted") float euCostMultiplier);
+	MutableComponent coilsLEFTier(
+			@WithStyle("highlighted") int batchSize,
+			@Parsed("percentage") @WithStyle("highlighted") float euCostMultiplier
+	);
 	
 	@LangKey(text = "Blue: ")
 	MutableComponent colorBlue();
@@ -129,23 +132,38 @@ public interface EIText
 	
 	@LangKey(text = "- Press %s + %s to swap between Fortune/Looting and Silk Touch.")
 	@WithStyle("tooltip")
-	MutableComponent electricToolHelp2FortuneLooting(@Parsed("keybind") String keybind1, @Parsed("keybind") String keybind2);
+	MutableComponent electricToolHelp2FortuneLooting(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
 	
 	@LangKey(text = "- Press %s + %s to swap between Fortune and Silk Touch.")
 	@WithStyle("tooltip")
-	MutableComponent electricToolHelp2FortuneSilkTouch(@Parsed("keybind") String keybind1, @Parsed("keybind") String keybind2);
+	MutableComponent electricToolHelp2FortuneSilkTouch(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
 	
 	@LangKey(text = "- Press %s + %s to swap between Looting and Beheading.")
 	@WithStyle("tooltip")
-	MutableComponent electricToolHelp2LootingBeheading(@Parsed("keybind") String keybind1, @Parsed("keybind") String keybind2);
+	MutableComponent electricToolHelp2LootingBeheading(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
 	
 	@LangKey(text = "- Use %s + %s to change mining speed.")
 	@WithStyle("tooltip")
-	MutableComponent electricToolHelp3(@Parsed("keybind") String keybind1, @Parsed("keybind") String keybind2);
+	MutableComponent electricToolHelp3(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
 	
 	@LangKey(text = "- Press %s while held or %s while hovered to toggle 3x3 mining.")
 	@WithStyle("tooltip")
-	MutableComponent electricToolHelp4(@Parsed("keybind") String keybind1, @Parsed("keybind") String keybind2);
+	MutableComponent electricToolHelp4(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
 	
 	@LangKey(text = "Insert an enchantment module to make the machine use the enchantment.")
 	@WithStyle("tooltip")
@@ -153,7 +171,7 @@ public interface EIText
 	
 	@LangKey(text = "Can be used in the %s.")
 	@WithStyle("tooltip")
-	MutableComponent enchantmentModuleMachine(@Parsed("block") ResourceLocation blockId);
+	MutableComponent enchantmentModuleMachine(@Parsed("block") @WithStyle("highlighted") ResourceLocation blockId);
 	
 	record EnchantmentWithLevelField(HolderLookup.Provider registry, ResourceKey<Enchantment> enchantment, int level)
 	{
@@ -162,7 +180,7 @@ public interface EIText
 	@LangKey(text = "Applies %s in the machine for %s.")
 	@WithStyle("tooltip")
 	@Deprecated
-	MutableComponent enchantmentModuleSingleValue(EnchantmentWithLevelField enchantment, @Parsed("eu_per_tick") long euPerTick);
+	MutableComponent enchantmentModuleSingleValue(@WithStyle("highlighted") EnchantmentWithLevelField enchantment, @Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick);
 	
 	default MutableComponent enchantmentModuleSingleValue(HolderLookup.Provider registry, ResourceKey<Enchantment> enchantment, int level, long euPerTick)
 	{
@@ -176,7 +194,7 @@ public interface EIText
 	@LangKey(text = "Voltage determines the level of %s applied in the machine.")
 	@WithStyle("tooltip")
 	@Deprecated
-	MutableComponent enchantmentModuleValues(EnchantmentField enchantment);
+	MutableComponent enchantmentModuleValues(@WithStyle("highlighted") EnchantmentField enchantment);
 	
 	default MutableComponent enchantmentModuleValues(HolderLookup.Provider registry, ResourceKey<Enchantment> enchantment)
 	{
@@ -197,7 +215,7 @@ public interface EIText
 	
 	@LangKey(text = "  - %s: %s")
 	@WithStyle("tooltip")
-	MutableComponent farmerTask(Component name, Component description);
+	MutableComponent farmerTask(@WithStyle("highlighted") Component name, Component description);
 	
 	@LangKey(text = "Fertilizing")
 	MutableComponent farmerTaskFertilizing();
@@ -231,7 +249,7 @@ public interface EIText
 	
 	@LangKey(text = "Can perform the following tasks using %s:")
 	@WithStyle("tooltip")
-	MutableComponent farmerTaskTooltip(@Parsed("eu_per_tick") long euPerTick);
+	MutableComponent farmerTaskTooltip(@Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick);
 	
 	@LangKey(text = "Tilling")
 	MutableComponent farmerTilling();
@@ -267,7 +285,7 @@ public interface EIText
 	
 	@LangKey(text = "Connects up to %s consecutive machines in a straight line in the direction it is facing.")
 	@WithStyle("tooltip")
-	MutableComponent machineChainerHelp1(int maxConnections);
+	MutableComponent machineChainerHelp1(@WithStyle("highlighted") int maxConnections);
 	
 	@LangKey(text = "Accepts items, fluids, and energy and distributes them to connected machines.")
 	@WithStyle("tooltip")
@@ -294,11 +312,14 @@ public interface EIText
 	
 	@LangKey(text = "- Press %s + %s on a machine to save its settings in the card.")
 	@WithStyle("tooltip")
-	MutableComponent machineConfigCardHelp1(@Parsed("keybind") String keybind1, @Parsed("keybind") String keybind2);
+	MutableComponent machineConfigCardHelp1(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
 	
 	@LangKey(text = "- Use %s on a machine to apply the settings from the card.")
 	@WithStyle("tooltip")
-	MutableComponent machineConfigCardHelp2(@Parsed("keybind") String keybind);
+	MutableComponent machineConfigCardHelp2(@Parsed("keybind") @WithStyle("highlighted") String keybind);
 	
 	@LangKey(text = "- (Optional) Hold in off-hand when placing machines to automatically apply settings.")
 	@WithStyle("tooltip")
@@ -306,7 +327,10 @@ public interface EIText
 	
 	@LangKey(text = "- Clear using %s + %s on air.")
 	@WithStyle("tooltip")
-	MutableComponent machineConfigCardHelp4(@Parsed("keybind") String keybind1, @Parsed("keybind") String keybind2);
+	MutableComponent machineConfigCardHelp4(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
 	
 	@LangKey(text = "Saved machine configuration to card.")
 	MutableComponent machineConfigCardSave();
@@ -328,7 +352,7 @@ public interface EIText
 	
 	@LangKey(text = "- Press %s to make a long ranged sweep attack.")
 	@WithStyle("tooltip")
-	MutableComponent nanoSaberHelp(@Parsed("keybind") String keybind);
+	MutableComponent nanoSaberHelp(@Parsed("keybind") @WithStyle("highlighted") String keybind);
 	
 	@LangKey(text = "Creative Flight: %s")
 	@WithStyle("tooltip")
@@ -340,19 +364,31 @@ public interface EIText
 	
 	@LangKey(text = "- Press %s while equipped or %s while hovered to toggle Creative Flight.")
 	@WithStyle("tooltip")
-	MutableComponent nanoSuitHelpCreativeFlight(@Parsed("keybind") String keybind1, @Parsed("keybind") String keybind2);
+	MutableComponent nanoSuitHelpCreativeFlight(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
 	
 	@LangKey(text = "- Press %s while equipped or %s while hovered to toggle Night Vision.")
 	@WithStyle("tooltip")
-	MutableComponent nanoSuitHelpNightVision(@Parsed("keybind") String keybind1, @Parsed("keybind") String keybind2);
+	MutableComponent nanoSuitHelpNightVision(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
 	
 	@LangKey(text = "- Press %s while equipped or %s while hovered to toggle the Speed Boost.")
 	@WithStyle("tooltip")
-	MutableComponent nanoSuitHelpSpeed(@Parsed("keybind") String keybind1, @Parsed("keybind") String keybind2);
+	MutableComponent nanoSuitHelpSpeed(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
 	
 	@LangKey(text = "- Press %s while equipped or %s while hovered to toggle the Step Boost.")
 	@WithStyle("tooltip")
-	MutableComponent nanoSuitHelpStep(@Parsed("keybind") String keybind1, @Parsed("keybind") String keybind2);
+	MutableComponent nanoSuitHelpStep(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
 	
 	@LangKey(text = "Night Vision: %s")
 	@WithStyle("tooltip")
@@ -386,15 +422,15 @@ public interface EIText
 	
 	@LangKey(text = "Will produce up to %s when placed in a Solar Panel.")
 	@WithStyle("tooltip")
-	MutableComponent photovoltaicCellEU(@Parsed("eu_per_tick") long euPerTick);
+	MutableComponent photovoltaicCellEU(@Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick);
 	
 	@LangKey(text = "Remaining Operation Time: %s")
 	@WithStyle("tooltip")
-	MutableComponent photovoltaicCellRemainingOperationTime(Component text);
+	MutableComponent photovoltaicCellRemainingOperationTime(@WithStyle("highlighted") Component text);
 	
 	@LangKey(text = "Remaining Operation Time: %s minute(s)")
 	@WithStyle("tooltip")
-	MutableComponent photovoltaicCellRemainingOperationTimeMinutes(@Parsed("ticks_to_minutes") long ticks);
+	MutableComponent photovoltaicCellRemainingOperationTimeMinutes(@Parsed("ticks_to_minutes") @WithStyle("highlighted") long ticks);
 	
 	@LangKey(text = "Priority: %s")
 	MutableComponent priority(int priority);
@@ -405,7 +441,7 @@ public interface EIText
 	
 	@LangKey(text = "Runs at %s the EU cost.")
 	@WithStyle("tooltip")
-	MutableComponent processingArrayEuCostMultiplier(EuCostTransformer euCostTransformer);
+	MutableComponent processingArrayEuCostMultiplier(@WithStyle("highlighted") EuCostTransformer euCostTransformer);
 	
 	@LangKey(text = "Insert electric crafting machines to run in parallel.")
 	@WithStyle("tooltip")
@@ -432,14 +468,14 @@ public interface EIText
 	
 	@LangKey(text = "Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Using an axe on the boiler will reset its calcification.")
 	@WithStyle("tooltip")
-	MutableComponent solarBoilerCalcification(@Parsed("percentage") @WithStyle("highlighted") float efficiency, Fluid fluid);
+	MutableComponent solarBoilerCalcification(@Parsed("percentage") @WithStyle("highlighted") float efficiency, @WithStyle("highlighted") Fluid fluid);
 	
 	@LangKey(text = "Solar Efficiency: %s %%")
 	MutableComponent solarEfficiency(int percentage);
 	
 	@LangKey(text = "By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long and produce 1.5x as much energy!")
 	@WithStyle("tooltip")
-	MutableComponent solarPanelDistilledWater(Fluid fluid);
+	MutableComponent solarPanelDistilledWater(@WithStyle("highlighted") Fluid fluid);
 	
 	@LangKey(text = "To produce energy, the Solar Panel needs a matching tier Photovoltaic Cell in its inventory.")
 	@WithStyle("tooltip")
@@ -451,26 +487,32 @@ public interface EIText
 	
 	@LangKey(text = "- Press %s on still or flowing water to fill.")
 	@WithStyle("tooltip")
-	MutableComponent steamChainsaw1(@Parsed("keybind") String keybind);
+	MutableComponent steamChainsaw1(@Parsed("keybind") @WithStyle("highlighted") String keybind);
 	
 	@LangKey(text = "- Place fuel inside the chainsaw using %s.")
 	@WithStyle("tooltip")
-	MutableComponent steamChainsaw2(@Parsed("keybind") String keybind);
+	MutableComponent steamChainsaw2(@Parsed("keybind") @WithStyle("highlighted") String keybind);
 	
 	@LangKey(text = "- Toggle Silk Touch with %s + %s.")
 	@WithStyle("tooltip")
-	MutableComponent steamChainsaw3(@Parsed("keybind") String keybind1, @Parsed("keybind") String keybind2);
+	MutableComponent steamChainsaw3(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
 	
 	@LangKey(text = "Cleared selection from tesla calibrator.")
 	MutableComponent teslaCalibratorClear();
 	
 	@LangKey(text = "- Press %s + %s on a transmitter to save its position in the calibrator.")
 	@WithStyle("tooltip")
-	MutableComponent teslaCalibratorHelp1(@Parsed("keybind") String keybind1, @Parsed("keybind") String keybind2);
+	MutableComponent teslaCalibratorHelp1(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
 	
 	@LangKey(text = "- Use %s on a Tesla Receiver to link it to the selected transmitter.")
 	@WithStyle("tooltip")
-	MutableComponent teslaCalibratorHelp2(@Parsed("keybind") String keybind);
+	MutableComponent teslaCalibratorHelp2(@Parsed("keybind") @WithStyle("highlighted") String keybind);
 	
 	@LangKey(text = "- (Optional) Hold in off-hand when placing receivers to automatically link.")
 	@WithStyle("tooltip")
@@ -478,7 +520,10 @@ public interface EIText
 	
 	@LangKey(text = "- Clear using %s + %s on air.")
 	@WithStyle("tooltip")
-	MutableComponent teslaCalibratorHelp4(@Parsed("keybind") String keybind1, @Parsed("keybind") String keybind2);
+	MutableComponent teslaCalibratorHelp4(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
 	
 	@LangKey(text = "Linked to %s")
 	@WithStyle("tooltip")
@@ -495,7 +540,7 @@ public interface EIText
 	
 	@LangKey(text = "Wirelessly transmits energy to linked receivers within %s blocks.")
 	@WithStyle("tooltip")
-	MutableComponent teslaCoilHelp1(int range);
+	MutableComponent teslaCoilHelp1(@WithStyle("highlighted") int range);
 	
 	@LangKey(text = "Voltage of energy transmitted is set by the hull provided. Higher voltages have an increased passive drain.")
 	@WithStyle("tooltip")
@@ -514,11 +559,14 @@ public interface EIText
 	
 	@LangKey(text = "- Press %s on a transmitter to link the receiver to it.")
 	@WithStyle("tooltip")
-	MutableComponent teslaHandheldHelp3(@Parsed("keybind") String keybind);
+	MutableComponent teslaHandheldHelp3(@Parsed("keybind") @WithStyle("highlighted") String keybind);
 	
 	@LangKey(text = "- Clear using %s + %s on air.")
 	@WithStyle("tooltip")
-	MutableComponent teslaHandheldHelp4(@Parsed("keybind") String keybind1, @Parsed("keybind") String keybind2);
+	MutableComponent teslaHandheldHelp4(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
 	
 	@LangKey(text = "Linked to %s")
 	@WithStyle("tooltip")
@@ -533,7 +581,7 @@ public interface EIText
 	
 	@LangKey(text = "Deals damage to entities within %s blocks while powered.")
 	@WithStyle("tooltip")
-	MutableComponent teslaLethalCoilHelp1(int range);
+	MutableComponent teslaLethalCoilHelp1(@WithStyle("highlighted") int range);
 	
 	@LangKey(text = "Voltage determines the amount of damage dealt and energy required:")
 	@WithStyle("tooltip")
@@ -620,7 +668,7 @@ public interface EIText
 	
 	@LangKey(text = "Area: %s")
 	@WithStyle("tooltip")
-	MutableComponent toolMiningArea(Component text);
+	MutableComponent toolMiningArea(@WithStyle("highlighted") Component text);
 	
 	@LangKey(text = "1x1")
 	MutableComponent toolMiningArea1By1();
@@ -629,12 +677,15 @@ public interface EIText
 	MutableComponent toolMiningArea3By3();
 	
 	@LangKey(text = "Speed: %s")
+	MutableComponent toolChangedMiningSpeed(@Parsed("percentage") float speed);
+	
+	@LangKey(text = "Speed: %s")
 	@WithStyle("tooltip")
-	MutableComponent toolMiningSpeed(@Parsed("percentage") float speed);
+	MutableComponent toolMiningSpeed(@Parsed("percentage") @WithStyle("highlighted") float speed);
 	
 	@LangKey(text = "Mode: %s")
 	@WithStyle("tooltip")
-	MutableComponent toolMode(ElectricToolItem.Mode mode);
+	MutableComponent toolMode(@WithStyle("highlighted") ElectricToolItem.Mode mode);
 	
 	@LangKey(text = "Beheading")
 	MutableComponent toolModeBeheading();
@@ -675,16 +726,16 @@ public interface EIText
 	@WithStyle("tooltip")
 	MutableComponent voltageValueForCost(
 			@Parsed("short") @WithStyle("highlighted") CableTier tier,
-			@Parsed("damage") float damageAmount,
-			@Parsed("eu") long energyCost
+			@Parsed("damage") @WithStyle("highlighted") float damageAmount,
+			@Parsed("eu") @WithStyle("highlighted") long energyCost
 	);
 	
 	@LangKey(text = "  - %s: %s for %s")
 	@WithStyle("tooltip")
 	MutableComponent voltageEnchantmentLevelForCost(
 			@Parsed("short") @WithStyle("highlighted") CableTier tier,
-			@Parsed("enchantment_level") int level,
-			@Parsed("eu_per_tick") long euPerTick
+			@Parsed("enchantment_level") @WithStyle("highlighted") int level,
+			@Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick
 	);
 	
 	@LangKey(text = "When placed underneath animals, manure will be collected.")
@@ -694,8 +745,8 @@ public interface EIText
 	@LangKey(text = "Allows the Tesla Tower to transmit up to %s within %s blocks with a passive drain of %s.")
 	@WithStyle("tooltip")
 	MutableComponent windingsTeslaTowerTier(
-			@Parsed("eu_per_tick") long maxTransfer,
-			int maxDistance,
-			@Parsed("eu_per_tick") long drain
+			@Parsed("eu_per_tick") @WithStyle("highlighted") long maxTransfer,
+			@WithStyle("highlighted") int maxDistance,
+			@Parsed("eu_per_tick") @WithStyle("highlighted") long drain
 	);
 }

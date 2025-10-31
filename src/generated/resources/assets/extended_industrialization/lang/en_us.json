@@ -248,6 +248,7 @@
   "text.extended_industrialization.rainbow": "Rainbow",
   "text.extended_industrialization.robot_auto_feeder_help_1": "Automatically grabs Canned Food from your inventory and feeds it to you.",
   "text.extended_industrialization.robot_auto_feeder_help_2": "Works with item containing items such as backpacks.",
+  "text.extended_industrialization.set_tool_mining_speed": "Speed: %s",
   "text.extended_industrialization.solar_boiler_calcification": "Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Using an axe on the boiler will reset its calcification.",
   "text.extended_industrialization.solar_efficiency": "Solar Efficiency: %s %%",
   "text.extended_industrialization.solar_panel_distilled_water": "By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long and produce 1.5x as much energy!",

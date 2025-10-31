@@ -94,8 +94,6 @@ import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static aztech.modern_industrialization.MITooltips.*;
-
 @EventBusSubscriber(modid = EI.ID)
 public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEnergyItem, DynamicDyedItem, ToggleableItem
 {
@@ -816,7 +814,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		
 		if(toolType.canDo3by3())
 		{
-			tooltip.add(EI.text().toolMiningArea((this.isActivated(stack) ? EI.text().toolMiningArea3By3() : EI.text().toolMiningArea1By1()).withStyle(NUMBER_TEXT)));
+			tooltip.add(EI.text().toolMiningArea(this.isActivated(stack) ? EI.text().toolMiningArea3By3() : EI.text().toolMiningArea1By1()));
 		}
 		
 		if(context.registries() != null)

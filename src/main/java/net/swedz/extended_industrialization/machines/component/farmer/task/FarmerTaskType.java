@@ -9,8 +9,6 @@ import net.swedz.extended_industrialization.machines.component.farmer.task.task.
 import net.swedz.extended_industrialization.machines.component.farmer.task.task.PlantingFarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.task.TillingFarmerTask;
 
-import static aztech.modern_industrialization.MITooltips.*;
-
 public enum FarmerTaskType
 {
 	TILLING(TillingFarmerTask::new, EI.text().farmerTaskTilling(), EI.text().farmerTaskTillingDescription()),
@@ -42,6 +40,6 @@ public enum FarmerTaskType
 	public Component tooltip()
 	{
 		return tooltipName == null || tooltipDescription == null ? null :
-				EI.text().farmerTask(tooltipName.copy().withStyle(NUMBER_TEXT), tooltipDescription);
+				EI.text().farmerTask(tooltipName, tooltipDescription);
 	}
 }

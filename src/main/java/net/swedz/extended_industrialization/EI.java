@@ -1,7 +1,8 @@
 package net.swedz.extended_industrialization;
 
-import aztech.modern_industrialization.MITooltips;
+import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.CableTier;
+import aztech.modern_industrialization.util.TextHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Style;
@@ -139,13 +140,21 @@ public final class EI
 				
 				.builtinParsers()
 				.parser("keybind", String.class, () -> EITooltips.KEYBIND_PARSER)
-				.parser("item", ResourceLocation.class, () -> Parser.ITEM_ID.withStyle(HIGHLIGHT_STYLE))
-				.parser("block", ResourceLocation.class, () -> Parser.BLOCK_ID.withStyle(HIGHLIGHT_STYLE))
+				.parser("item", ResourceLocation.class, () -> Parser.ITEM_ID)
+				.parser("block", ResourceLocation.class, () -> Parser.BLOCK_ID)
 				
 				.parser("percentage", float.class, () -> EITooltips.PERCENTAGE_PARSER)
 				
-				.parser("eu_per_tick", long.class, () -> MITooltips.EU_PER_TICK_PARSER::parse)
-				.parser("eu", long.class, () -> MITooltips.EU_PARSER::parse)
+				.parser("eu_per_tick", long.class, () -> (value) ->
+				{
+					var amount = TextHelper.getAmountGeneric(value);
+					return MIText.EuT.text(amount.digit(), amount.unit());
+				})
+				.parser("eu", long.class, () -> (value) ->
+				{
+					var amount = TextHelper.getAmountGeneric(value);
+					return MIText.Eu.text(amount.digit(), amount.unit());
+				})
 				
 				.parser("damage", float.class, () -> EITooltips.DAMAGE_PARSER)
 				
@@ -154,11 +163,11 @@ public final class EI
 				.parser("activated", boolean.class, () -> EITooltips.ACTIVATED_BOOLEAN_PARSER)
 				.parser("short", CableTier.class, () -> MIParser.CABLE_TIER_SHORT)
 				.parser(EuCostTransformer.class, () -> MIParser.EU_COST_TRANSFORMER_PARSER)
-				.parser(ElectricToolItem.Mode.class, () -> (mode) -> mode.text().name().copy().withStyle(NUMBER_TEXT))
+				.parser(ElectricToolItem.Mode.class, () -> (mode) -> mode.text().name())
 				
-				.parser(EIText.EnchantmentWithLevelField.class, () -> (value) -> Parser.ENCHANTMENT_AND_LEVEL.withStyle(HIGHLIGHT_STYLE).parse(value.registry(), new Pair<>(value.enchantment(), value.level())))
-				.parser(EIText.EnchantmentField.class, () -> (value) -> Parser.ENCHANTMENT.withStyle(HIGHLIGHT_STYLE).parse(value.registry(), value.enchantment()))
-				.parser("enchantment_level", int.class, () -> Parser.ENCHANTMENT_LEVEL.withStyle(HIGHLIGHT_STYLE))
+				.parser(EIText.EnchantmentWithLevelField.class, () -> (value) -> Parser.ENCHANTMENT_AND_LEVEL.parse(value.registry(), new Pair<>(value.enchantment(), value.level())))
+				.parser(EIText.EnchantmentField.class, () -> (value) -> Parser.ENCHANTMENT.parse(value.registry(), value.enchantment()))
+				.parser("enchantment_level", int.class, () -> Parser.ENCHANTMENT_LEVEL)
 				
 				.build(EIText.class)
 				.load();

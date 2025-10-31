@@ -46,11 +46,8 @@ public final class EITooltips
 	public static final Parser<Long> TICKS_TO_MINUTES_PARSER = (ticks) ->
 	{
 		float minutes = (float) ticks / (60 * 20);
-		return Component.literal("%.2f".formatted(minutes)).withStyle(NUMBER_TEXT);
+		return Component.literal("%.2f".formatted(minutes));
 	};
-	
-	public static final Parser<Integer> NUMBERED_LIST_BULLET_PARSER = (number) ->
-			Component.literal("%d)".formatted(number)).withStyle(HIGHLIGHT_STYLE);
 	
 	public static final Parser<Boolean> ACTIVATED_BOOLEAN_PARSER = (value) -> value ? EI.text().activated() : EI.text().deactivated();
 	
@@ -60,13 +57,13 @@ public final class EITooltips
 	{
 		if(key.equals("alt"))
 		{
-			return EI.text().keyAlt().withStyle(HIGHLIGHT_STYLE);
+			return EI.text().keyAlt();
 		}
 		else if(key.equals("mouse_scroll"))
 		{
-			return EI.text().keyMouseScroll().withStyle(HIGHLIGHT_STYLE);
+			return EI.text().keyMouseScroll();
 		}
-		return Parser.KEYBIND.withStyle(HIGHLIGHT_STYLE).parse(key);
+		return Parser.KEYBIND.parse(key);
 	};
 	
 	public static final Parser<Float> DAMAGE_PARSER = (damage) ->
@@ -83,7 +80,7 @@ public final class EITooltips
 					EI.text().damage(damage.intValue()) :
 					EI.text().damage(damage);
 		}
-		return line.withStyle(HIGHLIGHT_STYLE);
+		return line;
 	};
 	
 	public static final TooltipAttachment ENERGY_STORED_ITEM = TooltipAttachment.singleLineOptional(
