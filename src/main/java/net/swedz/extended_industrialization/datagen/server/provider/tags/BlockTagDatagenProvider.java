@@ -36,7 +36,8 @@ public final class BlockTagDatagenProvider extends BlockTagsProvider
 				.addTags(
 						BlockTags.DIRT,
 						Tags.Blocks.SANDS,
-						Tags.Blocks.VILLAGER_FARMLANDS
+						Tags.Blocks.VILLAGER_FARMLANDS,
+						BlockTags.NYLIUM
 				)
 				.addOptional(mysticalAgriculture("inferium_farmland"))
 				.addOptional(mysticalAgriculture("prudentium_farmland"))

@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
-public record FarmerTree(BlockPos base, List<BlockPos> blocks)
+public record FarmerTree(BlockPos origin, List<BlockPos> blocks)
 {
 	public List<BlockState> blockStates(Level level)
 	{

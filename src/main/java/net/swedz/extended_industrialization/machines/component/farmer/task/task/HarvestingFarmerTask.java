@@ -46,13 +46,17 @@ public final class HarvestingFarmerTask extends FarmerTask
 	
 	private boolean insertDrops(List<ItemStack> drops, boolean simulate)
 	{
-		try (Transaction transaction = Transaction.openRoot())
+		try (var transaction = Transaction.openRoot())
 		{
-			MIItemStorage itemOutput = new MIItemStorage(inventory.getItemOutputs());
+			var itemOutput = new MIItemStorage(inventory.getItemOutputs());
 			
 			boolean success = true;
-			for(ItemStack item : drops)
+			for(var item : drops)
 			{
+				if(item.isEmpty())
+				{
+					continue;
+				}
 				long inserted = itemOutput.insertAllSlot(ItemVariant.of(item), item.getCount(), transaction);
 				if(inserted != item.getCount() &&
 				   !item.is(EITags.Items.FARMER_VOIDABLE))
@@ -79,7 +83,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 	
 	private List<ItemStack> getDrops(HarvestingContext context, HarvestableBehavior handler)
 	{
-		BlockPos origin = context.pos();
+		var origin = context.pos();
 		List<ItemStack> drops;
 		if(cachedDrops.containsKey(origin))
 		{
@@ -109,7 +113,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 	
 	private boolean harvestBlocks(FarmerBlock cropBlockEntry, HarvestingContext context, HarvestableBehavior handler)
 	{
-		BlockPos origin = context.pos();
+		var origin = context.pos();
 		List<BlockPos> blockPositions = handler.getBlocks(context);
 		
 		if(blockPositions.isEmpty())
@@ -117,7 +121,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 			return false;
 		}
 		
-		List<ItemStack> drops = this.getDrops(context, handler);
+		var drops = this.getDrops(context, handler);
 		if(drops.isEmpty())
 		{
 			return false;
@@ -125,14 +129,14 @@ public final class HarvestingFarmerTask extends FarmerTask
 		
 		this.insertDrops(drops, false);
 		
-		BlockState[] oldStates = new BlockState[blockPositions.size()];
-		BlockState[] newStates = new BlockState[blockPositions.size()];
-		BlockState newOriginState = Blocks.AIR.defaultBlockState();
+		var oldStates = new BlockState[blockPositions.size()];
+		var newStates = new BlockState[blockPositions.size()];
+		var newOriginState = Blocks.AIR.defaultBlockState();
 		for(int index = 0; index < blockPositions.size(); index++)
 		{
 			var pos = blockPositions.get(index);
 			oldStates[index] = level.getBlockState(pos);
-			BlockState newState = level.getFluidState(pos).createLegacyBlock();
+			var newState = level.getFluidState(pos).createLegacyBlock();
 			newStates[index] = newState;
 			if(pos.equals(origin))
 			{

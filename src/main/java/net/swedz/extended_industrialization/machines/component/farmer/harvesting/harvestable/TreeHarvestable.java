@@ -10,7 +10,7 @@ import net.swedz.extended_industrialization.machines.component.farmer.block.Farm
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.FarmerListener;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.LootTableHarvestableBehavior;
-import net.swedz.tesseract.neoforge.event.TreeGrowthEvent;
+import net.swedz.tesseract.neoforge.event.treegrowth.TreeGrowthEvent;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -48,13 +48,13 @@ public final class TreeHarvestable implements LootTableHarvestableBehavior
 	
 	private void onTreeGrow(TreeGrowthEvent event, FarmerBlockMap blockMap)
 	{
-		BlockPos base = event.getPos();
-		if(blockMap.containsDirtAt(base.below()))
+		var origin = event.getPos();
+		if(blockMap.containsDirtAt(origin.below()))
 		{
 			List<BlockPos> blocks = event.getPositions();
 			blocks.removeIf(blockMap::containsDirtAt);
 			blocks.sort(Collections.reverseOrder(Comparator.comparingInt(Vec3i::getY)));
-			trees.put(base, new FarmerTree(base, blocks));
+			trees.put(origin, new FarmerTree(origin, blocks));
 		}
 	}
 	
@@ -73,7 +73,7 @@ public final class TreeHarvestable implements LootTableHarvestableBehavior
 		for(FarmerTree tree : this.trees.values())
 		{
 			long[] list = tree.blocks().stream().mapToLong(BlockPos::asLong).toArray();
-			trees.putLongArray(Long.toString(tree.base().asLong()), list);
+			trees.putLongArray(Long.toString(tree.origin().asLong()), list);
 		}
 		tag.put("trees", trees);
 	}

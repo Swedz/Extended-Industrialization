@@ -4,6 +4,7 @@
     "#minecraft:dirt",
     "#c:sands",
     "#neoforge:villager_farmlands",
+    "#minecraft:nylium",
     {
       "id": "mysticalagriculture:inferium_farmland",
       "required": false

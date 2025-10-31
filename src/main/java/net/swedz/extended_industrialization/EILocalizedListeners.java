@@ -4,7 +4,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.swedz.tesseract.neoforge.event.FarmlandLoseMoistureEvent;
-import net.swedz.tesseract.neoforge.event.TreeGrowthEvent;
+import net.swedz.tesseract.neoforge.event.treegrowth.TreeGrowthEvent;
 import net.swedz.tesseract.neoforge.localizedlistener.LocalizedListeners;
 
 public final class EILocalizedListeners extends LocalizedListeners
