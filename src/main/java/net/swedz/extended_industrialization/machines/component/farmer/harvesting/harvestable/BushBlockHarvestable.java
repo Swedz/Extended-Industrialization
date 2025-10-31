@@ -10,10 +10,13 @@ import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.LootTableHarvestableBehavior;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -21,36 +24,40 @@ import java.util.Map;
  * <p>This covers {@link CropBlock}, {@link NetherWartBlock}, {@link SweetBerryBushBlock}, or any other block that
  * inherits {@link BushBlock} and has an {@link IntegerProperty} with the name <code>age</code>.</p>
  */
+@EventBusSubscriber(modid = EI.ID)
 public final class BushBlockHarvestable implements LootTableHarvestableBehavior
 {
-	private static final Map<BlockState, IntegerProperty> AGEABLE_BLOCKS;
+	private static final Map<BlockState, IntegerProperty> AGEABLE_BLOCKS = Maps.newConcurrentMap();
 	
-	static
+	@SubscribeEvent
+	private static void onLoad(FMLCommonSetupEvent event)
 	{
-		// Cache the valid blocks so we dont have to search through all the properties of each block every time
-		Map<BlockState, IntegerProperty> ageableBlocks = Maps.newHashMap();
-		for(var block : BuiltInRegistries.BLOCK)
+		event.enqueueWork(() ->
 		{
-			if(block instanceof BushBlock)
+			// Cache the valid blocks so we dont have to search through all the properties of each block every time
+			for(var block : BuiltInRegistries.BLOCK)
 			{
-				var defaultState = block.defaultBlockState();
-				// Check that this block has the age property
-				var ageProperty = getNamedIntegerProperty(defaultState, "age");
-				if(ageProperty != null)
+				if(block instanceof BushBlock)
 				{
-					// Ignore blocks with a "stage" property, like the mangrove propagule (or other potential weird modded saplings)
-					if(getNamedIntegerProperty(defaultState, "stage") != null)
+					var defaultState = block.defaultBlockState();
+					// Check that this block has the age property
+					var ageProperty = getNamedIntegerProperty(defaultState, "age");
+					if(ageProperty != null)
 					{
-						continue;
-					}
-					for(var state : block.getStateDefinition().getPossibleStates())
-					{
-						ageableBlocks.put(state, ageProperty);
+						// Ignore blocks with a "stage" property, like the mangrove propagule (or other potential weird modded saplings)
+						if(getNamedIntegerProperty(defaultState, "stage") != null)
+						{
+							continue;
+						}
+						for(var state : block.getStateDefinition().getPossibleStates())
+						{
+							AGEABLE_BLOCKS.put(state, ageProperty);
+						}
 					}
 				}
 			}
-		}
-		AGEABLE_BLOCKS = Collections.unmodifiableMap(ageableBlocks);
+			EI.LOGGER.info("Discovered {} block states for BushBlockHarvestable", AGEABLE_BLOCKS.size());
+		});
 	}
 	
 	private static IntegerProperty getNamedIntegerProperty(BlockState state, String name)
