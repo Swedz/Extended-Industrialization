@@ -4,6 +4,10 @@
     "minecraft:apple",
     "minecraft:moss_carpet",
     "minecraft:mangrove_roots",
+    "minecraft:weeping_vines",
+    "minecraft:nether_wart_block",
+    "minecraft:warped_wart_block",
+    "minecraft:shroomlight",
     "#minecraft:saplings",
     {
       "id": "#rootsclassic:berries",
