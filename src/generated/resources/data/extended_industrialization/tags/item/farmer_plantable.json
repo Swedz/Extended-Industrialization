@@ -5,6 +5,8 @@
   ],
   "values": [
     "minecraft:kelp",
+    "minecraft:crimson_fungus",
+    "minecraft:warped_fungus",
     "#c:seeds",
     "#c:crops",
     "#minecraft:villager_plantable_seeds",
