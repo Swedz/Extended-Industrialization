@@ -1,11 +1,11 @@
 {
   "entries": [
     "extended_industrialization:nano_saber/auto_smelting",
-    "extended_industrialization:nano_saber/beheading/minecraft/skeleton",
-    "extended_industrialization:nano_saber/beheading/minecraft/piglin",
-    "extended_industrialization:nano_saber/beheading/minecraft/creeper",
     "extended_industrialization:nano_saber/beheading/minecraft/wither_skeleton",
-    "extended_industrialization:nano_saber/beheading/minecraft/zombie"
+    "extended_industrialization:nano_saber/beheading/minecraft/skeleton",
+    "extended_industrialization:nano_saber/beheading/minecraft/zombie",
+    "extended_industrialization:nano_saber/beheading/minecraft/creeper",
+    "extended_industrialization:nano_saber/beheading/minecraft/piglin"
   ],
   "replace": false
 }
