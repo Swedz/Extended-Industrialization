@@ -50,7 +50,8 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 				.add(
 						Items.KELP,
 						Items.CRIMSON_FUNGUS,
-						Items.WARPED_FUNGUS
+						Items.WARPED_FUNGUS,
+						Items.SWEET_BERRIES
 				)
 				.addTags(
 						Tags.Items.SEEDS,
