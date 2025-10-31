@@ -3,7 +3,6 @@ package net.swedz.extended_industrialization;
 import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.util.TextHelper;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -130,20 +129,16 @@ public final class EI
 	private static void setupText()
 	{
 		var instance = new LangManager(ID)
-				.style("clear", () -> Style.EMPTY)
+				.builtinColorStyles()
 				.style("tooltip", () -> DEFAULT_STYLE)
 				.style("tooltip_subtext", () -> DEFAULT_STYLE.withItalic(true))
 				.style("highlighted", () -> HIGHLIGHT_STYLE)
-				.style("green", () -> Style.EMPTY.withColor(ChatFormatting.GREEN))
-				.style("red", () -> Style.EMPTY.withColor(ChatFormatting.RED))
 				.style("rainbow", () -> Style.EMPTY.withColor(RainbowDataComponent.getCurrentRainbowColor()))
 				
 				.builtinParsers()
 				.parser("keybind", String.class, () -> EITooltips.KEYBIND_PARSER)
-				.parser("item", ResourceLocation.class, () -> Parser.ITEM_ID)
-				.parser("block", ResourceLocation.class, () -> Parser.BLOCK_ID)
 				
-				.parser("percentage", float.class, () -> EITooltips.PERCENTAGE_PARSER)
+				.parser("percentage", float.class, () -> (value) -> Parser.FLOAT_PERCENTAGE.parse(value, 0))
 				
 				.parser("eu_per_tick", long.class, () -> (value) ->
 				{
