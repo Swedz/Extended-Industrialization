@@ -35,6 +35,7 @@ public final class BushBlockHarvestable implements LootTableHarvestableBehavior
 		event.enqueueWork(() ->
 		{
 			// Cache the valid blocks so we dont have to search through all the properties of each block every time
+			AGEABLE_BLOCKS.clear();
 			for(var block : BuiltInRegistries.BLOCK)
 			{
 				if(block instanceof BushBlock)
