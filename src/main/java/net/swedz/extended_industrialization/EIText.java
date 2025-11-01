@@ -730,9 +730,9 @@ public interface EIText
 			@Parsed("eu") @WithStyle("highlighted") long energyCost
 	);
 	
-	@LangKey(text = "  - %s: %s for %s")
+	@LangKey
 	@WithStyle("tooltip")
-	MutableComponent voltageEnchantmentLevelForCost(
+	MutableComponent voltageValueForCost(
 			@Parsed("short") @WithStyle("highlighted") CableTier tier,
 			@Parsed("enchantment_level") @WithStyle("highlighted") int level,
 			@Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick

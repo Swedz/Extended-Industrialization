@@ -318,7 +318,6 @@
   "text.extended_industrialization.tool_switched_silk_touch": "Silk Touch mode enabled!",
   "text.extended_industrialization.universal_transformer_from_tier_input": "Hull for cable tier to convert from (LV by default).",
   "text.extended_industrialization.universal_transformer_to_tier_input": "Hull for cable tier to convert to (LV by default).",
-  "text.extended_industrialization.voltage_enchantment_level_for_cost": "  - %s: %s for %s",
   "text.extended_industrialization.voltage_value_for_cost": "  - %s: %s for %s",
   "text.extended_industrialization.waste_collector_help": "When placed underneath animals, manure will be collected.",
   "text.extended_industrialization.windings_tesla_tower_tier": "Allows the Tesla Tower to transmit up to %s within %s blocks with a passive drain of %s."

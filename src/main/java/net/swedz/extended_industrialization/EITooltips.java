@@ -314,7 +314,7 @@ public final class EITooltips
 						for(var tier : CableTier.allTiers())
 						{
 							var value = module.get(tier);
-							lines.add(EI.text().voltageEnchantmentLevelForCost(tier, value.level(), value.euCost()));
+							lines.add(EI.text().voltageValueForCost(tier, value.level(), value.euCost()));
 						}
 					}
 					return Optional.of(lines);
