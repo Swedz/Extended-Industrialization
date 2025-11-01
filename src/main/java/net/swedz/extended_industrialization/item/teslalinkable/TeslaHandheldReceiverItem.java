@@ -13,17 +13,13 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.tesla.network.transmitter.TeslaTransmitter;
-import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.tooltip.component.ItemStackTooltipComponent;
 
 import java.util.List;
 import java.util.Optional;
-
-import static aztech.modern_industrialization.MITooltips.*;
-import static net.swedz.extended_industrialization.EITooltips.*;
 
 public final class TeslaHandheldReceiverItem extends Item
 {
@@ -47,7 +43,7 @@ public final class TeslaHandheldReceiverItem extends Item
 				if(!client)
 				{
 					itemStack.set(EIComponents.SELECTED_TESLA_NETWORK, new SelectedTeslaNetwork(transmitter.getPosition(), context.getLevel().getBlockState(context.getClickedPos()).getBlock()));
-					player.displayClientMessage(EIText.TESLA_HANDHELD_SELECTED.text(), true);
+					player.displayClientMessage(EI.text().teslaHandheldSelected(), true);
 				}
 				return InteractionResult.sidedSuccess(client);
 			}
@@ -61,19 +57,19 @@ public final class TeslaHandheldReceiverItem extends Item
 		if(player.isShiftKeyDown())
 		{
 			player.getItemInHand(usedHand).remove(EIComponents.SELECTED_TESLA_NETWORK);
-			player.displayClientMessage(EIText.TESLA_HANDHELD_CLEAR.text(), true);
+			player.displayClientMessage(EI.text().teslaHandheldClear(), true);
 			return InteractionResultHolder.sidedSuccess(player.getItemInHand(usedHand), level.isClientSide());
 		}
 		return super.use(level, player, usedHand);
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag isAdvanced)
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag isAdvanced)
 	{
 		if(stack.has(EIComponents.SELECTED_TESLA_NETWORK))
 		{
-			WorldPos key = stack.get(EIComponents.SELECTED_TESLA_NETWORK).key();
-			tooltipComponents.add(EIText.TESLA_HANDHELD_LINKED.text(TESLA_NETWORK_KEY_PARSER.parse(key)).withStyle(DEFAULT_STYLE));
+			var key = stack.get(EIComponents.SELECTED_TESLA_NETWORK).key();
+			lines.add(EI.text().teslaHandheldLinked(key));
 		}
 	}
 	

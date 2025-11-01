@@ -1,6 +1,5 @@
 package net.swedz.extended_industrialization.machines.blockentity.tesla;
 
-import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
@@ -32,8 +31,6 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIDamageTypes;
 import net.swedz.extended_industrialization.EISounds;
 import net.swedz.extended_industrialization.EITags;
-import net.swedz.extended_industrialization.EIText;
-import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.machines.component.enchantmentmodule.EnchantmentModuleComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.AestheticTeslaCoilComponent;
@@ -44,13 +41,10 @@ import net.swedz.extended_industrialization.proxy.EIProxy;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.configurationpanel.ConfigurationPanelBuilder;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
-import net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 import org.joml.Vector3f;
 
 import java.util.List;
-
-import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
 public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity implements Tickable, EnergyComponentHolder, TeslaBehavior
 {
@@ -123,8 +117,8 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 				.with(EIModularSlotPanelSlots.LETHAL_TESLA_COIL_ENCHANTMENT_MODULE, enchantmentModule));
 		
 		var configPanel = new ConfigurationPanelBuilder(
-				EIText.CONFIGURATION_PANEL.text(),
-				EIText.CONFIGURATION_PANEL_DESCRIPTION.text().withStyle(MITooltips.DEFAULT_STYLE.withItalic(true)),
+				EI.text().configurationPanel(),
+				EI.text().configurationPanelDescription(),
 				(lineIndex, delta) -> this.sync()
 		);
 		aesthetic.appendSelectionPanel(this, configPanel);
@@ -224,14 +218,11 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	public List<Component> getTooltips()
 	{
 		List<Component> lines = Lists.newArrayList();
-		lines.add(line(EIText.TESLA_LETHAL_COIL_HELP_1).arg(EI.config().lethalTeslaCoil().range()));
-		lines.add(line(EIText.TESLA_LETHAL_COIL_VALUES));
+		lines.add(EI.text().teslaLethalCoilHelp1(EI.config().lethalTeslaCoil().range()));
+		lines.add(EI.text().teslaLethalCoilValues());
 		for(var tier : CableTier.allTiers())
 		{
-			lines.add(line(EIText.VOLTAGE_VALUE_FOR_COST)
-					.arg(tier, MIParser.CABLE_TIER_SHORT.withStyle(MITooltips.HIGHLIGHT_STYLE))
-					.arg(getDamageAmount(tier), EITooltips.DAMAGE_PARSER)
-					.arg(getEnergyCost(tier), MITooltips.EU_PARSER));
+			lines.add(EI.text().voltageValueForCost(tier, getDamageAmount(tier), getEnergyCost(tier)));
 		}
 		return lines;
 	}

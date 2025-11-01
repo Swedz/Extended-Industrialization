@@ -10,7 +10,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetworkCache;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetworkPart;
@@ -40,30 +39,24 @@ public final class EICommands
 	
 	private static void teslaNetworkDump(CommandSourceStack source, TeslaNetwork network, BlockPos pos)
 	{
-		source.sendSuccess(() -> EIText.COMMAND_TESLA_NETWORK_DUMP_RESULT_1.text(pos.toShortString()), true);
+		source.sendSuccess(() -> EI.text().commandTeslaNetworkDumpResult1(pos), true);
 		
-		// TODO use parser
-		source.sendSuccess(() -> EIText.COMMAND_TESLA_NETWORK_DUMP_RESULT_2.text("%s (%s)".formatted(network.key().pos().toShortString(), network.key().dimension().location().toString())), true);
+		source.sendSuccess(() -> EI.text().commandTeslaNetworkDumpResult2(network.key()), true);
 		
 		Component transmitterResult;
 		if(network.hasTransmitter())
 		{
 			WorldPos transmitterPosition = network.getTransmitter().getPosition();
 			boolean ticking = network.isTransmitterLoaded();
-			transmitterResult = EIText.COMMAND_TESLA_NETWORK_DUMP_RESULT_YES_TRANSMITTER.text(
-					// TODO use parser
-					"%s (%s)".formatted(transmitterPosition.pos().toShortString(), transmitterPosition.dimension().location().toString()),
-					Boolean.toString(ticking),
-					ticking ? network.getCableTier().shortEnglishName() : Component.literal("N/A")
-			);
+			transmitterResult = EI.text().commandTeslaNetworkDumpResultYesTransmitter(transmitterPosition, ticking, ticking ? network.getCableTier().shortEnglishName() : Component.literal("N/A"));
 		}
 		else
 		{
-			transmitterResult = EIText.COMMAND_TESLA_NETWORK_DUMP_RESULT_NO_TRANSMITTER.text();
+			transmitterResult = EI.text().commandTeslaNetworkDumpResultNoTransmitter();
 		}
-		source.sendSuccess(() -> EIText.COMMAND_TESLA_NETWORK_DUMP_RESULT_3.text(transmitterResult), true);
+		source.sendSuccess(() -> EI.text().commandTeslaNetworkDumpResult3(transmitterResult), true);
 		
-		source.sendSuccess(() -> EIText.COMMAND_TESLA_NETWORK_DUMP_RESULT_4.text(network.receiverCount(), network.loadedReceiverCount()), true);
+		source.sendSuccess(() -> EI.text().commandTeslaNetworkDumpResult4(network.receiverCount(), network.loadedReceiverCount()), true);
 	}
 	
 	private static int teslaNetworkDump(CommandSourceStack source, WorldPos pos)
@@ -78,8 +71,7 @@ public final class EICommands
 		}
 		else
 		{
-			// TODO use parser
-			source.sendFailure(EIText.COMMAND_TESLA_NETWORK_DUMP_NO_NETWORK.text("%s (%s)".formatted(pos.pos().toShortString(), pos.dimension().location().toString())));
+			source.sendFailure(EI.text().commandTeslaNetworkDumpNoNetwork(pos));
 		}
 		
 		return Command.SINGLE_SUCCESS;
@@ -99,12 +91,12 @@ public final class EICommands
 			}
 			else
 			{
-				source.sendFailure(EIText.COMMAND_TESLA_NETWORK_DUMP_NO_NETWORK.text(pos.toShortString()));
+				source.sendFailure(EI.text().commandTeslaNetworkDumpNoNetwork(new WorldPos(source.getLevel(), pos)));
 			}
 		}
 		else
 		{
-			source.sendFailure(EIText.COMMAND_TESLA_NETWORK_DUMP_CANT_HAVE_NETWORK.text(pos.toShortString()));
+			source.sendFailure(EI.text().commandTeslaNetworkDumpCantHaveNetwork(pos));
 		}
 		
 		return Command.SINGLE_SUCCESS;

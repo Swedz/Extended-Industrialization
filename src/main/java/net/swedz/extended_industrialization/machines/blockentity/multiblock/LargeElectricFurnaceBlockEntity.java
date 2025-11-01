@@ -16,9 +16,8 @@ import com.google.common.collect.Maps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.datamap.LargeElectricFurnaceTier;
-import net.swedz.tesseract.neoforge.TesseractText;
+import net.swedz.tesseract.neoforge.compat.mi.TesseractMI;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformer;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformers;
 import net.swedz.tesseract.neoforge.compat.mi.helper.CommonGuiComponents;
@@ -32,8 +31,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static aztech.modern_industrialization.machines.models.MachineCasings.*;
-import static net.swedz.tesseract.neoforge.compat.mi.TesseractMITooltips.*;
-import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
 public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMultipliedCraftingMultiblockBlockEntity
 {
@@ -73,8 +70,8 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 	public List<Component> getTooltips()
 	{
 		return List.of(
-				line(TesseractText.MI_MACHINE_BATCHER_RECIPE).arg(true, this.getRecipeType(), MACHINE_RECIPE_TYPE_PARSER),
-				line(EIText.MACHINE_BATCHER_COILS)
+				TesseractMI.text().machineBatcherRecipe(true, this.getRecipeType()),
+				EI.text().machineBatcherCoils()
 		);
 	}
 	

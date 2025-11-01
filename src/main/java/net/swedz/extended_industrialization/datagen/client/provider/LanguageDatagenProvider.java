@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.datagen.client.provider;
 
 import aztech.modern_industrialization.MI;
+import com.google.common.collect.Sets;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
@@ -9,13 +10,22 @@ import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.EIKeybinds;
 import net.swedz.extended_industrialization.EITags;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.tesseract.neoforge.datagen.mi.MIDatagenHooks;
+import net.swedz.tesseract.neoforge.lang.LangInstance;
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
+import java.util.Set;
+
 public final class LanguageDatagenProvider extends LanguageProvider
 {
+	private static final Set<LangInstance<?>> INSTANCES = Sets.newHashSet();
+	
+	public static void include(LangInstance<?> instance)
+	{
+		INSTANCES.add(instance);
+	}
+	
 	public LanguageDatagenProvider(GatherDataEvent event)
 	{
 		super(event.getGenerator().getPackOutput(), EI.ID, "en_us");
@@ -24,9 +34,9 @@ public final class LanguageDatagenProvider extends LanguageProvider
 	@Override
 	protected void addTranslations()
 	{
-		for(EIText text : EIText.values())
+		for(var instance : INSTANCES)
 		{
-			this.add(text.getTranslationKey(), text.englishText());
+			instance.datagen(this);
 		}
 		
 		for(ItemHolder item : EIItems.values())

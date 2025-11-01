@@ -9,20 +9,17 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.EITags;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-
-import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
 public final class EIModularSlotPanelSlots
 {
 	public static final ResourceLocation TESLA_TOWER_UPGRADE = register(
 			"tesla_tower_upgrade", SlotGroup.UPGRADES, 64,
 			(stack) -> stack.is(EIItems.TESLA_INTERDIMENSIONAL_UPGRADE.asItem()),
-			2, 0, () -> line(EIText.TESLA_TOWER_UPGRADE)
+			2, 0, () -> EI.text().teslaTowerUpgrade()
 	);
 	
 	public static final ResourceLocation FARMER_ENCHANTMENT_MODULE = registerEnchantmentModule(
@@ -55,7 +52,7 @@ public final class EIModularSlotPanelSlots
 		return register(
 				"%s_enchantment_module".formatted(name), SlotGroup.CONFIGURABLE_STACKS, 1,
 				(stack) -> stack.is(tag),
-				3, 0, () -> line(EIText.ENCHANTMENT_MODULE_INPUT)
+				3, 0, () -> EI.text().enchantmentModuleInput()
 		);
 	}
 	

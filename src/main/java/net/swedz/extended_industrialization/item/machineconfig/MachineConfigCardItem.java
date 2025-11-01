@@ -21,13 +21,10 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.tesseract.neoforge.tooltip.component.ItemStackTooltipComponent;
 
 import java.util.List;
 import java.util.Optional;
-
-import static aztech.modern_industrialization.MITooltips.*;
 
 @EventBusSubscriber(modid = EI.ID)
 public final class MachineConfigCardItem extends Item
@@ -53,11 +50,11 @@ public final class MachineConfigCardItem extends Item
 					if(config.apply(player, machine, Simulation.SIMULATE))
 					{
 						config.apply(player, machine, Simulation.ACT);
-						player.displayClientMessage(EIText.MACHINE_CONFIG_CARD_APPLY_SUCCESS.text(), true);
+						player.displayClientMessage(EI.text().machineConfigCardApplySuccess(), true);
 					}
 					else
 					{
-						player.displayClientMessage(EIText.MACHINE_CONFIG_CARD_APPLY_FAILED.text(), true);
+						player.displayClientMessage(EI.text().machineConfigCardApplyFailed(), true);
 					}
 				}
 			}
@@ -81,7 +78,7 @@ public final class MachineConfigCardItem extends Item
 					{
 						MachineConfig config = MachineConfig.from(machine);
 						itemStack.set(EIComponents.MACHINE_CONFIG, config);
-						player.displayClientMessage(EIText.MACHINE_CONFIG_CARD_SAVE.text(), true);
+						player.displayClientMessage(EI.text().machineConfigCardSave(), true);
 					}
 					else
 					{
@@ -92,11 +89,11 @@ public final class MachineConfigCardItem extends Item
 							if(config.apply(player, machine, Simulation.SIMULATE))
 							{
 								config.apply(player, machine, Simulation.ACT);
-								player.displayClientMessage(EIText.MACHINE_CONFIG_CARD_APPLY_SUCCESS.text(), true);
+								player.displayClientMessage(EI.text().machineConfigCardApplySuccess(), true);
 							}
 							else
 							{
-								player.displayClientMessage(EIText.MACHINE_CONFIG_CARD_APPLY_FAILED.text(), true);
+								player.displayClientMessage(EI.text().machineConfigCardApplyFailed(), true);
 							}
 						}
 					}
@@ -113,7 +110,7 @@ public final class MachineConfigCardItem extends Item
 		if(player.isShiftKeyDown())
 		{
 			player.getItemInHand(usedHand).remove(EIComponents.MACHINE_CONFIG);
-			player.displayClientMessage(EIText.MACHINE_CONFIG_CARD_CLEAR.text(), true);
+			player.displayClientMessage(EI.text().machineConfigCardClear(), true);
 			return InteractionResultHolder.sidedSuccess(player.getItemInHand(usedHand), level.isClientSide());
 		}
 		return super.use(level, player, usedHand);
@@ -125,7 +122,7 @@ public final class MachineConfigCardItem extends Item
 		if(stack.has(EIComponents.MACHINE_CONFIG))
 		{
 			Block machineBlock = stack.get(EIComponents.MACHINE_CONFIG).machineBlock();
-			tooltipComponents.add(EIText.MACHINE_CONFIG_CARD_CONFIGURED.arg(machineBlock.asItem(), ITEM_PARSER));
+			tooltipComponents.add(EI.text().machineConfigCardConfigured(machineBlock.asItem()));
 		}
 	}
 	

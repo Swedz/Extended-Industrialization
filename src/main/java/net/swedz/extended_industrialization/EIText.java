@@ -1,206 +1,752 @@
 package net.swedz.extended_industrialization;
 
-import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTranslatableTextEnum;
+import aztech.modern_industrialization.api.energy.CableTier;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.material.Fluid;
+import net.swedz.extended_industrialization.item.ElectricToolItem;
+import net.swedz.tesseract.neoforge.api.WorldPos;
+import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformer;
+import net.swedz.tesseract.neoforge.lang.annotation.LangKey;
+import net.swedz.tesseract.neoforge.lang.annotation.Parsed;
+import net.swedz.tesseract.neoforge.lang.annotation.WithStyle;
+import net.swedz.tesseract.neoforge.tooltip.Parser;
 
-public enum EIText implements MICompatibleTranslatableTextEnum
+public interface EIText
 {
-	ACTIVATED("Activated"),
-	BLAZING_ESSENCE_USES_1("Blazing Essence is used in the brewery to brew potions."),
-	BLAZING_ESSENCE_USES_2("1mb of Blazing Essence is used every time the brewery brews a set of potions."),
-	BREWERY_BREWS_MULTIPLE("Brews %s potions at a time."),
-	BREWERY_REQUIRES_BLAZING_ESSENCE("Requires %s to brew potions."),
-	CALCIFICATION_PERCENTAGE("Calcification: %d %%"),
-	COILS_LEF_TIER("Runs LEF in batches of up to %d at %s the EU cost."),
-	COLOR_BLUE("Blue: "),
-	COLOR_GREEN("Green: "),
-	COLOR_RED("Red: "),
-	COMMAND_TESLA_NETWORK_DUMP_CANT_HAVE_NETWORK("The block at %s is not a network part."),
-	COMMAND_TESLA_NETWORK_DUMP_CHUNK_NOT_LOADED("Chunk at %s is not loaded."),
-	COMMAND_TESLA_NETWORK_DUMP_NO_NETWORK("No existing network could be found for %s."),
-	COMMAND_TESLA_NETWORK_DUMP_RESULT_1("Dumping data on network of %s:"),
-	COMMAND_TESLA_NETWORK_DUMP_RESULT_2("* Key: %s"),
-	COMMAND_TESLA_NETWORK_DUMP_RESULT_3("* Transmitter: %s"),
-	COMMAND_TESLA_NETWORK_DUMP_RESULT_4("* Receiver Count: %d / %d (linked / loaded)"),
-	COMMAND_TESLA_NETWORK_DUMP_RESULT_NO_TRANSMITTER("Not loaded"),
-	COMMAND_TESLA_NETWORK_DUMP_RESULT_YES_TRANSMITTER("%s\n  * Ticking: %s\n  * Voltage: %s"),
-	CONFIGURATION_PANEL("Configure"),
-	CONFIGURATION_PANEL_DESCRIPTION("Click to open machine configuration panel."),
-	DAMAGE("%d \u2764"),
-	DEACTIVATED("Deactivated"),
-	DYEABLE_AND_TRIMMABLE_HELP("- Can be dyed and trimmed!"),
-	DYEABLE_HELP("- Can be dyed!"),
-	ELECTRIC_TOOL_3_BY_3_TOGGLED_OFF("Disabled 3x3 Mining"),
-	ELECTRIC_TOOL_3_BY_3_TOGGLED_ON("Enabled 3x3 Mining"),
-	ELECTRIC_TOOL_HELP_1("Tool configuration:"),
-	ELECTRIC_TOOL_HELP_2_FORTUNE_LOOTING("- Press %s + %s to swap between Fortune/Looting and Silk Touch."),
-	ELECTRIC_TOOL_HELP_2_FORTUNE_SILK_TOUCH("- Press %s + %s to swap between Fortune and Silk Touch."),
-	ELECTRIC_TOOL_HELP_2_LOOTING_BEHEADING("- Press %s + %s to swap between Looting and Beheading."),
-	ELECTRIC_TOOL_HELP_3("- Use %s + %s to change mining speed."),
-	ELECTRIC_TOOL_HELP_4("- Press %s while held or %s while hovered to toggle 3x3 mining."),
-	ENCHANTMENT_MODULE_INPUT("Insert an enchantment module to make the machine use the enchantment."),
-	ENCHANTMENT_MODULE_MACHINE("Can be used in the %s."),
-	ENCHANTMENT_MODULE_SINGLE_VALUE("Applies %s in the machine for %s."),
-	ENCHANTMENT_MODULE_VALUES("Voltage determines the level of %s applied in the machine."),
-	FARMER_NOT_TILLING("Not Tilling"),
-	FARMER_PLANTING_ALTERNATING_LINES("Alternating Lines"),
-	FARMER_PLANTING_AS_NEEDED("As Needed"),
-	FARMER_PLANTING_QUADRANTS("Quadrants"),
-	FARMER_TASK("  - %s: %s"),
-	FARMER_TASK_FERTILIZING("Fertilizing"),
-	FARMER_TASK_FERTILIZING_DESCRIPTION("When supplied with a valid fluid fertilizer, it will randomly bonemeal crops and saplings."),
-	FARMER_TASK_HARVESTING("Harvesting"),
-	FARMER_TASK_HARVESTING_DESCRIPTION("When there is enough output space provided, it will harvest fully grown crops and trees."),
-	FARMER_TASK_HYDRATING("Hydrating"),
-	FARMER_TASK_HYDRATING_DESCRIPTION("When supplied with water, tilled soil will be hydrated."),
-	FARMER_TASK_PLANTING("Planting"),
-	FARMER_TASK_PLANTING_DESCRIPTION("When supplied with crops or saplings, it will plant them on valid soil. Using different planting modes will plant them in different arrangements."),
-	FARMER_TASK_TILLING("Tilling"),
-	FARMER_TASK_TILLING_DESCRIPTION("When enabled, dirt blocks will be turned into farmland. This will not work unless water is supplied."),
-	FARMER_TASK_TOOLTIP("Can perform the following tasks using %s:"),
-	FARMER_TILLING("Tilling"),
-	FLUID_FERTILIZERS("Fluid Fertilizers"),
-	FLUID_FERTILIZERS_CONSUMES("Consumes: %dmb"),
-	FLUID_FERTILIZERS_TIME("Cycle Time: %.1fs"),
-	GENERATING_EU_PER_TICK("Generating: %d EU/t"),
-	HONEY_EXTRACTOR_HELP("When placed facing into a beehive, honey will be extracted in fluid form."),
-	KEY_ALT("Alt"),
-	KEY_MOUSE_SCROLL("Mouse Scroll"),
-	MACHINE_BATCHER_COILS("Batch size and cost is determined by coil used."),
-	MACHINE_CHAINER_CONNECTED_MACHINES("Connected Machines: %d / %d"),
-	MACHINE_CHAINER_HELP_1("Connects up to %d consecutive machines in a straight line in the direction it is facing."),
-	MACHINE_CHAINER_HELP_2("Accepts items, fluids, and energy and distributes them to connected machines."),
-	MACHINE_CHAINER_HELP_3("Can connect to other machine chainers, but it must not link back to itself."),
-	MACHINE_CHAINER_PROBLEM_AT("Problem at: %s"),
-	MACHINE_CONFIG_CARD_APPLY_FAILED("Failed to apply machine configuration to machine."),
-	MACHINE_CONFIG_CARD_APPLY_SUCCESS("Applied machine configuration to machine from card."),
-	MACHINE_CONFIG_CARD_CLEAR("Cleared machine configuration from card."),
-	MACHINE_CONFIG_CARD_CONFIGURED("Configured (%s)"),
-	MACHINE_CONFIG_CARD_HELP_1("- Press %s + %s on a machine to save its settings in the card."),
-	MACHINE_CONFIG_CARD_HELP_2("- Use %s on a machine to apply the settings from the card."),
-	MACHINE_CONFIG_CARD_HELP_3("- (Optional) Hold in off-hand when placing machines to automatically apply settings."),
-	MACHINE_CONFIG_CARD_HELP_4("- Clear using %s + %s on air."),
-	MACHINE_CONFIG_CARD_SAVE("Saved machine configuration to card."),
-	MANURE_OBTAINING("Manure can be collected by placing a Waste Collector underneath an animal."),
-	MEOW("Meow :3"),
-	MULCH_GANG_FOR_LIFE_0("I love mulch!"),
-	MULCH_GANG_FOR_LIFE_1("Mulch is my favorite food!"),
-	NANO_SABER_HELP("- Press %s to make a long ranged sweep attack."),
-	NANO_SUIT_CREATIVE_FLIGHT("Creative Flight: %s"),
-	NANO_SUIT_HELP_1("Armor information:"),
-	NANO_SUIT_HELP_CREATIVE_FLIGHT("- Press %s while equipped or %s while hovered to toggle Creative Flight."),
-	NANO_SUIT_HELP_NIGHT_VISION("- Press %s while equipped or %s while hovered to toggle Night Vision."),
-	NANO_SUIT_HELP_SPEED("- Press %s while equipped or %s while hovered to toggle the Speed Boost."),
-	NANO_SUIT_HELP_STEP("- Press %s while equipped or %s while hovered to toggle the Step Boost."),
-	NANO_SUIT_NIGHT_VISION("Night Vision: %s"),
-	NANO_SUIT_NIGHT_VISION_TOGGLED_OFF("Disabled Night Vision"),
-	NANO_SUIT_NIGHT_VISION_TOGGLED_ON("Enabled Night Vision"),
-	NANO_SUIT_SPEED("Speed: %s"),
-	NANO_SUIT_SPEED_TOGGLED_OFF("Disabled Speed Boost"),
-	NANO_SUIT_SPEED_TOGGLED_ON("Enabled Speed Boost"),
-	NANO_SUIT_STEP("Step: %s"),
-	NANO_SUIT_STEP_TOGGLED_OFF("Disabled Step Boost"),
-	NANO_SUIT_STEP_TOGGLED_ON("Enabled Step Boost"),
-	PHOTOVOLTAIC_CELL_EU("Will produce up to %s when placed in a Solar Panel."),
-	PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME("Remaining Operation Time: %s"),
-	PHOTOVOLTAIC_CELL_REMAINING_OPERATION_TIME_MINUTES("Remaining Operation Time: %s minute(s)"),
-	PRIORITY("Priority: "),
-	PROCESSING_ARRAY_BATCH_SIZE("Batch size is determined by the amount of machines provided to it."),
-	PROCESSING_ARRAY_EU_COST_MULTIPLIER("Runs at %s the EU cost."),
-	PROCESSING_ARRAY_MACHINE_INPUT("Insert electric crafting machines to run in parallel."),
-	PROCESSING_ARRAY_RECIPE("Can run recipes of any single block electric crafting machine provided to it in batches."),
-	PROCESSING_ARRAY_SIZE("Machines: %d"),
-	RAINBOW("Rainbow"),
-	ROBOT_AUTO_FEEDER_HELP_1("Automatically grabs Canned Food from your inventory and feeds it to you."),
-	ROBOT_AUTO_FEEDER_HELP_2("Works with item containing items such as backpacks."),
-	SOLAR_BOILER_CALCIFICATION("Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Using an axe on the boiler will reset its calcification."),
-	SOLAR_EFFICIENCY("Solar Efficiency: %d %%"),
-	SOLAR_PANEL_DISTILLED_WATER("By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long and produce 1.5x as much energy!"),
-	SOLAR_PANEL_PHOTOVOLTAIC_CELL("To produce energy, the Solar Panel needs a matching tier Photovoltaic Cell in its inventory."),
-	SOLAR_PANEL_SUNLIGHT("Energy generation rates are determined by how high the sun is in the sky and if the sky is visible."),
-	STEAM_CHAINSAW_1("- Press %s on still or flowing water to fill."),
-	STEAM_CHAINSAW_2("- Place fuel inside the chainsaw using %s."),
-	STEAM_CHAINSAW_3("- Toggle Silk Touch with %s + %s."),
-	TESLA_CALIBRATOR_CLEAR("Cleared selection from tesla calibrator."),
-	TESLA_CALIBRATOR_HELP_1("- Press %s + %s on a transmitter to save its position in the calibrator."),
-	TESLA_CALIBRATOR_HELP_2("- Use %s on a Tesla Receiver to link it to the selected transmitter."),
-	TESLA_CALIBRATOR_HELP_3("- (Optional) Hold in off-hand when placing receivers to automatically link."),
-	TESLA_CALIBRATOR_HELP_4("- Clear using %s + %s on air."),
-	TESLA_CALIBRATOR_LINKED("Linked to %s"),
-	TESLA_CALIBRATOR_LINK_FAILED_NO_SELECTION("Failed to link receiver because no transmitter is selected."),
-	TESLA_CALIBRATOR_LINK_SUCCESS("Linked receiver to selected transmitter."),
-	TESLA_CALIBRATOR_SELECTED("Selected transmitter for calibration."),
-	TESLA_COIL_HELP_1("Wirelessly transmits energy to linked receivers within %d blocks."),
-	TESLA_COIL_HELP_2("Voltage of energy transmitted is set by the hull provided. Higher voltages have an increased passive drain."),
-	TESLA_HANDHELD_CLEAR("Cleared selected transmitter."),
-	TESLA_HANDHELD_HELP_1("Receives energy from a linked transmitter within range and charges items while in your inventory."),
-	TESLA_HANDHELD_HELP_2("Tesla Calibration:"),
-	TESLA_HANDHELD_HELP_3("- Press %s on a transmitter to link the receiver to it."),
-	TESLA_HANDHELD_HELP_4("- Clear using %s + %s on air."),
-	TESLA_HANDHELD_LINKED("Linked to %s"),
-	TESLA_HANDHELD_SELECTED("Selected transmitter for receiving."),
-	TESLA_INTERDIMENSIONAL_UPGRADE_HELP("Removes the range limitation on a Tesla Tower and allows it to transmit energy across dimensions."),
-	TESLA_LETHAL_COIL_HELP_1("Deals damage to entities within %s blocks while powered."),
-	TESLA_LETHAL_COIL_VALUES("Voltage determines the amount of damage dealt and energy required:"),
-	TESLA_NETWORK_RECEIVER_LINKED("Linked to %s"),
-	TESLA_NETWORK_RECEIVER_MISMATCHING_VOLTAGE("Cannot receive %s power"),
-	TESLA_NETWORK_RECEIVER_NO_LINK("Not linked to any transmitter"),
-	TESLA_NETWORK_RECEIVER_TOO_FAR("Transmitter is too far"),
-	TESLA_NETWORK_RECEIVER_UNLOADED("Transmitter is not loaded"),
-	TESLA_NETWORK_SINGING_NOTE("Note: %s"),
-	TESLA_NETWORK_TRANSMITTER_CONSUMING("Consuming: %s"),
-	TESLA_NETWORK_TRANSMITTER_DRAIN("Drain: %s"),
-	TESLA_NETWORK_TRANSMITTER_RECEIVERS("Receivers: %d"),
-	TESLA_NETWORK_TRANSMITTER_TRANSMITTING("Transmitting: %s (%s)"),
-	TESLA_PARTICLE_GENERATOR_HELP("Generates arcs for aesthetic purposes only."),
-	TESLA_PARTICLE_GENERATOR_SIZE_EXTREME("Extreme"),
-	TESLA_PARTICLE_GENERATOR_SIZE_IMMENSE("Immense"),
-	TESLA_PARTICLE_GENERATOR_SIZE_LARGE("Large"),
-	TESLA_PARTICLE_GENERATOR_SIZE_MEDIUM("Medium"),
-	TESLA_PARTICLE_GENERATOR_SIZE_SMALL("Small"),
-	TESLA_RECEIVER_HELP_1("Can receive energy from a linked transmitter."),
-	TESLA_RECEIVER_HELP_2("Must accept energy of the same voltage as the linked transmitter."),
-	TESLA_TOWER_HELP_1("Wirelessly transmits energy to linked receivers within range."),
-	TESLA_TOWER_HELP_2("Energy transfer rate, range, and passive drain is determined by the windings used."),
-	TESLA_TOWER_HELP_3("Voltage of energy transmitted is set by the energy hatches. All hatches must be the same tier."),
-	TESLA_TOWER_MISMATCHING_HATCHES("All energy hatches must be of the same voltage."),
-	TESLA_TOWER_NO_ENERGY_HATCHES("No energy hatches provided"),
-	TESLA_TOWER_UPGRADE("Add tesla upgrades to increase maximum range."),
-	TOOL_MINING_AREA("Area: %s"),
-	TOOL_MINING_AREA_1_BY_1("1x1"),
-	TOOL_MINING_AREA_3_BY_3("3x3"),
-	TOOL_MINING_SPEED("Speed: %s"),
-	TOOL_MODE("Mode: %s"),
-	TOOL_MODE_BEHEADING("Beheading"),
-	TOOL_MODE_FORTUNE("Fortune"),
-	TOOL_MODE_FORTUNE_LOOTING("Fortune & Looting"),
-	TOOL_MODE_LOOTING("Looting"),
-	TOOL_MODE_SILK_TOUCH("Silk Touch"),
-	TOOL_SWITCHED_BEHEADING("Beheading mode enabled!"),
-	TOOL_SWITCHED_FORTUNE("Fortune mode enabled!"),
-	TOOL_SWITCHED_LOOTING("Looting mode enabled!"),
-	TOOL_SWITCHED_SILK_TOUCH("Silk Touch mode enabled!"),
-	UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT("Hull for cable tier to convert from (LV by default)."),
-	UNIVERSAL_TRANSFORMER_TO_TIER_INPUT("Hull for cable tier to convert to (LV by default)."),
-	VOLTAGE_VALUE_FOR_COST("  - %s: %s for %s"),
-	WASTE_COLLECTOR_HELP("When placed underneath animals, manure will be collected."),
-	WINDINGS_TESLA_TOWER_TIER("Allows the Tesla Tower to transmit up to %s within %s blocks with a passive drain of %s.");
+	@LangKey(text = "Activated")
+	@WithStyle("green")
+	MutableComponent activated();
 	
-	private final String englishText;
+	@LangKey(text = "Blazing Essence is used in the brewery to brew potions.")
+	MutableComponent blazingEssenceUses1();
 	
-	EIText(String englishText)
+	@LangKey(text = "1mb of Blazing Essence is used every time the brewery brews a set of potions.")
+	MutableComponent blazingEssenceUses2();
+	
+	@LangKey(text = "Brews %s potions at a time.")
+	@WithStyle("tooltip")
+	MutableComponent breweryBrewsMultiple(@WithStyle("highlighted") int amount);
+	
+	@LangKey(text = "Requires %s to brew potions.")
+	@WithStyle("tooltip")
+	MutableComponent breweryRequiresBlazingEssence(Fluid fluid);
+	
+	@LangKey(text = "Calcification: %s %%")
+	MutableComponent calcificationPercentage(int percentage);
+	
+	@LangKey(text = "Runs LEF in batches of up to %s at %s the EU cost.")
+	@WithStyle("tooltip")
+	MutableComponent coilsLEFTier(
+			@WithStyle("highlighted") int batchSize,
+			@Parsed("percentage") @WithStyle("highlighted") float euCostMultiplier
+	);
+	
+	@LangKey(text = "Blue: ")
+	MutableComponent colorBlue();
+	
+	@LangKey(text = "Green: ")
+	MutableComponent colorGreen();
+	
+	@LangKey(text = "Red: ")
+	MutableComponent colorRed();
+	
+	@LangKey(text = "The block at %s is not a network part.")
+	MutableComponent commandTeslaNetworkDumpCantHaveNetwork(BlockPos pos);
+	
+	@LangKey(text = "Chunk at %s is not loaded.")
+	MutableComponent commandTeslaNetworkDumpChunkNotLoaded();
+	
+	@LangKey(text = "No existing network could be found for %s.")
+	MutableComponent commandTeslaNetworkDumpNoNetwork(WorldPos pos);
+	
+	@LangKey(text = "Dumping data on network of %s:")
+	MutableComponent commandTeslaNetworkDumpResult1(BlockPos pos);
+	
+	@LangKey(text = "* Key: %s")
+	MutableComponent commandTeslaNetworkDumpResult2(WorldPos pos);
+	
+	@LangKey(text = "* Transmitter: %s")
+	MutableComponent commandTeslaNetworkDumpResult3(Component text);
+	
+	@LangKey(text = "* Receiver Count: %s / %s (linked / loaded)")
+	MutableComponent commandTeslaNetworkDumpResult4(int count, int loadedCount);
+	
+	@LangKey(text = "Not loaded")
+	MutableComponent commandTeslaNetworkDumpResultNoTransmitter();
+	
+	@LangKey(text = "%s\n  * Ticking: %s\n  * Voltage: %s")
+	MutableComponent commandTeslaNetworkDumpResultYesTransmitter(WorldPos pos, boolean ticking, Component text);
+	
+	@LangKey(text = "Configure")
+	MutableComponent configurationPanel();
+	
+	@LangKey(text = "Click to open machine configuration panel.")
+	@WithStyle("tooltip_subtext")
+	MutableComponent configurationPanelDescription();
+	
+	@LangKey(text = "%s \u2764")
+	MutableComponent damage(Component text);
+	
+	default MutableComponent damage(int amount)
 	{
-		this.englishText = englishText;
+		return this.damage(Component.literal(String.valueOf(amount)));
 	}
 	
-	@Override
-	public String englishText()
+	default MutableComponent damage(float amount)
 	{
-		return englishText;
+		return this.damage(Parser.FLOAT.parse(amount, 1));
 	}
 	
-	@Override
-	public String getTranslationKey()
+	@LangKey(text = "\u221E")
+	@WithStyle("highlighted")
+	MutableComponent infinity();
+	
+	@LangKey(text = "Deactivated")
+	@WithStyle("red")
+	MutableComponent deactivated();
+	
+	@LangKey(text = "- Can be dyed and trimmed!")
+	@WithStyle("tooltip")
+	MutableComponent dyeableAndTrimmableHelp();
+	
+	@LangKey(text = "- Can be dyed!")
+	@WithStyle("tooltip")
+	MutableComponent dyeableHelp();
+	
+	@LangKey(text = "Disabled 3x3 Mining")
+	MutableComponent electricTool3By3ToggledOff();
+	
+	@LangKey(text = "Enabled 3x3 Mining")
+	MutableComponent electricTool3By3ToggledOn();
+	
+	@LangKey(text = "Tool configuration:")
+	@WithStyle("tooltip")
+	MutableComponent electricToolHelp1();
+	
+	@LangKey(text = "- Press %s + %s to swap between Fortune/Looting and Silk Touch.")
+	@WithStyle("tooltip")
+	MutableComponent electricToolHelp2FortuneLooting(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "- Press %s + %s to swap between Fortune and Silk Touch.")
+	@WithStyle("tooltip")
+	MutableComponent electricToolHelp2FortuneSilkTouch(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "- Press %s + %s to swap between Looting and Beheading.")
+	@WithStyle("tooltip")
+	MutableComponent electricToolHelp2LootingBeheading(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "- Use %s + %s to change mining speed.")
+	@WithStyle("tooltip")
+	MutableComponent electricToolHelp3(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "- Press %s while held or %s while hovered to toggle 3x3 mining.")
+	@WithStyle("tooltip")
+	MutableComponent electricToolHelp4(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "Insert an enchantment module to make the machine use the enchantment.")
+	@WithStyle("tooltip")
+	MutableComponent enchantmentModuleInput();
+	
+	@LangKey(text = "Can be used in the %s.")
+	@WithStyle("tooltip")
+	MutableComponent enchantmentModuleMachine(@Parsed("block") @WithStyle("highlighted") ResourceLocation blockId);
+	
+	record EnchantmentWithLevelField(HolderLookup.Provider registry, ResourceKey<Enchantment> enchantment, int level)
 	{
-		return "text.%s.%s".formatted(EI.ID, this.name().toLowerCase());
 	}
+	
+	@LangKey(text = "Applies %s in the machine for %s.")
+	@WithStyle("tooltip")
+	@Deprecated
+	MutableComponent enchantmentModuleSingleValue(@WithStyle("highlighted") EnchantmentWithLevelField enchantment, @Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick);
+	
+	default MutableComponent enchantmentModuleSingleValue(HolderLookup.Provider registry, ResourceKey<Enchantment> enchantment, int level, long euPerTick)
+	{
+		return this.enchantmentModuleSingleValue(new EnchantmentWithLevelField(registry, enchantment, level), euPerTick);
+	}
+	
+	record EnchantmentField(HolderLookup.Provider registry, ResourceKey<Enchantment> enchantment)
+	{
+	}
+	
+	@LangKey(text = "Voltage determines the level of %s applied in the machine.")
+	@WithStyle("tooltip")
+	@Deprecated
+	MutableComponent enchantmentModuleValues(@WithStyle("highlighted") EnchantmentField enchantment);
+	
+	default MutableComponent enchantmentModuleValues(HolderLookup.Provider registry, ResourceKey<Enchantment> enchantment)
+	{
+		return this.enchantmentModuleValues(new EnchantmentField(registry, enchantment));
+	}
+	
+	@LangKey(text = "Not Tilling")
+	MutableComponent farmerNotTilling();
+	
+	@LangKey(text = "Alternating Lines")
+	MutableComponent farmerPlantingAlternatingLines();
+	
+	@LangKey(text = "As Needed")
+	MutableComponent farmerPlantingAsNeeded();
+	
+	@LangKey(text = "Quadrants")
+	MutableComponent farmerPlantingQuadrants();
+	
+	@LangKey(text = "  - %s: %s")
+	@WithStyle("tooltip")
+	MutableComponent farmerTask(@WithStyle("highlighted") Component name, Component description);
+	
+	@LangKey(text = "Fertilizing")
+	MutableComponent farmerTaskFertilizing();
+	
+	@LangKey(text = "When supplied with a valid fluid fertilizer, it will randomly bonemeal crops and saplings.")
+	MutableComponent farmerTaskFertilizingDescription();
+	
+	@LangKey(text = "Harvesting")
+	MutableComponent farmerTaskHarvesting();
+	
+	@LangKey(text = "When there is enough output space provided, it will harvest fully grown crops and trees.")
+	MutableComponent farmerTaskHarvestingDescription();
+	
+	@LangKey(text = "Hydrating")
+	MutableComponent farmerTaskHydrating();
+	
+	@LangKey(text = "When supplied with water, tilled soil will be hydrated.")
+	MutableComponent farmerTaskHydratingDescription();
+	
+	@LangKey(text = "Planting")
+	MutableComponent farmerTaskPlanting();
+	
+	@LangKey(text = "When supplied with crops or saplings, it will plant them on valid soil. Using different planting modes will plant them in different arrangements.")
+	MutableComponent farmerTaskPlantingDescription();
+	
+	@LangKey(text = "Tilling")
+	MutableComponent farmerTaskTilling();
+	
+	@LangKey(text = "When enabled, dirt blocks will be turned into farmland. This will not work unless water is supplied.")
+	MutableComponent farmerTaskTillingDescription();
+	
+	@LangKey(text = "Can perform the following tasks using %s:")
+	@WithStyle("tooltip")
+	MutableComponent farmerTaskTooltip(@Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick);
+	
+	@LangKey(text = "Tilling")
+	MutableComponent farmerTilling();
+	
+	@LangKey(text = "Fluid Fertilizers")
+	MutableComponent fluidFertilizers();
+	
+	@LangKey(text = "Consumes: %smb")
+	MutableComponent fluidFertilizersConsumes(int mb);
+	
+	@LangKey(text = "Cycle Time: %.1fs")
+	MutableComponent fluidFertilizersTime(float seconds);
+	
+	@LangKey(text = "Generating: %s EU/t")
+	MutableComponent generatingEuPerTick(long amount);
+	
+	@LangKey(text = "When placed facing into a beehive, honey will be extracted in fluid form.")
+	@WithStyle("tooltip")
+	MutableComponent honeyExtractorHelp();
+	
+	@LangKey(text = "Alt")
+	MutableComponent keyAlt();
+	
+	@LangKey(text = "Mouse Scroll")
+	MutableComponent keyMouseScroll();
+	
+	@LangKey(text = "Batch size and cost is determined by coil used.")
+	@WithStyle("tooltip")
+	MutableComponent machineBatcherCoils();
+	
+	@LangKey(text = "Connected Machines: %s / %s")
+	MutableComponent machineChainerConnectedMachines(int machineCount, int maxMachines);
+	
+	@LangKey(text = "Connects up to %s consecutive machines in a straight line in the direction it is facing.")
+	@WithStyle("tooltip")
+	MutableComponent machineChainerHelp1(@WithStyle("highlighted") int maxConnections);
+	
+	@LangKey(text = "Accepts items, fluids, and energy and distributes them to connected machines.")
+	@WithStyle("tooltip")
+	MutableComponent machineChainerHelp2();
+	
+	@LangKey(text = "Can connect to other machine chainers, but it must not link back to itself.")
+	@WithStyle("tooltip")
+	MutableComponent machineChainerHelp3();
+	
+	@LangKey(text = "Problem at: %s")
+	MutableComponent machineChainerProblemAt(BlockPos pos);
+	
+	@LangKey(text = "Failed to apply machine configuration to machine.")
+	MutableComponent machineConfigCardApplyFailed();
+	
+	@LangKey(text = "Applied machine configuration to machine from card.")
+	MutableComponent machineConfigCardApplySuccess();
+	
+	@LangKey(text = "Cleared machine configuration from card.")
+	MutableComponent machineConfigCardClear();
+	
+	@LangKey(text = "Configured (%s)")
+	MutableComponent machineConfigCardConfigured(Item item);
+	
+	@LangKey(text = "- Press %s + %s on a machine to save its settings in the card.")
+	@WithStyle("tooltip")
+	MutableComponent machineConfigCardHelp1(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "- Use %s on a machine to apply the settings from the card.")
+	@WithStyle("tooltip")
+	MutableComponent machineConfigCardHelp2(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	
+	@LangKey(text = "- (Optional) Hold in off-hand when placing machines to automatically apply settings.")
+	@WithStyle("tooltip")
+	MutableComponent machineConfigCardHelp3();
+	
+	@LangKey(text = "- Clear using %s + %s on air.")
+	@WithStyle("tooltip")
+	MutableComponent machineConfigCardHelp4(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "Saved machine configuration to card.")
+	MutableComponent machineConfigCardSave();
+	
+	@LangKey(text = "Manure can be collected by placing a Waste Collector underneath an animal.")
+	MutableComponent manureObtaining();
+	
+	@LangKey(text = "Meow :3")
+	@WithStyle("tooltip_subtext")
+	MutableComponent meow();
+	
+	@LangKey(text = "I love mulch!")
+	@WithStyle("tooltip_subtext")
+	MutableComponent mulchGangForLife0();
+	
+	@LangKey(text = "Mulch is my favorite food!")
+	@WithStyle("tooltip_subtext")
+	MutableComponent mulchGangForLife1();
+	
+	@LangKey(text = "- Press %s to make a long ranged sweep attack.")
+	@WithStyle("tooltip")
+	MutableComponent nanoSaberHelp(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	
+	@LangKey(text = "Creative Flight: %s")
+	@WithStyle("tooltip")
+	MutableComponent nanoSuitCreativeFlight(@Parsed("activated") boolean activated);
+	
+	@LangKey(text = "Armor information:")
+	@WithStyle("tooltip")
+	MutableComponent nanoSuitHelp1();
+	
+	@LangKey(text = "- Press %s while equipped or %s while hovered to toggle Creative Flight.")
+	@WithStyle("tooltip")
+	MutableComponent nanoSuitHelpCreativeFlight(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "- Press %s while equipped or %s while hovered to toggle Night Vision.")
+	@WithStyle("tooltip")
+	MutableComponent nanoSuitHelpNightVision(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "- Press %s while equipped or %s while hovered to toggle the Speed Boost.")
+	@WithStyle("tooltip")
+	MutableComponent nanoSuitHelpSpeed(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "- Press %s while equipped or %s while hovered to toggle the Step Boost.")
+	@WithStyle("tooltip")
+	MutableComponent nanoSuitHelpStep(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "Night Vision: %s")
+	@WithStyle("tooltip")
+	MutableComponent nanoSuitNightVision(@Parsed("activated") boolean activated);
+	
+	@LangKey(text = "Disabled Night Vision")
+	MutableComponent nanoSuitNightVisionToggledOff();
+	
+	@LangKey(text = "Enabled Night Vision")
+	MutableComponent nanoSuitNightVisionToggledOn();
+	
+	@LangKey(text = "Speed: %s")
+	@WithStyle("tooltip")
+	MutableComponent nanoSuitSpeed(@Parsed("activated") boolean activated);
+	
+	@LangKey(text = "Disabled Speed Boost")
+	MutableComponent nanoSuitSpeedToggledOff();
+	
+	@LangKey(text = "Enabled Speed Boost")
+	MutableComponent nanoSuitSpeedToggledOn();
+	
+	@LangKey(text = "Step: %s")
+	@WithStyle("tooltip")
+	MutableComponent nanoSuitStep(@Parsed("activated") boolean activated);
+	
+	@LangKey(text = "Disabled Step Boost")
+	MutableComponent nanoSuitStepToggledOff();
+	
+	@LangKey(text = "Enabled Step Boost")
+	MutableComponent nanoSuitStepToggledOn();
+	
+	@LangKey(text = "Will produce up to %s when placed in a Solar Panel.")
+	@WithStyle("tooltip")
+	MutableComponent photovoltaicCellEU(@Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick);
+	
+	@LangKey(text = "Remaining Operation Time: %s")
+	@WithStyle("tooltip")
+	MutableComponent photovoltaicCellRemainingOperationTime(@WithStyle("highlighted") Component text);
+	
+	@LangKey(text = "Remaining Operation Time: %s minute(s)")
+	@WithStyle("tooltip")
+	MutableComponent photovoltaicCellRemainingOperationTimeMinutes(@Parsed("ticks_to_minutes") @WithStyle("highlighted") long ticks);
+	
+	@LangKey(text = "Priority: %s")
+	MutableComponent priority(int priority);
+	
+	@LangKey(text = "Batch size is determined by the amount of machines provided to it.")
+	@WithStyle("tooltip")
+	MutableComponent processingArrayBatchSize();
+	
+	@LangKey(text = "Runs at %s the EU cost.")
+	@WithStyle("tooltip")
+	MutableComponent processingArrayEuCostMultiplier(@WithStyle("highlighted") EuCostTransformer euCostTransformer);
+	
+	@LangKey(text = "Insert electric crafting machines to run in parallel.")
+	@WithStyle("tooltip")
+	MutableComponent processingArrayMachineInput();
+	
+	@LangKey(text = "Can run recipes of any single block electric crafting machine provided to it in batches.")
+	@WithStyle("tooltip")
+	MutableComponent processingArrayRecipe();
+	
+	@LangKey(text = "Machines: %s")
+	MutableComponent processingArraySize(int machines);
+	
+	@LangKey(text = "Rainbow")
+	@WithStyle("rainbow")
+	MutableComponent rainbow();
+	
+	@LangKey(text = "Automatically grabs Canned Food from your inventory and feeds it to you.")
+	@WithStyle("tooltip")
+	MutableComponent robotAutoFeederHelp1();
+	
+	@LangKey(text = "Works with item containing items such as backpacks.")
+	@WithStyle("tooltip")
+	MutableComponent robotAutoFeederHelp2();
+	
+	@LangKey(text = "Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Using an axe on the boiler will reset its calcification.")
+	@WithStyle("tooltip")
+	MutableComponent solarBoilerCalcification(@Parsed("percentage") @WithStyle("highlighted") float efficiency, @WithStyle("highlighted") Fluid fluid);
+	
+	@LangKey(text = "Solar Efficiency: %s %%")
+	MutableComponent solarEfficiency(int percentage);
+	
+	@LangKey(text = "By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long and produce 1.5x as much energy!")
+	@WithStyle("tooltip")
+	MutableComponent solarPanelDistilledWater(@WithStyle("highlighted") Fluid fluid);
+	
+	@LangKey(text = "To produce energy, the Solar Panel needs a matching tier Photovoltaic Cell in its inventory.")
+	@WithStyle("tooltip")
+	MutableComponent solarPanelPhotovoltaicCell();
+	
+	@LangKey(text = "Energy generation rates are determined by how high the sun is in the sky and if the sky is visible.")
+	@WithStyle("tooltip")
+	MutableComponent solarPanelSunlight();
+	
+	@LangKey(text = "- Press %s on still or flowing water to fill.")
+	@WithStyle("tooltip")
+	MutableComponent steamChainsaw1(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	
+	@LangKey(text = "- Place fuel inside the chainsaw using %s.")
+	@WithStyle("tooltip")
+	MutableComponent steamChainsaw2(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	
+	@LangKey(text = "- Toggle Silk Touch with %s + %s.")
+	@WithStyle("tooltip")
+	MutableComponent steamChainsaw3(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "Cleared selection from tesla calibrator.")
+	MutableComponent teslaCalibratorClear();
+	
+	@LangKey(text = "- Press %s + %s on a transmitter to save its position in the calibrator.")
+	@WithStyle("tooltip")
+	MutableComponent teslaCalibratorHelp1(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "- Use %s on a Tesla Receiver to link it to the selected transmitter.")
+	@WithStyle("tooltip")
+	MutableComponent teslaCalibratorHelp2(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	
+	@LangKey(text = "- (Optional) Hold in off-hand when placing receivers to automatically link.")
+	@WithStyle("tooltip")
+	MutableComponent teslaCalibratorHelp3();
+	
+	@LangKey(text = "- Clear using %s + %s on air.")
+	@WithStyle("tooltip")
+	MutableComponent teslaCalibratorHelp4(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "Linked to %s")
+	@WithStyle("tooltip")
+	MutableComponent teslaCalibratorLinked(WorldPos pos);
+	
+	@LangKey(text = "Failed to link receiver because no transmitter is selected.")
+	MutableComponent teslaCalibratorLinkFailedNoSelection();
+	
+	@LangKey(text = "Linked receiver to selected transmitter.")
+	MutableComponent teslaCalibratorLinkSuccess();
+	
+	@LangKey(text = "Selected transmitter for calibration.")
+	MutableComponent teslaCalibratorSelected();
+	
+	@LangKey(text = "Wirelessly transmits energy to linked receivers within %s blocks.")
+	@WithStyle("tooltip")
+	MutableComponent teslaCoilHelp1(@WithStyle("highlighted") int range);
+	
+	@LangKey(text = "Voltage of energy transmitted is set by the hull provided. Higher voltages have an increased passive drain.")
+	@WithStyle("tooltip")
+	MutableComponent teslaCoilHelp2();
+	
+	@LangKey(text = "Cleared selected transmitter.")
+	MutableComponent teslaHandheldClear();
+	
+	@LangKey(text = "Receives energy from a linked transmitter within range and charges items while in your inventory.")
+	@WithStyle("tooltip")
+	MutableComponent teslaHandheldHelp1();
+	
+	@LangKey(text = "Tesla Calibration:")
+	@WithStyle("tooltip")
+	MutableComponent teslaHandheldHelp2();
+	
+	@LangKey(text = "- Press %s on a transmitter to link the receiver to it.")
+	@WithStyle("tooltip")
+	MutableComponent teslaHandheldHelp3(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	
+	@LangKey(text = "- Clear using %s + %s on air.")
+	@WithStyle("tooltip")
+	MutableComponent teslaHandheldHelp4(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "Linked to %s")
+	@WithStyle("tooltip")
+	MutableComponent teslaHandheldLinked(WorldPos pos);
+	
+	@LangKey(text = "Selected transmitter for receiving.")
+	MutableComponent teslaHandheldSelected();
+	
+	@LangKey(text = "Removes the range limitation on a Tesla Tower and allows it to transmit energy across dimensions.")
+	@WithStyle("tooltip")
+	MutableComponent teslaInterdimensionalUpgradeHelp();
+	
+	@LangKey(text = "Deals damage to entities within %s blocks while powered.")
+	@WithStyle("tooltip")
+	MutableComponent teslaLethalCoilHelp1(@WithStyle("highlighted") int range);
+	
+	@LangKey(text = "Voltage determines the amount of damage dealt and energy required:")
+	@WithStyle("tooltip")
+	MutableComponent teslaLethalCoilValues();
+	
+	@LangKey(text = "Linked to %s")
+	MutableComponent teslaNetworkReceiverLinked(WorldPos pos);
+	
+	@LangKey(text = "Cannot receive %s power")
+	MutableComponent teslaNetworkReceiverMismatchingVoltage(@Parsed("short") CableTier tier);
+	
+	@LangKey(text = "Not linked to any transmitter")
+	MutableComponent teslaNetworkReceiverNoLink();
+	
+	@LangKey(text = "Transmitter is too far")
+	MutableComponent teslaNetworkReceiverTooFar();
+	
+	@LangKey(text = "Transmitter is not loaded")
+	MutableComponent teslaNetworkReceiverUnloaded();
+	
+	@LangKey(text = "Note: %s")
+	MutableComponent teslaNetworkSingingNote(String note);
+	
+	@LangKey(text = "Consuming: %s")
+	MutableComponent teslaNetworkTransmitterConsuming(@Parsed("eu_per_tick") long euPerTick);
+	
+	@LangKey(text = "Drain: %s")
+	MutableComponent teslaNetworkTransmitterDrain(@Parsed("eu_per_tick") long euPerTick);
+	
+	@LangKey(text = "Receivers: %s")
+	MutableComponent teslaNetworkTransmitterReceivers(int count);
+	
+	@LangKey(text = "Transmitting: %s (%s)")
+	MutableComponent teslaNetworkTransmitterTransmitting(@Parsed("eu_per_tick") long euPerTick, @Parsed("short") CableTier tier);
+	
+	@LangKey(text = "Generates arcs for aesthetic purposes only.")
+	@WithStyle("tooltip")
+	MutableComponent teslaParticleGeneratorHelp();
+	
+	@LangKey(text = "Extreme")
+	MutableComponent teslaParticleGeneratorSizeExtreme();
+	
+	@LangKey(text = "Immense")
+	MutableComponent teslaParticleGeneratorSizeImmense();
+	
+	@LangKey(text = "Large")
+	MutableComponent teslaParticleGeneratorSizeLarge();
+	
+	@LangKey(text = "Medium")
+	MutableComponent teslaParticleGeneratorSizeMedium();
+	
+	@LangKey(text = "Small")
+	MutableComponent teslaParticleGeneratorSizeSmall();
+	
+	@LangKey(text = "Can receive energy from a linked transmitter.")
+	@WithStyle("tooltip")
+	MutableComponent teslaReceiverHelp1();
+	
+	@LangKey(text = "Must accept energy of the same voltage as the linked transmitter.")
+	@WithStyle("tooltip")
+	MutableComponent teslaReceiverHelp2();
+	
+	@LangKey(text = "Wirelessly transmits energy to linked receivers within range.")
+	@WithStyle("tooltip")
+	MutableComponent teslaTowerHelp1();
+	
+	@LangKey(text = "Energy transfer rate, range, and passive drain is determined by the windings used.")
+	@WithStyle("tooltip")
+	MutableComponent teslaTowerHelp2();
+	
+	@LangKey(text = "Voltage of energy transmitted is set by the energy hatches. All hatches must be the same tier.")
+	@WithStyle("tooltip")
+	MutableComponent teslaTowerHelp3();
+	
+	@LangKey(text = "All energy hatches must be of the same voltage.")
+	MutableComponent teslaTowerMismatchingHatches();
+	
+	@LangKey(text = "No energy hatches provided")
+	MutableComponent teslaTowerNoEnergyHatches();
+	
+	@LangKey(text = "Add tesla upgrades to increase maximum range.")
+	@WithStyle("tooltip")
+	MutableComponent teslaTowerUpgrade();
+	
+	@LangKey(text = "Area: %s")
+	@WithStyle("tooltip")
+	MutableComponent toolMiningArea(@WithStyle("highlighted") Component text);
+	
+	@LangKey(text = "1x1")
+	MutableComponent toolMiningArea1By1();
+	
+	@LangKey(text = "3x3")
+	MutableComponent toolMiningArea3By3();
+	
+	@LangKey(text = "Speed: %s")
+	MutableComponent toolChangedMiningSpeed(@Parsed("percentage") float speed);
+	
+	@LangKey(text = "Speed: %s")
+	@WithStyle("tooltip")
+	MutableComponent toolMiningSpeed(@Parsed("percentage") @WithStyle("highlighted") float speed);
+	
+	@LangKey(text = "Mode: %s")
+	@WithStyle("tooltip")
+	MutableComponent toolMode(@WithStyle("highlighted") ElectricToolItem.Mode mode);
+	
+	@LangKey(text = "Beheading")
+	MutableComponent toolModeBeheading();
+	
+	@LangKey(text = "Fortune")
+	MutableComponent toolModeFortune();
+	
+	@LangKey(text = "Fortune & Looting")
+	MutableComponent toolModeFortuneLooting();
+	
+	@LangKey(text = "Looting")
+	MutableComponent toolModeLooting();
+	
+	@LangKey(text = "Silk Touch")
+	MutableComponent toolModeSilkTouch();
+	
+	@LangKey(text = "Beheading mode enabled!")
+	MutableComponent toolSwitchedBeheading();
+	
+	@LangKey(text = "Fortune mode enabled!")
+	MutableComponent toolSwitchedFortune();
+	
+	@LangKey(text = "Looting mode enabled!")
+	MutableComponent toolSwitchedLooting();
+	
+	@LangKey(text = "Silk Touch mode enabled!")
+	MutableComponent toolSwitchedSilkTouch();
+	
+	@LangKey(text = "Hull for cable tier to convert from (LV by default).")
+	@WithStyle("tooltip")
+	MutableComponent universalTransformerFromTierInput();
+	
+	@LangKey(text = "Hull for cable tier to convert to (LV by default).")
+	@WithStyle("tooltip")
+	MutableComponent universalTransformerToTierInput();
+	
+	@LangKey(text = "  - %s: %s for %s")
+	@WithStyle("tooltip")
+	MutableComponent voltageValueForCost(
+			@Parsed("short") @WithStyle("highlighted") CableTier tier,
+			@Parsed("damage") @WithStyle("highlighted") float damageAmount,
+			@Parsed("eu") @WithStyle("highlighted") long energyCost
+	);
+	
+	@LangKey
+	@WithStyle("tooltip")
+	MutableComponent voltageValueForCost(
+			@Parsed("short") @WithStyle("highlighted") CableTier tier,
+			@Parsed("enchantment_level") @WithStyle("highlighted") int level,
+			@Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick
+	);
+	
+	@LangKey(text = "When placed underneath animals, manure will be collected.")
+	@WithStyle("tooltip")
+	MutableComponent wasteCollectorHelp();
+	
+	@LangKey(text = "Allows the Tesla Tower to transmit up to %s within %s blocks with a passive drain of %s.")
+	@WithStyle("tooltip")
+	MutableComponent windingsTeslaTowerTier(
+			@Parsed("eu_per_tick") @WithStyle("highlighted") long maxTransfer,
+			@WithStyle("highlighted") int maxDistance,
+			@Parsed("eu_per_tick") @WithStyle("highlighted") long drain
+	);
 }

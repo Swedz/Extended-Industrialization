@@ -1,7 +1,10 @@
 package net.swedz.extended_industrialization;
 
-import com.google.common.collect.Sets;
+import aztech.modern_industrialization.MIText;
+import aztech.modern_industrialization.api.energy.CableTier;
+import aztech.modern_industrialization.util.TextHelper;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -14,24 +17,31 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.datamaps.DataMapsUpdatedEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
+import net.swedz.extended_industrialization.component.RainbowDataComponent;
 import net.swedz.extended_industrialization.datagen.DatagenDelegator;
+import net.swedz.extended_industrialization.datagen.client.provider.LanguageDatagenProvider;
+import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
 import net.swedz.extended_industrialization.machines.guicomponent.EIModularSlotPanelSlots;
 import net.swedz.extended_industrialization.material.EIMaterialRegistry;
 import net.swedz.extended_industrialization.network.EIPackets;
 import net.swedz.tesseract.neoforge.api.Assert;
-import net.swedz.tesseract.neoforge.api.MCIdentifiable;
+import net.swedz.tesseract.neoforge.api.tuple.Pair;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 import net.swedz.tesseract.neoforge.compat.mi.TesseractMI;
+import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformer;
+import net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser;
 import net.swedz.tesseract.neoforge.config.ConfigManager;
+import net.swedz.tesseract.neoforge.lang.LangManager;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
+import net.swedz.tesseract.neoforge.tooltip.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Set;
+import static aztech.modern_industrialization.MITooltips.*;
 
 @Mod(EI.ID)
 public final class EI
@@ -46,18 +56,9 @@ public final class EI
 	
 	public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
 	
-	// TODO use this for translation generating
-	public static Set<MCIdentifiable> getAllIdentifiables()
-	{
-		Set<MCIdentifiable> identifiables = Sets.newHashSet();
-		identifiables.addAll(EIItems.values());
-		identifiables.addAll(EIBlocks.values());
-		identifiables.addAll(EIFluids.values());
-		return identifiables;
-	}
-	
 	public EI(IEventBus bus, ModContainer container)
 	{
+		setupText();
 		setupConfig(bus, container);
 		
 		EILocalizedListeners.INSTANCE.init();
@@ -115,5 +116,57 @@ public final class EI
 				.load()
 				.listenToLoad(bus)
 				.config();
+	}
+	
+	private static EIText TEXT;
+	
+	public static EIText text()
+	{
+		Assert.notNull(TEXT, "Text not yet loaded");
+		return TEXT;
+	}
+	
+	private static void setupText()
+	{
+		var instance = new LangManager(ID)
+				.builtinColorStyles()
+				.style("tooltip", () -> DEFAULT_STYLE)
+				.style("tooltip_subtext", () -> DEFAULT_STYLE.withItalic(true))
+				.style("highlighted", () -> HIGHLIGHT_STYLE)
+				.style("rainbow", () -> Style.EMPTY.withColor(RainbowDataComponent.getCurrentRainbowColor()))
+				
+				.builtinParsers()
+				.parser("keybind", String.class, () -> EITooltips.KEYBIND_PARSER)
+				
+				.parser("percentage", float.class, () -> (value) -> Parser.FLOAT_PERCENTAGE.parse(value, 0))
+				
+				.parser("eu_per_tick", long.class, () -> (value) ->
+				{
+					var amount = TextHelper.getAmountGeneric(value);
+					return MIText.EuT.text(amount.digit(), amount.unit());
+				})
+				.parser("eu", long.class, () -> (value) ->
+				{
+					var amount = TextHelper.getAmountGeneric(value);
+					return MIText.Eu.text(amount.digit(), amount.unit());
+				})
+				
+				.parser("damage", float.class, () -> EITooltips.DAMAGE_PARSER)
+				
+				.parser("ticks_to_minutes", long.class, () -> EITooltips.TICKS_TO_MINUTES_PARSER)
+				
+				.parser("activated", boolean.class, () -> EITooltips.ACTIVATED_BOOLEAN_PARSER)
+				.parser("short", CableTier.class, () -> MIParser.CABLE_TIER_SHORT)
+				.parser(EuCostTransformer.class, () -> MIParser.EU_COST_TRANSFORMER_PARSER)
+				.parser(ElectricToolItem.Mode.class, () -> (mode) -> mode.text().name())
+				
+				.parser(EIText.EnchantmentWithLevelField.class, () -> (value) -> Parser.ENCHANTMENT_AND_LEVEL.parse(value.registry(), new Pair<>(value.enchantment(), value.level())))
+				.parser(EIText.EnchantmentField.class, () -> (value) -> Parser.ENCHANTMENT.parse(value.registry(), value.enchantment()))
+				.parser("enchantment_level", int.class, () -> Parser.ENCHANTMENT_LEVEL)
+				
+				.build(EIText.class)
+				.load();
+		LanguageDatagenProvider.include(instance);
+		TEXT = instance.lang();
 	}
 }

@@ -1,6 +1,5 @@
 package net.swedz.extended_industrialization.machines.blockentity.tesla;
 
-import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
@@ -17,7 +16,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.machines.component.tesla.AestheticTeslaCoilComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.ForceHideTeslaComponent;
@@ -28,8 +26,6 @@ import net.swedz.tesseract.neoforge.proxy.Proxies;
 import org.joml.Vector3f;
 
 import java.util.List;
-
-import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
 public final class TeslaParticleGeneratorMachineBlockEntity extends MachineBlockEntity implements Tickable, TeslaBehavior
 {
@@ -53,11 +49,11 @@ public final class TeslaParticleGeneratorMachineBlockEntity extends MachineBlock
 		redstoneControl = new RedstoneControlComponent();
 		
 		aesthetic = new AestheticTeslaCoilComponent()
-				.with(EI.id("tesla/tesla_particle_generator/small"), EIText.TESLA_PARTICLE_GENERATOR_SIZE_SMALL.text())
-				.with(EI.id("tesla/tesla_particle_generator/medium"), EIText.TESLA_PARTICLE_GENERATOR_SIZE_MEDIUM.text())
-				.with(EI.id("tesla/tesla_particle_generator/large"), EIText.TESLA_PARTICLE_GENERATOR_SIZE_LARGE.text())
-				.with(EI.id("tesla/tesla_particle_generator/extreme"), EIText.TESLA_PARTICLE_GENERATOR_SIZE_EXTREME.text())
-				.with(EI.id("tesla/tesla_particle_generator/immense"), EIText.TESLA_PARTICLE_GENERATOR_SIZE_IMMENSE.text());
+				.with(EI.id("tesla/tesla_particle_generator/small"), EI.text().teslaParticleGeneratorSizeSmall())
+				.with(EI.id("tesla/tesla_particle_generator/medium"), EI.text().teslaParticleGeneratorSizeMedium())
+				.with(EI.id("tesla/tesla_particle_generator/large"), EI.text().teslaParticleGeneratorSizeLarge())
+				.with(EI.id("tesla/tesla_particle_generator/extreme"), EI.text().teslaParticleGeneratorSizeExtreme())
+				.with(EI.id("tesla/tesla_particle_generator/immense"), EI.text().teslaParticleGeneratorSizeImmense());
 		
 		forceHideRender = new ForceHideTeslaComponent();
 		
@@ -67,8 +63,8 @@ public final class TeslaParticleGeneratorMachineBlockEntity extends MachineBlock
 				.withRedstoneModule(redstoneControl));
 		
 		var configPanel = new ConfigurationPanelBuilder(
-				EIText.CONFIGURATION_PANEL.text(),
-				EIText.CONFIGURATION_PANEL_DESCRIPTION.text().withStyle(MITooltips.DEFAULT_STYLE.withItalic(true)),
+				EI.text().configurationPanel(),
+				EI.text().configurationPanelDescription(),
 				(lineIndex, delta) -> this.sync()
 		);
 		aesthetic.appendSelectionPanel(this, configPanel);
@@ -150,7 +146,7 @@ public final class TeslaParticleGeneratorMachineBlockEntity extends MachineBlock
 	public List<Component> getTooltips()
 	{
 		return List.of(
-				line(EIText.TESLA_PARTICLE_GENERATOR_HELP)
+				EI.text().teslaParticleGeneratorHelp()
 		);
 	}
 }

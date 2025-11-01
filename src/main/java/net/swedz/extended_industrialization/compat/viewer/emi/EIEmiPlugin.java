@@ -10,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIItems;
-import net.swedz.extended_industrialization.EIText;
 
 import java.util.List;
 
@@ -26,9 +25,9 @@ public final class EIEmiPlugin implements EmiPlugin
 		registry.addRecipe(new EmiInfoRecipe(
 				List.of(EmiStack.of(EIFluids.BLAZING_ESSENCE.asFluid())),
 				List.of(
-						EIText.BLAZING_ESSENCE_USES_1.text(),
+						EI.text().blazingEssenceUses1(),
 						Component.literal(" "),
-						EIText.BLAZING_ESSENCE_USES_2.text()
+						EI.text().blazingEssenceUses2()
 				),
 				EI.id("/emi_info/blazing_essence")
 		));
@@ -36,7 +35,7 @@ public final class EIEmiPlugin implements EmiPlugin
 		registry.addRecipe(new EmiInfoRecipe(
 				List.of(EmiStack.of(EIFluids.MANURE.asFluid())),
 				List.of(
-						EIText.MANURE_OBTAINING.text()
+						EI.text().manureObtaining()
 				),
 				EI.id("/emi_info/manure")
 		));

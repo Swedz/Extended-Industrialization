@@ -2,7 +2,7 @@ package net.swedz.extended_industrialization.machines.component.farmer;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
-import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerTile;
 
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.function.BiFunction;
 
 public enum PlantingMode
 {
-	AS_NEEDED(EIText.FARMER_PLANTING_AS_NEEDED.text(), false, (block, plantables) -> 0),
-	ALTERNATING_LINES(EIText.FARMER_PLANTING_ALTERNATING_LINES.text(), true, (block, plantables) -> block.line() % plantables.size()),
-	QUADRANTS(EIText.FARMER_PLANTING_QUADRANTS.text(), true, (block, plantables) -> block.quadrant() % plantables.size());
+	AS_NEEDED(EI.text().farmerPlantingAsNeeded(), false, (block, plantables) -> 0),
+	ALTERNATING_LINES(EI.text().farmerPlantingAlternatingLines(), true, (block, plantables) -> block.line() % plantables.size()),
+	QUADRANTS(EI.text().farmerPlantingQuadrants(), true, (block, plantables) -> block.quadrant() % plantables.size());
 	
 	private final Component textComponent;
 	

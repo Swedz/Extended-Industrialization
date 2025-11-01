@@ -5,14 +5,10 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 
 import java.util.List;
 import java.util.Optional;
-
-import static aztech.modern_industrialization.MITooltips.*;
-import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.line;
 
 public final class MeowNanoDecoration implements NanoSuitDecoration
 {
@@ -39,7 +35,7 @@ public final class MeowNanoDecoration implements NanoSuitDecoration
 	@Override
 	public Optional<List<Component>> getTooltipLines(NanoSuitArmorItem item, ItemStack stack)
 	{
-		return Optional.of(List.of(line(EIText.MEOW).withStyle(DEFAULT_STYLE.withItalic(true))));
+		return Optional.of(List.of(EI.text().meow()));
 	}
 	
 	@Override

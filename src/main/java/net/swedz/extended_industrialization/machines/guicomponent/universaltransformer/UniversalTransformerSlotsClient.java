@@ -17,12 +17,9 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.TransformerTierComponent;
 
 import java.util.List;
-
-import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
 public final class UniversalTransformerSlotsClient implements GuiComponentClient
 {
@@ -40,9 +37,9 @@ public final class UniversalTransformerSlotsClient implements GuiComponentClient
 	{
 		class ClientSlot extends SlotWithBackground implements SlotTooltip
 		{
-			private final EIText tooltip;
+			private final Component tooltip;
 			
-			public ClientSlot(EIText tooltip, int index)
+			public ClientSlot(Component tooltip, int index)
 			{
 				super(new SimpleContainer(1), 0, UniversalTransformerSlots.getSlotX(), UniversalTransformerSlots.getSlotY(index));
 				this.tooltip = tooltip;
@@ -75,12 +72,12 @@ public final class UniversalTransformerSlotsClient implements GuiComponentClient
 			@Override
 			public Component getTooltip()
 			{
-				return line(tooltip);
+				return tooltip;
 			}
 		}
 		
-		menu.addSlotToMenu(new ClientSlot(EIText.UNIVERSAL_TRANSFORMER_FROM_TIER_INPUT, 0), SlotGroup.CONFIGURABLE_STACKS);
-		menu.addSlotToMenu(new ClientSlot(EIText.UNIVERSAL_TRANSFORMER_TO_TIER_INPUT, 1), SlotGroup.CONFIGURABLE_STACKS);
+		menu.addSlotToMenu(new ClientSlot(EI.text().universalTransformerFromTierInput(), 0), SlotGroup.CONFIGURABLE_STACKS);
+		menu.addSlotToMenu(new ClientSlot(EI.text().universalTransformerToTierInput(), 1), SlotGroup.CONFIGURABLE_STACKS);
 	}
 	
 	@Override

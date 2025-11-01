@@ -1,6 +1,5 @@
 package net.swedz.extended_industrialization.machines.blockentity.tesla;
 
-import aztech.modern_industrialization.MITooltips;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
@@ -29,7 +28,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EISounds;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.machines.component.tesla.AestheticTeslaCoilComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.SingingTeslaCoilComponent;
@@ -48,8 +46,6 @@ import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Optional;
-
-import static net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine.*;
 
 public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implements TeslaTransmitter.Delegate, Tickable, EnergyComponentHolder, TeslaBehavior
 {
@@ -141,8 +137,8 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 				.withCasings(casing));
 		
 		var configPanel = new ConfigurationPanelBuilder(
-				EIText.CONFIGURATION_PANEL.text(),
-				EIText.CONFIGURATION_PANEL_DESCRIPTION.text().withStyle(MITooltips.DEFAULT_STYLE.withItalic(true)),
+				EI.text().configurationPanel(),
+				EI.text().configurationPanelDescription(),
 				(lineIndex, delta) -> this.sync()
 		);
 		aesthetic.appendSelectionPanel(this, configPanel);
@@ -301,8 +297,8 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	public List<Component> getTooltips()
 	{
 		return List.of(
-				line(EIText.TESLA_COIL_HELP_1).arg(EI.config().teslaCoilRange()),
-				line(EIText.TESLA_COIL_HELP_2)
+				EI.text().teslaCoilHelp1(EI.config().teslaCoilRange()),
+				EI.text().teslaCoilHelp2()
 		);
 	}
 	

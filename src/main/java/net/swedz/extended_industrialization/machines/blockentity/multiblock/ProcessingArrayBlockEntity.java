@@ -19,19 +19,15 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EITags;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.extended_industrialization.machines.component.craft.processingarray.ProcessingArrayMachineComponent;
 import net.swedz.extended_industrialization.machines.guicomponent.processingarraymachineslot.ProcessingArrayMachineSlot;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformer;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformers;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.multiplied.AbstractElectricMultipliedCraftingMultiblockBlockEntity;
 import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.member.PredicateSimpleMember;
-import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
 
 import java.util.List;
 import java.util.stream.IntStream;
-
-import static net.swedz.tesseract.neoforge.compat.mi.TesseractMITooltips.*;
 
 public final class ProcessingArrayBlockEntity extends AbstractElectricMultipliedCraftingMultiblockBlockEntity
 {
@@ -86,7 +82,7 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 				},
 				new ShapeSelection.LineInfo(
 						SPLIT,
-						IntStream.range(0, SPLIT).map(this::getMachineStackSize).mapToObj(EIText.PROCESSING_ARRAY_SIZE::text).toList(),
+						IntStream.range(0, SPLIT).map(this::getMachineStackSize).mapToObj(EI.text()::processingArraySize).toList(),
 						false
 				)
 		));
@@ -119,11 +115,11 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 	public List<Component> getTooltips()
 	{
 		List<Component> lines = Lists.newArrayList();
-		lines.add(MICompatibleTextLine.line(EIText.PROCESSING_ARRAY_RECIPE));
-		lines.add(MICompatibleTextLine.line(EIText.PROCESSING_ARRAY_BATCH_SIZE));
+		lines.add(EI.text().processingArrayRecipe());
+		lines.add(EI.text().processingArrayBatchSize());
 		if(EI.config().batchingMachines().processingArrayEU() != 1)
 		{
-			lines.add(MICompatibleTextLine.line(EIText.PROCESSING_ARRAY_EU_COST_MULTIPLIER).arg(this.getEuCostTransformer(), EU_COST_TRANSFORMER_PARSER));
+			lines.add(EI.text().processingArrayEuCostMultiplier(this.getEuCostTransformer()));
 		}
 		return lines;
 	}

@@ -1,29 +1,26 @@
 package net.swedz.extended_industrialization.machines.component.farmer.task;
 
 import net.minecraft.network.chat.Component;
-import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.machines.component.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.component.farmer.task.task.FertilizingFarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.task.HarvestingFarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.task.HydratingFarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.task.PlantingFarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.task.TillingFarmerTask;
-import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
-
-import static aztech.modern_industrialization.MITooltips.*;
 
 public enum FarmerTaskType
 {
-	TILLING(TillingFarmerTask::new, EIText.FARMER_TASK_TILLING, EIText.FARMER_TASK_TILLING_DESCRIPTION),
-	HYDRATING(HydratingFarmerTask::new, EIText.FARMER_TASK_HYDRATING, EIText.FARMER_TASK_HYDRATING_DESCRIPTION),
-	FERTLIZING(FertilizingFarmerTask::new, EIText.FARMER_TASK_FERTILIZING, EIText.FARMER_TASK_FERTILIZING_DESCRIPTION),
-	HARVESTING(HarvestingFarmerTask::new, EIText.FARMER_TASK_HARVESTING, EIText.FARMER_TASK_HARVESTING_DESCRIPTION),
-	PLANTING(PlantingFarmerTask::new, EIText.FARMER_TASK_PLANTING, EIText.FARMER_TASK_PLANTING_DESCRIPTION);
+	TILLING(TillingFarmerTask::new, EI.text().farmerTaskTilling(), EI.text().farmerTaskTillingDescription()),
+	HYDRATING(HydratingFarmerTask::new, EI.text().farmerTaskHydrating(), EI.text().farmerTaskHydratingDescription()),
+	FERTLIZING(FertilizingFarmerTask::new, EI.text().farmerTaskFertilizing(), EI.text().farmerTaskFertilizingDescription()),
+	HARVESTING(HarvestingFarmerTask::new, EI.text().farmerTaskHarvesting(), EI.text().farmerTaskHarvestingDescription()),
+	PLANTING(PlantingFarmerTask::new, EI.text().farmerTaskPlanting(), EI.text().farmerTaskPlantingDescription());
 	
 	private final FarmerTaskFactory factory;
-	private final EIText            tooltipName, tooltipDescription;
+	private final Component         tooltipName, tooltipDescription;
 	
-	FarmerTaskType(FarmerTaskFactory factory, EIText tooltipName, EIText tooltipDescription)
+	FarmerTaskType(FarmerTaskFactory factory, Component tooltipName, Component tooltipDescription)
 	{
 		this.factory = factory;
 		this.tooltipName = tooltipName;
@@ -43,8 +40,6 @@ public enum FarmerTaskType
 	public Component tooltip()
 	{
 		return tooltipName == null || tooltipDescription == null ? null :
-				MICompatibleTextLine.line(EIText.FARMER_TASK)
-						.arg(tooltipName.text().setStyle(NUMBER_TEXT))
-						.arg(tooltipDescription.text());
+				EI.text().farmerTask(tooltipName, tooltipDescription);
 	}
 }

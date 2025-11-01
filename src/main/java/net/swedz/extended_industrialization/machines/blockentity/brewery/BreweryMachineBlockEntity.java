@@ -17,10 +17,9 @@ import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIMachines;
-import net.swedz.extended_industrialization.EIText;
-import net.swedz.tesseract.neoforge.compat.mi.tooltip.MICompatibleTextLine;
 
 import java.util.List;
 import java.util.UUID;
@@ -127,8 +126,8 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 	public List<Component> getTooltips()
 	{
 		return List.of(
-				MICompatibleTextLine.line(EIText.BREWERY_REQUIRES_BLAZING_ESSENCE).arg(EIFluids.BLAZING_ESSENCE.asFluid()),
-				MICompatibleTextLine.line(EIText.BREWERY_BREWS_MULTIPLE).arg(4)
+				EI.text().breweryRequiresBlazingEssence(EIFluids.BLAZING_ESSENCE.asFluid()),
+				EI.text().breweryBrewsMultiple(4)
 		);
 	}
 }

@@ -7,7 +7,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.stats.Stats;
@@ -17,9 +16,9 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EITags;
-import net.swedz.extended_industrialization.EIText;
 import net.swedz.tesseract.neoforge.item.component.DataComponentTooltipProvider;
 import net.swedz.tesseract.neoforge.item.component.TooltipAdder;
 
@@ -88,7 +87,7 @@ public record RainbowDataComponent(boolean value, boolean showInTooltip) impleme
 	{
 		if(showInTooltip && value)
 		{
-			tooltip.add(Component.translatable("item.color", EIText.RAINBOW.text().setStyle(Style.EMPTY.withColor(getCurrentRainbowColor()))).withStyle(ChatFormatting.GRAY));
+			tooltip.add(Component.translatable("item.color", EI.text().rainbow()).withStyle(ChatFormatting.GRAY));
 		}
 	}
 }

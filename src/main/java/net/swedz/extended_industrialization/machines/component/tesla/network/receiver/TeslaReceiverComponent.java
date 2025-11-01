@@ -11,7 +11,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
-import net.swedz.extended_industrialization.EIText;
+import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.configurationpanel.ConfigurationPanelBuilder;
@@ -155,7 +155,7 @@ public class TeslaReceiverComponent implements IComponent, TeslaReceiver
 		List<Component> lines = Lists.newArrayList();
 		for(int priority = -PRIORITY_RANGE; priority <= PRIORITY_RANGE; priority++)
 		{
-			lines.add(EIText.PRIORITY.text().append(Integer.toString(priority)));
+			lines.add(EI.text().priority(priority));
 		}
 		return lines;
 	}
