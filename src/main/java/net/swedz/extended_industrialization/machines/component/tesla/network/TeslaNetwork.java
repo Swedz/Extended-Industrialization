@@ -22,6 +22,8 @@ public final class TeslaNetwork implements MIEnergyStorage, TeslaTransferLimits.
 	private final Set<TeslaReceiver>  loadedReceivers = Sets.newHashSet();
 	private final List<TeslaReceiver> receivers       = Lists.newArrayList();
 	
+	private boolean dirty = true;
+	
 	private Optional<TeslaTransmitter> transmitter = Optional.empty();
 	
 	public TeslaNetwork(TeslaNetworkCache cache, WorldPos key)
@@ -95,6 +97,7 @@ public final class TeslaNetwork implements MIEnergyStorage, TeslaTransferLimits.
 			if(!receivers.contains(receiver))
 			{
 				receivers.add(receiver);
+				dirty = true;
 			}
 		}
 		else
@@ -145,7 +148,13 @@ public final class TeslaNetwork implements MIEnergyStorage, TeslaTransferLimits.
 		{
 			return 0;
 		}
-		Collections.sort(receivers);
+		
+		if(dirty)
+		{
+			Collections.sort(receivers);
+			dirty = false;
+		}
+		
 		var buckets = TransferHelper.organizeBuckets(receivers, TeslaReceiver::getPriority);
 		long amountReceived = 0;
 		long remaining = maxReceive;
