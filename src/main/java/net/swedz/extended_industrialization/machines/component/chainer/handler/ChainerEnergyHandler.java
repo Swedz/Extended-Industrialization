@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 import net.swedz.extended_industrialization.machines.component.chainer.wrapper.InventoryWrapper;
+import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 import java.util.Collections;
 import java.util.List;
@@ -47,15 +48,7 @@ public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, 
 		{
 			return 0;
 		}
-		long amountReceived = 0;
-		for(int i = 0; i < wrappers.size(); i++)
-		{
-			var wrapper = wrappers.get(i);
-			int remainingStorages = wrappers.size() - i;
-			long remainingAmountToReceive = maxReceive - amountReceived;
-			amountReceived += wrapper.handler().receive(remainingAmountToReceive, simulate);
-		}
-		return amountReceived;
+		return TransferHelper.distributeLong((wrapper, amount, opSimulate) -> wrapper.handler().receive(amount, opSimulate), wrappers, maxReceive, simulate);
 	}
 	
 	@Override
@@ -65,17 +58,7 @@ public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, 
 		{
 			return 0;
 		}
-		long amountExtracted = 0;
-		for(var wrapper : wrappers)
-		{
-			long remainingAmountToExtract = maxExtract - amountExtracted;
-			amountExtracted += wrapper.handler().extract(remainingAmountToExtract, simulate);
-			if(amountExtracted == maxExtract)
-			{
-				break;
-			}
-		}
-		return amountExtracted;
+		return TransferHelper.distributeLong((wrapper, amount, opSimulate) -> wrapper.handler().extract(amount, opSimulate), wrappers, maxExtract, simulate);
 	}
 	
 	@Override
