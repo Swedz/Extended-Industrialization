@@ -7,9 +7,9 @@ import com.google.common.collect.Sets;
 import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.network.transmitter.TeslaTransmitter;
 import net.swedz.tesseract.neoforge.api.WorldPos;
+import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -146,68 +146,16 @@ public final class TeslaNetwork implements MIEnergyStorage, TeslaTransferLimits.
 			return 0;
 		}
 		Collections.sort(receivers);
-		
+		var buckets = TransferHelper.organizeBuckets(receivers, TeslaReceiver::getPriority);
 		long amountReceived = 0;
 		long remaining = maxReceive;
-		int bucketStartIndex = 0;
-		for(int index = 0; index < receivers.size(); index++)
+		for(var bucket : buckets)
 		{
-			if(index == receivers.size() - 1 ||
-			   receivers.get(index).getPriority() != receivers.get(index + 1).getPriority())
-			{
-				long received = this.receiveForBucket(receivers.subList(bucketStartIndex, index + 1), remaining, simulate);
-				amountReceived += received;
-				remaining -= received;
-				
-				bucketStartIndex = index + 1;
-				
-				if(remaining <= 0)
-				{
-					return amountReceived;
-				}
-			}
-		}
-		return amountReceived;
-	}
-	
-	private long receiveForBucket(List<TeslaReceiver> bucket, long maxReceive, boolean simulate)
-	{
-		Collections.shuffle(bucket);
-		
-		List<TransferTarget> targets = Lists.newArrayList();
-		for(var receiver : bucket)
-		{
-			var target = new TransferTarget(receiver);
-			target.simulationResult = receiver.receiveEnergy(maxReceive, true);
-			targets.add(target);
-		}
-		targets.sort(Comparator.comparingLong((target) -> target.simulationResult));
-		
-		long amountReceived = 0;
-		long remainingReceive = maxReceive;
-		for(int index = 0; index < targets.size(); index++)
-		{
-			var target = targets.get(index);
-			int remainingTargets = targets.size() - index;
-			long targetMaxReceive = remainingReceive / remainingTargets;
-			
-			long received = target.source.receiveEnergy(targetMaxReceive, simulate);
+			long received = TransferHelper.distributeLong(TeslaReceiver::receiveEnergy, bucket, remaining, simulate);
 			amountReceived += received;
-			remainingReceive -= received;
+			remaining -= received;
 		}
 		return amountReceived;
-	}
-	
-	private final static class TransferTarget
-	{
-		private final TeslaReceiver source;
-		
-		private long simulationResult;
-		
-		private TransferTarget(TeslaReceiver source)
-		{
-			this.source = source;
-		}
 	}
 	
 	@Override
