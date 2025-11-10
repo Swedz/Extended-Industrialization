@@ -18,9 +18,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.proxy.modslot.EIModSlotProxy;
+import net.swedz.tesseract.neoforge.api.tuple.Pair;
+import net.swedz.tesseract.neoforge.helper.TransferHelper;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.List;
@@ -86,7 +89,7 @@ public final class RobotAutoFeederItem extends Item implements ISimpleEnergyItem
 		return 0xFF0000;
 	}
 	
-	private ItemStack extractCannedFood(Player player)
+	private Pair<ItemStack, IItemHandler> extractCannedFood(Player player)
 	{
 		List<ItemStack> contents = Lists.newArrayList();
 		contents.addAll(player.getInventory().items);
@@ -97,7 +100,7 @@ public final class RobotAutoFeederItem extends Item implements ISimpleEnergyItem
 			{
 				ItemStack extracted = stack.copyWithCount(1);
 				stack.consume(1, player);
-				return extracted;
+				return new Pair<>(extracted, null);
 			}
 			var capability = stack.getCapability(Capabilities.ItemHandler.ITEM);
 			if(capability != null)
@@ -107,12 +110,12 @@ public final class RobotAutoFeederItem extends Item implements ISimpleEnergyItem
 					var innerStack = capability.getStackInSlot(slot);
 					if(innerStack.is(EIItems.CANNED_FOOD.asItem()))
 					{
-						return capability.extractItem(slot, 1, false);
+						return new Pair<>(capability.extractItem(slot, 1, false), capability);
 					}
 				}
 			}
 		}
-		return ItemStack.EMPTY;
+		return new Pair<>(ItemStack.EMPTY, null);
 	}
 	
 	/**
@@ -176,13 +179,22 @@ public final class RobotAutoFeederItem extends Item implements ISimpleEnergyItem
 		   this.hasEnergy(stack))
 		{
 			var cannedFoodStack = this.extractCannedFood(player);
-			if(!cannedFoodStack.isEmpty())
+
+			var itemStack = cannedFoodStack.a();
+			var itemHandler = cannedFoodStack.b();
+
+			if(!itemStack.isEmpty())
 			{
-				var container = this.eat(player, cannedFoodStack);
-				if(!container.isEmpty() &&
-				   !player.getInventory().add(container))
+				var container = this.eat(player, itemStack);
+				if(!container.isEmpty())
 				{
-					player.drop(container, false);
+					if (itemHandler != null) {
+						container.setCount(container.getCount() - TransferHelper.insert(itemHandler, container));
+					}
+
+					if (!container.isEmpty() && !player.getInventory().add(container)) {
+						player.drop(container, false);
+					}
 				}
 				this.tryUseEnergy(stack, EAT_ENERGY_COST);
 			}
