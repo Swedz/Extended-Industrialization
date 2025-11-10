@@ -65,7 +65,7 @@ public final class RobotAutoFeederItem extends Item implements ISimpleEnergyItem
 	
 	public boolean hasEnergy(ItemStack stack)
 	{
-		return this.getStoredEnergy(stack) > 0;
+		return this.getStoredEnergy(stack) >= EAT_ENERGY_COST;
 	}
 	
 	@Override
