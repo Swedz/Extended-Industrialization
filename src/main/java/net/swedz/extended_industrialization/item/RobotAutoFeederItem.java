@@ -178,21 +178,23 @@ public final class RobotAutoFeederItem extends Item implements ISimpleEnergyItem
 		   player.getFoodData().getFoodLevel() <= 18 &&
 		   this.hasEnergy(stack))
 		{
-			var cannedFoodStack = this.extractCannedFood(player);
-
-			var itemStack = cannedFoodStack.a();
-			var itemHandler = cannedFoodStack.b();
-
+			var cannedFood = this.extractCannedFood(player);
+			
+			var itemStack = cannedFood.a();
+			var originItemHandler = cannedFood.b();
+			
 			if(!itemStack.isEmpty())
 			{
 				var container = this.eat(player, itemStack);
 				if(!container.isEmpty())
 				{
-					if (itemHandler != null) {
-						container.setCount(container.getCount() - TransferHelper.insert(itemHandler, container));
+					if(originItemHandler != null)
+					{
+						container.shrink(TransferHelper.insert(originItemHandler, container));
 					}
-
-					if (!container.isEmpty() && !player.getInventory().add(container)) {
+					
+					if(!container.isEmpty() && !player.getInventory().add(container))
+					{
 						player.drop(container, false);
 					}
 				}
