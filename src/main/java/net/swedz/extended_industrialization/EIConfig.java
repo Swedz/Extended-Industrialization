@@ -14,7 +14,7 @@ import java.util.Map;
 
 public interface EIConfig
 {
-	@ConfigKey("machine_chainer_max_connections")
+	@ConfigKey
 	@ConfigComment("The maximum amount of connections a machine chainer can have")
 	@Range.Integer(min = 1, max = 128)
 	default int machineChainerMaxConnections()
@@ -22,14 +22,14 @@ public interface EIConfig
 		return 64;
 	}
 	
-	@ConfigKey("allow_upgrades_in_processing_array")
+	@ConfigKey
 	@ConfigComment("Whether upgrades should be allowed in the Processing Array")
 	default boolean allowUpgradesInProcessingArray()
 	{
 		return true;
 	}
 	
-	@ConfigKey("farmer_fertilizer_max_random_ticks")
+	@ConfigKey
 	@ConfigComment("The maximum amount of random ticks the farmer can do on a crop block in a single use of fertilizer")
 	@Range.Integer(min = 1, max = 1000)
 	default int farmerFertilizerMaxRandomTicks()
@@ -37,7 +37,7 @@ public interface EIConfig
 		return 80;
 	}
 	
-	@ConfigKey("tesla_coil_range")
+	@ConfigKey
 	@ConfigComment("The range for the tesla coil to transmit energy within")
 	@Range.Integer(min = 1, max = Integer.MAX_VALUE)
 	default int teslaCoilRange()
@@ -45,13 +45,13 @@ public interface EIConfig
 		return 32;
 	}
 	
-	@ConfigKey("lethal_tesla_coil")
+	@ConfigKey
 	@SubSection
 	LethalTeslaCoil lethalTeslaCoil();
 	
 	interface LethalTeslaCoil
 	{
-		@ConfigKey("range")
+		@ConfigKey
 		@ConfigComment("The range for the lethal tesla coil to damage entities within")
 		@Range.Integer(min = 1, max = Integer.MAX_VALUE)
 		default int range()
@@ -59,7 +59,7 @@ public interface EIConfig
 			return 2;
 		}
 		
-		@ConfigKey("damage")
+		@ConfigKey
 		@ConfigComment({
 				"The amount of damage dealt by the lethal tesla coil for a cable tier",
 				"If no value is specified for a cable tier, the cable tier's EU value is divided by 16 to determine the damage dealt",
@@ -73,13 +73,13 @@ public interface EIConfig
 		}
 	}
 	
-	@ConfigKey("batching_machines")
+	@ConfigKey
 	@SubSection
 	BatchingMachines batchingMachines();
 	
 	interface BatchingMachines
 	{
-		@ConfigKey("large_steam_macerator_size")
+		@ConfigKey
 		@ConfigComment("The maximum batch size to use for the Large Steam Macerator")
 		@Range.Integer(min = 1, max = Integer.MAX_VALUE)
 		default int largeSteamMaceratorSize()
@@ -87,7 +87,7 @@ public interface EIConfig
 			return 8;
 		}
 		
-		@ConfigKey("large_steam_macerator_eu")
+		@ConfigKey
 		@ConfigComment("The multiplier to use for the EU cost of the Large Steam Macerator")
 		@Range.Double(min = 0.1D, max = Double.MAX_VALUE)
 		default double largeSteamMaceratorEU()
@@ -95,7 +95,7 @@ public interface EIConfig
 			return 0.75;
 		}
 		
-		@ConfigKey("large_steam_furnace_size")
+		@ConfigKey
 		@ConfigComment("The maximum batch size to use for the Large Steam Furnace")
 		@Range.Integer(min = 1, max = Integer.MAX_VALUE)
 		default int largeSteamFurnaceSize()
@@ -103,7 +103,7 @@ public interface EIConfig
 			return 8;
 		}
 		
-		@ConfigKey("large_steam_furnace_eu")
+		@ConfigKey
 		@ConfigComment("The multiplier to use for the EU cost of the Large Steam Furnace")
 		@Range.Double(min = 0.1D, max = Double.MAX_VALUE)
 		default double largeSteamFurnaceEU()
@@ -111,7 +111,7 @@ public interface EIConfig
 			return 0.75;
 		}
 		
-		@ConfigKey("large_electric_macerator_size")
+		@ConfigKey
 		@ConfigComment("The maximum batch size to use for the Large Electric Macerator")
 		@Range.Integer(min = 1, max = Integer.MAX_VALUE)
 		default int largeElectricMaceratorSize()
@@ -119,7 +119,7 @@ public interface EIConfig
 			return 16;
 		}
 		
-		@ConfigKey("large_electric_macerator_eu")
+		@ConfigKey
 		@ConfigComment("The multiplier to use for the EU cost of the Large Electric Macerator")
 		@Range.Double(min = 0.1D, max = Double.MAX_VALUE)
 		default double largeElectricMaceratorEU()
@@ -127,7 +127,7 @@ public interface EIConfig
 			return 0.75;
 		}
 		
-		@ConfigKey("processing_array_eu")
+		@ConfigKey
 		@ConfigComment("The multiplier to use for the EU cost of the Processing Array")
 		@Range.Double(min = 0.1D, max = Double.MAX_VALUE)
 		default double processingArrayEU()
@@ -136,20 +136,20 @@ public interface EIConfig
 		}
 	}
 	
-	@ConfigKey("runtime_generated_recipes")
+	@ConfigKey
 	@SubSection
 	RuntimeGeneratedRecipes runtimeGeneratedRecipes();
 	
 	interface RuntimeGeneratedRecipes
 	{
-		@ConfigKey("canning_machine")
+		@ConfigKey
 		@ConfigComment("Whether canning machine recipes should be generated automatically at runtime or not")
 		default boolean canningMachine()
 		{
 			return true;
 		}
 		
-		@ConfigKey("composter")
+		@ConfigKey
 		@ConfigComment("Whether composter recipes should be generated automatically at runtime or not")
 		default boolean composter()
 		{
