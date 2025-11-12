@@ -6,14 +6,14 @@ import net.swedz.tesseract.neoforge.config.annotation.Range;
 
 public interface EIClientConfig
 {
-	@ConfigKey("render_tesla_animations")
+	@ConfigKey
 	@ConfigComment("Whether tesla animations should be rendered or not")
 	default boolean renderTeslaAnimations()
 	{
 		return true;
 	}
 	
-	@ConfigKey("tesla_animations_render_distance")
+	@ConfigKey
 	@ConfigComment({
 			"The distance (in blocks) for tesla animations to render within",
 			"Set to default (0) to always render"
