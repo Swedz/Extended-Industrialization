@@ -686,7 +686,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	
 	private boolean hasEnergy(ItemStack stack)
 	{
-		return quantum || this.getStoredEnergy(stack) > 0;
+		return quantum || this.getStoredEnergy(stack) >= ENERGY_COST;
 	}
 	
 	@Override

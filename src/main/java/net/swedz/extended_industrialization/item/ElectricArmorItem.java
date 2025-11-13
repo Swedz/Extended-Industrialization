@@ -71,7 +71,7 @@ public class ElectricArmorItem extends ArmorItem implements ISimpleEnergyItem, I
 	
 	public boolean hasEnergy(ItemStack stack)
 	{
-		return this.getStoredEnergy(stack) > 0;
+		return this.getStoredEnergy(stack) >= damageCostEnergy;
 	}
 	
 	@Override
