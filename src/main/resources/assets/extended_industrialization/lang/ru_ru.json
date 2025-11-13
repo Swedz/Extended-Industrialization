@@ -145,7 +145,7 @@
   "text.extended_industrialization.brewery_brews_multiple": "Заваривает одновременно %s зелий.",
   "text.extended_industrialization.brewery_requires_blazing_essence": "Требуется %s для варки зелий.",
   "text.extended_industrialization.calcification_percentage": "Накипь: %s %%",
-  "text.extended_industrialization.coils_lef_tier": "Запускает LEF партиями до %d при затратах ЭЕ в %s.",
+  "text.extended_industrialization.coils_lef_tier": "Запускает LEF партиями до %s при затратах ЭЕ в %s.",
   "text.extended_industrialization.color_blue": "Синий: ",
   "text.extended_industrialization.color_green": "Зелёный: ",
   "text.extended_industrialization.color_red": "Красный: ",
