@@ -95,7 +95,7 @@ public class ElectricArmorItem extends ArmorItem implements ISimpleEnergyItem, I
 	@Override
 	public void onHurt(LivingEntity entity, ItemStack stack, int damageAmount)
 	{
-		if(this.hasEnergy(stack))
+		if(this.getStoredEnergy(stack) > 0)
 		{
 			this.tryUseEnergy(stack, damageCostEnergy);
 		}
