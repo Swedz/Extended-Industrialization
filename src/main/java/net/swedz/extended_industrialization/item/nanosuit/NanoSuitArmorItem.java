@@ -19,6 +19,9 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIArmorMaterials;
 import net.swedz.extended_industrialization.item.ElectricArmorItem;
@@ -35,6 +38,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@EventBusSubscriber(modid = EI.ID)
 public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorTickHandler, ArmorUnequippedHandler, ItemHurtHandler, ToggleableItem, DynamicDyedItem
 {
 	private static final long DEFAULT_ENERGY_CAPACITY = 60 * 20 * CableTier.MV.getMaxTransfer();
@@ -128,6 +132,18 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 			);
 		}
 		return modifiers;
+	}
+	
+	@SubscribeEvent
+	private static void getAttributeModifiers(ItemAttributeModifierEvent event)
+	{
+		var stack = event.getItemStack();
+		if(stack.getItem() instanceof NanoSuitArmorItem item &&
+		   !item.isQuantum() &&
+		   !item.hasEnergy(stack))
+		{
+			event.clearModifiers();
+		}
 	}
 	
 	@Override
