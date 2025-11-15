@@ -4,7 +4,6 @@ import aztech.modern_industrialization.MIComponents;
 import aztech.modern_industrialization.MIRegistries;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.items.DynamicToolItem;
-import aztech.modern_industrialization.items.ItemHelper;
 import aztech.modern_industrialization.items.tools.QuantumSword;
 import aztech.modern_industrialization.util.GeometryHelper;
 import com.google.common.collect.Lists;
@@ -141,7 +140,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		),
 		SABER(
 				60 * 20 * CableTier.HV.getMaxTransfer(),
-				14,
+				15,
 				false, false,
 				EI.text()::electricToolHelp2LootingBeheading,
 				Stream.of(
@@ -211,7 +210,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		
 		public int damage()
 		{
-			return damage;
+			return damage - 1;
 		}
 		
 		public boolean hasAdjustableSpeed()
@@ -736,7 +735,17 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 					)
 					.build();
 		}
-		return this.hasEnergy(stack) ? ItemHelper.getToolModifiers(toolType.damage()) : ItemAttributeModifiers.EMPTY;
+		else if(this.hasEnergy(stack))
+		{
+			return ItemAttributeModifiers.builder()
+					.add(
+							Attributes.ATTACK_DAMAGE,
+							new AttributeModifier(BASE_ATTACK_DAMAGE_ID, toolType.damage(), AttributeModifier.Operation.ADD_VALUE),
+							EquipmentSlotGroup.MAINHAND
+					)
+					.build();
+		}
+		return ItemAttributeModifiers.EMPTY;
 	}
 	
 	@SubscribeEvent
