@@ -67,6 +67,7 @@ import net.neoforged.neoforge.common.IShearable;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -735,6 +736,18 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 					.build();
 		}
 		return this.hasEnergy(stack) ? ItemHelper.getToolModifiers(toolType.damage()) : ItemAttributeModifiers.EMPTY;
+	}
+	
+	@SubscribeEvent
+	private static void getAttributeModifiers(ItemAttributeModifierEvent event)
+	{
+		var stack = event.getItemStack();
+		if(stack.getItem() instanceof ElectricToolItem item &&
+		   !item.isQuantum() &&
+		   !item.hasEnergy(stack))
+		{
+			event.clearModifiers();
+		}
 	}
 	
 	@Override
