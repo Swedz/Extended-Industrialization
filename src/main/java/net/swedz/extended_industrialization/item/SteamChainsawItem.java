@@ -55,11 +55,15 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.IShearable;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
+import net.swedz.extended_industrialization.EI;
 import org.apache.commons.lang3.mutable.Mutable;
 
 import java.util.List;
@@ -69,6 +73,7 @@ import java.util.Optional;
 /**
  * Most of this code was directly copied from {@link aztech.modern_industrialization.items.SteamDrillItem} but adapted to be an axe-type tool instead and without the 3x3.
  */
+@EventBusSubscriber(modid = EI.ID)
 public final class SteamChainsawItem extends Item implements DynamicToolItem, ItemContainingItemHelper
 {
 	public static final StorageBehaviour<ItemVariant> BEHAVIOR = new StorageBehaviour<>()
@@ -163,6 +168,17 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 					.build();
 		}
 		return ItemAttributeModifiers.EMPTY;
+	}
+	
+	@SubscribeEvent
+	private static void getAttributeModifiers(ItemAttributeModifierEvent event)
+	{
+		var stack = event.getItemStack();
+		if(stack.getItem() instanceof SteamChainsawItem item &&
+		   !item.canUse(stack))
+		{
+			event.clearModifiers();
+		}
 	}
 	
 	@Override
