@@ -6,7 +6,6 @@ import aztech.modern_industrialization.blocks.storage.StorageBehaviour;
 import aztech.modern_industrialization.items.ContainerItem;
 import aztech.modern_industrialization.items.DynamicToolItem;
 import aztech.modern_industrialization.items.ItemContainingItemHelper;
-import aztech.modern_industrialization.items.ItemHelper;
 import aztech.modern_industrialization.items.SteamDrillFuel;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
 import aztech.modern_industrialization.util.Simulation;
@@ -24,8 +23,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -150,7 +152,17 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	@Override
 	public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack)
 	{
-		return this.canUse(stack) ? ItemHelper.getToolModifiers(7) : ItemAttributeModifiers.EMPTY;
+		if(this.canUse(stack))
+		{
+			return ItemAttributeModifiers.builder()
+					.add(
+							Attributes.ATTACK_DAMAGE,
+							new AttributeModifier(BASE_ATTACK_DAMAGE_ID, 7, AttributeModifier.Operation.ADD_VALUE),
+							EquipmentSlotGroup.MAINHAND
+					)
+					.build();
+		}
+		return ItemAttributeModifiers.EMPTY;
 	}
 	
 	@Override
