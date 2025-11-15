@@ -31,6 +31,7 @@ import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -848,7 +849,11 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		Vec3 spawnPos = player.position().add(0, player.getEyeHeight() / 2f, 0).add(look.multiply(0.25, 0.25, 0.25));
 		Vec3 target = player.getEyePosition().add(look.multiply(100, 100, 100));
 		Vec3 motion = target.subtract(spawnPos).normalize();
-		NanoSaberSweepEntity sweep = new NanoSaberSweepEntity(level, player, motion, colorRGB, rainbow, quantum ? (float) Integer.MAX_VALUE : toolType.damage(), getMode(stack) == Mode.BEHEADING);
+		
+		boolean quantum = player.getAttributeValue(MIRegistries.INFINITE_DAMAGE) > Mth.EPSILON;
+		float damage = quantum ? (float) Integer.MAX_VALUE : (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE);
+		
+		var sweep = new NanoSaberSweepEntity(level, player, motion, colorRGB, rainbow, damage, getMode(stack) == Mode.BEHEADING);
 		sweep.setPos(spawnPos.x(), spawnPos.y(), spawnPos.z());
 		level.addFreshEntity(sweep);
 	}
