@@ -31,7 +31,7 @@ public class ElectricArmorItem extends ArmorItem implements ISimpleEnergyItem, I
 	@Override
 	public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack)
 	{
-		return this.getModifiedDefaultAttributeModifiers(stack, this.getStoredEnergy(stack) > 0 ? defaultModifiers.get() : ItemAttributeModifiers.EMPTY);
+		return this.getModifiedDefaultAttributeModifiers(stack, this.hasEnergy(stack) ? defaultModifiers.get() : ItemAttributeModifiers.EMPTY);
 	}
 	
 	public ItemAttributeModifiers getModifiedDefaultAttributeModifiers(ItemStack stack, ItemAttributeModifiers modifiers)
@@ -95,7 +95,7 @@ public class ElectricArmorItem extends ArmorItem implements ISimpleEnergyItem, I
 	@Override
 	public void onHurt(LivingEntity entity, ItemStack stack, int damageAmount)
 	{
-		if(this.getStoredEnergy(stack) > 0)
+		if(this.hasEnergy(stack))
 		{
 			this.tryUseEnergy(stack, damageCostEnergy);
 		}
