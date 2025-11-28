@@ -1,7 +1,7 @@
 package net.swedz.extended_industrialization.client.ber.chainer;
 
 import aztech.modern_industrialization.MITags;
-import aztech.modern_industrialization.util.RenderHelper;
+import aztech.modern_industrialization.client.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;

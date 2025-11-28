@@ -39,12 +39,12 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 		
 		if(!EI.config().allowUpgradesInProcessingArray())
 		{
-			var slotPanel = guiComponents.get(SlotPanel.Server.class);
+			var slotPanel = guiComponents.getNullable(SlotPanel.class);
 			if(slotPanel != null)
 			{
 				guiComponents.unregister(slotPanel);
 			}
-			this.registerGuiComponent(new SlotPanel.Server(this)
+			this.registerGuiComponent(new SlotPanel(this)
 					.withRedstoneControl(redstoneControl)
 					.withOverdrive(overdrive));
 		}
@@ -53,13 +53,13 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 		
 		this.registerComponents(machines);
 		
-		this.registerGuiComponent(new ProcessingArrayMachineSlot.Server(
+		this.registerGuiComponent(new ProcessingArrayMachineSlot(
 				this,
 				() -> this.getMachineStackSize(activeShape.getActiveShapeIndex()),
 				machines
 		));
 		
-		this.registerGuiComponent(new ShapeSelection.Server(
+		this.registerGuiComponent(new ShapeSelection(
 				new ShapeSelection.Behavior()
 				{
 					@Override
@@ -81,8 +81,7 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 					}
 				},
 				new ShapeSelection.LineInfo(
-						SPLIT,
-						IntStream.range(0, SPLIT).map(this::getMachineStackSize).mapToObj(EI.text()::processingArraySize).toList(),
+						IntStream.range(0, SPLIT).map(this::getMachineStackSize).mapToObj(EI.text()::processingArraySize).map((c) -> (Component) c).toList(),
 						false
 				)
 		));

@@ -1,6 +1,6 @@
 package net.swedz.extended_industrialization.mixin;
 
-import aztech.modern_industrialization.machines.MachineOverlayClient;
+import aztech.modern_industrialization.client.machines.MachineOverlayClient;
 import net.minecraft.client.Minecraft;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import net.swedz.extended_industrialization.machines.blockentity.tesla.TeslaParticleGeneratorMachineBlockEntity;

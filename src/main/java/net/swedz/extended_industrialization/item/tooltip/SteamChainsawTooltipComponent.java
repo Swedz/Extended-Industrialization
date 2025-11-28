@@ -1,9 +1,9 @@
 package net.swedz.extended_industrialization.item.tooltip;
 
-import aztech.modern_industrialization.machines.gui.MachineScreen;
+import aztech.modern_industrialization.client.machines.gui.MachineScreen;
+import aztech.modern_industrialization.client.machines.guicomponents.ProgressBarClient;
+import aztech.modern_industrialization.client.util.RenderHelper;
 import aztech.modern_industrialization.machines.guicomponents.ProgressBar;
-import aztech.modern_industrialization.machines.guicomponents.ProgressBarClient;
-import aztech.modern_industrialization.util.RenderHelper;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -37,7 +37,7 @@ public final class SteamChainsawTooltipComponent implements ClientTooltipCompone
 		
 		RenderHelper.renderAndDecorateItem(guiGraphics, font, data.variant().toStack((int) data.amount()), x + 1, y + 1);
 		
-		ProgressBar.Parameters progressParams = new ProgressBar.Parameters(0, 0, "furnace", true);
+		var progressParams = new ProgressBar.Params(0, 0, "furnace", true);
 		ProgressBarClient.renderProgress(guiGraphics, x + 20, y, progressParams, (float) data.burnTicks() / data.maxBurnTicks());
 	}
 }

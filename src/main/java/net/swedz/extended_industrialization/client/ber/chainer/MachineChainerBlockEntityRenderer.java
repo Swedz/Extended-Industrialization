@@ -1,8 +1,8 @@
 package net.swedz.extended_industrialization.client.ber.chainer;
 
-import aztech.modern_industrialization.compat.sodium.SodiumCompat;
+import aztech.modern_industrialization.client.compat.sodium.SodiumCompat;
+import aztech.modern_industrialization.client.util.ModelHelper;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
-import aztech.modern_industrialization.util.ModelHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -23,7 +23,7 @@ import net.swedz.extended_industrialization.compat.continuity.ContinuityModelUnw
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
 
 /**
- * Based on {@link aztech.modern_industrialization.machines.MachineBlockEntityRenderer}
+ * Based on {@link aztech.modern_industrialization.client.machines.MachineBlockEntityRenderer}
  */
 public sealed class MachineChainerBlockEntityRenderer implements BlockEntityRenderer<MachineChainerMachineBlockEntity> permits MachineChainerHighlightRenderer
 {

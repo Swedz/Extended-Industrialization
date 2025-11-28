@@ -1,16 +1,16 @@
 package net.swedz.extended_industrialization.machines.guicomponent.processingarraymachineslot;
 
+import aztech.modern_industrialization.client.machines.gui.ClientComponentRenderer;
+import aztech.modern_industrialization.client.machines.gui.GuiComponentClient;
+import aztech.modern_industrialization.client.machines.gui.MachineScreen;
 import aztech.modern_industrialization.inventory.BackgroundRenderedSlot;
 import aztech.modern_industrialization.inventory.SlotGroup;
-import aztech.modern_industrialization.machines.gui.ClientComponentRenderer;
 import aztech.modern_industrialization.machines.gui.GuiComponent;
-import aztech.modern_industrialization.machines.gui.GuiComponentClient;
-import aztech.modern_industrialization.machines.gui.MachineScreen;
 import aztech.modern_industrialization.util.Rectangle;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Unit;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.Slot;
@@ -19,19 +19,11 @@ import net.swedz.extended_industrialization.EI;
 
 import java.util.List;
 
-public final class ProcessingArrayMachineSlotClient implements GuiComponentClient
+public final class ProcessingArrayMachineSlotClient extends GuiComponentClient<Unit, Integer>
 {
-	private int maxMachines;
-	
-	public ProcessingArrayMachineSlotClient(RegistryFriendlyByteBuf buf)
+	public ProcessingArrayMachineSlotClient(Unit params, Integer data)
 	{
-		this.readCurrentData(buf);
-	}
-	
-	@Override
-	public void readCurrentData(RegistryFriendlyByteBuf buf)
-	{
-		maxMachines = buf.readInt();
+		super(params, data);
 	}
 	
 	@Override
@@ -53,7 +45,7 @@ public final class ProcessingArrayMachineSlotClient implements GuiComponentClien
 			@Override
 			public int getMaxStackSize()
 			{
-				return maxMachines;
+				return data;
 			}
 			
 			@Override

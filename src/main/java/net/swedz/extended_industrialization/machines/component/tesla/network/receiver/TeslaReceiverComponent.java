@@ -2,8 +2,8 @@ package net.swedz.extended_industrialization.machines.component.tesla.network.re
 
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
-import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.machines.MachineComponent;
 import com.google.common.collect.Lists;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class TeslaReceiverComponent implements IComponent, TeslaReceiver
+public class TeslaReceiverComponent implements MachineComponent, TeslaReceiver
 {
 	private static final int PRIORITY_RANGE = 16;
 	

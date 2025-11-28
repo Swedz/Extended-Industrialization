@@ -1,6 +1,6 @@
 package net.swedz.extended_industrialization.machines.component.chainer;
 
-import aztech.modern_industrialization.machines.IComponent;
+import aztech.modern_industrialization.machines.MachineComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public final class ChainerComponent implements IComponent, ChainerElement
+public final class ChainerComponent implements MachineComponent, ChainerElement
 {
 	private final MachineChainerMachineBlockEntity machine;
 	

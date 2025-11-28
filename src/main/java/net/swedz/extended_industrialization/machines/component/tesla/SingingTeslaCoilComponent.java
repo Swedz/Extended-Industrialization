@@ -1,7 +1,7 @@
 package net.swedz.extended_industrialization.machines.component.tesla;
 
-import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.machines.MachineComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.NoteBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.tesseract.neoforge.api.Assert;
 
-public final class SingingTeslaCoilComponent implements IComponent
+public final class SingingTeslaCoilComponent implements MachineComponent
 {
 	private final MachineBlockEntity machine;
 	

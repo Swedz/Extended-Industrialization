@@ -47,10 +47,12 @@ public final class ElectricFluidHarvestingMachineBlockEntity extends FluidHarves
 		
 		this.registerComponents(inventory, energy, redstoneControl);
 		
-		this.registerGuiComponent(new EnergyBar.Server(
-				new EnergyBar.Parameters(18, 29), energy::getEu, energy::getCapacity
+		this.registerGuiComponent(new EnergyBar(
+				new EnergyBar.Params(18, 29),
+				energy::getEu,
+				energy::getCapacity
 		));
-		this.registerGuiComponent(new SlotPanel.Server(this).withRedstoneControl(redstoneControl));
+		this.registerGuiComponent(new SlotPanel(this).withRedstoneControl(redstoneControl));
 	}
 	
 	@Override

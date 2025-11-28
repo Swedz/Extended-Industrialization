@@ -1,6 +1,6 @@
 package net.swedz.extended_industrialization.machines.component.farmer;
 
-import aztech.modern_industrialization.machines.IComponent;
+import aztech.modern_industrialization.machines.MachineComponent;
 import aztech.modern_industrialization.machines.components.MultiblockInventoryComponent;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import aztech.modern_industrialization.util.Simulation;
@@ -42,7 +42,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public final class FarmerComponent implements IComponent
+public final class FarmerComponent implements MachineComponent
 {
 	private static final BehaviorRegistry<PlantableBehaviorHolder, FarmerPlantable, PlantingContext>         PLANTABLE_REGISTRY   = BehaviorRegistry.create(PlantableBehaviorHolder::new);
 	private static final BehaviorRegistry<HarvestableBehaviorHolder, HarvestableBehavior, HarvestingContext> HARVESTABLE_REGISTRY = BehaviorRegistry.create(HarvestableBehaviorHolder::new);

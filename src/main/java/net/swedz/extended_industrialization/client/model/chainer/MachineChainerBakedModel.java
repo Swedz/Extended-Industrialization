@@ -1,9 +1,9 @@
 package net.swedz.extended_industrialization.client.model.chainer;
 
-import aztech.modern_industrialization.machines.models.MachineBakedModel;
+import aztech.modern_industrialization.client.machines.models.MachineBakedModel;
+import aztech.modern_industrialization.client.util.ModelHelper;
 import aztech.modern_industrialization.machines.models.MachineCasing;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
-import aztech.modern_industrialization.util.ModelHelper;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;

@@ -69,7 +69,7 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 		
 		this.registerComponents(redstoneControl, enchantmentModule);
 		
-		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
+		this.registerGuiComponent(new ModularSlotPanel(this, 0)
 				.withRedstoneModule(redstoneControl)
 				.with(EIModularSlotPanelSlots.FARMER_ENCHANTMENT_MODULE, enchantmentModule));
 	}

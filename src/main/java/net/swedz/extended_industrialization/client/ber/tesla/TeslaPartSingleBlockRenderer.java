@@ -1,7 +1,7 @@
 package net.swedz.extended_industrialization.client.ber.tesla;
 
+import aztech.modern_industrialization.client.machines.MachineBlockEntityRenderer;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
-import aztech.modern_industrialization.machines.MachineBlockEntityRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;

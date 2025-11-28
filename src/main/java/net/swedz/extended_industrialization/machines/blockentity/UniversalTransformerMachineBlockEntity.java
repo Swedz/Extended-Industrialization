@@ -58,13 +58,16 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 		
 		this.registerComponents(transformerFrom, transformerTo, energy, redstoneControl);
 		
-		EnergyBar.Parameters energyBarParams = new EnergyBar.Parameters(76, 39);
-		this.registerGuiComponent(new EnergyBar.Server(energyBarParams, energy::getEu, energy::getCapacity));
+		this.registerGuiComponent(new EnergyBar(
+				new EnergyBar.Params(76, 39),
+				energy::getEu,
+				energy::getCapacity
+		));
 		
-		this.registerGuiComponent(new SlotPanel.Server(this)
+		this.registerGuiComponent(new SlotPanel(this)
 				.withRedstoneControl(redstoneControl));
 		
-		this.registerGuiComponent(new UniversalTransformerSlots.Server(this, transformerFrom, transformerTo));
+		this.registerGuiComponent(new UniversalTransformerSlots(this, transformerFrom, transformerTo));
 	}
 	
 	@Override
@@ -80,7 +83,7 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 	}
 	
 	@Override
-	protected MachineModelClientData getMachineModelData()
+	public MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = new MachineModelClientData();
 		orientation.writeModelData(data);

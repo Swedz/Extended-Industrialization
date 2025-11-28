@@ -109,9 +109,13 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 		
 		this.registerComponents(isActive, redstoneControl, casing, enchantmentModule, energy, lethal, buzzing, aesthetic);
 		
-		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(81, 34), energy::getEu, energy::getCapacity));
+		this.registerGuiComponent(new EnergyBar(
+				new EnergyBar.Params(81, 34),
+				energy::getEu,
+				energy::getCapacity
+		));
 		
-		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
+		this.registerGuiComponent(new ModularSlotPanel(this, 0)
 				.withRedstoneModule(redstoneControl)
 				.withCasings(casing)
 				.with(EIModularSlotPanelSlots.LETHAL_TESLA_COIL_ENCHANTMENT_MODULE, enchantmentModule));
@@ -144,7 +148,7 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	}
 	
 	@Override
-	protected MachineModelClientData getMachineModelData()
+	public MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
 		data.isActive = isActive.isActive;

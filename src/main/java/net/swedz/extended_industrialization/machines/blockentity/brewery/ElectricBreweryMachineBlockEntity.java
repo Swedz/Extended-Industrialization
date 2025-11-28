@@ -50,7 +50,7 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 		gui.registerEnergyBar(this, energy::getEu, energy::getCapacity);
 		gui.registerEfficiencyBar(this, crafter);
 		
-		this.registerGuiComponent(new SlotPanel.Server(this)
+		this.registerGuiComponent(new SlotPanel(this)
 				.withRedstoneControl(redstoneControl)
 				.withUpgrades(upgrades)
 				.withCasing(casing)
@@ -113,7 +113,7 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 	}
 	
 	@Override
-	protected MachineModelClientData getMachineModelData()
+	public MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
 		orientation.writeModelData(data);

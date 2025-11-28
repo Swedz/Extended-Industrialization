@@ -71,13 +71,13 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		transferFluid = new FluidTransferCache(chainer::fluidHandler);
 		transferEnergy = new MIEnergyTransferCache(chainer::extractableEnergyHandler);
 		
-		this.registerGuiComponent(new SlotPanel.Server(this)
+		this.registerGuiComponent(new SlotPanel(this)
 				.withRedstoneControl(redstoneControl)
 				.withCasing(casing));
 		
-		this.registerGuiComponent(new AutoExtract.Server(orientation));
+		this.registerGuiComponent(new AutoExtract(orientation));
 		
-		this.registerGuiComponent(new ModularMultiblockGui.Server(11, 50, (content) ->
+		this.registerGuiComponent(new ModularMultiblockGui(11, 50, (content) ->
 		{
 			ChainerLinks links = chainer.links();
 			
@@ -142,7 +142,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	}
 	
 	@Override
-	protected MachineModelClientData getMachineModelData()
+	public MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
 		orientation.writeModelData(data);

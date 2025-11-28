@@ -1,17 +1,17 @@
 package net.swedz.extended_industrialization.machines.guicomponent.universaltransformer;
 
+import aztech.modern_industrialization.client.machines.gui.ClientComponentRenderer;
+import aztech.modern_industrialization.client.machines.gui.GuiComponentClient;
+import aztech.modern_industrialization.client.machines.gui.MachineScreen;
 import aztech.modern_industrialization.inventory.BackgroundRenderedSlot;
 import aztech.modern_industrialization.inventory.SlotGroup;
-import aztech.modern_industrialization.machines.gui.ClientComponentRenderer;
 import aztech.modern_industrialization.machines.gui.GuiComponent;
-import aztech.modern_industrialization.machines.gui.GuiComponentClient;
-import aztech.modern_industrialization.machines.gui.MachineScreen;
 import aztech.modern_industrialization.util.Rectangle;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Unit;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.Slot;
@@ -21,15 +21,11 @@ import net.swedz.extended_industrialization.machines.component.TransformerTierCo
 
 import java.util.List;
 
-public final class UniversalTransformerSlotsClient implements GuiComponentClient
+public final class UniversalTransformerSlotsClient extends GuiComponentClient<Unit, Unit>
 {
-	public UniversalTransformerSlotsClient(RegistryFriendlyByteBuf buf)
+	public UniversalTransformerSlotsClient(Unit params, Unit data)
 	{
-	}
-	
-	@Override
-	public void readCurrentData(RegistryFriendlyByteBuf buf)
-	{
+		super(params, data);
 	}
 	
 	@Override

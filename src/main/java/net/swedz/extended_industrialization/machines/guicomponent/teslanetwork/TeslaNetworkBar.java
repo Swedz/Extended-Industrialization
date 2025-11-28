@@ -1,92 +1,95 @@
 package net.swedz.extended_industrialization.machines.guicomponent.teslanetwork;
 
 import aztech.modern_industrialization.api.energy.CableTier;
-import aztech.modern_industrialization.machines.gui.GuiComponent;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import aztech.modern_industrialization.machines.gui.GuiComponentServer;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiverState;
 import net.swedz.tesseract.neoforge.api.WorldPos;
+import net.swedz.tesseract.neoforge.compat.mi.serialization.MIStreamCodecs;
+import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public final class TeslaNetworkBar
+public final class TeslaNetworkBar implements GuiComponentServer<TeslaNetworkBar.Params, Optional<TeslaNetworkBar.Data>>
 {
-	public static final ResourceLocation ID = EI.id("tesla_network_bar");
+	private static final Map<String, StreamCodec<ByteBuf, ? extends Data<?>>> DATA_TYPES = Map.of(
+			TransmitterData.ID, TransmitterData.STREAM_CODEC,
+			ReceiverData.ID, ReceiverData.STREAM_CODEC,
+			SingingData.ID, SingingData.STREAM_CODEC
+	);
 	
-	public static final class Server implements GuiComponent.Server<Optional<Data>>
+	public static final Type<Params, Optional<Data>> TYPE = new Type<>(EI.id("tesla_network_bar"), Params.STREAM_CODEC, ByteBufCodecs.optional(Data.STREAM_CODEC));
+	
+	private final Params params;
+	
+	private final Supplier<Optional<Data>> data;
+	
+	public TeslaNetworkBar(Params params, Supplier<Optional<Data>> data)
 	{
-		private final Parameters params;
-		
-		private final Supplier<Optional<Data>> data;
-		
-		public Server(Parameters params, Supplier<Optional<Data>> data)
-		{
-			this.params = params;
-			this.data = data;
-		}
-		
-		@Override
-		public Optional<Data> copyData()
-		{
-			return data.get();
-		}
-		
-		@Override
-		public boolean needsSync(Optional<Data> cachedData)
-		{
-			return !cachedData.equals(this.copyData());
-		}
-		
-		@Override
-		public void writeInitialData(RegistryFriendlyByteBuf buf)
-		{
-			buf.writeVarInt(params.renderX);
-			buf.writeVarInt(params.renderY);
-			this.writeCurrentData(buf);
-		}
-		
-		@Override
-		public void writeCurrentData(RegistryFriendlyByteBuf buf)
-		{
-			Optional<Data> data = this.data.get();
-			buf.writeBoolean(data.isPresent());
-			data.ifPresent((d) -> d.write(buf));
-		}
-		
-		@Override
-		public ResourceLocation getId()
-		{
-			return ID;
-		}
+		this.params = params;
+		this.data = data;
 	}
 	
-	public record Parameters(int renderX, int renderY)
+	@Override
+	public Params getParams()
 	{
+		return params;
 	}
 	
-	public interface Data
+	@Override
+	public Optional<Data> extractData()
 	{
-		void write(RegistryFriendlyByteBuf buf);
+		return data.get();
+	}
+	
+	@Override
+	public Type<Params, Optional<Data>> getType()
+	{
+		return TYPE;
+	}
+	
+	public record Params(int renderX, int renderY)
+	{
+		public static final StreamCodec<ByteBuf, Params> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.VAR_INT, Params::renderX,
+				ByteBufCodecs.VAR_INT, Params::renderY,
+				Params::new
+		);
+	}
+	
+	public interface Data<T extends Data<T>>
+	{
+		StreamCodec<ByteBuf, Data> STREAM_CODEC = ByteBufCodecs.STRING_UTF8.dispatch(Data::id, DATA_TYPES::get);
+		
+		String id();
 		
 		int iconIndex();
 	}
 	
 	public record TransmitterData(
 			int receivers, long energyTransmitting, CableTier cableTier, long energyDrain, long energyConsuming
-	) implements Data
+	) implements Data<TransmitterData>
 	{
+		private static final String ID = "transmitter";
+		
+		public static final StreamCodec<ByteBuf, TransmitterData> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.VAR_INT, TransmitterData::receivers,
+				ByteBufCodecs.VAR_LONG, TransmitterData::energyTransmitting,
+				MIStreamCodecs.CABLE_TIER, TransmitterData::cableTier,
+				ByteBufCodecs.VAR_LONG, TransmitterData::energyDrain,
+				ByteBufCodecs.VAR_LONG, TransmitterData::energyConsuming,
+				TransmitterData::new
+		);
+		
 		@Override
-		public void write(RegistryFriendlyByteBuf buf)
+		public String id()
 		{
-			buf.writeVarInt(0);
-			
-			buf.writeVarInt(receivers);
-			buf.writeVarLong(energyTransmitting);
-			buf.writeUtf(cableTier.name);
-			buf.writeVarLong(energyDrain);
-			buf.writeVarLong(energyConsuming);
+			return ID;
 		}
 		
 		@Override
@@ -98,20 +101,21 @@ public final class TeslaNetworkBar
 	
 	public record ReceiverData(
 			TeslaReceiverState state, Optional<WorldPos> linked, Optional<CableTier> networkCableTier
-	) implements Data
+	) implements Data<ReceiverData>
 	{
+		private static final String ID = "receiver";
+		
+		public static final StreamCodec<ByteBuf, ReceiverData> STREAM_CODEC = StreamCodec.composite(
+				CodecHelper.forEnumStream(TeslaReceiverState.class), ReceiverData::state,
+				ByteBufCodecs.optional(WorldPos.STREAM_CODEC), ReceiverData::linked,
+				ByteBufCodecs.optional(MIStreamCodecs.CABLE_TIER), ReceiverData::networkCableTier,
+				ReceiverData::new
+		);
+		
 		@Override
-		public void write(RegistryFriendlyByteBuf buf)
+		public String id()
 		{
-			buf.writeVarInt(1);
-			
-			buf.writeEnum(state);
-			buf.writeOptional(linked, WorldPos.STREAM_CODEC);
-			if(linked.isPresent())
-			{
-				buf.writeBoolean(networkCableTier.isPresent());
-				networkCableTier.ifPresent((cableTier) -> buf.writeUtf(cableTier.name));
-			}
+			return ID;
 		}
 		
 		@Override
@@ -135,8 +139,16 @@ public final class TeslaNetworkBar
 	
 	public record SingingData(
 			int note, long energyConsuming
-	) implements Data
+	) implements Data<SingingData>
 	{
+		private static final String ID = "singing";
+		
+		public static final StreamCodec<ByteBuf, SingingData> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.VAR_INT, SingingData::note,
+				ByteBufCodecs.VAR_LONG, SingingData::energyConsuming,
+				SingingData::new
+		);
+		
 		private static final char ZERO = '\u2080';
 		private static final char ONE  = '\u2081';
 		private static final char TWO  = '\u2082';
@@ -153,12 +165,9 @@ public final class TeslaNetworkBar
 		}
 		
 		@Override
-		public void write(RegistryFriendlyByteBuf buf)
+		public String id()
 		{
-			buf.writeVarInt(2);
-			
-			buf.writeVarInt(note);
-			buf.writeVarLong(energyConsuming);
+			return ID;
 		}
 		
 		@Override

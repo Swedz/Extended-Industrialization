@@ -103,10 +103,14 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 		
 		this.registerComponents(isActive, redstoneControl, casing, energy, transmitter, singing, buzzing, aesthetic);
 		
-		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(61, 34), energy::getEu, energy::getCapacity));
+		this.registerGuiComponent(new EnergyBar(
+				new EnergyBar.Params(61, 34),
+				energy::getEu,
+				energy::getCapacity
+		));
 		
-		this.registerGuiComponent(new TeslaNetworkBar.Server(
-				new TeslaNetworkBar.Parameters(101, 34),
+		this.registerGuiComponent(new TeslaNetworkBar(
+				new TeslaNetworkBar.Params(101, 34),
 				() ->
 				{
 					if(singing.hasNote())
@@ -132,7 +136,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 				}
 		));
 		
-		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
+		this.registerGuiComponent(new ModularSlotPanel(this, 0)
 				.withRedstoneModule(redstoneControl)
 				.withCasings(casing));
 		
@@ -183,7 +187,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	}
 	
 	@Override
-	protected MachineModelClientData getMachineModelData()
+	public MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
 		data.isActive = isActive.isActive;

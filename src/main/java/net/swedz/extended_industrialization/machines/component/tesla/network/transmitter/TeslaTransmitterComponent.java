@@ -2,8 +2,8 @@ package net.swedz.extended_industrialization.machines.component.tesla.network.tr
 
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.MIEnergyStorage;
-import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.machines.MachineComponent;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.util.Simulation;
 import dev.technici4n.grandpower.api.EnergyStorageUtil;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class TeslaTransmitterComponent implements IComponent.ServerOnly, TeslaTransmitter
+public class TeslaTransmitterComponent implements MachineComponent.ServerOnly, TeslaTransmitter
 {
 	private final MachineBlockEntity machine;
 	
