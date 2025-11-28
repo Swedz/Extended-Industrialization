@@ -99,13 +99,13 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 		sunlight = new SolarSunlightComponent(this);
 		generator = new SolarGeneratorComponent(inventory, energy, this::getEfficiency, (cell) -> cell.getTier() == tier);
 		
-		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(ENERGY_X, ENERGY_Y), energy::getEu, energy::getCapacity));
+		this.registerGuiComponent(new EnergyBar(new EnergyBar.Params(ENERGY_X, ENERGY_Y), energy::getEu, energy::getCapacity));
 		
-		this.registerGuiComponent(new SlotPanel.Server(this)
+		this.registerGuiComponent(new SlotPanel(this)
 				.withRedstoneControl(redstoneControl));
 		
-		this.registerGuiComponent(SolarEfficiencyBar.Server.energyProduced(
-				new SolarEfficiencyBar.Parameters(SOLAR_EFFICIENCY_X, SOLAR_EFFICIENCY_Y),
+		this.registerGuiComponent(SolarEfficiencyBar.energyProduced(
+				new SolarEfficiencyBar.Params(SOLAR_EFFICIENCY_X, SOLAR_EFFICIENCY_Y),
 				sunlight::canOperate,
 				() -> (int) (this.getEfficiency() * 100),
 				generator::getEnergyPerTick
@@ -126,7 +126,7 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	}
 	
 	@Override
-	protected MachineModelClientData getMachineModelData()
+	public MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = new MachineModelClientData(tier.casing);
 		orientation.writeModelData(data);

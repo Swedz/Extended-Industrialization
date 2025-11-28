@@ -59,7 +59,7 @@ public final class TeslaParticleGeneratorMachineBlockEntity extends MachineBlock
 		
 		this.registerComponents(isActive, redstoneControl, aesthetic, forceHideRender);
 		
-		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
+		this.registerGuiComponent(new ModularSlotPanel(this, 0)
 				.withRedstoneModule(redstoneControl));
 		
 		var configPanel = new ConfigurationPanelBuilder(
@@ -90,7 +90,7 @@ public final class TeslaParticleGeneratorMachineBlockEntity extends MachineBlock
 	}
 	
 	@Override
-	protected MachineModelClientData getMachineModelData()
+	public MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = new MachineModelClientData();
 		data.isActive = isActive.isActive;

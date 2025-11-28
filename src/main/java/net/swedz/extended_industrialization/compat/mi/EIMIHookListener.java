@@ -39,10 +39,10 @@ public final class EIMIHookListener implements MIHookListener
 	@Override
 	public void clientGuiComponents(ClientGuiComponentsMIHookContext hook)
 	{
-		hook.register(SolarEfficiencyBar.ID, SolarEfficiencyBarClient::new);
-		hook.register(ProcessingArrayMachineSlot.ID, ProcessingArrayMachineSlotClient::new);
-		hook.register(UniversalTransformerSlots.ID, UniversalTransformerSlotsClient::new);
-		hook.register(TeslaNetworkBar.ID, TeslaNetworkBarClient::new);
+		hook.register(SolarEfficiencyBar.TYPE, SolarEfficiencyBarClient::new);
+		hook.register(ProcessingArrayMachineSlot.TYPE, ProcessingArrayMachineSlotClient::new);
+		hook.register(UniversalTransformerSlots.TYPE, UniversalTransformerSlotsClient::new);
+		hook.register(TeslaNetworkBar.TYPE, TeslaNetworkBarClient::new);
 	}
 	
 	@Override

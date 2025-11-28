@@ -1,7 +1,7 @@
 package net.swedz.extended_industrialization.machines.component.craft.processingarray;
 
-import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.machines.MachineComponent;
 import aztech.modern_industrialization.machines.components.DropableComponent;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeType;
 import net.minecraft.core.HolderLookup;
@@ -12,7 +12,7 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.machines.guicomponent.processingarraymachineslot.ProcessingArrayMachineSlot;
 import net.swedz.tesseract.neoforge.compat.mi.api.ComponentStackHolder;
 
-public final class ProcessingArrayMachineComponent implements IComponent.ServerOnly, DropableComponent, ComponentStackHolder
+public final class ProcessingArrayMachineComponent implements MachineComponent.ServerOnly, DropableComponent, ComponentStackHolder
 {
 	public static final ResourceLocation ID = EI.id("processing_array_machine");
 	

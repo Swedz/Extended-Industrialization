@@ -1,12 +1,12 @@
 package net.swedz.extended_industrialization.machines.component.solar;
 
-import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.machines.MachineComponent;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.swedz.extended_industrialization.EITags;
 
-public final class SolarSunlightComponent implements IComponent.ServerOnly
+public final class SolarSunlightComponent implements MachineComponent.ServerOnly
 {
 	private final MachineBlockEntity machine;
 	

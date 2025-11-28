@@ -49,7 +49,7 @@ record MachineConfigActiveShape(
 		
 		if(simulation.isActing())
 		{
-			((ActiveShapeComponentAccessor) target.components.get(ActiveShapeComponent.class)).setActiveShape(activeShape);
+			((ActiveShapeComponentAccessor) target.components.getOrThrow(ActiveShapeComponent.class)).setActiveShape(activeShape);
 		}
 		
 		return true;

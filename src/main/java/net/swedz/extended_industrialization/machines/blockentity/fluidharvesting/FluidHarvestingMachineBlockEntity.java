@@ -1,8 +1,8 @@
 package net.swedz.extended_industrialization.machines.blockentity.fluidharvesting;
 
 import aztech.modern_industrialization.machines.BEP;
-import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.machines.MachineComponent;
 import aztech.modern_industrialization.machines.components.IsActiveComponent;
 import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
@@ -44,14 +44,14 @@ public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEnti
 		this.behaviorCreator = behaviorCreator;
 		
 		this.isActiveComponent = new IsActiveComponent();
-		this.registerGuiComponent(new ProgressBar.Server(
-				new ProgressBar.Parameters(79, 29, "extract"),
+		this.registerGuiComponent(new ProgressBar(
+				new ProgressBar.Params(79, 29, "extract"),
 				() -> (float) pumpingTicks / this.getFluidHarvestingBehavior().totalPumpingTicks()
 		));
 		
-		this.registerGuiComponent(new AutoExtract.Server(orientation));
+		this.registerGuiComponent(new AutoExtract(orientation));
 		
-		this.registerComponents(isActiveComponent, new IComponent()
+		this.registerComponents(isActiveComponent, new MachineComponent()
 		{
 			@Override
 			public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
@@ -119,7 +119,7 @@ public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEnti
 	}
 	
 	@Override
-	protected MachineModelClientData getMachineModelData()
+	public MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = new MachineModelClientData();
 		data.isActive = isActiveComponent.isActive;

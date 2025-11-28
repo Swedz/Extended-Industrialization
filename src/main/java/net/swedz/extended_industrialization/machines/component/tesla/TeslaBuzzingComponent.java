@@ -1,7 +1,7 @@
 package net.swedz.extended_industrialization.machines.component.tesla;
 
-import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.machines.MachineComponent;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
@@ -11,7 +11,7 @@ import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.function.Supplier;
 
-public final class TeslaBuzzingComponent implements IComponent.ClientOnly
+public final class TeslaBuzzingComponent implements MachineComponent.ClientOnly
 {
 	private final MachineBlockEntity machine;
 	

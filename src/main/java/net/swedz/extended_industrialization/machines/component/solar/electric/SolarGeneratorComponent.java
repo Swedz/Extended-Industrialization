@@ -3,7 +3,7 @@ package net.swedz.extended_industrialization.machines.component.solar.electric;
 import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.inventory.ConfigurableItemStack;
 import aztech.modern_industrialization.inventory.MIInventory;
-import aztech.modern_industrialization.machines.IComponent;
+import aztech.modern_industrialization.machines.MachineComponent;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.fluid.FluidVariant;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
@@ -18,7 +18,7 @@ import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public final class SolarGeneratorComponent implements IComponent.ServerOnly
+public final class SolarGeneratorComponent implements MachineComponent.ServerOnly
 {
 	private final MIInventory     inventory;
 	private final EnergyComponent energy;

@@ -1,14 +1,13 @@
 package net.swedz.extended_industrialization.machines.guicomponent.solarefficiency;
 
 import aztech.modern_industrialization.MI;
-import aztech.modern_industrialization.machines.gui.ClientComponentRenderer;
-import aztech.modern_industrialization.machines.gui.GuiComponentClient;
-import aztech.modern_industrialization.machines.gui.MachineScreen;
-import aztech.modern_industrialization.util.RenderHelper;
+import aztech.modern_industrialization.client.machines.gui.ClientComponentRenderer;
+import aztech.modern_industrialization.client.machines.gui.GuiComponentClient;
+import aztech.modern_industrialization.client.machines.gui.MachineScreen;
+import aztech.modern_industrialization.client.util.RenderHelper;
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
@@ -16,40 +15,11 @@ import net.swedz.extended_industrialization.EI;
 import java.util.List;
 import java.util.Optional;
 
-public final class SolarEfficiencyBarClient implements GuiComponentClient
+public final class SolarEfficiencyBarClient extends GuiComponentClient<SolarEfficiencyBar.Params, SolarEfficiencyBar.Data>
 {
-	public final SolarEfficiencyBar.Parameters params;
-	
-	public boolean working;
-	public int     efficiency;
-	public boolean hasCalcification;
-	public int     calcification;
-	public boolean hasEnergyProduced;
-	public long    energyProduced;
-	
-	public SolarEfficiencyBarClient(RegistryFriendlyByteBuf buf)
+	public SolarEfficiencyBarClient(SolarEfficiencyBar.Params params, SolarEfficiencyBar.Data data)
 	{
-		this.params = new SolarEfficiencyBar.Parameters(buf.readInt(), buf.readInt());
-		this.readCurrentData(buf);
-	}
-	
-	@Override
-	public void readCurrentData(RegistryFriendlyByteBuf buf)
-	{
-		working = buf.readBoolean();
-		efficiency = buf.readInt();
-		
-		hasCalcification = buf.readBoolean();
-		if(hasCalcification)
-		{
-			calcification = buf.readInt();
-		}
-		
-		hasEnergyProduced = buf.readBoolean();
-		if(hasEnergyProduced)
-		{
-			energyProduced = buf.readLong();
-		}
+		super(params, data);
 	}
 	
 	@Override
@@ -73,7 +43,7 @@ public final class SolarEfficiencyBarClient implements GuiComponentClient
 					x + params.renderX() - 1, y + params.renderY() - 1,
 					0, 2, WIDTH + 2, HEIGHT + 2, 102, 6
 			);
-			int barPixels = (int) ((float) efficiency / 100 * WIDTH);
+			int barPixels = (int) ((float) data.efficiency() / 100 * WIDTH);
 			guiGraphics.blit(
 					EFFICIENCY_BAR,
 					x + params.renderX(), y + params.renderY(),
@@ -81,7 +51,7 @@ public final class SolarEfficiencyBarClient implements GuiComponentClient
 			);
 			guiGraphics.blit(SOLAR_STATE,
 					x + params.renderX() - 20, y + params.renderY() + HEIGHT / 2 - 6,
-					working ? 0 : 12, 0, 12, 12, 24, 12
+					data.working() ? 0 : 12, 0, 12, 12, 24, 12
 			);
 		}
 		
@@ -91,14 +61,14 @@ public final class SolarEfficiencyBarClient implements GuiComponentClient
 			if(RenderHelper.isPointWithinRectangle(params.renderX(), params.renderY(), WIDTH, HEIGHT, cursorX - x, cursorY - y))
 			{
 				List<Component> lines = Lists.newArrayList();
-				lines.add(EI.text().solarEfficiency(efficiency));
-				if(hasCalcification)
+				lines.add(EI.text().solarEfficiency(data.efficiency()));
+				if(data.calcification() > 0)
 				{
-					lines.add(EI.text().calcificationPercentage(calcification));
+					lines.add(EI.text().calcificationPercentage(data.calcification()));
 				}
-				if(hasEnergyProduced)
+				if(data.energyProduced() > 0)
 				{
-					lines.add(EI.text().generatingEuPerTick(energyProduced));
+					lines.add(EI.text().generatingEuPerTick(data.energyProduced()));
 				}
 				guiGraphics.renderTooltip(font, lines, Optional.empty(), cursorX, cursorY);
 			}

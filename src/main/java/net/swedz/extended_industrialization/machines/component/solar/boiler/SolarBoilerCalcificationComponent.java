@@ -1,10 +1,10 @@
 package net.swedz.extended_industrialization.machines.component.solar.boiler;
 
-import aztech.modern_industrialization.machines.IComponent;
+import aztech.modern_industrialization.machines.MachineComponent;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 
-public final class SolarBoilerCalcificationComponent implements IComponent.ServerOnly
+public final class SolarBoilerCalcificationComponent implements MachineComponent.ServerOnly
 {
 	public static final long  START_AFTER_TICKS      = 3 * 60 * 60 * 20;
 	public static final long  CALCIFICATION_DURATION = 3 * 60 * 60 * 20;

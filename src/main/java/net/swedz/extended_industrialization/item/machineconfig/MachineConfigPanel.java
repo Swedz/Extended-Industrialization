@@ -268,7 +268,7 @@ public record MachineConfigPanel(
 	{
 		for(var componentType : REGISTERED_COMPONENT_TYPES_BY_TYPE.keySet())
 		{
-			if(target.components.get(componentType) != null)
+			if(target.components.getNullable(componentType) != null)
 			{
 				return true;
 			}

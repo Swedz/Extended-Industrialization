@@ -85,10 +85,14 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		
 		this.registerComponents(isActive, redstoneControl, casing, energy, aesthetic, receiver);
 		
-		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(61, 34), energy::getEu, energy::getCapacity));
+		this.registerGuiComponent(new EnergyBar(
+				new EnergyBar.Params(61, 34),
+				energy::getEu,
+				energy::getCapacity
+		));
 		
-		this.registerGuiComponent(new TeslaNetworkBar.Server(
-				new TeslaNetworkBar.Parameters(101, 34),
+		this.registerGuiComponent(new TeslaNetworkBar(
+				new TeslaNetworkBar.Params(101, 34),
 				() ->
 				{
 					if(this.hasNetwork())
@@ -111,7 +115,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 				}
 		));
 		
-		this.registerGuiComponent(new SlotPanel.Server(this)
+		this.registerGuiComponent(new SlotPanel(this)
 				.withRedstoneControl(redstoneControl)
 				.withCasing(casing));
 		
@@ -158,7 +162,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	}
 	
 	@Override
-	protected MachineModelClientData getMachineModelData()
+	public MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
 		data.isActive = isActive.isActive;

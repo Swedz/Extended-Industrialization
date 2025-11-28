@@ -1,8 +1,8 @@
 package net.swedz.extended_industrialization.machines.component;
 
 import aztech.modern_industrialization.api.energy.CableTier;
-import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.machines.MachineComponent;
 import aztech.modern_industrialization.machines.components.DropableComponent;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class TransformerTierComponent implements IComponent.ServerOnly, DropableComponent
+public final class TransformerTierComponent implements MachineComponent.ServerOnly, DropableComponent
 {
 	private final boolean isFrom;
 	

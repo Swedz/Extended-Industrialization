@@ -46,7 +46,7 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 		
 		this.registerComponents(isActiveComponent, inventory, crafter);
 		
-		this.registerGuiComponent(new AutoExtract.Server(orientation));
+		this.registerGuiComponent(new AutoExtract(orientation));
 	}
 	
 	@Override
@@ -92,7 +92,7 @@ public abstract class BreweryMachineBlockEntity extends MachineBlockEntity imple
 	}
 	
 	@Override
-	protected MachineModelClientData getMachineModelData()
+	public MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = new MachineModelClientData();
 		data.isActive = isActiveComponent.isActive;

@@ -82,7 +82,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		
 		this.registerComponents(redstoneControl, upgrade, transmitter, aesthetic);
 		
-		this.registerGuiComponent(new ModularMultiblockGui.Server(0, ModularMultiblockGui.HEIGHT, (content) ->
+		this.registerGuiComponent(new ModularMultiblockGui(0, ModularMultiblockGui.HEIGHT, (content) ->
 		{
 			content.add((this.isShapeValid() ? MIText.MultiblockShapeValid : MIText.MultiblockShapeInvalid).text(), this.isShapeValid() ? WHITE : RED);
 			
@@ -115,7 +115,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 			}
 		}));
 		
-		this.registerGuiComponent(new ModularSlotPanel.Server(this, 0)
+		this.registerGuiComponent(new ModularSlotPanel(this, 0)
 				.withRedstoneModule(redstoneControl)
 				.with(EIModularSlotPanelSlots.TESLA_TOWER_UPGRADE, upgrade));
 		

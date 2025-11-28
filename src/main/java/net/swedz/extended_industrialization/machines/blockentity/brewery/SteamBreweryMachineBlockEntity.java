@@ -28,8 +28,8 @@ public final class SteamBreweryMachineBlockEntity extends BreweryMachineBlockEnt
 		gui.registerProgressBar(this, crafter::getProgress);
 		
 		this.overclockComponent = new OverclockComponent(OverclockComponent.getDefaultCatalysts()); // TODO allow kjs to hook into this
-		GunpowderOverclockGui.Parameters gunpowderOverclockGuiParams = new GunpowderOverclockGui.Parameters(gui.getProgressBar().renderX, gui.getProgressBar().renderY + 20);
-		this.registerGuiComponent(new GunpowderOverclockGui.Server(gunpowderOverclockGuiParams, overclockComponent::getTicks));
+		var gunpowderOverclockGuiParams = new GunpowderOverclockGui.Params(gui.getProgressBar().renderX(), gui.getProgressBar().renderY() + 20);
+		this.registerGuiComponent(new GunpowderOverclockGui(gunpowderOverclockGuiParams, overclockComponent::getTicks));
 		this.registerComponents(overclockComponent);
 	}
 	

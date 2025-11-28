@@ -1,6 +1,6 @@
 package net.swedz.extended_industrialization.compat.viewer.common;
 
-import aztech.modern_industrialization.compat.viewer.abstraction.ViewerCategory;
+import aztech.modern_industrialization.client.compat.viewer.abstraction.ViewerCategory;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.fluid.FluidVariant;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;

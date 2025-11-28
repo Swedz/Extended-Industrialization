@@ -102,12 +102,12 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 		
 		isActiveComponent = new IsActiveComponent();
 		
-		this.registerGuiComponent(new ProgressBar.Server(
-				new ProgressBar.Parameters(BURNING_PROGRESS_X, BURNING_PROGRESS_Y, "furnace", true),
+		this.registerGuiComponent(new ProgressBar(
+				new ProgressBar.Params(BURNING_PROGRESS_X, BURNING_PROGRESS_Y, "furnace", true),
 				() -> this.getEfficiency(false)
 		));
-		this.registerGuiComponent(SolarEfficiencyBar.Server.calcification(
-				new SolarEfficiencyBar.Parameters(SOLAR_EFFICIENCY_X, SOLAR_EFFICIENCY_Y),
+		this.registerGuiComponent(SolarEfficiencyBar.calcification(
+				new SolarEfficiencyBar.Params(SOLAR_EFFICIENCY_X, SOLAR_EFFICIENCY_Y),
 				sunlight::canOperate,
 				() -> (int) (this.getEfficiency(true) * 100),
 				() -> (int) (calcification.getCalcification() * 100)
@@ -128,7 +128,7 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 	}
 	
 	@Override
-	protected MachineModelClientData getMachineModelData()
+	public MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = new MachineModelClientData(bronze ? MachineCasings.BRICKED_BRONZE : MachineCasings.BRICKED_STEEL);
 		data.isActive = isActiveComponent.isActive;

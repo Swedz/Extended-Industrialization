@@ -1,7 +1,7 @@
 package net.swedz.extended_industrialization.machines.component.tesla;
 
-import aztech.modern_industrialization.machines.IComponent;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
+import aztech.modern_industrialization.machines.MachineComponent;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.util.Simulation;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -19,7 +19,7 @@ import net.swedz.extended_industrialization.network.packet.EntitiesElectrocutedP
 import java.util.List;
 import java.util.function.Supplier;
 
-public final class LethalTeslaCoilComponent implements IComponent
+public final class LethalTeslaCoilComponent implements MachineComponent
 {
 	private final MachineBlockEntity machine;
 	private final Supplier<Float>    damageAmount;

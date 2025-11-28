@@ -1,12 +1,12 @@
 package net.swedz.extended_industrialization;
 
+import aztech.modern_industrialization.client.machines.MachineBlockEntityRenderer;
+import aztech.modern_industrialization.client.machines.multiblocks.MultiblockMachineBER;
+import aztech.modern_industrialization.client.machines.multiblocks.MultiblockTankBER;
 import aztech.modern_industrialization.machines.MachineBlock;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
-import aztech.modern_industrialization.machines.MachineBlockEntityRenderer;
 import aztech.modern_industrialization.machines.blockentities.multiblocks.LargeTankMultiblockBlockEntity;
-import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBER;
 import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBlockEntity;
-import aztech.modern_industrialization.machines.multiblocks.MultiblockTankBER;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;

@@ -73,10 +73,14 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 		
 		this.registerComponents(isActive, energy, aesthetic, receiver);
 		
-		this.registerGuiComponent(new EnergyBar.Server(new EnergyBar.Parameters(61, 34), energy::getEu, energy::getCapacity));
+		this.registerGuiComponent(new EnergyBar(
+				new EnergyBar.Params(61, 34),
+				energy::getEu,
+				energy::getCapacity
+		));
 		
-		this.registerGuiComponent(new TeslaNetworkBar.Server(
-				new TeslaNetworkBar.Parameters(101, 34),
+		this.registerGuiComponent(new TeslaNetworkBar(
+				new TeslaNetworkBar.Params(101, 34),
 				() ->
 				{
 					if(this.hasNetwork())
@@ -142,7 +146,7 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 	}
 	
 	@Override
-	protected MachineModelClientData getMachineModelData()
+	public MachineModelClientData getMachineModelData()
 	{
 		MachineModelClientData data = super.getMachineModelData();
 		data.isActive = isActive.isActive;

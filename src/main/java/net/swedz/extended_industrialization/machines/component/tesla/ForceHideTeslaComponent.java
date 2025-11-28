@@ -1,10 +1,10 @@
 package net.swedz.extended_industrialization.machines.component.tesla;
 
-import aztech.modern_industrialization.machines.IComponent;
+import aztech.modern_industrialization.machines.MachineComponent;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 
-public final class ForceHideTeslaComponent implements IComponent
+public final class ForceHideTeslaComponent implements MachineComponent
 {
 	private boolean forceHide;
 	

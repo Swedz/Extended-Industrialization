@@ -1,73 +1,25 @@
 package net.swedz.extended_industrialization.machines.guicomponent.teslanetwork;
 
-import aztech.modern_industrialization.api.energy.CableTier;
-import aztech.modern_industrialization.machines.gui.ClientComponentRenderer;
-import aztech.modern_industrialization.machines.gui.GuiComponentClient;
-import aztech.modern_industrialization.machines.gui.MachineScreen;
-import aztech.modern_industrialization.util.RenderHelper;
+import aztech.modern_industrialization.client.machines.gui.ClientComponentRenderer;
+import aztech.modern_industrialization.client.machines.gui.GuiComponentClient;
+import aztech.modern_industrialization.client.machines.gui.MachineScreen;
+import aztech.modern_industrialization.client.util.RenderHelper;
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.EI;
-import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiverState;
-import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.helper.ComponentHelper;
 
 import java.util.List;
 import java.util.Optional;
 
-public final class TeslaNetworkBarClient implements GuiComponentClient
+public final class TeslaNetworkBarClient extends GuiComponentClient<TeslaNetworkBar.Params, Optional<TeslaNetworkBar.Data>>
 {
-	private final TeslaNetworkBar.Parameters params;
-	
-	private Optional<TeslaNetworkBar.Data> data = Optional.empty();
-	
-	public TeslaNetworkBarClient(RegistryFriendlyByteBuf buf)
+	public TeslaNetworkBarClient(TeslaNetworkBar.Params params, Optional<TeslaNetworkBar.Data> data)
 	{
-		this.params = new TeslaNetworkBar.Parameters(buf.readVarInt(), buf.readVarInt());
-		this.readCurrentData(buf);
-	}
-	
-	@Override
-	public void readCurrentData(RegistryFriendlyByteBuf buf)
-	{
-		if(buf.readBoolean())
-		{
-			int type = buf.readVarInt();
-			if(type == 0)
-			{
-				int receivers = buf.readVarInt();
-				long energyTransmitting = buf.readVarLong();
-				CableTier cableTier = CableTier.getTier(buf.readUtf());
-				long energyDrain = buf.readVarLong();
-				long energyConsuming = buf.readVarLong();
-				data = Optional.of(new TeslaNetworkBar.TransmitterData(receivers, energyTransmitting, cableTier, energyDrain, energyConsuming));
-			}
-			else if(type == 1)
-			{
-				TeslaReceiverState state = buf.readEnum(TeslaReceiverState.class);
-				Optional<WorldPos> linked = buf.readOptional(WorldPos.STREAM_CODEC);
-				Optional<CableTier> networkCableTier = Optional.empty();
-				if(linked.isPresent() && buf.readBoolean())
-				{
-					networkCableTier = Optional.of(CableTier.getTier(buf.readUtf()));
-				}
-				data = Optional.of(new TeslaNetworkBar.ReceiverData(state, linked, networkCableTier));
-			}
-			else if(type == 2)
-			{
-				int note = buf.readVarInt();
-				long energyConsuming = buf.readVarLong();
-				data = Optional.of(new TeslaNetworkBar.SingingData(note, energyConsuming));
-			}
-		}
-		else
-		{
-			data = Optional.empty();
-		}
+		super(params, data);
 	}
 	
 	@Override

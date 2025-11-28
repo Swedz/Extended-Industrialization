@@ -72,21 +72,19 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		{
 			sizes.add(SHAPE_TRANSLATIONS[i]);
 		}
-		lines.add(new ShapeSelection.LineInfo(sizes.size(), sizes, true));
+		lines.add(new ShapeSelection.LineInfo(sizes, true));
 		lines.add(new ShapeSelection.LineInfo(
-				2,
 				List.of(EI.text().farmerNotTilling(), EI.text().farmerTilling()),
 				true
 		));
 		if(canChoosePlantingMode)
 		{
 			lines.add(new ShapeSelection.LineInfo(
-					PlantingMode.values().length,
 					Stream.of(PlantingMode.values()).map(PlantingMode::textComponent).toList(),
 					true
 			));
 		}
-		this.registerGuiComponent(new ShapeSelection.Server(
+		this.registerGuiComponent(new ShapeSelection(
 				new ShapeSelection.Behavior()
 				{
 					@Override
