@@ -64,7 +64,7 @@ public final class EIClientRenderTypes
 		List<ResourceLocation> sprites = Lists.newArrayList();
 		for(int i = 1; i <= 4; i++)
 		{
-			sprites.add(EI.id("shaders/nano_quantum/%d".formatted(i)));
+			sprites.add(EI.id("shaders/nano_quantum/%s".formatted(i)));
 		}
 		return new NanoQuantumTextureStateShard(state.mask(), EI.id("textures/shaders/nano_quantum/glint.png"), state.stars(), state.starScaleX(), state.starScaleY(), EI.id("textures/atlas/nano_quantum.png"), sprites, false, false);
 	}
