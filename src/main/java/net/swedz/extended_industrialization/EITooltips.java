@@ -37,7 +37,7 @@ import static aztech.modern_industrialization.MITooltips.*;
 public final class EITooltips
 {
 	private static final BiParser<Boolean, Float> MAYBE_SPACED_PERCENTAGE_PARSER = (space, ratio) ->
-			Component.literal("%d%s%%".formatted((int) (ratio * 100), space ? " " : ""));
+			Component.literal("%s%s%%".formatted((int) (ratio * 100), space ? " " : ""));
 	
 	public static final Parser<Float> PERCENTAGE_PARSER = (ratio) -> MAYBE_SPACED_PERCENTAGE_PARSER.parse(false, ratio);
 	
