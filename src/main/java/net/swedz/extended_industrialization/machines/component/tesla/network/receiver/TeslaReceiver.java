@@ -3,7 +3,6 @@ package net.swedz.extended_industrialization.machines.component.tesla.network.re
 import aztech.modern_industrialization.api.energy.CableTier;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetworkPart;
-import net.swedz.extended_industrialization.machines.component.tesla.network.transmitter.TeslaTransmitter;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 
 public interface TeslaReceiver extends TeslaNetworkPart, Comparable<TeslaReceiver>
@@ -26,15 +25,15 @@ public interface TeslaReceiver extends TeslaNetworkPart, Comparable<TeslaReceive
 	
 	default TeslaReceiverState checkReceiveFrom(TeslaNetwork network)
 	{
-		TeslaTransmitter transmitter = network.getTransmitter();
+		var transmitter = network.getTransmitter();
 		
 		if(transmitter.isInterdimensional())
 		{
 			return TeslaReceiverState.SUCCESS;
 		}
 		
-		WorldPos transmitterPos = transmitter.getSourcePosition();
-		WorldPos receiverPos = this.getSourcePosition();
+		var transmitterPos = transmitter.getSourcePosition();
+		var receiverPos = this.getSourcePosition();
 		
 		if(!transmitterPos.isSameDimension(receiverPos))
 		{

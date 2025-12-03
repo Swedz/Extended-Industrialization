@@ -25,7 +25,7 @@ public final class ChainerFluidHandler extends SlotChainerHandler<IFluidHandler>
 		List<SlotInventoryWrapper<IFluidHandler>> wrappers = Lists.newArrayList();
 		int slots = 0;
 		
-		for(IFluidHandler handler : this.getMachineLinks().fluidHandlers())
+		for(var handler : this.getMachineLinks().fluidHandlers())
 		{
 			int handlerSlots = handler.getTanks();
 			wrappers.add(new SlotInventoryWrapper<>(handler, slots, handlerSlots));

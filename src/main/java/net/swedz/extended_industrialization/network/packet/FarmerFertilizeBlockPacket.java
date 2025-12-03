@@ -7,7 +7,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.ParticleUtils;
-import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.network.EICustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
@@ -21,7 +20,7 @@ public record FarmerFertilizeBlockPacket(BlockPos pos) implements EICustomPacket
 	{
 		context.assertClientbound();
 		
-		Level level = context.getPlayer().level();
+		var level = context.getPlayer().level();
 		
 		ParticleUtils.spawnParticleInBlock(level, pos, 4, ParticleTypes.HAPPY_VILLAGER);
 		level.playLocalSound(pos, SoundEvents.BONE_MEAL_USE, SoundSource.BLOCKS, 1, 1, false);

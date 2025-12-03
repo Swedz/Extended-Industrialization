@@ -52,7 +52,6 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
@@ -70,7 +69,6 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
-import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIArmorMaterials;
@@ -482,10 +480,10 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		private void addAll(List<ItemEntity> droppedItems, int droppedExperience)
 		{
 			outer:
-			for(ItemEntity drop : droppedItems)
+			for(var drop : droppedItems)
 			{
-				ItemStack dropItem = drop.getItem();
-				for(ItemStack totalDrop : totalDrops)
+				var dropItem = drop.getItem();
+				for(var totalDrop : totalDrops)
 				{
 					if(ItemStack.isSameItemSameComponents(dropItem, totalDrop))
 					{
@@ -499,7 +497,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		
 		public void drop(Level level, Player player, Area area)
 		{
-			BlockPos pos = player.blockPosition();
+			var pos = player.blockPosition();
 			
 			totalDrops.forEach((drop) -> ItemHandlerHelper.giveItemToPlayer(player, drop));
 			
@@ -516,10 +514,10 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	private static void onLeftClick(PlayerInteractEvent.LeftClickBlock event)
 	{
-		Player player = event.getEntity();
+		var player = event.getEntity();
 		if(!player.level().isClientSide())
 		{
-			PlayerInteractEvent.LeftClickBlock.Action action = event.getAction();
+			var action = event.getAction();
 			if(action == PlayerInteractEvent.LeftClickBlock.Action.START ||
 			   action == PlayerInteractEvent.LeftClickBlock.Action.STOP)
 			{
@@ -543,21 +541,21 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		{
 			if(miner instanceof Player player)
 			{
-				Optional<Area> optionalArea = this.getArea(level, player, stack, false);
+				var optionalArea = this.getArea(level, player, stack, false);
 				if(optionalArea.isEmpty())
 				{
 					this.tryUseEnergy(stack, ENERGY_COST);
 					return true;
 				}
 				LAST_CLICKED_FACE.remove(player);
-				Area area = optionalArea.get();
+				var area = optionalArea.get();
 				
 				MERGED_DROPS = new MergedDrops();
 				forEachMineableBlock(level, area, player, (minedPos, minedState) ->
 				{
-					Block minedBlock = minedState.getBlock();
-					BlockEntity minedBlockEntity = level.getBlockEntity(minedPos);
-					BlockEvent.BreakEvent event = CommonHooks.fireBlockBreak(
+					var minedBlock = minedState.getBlock();
+					var minedBlockEntity = level.getBlockEntity(minedPos);
+					var event = CommonHooks.fireBlockBreak(
 							level,
 							((ServerPlayer) player).gameMode.getGameModeForPlayer(),
 							(ServerPlayer) player,
@@ -585,9 +583,9 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	private static HitResult rayTraceSimple(BlockGetter level, Player player, float partialTicks)
 	{
 		double blockReachDistance = player.blockInteractionRange();
-		Vec3 eyePos = player.getEyePosition(partialTicks);
-		Vec3 viewVector = player.getViewVector(partialTicks);
-		Vec3 target = eyePos.add(viewVector.x * blockReachDistance, viewVector.y * blockReachDistance, viewVector.z * blockReachDistance);
+		var eyePos = player.getEyePosition(partialTicks);
+		var viewVector = player.getViewVector(partialTicks);
+		var target = eyePos.add(viewVector.x * blockReachDistance, viewVector.y * blockReachDistance, viewVector.z * blockReachDistance);
 		return level.clip(new ClipContext(eyePos, target, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
 	}
 	
@@ -596,11 +594,11 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		public static Area of(BlockPos pos, Direction hitFace)
 		{
 			int face = hitFace.get3DDataValue();
-			Vec3 right = GeometryHelper.FACE_RIGHT[face];
+			var right = GeometryHelper.FACE_RIGHT[face];
 			int rightX = (int) right.x();
 			int rightY = (int) right.y();
 			int rightZ = (int) right.z();
-			Vec3 up = GeometryHelper.FACE_UP[face];
+			var up = GeometryHelper.FACE_UP[face];
 			int upX = (int) up.x();
 			int upY = (int) up.y();
 			int upZ = (int) up.z();
@@ -620,17 +618,17 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		}
 		if(!rayTraceOnly)
 		{
-			ClickedBlock clickedBlock = LAST_CLICKED_FACE.get(player);
+			var clickedBlock = LAST_CLICKED_FACE.get(player);
 			if(clickedBlock != null)
 			{
 				return Optional.of(Area.of(clickedBlock.pos(), clickedBlock.face()));
 			}
 		}
-		HitResult rayTraceResult = rayTraceSimple(level, player, 0);
+		var rayTraceResult = rayTraceSimple(level, player, 0);
 		if(rayTraceResult.getType() == HitResult.Type.BLOCK)
 		{
-			BlockHitResult blockResult = (BlockHitResult) rayTraceResult;
-			Direction facing = blockResult.getDirection();
+			var blockResult = (BlockHitResult) rayTraceResult;
+			var facing = blockResult.getDirection();
 			return Optional.of(Area.of(blockResult.getBlockPos(), facing));
 		}
 		return Optional.empty();
@@ -647,10 +645,10 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	{
 		if(miner instanceof Player player)
 		{
-			ItemStack stack = player.getMainHandItem();
+			var stack = player.getMainHandItem();
 			if(stack.getItem() instanceof ElectricToolItem tool)
 			{
-				BlockState centerState = level.getBlockState(area.center());
+				var centerState = level.getBlockState(area.center());
 				if(!tool.isMineableBlock(stack, centerState, level, area.center()))
 				{
 					return;
@@ -706,7 +704,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 			{
 				float speed = getToolSpeed(stack) * SPEED_MULTIPLIER;
 				
-				Optional<Player> player = Proxies.get(TesseractProxy.class).findUserWithItem(EquipmentSlot.MAINHAND, stack);
+				var player = Proxies.get(TesseractProxy.class).findUserWithItem(EquipmentSlot.MAINHAND, stack);
 				if(player.isPresent() && this.should3By3(stack, player.get()))
 				{
 					speed /= 4;
@@ -823,7 +821,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	private static Component enchantmentFullNameComponent(HolderLookup.RegistryLookup<Enchantment> enchantmentRegistry,
 														  ResourceKey<Enchantment> enchantment)
 	{
-		Holder.Reference<Enchantment> fortune = enchantmentRegistry.getOrThrow(enchantment);
+		var fortune = enchantmentRegistry.getOrThrow(enchantment);
 		return Enchantment.getFullname(fortune, fortune.value().getMaxLevel());
 	}
 	
@@ -854,10 +852,10 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		int colorRGB = color == null ? this.getDefaultDyeColor() : color.rgb();
 		boolean rainbow = stack.getOrDefault(EIComponents.RAINBOW, new RainbowDataComponent(false, true)).value();
 		
-		Vec3 look = player.getLookAngle().normalize();
-		Vec3 spawnPos = player.position().add(0, player.getEyeHeight() / 2f, 0).add(look.multiply(0.25, 0.25, 0.25));
-		Vec3 target = player.getEyePosition().add(look.multiply(100, 100, 100));
-		Vec3 motion = target.subtract(spawnPos).normalize();
+		var look = player.getLookAngle().normalize();
+		var spawnPos = player.position().add(0, player.getEyeHeight() / 2f, 0).add(look.multiply(0.25, 0.25, 0.25));
+		var target = player.getEyePosition().add(look.multiply(100, 100, 100));
+		var motion = target.subtract(spawnPos).normalize();
 		
 		boolean quantum = player.getAttributeValue(MIRegistries.INFINITE_DAMAGE) > Mth.EPSILON;
 		float damage = quantum ? (float) Integer.MAX_VALUE : (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE);
@@ -898,11 +896,11 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public InteractionResult useOn(UseOnContext context)
 	{
-		ItemStack stack = context.getItemInHand();
-		Level level = context.getLevel();
-		BlockPos pos = context.getClickedPos();
-		BlockState state = level.getBlockState(pos);
-		Player player = context.getPlayer();
+		var stack = context.getItemInHand();
+		var level = context.getLevel();
+		var pos = context.getClickedPos();
+		var state = level.getBlockState(pos);
+		var player = context.getPlayer();
 		if(this.hasEnergy(stack))
 		{
 			if(stack.is(ItemTags.AXES))
@@ -940,8 +938,8 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity interactionTarget, InteractionHand usedHand)
 	{
-		Level level = interactionTarget.level();
-		BlockPos blockPos = interactionTarget.blockPosition();
+		var level = interactionTarget.level();
+		var blockPos = interactionTarget.blockPosition();
 		if(this.hasEnergy(stack) &&
 		   stack.is(Tags.Items.TOOLS_SHEAR) && interactionTarget instanceof IShearable shearable)
 		{
@@ -977,7 +975,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 	@Override
 	public ItemEnchantments getAllEnchantments(ItemStack stack, HolderLookup.RegistryLookup<Enchantment> lookup)
 	{
-		ItemEnchantments.Mutable enchantments = new ItemEnchantments.Mutable(super.getAllEnchantments(stack, lookup));
+		var enchantments = new ItemEnchantments.Mutable(super.getAllEnchantments(stack, lookup));
 		if(this.hasEnergy(stack))
 		{
 			for(var enchantment : getMode(stack).enchantments())

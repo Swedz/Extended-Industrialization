@@ -12,7 +12,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeItem;
-import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.configurationpanel.ConfigurationPanelBuilder;
 import net.swedz.tesseract.neoforge.helper.ColorHelper;
@@ -78,7 +77,7 @@ public final class AestheticTeslaCoilComponent implements MachineComponent
 	
 	public ItemInteractionResult onUse(MachineBlockEntity be, Player player, InteractionHand hand)
 	{
-		ItemStack stackInHand = player.getItemInHand(hand);
+		var stackInHand = player.getItemInHand(hand);
 		if(stackInHand.isEmpty())
 		{
 			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
@@ -99,7 +98,7 @@ public final class AestheticTeslaCoilComponent implements MachineComponent
 	@Override
 	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{
-		CompoundTag colorTag = new CompoundTag();
+		var colorTag = new CompoundTag();
 		colorTag.putFloat("red", red);
 		colorTag.putFloat("green", green);
 		colorTag.putFloat("blue", blue);
@@ -113,7 +112,7 @@ public final class AestheticTeslaCoilComponent implements MachineComponent
 	{
 		if(tag.contains("tesla_color", Tag.TAG_COMPOUND))
 		{
-			CompoundTag colorTag = tag.getCompound("tesla_color");
+			var colorTag = tag.getCompound("tesla_color");
 			red = colorTag.getFloat("red");
 			green = colorTag.getFloat("green");
 			blue = colorTag.getFloat("blue");

@@ -52,7 +52,7 @@ public final class TeslaArcInstance
 		}
 		Vec3 closest = null;
 		double closestDistance = 0;
-		for(Vec3 origin : tesla.arcs().worldOrigins(worldPosition, facingDirection.get()))
+		for(var origin : tesla.arcs().worldOrigins(worldPosition, facingDirection.get()))
 		{
 			double distance = origin.distanceTo(target);
 			if(closest == null || distance < closestDistance)
@@ -80,16 +80,16 @@ public final class TeslaArcInstance
 		{
 			return;
 		}
-		TeslaArcBuilder builder = TeslaArcBuilder.create(duration);
-		Vec3 origin = worldOrigin.subtract(worldPosition).add(0.5, 0.5, 0.5);
-		Vec3 direction = target.subtract(worldOrigin).normalize();
+		var builder = TeslaArcBuilder.create(duration);
+		var origin = worldOrigin.subtract(worldPosition).add(0.5, 0.5, 0.5);
+		var direction = target.subtract(worldOrigin).normalize();
 		double distance = worldOrigin.distanceTo(target);
 		double segmentLength = distance / segments;
-		Vec3 offset = direction.scale(segmentLength);
+		var offset = direction.scale(segmentLength);
 		for(int i = 0; i < segments; i++)
 		{
-			Vec3 direct = direction.scale(segmentLength * i).add(origin);
-			Vec3 tangent = i == segments - 1 ? Vec3.ZERO : randomTangent(RANDOM, direction).scale(tesla.arcs().randomVariance(RANDOM));
+			var direct = direction.scale(segmentLength * i).add(origin);
+			var tangent = i == segments - 1 ? Vec3.ZERO : randomTangent(RANDOM, direction).scale(tesla.arcs().randomVariance(RANDOM));
 			tangent = tangent.add(offset);
 			double x = direct.x();
 			double y = direct.y();

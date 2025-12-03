@@ -2,7 +2,6 @@ package net.swedz.extended_industrialization.proxy.modslot;
 
 import com.google.common.collect.Lists;
 import io.wispforest.accessories.api.AccessoriesCapability;
-import io.wispforest.accessories.api.slot.SlotEntryReference;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.tesseract.neoforge.proxy.ProxyEntrypoint;
@@ -28,9 +27,9 @@ public class EIModSlotAccessoriesProxy extends EIModSlotProxy
 		
 		AccessoriesCapability.getOptionally(player).ifPresent((capability) ->
 		{
-			for(SlotEntryReference entry : capability.getEquipped(filter))
+			for(var entry : capability.getEquipped(filter))
 			{
-				ItemStack stack = entry.stack();
+				var stack = entry.stack();
 				contents.add(stack);
 			}
 		});

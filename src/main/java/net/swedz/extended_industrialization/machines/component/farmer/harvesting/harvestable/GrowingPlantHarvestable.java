@@ -36,8 +36,8 @@ public final class GrowingPlantHarvestable implements LootTableHarvestableBehavi
 		
 		for(int y = 0; y <= 26; y++)
 		{
-			BlockPos pos = context.pos().above(y);
-			BlockState state = context.level().getBlockState(pos);
+			var pos = context.pos().above(y);
+			var state = context.level().getBlockState(pos);
 			if(isValidBlock(state))
 			{
 				blocks.add(pos);

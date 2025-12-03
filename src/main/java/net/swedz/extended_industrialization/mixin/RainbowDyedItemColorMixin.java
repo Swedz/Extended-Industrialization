@@ -23,7 +23,7 @@ public class RainbowDyedItemColorMixin
 	{
 		if(stack.is(EITags.Items.RAINBOW_DYEABLE))
 		{
-			RainbowDataComponent rainbow = stack.get(EIComponents.RAINBOW);
+			var rainbow = stack.get(EIComponents.RAINBOW);
 			if(rainbow != null && rainbow.value())
 			{
 				int color = RainbowDataComponent.getCurrentRainbowColor();

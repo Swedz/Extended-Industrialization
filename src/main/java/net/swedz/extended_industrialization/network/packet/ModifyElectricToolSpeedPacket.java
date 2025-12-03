@@ -5,8 +5,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.network.EICustomPacket;
@@ -22,8 +20,8 @@ public record ModifyElectricToolSpeedPacket(boolean increase) implements EICusto
 	{
 		context.assertServerbound();
 		
-		Player player = context.getPlayer();
-		ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
+		var player = context.getPlayer();
+		var stack = player.getItemInHand(InteractionHand.MAIN_HAND);
 		
 		if(stack.getItem() instanceof ElectricToolItem item && item.getToolType().hasAdjustableSpeed())
 		{

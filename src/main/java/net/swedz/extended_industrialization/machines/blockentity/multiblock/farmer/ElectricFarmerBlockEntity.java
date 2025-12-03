@@ -11,9 +11,7 @@ import aztech.modern_industrialization.machines.blockentities.hatches.EnergyHatc
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.components.UpgradeComponent;
-import aztech.modern_industrialization.machines.multiblocks.HatchBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
-import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.util.Simulation;
 import com.google.common.collect.Lists;
@@ -82,7 +80,7 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 	public static void registerReiShapes()
 	{
 		int index = 0;
-		for(ShapeTemplate shapeTemplate : SHAPES.shapeTemplates())
+		for(var shapeTemplate : SHAPES.shapeTemplates())
 		{
 			ReiMachineRecipes.registerMultiblockShape(EI.id("electric_farmer"), shapeTemplate, "" + index);
 			index++;
@@ -105,7 +103,7 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 	public long consumeEu(long max)
 	{
 		long total = 0;
-		for(EnergyComponent energyComponent : energyInputs)
+		for(var energyComponent : energyInputs)
 		{
 			total += energyComponent.consumeEu(max - total, Simulation.ACT);
 		}
@@ -128,7 +126,7 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 			energyInputs.clear();
 			highestCableTier = null;
 			
-			for(HatchBlockEntity hatch : shapeMatcher.getMatchedHatches())
+			for(var hatch : shapeMatcher.getMatchedHatches())
 			{
 				hatch.appendEnergyInputs(energyInputs);
 				
@@ -144,7 +142,7 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 	@Override
 	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
-		ItemInteractionResult result = super.useItemOn(player, hand, face);
+		var result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction())
 		{
 			result = components.mapOrDefault(UpgradeComponent.class, (upgrade) -> upgrade.onUse(this, player, hand), result);

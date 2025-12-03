@@ -144,7 +144,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	@Override
 	public MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
+		var data = new MachineModelClientData(casing.getCasing());
 		orientation.writeModelData(data);
 		return data;
 	}
@@ -216,7 +216,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	@Override
 	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
-		ItemInteractionResult result = super.useItemOn(player, hand, face);
+		var result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction())
 		{
 			result = redstoneControl.onUse(this, player, hand);
@@ -244,8 +244,8 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 					EnergyApi.SIDED, bet,
 					(be, direction) ->
 					{
-						MachineChainerMachineBlockEntity machine = (MachineChainerMachineBlockEntity) be;
-						ChainerComponent chainer = machine.getChainerComponent();
+						var machine = (MachineChainerMachineBlockEntity) be;
+						var chainer = machine.getChainerComponent();
 						return machine.orientation.outputDirection == direction ? chainer.extractableEnergyHandler() : chainer.insertableEnergyHandler();
 					}
 			);

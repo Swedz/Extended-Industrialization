@@ -10,7 +10,6 @@ import dev.technici4n.grandpower.api.EnergyStorageUtil;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.swedz.extended_industrialization.machines.component.itemslot.TeslaTowerUpgradeComponent;
-import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaTransferLimits;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 
@@ -46,7 +45,7 @@ public class TeslaTransmitterComponent implements MachineComponent.ServerOnly, T
 			public long extract(long maxExtract, boolean simulate)
 			{
 				long extracted = 0;
-				for(EnergyComponent energyComponent : energyInputs)
+				for(var energyComponent : energyInputs)
 				{
 					long remaining = maxExtract - extracted;
 					if(remaining == 0)
@@ -151,7 +150,7 @@ public class TeslaTransmitterComponent implements MachineComponent.ServerOnly, T
 	{
 		if(this.hasNetwork())
 		{
-			TeslaNetwork network = this.getNetwork();
+			var network = this.getNetwork();
 			return EnergyStorageUtil.move(energyStorage, network, maxTransmit);
 		}
 		return 0;

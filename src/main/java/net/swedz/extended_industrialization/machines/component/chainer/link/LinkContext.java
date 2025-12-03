@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
@@ -50,7 +49,7 @@ public final class LinkContext
 		LinkContext context;
 		if(itemStack.getItem() instanceof BlockItem blockItem)
 		{
-			Block block = blockItem.getBlock();
+			var block = blockItem.getBlock();
 			context = new LinkContext(
 					links,
 					BlockPos.ZERO,

@@ -89,9 +89,9 @@ public final class EIMIHookListener implements MIHookListener
 		ReiMachineRecipes.categories.forEach((__, params) ->
 		{
 			boolean isValidForProcessingArray = false;
-			for(ResourceLocation workstationId : params.workstations)
+			for(var workstationId : params.workstations)
 			{
-				Item workstationItem = BuiltInRegistries.ITEM.get(workstationId);
+				var workstationItem = BuiltInRegistries.ITEM.get(workstationId);
 				if(ProcessingArrayMachineSlot.isMachine(workstationItem))
 				{
 					isValidForProcessingArray = true;

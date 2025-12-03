@@ -181,7 +181,7 @@ public class TeslaReceiverComponent implements MachineComponent, TeslaReceiver
 	{
 		if(this.hasNetwork())
 		{
-			WorldPos key = this.getNetworkKey();
+			var key = this.getNetworkKey();
 			WorldPos.CODEC.encodeStart(NbtOps.INSTANCE, key).result().ifPresent((t) -> tag.put("network_key", t));
 		}
 		
@@ -193,7 +193,7 @@ public class TeslaReceiverComponent implements MachineComponent, TeslaReceiver
 	{
 		if(tag.contains("network_key", Tag.TAG_COMPOUND))
 		{
-			CompoundTag keyTag = tag.getCompound("network_key");
+			var keyTag = tag.getCompound("network_key");
 			this.setNetwork(WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result().orElse(null));
 		}
 		else
@@ -209,7 +209,7 @@ public class TeslaReceiverComponent implements MachineComponent, TeslaReceiver
 	{
 		if(tag.contains("network_key", Tag.TAG_COMPOUND))
 		{
-			CompoundTag keyTag = tag.getCompound("network_key");
+			var keyTag = tag.getCompound("network_key");
 			networkKey = WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result();
 		}
 		else

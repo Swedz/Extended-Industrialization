@@ -134,12 +134,13 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 	{
 		SHAPE_TEMPLATES = new ShapeTemplate[SPLIT];
 		
-		SimpleMember casing = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("clean_stainless_steel_machine_casing")));
-		SimpleMember pipe = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("stainless_steel_machine_casing_pipe")));
-		SimpleMember glass = new PredicateSimpleMember((state) -> state.is(EITags.blockCommon("glass_blocks")), Blocks.GLASS);
-		HatchFlags front = new HatchFlags.Builder().with(HatchTypes.ENERGY_INPUT).build();
-		HatchFlags top = new HatchFlags.Builder().with(HatchTypes.ITEM_INPUT, HatchTypes.FLUID_INPUT).build();
-		HatchFlags bottom = new HatchFlags.Builder().with(HatchTypes.ITEM_OUTPUT, HatchTypes.FLUID_OUTPUT).build();
+		var casing = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("clean_stainless_steel_machine_casing")));
+		var pipe = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("stainless_steel_machine_casing_pipe")));
+		var glass = new PredicateSimpleMember((state) -> state.is(EITags.blockCommon("glass_blocks")), Blocks.GLASS);
+		
+		var front = new HatchFlags.Builder().with(HatchTypes.ENERGY_INPUT).build();
+		var top = new HatchFlags.Builder().with(HatchTypes.ITEM_INPUT, HatchTypes.FLUID_INPUT).build();
+		var bottom = new HatchFlags.Builder().with(HatchTypes.ITEM_OUTPUT, HatchTypes.FLUID_OUTPUT).build();
 		
 		for(int
 			i = 0, size = 3, machines = BASE_MACHINES;

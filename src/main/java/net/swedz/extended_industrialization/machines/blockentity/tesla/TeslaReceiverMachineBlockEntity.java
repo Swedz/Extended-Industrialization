@@ -164,7 +164,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	@Override
 	public MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
+		var data = new MachineModelClientData(casing.getCasing());
 		data.isActive = isActive.isActive;
 		orientation.writeModelData(data);
 		return data;
@@ -215,7 +215,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 		if(this.hasNetwork() && this.getNetwork().isTransmitterLoaded() &&
 		   redstoneControl.doAllowNormalOperation(this))
 		{
-			TeslaNetwork network = this.getNetwork();
+			var network = this.getNetwork();
 			isActive.updateActive(network.isTransmitterLoaded() && this.checkReceiveFrom(network).isSuccess(), this);
 			
 			EnergyHelper.autoOutput(this, orientation, casing.getCableTier(), extractable);
@@ -229,7 +229,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	@Override
 	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
-		ItemInteractionResult result = super.useItemOn(player, hand, face);
+		var result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction())
 		{
 			result = redstoneControl.onUse(this, player, hand);

@@ -4,7 +4,6 @@ import aztech.modern_industrialization.MITags;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,8 +13,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -26,7 +23,6 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIClient;
 import net.swedz.extended_industrialization.EIClientRenderTypes;
 import net.swedz.extended_industrialization.EIComponents;
-import net.swedz.extended_industrialization.client.ber.tesla.arc.TeslaArcBuilder;
 import net.swedz.extended_industrialization.client.ber.tesla.arc.TeslaArcPoint;
 import net.swedz.extended_industrialization.client.ber.tesla.arc.TeslaArcRenderer;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaArcInstance;
@@ -49,7 +45,7 @@ public final class TeslaPartRenderer
 {
 	private static void renderHighlight(MachineBlockEntity machine, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
 	{
-		BlockPos pos = machine.getBlockPos();
+		var pos = machine.getBlockPos();
 		
 		if(machine instanceof TeslaNetworkPart part)
 		{
@@ -80,14 +76,14 @@ public final class TeslaPartRenderer
 	
 	private static Optional<WorldPos> getHeldNetworkKey()
 	{
-		Player player = Minecraft.getInstance().player;
+		var player = Minecraft.getInstance().player;
 		return player.getMainHandItem().has(EIComponents.SELECTED_TESLA_NETWORK) ? Optional.of(player.getMainHandItem().get(EIComponents.SELECTED_TESLA_NETWORK).key()) :
 				player.getOffhandItem().has(EIComponents.SELECTED_TESLA_NETWORK) ? Optional.of(player.getOffhandItem().get(EIComponents.SELECTED_TESLA_NETWORK).key()) : Optional.empty();
 	}
 	
 	private static boolean isHoldingWrench()
 	{
-		Player player = Minecraft.getInstance().player;
+		var player = Minecraft.getInstance().player;
 		return player.getMainHandItem().is(MITags.WRENCHES) ||
 			   player.getOffhandItem().is(MITags.WRENCHES);
 	}
@@ -147,10 +143,10 @@ public final class TeslaPartRenderer
 		{
 			matrices.pushPose();
 			
-			VertexConsumer consumer = buffer.getBuffer(RenderType.lines());
+			var consumer = buffer.getBuffer(RenderType.lines());
 			
-			Vec3 position = machine.getBlockPos().getCenter();
-			Direction direction = machine.orientation.facingDirection;
+			var position = machine.getBlockPos().getCenter();
+			var direction = machine.orientation.facingDirection;
 			
 			if(arcs.hasRandomBounds())
 			{
@@ -180,7 +176,7 @@ public final class TeslaPartRenderer
 			{
 				return;
 			}
-			for(TeslaArcBuilder trail : arcInstance.getTrails())
+			for(var trail : arcInstance.getTrails())
 			{
 				List<TeslaArcPoint> points = trail.points();
 				if(points.size() < 2)
@@ -220,9 +216,9 @@ public final class TeslaPartRenderer
 		{
 			matrices.pushPose();
 			
-			Vec3 worldPosition = machine.getBlockPos().getCenter();
-			Vec3 worldOffset = plasma.worldOffset(worldPosition, machine.orientation.facingDirection);
-			Vec3 offset = worldOffset.subtract(worldPosition).add(0.5, 0.5, 0.5);
+			var worldPosition = machine.getBlockPos().getCenter();
+			var worldOffset = plasma.worldOffset(worldPosition, machine.orientation.facingDirection);
+			var offset = worldOffset.subtract(worldPosition).add(0.5, 0.5, 0.5);
 			matrices.translate(offset.x(), offset.y(), offset.z());
 			
 			float modelScale = plasma.scale();

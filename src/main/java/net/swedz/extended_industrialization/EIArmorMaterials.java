@@ -45,7 +45,7 @@ public final class EIArmorMaterials
 				(id) -> new ArmorMaterial(
 						quantum ? Map.of() : Util.make(new EnumMap<>(ArmorItem.Type.class), (map) ->
 						{
-							for(ArmorItem.Type type : ArmorItem.Type.values())
+							for(var type : ArmorItem.Type.values())
 							{
 								map.put(type, 6);
 							}

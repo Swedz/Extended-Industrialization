@@ -86,11 +86,11 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 		List<ConfigurableItemStack> itemStacks = List.of(
 				ConfigurableItemStack.standardInputSlot()
 		);
-		SlotPositions itemPositions = new SlotPositions.Builder().addSlot(CELL_X, CELL_Y).build();
+		var itemPositions = new SlotPositions.Builder().addSlot(CELL_X, CELL_Y).build();
 		List<ConfigurableFluidStack> fluidStacks = List.of(
 				ConfigurableFluidStack.lockedInputSlot(capacity, EIFluids.DISTILLED_WATER.asFluid())
 		);
-		SlotPositions fluidPositions = new SlotPositions.Builder().addSlot(WATER_X, WATER_Y).build();
+		var fluidPositions = new SlotPositions.Builder().addSlot(WATER_X, WATER_Y).build();
 		inventory = new MIInventory(itemStacks, fluidStacks, itemPositions, fluidPositions);
 		
 		energy = new EnergyComponent(this, () -> tier.getEu() * 100);
@@ -128,7 +128,7 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	@Override
 	public MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData(tier.casing);
+		var data = new MachineModelClientData(tier.casing);
 		orientation.writeModelData(data);
 		return data;
 	}
@@ -153,7 +153,7 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	@Override
 	public boolean useWrench(Player player, InteractionHand hand, BlockHitResult hitResult)
 	{
-		Direction face = MachineOverlay.findHitSide(hitResult);
+		var face = MachineOverlay.findHitSide(hitResult);
 		if(face != Direction.UP && orientation.useWrench(player, hand, face))
 		{
 			level.blockUpdated(getBlockPos(), Blocks.AIR);
@@ -186,7 +186,7 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 	@Override
 	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
-		ItemInteractionResult result = super.useItemOn(player, hand, face);
+		var result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction())
 		{
 			result = redstoneControl.onUse(this, player, hand);

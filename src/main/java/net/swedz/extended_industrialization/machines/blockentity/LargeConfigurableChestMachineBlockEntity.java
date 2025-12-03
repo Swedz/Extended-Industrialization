@@ -34,7 +34,7 @@ public final class LargeConfigurableChestMachineBlockEntity extends MachineBlock
 		{
 			stacks.add(ConfigurableItemStack.standardIOSlot(true));
 		}
-		SlotPositions itemPositions = new SlotPositions.Builder().addSlots(8, 30, 9, 6).build();
+		var itemPositions = new SlotPositions.Builder().addSlots(8, 30, 9, 6).build();
 		inventory = new MIInventory(stacks, Collections.emptyList(), itemPositions, SlotPositions.empty());
 		
 		this.registerGuiComponent(new AutoExtract(orientation));
@@ -50,7 +50,7 @@ public final class LargeConfigurableChestMachineBlockEntity extends MachineBlock
 	@Override
 	public MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData(EIMachines.Casings.LARGE_STEEL_CRATE);
+		var data = new MachineModelClientData(EIMachines.Casings.LARGE_STEEL_CRATE);
 		orientation.writeModelData(data);
 		return data;
 	}

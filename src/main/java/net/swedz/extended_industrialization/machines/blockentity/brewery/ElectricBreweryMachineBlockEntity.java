@@ -92,7 +92,7 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 	@Override
 	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
-		ItemInteractionResult result = super.useItemOn(player, hand, face);
+		var result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction())
 		{
 			result = redstoneControl.onUse(this, player, hand);
@@ -115,7 +115,7 @@ public final class ElectricBreweryMachineBlockEntity extends BreweryMachineBlock
 	@Override
 	public MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
+		var data = new MachineModelClientData(casing.getCasing());
 		orientation.writeModelData(data);
 		data.isActive = isActiveComponent.isActive;
 		return data;

@@ -8,8 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 import net.swedz.extended_industrialization.item.nanosuit.ability.NanoSuitGravichestplateAbility;
 
@@ -17,18 +15,18 @@ public final class NanoGravichestplateHudRenderer
 {
 	public static void render(GuiGraphics graphics, DeltaTracker deltaTracker)
 	{
-		Minecraft mc = Minecraft.getInstance();
-		Player player = mc.player;
+		var mc = Minecraft.getInstance();
+		var player = mc.player;
 		if(player != null)
 		{
-			ItemStack chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
+			var chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
 			if(chestplate.getItem() instanceof NanoSuitArmorItem item &&
 			   item.hasAbility(NanoSuitGravichestplateAbility.class))
 			{
 				graphics.pose().pushPose();
 				graphics.pose().translate(0, MIClientConfig.INSTANCE.armorHudYPosition.getAsInt(), 0);
 				
-				Component activeComponent = item.isActivated(chestplate) ?
+				var activeComponent = item.isActivated(chestplate) ?
 						MIText.GravichestplateEnabled.text().withStyle(ChatFormatting.GREEN) :
 						MIText.GravichestplateDisabled.text().withStyle(ChatFormatting.RED);
 				graphics.drawString(mc.font, activeComponent, 4, 0, 0xF9FFFE);

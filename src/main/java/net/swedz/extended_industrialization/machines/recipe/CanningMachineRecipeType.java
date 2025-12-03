@@ -33,23 +33,23 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 	
 	private RecipeHolder<MachineRecipe> generateCannedFood(Item foodItem, FoodProperties food)
 	{
-		ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(foodItem);
-		ResourceLocation id = EI.id("/canning_machine/generated/canned_food/%s/%s".formatted(itemId.getNamespace(), itemId.getPath()));
+		var itemId = BuiltInRegistries.ITEM.getKey(foodItem);
+		var id = EI.id("/canning_machine/generated/canned_food/%s/%s".formatted(itemId.getNamespace(), itemId.getPath()));
 		
-		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
+		var recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
 		
 		int count = (int) Math.ceil(food.nutrition() / 2D);
 		recipe.addItemInput(EIItems.TIN_CAN, count);
 		recipe.addItemInput(foodItem, 1);
 		recipe.addItemOutput(EIItems.CANNED_FOOD, count);
-		ItemStack remainingItemStack = ItemStack.EMPTY;
+		var remainingItemStack = ItemStack.EMPTY;
 		if(food.usingConvertsTo().isPresent())
 		{
 			remainingItemStack = food.usingConvertsTo().get();
 		}
 		else
 		{
-			ItemStack foodItemStack = foodItem.getDefaultInstance();
+			var foodItemStack = foodItem.getDefaultInstance();
 			if(foodItemStack.hasCraftingRemainingItem())
 			{
 				remainingItemStack = foodItemStack.getCraftingRemainingItem();
@@ -67,15 +67,15 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 	{
 		List<RecipeHolder<MachineRecipe>> recipes = Lists.newArrayList();
 		
-		for(Item item : BuiltInRegistries.ITEM)
+		for(var item : BuiltInRegistries.ITEM)
 		{
 			if(!RegistryHelper.holder(BuiltInRegistries.ITEM, item).is(EITags.GeneratedRecipesBlacklist.CANNING_FOOD))
 			{
-				ItemStack itemStack = item.getDefaultInstance();
-				FoodProperties foodProperties = item.getFoodProperties(itemStack, null);
+				var itemStack = item.getDefaultInstance();
+				var foodProperties = item.getFoodProperties(itemStack, null);
 				if(foodProperties != null && foodProperties.nutrition() > 0)
 				{
-					FoodProperties food = item.getFoodProperties(item.getDefaultInstance(), null);
+					var food = item.getFoodProperties(item.getDefaultInstance(), null);
 					recipes.add(this.generateCannedFood(item, food));
 				}
 			}
@@ -86,9 +86,9 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 	
 	private RecipeHolder<MachineRecipe> generateFillingBucket(FluidStack fluidStack, ResourceLocation itemId, Item fullItem, Item emptyItem)
 	{
-		ResourceLocation id = EI.id("/canning_machine/generated/filling/%s/%s".formatted(itemId.getNamespace(), itemId.getPath()));
+		var id = EI.id("/canning_machine/generated/filling/%s/%s".formatted(itemId.getNamespace(), itemId.getPath()));
 		
-		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
+		var recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
 		
 		recipe.addFluidInput(fluidStack.getFluid(), fluidStack.getAmount());
 		recipe.addItemInput(emptyItem, 1);
@@ -99,9 +99,9 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 	
 	private RecipeHolder<MachineRecipe> generateEmptyingBucket(FluidStack fluidStack, ResourceLocation itemId, Item fullItem, Item emptyItem)
 	{
-		ResourceLocation id = EI.id("/canning_machine/generated/emptying/%s/%s".formatted(itemId.getNamespace(), itemId.getPath()));
+		var id = EI.id("/canning_machine/generated/emptying/%s/%s".formatted(itemId.getNamespace(), itemId.getPath()));
 		
-		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
+		var recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
 		
 		recipe.addItemInput(fullItem, 1);
 		recipe.addItemOutput(emptyItem, 1);
@@ -115,20 +115,20 @@ public final class CanningMachineRecipeType extends ProxyableMachineRecipeType
 		List<RecipeHolder<MachineRecipe>> recipes = Lists.newArrayList();
 		
 		Set<Fluid> uniqueFluids = Sets.newHashSet();
-		for(Fluid fluid : BuiltInRegistries.FLUID)
+		for(var fluid : BuiltInRegistries.FLUID)
 		{
-			Fluid processedFluid = fluid instanceof FlowingFluid flowingFluid ? flowingFluid.getSource() : fluid;
+			var processedFluid = fluid instanceof FlowingFluid flowingFluid ? flowingFluid.getSource() : fluid;
 			if(uniqueFluids.add(processedFluid) && !RegistryHelper.holder(BuiltInRegistries.FLUID, processedFluid).is(EITags.GeneratedRecipesBlacklist.CANNING_BUCKETS))
 			{
-				Item fullItem = processedFluid.getBucket();
+				var fullItem = processedFluid.getBucket();
 				if(fullItem != Items.AIR)
 				{
-					ItemStack fullItemStack = fullItem.getDefaultInstance();
-					ItemStack emptyItemStack = fullItemStack.getCraftingRemainingItem();
-					Item emptyItem = emptyItemStack.isEmpty() ? Items.BUCKET : emptyItemStack.getItem();
+					var fullItemStack = fullItem.getDefaultInstance();
+					var emptyItemStack = fullItemStack.getCraftingRemainingItem();
+					var emptyItem = emptyItemStack.isEmpty() ? Items.BUCKET : emptyItemStack.getItem();
 					
-					ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(fullItem);
-					FluidStack fluidStack = new FluidStack(processedFluid, 1000);
+					var itemId = BuiltInRegistries.ITEM.getKey(fullItem);
+					var fluidStack = new FluidStack(processedFluid, 1000);
 					recipes.add(this.generateFillingBucket(fluidStack, itemId, fullItem, emptyItem));
 					recipes.add(this.generateEmptyingBucket(fluidStack, itemId, fullItem, emptyItem));
 				}

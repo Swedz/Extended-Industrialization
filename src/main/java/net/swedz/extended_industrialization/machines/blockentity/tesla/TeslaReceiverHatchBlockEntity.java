@@ -148,7 +148,7 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 	@Override
 	public MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = super.getMachineModelData();
+		var data = super.getMachineModelData();
 		data.isActive = isActive.isActive;
 		return data;
 	}
@@ -229,7 +229,7 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 		
 		if(this.hasNetwork() && this.getNetwork().isTransmitterLoaded())
 		{
-			TeslaNetwork network = this.getNetwork();
+			var network = this.getNetwork();
 			isActive.updateActive(network.isTransmitterLoaded() && this.checkReceiveFrom(network).isSuccess(), this);
 		}
 		else
@@ -241,7 +241,7 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 	@Override
 	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
-		ItemInteractionResult result = super.useItemOn(player, hand, face);
+		var result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction())
 		{
 			result = aesthetic.onUse(this, player, hand);

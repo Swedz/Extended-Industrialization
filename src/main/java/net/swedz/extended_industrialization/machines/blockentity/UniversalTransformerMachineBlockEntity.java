@@ -85,7 +85,7 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 	@Override
 	public MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData();
+		var data = new MachineModelClientData();
 		orientation.writeModelData(data);
 		return data;
 	}
@@ -132,7 +132,7 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 				
 				for(int i = 0; i < 10000; ++i)
 				{
-					try (Transaction transaction = Transaction.openRoot())
+					try (var transaction = Transaction.openRoot())
 					{
 						long inserted = energyItem.receive(energy.getEu() / stackSize, false);
 						
@@ -154,7 +154,7 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 				{
 					for(int i = 0; i < 10000; ++i)
 					{
-						try (Transaction transaction = Transaction.openRoot())
+						try (var transaction = Transaction.openRoot())
 						{
 							long extracted = energyItem.extract(energy.getRemainingCapacity() / stackSize, false);
 							
@@ -179,7 +179,7 @@ public final class UniversalTransformerMachineBlockEntity extends MachineBlockEn
 		MICapabilities.onEvent((event) ->
 				event.registerBlockEntity(EnergyApi.SIDED, bet, (be, direction) ->
 				{
-					UniversalTransformerMachineBlockEntity machine = (UniversalTransformerMachineBlockEntity) be;
+					var machine = (UniversalTransformerMachineBlockEntity) be;
 					if(machine.isExtractableOnOutputDirection())
 					{
 						return machine.orientation.outputDirection == direction ? machine.extractable : machine.insertable;

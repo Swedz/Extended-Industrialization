@@ -114,14 +114,14 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 		
 		SHAPE_TEMPLATES = new ShapeTemplate[TIERS.size()];
 		
-		SimpleMember heatproofMachineCasing = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("heatproof_machine_casing")));
-		HatchFlags hatches = new HatchFlags.Builder().with(HatchTypes.ITEM_INPUT, HatchTypes.ITEM_OUTPUT, HatchTypes.ENERGY_INPUT).build();
+		var heatproofMachineCasing = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("heatproof_machine_casing")));
+		var hatches = new HatchFlags.Builder().with(HatchTypes.ITEM_INPUT, HatchTypes.ITEM_OUTPUT, HatchTypes.ENERGY_INPUT).build();
 		
 		for(int i = 0; i < TIERS.size(); i++)
 		{
-			Tier tier = TIERS.get(i);
-			SimpleMember coil = SimpleMember.forBlockId(tier.blockId());
-			ShapeTemplate shape = new ShapeTemplate.Builder(HEATPROOF)
+			var tier = TIERS.get(i);
+			var coil = SimpleMember.forBlockId(tier.blockId());
+			var shape = new ShapeTemplate.Builder(HEATPROOF)
 					.add3by3(0, heatproofMachineCasing, false, hatches)
 					.add3by3(1, coil, true, HatchFlags.NO_HATCH)
 					.add3by3(2, heatproofMachineCasing, false, hatches)
@@ -136,7 +136,7 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 	{
 		ReiMachineRecipes.multiblockShapes.removeIf((e) -> e.machine().equals(EI.id("large_electric_furnace")));
 		int index = 0;
-		for(ShapeTemplate shapeTemplate : SHAPE_TEMPLATES)
+		for(var shapeTemplate : SHAPE_TEMPLATES)
 		{
 			ReiMachineRecipes.registerMultiblockShape(EI.id("large_electric_furnace"), shapeTemplate, "" + index);
 			index++;

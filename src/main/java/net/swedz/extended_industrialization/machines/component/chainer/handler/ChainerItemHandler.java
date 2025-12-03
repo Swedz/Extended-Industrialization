@@ -23,7 +23,7 @@ public final class ChainerItemHandler extends SlotChainerHandler<IItemHandler> i
 		List<SlotInventoryWrapper<IItemHandler>> wrappers = Lists.newArrayList();
 		int slots = 0;
 		
-		for(IItemHandler handler : this.getMachineLinks().itemHandlers())
+		for(var handler : this.getMachineLinks().itemHandlers())
 		{
 			int handlerSlots = handler.getSlots();
 			wrappers.add(new SlotInventoryWrapper<>(handler, slots, handlerSlots));

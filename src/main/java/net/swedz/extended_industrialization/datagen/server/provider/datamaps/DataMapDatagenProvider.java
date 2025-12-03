@@ -2,6 +2,7 @@ package net.swedz.extended_industrialization.datagen.server.provider.datamaps;
 
 import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.api.energy.CableTier;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -33,7 +34,7 @@ public final class DataMapDatagenProvider extends DataMapProvider
 	}
 	
 	@Override
-	protected void gather()
+	protected void gather(HolderLookup.Provider registries)
 	{
 		this.addFarmerSimpleTallCropSize(Blocks.SUGAR_CANE, 3);
 		this.addFarmerSimpleTallCropSize(Blocks.CACTUS, 3);

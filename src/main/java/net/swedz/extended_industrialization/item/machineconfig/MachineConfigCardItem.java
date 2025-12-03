@@ -13,8 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -39,12 +37,12 @@ public final class MachineConfigCardItem extends Item
 	{
 		if(event.getEntity() instanceof Player player)
 		{
-			ItemStack offhand = player.getItemInHand(InteractionHand.OFF_HAND);
+			var offhand = player.getItemInHand(InteractionHand.OFF_HAND);
 			if(offhand.has(EIComponents.MACHINE_CONFIG))
 			{
-				MachineConfig config = offhand.get(EIComponents.MACHINE_CONFIG);
+				var config = offhand.get(EIComponents.MACHINE_CONFIG);
 				
-				BlockEntity blockEntity = event.getLevel().getBlockEntity(event.getPos());
+				var blockEntity = event.getLevel().getBlockEntity(event.getPos());
 				if(blockEntity instanceof MachineBlockEntity machine)
 				{
 					if(config.apply(player, machine, Simulation.SIMULATE))
@@ -64,19 +62,19 @@ public final class MachineConfigCardItem extends Item
 	@Override
 	public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context)
 	{
-		Player player = context.getPlayer();
+		var player = context.getPlayer();
 		if(player != null)
 		{
-			InteractionHand usedHand = context.getHand();
-			ItemStack itemStack = player.getItemInHand(usedHand);
-			BlockEntity hitBlockEntity = context.getLevel().getBlockEntity(context.getClickedPos());
+			var usedHand = context.getHand();
+			var itemStack = player.getItemInHand(usedHand);
+			var hitBlockEntity = context.getLevel().getBlockEntity(context.getClickedPos());
 			if(hitBlockEntity instanceof MachineBlockEntity machine)
 			{
 				if(!context.getLevel().isClientSide())
 				{
 					if(player.isShiftKeyDown())
 					{
-						MachineConfig config = MachineConfig.from(machine);
+						var config = MachineConfig.from(machine);
 						itemStack.set(EIComponents.MACHINE_CONFIG, config);
 						player.displayClientMessage(EI.text().machineConfigCardSave(), true);
 					}
@@ -84,7 +82,7 @@ public final class MachineConfigCardItem extends Item
 					{
 						if(itemStack.has(EIComponents.MACHINE_CONFIG))
 						{
-							MachineConfig config = itemStack.get(EIComponents.MACHINE_CONFIG);
+							var config = itemStack.get(EIComponents.MACHINE_CONFIG);
 							
 							if(config.apply(player, machine, Simulation.SIMULATE))
 							{
@@ -121,7 +119,7 @@ public final class MachineConfigCardItem extends Item
 	{
 		if(stack.has(EIComponents.MACHINE_CONFIG))
 		{
-			Block machineBlock = stack.get(EIComponents.MACHINE_CONFIG).machineBlock();
+			var machineBlock = stack.get(EIComponents.MACHINE_CONFIG).machineBlock();
 			tooltipComponents.add(EI.text().machineConfigCardConfigured(machineBlock.asItem()));
 		}
 	}
@@ -131,8 +129,8 @@ public final class MachineConfigCardItem extends Item
 	{
 		if(stack.has(EIComponents.MACHINE_CONFIG))
 		{
-			Block machineBlock = stack.get(EIComponents.MACHINE_CONFIG).machineBlock();
-			Item item = machineBlock.asItem();
+			var machineBlock = stack.get(EIComponents.MACHINE_CONFIG).machineBlock();
+			var item = machineBlock.asItem();
 			return Optional.of(new ItemStackTooltipComponent(item.getDefaultInstance()));
 		}
 		return Optional.empty();

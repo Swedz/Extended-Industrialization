@@ -53,8 +53,8 @@ public final class PlantableConfigurableItemStack extends ChangeListener
 	@Override
 	protected void onChange()
 	{
-		ItemVariant itemVariant = this.getItemVariant();
-		Item item = itemVariant.getItem();
+		var itemVariant = this.getItemVariant();
+		var item = itemVariant.getItem();
 		if(lastUpdateItem != item)
 		{
 			plantable = parent.getFarmer().getPlantableBehaviorHolder().behavior(itemVariant.toStack());

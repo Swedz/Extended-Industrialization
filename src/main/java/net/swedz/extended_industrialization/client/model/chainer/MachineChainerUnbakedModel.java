@@ -20,7 +20,7 @@ import net.swedz.extended_industrialization.client.model.MachineOverlaysJson;
 import java.util.function.Function;
 
 /**
- * Based on {@link aztech.modern_industrialization.machines.models.MachineUnbakedModel}
+ * Based on {@link aztech.modern_industrialization.client.machines.models.MachineUnbakedModel}
  */
 public final class MachineChainerUnbakedModel implements IUnbakedGeometry<MachineChainerUnbakedModel>
 {

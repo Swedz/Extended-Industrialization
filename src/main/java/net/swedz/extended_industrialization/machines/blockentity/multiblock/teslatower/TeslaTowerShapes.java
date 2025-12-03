@@ -104,9 +104,9 @@ public final class TeslaTowerShapes extends DataMapMultiblockTieredShapes<TeslaT
 	{
 		for(int i = 0; i < tiers.size(); i++)
 		{
-			TeslaTowerTier tier = tiers.get(i);
+			var tier = tiers.get(i);
 			
-			ShapeTemplate.LayeredBuilder builder = new ShapeTemplate.LayeredBuilder(
+			var builder = new ShapeTemplate.LayeredBuilder(
 					MachineCasings.CLEAN_STAINLESS_STEEL,
 					layersConvertFromVertical(this.pattern())
 			);

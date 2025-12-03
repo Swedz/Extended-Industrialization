@@ -4,14 +4,11 @@ import com.mojang.brigadier.Command;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
-import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetworkCache;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetworkPart;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 
@@ -46,7 +43,7 @@ public final class EICommands
 		Component transmitterResult;
 		if(network.hasTransmitter())
 		{
-			WorldPos transmitterPosition = network.getTransmitter().getPosition();
+			var transmitterPosition = network.getTransmitter().getPosition();
 			boolean ticking = network.isTransmitterLoaded();
 			transmitterResult = EI.text().commandTeslaNetworkDumpResultYesTransmitter(transmitterPosition, ticking, ticking ? network.getCableTier().shortEnglishName() : Component.literal("N/A"));
 		}
@@ -61,8 +58,8 @@ public final class EICommands
 	
 	private static int teslaNetworkDump(CommandSourceStack source, WorldPos pos)
 	{
-		Level level = pos.level();
-		TeslaNetworkCache cache = level.getServer().getTeslaNetworks();
+		var level = pos.level();
+		var cache = level.getServer().getTeslaNetworks();
 		
 		if(cache.exists(pos))
 		{
@@ -79,14 +76,14 @@ public final class EICommands
 	
 	private static int teslaNetworkDumpAt(CommandSourceStack source, BlockPos pos)
 	{
-		Level level = source.getLevel();
-		BlockEntity blockEntity = level.getBlockEntity(pos);
+		var level = source.getLevel();
+		var blockEntity = level.getBlockEntity(pos);
 		
 		if(blockEntity instanceof TeslaNetworkPart networkPart)
 		{
 			if(networkPart.hasNetwork())
 			{
-				TeslaNetwork network = networkPart.getNetwork();
+				var network = networkPart.getNetwork();
 				teslaNetworkDump(source, network, pos);
 			}
 			else

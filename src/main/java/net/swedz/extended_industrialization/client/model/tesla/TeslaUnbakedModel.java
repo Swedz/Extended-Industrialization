@@ -198,8 +198,8 @@ public final class TeslaUnbakedModel implements IUnbakedGeometry<TeslaUnbakedMod
 		{
 			Assert.that(this.hasRandomBounds());
 			
-			AABB include = this.worldIncludeBounds(machinePosition, machineDirection);
-			AABB exclude = this.worldExcludeBounds(machinePosition, machineDirection);
+			var include = this.worldIncludeBounds(machinePosition, machineDirection);
+			var exclude = this.worldExcludeBounds(machinePosition, machineDirection);
 			
 			while(true)
 			{
@@ -252,8 +252,7 @@ public final class TeslaUnbakedModel implements IUnbakedGeometry<TeslaUnbakedMod
 			case SOUTH -> new Vec3(position.x(), position.y(), -position.z());
 			case EAST -> new Vec3(-position.z(), position.y(), -position.x());
 			case WEST -> new Vec3(position.z(), position.y(), position.x());
-			default ->
-					throw new IllegalArgumentException("Unsupported machine direction: %s".formatted(machineDirection.toString()));
+			default -> throw new IllegalArgumentException("Unsupported machine direction: %s".formatted(machineDirection.toString()));
 		};
 		return rotatedPos.add(machinePosition);
 	}
@@ -285,9 +284,9 @@ public final class TeslaUnbakedModel implements IUnbakedGeometry<TeslaUnbakedMod
 		
 		if(plasma != null)
 		{
-			for(BlockElement element : plasma.elements())
+			for(var element : plasma.elements())
 			{
-				for(Direction direction : element.faces.keySet())
+				for(var direction : element.faces.keySet())
 				{
 					var face = element.faces.get(direction);
 					var sprite = spriteGetter.apply(context.getMaterial(face.texture()));
@@ -313,7 +312,7 @@ public final class TeslaUnbakedModel implements IUnbakedGeometry<TeslaUnbakedMod
 	{
 		List<BakedQuad> unculledFaces = Lists.newArrayList();
 		Map<Direction, List<BakedQuad>> culledFaces = Maps.newEnumMap(Direction.class);
-		for(Direction direction : Direction.values())
+		for(var direction : Direction.values())
 		{
 			culledFaces.put(direction, Lists.newArrayList());
 		}

@@ -150,7 +150,7 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	@Override
 	public MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
+		var data = new MachineModelClientData(casing.getCasing());
 		data.isActive = isActive.isActive;
 		orientation.writeModelData(data);
 		return data;
@@ -202,7 +202,7 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 	@Override
 	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
-		ItemInteractionResult result = super.useItemOn(player, hand, face);
+		var result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction())
 		{
 			result = redstoneControl.onUse(this, player, hand);

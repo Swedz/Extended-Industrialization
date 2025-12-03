@@ -52,8 +52,8 @@ public class ElectricToolBreakSpeedMixin
 		
 		tool.getArea(level, player, stack, false).ifPresent((area) ->
 		{
-			MutableFloat minProgress = new MutableFloat(Float.MAX_VALUE);
-			MutableBoolean foundAny = new MutableBoolean(false);
+			var minProgress = new MutableFloat(Float.MAX_VALUE);
+			var foundAny = new MutableBoolean(false);
 			
 			ElectricToolItem.forEachMineableBlock(level, area, player, (blockPos, state) ->
 			{

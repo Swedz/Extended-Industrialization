@@ -1,6 +1,5 @@
 package net.swedz.extended_industrialization.machines.component.fluidharvesting.wastecollector;
 
-import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.fluid.FluidVariant;
 import net.minecraft.world.entity.animal.Animal;
@@ -45,7 +44,7 @@ public final class WasteCollectorBehavior extends FluidHarvestingBehavior
 			throw new IllegalStateException("Called operate with no animals found");
 		}
 		
-		ConfigurableFluidStack fluidStack = this.getMachineBlockFluidStack();
+		var fluidStack = this.getMachineBlockFluidStack();
 		
 		long manureToCollect = Math.min((long) this.getOutputMultiplier() * MANURE_PER_ANIMAL * animalsFound, fluidStack.getRemainingSpace());
 		
@@ -55,7 +54,7 @@ public final class WasteCollectorBehavior extends FluidHarvestingBehavior
 	
 	private int countAnimalsInArea()
 	{
-		BoundingBox bounds = new BoundingBox(this.getMachineBlockEntity().getBlockPos());
+		var bounds = new BoundingBox(this.getMachineBlockEntity().getBlockPos());
 		bounds = new BoundingBox(
 				bounds.minX() - range,
 				bounds.minY() + 1,

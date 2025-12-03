@@ -28,7 +28,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
@@ -51,9 +50,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -62,7 +59,6 @@ import net.neoforged.neoforge.common.IShearable;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import net.swedz.extended_industrialization.EI;
 import org.apache.commons.lang3.mutable.Mutable;
 
@@ -221,7 +217,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	{
 		if(hand == InteractionHand.MAIN_HAND && user.isShiftKeyDown())
 		{
-			ItemStack stack = user.getItemInHand(hand);
+			var stack = user.getItemInHand(hand);
 			setSilkTouch(stack, isNotSilkTouch(stack));
 			if(!level.isClientSide)
 			{
@@ -233,11 +229,13 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 			return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
 		}
 		
-		ItemStack itemStack = user.getItemInHand(hand);
-		BlockHitResult hitResult = getPlayerPOVHitResult(level, user, ClipContext.Fluid.ANY);
+		var itemStack = user.getItemInHand(hand);
+		var hitResult = getPlayerPOVHitResult(level, user, ClipContext.Fluid.ANY);
 		if(hitResult.getType() != HitResult.Type.BLOCK)
+		{
 			return InteractionResultHolder.pass(itemStack);
-		FluidState fluidState = level.getFluidState(hitResult.getBlockPos());
+		}
+		var fluidState = level.getFluidState(hitResult.getBlockPos());
 		if(fluidState.getType() == Fluids.WATER || fluidState.getType() == Fluids.FLOWING_WATER)
 		{
 			this.fillWater(user, itemStack);
@@ -250,8 +248,8 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	@Override
 	public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity interactionTarget, InteractionHand usedHand)
 	{
-		Level level = interactionTarget.level();
-		BlockPos blockPos = interactionTarget.blockPosition();
+		var level = interactionTarget.level();
+		var blockPos = interactionTarget.blockPosition();
 		if(this.canUse(stack) &&
 		   stack.is(Tags.Items.TOOLS_SHEAR) && interactionTarget instanceof IShearable shearable)
 		{
@@ -283,7 +281,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected)
 	{
-		SteamDrillFuel fuel = stack.getOrDefault(MIComponents.STEAM_DRILL_FUEL, SteamDrillFuel.EMPTY);
+		var fuel = stack.getOrDefault(MIComponents.STEAM_DRILL_FUEL, SteamDrillFuel.EMPTY);
 		if(fuel.burnTicks() > 0)
 		{
 			stack.set(MIComponents.STEAM_DRILL_FUEL, new SteamDrillFuel(Math.max(0, fuel.burnTicks() - 5), fuel.maxBurnTicks()));
@@ -296,7 +294,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 		if(stack.getOrDefault(MIComponents.WATER, 0) == 0 &&
 		   entity instanceof Player player)
 		{
-			Inventory inv = player.getInventory();
+			var inv = player.getInventory();
 			for(int i = 0; i < inv.getContainerSize(); ++i)
 			{
 				if(this.tryFillWater(player, stack, inv.getItem(i)))
@@ -324,7 +322,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 		{
 			if(simulation.isActing())
 			{
-				ItemStack burnt = getResource(stack).toStack();
+				var burnt = getResource(stack).toStack();
 				setAmount(stack, getAmount(stack) - 1);
 				
 				if(burnt.hasCraftingRemainingItem())
@@ -347,7 +345,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	@Override
 	public ItemEnchantments getAllEnchantments(ItemStack stack, HolderLookup.RegistryLookup<Enchantment> lookup)
 	{
-		ItemEnchantments.Mutable map = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
+		var map = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
 		if(!isNotSilkTouch(stack))
 		{
 			lookup.get(Enchantments.SILK_TOUCH).ifPresent((enchantment) -> map.set(enchantment, 1));
@@ -364,16 +362,16 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	@Override
 	public InteractionResult useOn(UseOnContext context)
 	{
-		ItemStack stack = context.getItemInHand();
-		Level level = context.getLevel();
-		BlockPos pos = context.getClickedPos();
-		BlockState state = level.getBlockState(pos);
-		Player player = context.getPlayer();
+		var stack = context.getItemInHand();
+		var level = context.getLevel();
+		var pos = context.getClickedPos();
+		var state = level.getBlockState(pos);
+		var player = context.getPlayer();
 		if(this.canUse(stack))
 		{
 			if(stack.is(ItemTags.AXES))
 			{
-				Block newBlock = StrippingAccess.getStrippedBlocks().get(state.getBlock());
+				var newBlock = StrippingAccess.getStrippedBlocks().get(state.getBlock());
 				if(newBlock != null)
 				{
 					level.playSound(player, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1, 1);
@@ -391,7 +389,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	
 	public Optional<TooltipComponent> getTooltipImage(ItemStack stack)
 	{
-		SteamDrillFuel fuel = stack.getOrDefault(MIComponents.STEAM_DRILL_FUEL, SteamDrillFuel.EMPTY);
+		var fuel = stack.getOrDefault(MIComponents.STEAM_DRILL_FUEL, SteamDrillFuel.EMPTY);
 		return Optional.of(new SteamChainsawTooltipData(
 				stack.getOrDefault(MIComponents.WATER, 0) * 100 / 18000,
 				fuel.burnTicks(),
@@ -426,7 +424,7 @@ public final class SteamChainsawItem extends Item implements DynamicToolItem, It
 	
 	private boolean tryFillWater(Player player, ItemStack barrelLike, ItemStack fillSource)
 	{
-		IFluidHandlerItem otherStorage = fillSource.getCapability(Capabilities.FluidHandler.ITEM);
+		var otherStorage = fillSource.getCapability(Capabilities.FluidHandler.ITEM);
 		
 		if(otherStorage != null)
 		{

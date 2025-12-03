@@ -4,7 +4,6 @@ import aztech.modern_industrialization.client.compat.sodium.SodiumCompat;
 import aztech.modern_industrialization.client.util.ModelHelper;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
@@ -76,7 +75,7 @@ public sealed class MachineChainerBlockEntityRenderer implements BlockEntityRend
 	@Override
 	public void render(MachineChainerMachineBlockEntity machine, float tickDelta, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
 	{
-		BlockState state = machine.getBlockState();
+		var state = machine.getBlockState();
 		if(lastBlockState == null)
 		{
 			lastBlockState = state;
@@ -87,14 +86,14 @@ public sealed class MachineChainerBlockEntityRenderer implements BlockEntityRend
 			throw new IllegalStateException("Tried to use the same machine BER with two block states: " + state + " and " + lastBlockState);
 		}
 		
-		MachineModelClientData data = machine.getModelData().get(MachineModelClientData.KEY);
+		var data = machine.getModelData().get(MachineModelClientData.KEY);
 		if(data.isActive)
 		{
-			VertexConsumer vc = buffer.getBuffer(Sheets.cutoutBlockSheet());
+			var vc = buffer.getBuffer(Sheets.cutoutBlockSheet());
 			
-			for(Direction direction : Direction.values())
+			for(var direction : Direction.values())
 			{
-				BakedQuad quad = this.getCachedQuad(data, direction);
+				var quad = this.getCachedQuad(data, direction);
 				if(quad != null)
 				{
 					int faceLight = LevelRenderer.getLightColor(machine.getLevel(), machine.getBlockState(), machine.getBlockPos().relative(direction));

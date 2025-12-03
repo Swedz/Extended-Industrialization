@@ -25,7 +25,7 @@ public final class StandardFarmerPlantable implements FarmerPlantable
 	@Override
 	public boolean matches(PlantingContext context)
 	{
-		ItemStack stack = context.stack();
+		var stack = context.stack();
 		return !stack.isEmpty() &&
 			   stack.is(EITags.Items.FARMER_PLANTABLE) &&
 			   stack.getItem() instanceof BlockItem item &&
@@ -41,7 +41,7 @@ public final class StandardFarmerPlantable implements FarmerPlantable
 	@Override
 	public void plant(PlantingContext context)
 	{
-		BlockState crop = FarmerPlantable.getPlacementStateBlockItem(context);
+		var crop = FarmerPlantable.getPlacementStateBlockItem(context);
 		context.tile().crop().setBlock(context.level(), crop, 3, GameEvent.BLOCK_PLACE, crop);
 	}
 }

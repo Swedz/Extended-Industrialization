@@ -65,10 +65,10 @@ public final class EIMIHookRegistry implements MIHookRegistry
 	{
 		EIItems.Registry.include(itemHolder);
 		
-		String id = itemHolder.identifier().id();
+		var id = itemHolder.identifier().id();
 		if(id.endsWith("_tesla_receiver_hatch"))
 		{
-			CableTier tier = CableTier.getTier(id.substring(0, id.indexOf("_tesla_receiver_hatch")));
+			var tier = CableTier.getTier(id.substring(0, id.indexOf("_tesla_receiver_hatch")));
 			itemHolder.sorted(EISortOrder.HATCHES.and(tier));
 		}
 	}

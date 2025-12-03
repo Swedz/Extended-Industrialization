@@ -57,7 +57,7 @@ public final class SolarGeneratorComponent implements MachineComponent.ServerOnl
 	
 	private boolean tryUseDistilledWater()
 	{
-		try (Transaction transaction = Transaction.openRoot())
+		try (var transaction = Transaction.openRoot())
 		{
 			boolean usedDistilledWater = this.getSlotWater().extractDirect(FluidVariant.of(EIFluids.DISTILLED_WATER.asFluid()), 1, transaction) > 0;
 			transaction.commit();
@@ -67,8 +67,8 @@ public final class SolarGeneratorComponent implements MachineComponent.ServerOnl
 	
 	private void deterioratePhotovoltaicCell()
 	{
-		ConfigurableItemStack slotCell = this.getSlotPhotovoltaicCell();
-		ItemStack cellStack = slotCell.toStack();
+		var slotCell = this.getSlotPhotovoltaicCell();
+		var cellStack = slotCell.toStack();
 		photovoltaicCell.incrementTick(cellStack);
 		if(photovoltaicCell.getSolarTicksRemaining(cellStack) > 0)
 		{

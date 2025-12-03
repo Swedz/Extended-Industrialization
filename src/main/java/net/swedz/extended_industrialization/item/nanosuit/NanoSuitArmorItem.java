@@ -83,7 +83,7 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	public List<NanoSuitDecoration> decorations(ItemStack stack)
 	{
 		List<NanoSuitDecoration> decorations = Lists.newArrayList();
-		for(NanoSuitDecoration decoration : NanoSuitDecoration.values())
+		for(var decoration : NanoSuitDecoration.values())
 		{
 			if(decoration.armorType() == type && (stack == null || decoration.isActiveFor(this, stack)))
 			{
@@ -116,7 +116,7 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	{
 		if(ability.isPresent())
 		{
-			NanoSuitAbility ability = this.ability.get();
+			var ability = this.ability.get();
 			modifiers = ability.getModifiedDefaultAttributeModifiers(this, stack, modifiers);
 		}
 		if(quantum)
@@ -218,7 +218,7 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	@Override
 	public String getDescriptionId(ItemStack stack)
 	{
-		for(NanoSuitDecoration decoration : this.decorations(stack))
+		for(var decoration : this.decorations(stack))
 		{
 			String descriptionId = decoration.getDescriptionId(this, stack);
 			if(descriptionId != null)
@@ -232,7 +232,7 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag)
 	{
-		for(NanoSuitDecoration decoration : this.decorations(stack))
+		for(var decoration : this.decorations(stack))
 		{
 			decoration.getTooltipLines(this, stack).ifPresent(tooltip::addAll);
 		}

@@ -11,8 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.machines.component.tesla.network.transmitter.TeslaTransmitter;
@@ -32,12 +30,12 @@ public final class TeslaHandheldReceiverItem extends Item
 	public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context)
 	{
 		boolean client = context.getLevel().isClientSide();
-		Player player = context.getPlayer();
+		var player = context.getPlayer();
 		if(player != null)
 		{
-			InteractionHand usedHand = context.getHand();
-			ItemStack itemStack = player.getItemInHand(usedHand);
-			BlockEntity hitBlockEntity = context.getLevel().getBlockEntity(context.getClickedPos());
+			var usedHand = context.getHand();
+			var itemStack = player.getItemInHand(usedHand);
+			var hitBlockEntity = context.getLevel().getBlockEntity(context.getClickedPos());
 			if(hitBlockEntity instanceof TeslaTransmitter transmitter)
 			{
 				if(!client)
@@ -78,8 +76,8 @@ public final class TeslaHandheldReceiverItem extends Item
 	{
 		if(stack.has(EIComponents.SELECTED_TESLA_NETWORK))
 		{
-			Block machineBlock = stack.get(EIComponents.SELECTED_TESLA_NETWORK).block();
-			Item item = machineBlock.asItem();
+			var machineBlock = stack.get(EIComponents.SELECTED_TESLA_NETWORK).block();
+			var item = machineBlock.asItem();
 			return Optional.of(new ItemStackTooltipComponent(item.getDefaultInstance()));
 		}
 		return Optional.empty();

@@ -49,7 +49,7 @@ public enum PlantingMode
 	
 	public static PlantingMode fromName(String name)
 	{
-		for(PlantingMode mode : values())
+		for(var mode : values())
 		{
 			if(mode.name().equals(name))
 			{

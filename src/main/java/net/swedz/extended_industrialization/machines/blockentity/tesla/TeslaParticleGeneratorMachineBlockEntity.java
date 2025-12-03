@@ -92,7 +92,7 @@ public final class TeslaParticleGeneratorMachineBlockEntity extends MachineBlock
 	@Override
 	public MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData();
+		var data = new MachineModelClientData();
 		data.isActive = isActive.isActive;
 		orientation.writeModelData(data);
 		return data;
@@ -130,7 +130,7 @@ public final class TeslaParticleGeneratorMachineBlockEntity extends MachineBlock
 	@Override
 	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
-		ItemInteractionResult result = super.useItemOn(player, hand, face);
+		var result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction())
 		{
 			result = redstoneControl.onUse(this, player, hand);

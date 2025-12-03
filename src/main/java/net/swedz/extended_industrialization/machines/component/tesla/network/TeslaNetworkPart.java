@@ -19,7 +19,7 @@ public interface TeslaNetworkPart
 		{
 			throw new IllegalStateException("No network has been set");
 		}
-		TesseractProxy proxy = Proxies.get(TesseractProxy.class);
+		var proxy = Proxies.get(TesseractProxy.class);
 		if(!proxy.hasServer())
 		{
 			throw new IllegalStateException("Cannot get network without a server");

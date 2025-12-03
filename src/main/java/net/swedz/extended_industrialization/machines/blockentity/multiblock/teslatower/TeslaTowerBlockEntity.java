@@ -9,7 +9,6 @@ import aztech.modern_industrialization.machines.blockentities.hatches.EnergyHatc
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
-import aztech.modern_industrialization.machines.multiblocks.HatchBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
@@ -139,7 +138,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	
 	public BlockPos getTopLoadPosition()
 	{
-		Direction facing = orientation.facingDirection;
+		var facing = orientation.facingDirection;
 		return worldPosition
 				.relative(facing, -3)
 				.above(14);
@@ -183,7 +182,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		{
 			CableTier cableTier = null;
 			energyInputs.clear();
-			for(HatchBlockEntity hatch : shapeMatcher.getMatchedHatches())
+			for(var hatch : shapeMatcher.getMatchedHatches())
 			{
 				hatch.appendEnergyInputs(energyInputs);
 				if(cableTier == null && hatch instanceof EnergyHatch energyHatch)

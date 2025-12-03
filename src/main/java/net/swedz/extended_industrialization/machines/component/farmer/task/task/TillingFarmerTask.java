@@ -47,14 +47,14 @@ public final class TillingFarmerTask extends FarmerTask
 			return false;
 		}
 		
-		for(FarmerTile tile : blockMap.tiles())
+		for(var tile : blockMap.tiles())
 		{
-			FarmerBlock dirt = tile.dirt();
-			BlockPos pos = dirt.pos();
-			BlockState state = dirt.state(level);
+			var dirt = tile.dirt();
+			var pos = dirt.pos();
+			var state = dirt.state(level);
 			if(state.is(BlockTags.DIRT))
 			{
-				BlockState newState = state.getToolModifiedState(this.createFakeContext(pos), ItemAbilities.HOE_TILL, true);
+				var newState = state.getToolModifiedState(this.createFakeContext(pos), ItemAbilities.HOE_TILL, true);
 				if(newState != null && newState.canSurvive(level, pos))
 				{
 					dirt.setBlock(level, newState, 1 | 2 | 8, GameEvent.BLOCK_CHANGE, newState);
