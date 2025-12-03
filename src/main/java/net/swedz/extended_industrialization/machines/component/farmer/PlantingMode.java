@@ -10,7 +10,7 @@ import java.util.function.BiFunction;
 
 public enum PlantingMode
 {
-	AS_NEEDED(EI.text().farmerPlantingAsNeeded(), false, (block, plantables) -> 0),
+	AS_NEEDED(EI.text().farmerPlantingAsNeeded(), false, (block, plantables) -> -1),
 	ALTERNATING_LINES(EI.text().farmerPlantingAlternatingLines(), true, (block, plantables) -> block.line() % plantables.size()),
 	QUADRANTS(EI.text().farmerPlantingQuadrants(), true, (block, plantables) -> block.quadrant() % plantables.size());
 	
