@@ -2,7 +2,6 @@ package net.swedz.extended_industrialization.machines.component.farmer.harvestin
 
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.extended_industrialization.datamap.FarmerSimpleTallCropSize;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.LootTableHarvestableBehavior;
@@ -31,8 +30,8 @@ public final class SimpleTallCropHarvestable implements LootTableHarvestableBeha
 		int maxHeight = FarmerSimpleTallCropSize.getFor(context.state().getBlock()).maxHeight();
 		for(int y = 0; y <= maxHeight; y++)
 		{
-			BlockPos pos = context.pos().above(y);
-			BlockState state = context.level().getBlockState(pos);
+			var pos = context.pos().above(y);
+			var state = context.level().getBlockState(pos);
 			if(state.getBlock() == context.state().getBlock())
 			{
 				blocks.add(pos);

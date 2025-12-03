@@ -59,7 +59,7 @@ public final class TeslaParticleGeneratorModel extends SimpleUnbakedGeometry<Tes
 		private static Map<Direction, List<BakedQuad>> makeEmptyCulledFaces()
 		{
 			Map<Direction, List<BakedQuad>> map = new EnumMap<>(Direction.class);
-			for(Direction direction : Direction.values())
+			for(var direction : Direction.values())
 			{
 				map.put(direction, List.of());
 			}

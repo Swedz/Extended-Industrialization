@@ -8,12 +8,9 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockState;
 
 public final class TransformerTierComponent implements MachineComponent.ServerOnly, DropableComponent
 {
@@ -86,9 +83,9 @@ public final class TransformerTierComponent implements MachineComponent.ServerOn
 		
 		BuiltInRegistries.BLOCK.getOptional(blockKey).ifPresent((block) ->
 		{
-			BlockState casingState = block.defaultBlockState();
-			SoundType group = casingState.getSoundType();
-			SoundEvent sound = group.getBreakSound();
+			var casingState = block.defaultBlockState();
+			var group = casingState.getSoundType();
+			var sound = group.getBreakSound();
 			blockEntity.getLevel().playSound(null, blockEntity.getBlockPos(), sound, SoundSource.BLOCKS, (group.getVolume() + 1.0F) / 4.0F, group.getPitch() * 0.8F);
 		});
 	}
@@ -108,7 +105,7 @@ public final class TransformerTierComponent implements MachineComponent.ServerOn
 		{
 			return null;
 		}
-		ResourceLocation itemKey = BuiltInRegistries.ITEM.getKey(stack.getItem());
+		var itemKey = BuiltInRegistries.ITEM.getKey(stack.getItem());
 		for(var tier : CableTier.allTiers())
 		{
 			if(tier.itemKey != null && tier.itemKey.equals(itemKey))

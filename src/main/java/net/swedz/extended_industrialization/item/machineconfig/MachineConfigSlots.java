@@ -1,9 +1,6 @@
 package net.swedz.extended_industrialization.item.machineconfig;
 
-import aztech.modern_industrialization.inventory.AbstractConfigurableStack;
-import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.inventory.ConfigurableItemStack;
-import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.util.Simulation;
 import com.google.common.collect.Lists;
@@ -26,7 +23,7 @@ public record MachineConfigSlots(
 			{
 				int itemSlotCount = 0;
 				int fluidSlotCount = 0;
-				for(MachineConfigSlot slot : slots)
+				for(var slot : slots)
 				{
 					if(slot instanceof MachineConfigSlot.ItemSlot)
 					{
@@ -43,19 +40,19 @@ public record MachineConfigSlots(
 	
 	public static MachineConfigSlots from(MachineBlockEntity machine)
 	{
-		MIInventory inventory = machine.getInventory();
+		var inventory = machine.getInventory();
 		
 		List<MachineConfigSlot> slots = Lists.newArrayList();
 		
 		int itemIndex = 0;
-		for(ConfigurableItemStack itemStack : inventory.getItemStacks())
+		for(var itemStack : inventory.getItemStacks())
 		{
 			slots.add(new MachineConfigSlot.ItemSlot(itemIndex, itemStack.getAdjustedCapacity(), itemStack.getLockedInstance()));
 			itemIndex++;
 		}
 		
 		int fluidIndex = 0;
-		for(ConfigurableFluidStack fluidStack : inventory.getFluidStacks())
+		for(var fluidStack : inventory.getFluidStacks())
 		{
 			slots.add(new MachineConfigSlot.FluidSlot(fluidIndex, fluidStack.getLockedInstance()));
 			fluidIndex++;
@@ -81,9 +78,9 @@ public record MachineConfigSlots(
 		
 		boolean success = true;
 		
-		for(MachineConfigSlot slot : slots)
+		for(var slot : slots)
 		{
-			AbstractConfigurableStack stack = slot.stack(target.getInventory());
+			var stack = slot.stack(target.getInventory());
 			if(slot.lock() != null && stack.canPlayerLock())
 			{
 				if(!stack.playerLock(slot.lock(), simulation))
@@ -93,12 +90,12 @@ public record MachineConfigSlots(
 			}
 			if(slot instanceof MachineConfigSlot.ItemSlot itemSlot && itemSlot.capacity() >= 0)
 			{
-				ConfigurableItemStack itemStack = (ConfigurableItemStack) stack;
+				var itemStack = (ConfigurableItemStack) stack;
 				if(itemStack.getAmount() <= itemSlot.capacity())
 				{
 					if(simulation.isActing())
 					{
-						ConfigurableItemStackAccessor capacityAccessor = (ConfigurableItemStackAccessor) stack;
+						var capacityAccessor = (ConfigurableItemStackAccessor) stack;
 						capacityAccessor.setAdjustedCapacity(itemSlot.capacity());
 					}
 				}

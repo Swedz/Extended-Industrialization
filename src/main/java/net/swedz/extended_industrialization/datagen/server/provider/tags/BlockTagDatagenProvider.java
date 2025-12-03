@@ -4,8 +4,6 @@ import aztech.modern_industrialization.MITags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
@@ -60,11 +58,11 @@ public final class BlockTagDatagenProvider extends BlockTagsProvider
 	}
 	
 	@Override
-	protected void addTags(HolderLookup.Provider provider)
+	protected void addTags(HolderLookup.Provider registries)
 	{
 		for(BlockHolder<?> block : EIBlocks.values().stream().sorted(Comparator.comparing((block) -> block.identifier().id())).toList())
 		{
-			for(TagKey<Block> tag : block.tags())
+			for(var tag : block.tags())
 			{
 				this.tag(tag).add(block.get());
 			}

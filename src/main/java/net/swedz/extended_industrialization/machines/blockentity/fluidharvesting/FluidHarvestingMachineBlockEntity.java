@@ -121,7 +121,7 @@ public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEnti
 	@Override
 	public MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData();
+		var data = new MachineModelClientData();
 		data.isActive = isActiveComponent.isActive;
 		orientation.writeModelData(data);
 		return data;

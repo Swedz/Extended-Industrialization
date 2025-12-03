@@ -52,7 +52,7 @@ public final class MeowTradeGoal extends Goal
 	
 	private Player findOwnerNearby()
 	{
-		Player owner = cat.level().getPlayerByUUID(cat.getOwnerUUID());
+		var owner = cat.level().getPlayerByUUID(cat.getOwnerUUID());
 		return owner != null && owner.isAlive() && owner.distanceTo(cat) <= 10 ? owner : null;
 	}
 	
@@ -130,7 +130,7 @@ public final class MeowTradeGoal extends Goal
 		}
 		else
 		{
-			Player owner = this.findOwnerNearby();
+			var owner = this.findOwnerNearby();
 			if(owner != null)
 			{
 				if(ticks < 3 * 20)
@@ -171,11 +171,11 @@ public final class MeowTradeGoal extends Goal
 		{
 			cat.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
 			
-			Player owner = this.findOwnerNearby();
+			var owner = this.findOwnerNearby();
 			Vec3 pos;
 			if(owner == null)
 			{
-				Vec3 randomPos = LandRandomPos.getPos(cat, 4, 2);
+				var randomPos = LandRandomPos.getPos(cat, 4, 2);
 				pos = randomPos == null ? cat.position() : randomPos;
 			}
 			else

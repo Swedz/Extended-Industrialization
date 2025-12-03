@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.client.nanosuit.decorations;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -11,7 +10,6 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -90,9 +88,9 @@ public final class WingNanoSuitDecorationModel<T extends LivingEntity> extends N
 					   PoseStack poseStack, MultiBufferSource bufferSource, int packedLight,
 					   ArmorMaterial.Layer armorLayer, int armorLayerIndex, int armorLayerColor, boolean armorLayerIsColored)
 	{
-		ResourceLocation texture = getTexture(armorLayerIndex);
-		RenderType renderType = NanoArmorLayer.decorationRenderType(armorLayerIndex, item, texture, armorLayerIsColored);
-		VertexConsumer buffer = bufferSource.getBuffer(renderType);
+		var texture = getTexture(armorLayerIndex);
+		var renderType = NanoArmorLayer.decorationRenderType(armorLayerIndex, item, texture, armorLayerIsColored);
+		var buffer = bufferSource.getBuffer(renderType);
 		this.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, armorLayerColor);
 	}
 	

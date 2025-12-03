@@ -38,13 +38,13 @@ public final class TeslaArcRenderer
 		int count = points.size() - 1;
 		float increment = 1f / count;
 		
-		TeslaArcRenderPoint[] renderPoints = new TeslaArcRenderPoint[points.size()];
+		var renderPoints = new TeslaArcRenderPoint[points.size()];
 		for(int i = 1; i < count; i++)
 		{
 			float width = widthFunction.apply(increment * i);
-			Vector4f previous = positions.get(i - 1);
-			Vector4f current = positions.get(i);
-			Vector4f next = positions.get(i + 1);
+			var previous = positions.get(i - 1);
+			var current = positions.get(i);
+			var next = positions.get(i + 1);
 			renderPoints[i] = new TeslaArcRenderPoint(current, perpendicularPoints(previous, next, width));
 		}
 		renderPoints[0] = new TeslaArcRenderPoint(

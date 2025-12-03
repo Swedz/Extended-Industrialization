@@ -25,17 +25,17 @@ public final class HydratingFarmerTask extends FarmerTask
 			return false;
 		}
 		
-		for(FarmerTile tile : blockMap.tiles())
+		for(var tile : blockMap.tiles())
 		{
-			FarmerBlock dirt = tile.dirt();
-			BlockPos pos = dirt.pos();
-			BlockState state = dirt.state(level);
+			var dirt = tile.dirt();
+			var pos = dirt.pos();
+			var state = dirt.state(level);
 			if(state.getBlock() instanceof FarmBlock)
 			{
 				int moisture = state.getValue(FarmBlock.MOISTURE);
 				if(moisture < 7 && FarmerComponent.consumeWater(inventory, Simulation.ACT))
 				{
-					BlockState newState = state.setValue(FarmBlock.MOISTURE, 7);
+					var newState = state.setValue(FarmBlock.MOISTURE, 7);
 					dirt.setBlock(level, newState, 2);
 					
 					if(operations.operate())

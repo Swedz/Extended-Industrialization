@@ -13,7 +13,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -82,11 +81,11 @@ public record MachineConfigPanel(
 		
 		register("casings", CasingComponent.class, (player, target, component, holder, slotItem, item, simulation) ->
 		{
-			CableTier currentTier = component.getCableTier();
-			ItemStack componentItem = holder.getStack();
+			var currentTier = component.getCableTier();
+			var componentItem = holder.getStack();
 			if(!item.isEmpty())
 			{
-				CableTier newTier = CasingComponent.getCasingTier(item.getItem());
+				var newTier = CasingComponent.getCasingTier(item.getItem());
 				if(newTier != null && newTier != currentTier)
 				{
 					if(simulation.isActing())
@@ -124,7 +123,7 @@ public record MachineConfigPanel(
 		
 		static void drop(MachineBlockEntity machine, ItemStack stack)
 		{
-			BlockPos blockPos = machine.getBlockPos();
+			var blockPos = machine.getBlockPos();
 			Containers.dropItemStack(
 					machine.getLevel(),
 					blockPos.getX(), blockPos.getY(), blockPos.getZ(),
@@ -136,7 +135,7 @@ public record MachineConfigPanel(
 		{
 			if(simulation.isActing())
 			{
-				ItemStack componentItem = holder.getStack();
+				var componentItem = holder.getStack();
 				ItemStack insertItem;
 				if(componentItem.isEmpty())
 				{
@@ -164,13 +163,13 @@ public record MachineConfigPanel(
 		static boolean insertStack(Player player, MachineBlockEntity target, ComponentStackHolder holder, ItemStack slotItem, ItemStack item, Simulation simulation)
 		{
 			int desiredCount = slotItem.getCount();
-			ItemStack componentItem = holder.getStack();
+			var componentItem = holder.getStack();
 			boolean changed = false;
 			if(componentItem.isEmpty())
 			{
 				if(simulation.isActing())
 				{
-					ItemStack insertItem = item.copyWithCount(Math.min(item.getCount(), desiredCount));
+					var insertItem = item.copyWithCount(Math.min(item.getCount(), desiredCount));
 					holder.setStack(insertItem);
 					item.consume(insertItem.getCount(), player);
 					changed = true;
@@ -184,7 +183,7 @@ public record MachineConfigPanel(
 					changed = added > 0;
 					if(simulation.isActing() && changed)
 					{
-						ItemStack insertItem = componentItem.copy();
+						var insertItem = componentItem.copy();
 						insertItem.grow(added);
 						holder.setStack(insertItem);
 						item.consume(added, player);
@@ -196,7 +195,7 @@ public record MachineConfigPanel(
 					changed = subtracted > 0;
 					if(simulation.isActing() && changed)
 					{
-						ItemStack insertItem = componentItem.copy();
+						var insertItem = componentItem.copy();
 						insertItem.shrink(subtracted);
 						if(insertItem.getCount() == 0)
 						{
@@ -218,7 +217,7 @@ public record MachineConfigPanel(
 					{
 						ComponentTypeHandler.drop(target, componentItem.copy());
 					}
-					ItemStack insertItem = item.copyWithCount(Math.min(item.getCount(), desiredCount));
+					var insertItem = item.copyWithCount(Math.min(item.getCount(), desiredCount));
 					holder.setStack(insertItem);
 					item.consume(insertItem.getCount(), player);
 				}
@@ -233,12 +232,12 @@ public record MachineConfigPanel(
 		Map<String, ItemStack> slotItems = Maps.newHashMap();
 		for(var componentType : REGISTERED_COMPONENT_TYPES_BY_TYPE.keySet())
 		{
-			String key = REGISTERED_COMPONENT_TYPES_BY_TYPE.get(componentType);
+			var key = REGISTERED_COMPONENT_TYPES_BY_TYPE.get(componentType);
 			machine.components.forType(componentType, (component) ->
 			{
 				if(component instanceof ComponentStackHolder holder)
 				{
-					ItemStack drop = holder.getStack().copy();
+					var drop = holder.getStack().copy();
 					if(!drop.isEmpty())
 					{
 						slotItems.put(key, drop);
@@ -254,7 +253,7 @@ public record MachineConfigPanel(
 		List<ItemStack> items = Lists.newArrayList();
 		for(int i = 0; i < inventory.items.size(); i++)
 		{
-			ItemStack slot = inventory.items.get(i);
+			var slot = inventory.items.get(i);
 			if(!slot.isEmpty() && ItemStack.isSameItem(itemStack, slot))
 			{
 				items.add(slot);
@@ -278,7 +277,7 @@ public record MachineConfigPanel(
 	
 	private <T extends ComponentStackHolder> boolean insertItemToComponent(String key, Player player, MachineBlockEntity target, T component, ItemStack item, Simulation simulation)
 	{
-		ItemStack slotItem = slotItems.get(key);
+		var slotItem = slotItems.get(key);
 		var handler = REGISTERED_COMPONENT_TYPES.get(key).handler();
 		return handler.handle(player, target, component, component, slotItem, item, simulation);
 	}
@@ -291,19 +290,19 @@ public record MachineConfigPanel(
 		}
 		boolean success = false;
 		
-		ItemStack slotItem = slotItems.get(key).copy();
-		List<ItemStack> matchingItems = player.hasInfiniteMaterials() ? List.of(slotItem) : findItemsMatching(player.getInventory(), slotItem);
+		var slotItem = slotItems.get(key).copy();
+		var matchingItems = player.hasInfiniteMaterials() ? List.of(slotItem) : findItemsMatching(player.getInventory(), slotItem);
 		
 		if(matchingItems.isEmpty() && componentStackHolder instanceof RedstoneControlComponent)
 		{
-			ItemStack componentStack = componentStackHolder.getStack().copy();
+			var componentStack = componentStackHolder.getStack().copy();
 			if(!componentStack.isEmpty())
 			{
 				matchingItems.add(componentStack);
 			}
 		}
 		
-		for(ItemStack matchingItem : matchingItems)
+		for(var matchingItem : matchingItems)
 		{
 			if(this.insertItemToComponent(key, player, target, componentStackHolder, matchingItem, simulation))
 			{
@@ -319,7 +318,7 @@ public record MachineConfigPanel(
 	
 	private <T extends ComponentStackHolder> boolean dropFromComponent(Player player, MachineBlockEntity target, T component, Simulation simulation)
 	{
-		ItemStack componentItem = component.getStack();
+		var componentItem = component.getStack();
 		if(!componentItem.isEmpty())
 		{
 			if(!player.hasInfiniteMaterials())
@@ -334,9 +333,9 @@ public record MachineConfigPanel(
 	
 	private <T> boolean applyComponent(Player player, MachineBlockEntity target, String key, Simulation simulation)
 	{
-		AtomicBoolean success = new AtomicBoolean(false);
+		var success = new AtomicBoolean(false);
 		
-		Inventory inventory = player.getInventory();
+		var inventory = player.getInventory();
 		
 		var componentType = REGISTERED_COMPONENT_TYPES.get(key).componentType();
 		target.components.forType(componentType, (component) ->

@@ -22,50 +22,50 @@ public final class EITags
 		return Collections.unmodifiableMap(TRANSLATIONS);
 	}
 	
-	public static final class Items
+	public interface Items
 	{
-		public static final TagKey<Item> FARMER_PLANTABLE           = item("farmer_plantable", "Farmer Plantable");
-		public static final TagKey<Item> FARMER_VOIDABLE            = item("farmer_voidable", "Farmer Voidable");
-		public static final TagKey<Item> PHOTOVOLTAIC_CELL          = item("photovoltaic_cell", "Photovoltaic Cells");
-		public static final TagKey<Item> RAINBOW_DYEABLE            = item("rainbow_dyeable", "Rainbow Dyeable");
-		public static final TagKey<Item> PROCESSING_ARRAY_BLACKLIST = item("processing_array_blacklist", "Processing Array Blacklist");
+		TagKey<Item> FARMER_PLANTABLE           = item("farmer_plantable", "Farmer Plantable");
+		TagKey<Item> FARMER_VOIDABLE            = item("farmer_voidable", "Farmer Voidable");
+		TagKey<Item> PHOTOVOLTAIC_CELL          = item("photovoltaic_cell", "Photovoltaic Cells");
+		TagKey<Item> RAINBOW_DYEABLE            = item("rainbow_dyeable", "Rainbow Dyeable");
+		TagKey<Item> PROCESSING_ARRAY_BLACKLIST = item("processing_array_blacklist", "Processing Array Blacklist");
 		
-		public static final class EnchantmentModules
+		interface EnchantmentModules
 		{
-			public static final TagKey<Item> FARMER            = item("enchantment_modules/farmer", "Farmer Enchantment Modules");
-			public static final TagKey<Item> LETHAL_TESLA_COIL = item("enchantment_modules/lethal_tesla_coil", "Lethal Tesla Coil Enchantment Modules");
+			TagKey<Item> FARMER            = item("enchantment_modules/farmer", "Farmer Enchantment Modules");
+			TagKey<Item> LETHAL_TESLA_COIL = item("enchantment_modules/lethal_tesla_coil", "Lethal Tesla Coil Enchantment Modules");
 		}
 	}
 	
-	public static final class Fluids
+	public interface Fluids
 	{
-		public static final TagKey<Fluid> HONEY = fluidCommon("honey");
+		TagKey<Fluid> HONEY = fluidCommon("honey");
 	}
 	
-	public static final class Blocks
+	public interface Blocks
 	{
-		public static final TagKey<Block> FARMER_DIRT               = block("farmer_dirt");
-		public static final TagKey<Block> MACHINE_CHAINER_LINKABLE  = block("machine_chainer/linkable");
-		public static final TagKey<Block> MACHINE_CHAINER_RELAY     = block("machine_chainer/relay");
-		public static final TagKey<Block> MACHINE_CHAINER_BLACKLIST = block("machine_chainer/blacklist");
+		TagKey<Block> FARMER_DIRT               = block("farmer_dirt");
+		TagKey<Block> MACHINE_CHAINER_LINKABLE  = block("machine_chainer/linkable");
+		TagKey<Block> MACHINE_CHAINER_RELAY     = block("machine_chainer/relay");
+		TagKey<Block> MACHINE_CHAINER_BLACKLIST = block("machine_chainer/blacklist");
 	}
 	
-	public static final class DimensionTypes
+	public interface DimensionTypes
 	{
-		public static final TagKey<DimensionType> SOLAR_BLACKLIST = dimensionType("solar_blacklist");
+		TagKey<DimensionType> SOLAR_BLACKLIST = dimensionType("solar_blacklist");
 	}
 	
-	public static final class DamageTypes
+	public interface DamageTypes
 	{
-		public static final TagKey<DamageType> NANO_SABER_SWEEP           = damageType("nano_saber_sweep");
-		public static final TagKey<DamageType> NANO_SABER_SWEEP_BEHEADING = damageType("nano_saber_sweep/beheading");
+		TagKey<DamageType> NANO_SABER_SWEEP           = damageType("nano_saber_sweep");
+		TagKey<DamageType> NANO_SABER_SWEEP_BEHEADING = damageType("nano_saber_sweep/beheading");
 	}
 	
-	public static final class GeneratedRecipesBlacklist
+	public interface GeneratedRecipesBlacklist
 	{
-		public static final TagKey<Item>  CANNING_FOOD    = item("generated_recipes_blacklist/canning_food", "Canning Food Generated Recipes Blacklist");
-		public static final TagKey<Fluid> CANNING_BUCKETS = fluid("generated_recipes_blacklist/canning_buckets");
-		public static final TagKey<Item>  COMPOSTING      = item("generated_recipes_blacklist/composting", "Composting Generated Recipes Blacklist");
+		TagKey<Item>  CANNING_FOOD    = item("generated_recipes_blacklist/canning_food", "Canning Food Generated Recipes Blacklist");
+		TagKey<Fluid> CANNING_BUCKETS = fluid("generated_recipes_blacklist/canning_buckets");
+		TagKey<Item>  COMPOSTING      = item("generated_recipes_blacklist/composting", "Composting Generated Recipes Blacklist");
 	}
 	
 	public static TagKey<Item> item(String path, String englishName)

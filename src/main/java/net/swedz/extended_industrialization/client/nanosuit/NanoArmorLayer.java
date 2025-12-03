@@ -1,7 +1,6 @@
 package net.swedz.extended_industrialization.client.nanosuit;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -13,9 +12,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.neoforged.neoforge.client.ClientHooks;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.swedz.extended_industrialization.client.nanosuit.decorations.NanoSuitDecorationModel;
@@ -76,7 +72,7 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 	private void renderArmorPiece(PoseStack poseStack, MultiBufferSource bufferSource, T entity, EquipmentSlot slot, int packedLight, NanoArmorModel<T> model,
 								  float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float headYaw, float headPitch)
 	{
-		ItemStack stack = entity.getItemBySlot(slot);
+		var stack = entity.getItemBySlot(slot);
 		if(stack.getItem() instanceof NanoSuitArmorItem item && item.getEquipmentSlot() == slot)
 		{
 			this.getParentModel().copyPropertiesTo(model);
@@ -85,25 +81,25 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 			
 			boolean usesInnerModel = this.usesInnerModel(slot);
 			
-			ArmorMaterial armorMaterial = item.getMaterial().value();
-			IClientItemExtensions extensions = IClientItemExtensions.of(stack);
+			var armorMaterial = item.getMaterial().value();
+			var extensions = IClientItemExtensions.of(stack);
 			int fallbackColor = extensions.getDefaultDyeColor(stack);
 			
 			for(int layerIndex = armorMaterial.layers().size() - 1; layerIndex >= 0; --layerIndex)
 			{
-				ArmorMaterial.Layer armorMaterialLayer = armorMaterial.layers().get(layerIndex);
+				var armorMaterialLayer = armorMaterial.layers().get(layerIndex);
 				int layerColor = extensions.getArmorLayerTintColor(stack, entity, armorMaterialLayer, layerIndex, fallbackColor);
 				if(layerColor != 0)
 				{
 					boolean isColored = layerColor != -1;
-					ResourceLocation texture = ClientHooks.getArmorTexture(entity, stack, armorMaterialLayer, usesInnerModel, slot);
-					RenderType renderType = armorRenderType(layerIndex, item, texture, isColored);
-					VertexConsumer buffer = bufferSource.getBuffer(renderType);
+					var texture = ClientHooks.getArmorTexture(entity, stack, armorMaterialLayer, usesInnerModel, slot);
+					var renderType = armorRenderType(layerIndex, item, texture, isColored);
+					var buffer = bufferSource.getBuffer(renderType);
 					model.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, layerColor);
 				}
 			}
 			
-			ArmorTrim armorTrim = stack.get(DataComponents.TRIM);
+			var armorTrim = stack.get(DataComponents.TRIM);
 			if(armorTrim != null)
 			{
 				this.renderTrim(item.getMaterial(), poseStack, bufferSource, packedLight, armorTrim, model, usesInnerModel);
@@ -119,7 +115,7 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 	private void renderArmorPieceDecorations(PoseStack poseStack, MultiBufferSource bufferSource, T entity, EquipmentSlot slot, int packedLight,
 											 float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float headYaw, float headPitch)
 	{
-		ItemStack stack = entity.getItemBySlot(slot);
+		var stack = entity.getItemBySlot(slot);
 		if(stack.getItem() instanceof NanoSuitArmorItem item && item.getEquipmentSlot() == slot)
 		{
 			for(NanoSuitDecorationModel<T> decoration : decorations)
@@ -130,13 +126,13 @@ public final class NanoArmorLayer<T extends LivingEntity, M extends HumanoidMode
 				
 				if(shouldRender)
 				{
-					ArmorMaterial armorMaterial = item.getMaterial().value();
-					IClientItemExtensions extensions = IClientItemExtensions.of(stack);
+					var armorMaterial = item.getMaterial().value();
+					var extensions = IClientItemExtensions.of(stack);
 					int fallbackColor = extensions.getDefaultDyeColor(stack);
 					
 					for(int layerIndex = armorMaterial.layers().size() - 1; layerIndex >= 0; --layerIndex)
 					{
-						ArmorMaterial.Layer armorMaterialLayer = armorMaterial.layers().get(layerIndex);
+						var armorMaterialLayer = armorMaterial.layers().get(layerIndex);
 						int layerColor = extensions.getArmorLayerTintColor(stack, entity, armorMaterialLayer, layerIndex, fallbackColor);
 						if(layerColor != 0)
 						{

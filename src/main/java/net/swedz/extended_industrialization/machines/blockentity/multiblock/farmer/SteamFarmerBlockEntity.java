@@ -5,7 +5,6 @@ import aztech.modern_industrialization.MIBlock;
 import aztech.modern_industrialization.compat.rei.machines.ReiMachineRecipes;
 import aztech.modern_industrialization.machines.BEP;
 import aztech.modern_industrialization.machines.helper.SteamHelper;
-import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.util.Simulation;
 import net.swedz.extended_industrialization.EI;
@@ -38,7 +37,7 @@ public final class SteamFarmerBlockEntity extends FarmerBlockEntity
 	public static void registerReiShapes()
 	{
 		int index = 0;
-		for(ShapeTemplate shapeTemplate : SHAPES.shapeTemplates())
+		for(var shapeTemplate : SHAPES.shapeTemplates())
 		{
 			ReiMachineRecipes.registerMultiblockShape(EI.id("steam_farmer"), shapeTemplate, "" + index);
 			index++;

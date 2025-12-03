@@ -27,7 +27,6 @@ import net.swedz.tesseract.neoforge.helper.TransferHelper;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.List;
-import java.util.Optional;
 
 public final class RobotAutoFeederItem extends Item implements ISimpleEnergyItem
 {
@@ -98,7 +97,7 @@ public final class RobotAutoFeederItem extends Item implements ISimpleEnergyItem
 		{
 			if(stack.is(EIItems.CANNED_FOOD.asItem()))
 			{
-				ItemStack extracted = stack.copyWithCount(1);
+				var extracted = stack.copyWithCount(1);
 				stack.consume(1, player);
 				return new Pair<>(extracted, null);
 			}
@@ -153,7 +152,7 @@ public final class RobotAutoFeederItem extends Item implements ISimpleEnergyItem
 		stack.consume(1, player);
 		player.gameEvent(GameEvent.EAT);
 		
-		Optional<ItemStack> container = food.usingConvertsTo();
+		var container = food.usingConvertsTo();
 		if(container.isPresent() && !player.hasInfiniteMaterials())
 		{
 			return container.get().copy();
@@ -163,7 +162,7 @@ public final class RobotAutoFeederItem extends Item implements ISimpleEnergyItem
 	
 	private ItemStack eat(Player player, ItemStack stack)
 	{
-		FoodProperties food = stack.getFoodProperties(player);
+		var food = stack.getFoodProperties(player);
 		return food == null ? ItemStack.EMPTY : this.eat(player, stack, food);
 	}
 	

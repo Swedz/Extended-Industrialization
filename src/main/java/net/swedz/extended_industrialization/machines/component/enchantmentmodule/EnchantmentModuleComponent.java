@@ -45,14 +45,14 @@ public final class EnchantmentModuleComponent extends SimpleItemStackComponent
 	
 	public ItemInteractionResult onUse(MachineBlockEntity blockEntity, Player player, InteractionHand hand)
 	{
-		ItemStack stack = player.getItemInHand(hand);
+		var stack = player.getItemInHand(hand);
 		if(!this.is(stack))
 		{
 			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 		}
 		if(this.getStack().isEmpty())
 		{
-			ItemStack copy = stack.copyWithCount(1);
+			var copy = stack.copyWithCount(1);
 			stack.consume(1, player);
 			if(!blockEntity.getLevel().isClientSide())
 			{

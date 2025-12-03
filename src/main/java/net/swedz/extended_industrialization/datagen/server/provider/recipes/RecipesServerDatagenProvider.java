@@ -27,7 +27,7 @@ public abstract class RecipesServerDatagenProvider extends RecipeProvider
 	
 	protected static void addMachineRecipe(String path, String name, MachineRecipeType recipeType, int eu, int duration, Consumer<MIMachineRecipeBuilder> recipeBuilder, RecipeOutput output)
 	{
-		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(recipeType, eu, duration);
+		var recipe = new MIMachineRecipeBuilder(recipeType, eu, duration);
 		recipeBuilder.accept(recipe);
 		recipe.offerTo(output, EI.id(path + "/" + name));
 	}

@@ -12,8 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -22,7 +20,6 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.network.transmitter.TeslaTransmitter;
-import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.tooltip.component.ItemStackTooltipComponent;
 
 import java.util.List;
@@ -41,12 +38,12 @@ public final class TeslaCalibratorItem extends Item
 	{
 		if(event.getEntity() instanceof Player player)
 		{
-			ItemStack offhand = player.getItemInHand(InteractionHand.OFF_HAND);
+			var offhand = player.getItemInHand(InteractionHand.OFF_HAND);
 			if(offhand.has(EIComponents.SELECTED_TESLA_NETWORK))
 			{
-				WorldPos key = offhand.get(EIComponents.SELECTED_TESLA_NETWORK).key();
+				var key = offhand.get(EIComponents.SELECTED_TESLA_NETWORK).key();
 				
-				BlockEntity blockEntity = event.getLevel().getBlockEntity(event.getPos());
+				var blockEntity = event.getLevel().getBlockEntity(event.getPos());
 				if(blockEntity instanceof MachineBlockEntity machine &&
 				   blockEntity instanceof TeslaReceiver receiver)
 				{
@@ -63,12 +60,12 @@ public final class TeslaCalibratorItem extends Item
 	public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context)
 	{
 		boolean client = context.getLevel().isClientSide();
-		Player player = context.getPlayer();
+		var player = context.getPlayer();
 		if(player != null)
 		{
-			InteractionHand usedHand = context.getHand();
-			ItemStack itemStack = player.getItemInHand(usedHand);
-			BlockEntity hitBlockEntity = context.getLevel().getBlockEntity(context.getClickedPos());
+			var usedHand = context.getHand();
+			var itemStack = player.getItemInHand(usedHand);
+			var hitBlockEntity = context.getLevel().getBlockEntity(context.getClickedPos());
 			if(player.isShiftKeyDown() &&
 			   hitBlockEntity instanceof TeslaTransmitter transmitter)
 			{
@@ -87,7 +84,7 @@ public final class TeslaCalibratorItem extends Item
 				{
 					if(itemStack.has(EIComponents.SELECTED_TESLA_NETWORK))
 					{
-						WorldPos key = itemStack.get(EIComponents.SELECTED_TESLA_NETWORK).key();
+						var key = itemStack.get(EIComponents.SELECTED_TESLA_NETWORK).key();
 						receiver.setNetwork(key);
 						machine.setChanged();
 						machine.sync();
@@ -131,8 +128,8 @@ public final class TeslaCalibratorItem extends Item
 	{
 		if(stack.has(EIComponents.SELECTED_TESLA_NETWORK))
 		{
-			Block machineBlock = stack.get(EIComponents.SELECTED_TESLA_NETWORK).block();
-			Item item = machineBlock.asItem();
+			var machineBlock = stack.get(EIComponents.SELECTED_TESLA_NETWORK).block();
+			var item = machineBlock.asItem();
 			return Optional.of(new ItemStackTooltipComponent(item.getDefaultInstance()));
 		}
 		return Optional.empty();

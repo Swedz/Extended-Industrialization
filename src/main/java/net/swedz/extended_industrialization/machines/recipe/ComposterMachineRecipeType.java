@@ -25,10 +25,10 @@ public final class ComposterMachineRecipeType extends ProxyableMachineRecipeType
 	
 	private RecipeHolder<MachineRecipe> generate(Item item, float chance)
 	{
-		ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
-		ResourceLocation id = EI.id("/composter/generated/%s/%s_to_bonemeal".formatted(itemId.getNamespace(), itemId.getPath()));
+		var itemId = BuiltInRegistries.ITEM.getKey(item);
+		var id = EI.id("/composter/generated/%s/%s_to_bonemeal".formatted(itemId.getNamespace(), itemId.getPath()));
 		
-		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
+		var recipe = new MIMachineRecipeBuilder(this, 2, 5 * 20);
 		
 		int amountNeeded = Math.max(1, (int) Math.floor((8 / chance) / 2));
 		recipe.addItemInput(item, amountNeeded);
@@ -44,14 +44,14 @@ public final class ComposterMachineRecipeType extends ProxyableMachineRecipeType
 		
 		if(EI.config().runtimeGeneratedRecipes().composter())
 		{
-			for(Item item : BuiltInRegistries.ITEM)
+			for(var item : BuiltInRegistries.ITEM)
 			{
 				if(!RegistryHelper.holder(BuiltInRegistries.ITEM, item).is(EITags.GeneratedRecipesBlacklist.COMPOSTING))
 				{
 					float chance = ComposterBlock.getValue(item.getDefaultInstance());
 					if(chance > 0f)
 					{
-						RecipeHolder<MachineRecipe> recipe = this.generate(item, chance);
+						var recipe = this.generate(item, chance);
 						recipeList.add(recipe);
 					}
 				}

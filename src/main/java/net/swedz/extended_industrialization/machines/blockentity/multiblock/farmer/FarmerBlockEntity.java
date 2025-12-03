@@ -159,7 +159,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		
 		if(shapeMatcher.isMatchSuccessful())
 		{
-			List<BlockPos> offsets = shapes.dirtPositions()[activeShape.getActiveShapeIndex()];
+			var offsets = shapes.dirtPositions()[activeShape.getActiveShapeIndex()];
 			farmer.fromOffsets(worldPosition, orientation.facingDirection, offsets);
 			
 			farmer.updateStackListeners();
@@ -252,16 +252,16 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 		
 		public ShapeWrapper complete()
 		{
-			HatchFlags.Builder hatchFlagsBuilder = new HatchFlags.Builder();
+			var hatchFlagsBuilder = new HatchFlags.Builder();
 			if(electric)
 			{
 				hatchFlagsBuilder.with(HatchTypes.ENERGY_INPUT);
 			}
-			HatchFlags hatchFlags = hatchFlagsBuilder.with(HatchTypes.ITEM_INPUT, HatchTypes.ITEM_OUTPUT, HatchTypes.FLUID_INPUT).build();
+			var hatchFlags = hatchFlagsBuilder.with(HatchTypes.ITEM_INPUT, HatchTypes.ITEM_OUTPUT, HatchTypes.FLUID_INPUT).build();
 			
 			for(int i = 0; i < shapeTemplates.length; i++)
 			{
-				ShapeTemplate.Builder builder = new ShapeTemplate.Builder(hatch);
+				var builder = new ShapeTemplate.Builder(hatch);
 				
 				int height = i + 4;
 				for(int y = 0; y > -height; y--)

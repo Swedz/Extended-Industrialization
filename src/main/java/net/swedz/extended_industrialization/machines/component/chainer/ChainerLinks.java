@@ -8,7 +8,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
@@ -129,9 +128,9 @@ public final class ChainerLinks implements ChainerElement
 		}
 		if(recursive)
 		{
-			for(BlockPos link : positions)
+			for(var link : positions)
 			{
-				BlockEntity blockEntity = this.level().getBlockEntity(link);
+				var blockEntity = this.level().getBlockEntity(link);
 				if(blockEntity instanceof MachineChainerMachineBlockEntity chainerBlockEntity &&
 				   chainerBlockEntity.getChainerComponent().links().contains(pos, true))
 				{
@@ -173,7 +172,7 @@ public final class ChainerLinks implements ChainerElement
 	Set<ChunkPos> getSpannedChunks(boolean includeOrigin, boolean includeFailure)
 	{
 		Set<ChunkPos> chunks = Sets.newHashSet();
-		for(BlockPos block : this.getSpannedBlocks(includeOrigin, includeFailure))
+		for(var block : this.getSpannedBlocks(includeOrigin, includeFailure))
 		{
 			chunks.add(new ChunkPos(block));
 		}
@@ -255,7 +254,7 @@ public final class ChainerLinks implements ChainerElement
 		List<MIEnergyStorage> energyHandlers = Lists.newArrayList();
 		
 		LinkResult result = null;
-		for(BlockPos pos : this.getSpannedBlocks(false, false))
+		for(var pos : this.getSpannedBlocks(false, false))
 		{
 			result = this.test(pos);
 			if(result.isSuccess())

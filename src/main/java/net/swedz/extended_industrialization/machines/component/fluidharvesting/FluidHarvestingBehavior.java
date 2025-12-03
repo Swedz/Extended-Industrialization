@@ -5,8 +5,6 @@ import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.util.Simulation;
 import net.swedz.tesseract.neoforge.compat.mi.helper.EuConsumerBehavior;
 
-import java.util.List;
-
 public abstract class FluidHarvestingBehavior
 {
 	protected final MachineBlockEntity machine;
@@ -31,8 +29,7 @@ public abstract class FluidHarvestingBehavior
 	
 	public ConfigurableFluidStack getMachineBlockFluidStack()
 	{
-		List<ConfigurableFluidStack> fluidStacks = this.getMachineBlockEntity().getInventory().getFluidStacks();
-		return fluidStacks.getLast();
+		return this.getMachineBlockEntity().getInventory().getFluidStacks().getLast();
 	}
 	
 	public int totalPumpingTicks()

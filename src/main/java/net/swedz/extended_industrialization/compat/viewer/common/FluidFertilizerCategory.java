@@ -25,7 +25,7 @@ public final class FluidFertilizerCategory extends ViewerCategory<Fluid>
 	@Override
 	public ResourceLocation getRecipeId(Fluid fluid)
 	{
-		ResourceLocation key = BuiltInRegistries.FLUID.getKey(fluid);
+		var key = BuiltInRegistries.FLUID.getKey(fluid);
 		return EI.id("/fluid_fertilizer/%s/%s".formatted(key.getNamespace(), key.getPath()));
 	}
 	
@@ -38,7 +38,7 @@ public final class FluidFertilizerCategory extends ViewerCategory<Fluid>
 	@Override
 	public void buildRecipes(RecipeManager recipeManager, RegistryAccess registryAccess, Consumer<Fluid> consumer)
 	{
-		for(Fluid fluid : registryAccess.registryOrThrow(Registries.FLUID))
+		for(var fluid : registryAccess.registryOrThrow(Registries.FLUID))
 		{
 			if(FertilizerPotency.getFor(fluid) != null)
 			{
@@ -56,7 +56,7 @@ public final class FluidFertilizerCategory extends ViewerCategory<Fluid>
 	@Override
 	public void buildWidgets(Fluid recipe, WidgetList widgets)
 	{
-		FertilizerPotency fertilizerPotency = FertilizerPotency.getFor(recipe);
+		var fertilizerPotency = FertilizerPotency.getFor(recipe);
 		var rate = EI.text().fluidFertilizersTime(fertilizerPotency.tickRate() / 20f);
 		widgets.secondaryText(rate, 40, 14);
 		var cost = EI.text().fluidFertilizersConsumes(fertilizerPotency.mbToConsumePerFertilizerTick());

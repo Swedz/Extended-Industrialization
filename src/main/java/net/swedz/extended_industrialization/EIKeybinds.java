@@ -6,8 +6,6 @@ import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
@@ -117,8 +115,8 @@ public final class EIKeybinds
 	
 	private static Keybind create(String id, String englishName, Function<String, KeyMapping> creator, Runnable action)
 	{
-		String descriptionId = Util.makeDescriptionId("key", EI.id(id));
-		Keybind keybind = new Keybind(descriptionId, englishName, Lazy.of(() -> creator.apply(descriptionId)), action);
+		var descriptionId = Util.makeDescriptionId("key", EI.id(id));
+		var keybind = new Keybind(descriptionId, englishName, Lazy.of(() -> creator.apply(descriptionId)), action);
 		Registry.include(keybind);
 		return keybind;
 	}
@@ -127,8 +125,8 @@ public final class EIKeybinds
 	{
 		return () ->
 		{
-			Player player = Minecraft.getInstance().player;
-			ItemStack stack = player.getItemBySlot(slot);
+			var player = Minecraft.getInstance().player;
+			var stack = player.getItemBySlot(slot);
 			if(stack.getItem() instanceof ToggleableItem item)
 			{
 				boolean activated = !item.isActivated(stack);

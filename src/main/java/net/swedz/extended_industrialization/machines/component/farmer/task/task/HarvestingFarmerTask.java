@@ -114,7 +114,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 	private boolean harvestBlocks(FarmerBlock cropBlockEntry, HarvestingContext context, HarvestableBehavior handler)
 	{
 		var origin = context.pos();
-		List<BlockPos> blockPositions = handler.getBlocks(context);
+		var blockPositions = handler.getBlocks(context);
 		
 		if(blockPositions.isEmpty())
 		{
@@ -179,8 +179,8 @@ public final class HarvestingFarmerTask extends FarmerTask
 	 */
 	private void markAndNotifyBlockWithoutOnBlockStateChange(BlockPos pos, LevelChunk chunk, BlockState oldState, BlockState newState, int updateFlag, int updateLimit)
 	{
-		Block block = newState.getBlock();
-		BlockState currentState = level.getBlockState(pos);
+		var block = newState.getBlock();
+		var currentState = level.getBlockState(pos);
 		if(currentState == newState)
 		{
 			if(oldState != currentState)
@@ -224,18 +224,18 @@ public final class HarvestingFarmerTask extends FarmerTask
 	@Override
 	protected boolean run()
 	{
-		for(FarmerTile tile : blockMap)
+		for(var tile : blockMap)
 		{
-			FarmerBlock crop = tile.crop();
-			BlockPos pos = crop.pos();
-			BlockState state = crop.state(level);
+			var crop = tile.crop();
+			var pos = crop.pos();
+			var state = crop.state(level);
 			
-			HarvestingContext context = new HarvestingContext(level, pos, state, this.getActiveEnchantment(), farmer.getMachine().getHighestCableTier());
-			Optional<HarvestableBehavior> handlerOptional = harvestingHandlers.behavior(context);
+			var context = new HarvestingContext(level, pos, state, this.getActiveEnchantment(), farmer.getMachine().getHighestCableTier());
+			var handlerOptional = harvestingHandlers.behavior(context);
 			
 			if(handlerOptional.isPresent())
 			{
-				HarvestableBehavior handler = handlerOptional.get();
+				var handler = handlerOptional.get();
 				if(handler.isFullyGrown(context) && this.harvestBlocks(crop, context, handler) && operations.operate())
 				{
 					return true;

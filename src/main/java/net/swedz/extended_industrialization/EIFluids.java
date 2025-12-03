@@ -58,7 +58,7 @@ public final class EIFluids
 	
 	public static MIFluidHolder create(String id, String englishName, MIFluidProperties properties)
 	{
-		MIFluidHolder holder = new MIFluidHolder(
+		var holder = new MIFluidHolder(
 				EI.id(id), englishName,
 				Registry.FLUIDS, Registry.FLUID_TYPES,
 				EIBlocks.Registry.BLOCKS,

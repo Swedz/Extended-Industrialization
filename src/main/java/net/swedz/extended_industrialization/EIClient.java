@@ -4,7 +4,6 @@ import aztech.modern_industrialization.client.machines.MachineBlockEntityRendere
 import aztech.modern_industrialization.client.machines.multiblocks.MultiblockMachineBER;
 import aztech.modern_industrialization.client.machines.multiblocks.MultiblockTankBER;
 import aztech.modern_industrialization.machines.MachineBlock;
-import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.blockentities.multiblocks.LargeTankMultiblockBlockEntity;
 import aztech.modern_industrialization.machines.multiblocks.MultiblockMachineBlockEntity;
 import net.minecraft.client.Minecraft;
@@ -13,11 +12,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -36,7 +31,6 @@ import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterMaterialAtlasesEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import net.swedz.extended_industrialization.client.NanoGravichestplateHudRenderer;
 import net.swedz.extended_industrialization.client.ber.chainer.MachineChainerHighlightRenderer;
 import net.swedz.extended_industrialization.client.ber.tesla.TeslaPartMultiblockRenderer;
@@ -68,7 +62,7 @@ public final class EIClient
 		
 		NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, (event) ->
 		{
-			for(EIKeybinds.Keybind keybind : EIKeybinds.Registry.getMappings())
+			for(var keybind : EIKeybinds.Registry.getMappings())
 			{
 				while(keybind.holder().get().consumeClick())
 				{
@@ -81,8 +75,8 @@ public final class EIClient
 		{
 			if(Screen.hasAltDown())
 			{
-				Player player = Minecraft.getInstance().player;
-				ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
+				var player = Minecraft.getInstance().player;
+				var stack = player.getItemInHand(InteractionHand.MAIN_HAND);
 				if(stack.getItem() instanceof ElectricToolItem tool && tool.getToolType().hasAdjustableSpeed())
 				{
 					boolean increase = event.getScrollDeltaY() > 0;
@@ -155,14 +149,14 @@ public final class EIClient
 	@SubscribeEvent
 	private static void registerBlockEntityRenderers(FMLClientSetupEvent event)
 	{
-		for(DeferredHolder<Block, ? extends Block> blockDef : EIBlocks.Registry.BLOCKS.getEntries())
+		for(var blockDef : EIBlocks.Registry.BLOCKS.getEntries())
 		{
 			if(blockDef.get() instanceof MachineBlock machine)
 			{
 				try
 				{
-					MachineBlockEntity blockEntity = machine.getBlockEntityInstance();
-					BlockEntityType type = blockEntity.getType();
+					var blockEntity = machine.getBlockEntityInstance();
+					var type = blockEntity.getType();
 					
 					BlockEntityRendererProvider provider = switch (blockEntity)
 					{

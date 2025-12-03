@@ -14,7 +14,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.renderable.BakedModelRenderable;
 import net.swedz.extended_industrialization.EI;
@@ -47,7 +46,7 @@ public final class NanoSaberSweepEntityRenderer extends EntityRenderer<NanoSaber
 		
 		matrices.pushPose();
 		
-		Vec3 movement = entity.getDeltaMovement().normalize();
+		var movement = entity.getDeltaMovement().normalize();
 		float yaw = (float) Math.atan2(movement.x(), movement.z());
 		float pitch = (float) Math.asin(-movement.y());
 		matrices.mulPose(Axis.YP.rotation(yaw));

@@ -16,7 +16,6 @@ import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.ProgressBar;
 import aztech.modern_industrialization.machines.models.MachineCasings;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
-import aztech.modern_industrialization.thirdparty.fabrictransfer.api.fluid.FluidVariant;
 import aztech.modern_industrialization.util.Tickable;
 import com.google.common.collect.Lists;
 import net.minecraft.core.Direction;
@@ -28,7 +27,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -86,7 +84,7 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 				ConfigurableFluidStack.standardInputSlot(capacity),
 				ConfigurableFluidStack.lockedOutputSlot(capacity, MIFluids.STEAM.asFluid())
 		);
-		SlotPositions fluidPositions = new SlotPositions.Builder().addSlot(WATER_SLOT_X, WATER_SLOT_Y).addSlot(OUTPUT_SLOT_X, OUTPUT_SLOT_Y).build();
+		var fluidPositions = new SlotPositions.Builder().addSlot(WATER_SLOT_X, WATER_SLOT_Y).addSlot(OUTPUT_SLOT_X, OUTPUT_SLOT_Y).build();
 		inventory = new MIInventory(List.of(), fluidStacks, new SlotPositions.Builder().build(), fluidPositions);
 		
 		sunlight = new SolarSunlightComponent(this);
@@ -130,7 +128,7 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 	@Override
 	public MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData(bronze ? MachineCasings.BRICKED_BRONZE : MachineCasings.BRICKED_STEEL);
+		var data = new MachineModelClientData(bronze ? MachineCasings.BRICKED_BRONZE : MachineCasings.BRICKED_STEEL);
 		data.isActive = isActiveComponent.isActive;
 		orientation.writeModelData(data);
 		return data;
@@ -148,7 +146,7 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 		
 		if(sunlight.canOperate())
 		{
-			FluidVariant waterFluid = steamProduction.tryMakeSteam();
+			var waterFluid = steamProduction.tryMakeSteam();
 			if(waterFluid.isBlank())
 			{
 				active = false;
@@ -163,7 +161,7 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 			active = false;
 		}
 		
-		for(Direction direction : Direction.values())
+		for(var direction : Direction.values())
 		{
 			this.getInventory().autoExtractFluids(level, worldPosition, direction);
 		}
@@ -176,10 +174,10 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 	@Override
 	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
-		ItemInteractionResult result = super.useItemOn(player, hand, face);
+		var result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction() && player != null)
 		{
-			ItemStack stack = player.getItemInHand(hand);
+			var stack = player.getItemInHand(hand);
 			if(stack.is(ItemTags.AXES))
 			{
 				boolean canUse;

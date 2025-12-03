@@ -10,11 +10,9 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 import net.swedz.tesseract.neoforge.helper.CubeOverlayRenderHelper;
 
 public final class MachineChainerHighlightRenderer extends MachineChainerBlockEntityRenderer
@@ -41,12 +39,12 @@ public final class MachineChainerHighlightRenderer extends MachineChainerBlockEn
 	@Override
 	public AABB getRenderBoundingBox(MachineChainerMachineBlockEntity machine)
 	{
-		ChainerLinks links = machine.getChainerComponent().links();
+		var links = machine.getChainerComponent().links();
 		boolean hasConnections = links.hasConnections();
 		boolean hasFailure = links.failPosition().isPresent();
 		if(hasConnections || hasFailure)
 		{
-			BlockPos endPos = hasFailure ?
+			var endPos = hasFailure ?
 					links.failPosition().get() :
 					links.position(links.count() + 1);
 			return new AABB(
@@ -65,8 +63,8 @@ public final class MachineChainerHighlightRenderer extends MachineChainerBlockEn
 	{
 		super.render(machine, tickDelta, matrices, buffer, light, overlay);
 		
-		BlockPos originPos = machine.getBlockPos();
-		ChainerLinks links = machine.getChainerComponent().links();
+		var originPos = machine.getBlockPos();
+		var links = machine.getChainerComponent().links();
 		
 		boolean holdingWrench = isHoldingWrench();
 		boolean holdingMachine = isHoldingMachine(machine);
@@ -117,8 +115,8 @@ public final class MachineChainerHighlightRenderer extends MachineChainerBlockEn
 	private void renderPosition(MachineChainerMachineBlockEntity machine, float tickDelta, PoseStack matrices, MultiBufferSource buffer, int light, int overlay,
 								BlockPos pos, float red, float green, float blue)
 	{
-		BlockPos originPos = machine.getBlockPos();
-		BlockPos offset = pos.subtract(originPos);
+		var originPos = machine.getBlockPos();
+		var offset = pos.subtract(originPos);
 		
 		matrices.pushPose();
 		matrices.translate((float) offset.getX(), (float) offset.getY(), (float) offset.getZ());
@@ -132,7 +130,7 @@ public final class MachineChainerHighlightRenderer extends MachineChainerBlockEn
 	{
 		int playerY = (int) Math.round(Minecraft.getInstance().player.getY());
 		
-		Direction machineDirection = machine.orientation.facingDirection;
+		var machineDirection = machine.orientation.facingDirection;
 		if(machineDirection.getAxis().isHorizontal())
 		{
 			int machineY = machine.getBlockPos().getY();
@@ -170,13 +168,13 @@ public final class MachineChainerHighlightRenderer extends MachineChainerBlockEn
 	private String pickArrowSymbol(MachineChainerMachineBlockEntity machine,
 								   Direction playerDirection, Direction renderDirection)
 	{
-		ChainerLinks links = machine.getChainerComponent().links();
-		Direction machineDirection = links.direction();
+		var links = machine.getChainerComponent().links();
+		var machineDirection = links.direction();
 		
-		Direction playerDirectionLeft = playerDirection.getCounterClockWise();
-		Direction playerDirectionRight = playerDirection.getClockWise();
+		var playerDirectionLeft = playerDirection.getCounterClockWise();
+		var playerDirectionRight = playerDirection.getClockWise();
 		
-		String arrow = "";
+		var arrow = "";
 		if(renderDirection != machineDirection && renderDirection != machineDirection.getOpposite())
 		{
 			if(playerDirection == machineDirection)
@@ -215,18 +213,18 @@ public final class MachineChainerHighlightRenderer extends MachineChainerBlockEn
 			return;
 		}
 		
-		BlockPos originPos = machine.getBlockPos();
-		ChainerLinks links = machine.getChainerComponent().links();
+		var originPos = machine.getBlockPos();
+		var links = machine.getChainerComponent().links();
 		
-		Direction playerDirection = Direction.fromYRot(Minecraft.getInstance().player.yHeadRot);
-		Direction renderDirection = this.pickNumberRenderFace(machine);
-		String arrow = this.pickArrowSymbol(machine, playerDirection, renderDirection);
+		var playerDirection = Direction.fromYRot(Minecraft.getInstance().player.yHeadRot);
+		var renderDirection = this.pickNumberRenderFace(machine);
+		var arrow = this.pickArrowSymbol(machine, playerDirection, renderDirection);
 		
 		for(int i = 1; i <= count; i++)
 		{
-			BlockPos pos = links.position(i);
-			BlockPos offset = pos.subtract(originPos);
-			Vec3 center = Vec3.atCenterOf(offset);
+			var pos = links.position(i);
+			var offset = pos.subtract(originPos);
+			var center = Vec3.atCenterOf(offset);
 			
 			matrices.pushPose();
 			
@@ -297,14 +295,14 @@ public final class MachineChainerHighlightRenderer extends MachineChainerBlockEn
 	
 	private static boolean isHoldingMachine(MachineChainerMachineBlockEntity machine)
 	{
-		Player player = Minecraft.getInstance().player;
+		var player = Minecraft.getInstance().player;
 		return machine.getChainerComponent().links().test(player.getMainHandItem()).isSuccess() ||
 			   machine.getChainerComponent().links().test(player.getOffhandItem()).isSuccess();
 	}
 	
 	private static boolean isHoldingWrench()
 	{
-		Player player = Minecraft.getInstance().player;
+		var player = Minecraft.getInstance().player;
 		return player.getMainHandItem().is(MITags.WRENCHES) ||
 			   player.getOffhandItem().is(MITags.WRENCHES);
 	}

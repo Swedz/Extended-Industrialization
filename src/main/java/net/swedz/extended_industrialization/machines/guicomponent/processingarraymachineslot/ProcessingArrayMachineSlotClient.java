@@ -89,7 +89,7 @@ public final class ProcessingArrayMachineSlotClient extends GuiComponentClient<U
 			@Override
 			public void renderBackground(GuiGraphics graphics, int leftPos, int topPos)
 			{
-				Rectangle box = this.getBox(leftPos, topPos);
+				var box = this.getBox(leftPos, topPos);
 				
 				int textureX = box.x() - leftPos - box.w();
 				graphics.blit(MachineScreen.BACKGROUND, box.x(), box.y(), textureX, 0, box.w(), box.h() - 4);

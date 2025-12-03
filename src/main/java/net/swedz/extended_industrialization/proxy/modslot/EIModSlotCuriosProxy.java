@@ -6,7 +6,6 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.tesseract.neoforge.proxy.ProxyEntrypoint;
 import net.swedz.tesseract.neoforge.proxy.ProxyEnvironment;
 import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,10 +28,10 @@ public class EIModSlotCuriosProxy extends EIModSlotProxy
 		CuriosApi.getCuriosInventory(player).ifPresent((inventory) ->
 				inventory.getCurios().forEach((identifier, slot) ->
 				{
-					IDynamicStackHandler stacks = slot.getStacks();
+					var stacks = slot.getStacks();
 					for(int index = 0; index < stacks.getSlots(); index++)
 					{
-						ItemStack stack = stacks.getStackInSlot(index);
+						var stack = stacks.getStackInSlot(index);
 						if(filter.test(stack))
 						{
 							contents.add(stack);

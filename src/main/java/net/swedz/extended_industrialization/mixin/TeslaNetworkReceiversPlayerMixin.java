@@ -6,7 +6,6 @@ import com.google.common.collect.Sets;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -52,9 +51,9 @@ public abstract class TeslaNetworkReceiversPlayerMixin extends LivingEntity
 	@Unique
 	private List<ItemStack> getAllItems()
 	{
-		Player player = (Player) (Object) this;
+		var player = (Player) (Object) this;
 		
-		Inventory inventory = player.getInventory();
+		var inventory = player.getInventory();
 		
 		List<ItemStack> items = Lists.newArrayList();
 		items.addAll(inventory.armor);
@@ -71,7 +70,7 @@ public abstract class TeslaNetworkReceiversPlayerMixin extends LivingEntity
 	)
 	private void tick(CallbackInfo callback)
 	{
-		Player player = (Player) (Object) this;
+		var player = (Player) (Object) this;
 		
 		if(this.level().isClientSide())
 		{
@@ -79,7 +78,7 @@ public abstract class TeslaNetworkReceiversPlayerMixin extends LivingEntity
 		}
 		
 		Set<WorldPos> found = Sets.newHashSet();
-		for(ItemStack stack : this.getAllItems())
+		for(var stack : this.getAllItems())
 		{
 			if(stack.getItem() instanceof TeslaHandheldReceiverItem && stack.has(EIComponents.SELECTED_TESLA_NETWORK))
 			{
@@ -87,17 +86,17 @@ public abstract class TeslaNetworkReceiversPlayerMixin extends LivingEntity
 			}
 		}
 		
-		Set<WorldPos> toRemove = Sets.difference(playerReceivers.keySet(), found);
-		for(WorldPos key : toRemove)
+		var toRemove = Sets.difference(playerReceivers.keySet(), found);
+		for(var key : toRemove)
 		{
-			PlayerTeslaReceiver receiver = playerReceivers.remove(key);
+			var receiver = playerReceivers.remove(key);
 			receiver.getNetwork().remove(receiver);
 		}
 		
-		Set<WorldPos> toAdd = Sets.difference(found, playerReceivers.keySet());
-		for(WorldPos key : toAdd)
+		var toAdd = Sets.difference(found, playerReceivers.keySet());
+		for(var key : toAdd)
 		{
-			PlayerTeslaReceiver receiver = new PlayerTeslaReceiver(player, key);
+			var receiver = new PlayerTeslaReceiver(player, key);
 			receiver.getNetwork().add(receiver);
 			playerReceivers.put(key, receiver);
 		}

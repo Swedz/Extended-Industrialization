@@ -11,14 +11,11 @@ import net.minecraft.world.level.material.Fluid;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.datamap.FertilizerPotency;
 import net.swedz.extended_industrialization.machines.component.farmer.FarmerComponent;
-import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlock;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerTile;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTask;
 import net.swedz.extended_industrialization.machines.component.farmer.task.FarmerTaskType;
 import net.swedz.extended_industrialization.network.packet.FarmerFertilizeBlockPacket;
 import net.swedz.tesseract.neoforge.compat.mi.helper.MachineInventoryHelper;
-
-import java.util.List;
 
 public final class FertilizingFarmerTask extends FarmerTask
 {
@@ -54,7 +51,7 @@ public final class FertilizingFarmerTask extends FarmerTask
 	{
 		if(fertilizerTicks <= 0 || fertilizerTickRate <= 0)
 		{
-			FertilizerPotency potency = tryConsumeFertilizer(inventory, Simulation.ACT);
+			var potency = tryConsumeFertilizer(inventory, Simulation.ACT);
 			if(potency != null)
 			{
 				fertilizerTickRate = potency.tickRate();
@@ -64,7 +61,7 @@ public final class FertilizingFarmerTask extends FarmerTask
 		
 		if(fertilizerTicks > 0 && fertilizerTickRate > 0 && processTick % fertilizerTickRate == 0)
 		{
-			List<FarmerBlock> crops = blockMap.tiles().stream()
+			var crops = blockMap.tiles().stream()
 					.map(FarmerTile::crop)
 					.filter((cropBlock) ->
 							cropBlock.state(level).getBlock() instanceof BonemealableBlock ||

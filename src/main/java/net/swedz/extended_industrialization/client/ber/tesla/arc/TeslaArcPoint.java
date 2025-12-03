@@ -27,7 +27,7 @@ public final class TeslaArcPoint
 	
 	public Vector4f matrixPosition()
 	{
-		Vec3 position = this.position();
+		var position = this.position();
 		return new Vector4f((float) position.x, (float) position.y, (float) position.z, 1.0f);
 	}
 	
@@ -43,7 +43,7 @@ public final class TeslaArcPoint
 	
 	public TeslaArcPoint lerp(TeslaArcPoint trailPoint, float delta)
 	{
-		Vec3 position = this.position();
+		var position = this.position();
 		return new TeslaArcPoint(position.lerp(trailPoint.position, delta), timeActive);
 	}
 	

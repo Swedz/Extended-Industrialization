@@ -189,7 +189,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	@Override
 	public MachineModelClientData getMachineModelData()
 	{
-		MachineModelClientData data = new MachineModelClientData(casing.getCasing());
+		var data = new MachineModelClientData(casing.getCasing());
 		data.isActive = isActive.isActive;
 		orientation.writeModelData(data);
 		return data;
@@ -252,7 +252,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 			this.sync(false);
 		}
 		
-		TeslaNetwork network = this.getNetwork();
+		var network = this.getNetwork();
 		if(!network.hasTransmitter())
 		{
 			network.loadTransmitter(transmitter);
@@ -281,7 +281,7 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 	@Override
 	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
-		ItemInteractionResult result = super.useItemOn(player, hand, face);
+		var result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction())
 		{
 			result = redstoneControl.onUse(this, player, hand);

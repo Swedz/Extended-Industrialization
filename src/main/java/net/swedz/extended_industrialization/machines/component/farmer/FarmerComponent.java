@@ -197,7 +197,7 @@ public final class FarmerComponent implements MachineComponent
 		
 		boolean hasWater = consumeWater(inventory, Simulation.SIMULATE);
 		
-		for(FarmerTask task : tasks)
+		for(var task : tasks)
 		{
 			task.run(level, plantingMode, tilling, processTick, hasWater);
 		}
@@ -237,17 +237,17 @@ public final class FarmerComponent implements MachineComponent
 		tag.putBoolean("tilling", tilling);
 		tag.putString("planting_mode", plantingMode.name());
 		
-		CompoundTag harvestingHandlersCache = new CompoundTag();
-		for(HarvestableBehavior harvestingHandler : harvestableBehaviorHolder.behaviors())
+		var harvestingHandlersCache = new CompoundTag();
+		for(var harvestingHandler : harvestableBehaviorHolder.behaviors())
 		{
 			harvestingHandler.writeNbt(harvestingHandlersCache);
 		}
 		tag.put("harvesting_handlers", harvestingHandlersCache);
 		
-		CompoundTag tasksTag = new CompoundTag();
-		for(FarmerTask task : tasks)
+		var tasksTag = new CompoundTag();
+		for(var task : tasks)
 		{
-			CompoundTag taskTag = new CompoundTag();
+			var taskTag = new CompoundTag();
 			task.writeNbt(taskTag);
 			if(!taskTag.isEmpty())
 			{
@@ -270,18 +270,18 @@ public final class FarmerComponent implements MachineComponent
 			plantingMode = defaultPlantingMode;
 		}
 		
-		CompoundTag harvestingHandlersCache = tag.getCompound("harvesting_handlers");
+		var harvestingHandlersCache = tag.getCompound("harvesting_handlers");
 		for(HarvestableBehavior harvestingHandler : harvestableBehaviorHolder.behaviors())
 		{
 			harvestingHandler.readNbt(harvestingHandlersCache);
 		}
 		
-		CompoundTag tasksTag = tag.getCompound("tasks");
+		var tasksTag = tag.getCompound("tasks");
 		if(!tasksTag.isEmpty())
 		{
-			for(FarmerTask task : tasks)
+			for(var task : tasks)
 			{
-				CompoundTag taskTag = tasksTag.getCompound(task.type().name());
+				var taskTag = tasksTag.getCompound(task.type().name());
 				task.readNbt(taskTag, isUpgradingMachine);
 			}
 		}

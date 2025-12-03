@@ -12,7 +12,7 @@ import java.lang.invoke.MethodHandles;
  * be issues with mismatching model instances.</p>
  *
  * <p>This is taken from Modern Industrialization's
- * {@link aztech.modern_industrialization.machines.MachineBlockEntityRenderer}.</p>
+ * {@link aztech.modern_industrialization.client.machines.MachineBlockEntityRenderer}.</p>
  */
 public final class ContinuityModelUnwrapper
 {

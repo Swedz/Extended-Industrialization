@@ -2,12 +2,10 @@ package net.swedz.extended_industrialization.machines.component.tesla;
 
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import aztech.modern_industrialization.machines.MachineComponent;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.NoteBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.tesseract.neoforge.api.Assert;
 
 public final class SingingTeslaCoilComponent implements MachineComponent
@@ -42,8 +40,8 @@ public final class SingingTeslaCoilComponent implements MachineComponent
 		{
 			return -1;
 		}
-		BlockPos below = machine.getBlockPos().below();
-		BlockState state = machine.getLevel().getBlockState(below);
+		var below = machine.getBlockPos().below();
+		var state = machine.getLevel().getBlockState(below);
 		return state.is(Blocks.NOTE_BLOCK) ? state.getValue(NoteBlock.NOTE) : -1;
 	}
 	

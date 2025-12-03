@@ -33,9 +33,9 @@ public final class FarmerComponentPlantableStacks
 	
 	public void update(List<ConfigurableItemStack> stacks)
 	{
-		for(ConfigurableItemStack stack : stacks)
+		for(var stack : stacks)
 		{
-			PlantableConfigurableItemStack listener = listeners.remove(stack);
+			var listener = listeners.remove(stack);
 			if(listener != null)
 			{
 				stack.removeListener(listener);
@@ -43,9 +43,9 @@ public final class FarmerComponentPlantableStacks
 		}
 		listeners.clear();
 		items.clear();
-		for(ConfigurableItemStack stack : stacks)
+		for(var stack : stacks)
 		{
-			PlantableConfigurableItemStack listener = new PlantableConfigurableItemStack(this, stack);
+			var listener = new PlantableConfigurableItemStack(this, stack);
 			listener.listenAll(List.of(stack), null);
 			listeners.put(stack, listener);
 			items.add(listener);

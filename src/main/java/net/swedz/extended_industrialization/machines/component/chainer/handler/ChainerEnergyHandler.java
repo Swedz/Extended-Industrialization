@@ -29,7 +29,7 @@ public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, 
 	{
 		List<InventoryWrapper<MIEnergyStorage>> wrappers = Lists.newArrayList();
 		
-		for(MIEnergyStorage handler : this.getMachineLinks().energyHandlers())
+		for(var handler : this.getMachineLinks().energyHandlers())
 		{
 			if(handler.canConnect(cableTier.get()))
 			{

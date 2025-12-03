@@ -19,14 +19,12 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.brewing.BrewingRecipe;
-import net.neoforged.neoforge.common.brewing.IBrewingRecipe;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.tesseract.neoforge.compat.mi.recipe.MIMachineRecipeBuilder;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
@@ -68,7 +66,7 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 	
 	private RecipeHolder<MachineRecipe> generate(ResourceLocation id, Ingredient inputIngredient, Ingredient reagentIngredient, ItemStack outputStack)
 	{
-		MIMachineRecipeBuilder recipe = new MIMachineRecipeBuilder(this, 4, 5 * 20);
+		var recipe = new MIMachineRecipeBuilder(this, 4, 5 * 20);
 		
 		recipe.addItemInput(inputIngredient, 4, 1f);
 		recipe.addItemInput(reagentIngredient, 1, 1f);
@@ -85,13 +83,13 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 	
 	private RecipeHolder<MachineRecipe> generateMix(ItemStack stack, PotionBrewing.Mix<Potion> mix)
 	{
-		ItemStack inputStack = stack.copy();
+		var inputStack = stack.copy();
 		inputStack.set(DataComponents.POTION_CONTENTS, new PotionContents(mix.from()));
-		Ingredient reagentIngredient = mix.ingredient();
-		ItemStack outputStack = stack.copy();
+		var reagentIngredient = mix.ingredient();
+		var outputStack = stack.copy();
 		outputStack.set(DataComponents.POTION_CONTENTS, new PotionContents(mix.to()));
 		
-		ResourceLocation id = EI.id("/brewery/generated/mix/%s/%s/%s/%s".formatted(
+		var id = EI.id("/brewery/generated/mix/%s/%s/%s/%s".formatted(
 				id(stack),
 				idPotion(mix.from()),
 				id(reagentIngredient),
@@ -105,11 +103,11 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 	{
 		List<RecipeHolder<MachineRecipe>> recipes = Lists.newArrayList();
 		
-		for(Ingredient allowedContainer : potionBrewing.containers)
+		for(var allowedContainer : potionBrewing.containers)
 		{
-			for(ItemStack stack : allowedContainer.getItems())
+			for(var stack : allowedContainer.getItems())
 			{
-				for(PotionBrewing.Mix<Potion> mix : potionBrewing.potionMixes)
+				for(var mix : potionBrewing.potionMixes)
 				{
 					if(mix.ingredient().getItems().length > 0)
 					{
@@ -124,13 +122,13 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 	
 	private RecipeHolder<MachineRecipe> generateContainer(PotionBrewing.Mix<Item> mix, Holder<Potion> potion)
 	{
-		ItemStack inputStack = new ItemStack(mix.from().value());
+		var inputStack = new ItemStack(mix.from().value());
 		inputStack.set(DataComponents.POTION_CONTENTS, new PotionContents(potion));
-		Ingredient reagentIngredient = mix.ingredient();
-		ItemStack outputStack = new ItemStack(mix.to().value());
+		var reagentIngredient = mix.ingredient();
+		var outputStack = new ItemStack(mix.to().value());
 		outputStack.set(DataComponents.POTION_CONTENTS, new PotionContents(potion));
 		
-		ResourceLocation id = EI.id("/brewery/generated/container/%s/%s/%s/%s".formatted(
+		var id = EI.id("/brewery/generated/container/%s/%s/%s/%s".formatted(
 				id(potion.unwrapKey().orElseThrow().location()),
 				idItem(mix.from()),
 				id(reagentIngredient),
@@ -144,7 +142,7 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 	{
 		List<RecipeHolder<MachineRecipe>> recipes = Lists.newArrayList();
 		
-		for(PotionBrewing.Mix<Item> mix : potionBrewing.containerMixes)
+		for(var mix : potionBrewing.containerMixes)
 		{
 			if(mix.ingredient().getItems().length > 0)
 			{
@@ -174,7 +172,7 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 	
 	private RecipeHolder<MachineRecipe> generateModded(ItemStack inputStack, Ingredient reagentIngredient, ItemStack outputStack)
 	{
-		ResourceLocation id = EI.id("/brewery/generated/modded_improper/%s/%s/%s".formatted(
+		var id = EI.id("/brewery/generated/modded_improper/%s/%s/%s".formatted(
 				id(inputStack),
 				id(reagentIngredient),
 				id(outputStack)
@@ -182,8 +180,8 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 		
 		if(inputStack.has(DataComponents.POTION_CONTENTS) && outputStack.has(DataComponents.POTION_CONTENTS))
 		{
-			Optional<Holder<Potion>> inputPotion = inputStack.get(DataComponents.POTION_CONTENTS).potion();
-			Optional<Holder<Potion>> outputPotion = outputStack.get(DataComponents.POTION_CONTENTS).potion();
+			var inputPotion = inputStack.get(DataComponents.POTION_CONTENTS).potion();
+			var outputPotion = outputStack.get(DataComponents.POTION_CONTENTS).potion();
 			if(inputPotion.isPresent() && outputPotion.isPresent())
 			{
 				id = EI.id("/brewery/generated/modded/%s/%s/%s".formatted(
@@ -201,10 +199,10 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 	{
 		List<RecipeHolder<MachineRecipe>> recipes = Lists.newArrayList();
 		
-		for(ItemStack inputStack : brewingRecipe.getInput().getItems())
+		for(var inputStack : brewingRecipe.getInput().getItems())
 		{
-			Ingredient reagentIngredient = brewingRecipe.getIngredient();
-			ItemStack outputStack = brewingRecipe.getOutput(inputStack, reagentIngredient.getItems()[0]);
+			var reagentIngredient = brewingRecipe.getIngredient();
+			var outputStack = brewingRecipe.getOutput(inputStack, reagentIngredient.getItems()[0]);
 			recipes.add(this.generateModded(inputStack, reagentIngredient, outputStack));
 		}
 		
@@ -215,7 +213,7 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 	{
 		List<RecipeHolder<MachineRecipe>> recipes = Lists.newArrayList();
 		
-		for(IBrewingRecipe entry : potionBrewing.getRecipes())
+		for(var entry : potionBrewing.getRecipes())
 		{
 			if(entry instanceof BrewingRecipe brewingRecipe)
 			{

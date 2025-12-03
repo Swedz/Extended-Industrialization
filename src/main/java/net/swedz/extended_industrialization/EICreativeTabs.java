@@ -4,7 +4,6 @@ import dev.technici4n.grandpower.api.ISimpleEnergyItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
@@ -20,7 +19,7 @@ public final class EICreativeTabs
 			.title(Component.translatable("itemGroup.%s.%s".formatted(EI.ID, EI.ID)))
 			.icon(() ->
 			{
-				ItemStack stack = EIItems.ELECTRIC_MINING_DRILL.asItem().getDefaultInstance();
+				var stack = EIItems.ELECTRIC_MINING_DRILL.asItem().getDefaultInstance();
 				stack.set(EIComponents.HIDE_BAR, true);
 				return stack;
 			})

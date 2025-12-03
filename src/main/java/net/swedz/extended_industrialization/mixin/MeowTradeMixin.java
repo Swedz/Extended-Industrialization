@@ -16,7 +16,7 @@ public class MeowTradeMixin
 	)
 	private void registerGoals(CallbackInfo callback)
 	{
-		Cat cat = (Cat) (Object) this;
+		var cat = (Cat) (Object) this;
 		cat.goalSelector.addGoal(4, new MeowTradeGoal(cat));
 	}
 }

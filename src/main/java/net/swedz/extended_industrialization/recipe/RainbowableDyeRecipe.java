@@ -30,12 +30,12 @@ public final class RainbowableDyeRecipe extends CustomRecipe
 	
 	private Optional<Match> find(CraftingInput input)
 	{
-		ItemStack dyeableItem = ItemStack.EMPTY;
+		var dyeableItem = ItemStack.EMPTY;
 		List<DyeItem> dyeItems = Lists.newArrayList();
 		
 		for(int i = 0; i < input.size(); i++)
 		{
-			ItemStack item = input.getItem(i);
+			var item = input.getItem(i);
 			if(!item.isEmpty())
 			{
 				if(item.is(ItemTags.DYEABLE) && item.is(EITags.Items.RAINBOW_DYEABLE))
@@ -107,7 +107,7 @@ public final class RainbowableDyeRecipe extends CustomRecipe
 			{
 				if(this.rainbow())
 				{
-					ItemStack result = dyeableItem.copy();
+					var result = dyeableItem.copy();
 					result.remove(DataComponents.DYED_COLOR);
 					result.set(EIComponents.RAINBOW, new RainbowDataComponent(true, true));
 					return result;

@@ -70,7 +70,7 @@ public final class SteamBreweryMachineBlockEntity extends BreweryMachineBlockEnt
 	@Override
 	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
-		ItemInteractionResult result = super.useItemOn(player, hand, face);
+		var result = super.useItemOn(player, hand, face);
 		if(!result.consumesAction())
 		{
 			return overclockComponent.onUse(this, player, hand);

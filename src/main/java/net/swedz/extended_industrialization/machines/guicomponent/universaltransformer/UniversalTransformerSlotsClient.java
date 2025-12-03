@@ -97,7 +97,7 @@ public final class UniversalTransformerSlotsClient extends GuiComponentClient<Un
 			@Override
 			public void renderBackground(GuiGraphics graphics, int leftPos, int topPos)
 			{
-				Rectangle box = this.getBox(leftPos, topPos);
+				var box = this.getBox(leftPos, topPos);
 				
 				int textureX = leftPos - box.x() - box.w();
 				graphics.blit(MachineScreen.BACKGROUND, box.x(), box.y(), textureX, 0, box.w(), box.h() - 4);

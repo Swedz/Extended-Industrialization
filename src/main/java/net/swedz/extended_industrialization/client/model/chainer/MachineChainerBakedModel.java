@@ -101,7 +101,7 @@ public final class MachineChainerBakedModel implements IDynamicBakedModel
 		{
 			return modelData;
 		}
-		MachineCasing casing = Objects.requireNonNullElse(machineData.casing, this.casing);
+		var casing = Objects.requireNonNullElse(machineData.casing, this.casing);
 		return MachineBakedModel.getCasingModel(casing).getModelData(level, pos, state, modelData);
 	}
 	
@@ -114,7 +114,7 @@ public final class MachineChainerBakedModel implements IDynamicBakedModel
 		{
 			data = defaultData;
 		}
-		MachineCasing casing = Objects.requireNonNullElse(data.casing, this.casing);
+		var casing = Objects.requireNonNullElse(data.casing, this.casing);
 		
 		var sprites = this.getSprites();
 		

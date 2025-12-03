@@ -3,7 +3,6 @@ package net.swedz.extended_industrialization.machines.component.tesla.network.re
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.api.energy.EnergyApi;
 import com.google.common.collect.Lists;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.proxy.modslot.EIModSlotProxy;
@@ -33,7 +32,7 @@ public final class PlayerTeslaReceiver implements TeslaReceiver
 	@Override
 	public long receiveEnergy(long maxReceive, boolean simulate)
 	{
-		Inventory inventory = player.getInventory();
+		var inventory = player.getInventory();
 		
 		List<ItemStack> items = Lists.newArrayList();
 		items.addAll(inventory.armor);

@@ -51,7 +51,7 @@ public final class TreeHarvestable implements LootTableHarvestableBehavior
 		var origin = event.getPos();
 		if(blockMap.containsDirtAt(origin.below()))
 		{
-			List<BlockPos> blocks = event.getPositions();
+			var blocks = event.getPositions();
 			blocks.removeIf(blockMap::containsDirtAt);
 			blocks.sort(Collections.reverseOrder(Comparator.comparingInt(Vec3i::getY)));
 			trees.put(origin, new FarmerTree(origin, blocks));
@@ -69,24 +69,24 @@ public final class TreeHarvestable implements LootTableHarvestableBehavior
 	@Override
 	public void writeNbt(CompoundTag tag)
 	{
-		CompoundTag trees = new CompoundTag();
-		for(FarmerTree tree : this.trees.values())
+		var treesTag = new CompoundTag();
+		for(FarmerTree tree : trees.values())
 		{
 			long[] list = tree.blocks().stream().mapToLong(BlockPos::asLong).toArray();
-			trees.putLongArray(Long.toString(tree.origin().asLong()), list);
+			treesTag.putLongArray(Long.toString(tree.origin().asLong()), list);
 		}
-		tag.put("trees", trees);
+		tag.put("trees", treesTag);
 	}
 	
 	@Override
 	public void readNbt(CompoundTag tag)
 	{
-		CompoundTag trees = tag.getCompound("trees");
-		for(String key : trees.getAllKeys())
+		var treesTag = tag.getCompound("trees");
+		for(String key : treesTag.getAllKeys())
 		{
-			BlockPos base = BlockPos.of(Long.parseLong(key));
-			List<BlockPos> blocks = Arrays.stream(trees.getLongArray(key)).mapToObj(BlockPos::of).toList();
-			this.trees.put(base, new FarmerTree(base, blocks));
+			var base = BlockPos.of(Long.parseLong(key));
+			var blocks = Arrays.stream(treesTag.getLongArray(key)).mapToObj(BlockPos::of).toList();
+			trees.put(base, new FarmerTree(base, blocks));
 		}
 	}
 }

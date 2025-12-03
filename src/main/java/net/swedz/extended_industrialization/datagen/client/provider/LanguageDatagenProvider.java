@@ -51,7 +51,7 @@ public final class LanguageDatagenProvider extends LanguageProvider
 			this.add(fluid.block().get(), fluid.identifier().englishName());
 		}
 		
-		for(EIKeybinds.Keybind keybind : EIKeybinds.Registry.getMappings())
+		for(var keybind : EIKeybinds.Registry.getMappings())
 		{
 			this.add(keybind.descriptionId(), keybind.englishName());
 		}
