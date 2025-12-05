@@ -30,6 +30,8 @@ public final class EITags
 		TagKey<Item> RAINBOW_DYEABLE            = item("rainbow_dyeable", "Rainbow Dyeable");
 		TagKey<Item> PROCESSING_ARRAY_BLACKLIST = item("processing_array_blacklist", "Processing Array Blacklist");
 		
+		TagKey<Item> BUCKETS_HONEY = itemCommon("buckets/honey");
+		
 		interface EnchantmentModules
 		{
 			TagKey<Item> FARMER            = item("enchantment_modules/farmer", "Farmer Enchantment Modules");

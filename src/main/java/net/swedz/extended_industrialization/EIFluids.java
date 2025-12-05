@@ -41,7 +41,11 @@ public final class EIFluids
 		Registry.init(bus);
 	}
 	
-	public static final MIFluidHolder HONEY               = (MIFluidHolder) create("honey", "Honey", 0xF2AE21, NEAR_OPACITY, FluidTexture.WATER_LIKE, false).tag(EITags.Fluids.HONEY).register();
+	public static final MIFluidHolder HONEY = (MIFluidHolder) create("honey", "Honey", 0xF2AE21, NEAR_OPACITY, FluidTexture.WATER_LIKE, false)
+			.tag(EITags.Fluids.HONEY)
+			.bucketItem((item) -> item.tag(EITags.Items.BUCKETS_HONEY))
+			.register();
+	
 	public static final MIFluidHolder MANURE              = create("manure", "Manure", 0x211404, FULL_OPACITY, FluidTexture.LAVA_LIKE, false).register();
 	public static final MIFluidHolder COMPOSTED_MANURE    = create("composted_manure", "Composted Manure", 0x301b00, FULL_OPACITY, FluidTexture.LAVA_LIKE, false).register();
 	public static final MIFluidHolder PHOSPHORIC_ACID     = create("phosphoric_acid", "Phosphoric Acid", 0x00A000, NEAR_OPACITY, FluidTexture.WATER_LIKE, false).register();
