@@ -15,12 +15,14 @@ import java.util.function.Supplier;
 public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, InventoryWrapper<MIEnergyStorage>> implements MIEnergyStorage
 {
 	private final Supplier<CableTier> cableTier;
+	private final Supplier<Long>      maxTransfer;
 	private final boolean             insertable;
 	
-	public ChainerEnergyHandler(ChainerLinks chainerLinks, Supplier<CableTier> cableTier, boolean insertable)
+	public ChainerEnergyHandler(ChainerLinks chainerLinks, Supplier<CableTier> cableTier, Supplier<Long> maxTransfer, boolean insertable)
 	{
 		super(chainerLinks);
 		this.cableTier = cableTier;
+		this.maxTransfer = maxTransfer;
 		this.insertable = insertable;
 	}
 	
@@ -48,6 +50,7 @@ public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, 
 		{
 			return 0;
 		}
+		maxReceive = Math.min(maxReceive, maxTransfer.get());
 		return TransferHelper.distributeLong((wrapper, amount, opSimulate) -> wrapper.handler().receive(amount, opSimulate), wrappers, maxReceive, simulate);
 	}
 	
@@ -58,6 +61,7 @@ public final class ChainerEnergyHandler extends ChainerHandler<MIEnergyStorage, 
 		{
 			return 0;
 		}
+		maxExtract = Math.min(maxExtract, maxTransfer.get());
 		return TransferHelper.distributeLong((wrapper, amount, opSimulate) -> wrapper.handler().extract(amount, opSimulate), wrappers, maxExtract, simulate);
 	}
 	

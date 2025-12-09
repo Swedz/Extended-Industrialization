@@ -135,6 +135,12 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		return casing.getCableTier();
 	}
 	
+	public long getMaxTransfer()
+	{
+		int multiplier = EI.config().machineChainerMaxTransferMultiplier();
+		return multiplier == 0 ? Long.MAX_VALUE : (this.getCableTier().getMaxTransfer() * multiplier);
+	}
+	
 	@Override
 	public MIInventory getInventory()
 	{
@@ -200,7 +206,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			{
 				transferFluid.autoExtract(level, worldPosition, orientation.outputDirection);
 			}
-			if(transferEnergy.autoExtract(level, worldPosition, orientation.outputDirection, this.getCableTier()))
+			if(transferEnergy.autoExtract(level, worldPosition, orientation.outputDirection, this.getCableTier(), this.getMaxTransfer()))
 			{
 				this.setChanged();
 			}

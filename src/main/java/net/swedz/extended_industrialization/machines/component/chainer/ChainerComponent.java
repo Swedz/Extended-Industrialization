@@ -40,8 +40,8 @@ public final class ChainerComponent implements MachineComponent, ChainerElement
 		
 		this.itemHandler = new ChainerItemHandler(links);
 		this.fluidHandler = new ChainerFluidHandler(links);
-		this.insertableEnergyHandler = new ChainerEnergyHandler(links, machine::getCableTier, true);
-		this.extractableEnergyHandler = new ChainerEnergyHandler(links, machine::getCableTier, false);
+		this.insertableEnergyHandler = new ChainerEnergyHandler(links, machine::getCableTier, machine::getMaxTransfer, true);
+		this.extractableEnergyHandler = new ChainerEnergyHandler(links, machine::getCableTier, machine::getMaxTransfer, false);
 		
 		this.listenerNeighborNotify = (event) ->
 		{
