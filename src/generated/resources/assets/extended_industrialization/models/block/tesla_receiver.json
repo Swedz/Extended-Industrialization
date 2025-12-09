@@ -5,7 +5,7 @@
     "front": "extended_industrialization:block/machines/tesla_receiver/overlay_front",
     "front_active": "extended_industrialization:block/machines/tesla_receiver/overlay_front_active",
     "item_auto": "modern_industrialization:block/overlays/item_auto",
-    "output": "modern_industrialization:block/overlays/output",
+    "output": "modern_industrialization:block/overlays/output_energy",
     "side": "extended_industrialization:block/machines/tesla_receiver/overlay_side",
     "side_active": "extended_industrialization:block/machines/tesla_receiver/overlay_side_active",
     "top": "extended_industrialization:block/machines/tesla_receiver/overlay_top",
