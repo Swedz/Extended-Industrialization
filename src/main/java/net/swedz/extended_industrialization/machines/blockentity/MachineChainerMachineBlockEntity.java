@@ -138,7 +138,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 	public long getMaxTransfer()
 	{
 		int multiplier = EI.config().machineChainerMaxTransferMultiplier();
-		return multiplier == 0 ? Long.MAX_VALUE : this.getCableTier().getMaxTransfer() * multiplier;
+		return multiplier == 0 ? Long.MAX_VALUE : (this.getCableTier().getMaxTransfer() * multiplier);
 	}
 	
 	@Override
