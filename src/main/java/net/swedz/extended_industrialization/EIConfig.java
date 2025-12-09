@@ -23,6 +23,17 @@ public interface EIConfig
 	}
 	
 	@ConfigKey
+	@ConfigComment({
+			"The multiplier applied to the transfer rate of machine chainers. The base transfer rate is equal to the max transfer rate of the cable tier of the chainer (as per the hull).",
+			"Set to 0 for infinite transfer."
+	})
+	@Range.Integer(min = 0, max = 1000)
+	default int machineChainerMaxTransferMultiplier()
+	{
+		return 3;
+	}
+	
+	@ConfigKey
 	@ConfigComment("Whether upgrades should be allowed in the Processing Array")
 	default boolean allowUpgradesInProcessingArray()
 	{
