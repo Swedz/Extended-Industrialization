@@ -360,7 +360,7 @@ public final class EIMachines
 				.registerMachine();
 		
 		hook.builder("universal_transformer", "Universal Transformer", UniversalTransformerMachineBlockEntity::new)
-				.builtinModel(CableTier.LV.casing, "universal_transformer", (model) -> model.top(true).side(true).front(false).active(false))
+				.builtinModel(CableTier.LV.casing, "universal_transformer", (model) -> model.top(true).side(true).front(false).active(false).outputTextureEnergy())
 				.registrator(UniversalTransformerMachineBlockEntity::registerEnergyApi)
 				.registerMachine();
 		
@@ -370,7 +370,7 @@ public final class EIMachines
 			String englishName = "%s Solar Panel".formatted(tier.shortEnglishName);
 			String overlayFolder = "solar_panel/%s".formatted(tier.name);
 			hook.builder(name, englishName, (bep) -> new SolarPanelMachineBlockEntity(bep, EI.id(name), tier))
-					.builtinModel(tier.casing, overlayFolder, (model) -> model.top(true).side(true).front(false).active(false))
+					.builtinModel(tier.casing, overlayFolder, (model) -> model.top(true).side(true).front(false).active(false).outputTextureEnergy())
 					.registrator(MachineBlockEntity::registerItemApi)
 					.registrator(MachineBlockEntity::registerFluidApi)
 					.registrator(SolarPanelMachineBlockEntity::registerEnergyApi)
@@ -388,7 +388,7 @@ public final class EIMachines
 				.registerMachine();
 		
 		hook.builder("tesla_receiver", "Tesla Receiver", TeslaReceiverMachineBlockEntity::new)
-				.builtinModel(CableTier.LV.casing, "tesla_receiver", (model) -> model.front(true).top(true).side(true).active(true))
+				.builtinModel(CableTier.LV.casing, "tesla_receiver", (model) -> model.front(true).top(true).side(true).active(true).outputTextureEnergy())
 				.registrator(TeslaReceiverMachineBlockEntity::registerEnergyApi)
 				.registerMachine();
 		
