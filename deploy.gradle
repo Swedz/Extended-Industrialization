@@ -9,7 +9,7 @@ static def trimChangelog(String changelog, int maxLength, boolean discordFormat)
 
 	changelog = changelog.replaceAll(/https:\/\/github.com\/([^ ]+)\/pull\/([0-9]+)/, '[#\$2](https://github.com/\$1/pull/\$2)')
 
-	changelog = changelog.replaceAll(/\*\*Full Changelog\*\*: (https:\/\/github.com\/[^ ]+\/compare\/[^\s]+)/, '[Full Changelog](\$1)')
+	changelog = changelog.replaceAll(/\*\*Full Changelog\*\*: (https:\/\/github.com\/\S+)/, '[Full Changelog](\$1)')
 
 	if (discordFormat) {
 		changelog = changelog.replaceAll(/\r?\n/, '\\\\n')
@@ -84,42 +84,49 @@ publishing {
 	}
 }
 
-if (System.getenv("CURSEFORGE_API_KEY")) {
-	curseforge {
-		apiKey = System.getenv("CURSEFORGE_API_KEY")
+static Map<String, String> gatherProjectRelations(String property) {
+	Map<String, String> projectRelations = new HashMap<>()
 
-		project {
-			id = project.curseforge_project
-			releaseType = System.getenv("RELEASE_TYPE")
-			changelogType = "markdown"
-			delegate.changelog = System.getenv("MOD_CHANGELOG_TRIMMED_PUBLISH")
-
-			def compatible_minecraft_versions = project.compatible_minecraft_versions.split(",")
-			compatible_minecraft_versions.each { addGameVersion it }
-			addGameVersion "NeoForge"
-			addGameVersion "Java 21"
-
-			relations {
-				def relations = project.curseforge_project_relations.split(",")
-				relations.each {
-					def split = it.split(":")
-					def dependency = split[0]
-					def requirementType = split[1]
-					if (requirementType == "required") {
-						requiredDependency dependency
-					} else if (requirementType == "optional") {
-						optionalDependency dependency
-					} else if (requirementType == "incompatibility") {
-						incompatible dependency
-					}
-				}
-			}
-
-			mainArtifact(tasks.named("jar").flatMap { it.archiveFile })
+	def relations = property.split(",")
+	relations.each {
+		def split = it.split(":")
+		if (split.length == 2) {
+			def dependency = split[0]
+			def requirementType = split[1]
+			projectRelations.put(dependency, requirementType)
 		}
+	}
 
-		options {
-			forgeGradleIntegration = false
+	return projectRelations
+}
+
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
+if (System.getenv("CURSEFORGE_API_KEY")) {
+	tasks.register('publishCurseForge', TaskPublishCurseForge).configure {
+		apiToken = System.getenv("CURSEFORGE_API_KEY")
+
+		def mainFile = upload(project.curseforge_project, jar)
+		mainFile.releaseType = System.getenv("RELEASE_TYPE")
+		mainFile.changelogType = "markdown"
+		mainFile.changelog = System.getenv("MOD_CHANGELOG_TRIMMED_PUBLISH")
+
+		def compatible_minecraft_versions = project.compatible_minecraft_versions.split(",")
+		compatible_minecraft_versions.each { mainFile.addGameVersion(it) }
+		mainFile.addGameVersion("NeoForge")
+		mainFile.addGameVersion("Java 21")
+
+		def projectRelations = gatherProjectRelations(project.curseforge_project_relations)
+		projectRelations.each {
+			def dependency = it.getKey()
+			def requirementType = it.getValue()
+			if (requirementType == "required") {
+				mainFile.addRequirement(dependency)
+			} else if (requirementType == "optional") {
+				mainFile.addOptional(dependency)
+			} else if (requirementType == "incompatibility") {
+				mainFile.addIncompatibility(dependency)
+			}
 		}
 	}
 }
@@ -137,18 +144,19 @@ if (System.getenv("MODRINTH_API_KEY")) {
 		gameVersions = project.compatible_minecraft_versions.split(",").collect { it }
 		loaders = ["neoforge"]
 
-		dependencies {
-			def relations = project.modrinth_project_relations.split(",")
-			relations.each {
-				def split = it.split(":")
-				def dependency = split[0]
-				def requirementType = split[1]
-				if (requirementType == "required") {
-					required.project dependency
-				} else if (requirementType == "optional") {
-					optional.project dependency
-				} else if (requirementType == "incompatibility") {
-					incompatible.project dependency
+		def projectRelations = gatherProjectRelations(project.modrinth_project_relations)
+		if (!projectRelations.isEmpty()) {
+			dependencies {
+				projectRelations.each {
+					def dependency = it.getKey()
+					def requirementType = it.getValue()
+					if (requirementType == "required") {
+						required.project dependency
+					} else if (requirementType == "optional") {
+						optional.project dependency
+					} else if (requirementType == "incompatibility") {
+						incompatible.project dependency
+					}
 				}
 			}
 		}

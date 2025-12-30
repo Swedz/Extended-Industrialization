@@ -64,7 +64,7 @@ jobs:
           MODMAVEN_USERNAME: ${{ secrets.MODMAVEN_USERNAME }}
           MODMAVEN_PASSWORD: ${{ secrets.MODMAVEN_PASSWORD }}
       - name: Publish to Curseforge
-        run: ./gradlew curseforge
+        run: ./gradlew publishCurseForge
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
       - name: Publish to Modrinth
