@@ -76,6 +76,8 @@ public final class LanguageDatagenProvider extends LanguageProvider
 		
 		this.add(EI.id("tesla").toLanguageKey("death.attack"), "%1$s was electrocuted to death");
 		this.add(EI.id("nano_saber_sweep").toLanguageKey("death.attack"), "%1$s was vaporized");
+		this.add(EI.id("nano_saber_sweep.player").toLanguageKey("death.attack"), "%1$s was vaporized by %2$s");
+		this.add(EI.id("nano_saber_sweep.item").toLanguageKey("death.attack"), "%1$s was vaporized by %2$s using %3$s");
 		
 		this.add("curios.identifier.shoulders", "Shoulders");
 	}
