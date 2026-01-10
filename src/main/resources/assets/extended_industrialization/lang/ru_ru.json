@@ -60,6 +60,8 @@
   "block.extended_industrialization.universal_transformer": "Универсальный трансформатор",
   "curios.identifier.shoulders": "Плечи",
   "death.attack.extended_industrialization.nano_saber_sweep": "%1$s был испарён",
+  "death.attack.extended_industrialization.nano_saber_sweep.item": "%1$s был испарён %2$s с помощью %3$s",
+  "death.attack.extended_industrialization.nano_saber_sweep.player": "%1$s был испарён %2$s",
   "death.attack.extended_industrialization.tesla": "%1$s погиб от удара током",
   "entity.extended_industrialization.nano_saber_sweep": "Взмах нано-сабли",
   "item.extended_industrialization.blazing_essence_bucket": "Ведро пламенной эссенции",
