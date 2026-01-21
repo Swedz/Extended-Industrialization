@@ -41,6 +41,20 @@ public interface EIConfig
 	}
 	
 	@ConfigKey
+	@ConfigComment({
+			"The maximum size tier allowed for the Processing Array.",
+			"WARNING: Changing this and then loading a world with a Processing Array that has a selected tier beyond this value",
+			"         will crash. If you must change this for an existing world, I recommend downgrading all of the existing",
+			"         Processing Arrays and then making the change to this config option.",
+			"1 = 8, 2 = 16, 3 = 32, 4 = 64 (default)"
+	})
+	@Range.Integer(min = 1, max = 4)
+	default int processingArrayMaxSize()
+	{
+		return 4;
+	}
+	
+	@ConfigKey
 	@ConfigComment("The maximum amount of random ticks the farmer can do on a crop block in a single use of fertilizer")
 	@Range.Integer(min = 1, max = 1000)
 	default int farmerFertilizerMaxRandomTicks()
