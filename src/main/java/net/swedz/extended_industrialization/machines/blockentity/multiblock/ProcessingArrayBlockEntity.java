@@ -26,6 +26,7 @@ import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostT
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.multiplied.AbstractElectricMultipliedCraftingMultiblockBlockEntity;
 import net.swedz.tesseract.neoforge.compat.mi.machine.multiblock.member.PredicateSimpleMember;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -81,7 +82,7 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 					}
 				},
 				new ShapeSelection.LineInfo(
-						IntStream.range(0, SPLIT).map(this::getMachineStackSize).mapToObj(EI.text()::processingArraySize).map((c) -> (Component) c).toList(),
+						IntStream.range(0, EI.config().processingArrayMaxSize()).map(this::getMachineStackSize).mapToObj(EI.text()::processingArraySize).map((c) -> (Component) c).toList(),
 						false
 				)
 		));
@@ -132,7 +133,7 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 	
 	static
 	{
-		SHAPE_TEMPLATES = new ShapeTemplate[SPLIT];
+		var shapeTemplates = new ShapeTemplate[SPLIT];
 		
 		var casing = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("clean_stainless_steel_machine_casing")));
 		var pipe = SimpleMember.forBlock(MIBlock.BLOCK_DEFINITIONS.get(MI.id("stainless_steel_machine_casing_pipe")));
@@ -147,7 +148,7 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 			i < SPLIT && machines <= MAX_MACHINES;
 			i++, size += 2, machines *= MULT_MACHINES)
 		{
-			ShapeTemplate.Builder builder = new ShapeTemplate.Builder(MachineCasings.CLEAN_STAINLESS_STEEL);
+			var builder = new ShapeTemplate.Builder(MachineCasings.CLEAN_STAINLESS_STEEL);
 			for(int z = 0; z < size; z++)
 			{
 				boolean isFront = z == 0;
@@ -163,14 +164,16 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 					}
 				}
 			}
-			SHAPE_TEMPLATES[i] = builder.build();
+			shapeTemplates[i] = builder.build();
 		}
+		
+		SHAPE_TEMPLATES = Arrays.copyOf(shapeTemplates, EI.config().processingArrayMaxSize());
 	}
 	
 	public static void registerReiShapes()
 	{
 		int index = 0;
-		for(ShapeTemplate shapeTemplate : SHAPE_TEMPLATES)
+		for(var shapeTemplate : SHAPE_TEMPLATES)
 		{
 			ReiMachineRecipes.registerMultiblockShape(EI.id("processing_array"), shapeTemplate, "" + index);
 			index++;
