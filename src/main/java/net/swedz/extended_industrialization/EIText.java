@@ -15,6 +15,7 @@ import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformer;
 import net.swedz.tesseract.neoforge.lang.annotation.LangKey;
 import net.swedz.tesseract.neoforge.lang.annotation.Parsed;
+import net.swedz.tesseract.neoforge.lang.annotation.ParsedDecimal;
 import net.swedz.tesseract.neoforge.lang.annotation.WithStyle;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 
@@ -32,14 +33,20 @@ public interface EIText
 	
 	@LangKey(text = "Brews %s potions at a time.")
 	@WithStyle("tooltip")
-	MutableComponent breweryBrewsMultiple(@WithStyle("highlighted") int amount);
+	MutableComponent breweryBrewsMultiple(
+			@WithStyle("highlighted") int amount
+	);
 	
 	@LangKey(text = "Requires %s to brew potions.")
 	@WithStyle("tooltip")
-	MutableComponent breweryRequiresBlazingEssence(Fluid fluid);
+	MutableComponent breweryRequiresBlazingEssence(
+			Fluid fluid
+	);
 	
 	@LangKey(text = "Calcification: %s %%")
-	MutableComponent calcificationPercentage(int percentage);
+	MutableComponent calcificationPercentage(
+			int percentage
+	);
 	
 	@LangKey(text = "Runs LEF in batches of up to %s at %s the EU cost.")
 	@WithStyle("tooltip")
@@ -58,31 +65,48 @@ public interface EIText
 	MutableComponent colorRed();
 	
 	@LangKey(text = "The block at %s is not a network part.")
-	MutableComponent commandTeslaNetworkDumpCantHaveNetwork(BlockPos pos);
+	MutableComponent commandTeslaNetworkDumpCantHaveNetwork(
+			BlockPos pos
+	);
 	
 	@LangKey(text = "Chunk at %s is not loaded.")
 	MutableComponent commandTeslaNetworkDumpChunkNotLoaded();
 	
 	@LangKey(text = "No existing network could be found for %s.")
-	MutableComponent commandTeslaNetworkDumpNoNetwork(WorldPos pos);
+	MutableComponent commandTeslaNetworkDumpNoNetwork(
+			WorldPos pos
+	);
 	
 	@LangKey(text = "Dumping data on network of %s:")
-	MutableComponent commandTeslaNetworkDumpResult1(BlockPos pos);
+	MutableComponent commandTeslaNetworkDumpResult1(
+			BlockPos pos
+	);
 	
 	@LangKey(text = "* Key: %s")
-	MutableComponent commandTeslaNetworkDumpResult2(WorldPos pos);
+	MutableComponent commandTeslaNetworkDumpResult2(
+			WorldPos pos
+	);
 	
 	@LangKey(text = "* Transmitter: %s")
-	MutableComponent commandTeslaNetworkDumpResult3(Component text);
+	MutableComponent commandTeslaNetworkDumpResult3(
+			Component text
+	);
 	
 	@LangKey(text = "* Receiver Count: %s / %s (linked / loaded)")
-	MutableComponent commandTeslaNetworkDumpResult4(int count, int loadedCount);
+	MutableComponent commandTeslaNetworkDumpResult4(
+			int count,
+			int loadedCount
+	);
 	
 	@LangKey(text = "Not loaded")
 	MutableComponent commandTeslaNetworkDumpResultNoTransmitter();
 	
 	@LangKey(text = "%s\n  * Ticking: %s\n  * Voltage: %s")
-	MutableComponent commandTeslaNetworkDumpResultYesTransmitter(WorldPos pos, boolean ticking, Component text);
+	MutableComponent commandTeslaNetworkDumpResultYesTransmitter(
+			WorldPos pos,
+			boolean ticking,
+			Component text
+	);
 	
 	@LangKey(text = "Configure")
 	MutableComponent configurationPanel();
@@ -92,14 +116,20 @@ public interface EIText
 	MutableComponent configurationPanelDescription();
 	
 	@LangKey(text = "%s \u2764")
-	MutableComponent damage(Component text);
+	MutableComponent damage(
+			Component text
+	);
 	
-	default MutableComponent damage(int amount)
+	default MutableComponent damage(
+			int amount
+	)
 	{
 		return this.damage(Component.literal(String.valueOf(amount)));
 	}
 	
-	default MutableComponent damage(float amount)
+	default MutableComponent damage(
+			float amount
+	)
 	{
 		return this.damage(Parser.FLOAT.parse(amount, 1));
 	}
@@ -171,32 +201,54 @@ public interface EIText
 	
 	@LangKey(text = "Can be used in the %s.")
 	@WithStyle("tooltip")
-	MutableComponent enchantmentModuleMachine(@Parsed("block") @WithStyle("highlighted") ResourceLocation blockId);
+	MutableComponent enchantmentModuleMachine(
+			@Parsed("block") @WithStyle("highlighted") ResourceLocation blockId
+	);
 	
-	record EnchantmentWithLevelField(HolderLookup.Provider registry, ResourceKey<Enchantment> enchantment, int level)
+	record EnchantmentWithLevelField(
+			HolderLookup.Provider registry,
+			ResourceKey<Enchantment> enchantment,
+			int level
+	)
 	{
 	}
 	
 	@LangKey(text = "Applies %s in the machine for %s.")
 	@WithStyle("tooltip")
 	@Deprecated
-	MutableComponent enchantmentModuleSingleValue(@WithStyle("highlighted") EnchantmentWithLevelField enchantment, @Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick);
+	MutableComponent enchantmentModuleSingleValue(
+			@WithStyle("highlighted") EnchantmentWithLevelField enchantment,
+			@Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick
+	);
 	
-	default MutableComponent enchantmentModuleSingleValue(HolderLookup.Provider registry, ResourceKey<Enchantment> enchantment, int level, long euPerTick)
+	default MutableComponent enchantmentModuleSingleValue(
+			HolderLookup.Provider registry,
+			ResourceKey<Enchantment> enchantment,
+			int level,
+			long euPerTick
+	)
 	{
 		return this.enchantmentModuleSingleValue(new EnchantmentWithLevelField(registry, enchantment, level), euPerTick);
 	}
 	
-	record EnchantmentField(HolderLookup.Provider registry, ResourceKey<Enchantment> enchantment)
+	record EnchantmentField(
+			HolderLookup.Provider registry,
+			ResourceKey<Enchantment> enchantment
+	)
 	{
 	}
 	
 	@LangKey(text = "Voltage determines the level of %s applied in the machine.")
 	@WithStyle("tooltip")
 	@Deprecated
-	MutableComponent enchantmentModuleValues(@WithStyle("highlighted") EnchantmentField enchantment);
+	MutableComponent enchantmentModuleValues(
+			@WithStyle("highlighted") EnchantmentField enchantment
+	);
 	
-	default MutableComponent enchantmentModuleValues(HolderLookup.Provider registry, ResourceKey<Enchantment> enchantment)
+	default MutableComponent enchantmentModuleValues(
+			HolderLookup.Provider registry,
+			ResourceKey<Enchantment> enchantment
+	)
 	{
 		return this.enchantmentModuleValues(new EnchantmentField(registry, enchantment));
 	}
@@ -215,7 +267,10 @@ public interface EIText
 	
 	@LangKey(text = "  - %s: %s")
 	@WithStyle("tooltip")
-	MutableComponent farmerTask(@WithStyle("highlighted") Component name, Component description);
+	MutableComponent farmerTask(
+			@WithStyle("highlighted") Component name,
+			Component description
+	);
 	
 	@LangKey(text = "Fertilizing")
 	MutableComponent farmerTaskFertilizing();
@@ -249,7 +304,9 @@ public interface EIText
 	
 	@LangKey(text = "Can perform the following tasks using %s:")
 	@WithStyle("tooltip")
-	MutableComponent farmerTaskTooltip(@Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick);
+	MutableComponent farmerTaskTooltip(
+			@Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick
+	);
 	
 	@LangKey(text = "Tilling")
 	MutableComponent farmerTilling();
@@ -258,13 +315,19 @@ public interface EIText
 	MutableComponent fluidFertilizers();
 	
 	@LangKey(text = "Consumes: %smb")
-	MutableComponent fluidFertilizersConsumes(int mb);
+	MutableComponent fluidFertilizersConsumes(
+			int mb
+	);
 	
-	@LangKey(text = "Cycle Time: %.1fs")
-	MutableComponent fluidFertilizersTime(float seconds);
+	@LangKey(text = "Cycle Time: %s")
+	MutableComponent fluidFertilizersTime(
+			@ParsedDecimal(2) float seconds
+	);
 	
 	@LangKey(text = "Generating: %s EU/t")
-	MutableComponent generatingEuPerTick(long amount);
+	MutableComponent generatingEuPerTick(
+			long amount
+	);
 	
 	@LangKey(text = "When placed facing into a beehive, honey will be extracted in fluid form.")
 	@WithStyle("tooltip")
@@ -281,11 +344,16 @@ public interface EIText
 	MutableComponent machineBatcherCoils();
 	
 	@LangKey(text = "Connected Machines: %s / %s")
-	MutableComponent machineChainerConnectedMachines(int machineCount, int maxMachines);
+	MutableComponent machineChainerConnectedMachines(
+			int machineCount,
+			int maxMachines
+	);
 	
 	@LangKey(text = "Connects up to %s consecutive machines in a straight line in the direction it is facing.")
 	@WithStyle("tooltip")
-	MutableComponent machineChainerHelp1(@WithStyle("highlighted") int maxConnections);
+	MutableComponent machineChainerHelp1(
+			@WithStyle("highlighted") int maxConnections
+	);
 	
 	@LangKey(text = "Accepts items, fluids, and energy and distributes them to connected machines.")
 	@WithStyle("tooltip")
@@ -296,7 +364,9 @@ public interface EIText
 	MutableComponent machineChainerHelp3();
 	
 	@LangKey(text = "Problem at: %s")
-	MutableComponent machineChainerProblemAt(BlockPos pos);
+	MutableComponent machineChainerProblemAt(
+			BlockPos pos
+	);
 	
 	@LangKey(text = "Failed to apply machine configuration to machine.")
 	MutableComponent machineConfigCardApplyFailed();
@@ -308,7 +378,9 @@ public interface EIText
 	MutableComponent machineConfigCardClear();
 	
 	@LangKey(text = "Configured (%s)")
-	MutableComponent machineConfigCardConfigured(Item item);
+	MutableComponent machineConfigCardConfigured(
+			Item item
+	);
 	
 	@LangKey(text = "- Press %s + %s on a machine to save its settings in the card.")
 	@WithStyle("tooltip")
@@ -319,7 +391,9 @@ public interface EIText
 	
 	@LangKey(text = "- Use %s on a machine to apply the settings from the card.")
 	@WithStyle("tooltip")
-	MutableComponent machineConfigCardHelp2(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	MutableComponent machineConfigCardHelp2(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind
+	);
 	
 	@LangKey(text = "- (Optional) Hold in off-hand when placing machines to automatically apply settings.")
 	@WithStyle("tooltip")
@@ -352,11 +426,15 @@ public interface EIText
 	
 	@LangKey(text = "- Press %s to make a long ranged sweep attack.")
 	@WithStyle("tooltip")
-	MutableComponent nanoSaberHelp(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	MutableComponent nanoSaberHelp(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind
+	);
 	
 	@LangKey(text = "Creative Flight: %s")
 	@WithStyle("tooltip")
-	MutableComponent nanoSuitCreativeFlight(@Parsed("activated") boolean activated);
+	MutableComponent nanoSuitCreativeFlight(
+			@Parsed("activated") boolean activated
+	);
 	
 	@LangKey(text = "Armor information:")
 	@WithStyle("tooltip")
@@ -392,7 +470,9 @@ public interface EIText
 	
 	@LangKey(text = "Night Vision: %s")
 	@WithStyle("tooltip")
-	MutableComponent nanoSuitNightVision(@Parsed("activated") boolean activated);
+	MutableComponent nanoSuitNightVision(
+			@Parsed("activated") boolean activated
+	);
 	
 	@LangKey(text = "Disabled Night Vision")
 	MutableComponent nanoSuitNightVisionToggledOff();
@@ -402,7 +482,9 @@ public interface EIText
 	
 	@LangKey(text = "Speed: %s")
 	@WithStyle("tooltip")
-	MutableComponent nanoSuitSpeed(@Parsed("activated") boolean activated);
+	MutableComponent nanoSuitSpeed(
+			@Parsed("activated") boolean activated
+	);
 	
 	@LangKey(text = "Disabled Speed Boost")
 	MutableComponent nanoSuitSpeedToggledOff();
@@ -412,7 +494,9 @@ public interface EIText
 	
 	@LangKey(text = "Step: %s")
 	@WithStyle("tooltip")
-	MutableComponent nanoSuitStep(@Parsed("activated") boolean activated);
+	MutableComponent nanoSuitStep(
+			@Parsed("activated") boolean activated
+	);
 	
 	@LangKey(text = "Disabled Step Boost")
 	MutableComponent nanoSuitStepToggledOff();
@@ -422,18 +506,26 @@ public interface EIText
 	
 	@LangKey(text = "Will produce up to %s when placed in a Solar Panel.")
 	@WithStyle("tooltip")
-	MutableComponent photovoltaicCellEU(@Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick);
+	MutableComponent photovoltaicCellEU(
+			@Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick
+	);
 	
 	@LangKey(text = "Remaining Operation Time: %s")
 	@WithStyle("tooltip")
-	MutableComponent photovoltaicCellRemainingOperationTime(@WithStyle("highlighted") Component text);
+	MutableComponent photovoltaicCellRemainingOperationTime(
+			@WithStyle("highlighted") Component text
+	);
 	
 	@LangKey(text = "Remaining Operation Time: %s minute(s)")
 	@WithStyle("tooltip")
-	MutableComponent photovoltaicCellRemainingOperationTimeMinutes(@Parsed("ticks_to_minutes") @WithStyle("highlighted") long ticks);
+	MutableComponent photovoltaicCellRemainingOperationTimeMinutes(
+			@Parsed("ticks_to_minutes") @WithStyle("highlighted") long ticks
+	);
 	
 	@LangKey(text = "Priority: %s")
-	MutableComponent priority(int priority);
+	MutableComponent priority(
+			int priority
+	);
 	
 	@LangKey(text = "Batch size is determined by the amount of machines provided to it.")
 	@WithStyle("tooltip")
@@ -441,7 +533,9 @@ public interface EIText
 	
 	@LangKey(text = "Runs at %s the EU cost.")
 	@WithStyle("tooltip")
-	MutableComponent processingArrayEuCostMultiplier(@WithStyle("highlighted") EuCostTransformer euCostTransformer);
+	MutableComponent processingArrayEuCostMultiplier(
+			@WithStyle("highlighted") EuCostTransformer euCostTransformer
+	);
 	
 	@LangKey(text = "Insert electric crafting machines to run in parallel.")
 	@WithStyle("tooltip")
@@ -452,7 +546,9 @@ public interface EIText
 	MutableComponent processingArrayRecipe();
 	
 	@LangKey(text = "Machines: %s")
-	MutableComponent processingArraySize(int machines);
+	MutableComponent processingArraySize(
+			int machines
+	);
 	
 	@LangKey(text = "Rainbow")
 	@WithStyle("rainbow")
@@ -468,14 +564,21 @@ public interface EIText
 	
 	@LangKey(text = "Will calcify and lose efficiency over time to a minimum of %s efficiency when not using %s. Using an axe on the boiler will reset its calcification.")
 	@WithStyle("tooltip")
-	MutableComponent solarBoilerCalcification(@Parsed("percentage") @WithStyle("highlighted") float efficiency, @WithStyle("highlighted") Fluid fluid);
+	MutableComponent solarBoilerCalcification(
+			@Parsed("percentage") @WithStyle("highlighted") float efficiency,
+			@WithStyle("highlighted") Fluid fluid
+	);
 	
 	@LangKey(text = "Solar Efficiency: %s %%")
-	MutableComponent solarEfficiency(int percentage);
+	MutableComponent solarEfficiency(
+			int percentage
+	);
 	
 	@LangKey(text = "By supplying %s to the Solar Panel, the Photovoltaic Cell in its slot will last 2x as long and produce 1.5x as much energy!")
 	@WithStyle("tooltip")
-	MutableComponent solarPanelDistilledWater(@WithStyle("highlighted") Fluid fluid);
+	MutableComponent solarPanelDistilledWater(
+			@WithStyle("highlighted") Fluid fluid
+	);
 	
 	@LangKey(text = "To produce energy, the Solar Panel needs a matching tier Photovoltaic Cell in its inventory.")
 	@WithStyle("tooltip")
@@ -487,11 +590,15 @@ public interface EIText
 	
 	@LangKey(text = "- Press %s on still or flowing water to fill.")
 	@WithStyle("tooltip")
-	MutableComponent steamChainsaw1(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	MutableComponent steamChainsaw1(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind
+	);
 	
 	@LangKey(text = "- Place fuel inside the chainsaw using %s.")
 	@WithStyle("tooltip")
-	MutableComponent steamChainsaw2(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	MutableComponent steamChainsaw2(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind
+	);
 	
 	@LangKey(text = "- Toggle Silk Touch with %s + %s.")
 	@WithStyle("tooltip")
@@ -512,7 +619,9 @@ public interface EIText
 	
 	@LangKey(text = "- Use %s on a Tesla Receiver to link it to the selected transmitter.")
 	@WithStyle("tooltip")
-	MutableComponent teslaCalibratorHelp2(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	MutableComponent teslaCalibratorHelp2(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind
+	);
 	
 	@LangKey(text = "- (Optional) Hold in off-hand when placing receivers to automatically link.")
 	@WithStyle("tooltip")
@@ -527,7 +636,9 @@ public interface EIText
 	
 	@LangKey(text = "Linked to %s")
 	@WithStyle("tooltip")
-	MutableComponent teslaCalibratorLinked(WorldPos pos);
+	MutableComponent teslaCalibratorLinked(
+			WorldPos pos
+	);
 	
 	@LangKey(text = "Failed to link receiver because no transmitter is selected.")
 	MutableComponent teslaCalibratorLinkFailedNoSelection();
@@ -540,7 +651,9 @@ public interface EIText
 	
 	@LangKey(text = "Wirelessly transmits energy to linked receivers within %s blocks.")
 	@WithStyle("tooltip")
-	MutableComponent teslaCoilHelp1(@WithStyle("highlighted") int range);
+	MutableComponent teslaCoilHelp1(
+			@WithStyle("highlighted") int range
+	);
 	
 	@LangKey(text = "Voltage of energy transmitted is set by the hull provided. Higher voltages have an increased passive drain.")
 	@WithStyle("tooltip")
@@ -559,7 +672,9 @@ public interface EIText
 	
 	@LangKey(text = "- Press %s on a transmitter to link the receiver to it.")
 	@WithStyle("tooltip")
-	MutableComponent teslaHandheldHelp3(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	MutableComponent teslaHandheldHelp3(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind
+	);
 	
 	@LangKey(text = "- Clear using %s + %s on air.")
 	@WithStyle("tooltip")
@@ -570,7 +685,9 @@ public interface EIText
 	
 	@LangKey(text = "Linked to %s")
 	@WithStyle("tooltip")
-	MutableComponent teslaHandheldLinked(WorldPos pos);
+	MutableComponent teslaHandheldLinked(
+			WorldPos pos
+	);
 	
 	@LangKey(text = "Selected transmitter for receiving.")
 	MutableComponent teslaHandheldSelected();
@@ -581,17 +698,23 @@ public interface EIText
 	
 	@LangKey(text = "Deals damage to entities within %s blocks while powered.")
 	@WithStyle("tooltip")
-	MutableComponent teslaLethalCoilHelp1(@WithStyle("highlighted") int range);
+	MutableComponent teslaLethalCoilHelp1(
+			@WithStyle("highlighted") int range
+	);
 	
 	@LangKey(text = "Voltage determines the amount of damage dealt and energy required:")
 	@WithStyle("tooltip")
 	MutableComponent teslaLethalCoilValues();
 	
 	@LangKey(text = "Linked to %s")
-	MutableComponent teslaNetworkReceiverLinked(WorldPos pos);
+	MutableComponent teslaNetworkReceiverLinked(
+			WorldPos pos
+	);
 	
 	@LangKey(text = "Cannot receive %s power")
-	MutableComponent teslaNetworkReceiverMismatchingVoltage(@Parsed("short") CableTier tier);
+	MutableComponent teslaNetworkReceiverMismatchingVoltage(
+			@Parsed("short") CableTier tier
+	);
 	
 	@LangKey(text = "Not linked to any transmitter")
 	MutableComponent teslaNetworkReceiverNoLink();
@@ -603,19 +726,29 @@ public interface EIText
 	MutableComponent teslaNetworkReceiverUnloaded();
 	
 	@LangKey(text = "Note: %s")
-	MutableComponent teslaNetworkSingingNote(String note);
+	MutableComponent teslaNetworkSingingNote(
+			String note
+	);
 	
 	@LangKey(text = "Consuming: %s")
-	MutableComponent teslaNetworkTransmitterConsuming(@Parsed("eu_per_tick") long euPerTick);
+	MutableComponent teslaNetworkTransmitterConsuming(
+			@Parsed("eu_per_tick") long euPerTick
+	);
 	
 	@LangKey(text = "Drain: %s")
-	MutableComponent teslaNetworkTransmitterDrain(@Parsed("eu_per_tick") long euPerTick);
+	MutableComponent teslaNetworkTransmitterDrain(
+			@Parsed("eu_per_tick") long euPerTick
+	);
 	
 	@LangKey(text = "Receivers: %s")
-	MutableComponent teslaNetworkTransmitterReceivers(int count);
+	MutableComponent teslaNetworkTransmitterReceivers(
+			int count
+	);
 	
 	@LangKey(text = "Transmitting: %s (%s)")
-	MutableComponent teslaNetworkTransmitterTransmitting(@Parsed("eu_per_tick") long euPerTick, @Parsed("short") CableTier tier);
+	MutableComponent teslaNetworkTransmitterTransmitting(
+			@Parsed("eu_per_tick") long euPerTick, @Parsed("short") CableTier tier
+	);
 	
 	@LangKey(text = "Generates arcs for aesthetic purposes only.")
 	@WithStyle("tooltip")
@@ -668,7 +801,9 @@ public interface EIText
 	
 	@LangKey(text = "Area: %s")
 	@WithStyle("tooltip")
-	MutableComponent toolMiningArea(@WithStyle("highlighted") Component text);
+	MutableComponent toolMiningArea(
+			@WithStyle("highlighted") Component text
+	);
 	
 	@LangKey(text = "1x1")
 	MutableComponent toolMiningArea1By1();
@@ -677,15 +812,21 @@ public interface EIText
 	MutableComponent toolMiningArea3By3();
 	
 	@LangKey(text = "Speed: %s")
-	MutableComponent toolChangedMiningSpeed(@Parsed("percentage") float speed);
+	MutableComponent toolChangedMiningSpeed(
+			@Parsed("percentage") float speed
+	);
 	
 	@LangKey(text = "Speed: %s")
 	@WithStyle("tooltip")
-	MutableComponent toolMiningSpeed(@Parsed("percentage") @WithStyle("highlighted") float speed);
+	MutableComponent toolMiningSpeed(
+			@Parsed("percentage") @WithStyle("highlighted") float speed
+	);
 	
 	@LangKey(text = "Mode: %s")
 	@WithStyle("tooltip")
-	MutableComponent toolMode(@WithStyle("highlighted") ElectricToolItem.Mode mode);
+	MutableComponent toolMode(
+			@WithStyle("highlighted") ElectricToolItem.Mode mode
+	);
 	
 	@LangKey(text = "Beheading")
 	MutableComponent toolModeBeheading();
