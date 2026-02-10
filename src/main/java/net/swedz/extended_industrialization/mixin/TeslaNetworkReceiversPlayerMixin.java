@@ -14,9 +14,8 @@ import net.swedz.extended_industrialization.item.teslalinkable.TeslaHandheldRece
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaReceiverHolder;
 import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.PlayerTeslaReceiver;
 import net.swedz.extended_industrialization.machines.component.tesla.network.receiver.TeslaReceiver;
-import net.swedz.extended_industrialization.proxy.modslot.EIModSlotProxy;
+import net.swedz.extended_industrialization.proxy.modslot.EIModSlot;
 import net.swedz.tesseract.neoforge.api.WorldPos;
-import net.swedz.tesseract.neoforge.proxy.Proxies;
 import org.spongepowered.asm.mixin.Implements;
 import org.spongepowered.asm.mixin.Interface;
 import org.spongepowered.asm.mixin.Mixin;
@@ -59,7 +58,7 @@ public abstract class TeslaNetworkReceiversPlayerMixin extends LivingEntity
 		items.addAll(inventory.armor);
 		items.addAll(inventory.items);
 		items.addAll(inventory.offhand);
-		items.addAll(Proxies.get(EIModSlotProxy.class).getContents(player, (stack) -> true));
+		items.addAll(EIModSlot.getContents(player, (stack) -> true));
 		
 		return items;
 	}

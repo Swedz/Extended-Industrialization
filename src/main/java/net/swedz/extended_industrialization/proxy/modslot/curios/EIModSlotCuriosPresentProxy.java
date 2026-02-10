@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.proxy.modslot;
+package net.swedz.extended_industrialization.proxy.modslot.curios;
 
 import com.google.common.collect.Lists;
 import net.minecraft.world.entity.player.Player;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @ProxyEntrypoint(environment = ProxyEnvironment.MOD, modid = "curios")
-public class EIModSlotCuriosProxy extends EIModSlotProxy
+public class EIModSlotCuriosPresentProxy extends EIModSlotCuriosProxy
 {
 	@Override
 	public boolean isLoaded()
