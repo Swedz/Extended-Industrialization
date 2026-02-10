@@ -21,10 +21,9 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIItems;
-import net.swedz.extended_industrialization.proxy.modslot.EIModSlotProxy;
+import net.swedz.extended_industrialization.proxy.modslot.EIModSlot;
 import net.swedz.tesseract.neoforge.api.tuple.Pair;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
-import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.List;
 
@@ -92,7 +91,7 @@ public final class RobotAutoFeederItem extends Item implements ISimpleEnergyItem
 	{
 		List<ItemStack> contents = Lists.newArrayList();
 		contents.addAll(player.getInventory().items);
-		contents.addAll(Proxies.get(EIModSlotProxy.class).getContents(player, (stack) -> true));
+		contents.addAll(EIModSlot.getContents(player, (stack) -> true));
 		for(var stack : contents)
 		{
 			if(stack.is(EIItems.CANNED_FOOD.asItem()))

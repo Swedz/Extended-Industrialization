@@ -1,4 +1,4 @@
-package net.swedz.extended_industrialization.proxy.modslot;
+package net.swedz.extended_industrialization.proxy.modslot.accessories;
 
 import com.google.common.collect.Lists;
 import io.wispforest.accessories.api.AccessoriesCapability;
@@ -11,8 +11,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
-@ProxyEntrypoint(priority = 1, environment = ProxyEnvironment.MOD, modid = "accessories")
-public class EIModSlotAccessoriesProxy extends EIModSlotProxy
+@ProxyEntrypoint(environment = ProxyEnvironment.MOD, modid = "accessories")
+public class EIModSlotAccessoriesPresentProxy extends EIModSlotAccessoriesProxy
 {
 	@Override
 	public boolean isLoaded()
