@@ -3,6 +3,8 @@
         "minecraft:player"
     ],
     "slots": [
-        "shoulders"
+        "shoulders",
+        "belt",
+        "hands"
     ]
 }
