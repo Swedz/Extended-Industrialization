@@ -1,11 +1,11 @@
 package net.swedz.extended_industrialization.proxy.modslot;
 
+import com.google.common.collect.Lists;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.proxy.modslot.accessories.EIModSlotAccessoriesProxy;
 import net.swedz.extended_industrialization.proxy.modslot.curios.EIModSlotCuriosProxy;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 import java.util.function.Predicate;
