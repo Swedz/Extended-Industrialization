@@ -1,7 +1,10 @@
 package net.swedz.extended_industrialization.machines.component.chainer.handler;
 
+import aztech.modern_industrialization.inventory.WhitelistedItemStorage;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
@@ -9,9 +12,13 @@ import net.swedz.extended_industrialization.machines.component.chainer.wrapper.S
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
-public final class ChainerItemHandler extends SlotChainerHandler<IItemHandler> implements IItemHandler
+public final class ChainerItemHandler extends SlotChainerHandler<IItemHandler> implements IItemHandler, WhitelistedItemStorage
 {
+	private boolean   currentlyWhitelisted = false;
+	private Set<Item> whitelistedItems     = Set.of();
+	
 	public ChainerItemHandler(ChainerLinks chainerLinks)
 	{
 		super(chainerLinks);
@@ -22,17 +29,28 @@ public final class ChainerItemHandler extends SlotChainerHandler<IItemHandler> i
 	{
 		List<SlotInventoryWrapper<IItemHandler>> wrappers = Lists.newArrayList();
 		int slots = 0;
+		boolean currentlyWhitelisted = false;
+		Set<Item> whitelistedItems = Sets.newHashSet();
 		
 		for(var handler : this.getMachineLinks().itemHandlers())
 		{
 			int handlerSlots = handler.getSlots();
 			wrappers.add(new SlotInventoryWrapper<>(handler, slots, handlerSlots));
 			slots += handlerSlots;
+			
+			if(handler instanceof WhitelistedItemStorage whitelisted &&
+			   whitelisted.currentlyWhitelisted())
+			{
+				currentlyWhitelisted = true;
+				whitelisted.getWhitelistedItems(whitelistedItems);
+			}
 		}
 		
 		this.wrappers = Collections.unmodifiableList(wrappers);
 		this.wrappersSlotMap = Maps.newConcurrentMap();
 		this.slots = slots;
+		this.currentlyWhitelisted = currentlyWhitelisted;
+		this.whitelistedItems = Collections.unmodifiableSet(whitelistedItems);
 	}
 	
 	@Override
@@ -82,5 +100,17 @@ public final class ChainerItemHandler extends SlotChainerHandler<IItemHandler> i
 	{
 		var wrapper = this.getWrapper(slot);
 		return wrapper != null && wrapper.handler().isItemValid(wrapper.toLocalSlot(slot), stack);
+	}
+	
+	@Override
+	public boolean currentlyWhitelisted()
+	{
+		return currentlyWhitelisted;
+	}
+	
+	@Override
+	public void getWhitelistedItems(Set<Item> items)
+	{
+		items.addAll(whitelistedItems);
 	}
 }
