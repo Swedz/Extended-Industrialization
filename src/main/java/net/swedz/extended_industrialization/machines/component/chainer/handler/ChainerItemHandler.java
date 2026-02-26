@@ -1,6 +1,9 @@
 package net.swedz.extended_industrialization.machines.component.chainer.handler;
 
 import aztech.modern_industrialization.inventory.WhitelistedItemStorage;
+import aztech.modern_industrialization.thirdparty.fabrictransfer.api.bridge.SlotItemHandler;
+import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVariant;
+import aztech.modern_industrialization.thirdparty.fabrictransfer.api.storage.base.SingleSlotStorage;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -44,6 +47,11 @@ public final class ChainerItemHandler extends SlotChainerHandler<IItemHandler> i
 				   whitelisted.currentlyWhitelisted())
 				{
 					whitelisted.getWhitelistedItems(whitelistedItems);
+				}
+				else if(handler instanceof SlotItemHandler(SingleSlotStorage<ItemVariant> storage) &&
+						!storage.isResourceBlank())
+				{
+					whitelistedItems.add(storage.getResource().getItem());
 				}
 				else
 				{
