@@ -29,7 +29,7 @@ public final class ChainerItemHandler extends SlotChainerHandler<IItemHandler> i
 	{
 		List<SlotInventoryWrapper<IItemHandler>> wrappers = Lists.newArrayList();
 		int slots = 0;
-		boolean currentlyWhitelisted = false;
+		boolean currentlyWhitelisted = true;
 		Set<Item> whitelistedItems = Sets.newHashSet();
 		
 		for(var handler : this.getMachineLinks().itemHandlers())
@@ -38,11 +38,18 @@ public final class ChainerItemHandler extends SlotChainerHandler<IItemHandler> i
 			wrappers.add(new SlotInventoryWrapper<>(handler, slots, handlerSlots));
 			slots += handlerSlots;
 			
-			if(handler instanceof WhitelistedItemStorage whitelisted &&
-			   whitelisted.currentlyWhitelisted())
+			if(currentlyWhitelisted)
 			{
-				currentlyWhitelisted = true;
-				whitelisted.getWhitelistedItems(whitelistedItems);
+				if(handler instanceof WhitelistedItemStorage whitelisted &&
+				   whitelisted.currentlyWhitelisted())
+				{
+					whitelisted.getWhitelistedItems(whitelistedItems);
+				}
+				else
+				{
+					currentlyWhitelisted = false;
+					whitelistedItems = Sets.newHashSet();
+				}
 			}
 		}
 		
