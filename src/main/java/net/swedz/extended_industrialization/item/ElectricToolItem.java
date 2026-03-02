@@ -107,55 +107,77 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		DRILL(
 				60 * 20 * CableTier.HV.getMaxTransfer(),
 				8,
-				true, true,
+				true,
+				true,
 				EI.text()::electricToolHelp2FortuneSilkTouch,
 				Stream.of(
 						ItemAbilities.DEFAULT_PICKAXE_ACTIONS,
 						ItemAbilities.DEFAULT_SHOVEL_ACTIONS
 				).flatMap(Set::stream).toList(),
-				List.of(Mode.SILK_TOUCH, Mode.FORTUNE),
+				List.of(
+						Mode.SILK_TOUCH,
+						Mode.FORTUNE
+				),
 				() -> new Tool(
 						List.of(),
-						1, 1
+						1,
+						1
 				)
 		),
 		CHAINSAW(
 				60 * 20 * CableTier.HV.getMaxTransfer(),
 				10,
-				true, false,
+				true,
+				false,
 				EI.text()::electricToolHelp2FortuneLooting,
 				Stream.of(
 						ItemAbilities.DEFAULT_AXE_ACTIONS,
 						ItemAbilities.DEFAULT_SHEARS_ACTIONS
 				).flatMap(Set::stream).toList(),
-				List.of(Mode.SILK_TOUCH, Mode.FORTUNE_LOOTING),
+				List.of(
+						Mode.SILK_TOUCH,
+						Mode.FORTUNE_LOOTING
+				),
 				() -> new Tool(
 						List.of(
-								Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), 0)
+								Tool.Rule.minesAndDrops(
+										List.of(Blocks.COBWEB),
+										1
+								)
 						),
-						1, 1
+						1,
+						1
 				)
 		),
 		SABER(
 				60 * 20 * CableTier.HV.getMaxTransfer(),
 				15,
-				false, false,
+				false,
+				false,
 				EI.text()::electricToolHelp2LootingBeheading,
 				Stream.of(
 						ItemAbilities.DEFAULT_SWORD_ACTIONS
 				).flatMap(Set::stream).toList(),
-				List.of(Mode.LOOTING, Mode.BEHEADING),
+				List.of(
+						Mode.LOOTING,
+						Mode.BEHEADING
+				),
 				() -> new Tool(
 						List.of(
-								Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), 0)
+								Tool.Rule.minesAndDrops(
+										List.of(Blocks.COBWEB),
+										1
+								)
 						),
-						1, 2
+						1,
+						2
 				)
 		),
 		ULTIMATE(
 				60 * 20 * CableTier.EV.getMaxTransfer(),
 				20,
-				true, true,
+				true,
+				true,
 				EI.text()::electricToolHelp2FortuneLooting,
 				Stream.of(
 						ItemAbilities.DEFAULT_PICKAXE_ACTIONS,
@@ -164,12 +186,19 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 						ItemAbilities.DEFAULT_SHEARS_ACTIONS,
 						ItemAbilities.DEFAULT_SWORD_ACTIONS
 				).flatMap(Set::stream).toList(),
-				List.of(Mode.SILK_TOUCH, Mode.FORTUNE_LOOTING),
+				List.of(
+						Mode.SILK_TOUCH,
+						Mode.FORTUNE_LOOTING
+				),
 				() -> new Tool(
 						List.of(
-								Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), 0)
+								Tool.Rule.minesAndDrops(
+										List.of(Blocks.COBWEB),
+										1
+								)
 						),
-						1, 2
+						1,
+						1
 				)
 		);
 		
