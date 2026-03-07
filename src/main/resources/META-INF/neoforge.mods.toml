@@ -47,12 +47,6 @@ ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.${ mod_id }]]
-modId = "mi_tweaks"
-type = "optional"
-ordering = "AFTER"
-side = "BOTH"
-
-[[dependencies.${ mod_id }]]
 modId = "accessories"
 type = "optional"
 versionRange = "${accessories_version_range}"
