@@ -54,12 +54,9 @@ record MachineConfigOrientation(
 		if(simulation.isActing())
 		{
 			target.facingDirection = facingDirection;
-			if(target.params.hasOutput)
-			{
-				target.outputDirection = outputDirection;
-				target.extractItems = extractItems;
-				target.extractFluids = extractFluids;
-			}
+			target.outputDirection = outputDirection;
+			target.extractItems = extractItems;
+			target.extractFluids = extractFluids;
 		}
 		
 		return true;
