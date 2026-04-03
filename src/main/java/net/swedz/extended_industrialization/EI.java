@@ -79,12 +79,15 @@ public final class EI
 		
 		bus.register(new DatagenDelegator());
 		
-		bus.addListener(FMLCommonSetupEvent.class, (event) ->
-		{
-			EIItems.values().forEach(ItemHolder::triggerRegistrationListener);
-			EIBlocks.values().forEach(BlockHolder::triggerRegistrationListener);
-			EIFluids.values().forEach(FluidHolder::triggerRegistrationListener);
-		});
+		bus.addListener(
+				FMLCommonSetupEvent.class,
+				(event) -> event.enqueueWork(() ->
+				{
+					EIItems.values().forEach(ItemHolder::triggerRegistrationListener);
+					EIBlocks.values().forEach(BlockHolder::triggerRegistrationListener);
+					EIFluids.values().forEach(FluidHolder::triggerRegistrationListener);
+				})
+		);
 		
 		bus.addListener(RegisterCapabilitiesEvent.class, (event) -> CapabilitiesListeners.triggerAll(ID, event));
 		bus.addListener(RegisterPayloadHandlersEvent.class, EIPackets::init);
