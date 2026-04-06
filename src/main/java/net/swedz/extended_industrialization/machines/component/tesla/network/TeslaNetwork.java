@@ -141,6 +141,14 @@ public final class TeslaNetwork implements MIEnergyStorage, TeslaTransferLimits.
 		return true;
 	}
 	
+	private List<TeslaReceiver> cleanBucket(List<TeslaReceiver> bucket)
+	{
+		var cleaned = Lists.newArrayList(bucket);
+		cleaned.removeIf((receiver) ->
+				receiver.isMobile() && receiver.checkReceiveFrom(this).isFailure());
+		return cleaned;
+	}
+	
 	@Override
 	public long receive(long maxReceive, boolean simulate)
 	{
@@ -160,7 +168,7 @@ public final class TeslaNetwork implements MIEnergyStorage, TeslaTransferLimits.
 		long remaining = maxReceive;
 		for(var bucket : buckets)
 		{
-			long received = TransferHelper.distributeLong(TeslaReceiver::receiveEnergy, bucket, remaining, simulate);
+			long received = TransferHelper.distributeLong(TeslaReceiver::receiveEnergy, this.cleanBucket(bucket), remaining, simulate);
 			amountReceived += received;
 			remaining -= received;
 		}
