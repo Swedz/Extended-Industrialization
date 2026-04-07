@@ -41,7 +41,7 @@ public final class EIClientRenderTypes
 				RenderType.CompositeState.builder()
 						.setShaderState(glow ? ARMOR_CUTOUT_GLOW : RENDERTYPE_ARMOR_CUTOUT_NO_CULL_SHADER)
 						.setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-						.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+						.setTransparencyState(glow ? TRANSLUCENT_TRANSPARENCY : NO_TRANSPARENCY)
 						.setCullState(cull ? CULL : NO_CULL)
 						.setLightmapState(LIGHTMAP)
 						.setOverlayState(NO_OVERLAY)
