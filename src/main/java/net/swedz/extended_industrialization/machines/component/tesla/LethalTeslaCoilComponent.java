@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.network.packet.EntitiesElectrocutedPacket;
+import net.swedz.tesseract.neoforge.compat.mi.guicomponent.configurationpanel.ConfigurationPanelBuilder;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -30,11 +31,18 @@ public final class LethalTeslaCoilComponent implements MachineComponent
 	private final Supplier<Long>         damageInterval;
 	private final Supplier<DamageSource> damageSource;
 	
+	private boolean damagesPlayers;
+	
 	private int entityCount;
 	
 	public LethalTeslaCoilComponent(
-			MachineBlockEntity machine, Supplier<Float> damageAmount, EnergyComponent energy, Supplier<Long> energyCost,
-			Supplier<Integer> range, Supplier<Long> damageInterval, Supplier<DamageSource> damageSource
+			MachineBlockEntity machine,
+			Supplier<Float> damageAmount,
+			EnergyComponent energy,
+			Supplier<Long> energyCost,
+			Supplier<Integer> range,
+			Supplier<Long> damageInterval,
+			Supplier<DamageSource> damageSource
 	)
 	{
 		this.machine = machine;
@@ -53,7 +61,7 @@ public final class LethalTeslaCoilComponent implements MachineComponent
 	
 	private AABB getDamageArea()
 	{
-		int range = EI.config().lethalTeslaCoil().range();
+		int range = this.range.get();
 		var center = machine.getBlockPos().getCenter();
 		return new AABB(
 				center.subtract(range, range, range).subtract(0.5, 0.5, 0.5),
@@ -61,12 +69,29 @@ public final class LethalTeslaCoilComponent implements MachineComponent
 		);
 	}
 	
+	private boolean canDamageEntity(Entity entity)
+	{
+		return entity.isAlive() &&
+			   entity instanceof LivingEntity &&
+			   (!(entity instanceof Player player) ||
+				(damagesPlayers && !player.getUUID().equals(machine.placedBy.placerId)));
+	}
+	
 	private List<Entity> getEntitiesInDamageArea()
 	{
-		return machine.getLevel().getEntities(
-				(Entity) null,
-				this.getDamageArea(),
-				(entity) -> entity.isAlive() && entity instanceof LivingEntity && !(entity instanceof Player)
+		return machine.getLevel().getEntities((Entity) null, this.getDamageArea(), this::canDamageEntity);
+	}
+	
+	public void appendSelectionPanel(MachineBlockEntity machine, ConfigurationPanelBuilder builder)
+	{
+		builder.add(
+				List.of(
+						EI.text().teslaLethalCoilDamagesPlayersNo(),
+						EI.text().teslaLethalCoilDamagesPlayersYes()
+				),
+				true,
+				(delta) -> damagesPlayers = !damagesPlayers,
+				() -> damagesPlayers ? 1 : 0
 		);
 	}
 	
@@ -120,11 +145,13 @@ public final class LethalTeslaCoilComponent implements MachineComponent
 	@Override
 	public void writeNbt(CompoundTag tag, HolderLookup.Provider registries)
 	{
+		tag.putBoolean("damages_players", damagesPlayers);
 	}
 	
 	@Override
 	public void readNbt(CompoundTag tag, HolderLookup.Provider registries, boolean isUpgradingMachine)
 	{
+		damagesPlayers = tag.getBoolean("damages_players");
 	}
 	
 	@Override
