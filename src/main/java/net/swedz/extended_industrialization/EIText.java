@@ -706,6 +706,12 @@ public interface EIText
 	@WithStyle("tooltip")
 	MutableComponent teslaLethalCoilValues();
 	
+	@LangKey(text = "Damages Players: No")
+	MutableComponent teslaLethalCoilDamagesPlayersNo();
+	
+	@LangKey(text = "Damages Players: Yes")
+	MutableComponent teslaLethalCoilDamagesPlayersYes();
+	
 	@LangKey(text = "Linked to %s")
 	MutableComponent teslaNetworkReceiverLinked(
 			WorldPos pos

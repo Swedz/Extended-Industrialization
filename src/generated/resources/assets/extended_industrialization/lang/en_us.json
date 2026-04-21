@@ -277,6 +277,8 @@
   "text.extended_industrialization.tesla_handheld_linked": "Linked to %s",
   "text.extended_industrialization.tesla_handheld_selected": "Selected transmitter for receiving.",
   "text.extended_industrialization.tesla_interdimensional_upgrade_help": "Removes the range limitation on a Tesla Tower and allows it to transmit energy across dimensions.",
+  "text.extended_industrialization.tesla_lethal_coil_damages_players_no": "Damages Players: No",
+  "text.extended_industrialization.tesla_lethal_coil_damages_players_yes": "Damages Players: Yes",
   "text.extended_industrialization.tesla_lethal_coil_help_1": "Deals damage to entities within %s blocks while powered.",
   "text.extended_industrialization.tesla_lethal_coil_values": "Voltage determines the amount of damage dealt and energy required:",
   "text.extended_industrialization.tesla_network_receiver_linked": "Linked to %s",

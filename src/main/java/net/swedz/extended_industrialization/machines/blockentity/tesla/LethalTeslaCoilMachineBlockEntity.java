@@ -125,6 +125,7 @@ public final class LethalTeslaCoilMachineBlockEntity extends MachineBlockEntity 
 				EI.text().configurationPanelDescription(),
 				(lineIndex, delta) -> this.sync()
 		);
+		lethal.appendSelectionPanel(this, configPanel);
 		aesthetic.appendSelectionPanel(this, configPanel);
 		this.registerGuiComponent(configPanel.build());
 	}
