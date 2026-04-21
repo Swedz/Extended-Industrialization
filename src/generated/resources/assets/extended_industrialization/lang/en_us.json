@@ -197,7 +197,7 @@
   "text.extended_industrialization.farmer_tilling": "Tilling",
   "text.extended_industrialization.fluid_fertilizers": "Fluid Fertilizers",
   "text.extended_industrialization.fluid_fertilizers_consumes": "Consumes: %smb",
-  "text.extended_industrialization.fluid_fertilizers_time": "Cycle Time: %.1fs",
+  "text.extended_industrialization.fluid_fertilizers_time": "Cycle Time: %ss",
   "text.extended_industrialization.generating_eu_per_tick": "Generating: %s EU/t",
   "text.extended_industrialization.honey_extractor_help": "When placed facing into a beehive, honey will be extracted in fluid form.",
   "text.extended_industrialization.infinity": "∞",

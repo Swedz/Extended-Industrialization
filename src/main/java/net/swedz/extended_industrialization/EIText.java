@@ -319,7 +319,7 @@ public interface EIText
 			int mb
 	);
 	
-	@LangKey(text = "Cycle Time: %s")
+	@LangKey(text = "Cycle Time: %ss")
 	MutableComponent fluidFertilizersTime(
 			@ParsedDecimal(2) float seconds
 	);
