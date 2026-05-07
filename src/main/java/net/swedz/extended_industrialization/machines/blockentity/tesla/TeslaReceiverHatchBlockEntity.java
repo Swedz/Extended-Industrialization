@@ -7,6 +7,7 @@ import aztech.modern_industrialization.api.machine.component.EnergyAccess;
 import aztech.modern_industrialization.api.machine.holder.EnergyComponentHolder;
 import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.machines.BEP;
+import aztech.modern_industrialization.machines.MachineBlock;
 import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.IsActiveComponent;
 import aztech.modern_industrialization.machines.components.OrientationComponent;
@@ -19,9 +20,13 @@ import aztech.modern_industrialization.machines.multiblocks.HatchTypes;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
@@ -238,6 +243,55 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 		}
 	}
 	
+	private ItemInteractionResult tryReplaceHatch(Player player, InteractionHand hand, Direction face)
+	{
+		var stack = player.getItemInHand(hand);
+		var item = stack.getItem();
+		
+		if(item instanceof BlockItem blockItem &&
+		   blockItem.getBlock() instanceof MachineBlock machineBlockItem &&
+		   machineBlockItem.getBlockEntityInstance() instanceof TeslaReceiverHatchBlockEntity receiverHatchBlockItem &&
+		   receiverHatchBlockItem.getCableTier() != tier)
+		{
+			var originalBlockState = this.getBlockState();
+			
+			if(level.isClientSide())
+			{
+				level.setBlockAndUpdate(worldPosition, machineBlockItem.defaultBlockState());
+			}
+			else
+			{
+				var oldBlockData = this.saveWithoutMetadata(level.registryAccess());
+				
+				level.removeBlockEntity(worldPosition);
+				level.setBlockAndUpdate(worldPosition, machineBlockItem.defaultBlockState());
+				
+				if(!player.hasInfiniteMaterials())
+				{
+					var clickedFaceBlock = worldPosition.relative(face);
+					Containers.dropItemStack(level, clickedFaceBlock.getX(), clickedFaceBlock.getY(), clickedFaceBlock.getZ(), new ItemStack(originalBlockState.getBlock().asItem()));
+				}
+				
+				var newBlockEntity = level.getBlockEntity(worldPosition);
+				if(!(newBlockEntity instanceof TeslaReceiverHatchBlockEntity newHatchBlockEntity))
+				{
+					throw new RuntimeException("Replaced machine should be a TeslaReceiverHatchBlockEntity, found " + newBlockEntity);
+				}
+				newHatchBlockEntity.load(oldBlockData, level.registryAccess(), true);
+			}
+			
+			var group = originalBlockState.getSoundType();
+			var sound = group.getBreakSound();
+			level.playSound(null, worldPosition, sound, SoundSource.BLOCKS, (group.getVolume() + 1f) / 4f, group.getPitch() * 0.8f);
+			
+			stack.consume(1, player);
+			
+			return ItemInteractionResult.sidedSuccess(player.level().isClientSide());
+		}
+		
+		return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+	}
+	
 	@Override
 	protected ItemInteractionResult useItemOn(Player player, InteractionHand hand, Direction face)
 	{
@@ -245,6 +299,10 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 		if(!result.consumesAction())
 		{
 			result = aesthetic.onUse(this, player, hand);
+		}
+		if(!result.consumesAction())
+		{
+			result = this.tryReplaceHatch(player, hand, face);
 		}
 		return result;
 	}
