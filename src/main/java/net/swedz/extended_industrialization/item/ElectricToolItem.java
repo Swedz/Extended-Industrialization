@@ -77,7 +77,7 @@ import net.swedz.extended_industrialization.EISounds;
 import net.swedz.extended_industrialization.component.RainbowDataComponent;
 import net.swedz.extended_industrialization.entity.NanoSaberSweepEntity;
 import net.swedz.extended_industrialization.proxy.EIProxy;
-import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.neoforge.helper.ColorHelper;
 import net.swedz.tesseract.neoforge.item.DynamicDyedItem;
 import net.swedz.tesseract.neoforge.proxy.Proxies;

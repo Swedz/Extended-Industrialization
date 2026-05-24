@@ -28,7 +28,7 @@ import net.neoforged.neoforge.event.EventHooks;
 import net.swedz.extended_industrialization.EIDamageTypes;
 import net.swedz.extended_industrialization.EIEntities;
 import net.swedz.extended_industrialization.EISounds;
-import net.swedz.tesseract.neoforge.api.tuple.Pair;
+import net.swedz.tesseract.api.tuple.Pair;
 
 import java.util.List;
 import java.util.function.Predicate;

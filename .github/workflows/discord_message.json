@@ -35,9 +35,9 @@
                 }
             ],
             "author": {
-                "name": "$MOD_NAME",
-                "icon_url": "$MOD_DISCORD_ICON",
-                "url": "$MOD_GITHUB"
+                "name": "$DEPLOY_NAME",
+                "icon_url": "$DEPLOY_DISCORD_ICON",
+                "url": "$DEPLOY_GITHUB"
             }
         }
     ],
