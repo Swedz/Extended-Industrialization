@@ -26,13 +26,14 @@ import net.swedz.extended_industrialization.machines.blockentity.multiblock.tesl
 import net.swedz.extended_industrialization.machines.guicomponent.EIModularSlotPanelSlots;
 import net.swedz.extended_industrialization.material.EIMaterialRegistry;
 import net.swedz.extended_industrialization.network.EIPackets;
-import net.swedz.tesseract.neoforge.api.Assert;
-import net.swedz.tesseract.neoforge.api.tuple.Pair;
+import net.swedz.tesseract.api.Assert;
+import net.swedz.tesseract.api.tuple.Pair;
+import net.swedz.tesseract.config.ConfigManager;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 import net.swedz.tesseract.neoforge.compat.mi.TesseractMI;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformer;
 import net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser;
-import net.swedz.tesseract.neoforge.config.ConfigManager;
+import net.swedz.tesseract.neoforge.config.ModConfigFileAccess;
 import net.swedz.tesseract.neoforge.lang.LangManager;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
@@ -94,8 +95,10 @@ public final class EI
 		
 		bus.addListener(RegisterDataMapTypesEvent.class, EIDataMaps::init);
 		
-		NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, DataMapsUpdatedEvent.class, (event) ->
-				event.ifRegistry(Registries.BLOCK, (registry) -> LargeElectricFurnaceBlockEntity.initTiers()));
+		NeoForge.EVENT_BUS.addListener(
+				EventPriority.LOWEST, DataMapsUpdatedEvent.class, (event) ->
+						event.ifRegistry(Registries.BLOCK, (registry) -> LargeElectricFurnaceBlockEntity.initTiers())
+		);
 		TeslaTowerBlockEntity.registerTieredShapes();
 	}
 	
@@ -109,16 +112,14 @@ public final class EI
 	
 	private static void setupConfig(IEventBus bus, ModContainer container)
 	{
-		var manager = new ConfigManager()
-				.includeDefaultValueComments();
-		manager.codecs()
+		var file = new ModConfigFileAccess(container, ModConfig.Type.STARTUP);
+		file.codecs()
 				.register(EIConfig.CableTierDamages.class, EIConfig.CableTierDamages.CODEC);
-		CONFIG = manager
+		var instance = new ConfigManager(file)
 				.build(EIConfig.class)
-				.register(container, ModConfig.Type.STARTUP)
-				.load()
-				.listenToLoad(bus)
-				.config();
+				.load();
+		bus.addListener(FMLCommonSetupEvent.class, (event) -> instance.load(false));
+		CONFIG = instance.config();
 	}
 	
 	private static EIText TEXT;
@@ -143,16 +144,20 @@ public final class EI
 				
 				.parser("percentage", float.class, () -> (value) -> Parser.FLOAT_PERCENTAGE.parse(value, 0))
 				
-				.parser("eu_per_tick", long.class, () -> (value) ->
-				{
-					var amount = TextHelper.getAmountGeneric(value);
-					return MIText.EuT.text(amount.digit(), amount.unit());
-				})
-				.parser("eu", long.class, () -> (value) ->
-				{
-					var amount = TextHelper.getAmountGeneric(value);
-					return MIText.Eu.text(amount.digit(), amount.unit());
-				})
+				.parser(
+						"eu_per_tick", long.class, () -> (value) ->
+						{
+							var amount = TextHelper.getAmountGeneric(value);
+							return MIText.EuT.text(amount.digit(), amount.unit());
+						}
+				)
+				.parser(
+						"eu", long.class, () -> (value) ->
+						{
+							var amount = TextHelper.getAmountGeneric(value);
+							return MIText.Eu.text(amount.digit(), amount.unit());
+						}
+				)
 				
 				.parser("damage", float.class, () -> EITooltips.DAMAGE_PARSER)
 				

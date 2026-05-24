@@ -16,14 +16,6 @@ repositories {
 		}
 	}
 	maven {
-		name = "shedaniel"
-		url "https://maven.shedaniel.me"
-		content {
-			// Cloth Config API
-			includeGroup "me.shedaniel.cloth"
-		}
-	}
-	maven {
 		name = "TerraformersMC"
 		url = "https://maven.terraformersmc.com/releases/"
 		content {
@@ -58,8 +50,6 @@ dependencies {
 	implementation "aztech:Modern-Industrialization:${modern_industrialization_version}"
 
 	implementation "dev.technici4n:GrandPower:${grandpower_version}"
-
-	implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
 
 	if (project.runtime_include_emi.toBoolean()) {
 		localImplementation "dev.emi:emi-neoforge:${emi_version}"

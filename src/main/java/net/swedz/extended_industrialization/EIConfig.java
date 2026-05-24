@@ -2,12 +2,12 @@ package net.swedz.extended_industrialization;
 
 import aztech.modern_industrialization.api.energy.CableTier;
 import com.mojang.serialization.Codec;
-import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.neoforge.compat.mi.serialization.MICodecs;
-import net.swedz.tesseract.neoforge.config.annotation.ConfigComment;
-import net.swedz.tesseract.neoforge.config.annotation.ConfigKey;
-import net.swedz.tesseract.neoforge.config.annotation.Range;
-import net.swedz.tesseract.neoforge.config.annotation.SubSection;
+import net.swedz.tesseract.config.annotation.ConfigComment;
+import net.swedz.tesseract.config.annotation.ConfigKey;
+import net.swedz.tesseract.config.annotation.Range;
+import net.swedz.tesseract.config.annotation.SubSection;
 
 import java.util.Collections;
 import java.util.Map;

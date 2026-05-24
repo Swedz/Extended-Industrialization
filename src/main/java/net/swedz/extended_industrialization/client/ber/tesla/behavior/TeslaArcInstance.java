@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.extended_industrialization.client.ber.tesla.arc.TeslaArcBuilder;
 import net.swedz.extended_industrialization.client.model.tesla.TeslaBakedModel;
-import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.api.Assert;
 
 import java.util.Collections;
 import java.util.List;

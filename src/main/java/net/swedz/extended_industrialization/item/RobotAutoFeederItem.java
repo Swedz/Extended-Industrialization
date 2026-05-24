@@ -22,7 +22,7 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.proxy.modslot.EIModSlot;
-import net.swedz.tesseract.neoforge.api.tuple.Pair;
+import net.swedz.tesseract.api.tuple.Pair;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 import java.util.List;
