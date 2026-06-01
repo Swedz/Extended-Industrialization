@@ -11,7 +11,6 @@ import aztech.modern_industrialization.thirdparty.fabrictransfer.api.transaction
 import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.ItemStack;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
 
@@ -103,7 +102,7 @@ public final class SolarGeneratorComponent implements MachineComponent.ServerOnl
 				this.deterioratePhotovoltaicCell();
 			}
 			
-			energy.insertEu((long) (this.getEnergyPerTick() * (usedDistilledWater ? 1.5f : 1f)), Simulation.ACT);
+			energy.insertEu(this.getEnergyPerTick(), Simulation.ACT);
 		}
 		else
 		{
