@@ -75,7 +75,7 @@
 			"z": 0
 		},
 		"scale": 1.05,
-		"speed": 100,
-		"texture_scale": 48
+		"speed": 75,
+		"texture_scale": 4
 	}
 }
