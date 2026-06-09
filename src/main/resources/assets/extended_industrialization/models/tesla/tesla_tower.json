@@ -81,8 +81,8 @@
 			"z": 3
 		},
 		"scale": 5.25,
-		"speed": 60,
-		"texture_scale": 48
+		"speed": 75,
+		"texture_scale": 4
 	},
 	"arcs": {
 		"random_bounds": {

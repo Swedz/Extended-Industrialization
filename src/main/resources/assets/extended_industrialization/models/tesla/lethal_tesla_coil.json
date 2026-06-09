@@ -53,8 +53,8 @@
 			"z": 0
 		},
 		"scale": 1.05,
-		"speed": 100,
-		"texture_scale": 32
+		"speed": 75,
+		"texture_scale": 4
 	},
 	"arcs": {
 		"attach_to_nearby_entities": 2,
