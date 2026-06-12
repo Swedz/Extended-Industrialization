@@ -2,7 +2,6 @@ package net.swedz.extended_industrialization;
 
 import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.MIBlock;
-import aztech.modern_industrialization.MIFluids;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.compat.rei.machines.SteamMode;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
@@ -29,8 +28,6 @@ import net.swedz.extended_industrialization.machines.blockentity.MachineChainerM
 import net.swedz.extended_industrialization.machines.blockentity.SolarBoilerMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.SolarPanelMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.UniversalTransformerMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentity.brewery.ElectricBreweryMachineBlockEntity;
-import net.swedz.extended_industrialization.machines.blockentity.brewery.SteamBreweryMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.fluidharvesting.ElectricFluidHarvestingMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.fluidharvesting.SteamFluidHarvestingMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
@@ -48,6 +45,7 @@ import net.swedz.extended_industrialization.machines.component.fluidharvesting.w
 import net.swedz.extended_industrialization.machines.recipe.BreweryMachineRecipeType;
 import net.swedz.extended_industrialization.machines.recipe.CanningMachineRecipeType;
 import net.swedz.extended_industrialization.machines.recipe.ComposterMachineRecipeType;
+import net.swedz.extended_industrialization.machines.recipe.condition.RuntimeGeneratedFlagProcessCondition;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformers;
 import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.BlastFurnaceTiersMIHookContext;
 import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.MachineCasingsMIHookContext;
@@ -266,6 +264,22 @@ public final class EIMachines
 						.energyBar(14, 35))
 				.builtinModel("composter", (model) -> model.front(true).top(true))
 				.registerMachine();
+		
+		hook.builder("brewery", "Brewery", RecipeTypes.BREWERY)
+				.steel().electric()
+				.steamSlotPosition(5, 45)
+				.gui(SteamMode.BOTH, (gui) -> gui
+						.predicate(RuntimeGeneratedFlagProcessCondition::isNot)
+						.guiHeight(186)
+						.slots((s) -> s
+								.fluidInput(24, 45, EIFluids.BLAZING_ESSENCE::asFluid, 32)
+								.itemInputs(43, 27, 3, 3)
+								.itemOutputs(119, 27, 3, 3))
+						.progressBar(97, 43, "triple_arrow")
+						.energyBar(7, 44)
+						.efficiencyBar(57, 86))
+				.builtinModel(MachineCasings.STEEL, "brewery", (model) -> model.front(true).side(true).active(true))
+				.registerMachine();
 	}
 	
 	public static void singleBlockSpecial(SingleBlockSpecialMachinesMIHookContext hook)
@@ -296,38 +310,6 @@ public final class EIMachines
 				.registrator(MachineBlockEntity::registerFluidApi)
 				.registrator(ElectricFluidHarvestingMachineBlockEntity::registerEnergyApi)
 				.registerMachine();
-		
-		hook.builder("steel_brewery", "Steel Brewery", (bep, gui) -> new SteamBreweryMachineBlockEntity(bep, gui, false))
-				.builtinModel(MachineCasings.STEEL, "brewery", (model) -> model.front(true).side(true).active(true))
-				.gui((gui) -> gui
-						.guiHeight(186)
-						.inventoryOnlySlots((s) -> s
-								.fluidInput(5, 45, MIFluids.STEAM::asFluid, 16)
-								.fluidInput(24, 45, EIFluids.BLAZING_ESSENCE::asFluid, 16))
-						.slots((s) -> s
-								.itemInputs(43, 27, 3, 3)
-								.itemOutputs(119, 27, 3, 3))
-						.progressBar(97, 43, "triple_arrow"))
-				.registrator(MachineBlockEntity::registerItemApi)
-				.registrator(MachineBlockEntity::registerFluidApi)
-				.registerMachine();
-		hook.builder("electric_brewery", "Electric Brewery", ElectricBreweryMachineBlockEntity::new)
-				.builtinModel(CableTier.LV.casing, "brewery", (model) -> model.front(true).side(true).active(true))
-				.gui((gui) -> gui
-						.guiHeight(186)
-						.inventoryOnlySlots((s) -> s
-								.fluidInput(24, 45, EIFluids.BLAZING_ESSENCE::asFluid, 32))
-						.slots((s) -> s
-								.itemInputs(43, 27, 3, 3)
-								.itemOutputs(119, 27, 3, 3))
-						.progressBar(97, 43, "triple_arrow")
-						.energyBar(7, 44)
-						.efficiencyBar(57, 86))
-				.registrator(MachineBlockEntity::registerItemApi)
-				.registrator(MachineBlockEntity::registerFluidApi)
-				.registrator(ElectricBreweryMachineBlockEntity::registerEnergyApi)
-				.registerMachine();
-		
 		
 		hook.builder("bronze_waste_collector", "Bronze Waste Collector", (bep) -> new SteamFluidHarvestingMachineBlockEntity(
 						bep, EI.id("bronze_waste_collector"),
