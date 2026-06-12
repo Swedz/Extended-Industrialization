@@ -2,8 +2,6 @@ package net.swedz.extended_industrialization.compat.mi;
 
 import aztech.modern_industrialization.compat.rei.machines.ReiMachineRecipes;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIMachines;
 import net.swedz.extended_industrialization.EITooltips;
@@ -16,11 +14,13 @@ import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.T
 import net.swedz.extended_industrialization.machines.guicomponent.teslanetwork.TeslaNetworkBarClient;
 import net.swedz.extended_industrialization.machines.guicomponent.universaltransformer.UniversalTransformerSlots;
 import net.swedz.extended_industrialization.machines.guicomponent.universaltransformer.UniversalTransformerSlotsClient;
+import net.swedz.extended_industrialization.machines.recipe.condition.RuntimeGeneratedFlagProcessCondition;
 import net.swedz.tesseract.neoforge.compat.mi.hook.MIHookEntrypoint;
 import net.swedz.tesseract.neoforge.compat.mi.hook.MIHookListener;
 import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.BlastFurnaceTiersMIHookContext;
 import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.ClientGuiComponentsMIHookContext;
 import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.MachineCasingsMIHookContext;
+import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.MachineProcessConditionsMIHookContext;
 import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.MachineRecipeTypesMIHookContext;
 import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.MultiblockMachinesMIHookContext;
 import net.swedz.tesseract.neoforge.compat.mi.hook.context.listener.SingleBlockCraftingMachinesMIHookContext;
@@ -49,6 +49,12 @@ public final class EIMIHookListener implements MIHookListener
 	public void machineCasings(MachineCasingsMIHookContext hook)
 	{
 		EIMachines.casings(hook);
+	}
+	
+	@Override
+	public void machineProcessConditions(MachineProcessConditionsMIHookContext hook)
+	{
+		hook.register(EI.id("runtime_generated_flag"), RuntimeGeneratedFlagProcessCondition.CODEC, RuntimeGeneratedFlagProcessCondition.STREAM_CODEC);
 	}
 	
 	@Override

@@ -22,6 +22,7 @@ import net.neoforged.neoforge.common.brewing.BrewingRecipe;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIFluids;
+import net.swedz.extended_industrialization.machines.recipe.condition.RuntimeGeneratedFlagProcessCondition;
 import net.swedz.tesseract.neoforge.compat.mi.recipe.MIMachineRecipeBuilder;
 
 import java.util.List;
@@ -67,6 +68,8 @@ public final class BreweryMachineRecipeType extends ProxyableMachineRecipeType
 	private RecipeHolder<MachineRecipe> generate(ResourceLocation id, Ingredient inputIngredient, Ingredient reagentIngredient, ItemStack outputStack)
 	{
 		var recipe = new MIMachineRecipeBuilder(this, 4, 5 * 20);
+		
+		recipe.addCondition(new RuntimeGeneratedFlagProcessCondition());
 		
 		recipe.addItemInput(inputIngredient, 4, 1f);
 		recipe.addItemInput(reagentIngredient, 1, 1f);

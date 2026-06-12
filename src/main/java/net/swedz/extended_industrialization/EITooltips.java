@@ -256,6 +256,17 @@ public final class EITooltips
 			EI.text().wasteCollectorHelp()
 	);
 	
+	public static final TooltipAttachment BREWERY = TooltipAttachment.multilines(
+			List.of(
+					EI.id("steel_brewery"),
+					EI.id("electric_brewery")
+			),
+			(flags, context, stack, item) -> List.of(
+					EI.text().breweryRequiresBlazingEssence(EIFluids.BLAZING_ESSENCE.asFluid()),
+					EI.text().breweryBrewsMultiple(4)
+			)
+	);
+	
 	public static final TooltipAttachment TESLA_INTERDIMENSIONAL_UPGRADE = TooltipAttachment.singleLine(
 			List.of(EI.id("tesla_interdimensional_upgrade")),
 			EI.text().teslaInterdimensionalUpgradeHelp()
