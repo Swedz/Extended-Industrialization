@@ -17,12 +17,15 @@ public interface LootTableHarvestableBehavior extends HarvestableBehavior
 	{
 		List<BlockPos> blocks = this.getBlocks(context);
 		List<ItemStack> drops = Lists.newArrayList();
+		var harvestingOwner = context.harvestingOwner();
 		for(BlockPos block : blocks)
 		{
-			var blockContext = new HarvestingContext(context.level(), block, context.level().getBlockState(block), context.enchantment(), context.tier());
+			var blockContext = new HarvestingContext(context.level(), block, context.level().getBlockState(block), context.harvestingOwnerUUID(), context.enchantment(), context.tier());
 			var lootParams = new LootParams.Builder((ServerLevel) context.level())
 					.withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(block))
 					.withParameter(LootContextParams.TOOL, blockContext.enchantedItem());
+			harvestingOwner.ifPresent((player) -> lootParams
+					.withParameter(LootContextParams.THIS_ENTITY, player));
 			drops.addAll(blockContext.state().getDrops(lootParams));
 		}
 		return drops;

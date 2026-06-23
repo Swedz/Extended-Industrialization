@@ -20,7 +20,6 @@ import net.swedz.extended_industrialization.datamap.EnchantmentModule;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.component.farmer.FarmerComponent;
 import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerBlock;
-import net.swedz.extended_industrialization.machines.component.farmer.block.FarmerTile;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestableBehavior;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestableBehaviorHolder;
 import net.swedz.extended_industrialization.machines.component.farmer.harvesting.HarvestingContext;
@@ -230,7 +229,7 @@ public final class HarvestingFarmerTask extends FarmerTask
 			var pos = crop.pos();
 			var state = crop.state(level);
 			
-			var context = new HarvestingContext(level, pos, state, this.getActiveEnchantment(), farmer.getMachine().getHighestCableTier());
+			var context = new HarvestingContext(level, pos, state, farmer.getMachine().placedBy.placerId, this.getActiveEnchantment(), farmer.getMachine().getHighestCableTier());
 			var handlerOptional = harvestingHandlers.behavior(context);
 			
 			if(handlerOptional.isPresent())
