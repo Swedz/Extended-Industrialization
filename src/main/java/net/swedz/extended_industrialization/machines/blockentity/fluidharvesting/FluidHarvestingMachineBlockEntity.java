@@ -8,6 +8,7 @@ import aztech.modern_industrialization.machines.components.OrientationComponent;
 import aztech.modern_industrialization.machines.gui.MachineGuiParameters;
 import aztech.modern_industrialization.machines.guicomponents.AutoExtract;
 import aztech.modern_industrialization.machines.guicomponents.ProgressBar;
+import aztech.modern_industrialization.machines.init.MachineTier;
 import aztech.modern_industrialization.machines.models.MachineModelClientData;
 import aztech.modern_industrialization.util.Tickable;
 import net.minecraft.core.HolderLookup;
@@ -15,12 +16,15 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.FluidHarvestingBehavior;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.FluidHarvestingBehaviorCreator;
+import net.swedz.tesseract.neoforge.compat.mi.api.MachineTierHolder;
 import net.swedz.tesseract.neoforge.compat.mi.helper.EuConsumerBehavior;
 
-public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEntity implements Tickable
+public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEntity implements Tickable, MachineTierHolder
 {
 	protected static final int OUTPUT_SLOT_X = 110;
 	protected static final int OUTPUT_SLOT_Y = 30;
+	
+	protected final MachineTier tier;
 	
 	protected final long euCost;
 	
@@ -32,13 +36,15 @@ public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEnti
 	
 	protected int pumpingTicks;
 	
-	public FluidHarvestingMachineBlockEntity(BEP bep, ResourceLocation blockName, long euCost, FluidHarvestingBehaviorCreator behaviorCreator)
+	public FluidHarvestingMachineBlockEntity(BEP bep, ResourceLocation blockName, MachineTier tier, long euCost, FluidHarvestingBehaviorCreator behaviorCreator)
 	{
 		super(
 				bep,
 				new MachineGuiParameters.Builder(blockName, false).build(),
 				new OrientationComponent.Params(true, false, true)
 		);
+		
+		this.tier = tier;
 		
 		this.euCost = euCost;
 		this.behaviorCreator = behaviorCreator;
@@ -65,6 +71,12 @@ public abstract class FluidHarvestingMachineBlockEntity extends MachineBlockEnti
 				pumpingTicks = tag.getInt("pumpingTicks");
 			}
 		});
+	}
+	
+	@Override
+	public MachineTier getMachineTier()
+	{
+		return tier;
 	}
 	
 	protected abstract EuConsumerBehavior createEuConsumerBehavior();

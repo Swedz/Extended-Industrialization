@@ -65,13 +65,6 @@ dependencies {
 		compileOnly "net.swedz:mi-tweaks:${mi_tweaks_version}"
 	}
 
-	jarJar(implementation("io.github.llamalad7:mixinextras-neoforge:${mixinextras_version}")) {
-		version {
-			strictly "[${mixinextras_version},)"
-			prefer mixinextras_version
-		}
-	}
-
 	if (project.runtime_include_accessories.toBoolean()) {
 		localImplementation "io.wispforest:accessories-neoforge:${accessories_version}"
 	} else {
