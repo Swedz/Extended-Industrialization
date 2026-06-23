@@ -294,17 +294,24 @@ public final class EIMachines
 				.registerMachine();
 		
 		hook.builder("steel_honey_extractor", "Steel Honey Extractor", (bep) -> new SteamFluidHarvestingMachineBlockEntity(
-						bep, EI.id("steel_honey_extractor"),
-						2, HoneyExtractorBehavior.STEEL,
-						16 * FluidType.BUCKET_VOLUME, EIFluids.HONEY
+						bep,
+						EI.id("steel_honey_extractor"),
+						false,
+						2,
+						HoneyExtractorBehavior.STEEL,
+						16 * FluidType.BUCKET_VOLUME,
+						EIFluids.HONEY
 				))
 				.builtinModel(MachineCasings.STEEL, "honey_extractor", (model) -> model.front(true).side(true).active(true))
 				.registrator(MachineBlockEntity::registerFluidApi)
 				.registerMachine();
 		hook.builder("electric_honey_extractor", "Electric Honey Extractor", (bep) -> new ElectricFluidHarvestingMachineBlockEntity(
-						bep, EI.id("electric_honey_extractor"),
-						4, HoneyExtractorBehavior.ELECTRIC,
-						32 * FluidType.BUCKET_VOLUME, EIFluids.HONEY
+						bep,
+						EI.id("electric_honey_extractor"),
+						4,
+						HoneyExtractorBehavior.ELECTRIC,
+						32 * FluidType.BUCKET_VOLUME,
+						EIFluids.HONEY
 				))
 				.builtinModel(CableTier.LV.casing, "honey_extractor", (model) -> model.front(true).side(true).active(true))
 				.registrator(MachineBlockEntity::registerFluidApi)
@@ -312,25 +319,36 @@ public final class EIMachines
 				.registerMachine();
 		
 		hook.builder("bronze_waste_collector", "Bronze Waste Collector", (bep) -> new SteamFluidHarvestingMachineBlockEntity(
-						bep, EI.id("bronze_waste_collector"),
-						1, WasteCollectorBehavior.BRONZE,
-						8 * FluidType.BUCKET_VOLUME, EIFluids.MANURE
+						bep,
+						EI.id("bronze_waste_collector"),
+						true,
+						1,
+						WasteCollectorBehavior.BRONZE,
+						8 * FluidType.BUCKET_VOLUME,
+						EIFluids.MANURE
 				))
 				.builtinModel(MachineCasings.BRONZE, "waste_collector", (model) -> model.top(true).front(false).active(true))
 				.registrator(MachineBlockEntity::registerFluidApi)
 				.registerMachine();
 		hook.builder("steel_waste_collector", "Steel Waste Collector", (bep) -> new SteamFluidHarvestingMachineBlockEntity(
-						bep, EI.id("steel_waste_collector"),
-						2, WasteCollectorBehavior.STEEL,
-						16 * FluidType.BUCKET_VOLUME, EIFluids.MANURE
+						bep,
+						EI.id("steel_waste_collector"),
+						false,
+						2,
+						WasteCollectorBehavior.STEEL,
+						16 * FluidType.BUCKET_VOLUME,
+						EIFluids.MANURE
 				))
 				.builtinModel(MachineCasings.STEEL, "waste_collector", (model) -> model.top(true).front(false).active(true))
 				.registrator(MachineBlockEntity::registerFluidApi)
 				.registerMachine();
 		hook.builder("electric_waste_collector", "Electric Waste Collector", (bep) -> new ElectricFluidHarvestingMachineBlockEntity(
-						bep, EI.id("electric_waste_collector"),
-						4, WasteCollectorBehavior.ELECTRIC,
-						32 * FluidType.BUCKET_VOLUME, EIFluids.MANURE
+						bep,
+						EI.id("electric_waste_collector"),
+						4,
+						WasteCollectorBehavior.ELECTRIC,
+						32 * FluidType.BUCKET_VOLUME,
+						EIFluids.MANURE
 				))
 				.builtinModel(CableTier.LV.casing, "waste_collector", (model) -> model.top(true).front(false).active(true))
 				.registrator(MachineBlockEntity::registerFluidApi)

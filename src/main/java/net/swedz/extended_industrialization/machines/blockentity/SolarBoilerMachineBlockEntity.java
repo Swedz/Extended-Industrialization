@@ -37,11 +37,12 @@ import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.machines.component.solar.SolarSunlightComponent;
 import net.swedz.extended_industrialization.machines.component.solar.boiler.SolarBoilerCalcificationComponent;
 import net.swedz.extended_industrialization.machines.guicomponent.solarefficiency.SolarEfficiencyBar;
+import net.swedz.tesseract.neoforge.compat.mi.api.SteamMachineTierHolder;
 import net.swedz.tesseract.neoforge.compat.mi.component.SteamProductionComponent;
 
 import java.util.List;
 
-public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity implements Tickable
+public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity implements Tickable, SteamMachineTierHolder
 {
 	private static final int WATER_SLOT_X = 38;
 	private static final int WATER_SLOT_Y = 32;
@@ -112,6 +113,12 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 		));
 		
 		this.registerComponents(inventory, sunlight, calcification, steamProduction, isActiveComponent);
+	}
+	
+	@Override
+	public boolean isSteelTier()
+	{
+		return !bronze;
 	}
 	
 	public float getEfficiency(boolean includeCalficiation)

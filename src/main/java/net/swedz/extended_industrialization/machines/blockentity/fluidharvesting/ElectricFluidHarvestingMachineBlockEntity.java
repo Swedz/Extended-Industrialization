@@ -15,6 +15,7 @@ import aztech.modern_industrialization.machines.components.EnergyComponent;
 import aztech.modern_industrialization.machines.components.RedstoneControlComponent;
 import aztech.modern_industrialization.machines.guicomponents.EnergyBar;
 import aztech.modern_industrialization.machines.guicomponents.SlotPanel;
+import aztech.modern_industrialization.machines.init.MachineTier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.FluidHarvestingBehaviorCreator;
@@ -33,7 +34,7 @@ public final class ElectricFluidHarvestingMachineBlockEntity extends FluidHarves
 	
 	public ElectricFluidHarvestingMachineBlockEntity(BEP bep, ResourceLocation blockName, long euCost, FluidHarvestingBehaviorCreator behaviorCreator, long capacity, FluidLike fluid)
 	{
-		super(bep, blockName, euCost, behaviorCreator);
+		super(bep, blockName, MachineTier.LV, euCost, behaviorCreator);
 		
 		List<ConfigurableFluidStack> fluidStacks = Collections.singletonList(
 				ConfigurableFluidStack.lockedOutputSlot(capacity, fluid.asFluid())

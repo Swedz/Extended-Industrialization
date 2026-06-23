@@ -6,21 +6,23 @@ import aztech.modern_industrialization.inventory.ConfigurableFluidStack;
 import aztech.modern_industrialization.inventory.MIInventory;
 import aztech.modern_industrialization.inventory.SlotPositions;
 import aztech.modern_industrialization.machines.BEP;
+import aztech.modern_industrialization.machines.init.MachineTier;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.extended_industrialization.machines.component.fluidharvesting.FluidHarvestingBehaviorCreator;
+import net.swedz.tesseract.neoforge.compat.mi.api.SteamMachineTierHolder;
 import net.swedz.tesseract.neoforge.compat.mi.helper.EuConsumerBehavior;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public final class SteamFluidHarvestingMachineBlockEntity extends FluidHarvestingMachineBlockEntity
+public final class SteamFluidHarvestingMachineBlockEntity extends FluidHarvestingMachineBlockEntity implements SteamMachineTierHolder
 {
 	private final MIInventory inventory;
 	
-	public SteamFluidHarvestingMachineBlockEntity(BEP bep, ResourceLocation blockName, long euCost, FluidHarvestingBehaviorCreator behaviorCreator, long capacity, FluidLike fluid)
+	public SteamFluidHarvestingMachineBlockEntity(BEP bep, ResourceLocation blockName, boolean bronze, long euCost, FluidHarvestingBehaviorCreator behaviorCreator, long capacity, FluidLike fluid)
 	{
-		super(bep, blockName, euCost, behaviorCreator);
+		super(bep, blockName, bronze ? MachineTier.BRONZE : MachineTier.STEEL, euCost, behaviorCreator);
 		
 		List<ConfigurableFluidStack> fluidStacks = Arrays.asList(
 				ConfigurableFluidStack.lockedInputSlot(capacity, MIFluids.STEAM.asFluid()),
@@ -48,5 +50,11 @@ public final class SteamFluidHarvestingMachineBlockEntity extends FluidHarvestin
 	public MIInventory getInventory()
 	{
 		return inventory;
+	}
+	
+	@Override
+	public boolean isSteelTier()
+	{
+		return tier == MachineTier.STEEL;
 	}
 }
