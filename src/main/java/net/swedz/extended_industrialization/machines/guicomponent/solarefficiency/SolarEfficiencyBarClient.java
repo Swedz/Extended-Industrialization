@@ -56,7 +56,7 @@ public final class SolarEfficiencyBarClient extends GuiComponentClient<SolarEffi
 		}
 		
 		@Override
-		public void renderTooltip(MachineScreen screen, Font font, GuiGraphics guiGraphics, int x, int y, int cursorX, int cursorY)
+		public boolean renderTooltip(MachineScreen screen, Font font, GuiGraphics graphics, int x, int y, int cursorX, int cursorY)
 		{
 			if(RenderHelper.isPointWithinRectangle(params.renderX(), params.renderY(), WIDTH, HEIGHT, cursorX - x, cursorY - y))
 			{
@@ -70,8 +70,10 @@ public final class SolarEfficiencyBarClient extends GuiComponentClient<SolarEffi
 				{
 					lines.add(EI.text().generatingEuPerTick(data.energyProduced()));
 				}
-				guiGraphics.renderTooltip(font, lines, Optional.empty(), cursorX, cursorY);
+				graphics.renderTooltip(font, lines, Optional.empty(), cursorX, cursorY);
+				return true;
 			}
+			return false;
 		}
 	}
 }

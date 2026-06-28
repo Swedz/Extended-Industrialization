@@ -81,38 +81,43 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		
 		this.registerComponents(redstoneControl, upgrade, transmitter, aesthetic);
 		
-		this.registerGuiComponent(new ModularMultiblockGui(0, ModularMultiblockGui.HEIGHT, (content) ->
-		{
-			content.add((this.isShapeValid() ? MIText.MultiblockShapeValid : MIText.MultiblockShapeInvalid).text(), this.isShapeValid() ? WHITE : RED);
-			
-			if(this.isShapeValid())
-			{
-				if(this.hasNetwork())
+		this.registerGuiComponent(new ModularMultiblockGui(
+				0,
+				ModularMultiblockGui.HEIGHT,
+				(content) ->
 				{
-					TeslaNetwork network = this.getNetwork();
-					if(network.isTransmitterLoaded())
+					content.add((this.isShapeValid() ? MIText.MultiblockShapeValid : MIText.MultiblockShapeInvalid).text(), this.isShapeValid() ? WHITE : RED);
+					
+					if(this.isShapeValid())
 					{
-						content.add(EI.text().teslaNetworkTransmitterReceivers(network.receiverCount()));
-						
-						content.add(EI.text().teslaNetworkTransmitterTransmitting(lastEnergyTransmitted, network.getCableTier()));
-						long drain = this.getPassiveDrain();
-						content.add(EI.text().teslaNetworkTransmitterDrain(drain));
-						content.add(EI.text().teslaNetworkTransmitterConsuming(lastEnergyTransmitted + drain));
+						if(this.hasNetwork())
+						{
+							TeslaNetwork network = this.getNetwork();
+							if(network.isTransmitterLoaded())
+							{
+								content.add(EI.text().teslaNetworkTransmitterReceivers(network.receiverCount()));
+								
+								content.add(EI.text().teslaNetworkTransmitterTransmitting(lastEnergyTransmitted, network.getCableTier()));
+								long drain = this.getPassiveDrain();
+								content.add(EI.text().teslaNetworkTransmitterDrain(drain));
+								content.add(EI.text().teslaNetworkTransmitterConsuming(lastEnergyTransmitted + drain));
+							}
+							else if(this.getCableTier() == null)
+							{
+								content.add(EI.text().teslaTowerNoEnergyHatches(), RED);
+							}
+						}
 					}
-					else if(this.getCableTier() == null)
+					else
 					{
-						content.add(EI.text().teslaTowerNoEnergyHatches(), RED);
+						if(hasMismatchingHatches)
+						{
+							content.add(EI.text().teslaTowerMismatchingHatches(), RED, true);
+						}
 					}
-				}
-			}
-			else
-			{
-				if(hasMismatchingHatches)
-				{
-					content.add(EI.text().teslaTowerMismatchingHatches(), RED, true);
-				}
-			}
-		}));
+				},
+				List::of
+		));
 		
 		this.registerGuiComponent(new ModularSlotPanel(this, 0)
 				.withRedstoneModule(redstoneControl)
@@ -253,8 +258,12 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	public ShapeMatcher createShapeMatcher()
 	{
 		return new SameCableTierShapeMatcher(
-				level, worldPosition, orientation.facingDirection,
-				this.getActiveShape(), (value) -> hasMismatchingHatches = value
+				level,
+				worldPosition,
+				orientation.facingDirection,
+				this.getActiveShape(),
+				shapeValid,
+				(value) -> hasMismatchingHatches = value
 		);
 	}
 	

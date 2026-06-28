@@ -30,6 +30,8 @@ import net.swedz.tesseract.neoforge.compat.mi.helper.transfer.MIEnergyTransferCa
 import net.swedz.tesseract.neoforge.helper.transfer.FluidTransferCache;
 import net.swedz.tesseract.neoforge.helper.transfer.ItemTransferCache;
 
+import java.util.List;
+
 import static net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGuiLine.*;
 
 public final class MachineChainerMachineBlockEntity extends MachineBlockEntity implements Tickable, CableTierHolder
@@ -77,19 +79,24 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		
 		this.registerGuiComponent(new AutoExtract(orientation));
 		
-		this.registerGuiComponent(new ModularMultiblockGui(11, 50, (content) ->
-		{
-			ChainerLinks links = chainer.links();
-			
-			if(!links.hasConnections() && links.failPosition().isPresent())
-			{
-				content.add(EI.text().machineChainerProblemAt(links.failPosition().get()), RED);
-			}
-			else
-			{
-				content.add(EI.text().machineChainerConnectedMachines(links.count(), links.maxConnections()));
-			}
-		}));
+		this.registerGuiComponent(new ModularMultiblockGui(
+				11,
+				50,
+				(content) ->
+				{
+					ChainerLinks links = chainer.links();
+					
+					if(!links.hasConnections() && links.failPosition().isPresent())
+					{
+						content.add(EI.text().machineChainerProblemAt(links.failPosition().get()), RED);
+					}
+					else
+					{
+						content.add(EI.text().machineChainerConnectedMachines(links.count(), links.maxConnections()));
+					}
+				},
+				List::of
+		));
 		
 		this.registerComponents(chainer, redstoneControl, casing);
 	}
