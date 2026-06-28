@@ -32,10 +32,10 @@ public final class TeslaNetworkBarClient extends GuiComponentClient<TeslaNetwork
 			private final int WIDTH = 18, HEIGHT = 18;
 			
 			@Override
-			public void renderBackground(GuiGraphics guiGraphics, int x, int y)
+			public void renderBackground(GuiGraphics graphics, int x, int y)
 			{
 				int iconIndex = data.map(TeslaNetworkBar.Data::iconIndex).orElse(0);
-				guiGraphics.blit(
+				graphics.blit(
 						TESLA_NETWORK_BAR,
 						x + params.renderX(), y + params.renderY(),
 						iconIndex * 18, 0, WIDTH, HEIGHT, 18 * 7, 18
@@ -43,7 +43,7 @@ public final class TeslaNetworkBarClient extends GuiComponentClient<TeslaNetwork
 			}
 			
 			@Override
-			public void renderTooltip(MachineScreen screen, Font font, GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY)
+			public boolean renderTooltip(MachineScreen screen, Font font, GuiGraphics graphics, int x, int y, int mouseX, int mouseY)
 			{
 				if(RenderHelper.isPointWithinRectangle(params.renderX(), params.renderY(), WIDTH, HEIGHT, mouseX - x, mouseY - y))
 				{
@@ -83,9 +83,11 @@ public final class TeslaNetworkBarClient extends GuiComponentClient<TeslaNetwork
 					}
 					if(!lines.isEmpty())
 					{
-						guiGraphics.renderTooltip(font, lines.stream().map((c) -> ComponentHelper.stripStyle(c.getVisualOrderText())).toList(), mouseX, mouseY);
+						graphics.renderTooltip(font, lines.stream().map((c) -> ComponentHelper.stripStyle(c.getVisualOrderText())).toList(), mouseX, mouseY);
+						return true;
 					}
 				}
+				return false;
 			}
 		};
 	}

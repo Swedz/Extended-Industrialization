@@ -149,7 +149,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	@Override
 	public ShapeMatcher createShapeMatcher()
 	{
-		return new FarmerShapeMatcher(level, worldPosition, orientation.facingDirection, this.getActiveShape(), farmer);
+		return new FarmerShapeMatcher(level, worldPosition, orientation.facingDirection, this.getActiveShape(), shapeValid, farmer);
 	}
 	
 	@Override

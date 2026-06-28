@@ -1,5 +1,6 @@
 package net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer;
 
+import aztech.modern_industrialization.machines.components.ShapeValidComponent;
 import aztech.modern_industrialization.machines.multiblocks.ShapeMatcher;
 import aztech.modern_industrialization.machines.multiblocks.ShapeTemplate;
 import net.minecraft.core.BlockPos;
@@ -11,10 +12,16 @@ public final class FarmerShapeMatcher extends ShapeMatcher
 {
 	private final FarmerComponent farmer;
 	
-	public FarmerShapeMatcher(Level world, BlockPos controllerPos, Direction controllerDirection, ShapeTemplate template,
-							  FarmerComponent farmer)
+	public FarmerShapeMatcher(
+			Level world,
+			BlockPos controllerPos,
+			Direction controllerDirection,
+			ShapeTemplate template,
+			ShapeValidComponent shapeValid,
+			FarmerComponent farmer
+	)
 	{
-		super(world, controllerPos, controllerDirection, template);
+		super(world, controllerPos, controllerDirection, template, shapeValid);
 		this.farmer = farmer;
 	}
 	
