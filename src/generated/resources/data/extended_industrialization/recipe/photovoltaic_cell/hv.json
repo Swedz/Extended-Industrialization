@@ -4,11 +4,11 @@
   "eu": 8,
   "fluid_inputs": [
     {
-      "amount": 200,
+      "amount": 80,
       "fluid": "modern_industrialization:synthetic_rubber"
     },
     {
-      "amount": 500,
+      "amount": 25,
       "fluid": "modern_industrialization:polyethylene"
     }
   ],
@@ -18,7 +18,7 @@
       "tag": "c:glass_panes"
     },
     {
-      "amount": 4,
+      "amount": 2,
       "item": "modern_industrialization:silicon_wafer"
     },
     {

@@ -4,7 +4,7 @@
   "eu": 8,
   "fluid_inputs": [
     {
-      "amount": 100,
+      "amount": 40,
       "fluid": "modern_industrialization:synthetic_rubber"
     }
   ],

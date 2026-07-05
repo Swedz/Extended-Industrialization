@@ -98,7 +98,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				(r) -> r
 						.addItemInput(EITags.itemCommon("glass_panes"), 4)
 						.addItemInput(EITags.itemCommon("plates/silver"), 2)
-						.addItemInput("modern_industrialization:rubber_sheet", 4)
+						.addItemInput("modern_industrialization:rubber_sheet", 2)
 						.addItemOutput(EIItems.LV_PHOTOVOLTAIC_CELL, 1),
 				output
 		);
@@ -108,7 +108,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				(r) -> r
 						.addItemInput(EITags.itemCommon("glass_panes"), 4)
 						.addItemInput(EITags.itemCommon("plates/silver"), 2)
-						.addFluidInput(MIFluids.SYNTHETIC_RUBBER, 20)
+						.addFluidInput(MIFluids.SYNTHETIC_RUBBER, 10)
 						.addItemOutput(EIItems.LV_PHOTOVOLTAIC_CELL, 1),
 				output
 		);
@@ -118,7 +118,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				(r) -> r
 						.addItemInput(EITags.itemCommon("glass_panes"), 4)
 						.addItemInput(EITags.itemCommon("plates/silver"), 2)
-						.addFluidInput(MIFluids.STYRENE_BUTADIENE_RUBBER, 4)
+						.addFluidInput(MIFluids.STYRENE_BUTADIENE_RUBBER, 2)
 						.addItemOutput(EIItems.LV_PHOTOVOLTAIC_CELL, 1),
 				output
 		);
@@ -131,7 +131,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 						.addItemInput("modern_industrialization:silicon_n_doped_plate", 1)
 						.addItemInput(EITags.itemCommon("plates/silver"), 4)
 						.addItemInput("modern_industrialization:silicon_p_doped_plate", 1)
-						.addFluidInput(MIFluids.SYNTHETIC_RUBBER, 100)
+						.addFluidInput(MIFluids.SYNTHETIC_RUBBER, 40)
 						.addItemOutput(EIItems.MV_PHOTOVOLTAIC_CELL, 1),
 				output
 		);
@@ -143,7 +143,7 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 						.addItemInput("modern_industrialization:silicon_n_doped_plate", 1)
 						.addItemInput(EITags.itemCommon("plates/silver"), 4)
 						.addItemInput("modern_industrialization:silicon_p_doped_plate", 1)
-						.addFluidInput(MIFluids.STYRENE_BUTADIENE_RUBBER, 20)
+						.addFluidInput(MIFluids.STYRENE_BUTADIENE_RUBBER, 8)
 						.addItemOutput(EIItems.MV_PHOTOVOLTAIC_CELL, 1),
 				output
 		);
@@ -153,10 +153,10 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				8, 40 * 20,
 				(r) -> r
 						.addItemInput(EITags.itemCommon("glass_panes"), 4)
-						.addItemInput("modern_industrialization:silicon_wafer", 4)
+						.addItemInput("modern_industrialization:silicon_wafer", 2)
 						.addItemInput(EITags.itemCommon("plates/silver"), 8)
-						.addFluidInput(MIFluids.SYNTHETIC_RUBBER, 200)
-						.addFluidInput(MIFluids.POLYETHYLENE, 500)
+						.addFluidInput(MIFluids.SYNTHETIC_RUBBER, 80)
+						.addFluidInput(MIFluids.POLYETHYLENE, 25)
 						.addItemOutput(EIItems.HV_PHOTOVOLTAIC_CELL, 1),
 				output
 		);
@@ -165,10 +165,10 @@ public final class CommonRecipesServerDatagenProvider extends RecipesServerDatag
 				8, 40 * 20,
 				(r) -> r
 						.addItemInput(EITags.itemCommon("glass_panes"), 4)
-						.addItemInput("modern_industrialization:silicon_wafer", 4)
+						.addItemInput("modern_industrialization:silicon_wafer", 2)
 						.addItemInput(EITags.itemCommon("plates/silver"), 8)
-						.addFluidInput(MIFluids.STYRENE_BUTADIENE_RUBBER, 40)
-						.addFluidInput(MIFluids.POLYETHYLENE, 500)
+						.addFluidInput(MIFluids.STYRENE_BUTADIENE_RUBBER, 16)
+						.addFluidInput(MIFluids.POLYETHYLENE, 25)
 						.addItemOutput(EIItems.HV_PHOTOVOLTAIC_CELL, 1),
 				output
 		);
