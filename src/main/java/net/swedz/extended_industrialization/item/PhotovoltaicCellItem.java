@@ -44,30 +44,4 @@ public final class PhotovoltaicCellItem extends Item
 		float hue = Math.max(0, (float) solarTicksRemaining / cell.durationTicks());
 		return Mth.hsvToRgb(hue / 3, 1, 1);
 	}
-	
-	public static long calculateTotalEuProduced(int euPerTick, int durationTicks)
-	{
-		int dayLength = 12000;
-		int energyProduced = 0;
-		for(int tick = 0; tick <= durationTicks; tick++)
-		{
-			int time = tick % dayLength;
-			long timeFromNoon = Math.abs(6000 - time);
-			float efficiency;
-			if(time >= 4000 && time <= 8000)
-			{
-				efficiency = 1;
-			}
-			else if(time < 4000)
-			{
-				efficiency = (-1f / 16000000f) * time * time + (1f / 2000f) * time;
-			}
-			else
-			{
-				efficiency = (-1f / 16000000f) * time * time + (1f / 1000f) * time - 3f;
-			}
-			energyProduced += (int) (euPerTick * efficiency);
-		}
-		return energyProduced;
-	}
 }
