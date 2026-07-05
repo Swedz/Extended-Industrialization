@@ -97,7 +97,7 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 		extractable = energy.buildExtractable((otherTier) -> otherTier == tier);
 		
 		sunlight = new SolarSunlightComponent(this);
-		generator = new SolarGeneratorComponent(inventory, energy, this::getEfficiency, (cell) -> cell.getTier() == tier);
+		generator = new SolarGeneratorComponent(inventory, energy, this::getEfficiency, (cell) -> cell.tier() == tier);
 		
 		this.registerGuiComponent(new EnergyBar(new EnergyBar.Params(ENERGY_X, ENERGY_Y), energy::getEu, energy::getCapacity));
 		

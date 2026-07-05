@@ -17,7 +17,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.swedz.extended_industrialization.datamap.EnchantmentModule;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
-import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
 import net.swedz.extended_industrialization.item.nanosuit.NanoSuitArmorItem;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
@@ -135,15 +134,15 @@ public final class EITooltips
 	);
 	
 	public static final TooltipAttachment PHOTOVOLTAIC_CELLS = TooltipAttachment.multilines(
-			PhotovoltaicCellItem.class,
+			(stack, item) -> stack.has(EIComponents.PHOTOVOLTAIC_CELL),
 			(flags, context, stack, item) ->
 			{
-				int euPerTick = item.getEuPerTick();
+				var data = stack.get(EIComponents.PHOTOVOLTAIC_CELL);
 				List<Component> lines = Lists.newArrayList();
-				lines.add(EI.text().photovoltaicCellEU(euPerTick));
-				if(!item.lastsForever())
+				lines.add(EI.text().photovoltaicCellEU(data.euPerTick()));
+				if(!data.lastsForever())
 				{
-					int solarTicksRemaining = item.getSolarTicksRemaining(stack);
+					int solarTicksRemaining = data.durationTicks() - stack.getOrDefault(EIComponents.SOLAR_TICKS, 0);
 					lines.add(EI.text().photovoltaicCellRemainingOperationTimeMinutes(solarTicksRemaining));
 				}
 				else
