@@ -52,9 +52,24 @@ public final class SolarGeneratorComponent implements MachineComponent.ServerOnl
 		return inventory.getItemStacks().getFirst();
 	}
 	
+	private PhotovoltaicCell getPhotovoltaicCellData()
+	{
+		var resource = this.getSlotPhotovoltaicCell().getResource();
+		var components = PatchedDataComponentMap.fromPatch(resource.getItem().components(), resource.getComponentsPatch());
+		return components.get(EIComponents.PHOTOVOLTAIC_CELL.get());
+	}
+	
+	public float getEnergyEfficiency()
+	{
+		float efficiency = energyEfficiency.get();
+		return photovoltaicCell != null ?
+				Math.max(efficiency, photovoltaicCell.minimumEfficiency()) :
+				efficiency;
+	}
+	
 	public long getEnergyPerTick()
 	{
-		return photovoltaicCell != null ? (long) (photovoltaicCell.euPerTick() * energyEfficiency.get() * (usedDistilledWater ? 1.5 : 1)) : 0;
+		return photovoltaicCell != null ? (long) (photovoltaicCell.euPerTick() * this.getEnergyEfficiency() * (usedDistilledWater ? 1.5 : 1)) : 0;
 	}
 	
 	private boolean tryUseDistilledWater()
@@ -70,7 +85,7 @@ public final class SolarGeneratorComponent implements MachineComponent.ServerOnl
 	private void incrementSolarTicks(ItemStack stack)
 	{
 		int solarTicks = stack.getOrDefault(EIComponents.SOLAR_TICKS, 0) + 1;
-		if(solarTicks > photovoltaicCell.durationTicks())
+		if(solarTicks > photovoltaicCell.lifetimeTicks())
 		{
 			return;
 		}
@@ -80,7 +95,7 @@ public final class SolarGeneratorComponent implements MachineComponent.ServerOnl
 	private int getSolarTicksRemaining(ItemStack stack)
 	{
 		int solarTicks = stack.getOrDefault(EIComponents.SOLAR_TICKS, 0);
-		return photovoltaicCell.durationTicks() - solarTicks;
+		return photovoltaicCell.lifetimeTicks() - solarTicks;
 	}
 	
 	private void deterioratePhotovoltaicCell()
@@ -109,9 +124,7 @@ public final class SolarGeneratorComponent implements MachineComponent.ServerOnl
 			tick = 1;
 		}
 		
-		var resource = this.getSlotPhotovoltaicCell().getResource();
-		var components = PatchedDataComponentMap.fromPatch(resource.getItem().components(), resource.getComponentsPatch());
-		var photovoltaicCellComponent = components.get(EIComponents.PHOTOVOLTAIC_CELL.get());
+		var photovoltaicCellComponent = this.getPhotovoltaicCellData();
 		if(photovoltaicCellComponent != null && photovoltaicCellTest.test(photovoltaicCellComponent))
 		{
 			photovoltaicCell = photovoltaicCellComponent;
