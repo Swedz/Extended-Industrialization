@@ -123,7 +123,10 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 	
 	public float getEfficiency(boolean includeCalficiation)
 	{
-		return includeCalficiation ? sunlight.getSolarEfficiency() * calcification.getEfficiency() : sunlight.getSolarEfficiency();
+		float sunlightEfficiency = sunlight.getSolarEfficiency();
+		return includeCalficiation ?
+				sunlightEfficiency * calcification.getEfficiency() :
+				sunlightEfficiency;
 	}
 	
 	@Override

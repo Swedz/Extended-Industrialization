@@ -9,12 +9,12 @@ import net.swedz.extended_industrialization.component.PhotovoltaicCell;
 
 public final class PhotovoltaicCellItem extends Item
 {
-	public PhotovoltaicCellItem(Properties properties, CableTier tier, int euPerTick, int durationTicks)
+	public PhotovoltaicCellItem(Properties properties, CableTier tier, int euPerTick, int durationTicks, float minimumEfficiency)
 	{
 		super(properties
 				.stacksTo(1)
 				.durability(0)
-				.component(EIComponents.PHOTOVOLTAIC_CELL, new PhotovoltaicCell(tier, euPerTick, durationTicks))
+				.component(EIComponents.PHOTOVOLTAIC_CELL, new PhotovoltaicCell(tier, euPerTick, durationTicks, minimumEfficiency))
 				.component(EIComponents.SOLAR_TICKS, 0));
 	}
 	
@@ -32,7 +32,7 @@ public final class PhotovoltaicCellItem extends Item
 	{
 		int solarTicks = stack.getOrDefault(EIComponents.SOLAR_TICKS, 0);
 		var cell = stack.get(EIComponents.PHOTOVOLTAIC_CELL);
-		return Math.round(13 - (((float) solarTicks / cell.durationTicks()) * 13));
+		return Math.round(13 - (((float) solarTicks / cell.lifetimeTicks()) * 13));
 	}
 	
 	@Override
@@ -40,8 +40,8 @@ public final class PhotovoltaicCellItem extends Item
 	{
 		int solarTicks = stack.getOrDefault(EIComponents.SOLAR_TICKS, 0);
 		var cell = stack.get(EIComponents.PHOTOVOLTAIC_CELL);
-		int solarTicksRemaining = cell.durationTicks() - solarTicks;
-		float hue = Math.max(0, (float) solarTicksRemaining / cell.durationTicks());
+		int solarTicksRemaining = cell.lifetimeTicks() - solarTicks;
+		float hue = Math.max(0, (float) solarTicksRemaining / cell.lifetimeTicks());
 		return Mth.hsvToRgb(hue / 3, 1, 1);
 	}
 }

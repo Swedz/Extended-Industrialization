@@ -142,7 +142,7 @@ public final class EITooltips
 				lines.add(EI.text().photovoltaicCellEU(data.euPerTick()));
 				if(!data.lastsForever())
 				{
-					int solarTicksRemaining = data.durationTicks() - stack.getOrDefault(EIComponents.SOLAR_TICKS, 0);
+					int solarTicksRemaining = data.lifetimeTicks() - stack.getOrDefault(EIComponents.SOLAR_TICKS, 0);
 					lines.add(EI.text().photovoltaicCellRemainingOperationTimeMinutes(solarTicksRemaining));
 				}
 				else

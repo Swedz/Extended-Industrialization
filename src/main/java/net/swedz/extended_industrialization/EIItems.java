@@ -245,7 +245,7 @@ public final class EIItems
 	
 	public static ItemHolder<PhotovoltaicCellItem> createPhotovoltaicCell(String id, String name, CableTier tier, int euPerTick, int durationTicks)
 	{
-		return create("%s_photovoltaic_cell".formatted(id), "%s Photovoltaic Cell".formatted(name), (p) -> new PhotovoltaicCellItem(p, tier, euPerTick, durationTicks), EISortOrder.PARTS)
+		return create("%s_photovoltaic_cell".formatted(id), "%s Photovoltaic Cell".formatted(name), (p) -> new PhotovoltaicCellItem(p, tier, euPerTick, durationTicks, 0), EISortOrder.PARTS)
 				.tag(EITags.Items.PHOTOVOLTAIC_CELL)
 				.withModelBuilder(CommonModelBuilders::generated)
 				.register();

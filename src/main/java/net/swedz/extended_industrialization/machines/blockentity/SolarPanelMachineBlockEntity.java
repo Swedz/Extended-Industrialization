@@ -97,7 +97,7 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 		extractable = energy.buildExtractable((otherTier) -> otherTier == tier);
 		
 		sunlight = new SolarSunlightComponent(this);
-		generator = new SolarGeneratorComponent(inventory, energy, this::getEfficiency, (cell) -> cell.tier() == tier);
+		generator = new SolarGeneratorComponent(inventory, energy, sunlight::getSolarEfficiency, (cell) -> cell.tier() == tier);
 		
 		this.registerGuiComponent(new EnergyBar(new EnergyBar.Params(ENERGY_X, ENERGY_Y), energy::getEu, energy::getCapacity));
 		
@@ -107,16 +107,11 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 		this.registerGuiComponent(SolarEfficiencyBar.energyProduced(
 				new SolarEfficiencyBar.Params(SOLAR_EFFICIENCY_X, SOLAR_EFFICIENCY_Y),
 				sunlight::canOperate,
-				() -> (int) (this.getEfficiency() * 100),
+				() -> (int) (generator.getEnergyEfficiency() * 100),
 				generator::getEnergyPerTick
 		));
 		
 		this.registerComponents(inventory, energy, redstoneControl, sunlight, generator);
-	}
-	
-	public float getEfficiency()
-	{
-		return sunlight.getSolarEfficiency();
 	}
 	
 	@Override
@@ -175,7 +170,7 @@ public final class SolarPanelMachineBlockEntity extends MachineBlockEntity imple
 			return;
 		}
 		
-		if(sunlight.canOperate() && redstoneControl.doAllowNormalOperation(this))
+		if(generator.getEnergyEfficiency() > 0 && redstoneControl.doAllowNormalOperation(this))
 		{
 			generator.tick();
 		}
