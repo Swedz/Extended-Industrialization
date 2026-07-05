@@ -10,9 +10,12 @@ import aztech.modern_industrialization.thirdparty.fabrictransfer.api.item.ItemVa
 import aztech.modern_industrialization.thirdparty.fabrictransfer.api.transaction.Transaction;
 import aztech.modern_industrialization.util.Simulation;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
+import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.EIFluids;
-import net.swedz.extended_industrialization.item.PhotovoltaicCellItem;
+import net.swedz.extended_industrialization.component.PhotovoltaicCell;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -22,16 +25,16 @@ public final class SolarGeneratorComponent implements MachineComponent.ServerOnl
 	private final MIInventory     inventory;
 	private final EnergyComponent energy;
 	
-	private final Supplier<Float>                 energyEfficiency;
-	private final Predicate<PhotovoltaicCellItem> photovoltaicCellTest;
+	private final Supplier<Float>             energyEfficiency;
+	private final Predicate<PhotovoltaicCell> photovoltaicCellTest;
 	
 	private int tick;
 	
-	private PhotovoltaicCellItem photovoltaicCell;
+	private PhotovoltaicCell photovoltaicCell;
 	
 	private boolean usedDistilledWater;
 	
-	public SolarGeneratorComponent(MIInventory inventory, EnergyComponent energy, Supplier<Float> energyEfficiency, Predicate<PhotovoltaicCellItem> photovoltaicCellTest)
+	public SolarGeneratorComponent(MIInventory inventory, EnergyComponent energy, Supplier<Float> energyEfficiency, Predicate<PhotovoltaicCell> photovoltaicCellTest)
 	{
 		this.inventory = inventory;
 		this.energy = energy;
@@ -51,12 +54,12 @@ public final class SolarGeneratorComponent implements MachineComponent.ServerOnl
 	
 	public long getEnergyPerTick()
 	{
-		return photovoltaicCell != null ? (long) (photovoltaicCell.getEuPerTick() * energyEfficiency.get() * (usedDistilledWater ? 1.5 : 1)) : 0;
+		return photovoltaicCell != null ? (long) (photovoltaicCell.euPerTick() * energyEfficiency.get() * (usedDistilledWater ? 1.5 : 1)) : 0;
 	}
 	
 	private boolean tryUseDistilledWater()
 	{
-		try (var transaction = Transaction.openRoot())
+		try(var transaction = Transaction.openRoot())
 		{
 			boolean usedDistilledWater = this.getSlotWater().extractDirect(FluidVariant.of(EIFluids.DISTILLED_WATER.asFluid()), 1, transaction) > 0;
 			transaction.commit();
@@ -64,12 +67,28 @@ public final class SolarGeneratorComponent implements MachineComponent.ServerOnl
 		}
 	}
 	
+	private void incrementSolarTicks(ItemStack stack)
+	{
+		int solarTicks = stack.getOrDefault(EIComponents.SOLAR_TICKS, 0) + 1;
+		if(solarTicks > photovoltaicCell.durationTicks())
+		{
+			return;
+		}
+		stack.set(EIComponents.SOLAR_TICKS, solarTicks);
+	}
+	
+	private int getSolarTicksRemaining(ItemStack stack)
+	{
+		int solarTicks = stack.getOrDefault(EIComponents.SOLAR_TICKS, 0);
+		return photovoltaicCell.durationTicks() - solarTicks;
+	}
+	
 	private void deterioratePhotovoltaicCell()
 	{
 		var slotCell = this.getSlotPhotovoltaicCell();
 		var cellStack = slotCell.toStack();
-		photovoltaicCell.incrementTick(cellStack);
-		if(photovoltaicCell.getSolarTicksRemaining(cellStack) > 0)
+		this.incrementSolarTicks(cellStack);
+		if(this.getSolarTicksRemaining(cellStack) > 0)
 		{
 			slotCell.setKey(ItemVariant.of(cellStack));
 		}
@@ -90,12 +109,15 @@ public final class SolarGeneratorComponent implements MachineComponent.ServerOnl
 			tick = 1;
 		}
 		
-		if(this.getSlotPhotovoltaicCell().getResource().getItem() instanceof PhotovoltaicCellItem cellItem && photovoltaicCellTest.test(cellItem))
+		var resource = this.getSlotPhotovoltaicCell().getResource();
+		var components = PatchedDataComponentMap.fromPatch(resource.getItem().components(), resource.getComponentsPatch());
+		var photovoltaicCellComponent = components.get(EIComponents.PHOTOVOLTAIC_CELL.get());
+		if(photovoltaicCellComponent != null && photovoltaicCellTest.test(photovoltaicCellComponent))
 		{
-			photovoltaicCell = cellItem;
+			photovoltaicCell = photovoltaicCellComponent;
 			
 			usedDistilledWater = this.tryUseDistilledWater();
-			boolean deterioratePhotovoltaicCell = !usedDistilledWater || tick % 2 == 0;
+			boolean deterioratePhotovoltaicCell = (!usedDistilledWater || tick % 2 == 0) && !photovoltaicCell.lastsForever();
 			
 			if(deterioratePhotovoltaicCell)
 			{

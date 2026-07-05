@@ -10,6 +10,7 @@ import net.minecraft.util.ExtraCodecs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.swedz.extended_industrialization.component.PhotovoltaicCell;
 import net.swedz.extended_industrialization.component.RainbowDataComponent;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.machineconfig.MachineConfig;
@@ -23,6 +24,7 @@ public final class EIComponents
 	private static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, EI.ID);
 	
 	public static final Supplier<DataComponentType<Boolean>>               HIDE_BAR               = create("hide_bar", Codec.BOOL, ByteBufCodecs.BOOL);
+	public static final Supplier<DataComponentType<PhotovoltaicCell>>      PHOTOVOLTAIC_CELL      = create("photovoltaic_cell", PhotovoltaicCell.CODEC, PhotovoltaicCell.STREAM_CODEC);
 	public static final Supplier<DataComponentType<Integer>>               SOLAR_TICKS            = create("solar_ticks", ExtraCodecs.POSITIVE_INT, ByteBufCodecs.VAR_INT);
 	public static final Supplier<DataComponentType<MachineConfig>>         MACHINE_CONFIG         = create("machine_config", MachineConfig.CODEC, MachineConfig.STREAM_CODEC);
 	public static final Supplier<DataComponentType<ElectricToolItem.Mode>> ELECTRIC_TOOL_MODE     = create("electric_tool_mode", CodecHelper.forLowercaseEnum(ElectricToolItem.Mode.class), CodecHelper.forLowercaseEnumStream(ElectricToolItem.Mode.class));
