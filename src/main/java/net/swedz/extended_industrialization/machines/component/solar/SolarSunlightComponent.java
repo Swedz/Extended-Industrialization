@@ -26,6 +26,16 @@ public final class SolarSunlightComponent implements MachineComponent.ServerOnly
 		return time >= 0 && time <= 12000;
 	}
 	
+	/**
+	 * <p>Parabola formula calculated using three intersection points:</p>
+	 * <ul>
+	 *     <li>(0, 0)</li>
+	 *     <li>(12000, 0)</li>
+	 *     <li>(1500, 1)</li>
+	 * </ul>
+	 *
+	 * @see <a href="https://www.desmos.com/calculator/rwqs1ch9wx">Desmos Graph</a>
+	 */
 	public float getSolarEfficiency()
 	{
 		if(!this.canOperate())
@@ -33,21 +43,13 @@ public final class SolarSunlightComponent implements MachineComponent.ServerOnly
 			return 0;
 		}
 		long time = this.getTime();
-		if(time >= 4000 && time <= 8000)
+		if(time >= 1500 && time <= 10500)
 		{
 			return 1;
 		}
-		else if(time < 4000)
-		{
-			return (-1f / 16000000f) * time * time + (1f / 2000f) * time;
-		}
-		else if(time > 8000)
-		{
-			return (-1f / 16000000f) * time * time + (1f / 1000f) * time - 3f;
-		}
 		else
 		{
-			throw new IllegalStateException();
+			return (-(time * time) / 15750000f) + ((2f * time) / 2625f);
 		}
 	}
 	
