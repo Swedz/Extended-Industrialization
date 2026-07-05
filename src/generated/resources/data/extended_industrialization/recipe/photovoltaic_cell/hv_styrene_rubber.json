@@ -4,7 +4,7 @@
   "eu": 8,
   "fluid_inputs": [
     {
-      "amount": 16,
+      "amount": 32,
       "fluid": "modern_industrialization:styrene_butadiene_rubber"
     },
     {
