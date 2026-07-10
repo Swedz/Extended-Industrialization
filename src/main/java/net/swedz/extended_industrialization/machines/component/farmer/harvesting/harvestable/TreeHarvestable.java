@@ -52,7 +52,7 @@ public final class TreeHarvestable implements LootTableHarvestableBehavior
 		if(blockMap.containsDirtAt(origin.below()))
 		{
 			var blocks = event.getPositions();
-			blocks.removeIf(blockMap::containsDirtAt);
+			blocks.removeIf((pos) -> pos.getY() < origin.getY());
 			blocks.sort(Collections.reverseOrder(Comparator.comparingInt(Vec3i::getY)));
 			trees.put(origin, new FarmerTree(origin, blocks));
 		}
