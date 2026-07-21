@@ -39,7 +39,7 @@ jobs:
       - name: Generate variables using release data
         run: |
           echo "MOD_VERSION=$(echo "$GITHUB_RELEASE_TAG_NAME" | sed -E 's/-[^-]+$//')" >> $GITHUB_ENV
-          echo "RELEASE_TYPE=$(echo "$GITHUB_RELEASE_TAG_NAME" | grep -oE '(alpha|beta)' || echo "stable")" >> $GITHUB_ENV
+          echo "RELEASE_TYPE=$(echo "$GITHUB_RELEASE_TAG_NAME" | grep -oE '(alpha|beta)' || echo "release")" >> $GITHUB_ENV
       - name: Build changelog
         run: ./gradlew buildChangelog
       - name: Finalize variables

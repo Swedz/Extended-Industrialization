@@ -102,9 +102,25 @@ static Map<String, String> gatherProjectRelations(String property) {
 	return projectRelations
 }
 
+static ReleaseType releaseType() {
+	def type = System.getenv("RELEASE_TYPE") ?: "alpha"
+	if(type == "alpha")
+	{
+		return ReleaseType.ALPHA
+	}
+	else if(type == "beta")
+	{
+		return ReleaseType.BETA
+	}
+	else
+	{
+		return ReleaseType.STABLE
+	}
+}
+
 publishMods {
 	changelog = System.getenv("MOD_CHANGELOG_TRIMMED_PUBLISH")
-	type = ReleaseType.of((System.getenv("RELEASE_TYPE") ?: "alpha").toUpperCase())
+	type = releaseType()
 	file = tasks.named("jar").flatMap { it.archiveFile }
 	version = project.version
 	displayName = "${project.mod_name} ${project.version}"
