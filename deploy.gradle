@@ -110,12 +110,11 @@ publishMods {
 	displayName = "${project.mod_name} ${project.version}"
 	modLoaders = ["neoforge"]
 
-	def shared = { boolean isCurseforge, platform ->
+	def shared = { String projectRelations, platform ->
 		def compatible_minecraft_versions = project.compatible_minecraft_versions.split(",")
 		compatible_minecraft_versions.each { platform.minecraftVersions.add(it) }
 
-		def projectRelations = gatherProjectRelations(isCurseforge ? project.curseforge_project_relations : project.modrinth_project_relations)
-		projectRelations.each {
+		gatherProjectRelations(projectRelations).each {
 			def dependency = it.getKey()
 			def requirementType = it.getValue()
 			if (requirementType == "required") {
@@ -135,12 +134,12 @@ publishMods {
 		client = true
 		server = true
 		changelogType = "markdown"
-		shared true, it
+		shared project.curseforge_project_relations, it
 	}
 
 	modrinth {
 		projectId = project.modrinth_project
 		accessToken = System.getenv("MODRINTH_API_KEY")
-		shared false, it
+		shared project.modrinth_project_relations, it
 	}
 }
