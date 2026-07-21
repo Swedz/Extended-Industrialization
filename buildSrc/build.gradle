@@ -3,5 +3,5 @@ repositories {
 }
 
 dependencies {
-	implementation "net.darkhax.curseforgegradle:CurseForgeGradle:1.1.28"
+	implementation "me.modmuss50.mod-publish-plugin:me.modmuss50.mod-publish-plugin.gradle.plugin:2.1.1"
 }

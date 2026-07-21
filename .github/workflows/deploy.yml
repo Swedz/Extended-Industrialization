@@ -39,7 +39,7 @@ jobs:
       - name: Generate variables using release data
         run: |
           echo "MOD_VERSION=$(echo "$GITHUB_RELEASE_TAG_NAME" | sed -E 's/-[^-]+$//')" >> $GITHUB_ENV
-          echo "RELEASE_TYPE=$(echo "$GITHUB_RELEASE_TAG_NAME" | grep -oE '(alpha|beta)' || echo "release")" >> $GITHUB_ENV
+          echo "RELEASE_TYPE=$(echo "$GITHUB_RELEASE_TAG_NAME" | grep -oE '(alpha|beta)' || echo "stable")" >> $GITHUB_ENV
       - name: Build changelog
         run: ./gradlew buildChangelog
       - name: Finalize variables
@@ -63,13 +63,10 @@ jobs:
         env:
           MODMAVEN_USERNAME: ${{ secrets.MODMAVEN_USERNAME }}
           MODMAVEN_PASSWORD: ${{ secrets.MODMAVEN_PASSWORD }}
-      - name: Publish to Curseforge
-        run: ./gradlew publishCurseForge
+      - name: Publish to Curseforge and Modrinth
+        run: ./gradlew publishMods
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
-      - name: Publish to Modrinth
-        run: ./gradlew modrinth
-        env:
           MODRINTH_API_KEY: ${{ secrets.MODRINTH_API_KEY }}
 
       # Post to the Discord that the update has been deployed

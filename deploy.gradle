@@ -1,7 +1,9 @@
-static def trimChangelog(String changelog, int maxLength, boolean discordFormat) {
-	if (discordFormat) {
-		changelog = changelog.replaceAll(/## What's Changed\r?\n/, '')
+import me.modmuss50.mpp.ReleaseType
 
+static def trimChangelog(String changelog, int maxLength, boolean discordFormat) {
+	changelog = changelog.replaceAll(/## What's Changed\r?\n/, '')
+
+	if (discordFormat) {
 		changelog = changelog.replaceAll(/## New Contributors/, '**New Contributors**')
 	}
 
@@ -100,67 +102,45 @@ static Map<String, String> gatherProjectRelations(String property) {
 	return projectRelations
 }
 
-import net.darkhax.curseforgegradle.TaskPublishCurseForge
+publishMods {
+	changelog = System.getenv("MOD_CHANGELOG_TRIMMED_PUBLISH")
+	type = ReleaseType.of((System.getenv("RELEASE_TYPE") ?: "alpha").toUpperCase())
+	file = tasks.named("jar").flatMap { it.archiveFile }
+	version = project.version
+	displayName = "${project.mod_name} ${project.version}"
+	modLoaders = ["neoforge"]
 
-if (System.getenv("CURSEFORGE_API_KEY")) {
-	tasks.register('publishCurseForge', TaskPublishCurseForge).configure {
-		apiToken = System.getenv("CURSEFORGE_API_KEY")
-
-		def mainFile = upload(project.curseforge_project, jar)
-		mainFile.releaseType = System.getenv("RELEASE_TYPE")
-		mainFile.changelogType = "markdown"
-		mainFile.changelog = System.getenv("MOD_CHANGELOG_TRIMMED_PUBLISH")
-
+	def shared = { platform ->
 		def compatible_minecraft_versions = project.compatible_minecraft_versions.split(",")
-		compatible_minecraft_versions.each { mainFile.addGameVersion(it) }
-		mainFile.addGameVersion("NeoForge")
-		mainFile.addGameVersion("Java 21")
+		compatible_minecraft_versions.each { platform.minecraftVersions.add(it) }
 
 		def projectRelations = gatherProjectRelations(project.curseforge_project_relations)
 		projectRelations.each {
 			def dependency = it.getKey()
 			def requirementType = it.getValue()
 			if (requirementType == "required") {
-				mainFile.addRequirement(dependency)
+				platform.requires dependency
 			} else if (requirementType == "optional") {
-				mainFile.addOptional(dependency)
+				platform.optional dependency
 			} else if (requirementType == "incompatibility") {
-				mainFile.addIncompatibility(dependency)
+				platform.incompatible dependency
 			}
 		}
 	}
-}
 
-if (System.getenv("MODRINTH_API_KEY")) {
+	curseforge {
+		projectId = project.curseforge_project
+		accessToken = System.getenv("CURSEFORGE_API_KEY")
+		javaVersions.add JavaVersion.VERSION_21
+		client = true
+		server = true
+		changelogType = "markdown"
+		shared it
+	}
+
 	modrinth {
-		token = System.getenv("MODRINTH_API_KEY")
-
 		projectId = project.modrinth_project
-		versionNumber = "${version}"
-		versionName = "${project.mod_name} ${version}"
-		versionType = System.getenv("RELEASE_TYPE")
-		delegate.changelog = System.getenv("MOD_CHANGELOG_TRIMMED_PUBLISH")
-
-		gameVersions = project.compatible_minecraft_versions.split(",").collect { it }
-		loaders = ["neoforge"]
-
-		def projectRelations = gatherProjectRelations(project.modrinth_project_relations)
-		if (!projectRelations.isEmpty()) {
-			dependencies {
-				projectRelations.each {
-					def dependency = it.getKey()
-					def requirementType = it.getValue()
-					if (requirementType == "required") {
-						required.project dependency
-					} else if (requirementType == "optional") {
-						optional.project dependency
-					} else if (requirementType == "incompatibility") {
-						incompatible.project dependency
-					}
-				}
-			}
-		}
-
-		uploadFile = tasks.jar
+		accessToken = System.getenv("MODRINTH_API_KEY")
+		shared it
 	}
 }
