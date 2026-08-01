@@ -1,11 +1,21 @@
 pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-        maven { url = 'https://maven.neoforged.net/releases' }
-    }
+	repositories {
+		mavenLocal()
+		gradlePluginPortal()
+		maven {
+			url = "https://maven.neoforged.net/releases"
+		}
+		maven {
+			name = "Modmaven"
+			url "https://modmaven.dev"
+			content {
+				includeGroup "net.swedz"
+				includeGroup "net.swedz.deploy-inator"
+			}
+		}
+	}
 }
 
 plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+	id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
 }

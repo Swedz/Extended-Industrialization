@@ -3,7 +3,7 @@ plugins {
 	id 'idea'
 	id 'maven-publish'
 	id 'net.neoforged.moddev' version '1.0.14'
-	id 'me.modmuss50.mod-publish-plugin'
+	id 'net.swedz.deploy-inator' version '1.0.1'
 }
 
 configurations {

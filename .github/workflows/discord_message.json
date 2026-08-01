@@ -18,7 +18,7 @@
                 {
                     "id": 166449711,
                     "name": "Minecraft Version",
-                    "value": "$MINECRAFT_VERSION",
+                    "value": "1.21.1",
                     "inline": false
                 },
                 {
@@ -26,18 +26,12 @@
                     "name": "Changelog",
                     "value": "$MOD_CHANGELOG_TRIMMED_DISCORD",
                     "inline": false
-                },
-                {
-                    "id": 742525752,
-                    "name": "Download",
-                    "value": "[$ARTIFACT_NAME-$GITHUB_RELEASE_TAG_NAME.jar](https://modrinth.com/mod/$MODRINTH_PROJECT_SLUG/version/$GITHUB_RELEASE_TAG_NAME)",
-                    "inline": false
                 }
             ],
             "author": {
-                "name": "$DEPLOY_NAME",
-                "icon_url": "$DEPLOY_DISCORD_ICON",
-                "url": "$DEPLOY_GITHUB"
+                "name": "Extended Industrialization",
+                "icon_url": "https://cdn.discordapp.com/emojis/1264330258505531473.webp",
+                "url": "https://github.com/$GITHUB_REPOSITORY"
             }
         }
     ],
