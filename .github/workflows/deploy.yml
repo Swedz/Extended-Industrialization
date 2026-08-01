@@ -7,6 +7,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      MODMAVEN_USERNAME: ${{ secrets.MODMAVEN_USERNAME }}
+      MODMAVEN_PASSWORD: ${{ secrets.MODMAVEN_PASSWORD }}
+      CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+      MODRINTH_API_KEY: ${{ secrets.MODRINTH_API_KEY }}
+      RELEASE_WEBHOOK_URL: ${{ secrets.RELEASE_WEBHOOK_URL }}
     steps:
       # Set up Github actions, JDK & Gradle
       - uses: actions/checkout@v2
@@ -20,13 +26,6 @@ jobs:
         run: chmod +x gradlew
 
       # Load the variables needed
-      - name: Load gradle.properties into the environment
-        run: |
-          while IFS='=' read -r key value; do
-            [[ -z "$key" || "$key" =~ ^#.* ]] && continue
-            env_key=$(echo "$key" | tr '[:lower:]' '[:upper:]' | tr '.' '_')
-            echo "${env_key}=${value}" >> $GITHUB_ENV
-          done < gradle.properties
       - name: Load GitHub variables into the environment
         run: |
           echo "GITHUB_REPOSITORY=${{ github.repository }}" >> $GITHUB_ENV
@@ -48,6 +47,7 @@ jobs:
           echo "RELEASE_TYPE_DISPLAY=${RELEASE_TYPE^}" >> $GITHUB_ENV
           echo "EMBED_COLOR=$(if [ $RELEASE_TYPE == "alpha" ]; then echo 15875907; elif [ $RELEASE_TYPE == "beta" ]; then echo 15774258; else echo 2336090; fi)" >> $GITHUB_ENV
       - name: Prepare Discord webhook JSON file
+        if: ${{ true && env.RELEASE_WEBHOOK_URL != '' }}
         run: |
           envsubst < .github/workflows/discord_message.json > prepared_discord_message.json
           echo "Prepared Discord webhook JSON:"
@@ -58,18 +58,18 @@ jobs:
         run: ./gradlew build
       - name: Publish to ModMaven
         uses: gradle/gradle-build-action@v2
+        if: ${{ true && env.MODMAVEN_USERNAME != '' && env.MODMAVEN_PASSWORD != '' }}
         with:
           arguments: publishMavenJavaPublicationToModmavenRepository
-        env:
-          MODMAVEN_USERNAME: ${{ secrets.MODMAVEN_USERNAME }}
-          MODMAVEN_PASSWORD: ${{ secrets.MODMAVEN_PASSWORD }}
-      - name: Publish to Curseforge and Modrinth
-        run: ./gradlew publishMods
-        env:
-          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
-          MODRINTH_API_KEY: ${{ secrets.MODRINTH_API_KEY }}
+      - name: Publish to Curseforge
+        if: ${{ true && env.CURSEFORGE_API_KEY != '' }}
+        run: ./gradlew publishCurseforge
+      - name: Publish to Modrinth
+        if: ${{ true && env.MODRINTH_API_KEY != '' }}
+        run: ./gradlew publishModrinth
 
       # Post to the Discord that the update has been deployed
       - name: Post to Discord
+        if: ${{ true && env.RELEASE_WEBHOOK_URL != '' }}
         run: |
-          curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data @prepared_discord_message.json ${{ secrets.RELEASE_WEBHOOK_URL }}
+          curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data @prepared_discord_message.json ${{ env.RELEASE_WEBHOOK_URL }}
