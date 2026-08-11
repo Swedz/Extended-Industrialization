@@ -85,14 +85,14 @@ public abstract class TeslaNetworkReceiversPlayerMixin extends LivingEntity
 			}
 		}
 		
-		var toRemove = Sets.difference(playerReceivers.keySet(), found);
+		var toRemove = Sets.difference(Set.copyOf(playerReceivers.keySet()), found);
 		for(var key : toRemove)
 		{
 			var receiver = playerReceivers.remove(key);
 			receiver.getNetwork().remove(receiver);
 		}
 		
-		var toAdd = Sets.difference(found, playerReceivers.keySet());
+		var toAdd = Sets.difference(found, Set.copyOf(playerReceivers.keySet()));
 		for(var key : toAdd)
 		{
 			var receiver = new PlayerTeslaReceiver(player, key);
