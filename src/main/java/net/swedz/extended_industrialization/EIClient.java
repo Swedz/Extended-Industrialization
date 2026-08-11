@@ -33,6 +33,7 @@ import net.neoforged.neoforge.client.event.RegisterMaterialAtlasesEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 import net.swedz.extended_industrialization.client.NanoGravichestplateHudRenderer;
+import net.swedz.extended_industrialization.client.ber.beacon.ElectricBeaconBlockEntityRenderer;
 import net.swedz.extended_industrialization.client.ber.chainer.MachineChainerHighlightRenderer;
 import net.swedz.extended_industrialization.client.ber.tesla.TeslaPartMultiblockRenderer;
 import net.swedz.extended_industrialization.client.ber.tesla.TeslaPartSingleBlockRenderer;
@@ -45,6 +46,7 @@ import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.extended_industrialization.item.SteamChainsawItem;
 import net.swedz.extended_industrialization.item.tooltip.SteamChainsawTooltipComponent;
 import net.swedz.extended_industrialization.machines.blockentity.MachineChainerMachineBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.beacon.ElectricBeaconMachineBlockEntity;
 import net.swedz.extended_industrialization.network.packet.ModifyElectricToolSpeedPacket;
 import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.config.ConfigManager;
@@ -162,14 +164,15 @@ public final class EIClient
 					
 					BlockEntityRendererProvider provider = switch (blockEntity)
 					{
-						case MachineChainerMachineBlockEntity be -> MachineChainerHighlightRenderer::new;
+						case ElectricBeaconMachineBlockEntity __ -> ElectricBeaconBlockEntityRenderer::new;
+						case MachineChainerMachineBlockEntity __ -> MachineChainerHighlightRenderer::new;
 						case TeslaBehavior __ -> switch (blockEntity)
 						{
-							case MultiblockMachineBlockEntity be -> TeslaPartMultiblockRenderer::new;
+							case MultiblockMachineBlockEntity ___ -> TeslaPartMultiblockRenderer::new;
 							default -> TeslaPartSingleBlockRenderer::new;
 						};
-						case LargeTankMultiblockBlockEntity be -> MultiblockTankBER::new;
-						case MultiblockMachineBlockEntity be -> MultiblockMachineBER::new;
+						case LargeTankMultiblockBlockEntity __ -> MultiblockTankBER::new;
+						case MultiblockMachineBlockEntity __ -> MultiblockMachineBER::new;
 						default -> MachineBlockEntityRenderer::new;
 					};
 					BlockEntityRenderers.register(type, provider);
