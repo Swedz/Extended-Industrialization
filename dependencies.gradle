@@ -16,8 +16,8 @@ repositories {
 		}
 	}
 	maven {
-		name = "Gnomecraft"
-		url = "https://maven.gnomecraft.net/repository/maven-public"
+		name = "Sleeping Town"
+		url = "https://repo.sleeping.town/"
 		content {
 			// EMI
 			includeGroup "dev.emi"
