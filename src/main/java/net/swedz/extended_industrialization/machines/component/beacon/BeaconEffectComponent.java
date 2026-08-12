@@ -38,6 +38,9 @@ import java.util.Optional;
 
 public final class BeaconEffectComponent implements MachineComponent
 {
+	// This should not be any larger than 6, because then there will be effects not shown in the GUI
+	private static final int MAX_EFFECTS = 3;
+	
 	private List<Effect> activeEffects = List.of();
 	
 	private int totalEffectTicks     = 0;
@@ -140,7 +143,8 @@ public final class BeaconEffectComponent implements MachineComponent
 				}
 				
 				var result = this.calculateEffectResult(potionContents);
-				if(result.effects().isEmpty())
+				if(result.effects().isEmpty() ||
+				   result.effects().size() > MAX_EFFECTS)
 				{
 					continue;
 				}
