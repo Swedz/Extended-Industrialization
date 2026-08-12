@@ -21,6 +21,7 @@ import aztech.modern_industrialization.util.MobSpawning;
 import com.google.common.collect.Maps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.machines.blockentity.LargeConfigurableChestMachineBlockEntity;
@@ -214,6 +215,9 @@ public final class EIMachines
 		
 		hook.builder("electric_beacon", "Electric Beacon", ElectricBeaconMachineBlockEntity::new)
 				.creator(ElectricBeaconMachineBlock::new)
+				.modify((b) -> b.item((i) -> i
+						.withProperties((p) -> p
+								.rarity(Rarity.RARE))))
 				.properties((p) -> p
 						.lightLevel((__) -> 15)
 						.noOcclusion())
