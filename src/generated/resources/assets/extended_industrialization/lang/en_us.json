@@ -170,6 +170,7 @@
   "text.extended_industrialization.dyeable_and_trimmable_help": "- Can be dyed and trimmed!",
   "text.extended_industrialization.dyeable_help": "- Can be dyed!",
   "text.extended_industrialization.electric_beacon_beam_obstructed": "Beam Obstructed",
+  "text.extended_industrialization.electric_beacon_help": "Consumes potions and provides the effects to all nearby players for half the duration using %s.",
   "text.extended_industrialization.electric_beacon_remaining_time_tooltip": "Remaining Effect Time: %s",
   "text.extended_industrialization.electric_tool_3_by_3_toggled_off": "Disabled 3x3 Mining",
   "text.extended_industrialization.electric_tool_3_by_3_toggled_on": "Enabled 3x3 Mining",

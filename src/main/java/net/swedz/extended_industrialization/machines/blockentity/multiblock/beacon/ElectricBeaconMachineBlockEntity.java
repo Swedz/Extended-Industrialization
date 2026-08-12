@@ -218,6 +218,14 @@ public final class ElectricBeaconMachineBlockEntity extends BasicMultiblockMachi
 		return result;
 	}
 	
+	@Override
+	public List<Component> getTooltips()
+	{
+		List<Component> lines = Lists.newArrayList();
+		lines.add(EI.text().electricBeaconHelp(this.getEuCost()));
+		return lines;
+	}
+	
 	private static final int MAX_LAYERS = 4;
 	
 	private static final ShapeTemplate[] SHAPE_TEMPLATES;
