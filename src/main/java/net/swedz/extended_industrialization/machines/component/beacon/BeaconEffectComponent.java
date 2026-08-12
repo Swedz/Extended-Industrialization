@@ -11,10 +11,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -25,6 +29,7 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.swedz.tesseract.api.Assert;
+import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +39,23 @@ public final class BeaconEffectComponent implements MachineComponent
 {
 	private List<Effect> activeEffects = List.of();
 	
+	private int totalEffectTicks     = 0;
 	private int remainingEffectTicks = 0;
+	
+	public List<Effect> getActiveEffects()
+	{
+		return activeEffects;
+	}
+	
+	public int getTotalTicks()
+	{
+		return totalEffectTicks;
+	}
+	
+	public int getRemainingTicks()
+	{
+		return remainingEffectTicks;
+	}
 	
 	public void tick(Level level, BlockPos controllerPos, MultiblockInventoryComponent inventory, int size)
 	{
@@ -55,12 +76,14 @@ public final class BeaconEffectComponent implements MachineComponent
 				{
 					this.putItemOutput(inventory.getItemOutputs(), false);
 					activeEffects = result.get().effects();
+					totalEffectTicks = result.get().ticks();
 					remainingEffectTicks = result.get().ticks();
 				}
 			}
 			if(remainingEffectTicks <= 0)
 			{
 				activeEffects = List.of();
+				totalEffectTicks = 0;
 				remainingEffectTicks = 0;
 			}
 		}
@@ -190,6 +213,7 @@ public final class BeaconEffectComponent implements MachineComponent
 		}
 		tag.put("beacon_effects", effectsTag);
 		
+		tag.putInt("total_beacon_effect_ticks", totalEffectTicks);
 		tag.putInt("remaining_beacon_effect_ticks", remainingEffectTicks);
 	}
 	
@@ -216,6 +240,7 @@ public final class BeaconEffectComponent implements MachineComponent
 		}
 		this.activeEffects = Collections.unmodifiableList(activeEffects);
 		
+		totalEffectTicks = tag.getInt("total_beacon_effect_ticks");
 		remainingEffectTicks = tag.getInt("remaining_beacon_effect_ticks");
 	}
 	
@@ -224,6 +249,13 @@ public final class BeaconEffectComponent implements MachineComponent
 			int amplifier
 	)
 	{
+		public static final StreamCodec<RegistryFriendlyByteBuf, Effect> STREAM_CODEC = StreamCodec.composite(
+				CodecHelper.forRegistryHolderStream(BuiltInRegistries.MOB_EFFECT),
+				Effect::effect,
+				ByteBufCodecs.INT,
+				Effect::amplifier,
+				Effect::new
+		);
 	}
 	
 	private record EffectResult(

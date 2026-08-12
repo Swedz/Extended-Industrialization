@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.machines.component.beacon.BeaconBeamComponent;
 import net.swedz.extended_industrialization.machines.component.beacon.BeaconEffectComponent;
+import net.swedz.extended_industrialization.machines.guicomponent.beacon.BeaconEffectsView;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.BasicMultiblockMachineBlockEntity;
 
@@ -50,7 +51,7 @@ public final class ElectricBeaconMachineBlockEntity extends BasicMultiblockMachi
 		super(
 				bep,
 				new MachineGuiParameters.Builder(EI.id("electric_beacon"), false)
-						.backgroundHeight(200)
+						.backgroundHeight(160)
 						.build(),
 				SHAPE_TEMPLATES
 		);
@@ -61,7 +62,13 @@ public final class ElectricBeaconMachineBlockEntity extends BasicMultiblockMachi
 		
 		this.registerComponents(redstoneControl, beam, effect);
 		
-		// TODO gui component to display active effects and remaining duration
+		this.registerGuiComponent(new BeaconEffectsView(
+				this::isShapeValid,
+				beam::isActive,
+				effect::getActiveEffects,
+				effect::getTotalTicks,
+				effect::getRemainingTicks
+		));
 		
 		this.registerGuiComponent(new ModularSlotPanel(this, 0)
 				.withRedstoneModule(redstoneControl));

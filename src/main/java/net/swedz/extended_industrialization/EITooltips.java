@@ -13,6 +13,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.StringUtil;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.swedz.extended_industrialization.datamap.EnchantmentModule;
@@ -47,6 +48,8 @@ public final class EITooltips
 		float minutes = (float) ticks / (60 * 20);
 		return Component.literal("%.2f".formatted(minutes));
 	};
+	
+	public static final Parser<Integer> TICKS_DURATION_PARSER = (ticks) -> Component.literal(StringUtil.formatTickDuration(ticks, 20));
 	
 	public static final Parser<Boolean> ACTIVATED_BOOLEAN_PARSER = (value) -> value ? EI.text().activated() : EI.text().deactivated();
 	

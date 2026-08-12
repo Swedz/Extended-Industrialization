@@ -150,6 +150,14 @@ public interface EIText
 	@WithStyle("tooltip")
 	MutableComponent dyeableHelp();
 	
+	@LangKey(text = "Beam Obstructed")
+	MutableComponent electricBeaconBeamObstructed();
+	
+	@LangKey(text = "Remaining Effect Time: %s")
+	MutableComponent electricBeaconRemainingTimeTooltip(
+			@Parsed("ticks_duration") int ticks
+	);
+	
 	@LangKey(text = "Disabled 3x3 Mining")
 	MutableComponent electricTool3By3ToggledOff();
 	

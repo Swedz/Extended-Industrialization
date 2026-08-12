@@ -6,6 +6,8 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIMachines;
 import net.swedz.extended_industrialization.EITooltips;
 import net.swedz.extended_industrialization.compat.viewer.common.FluidFertilizerCategory;
+import net.swedz.extended_industrialization.machines.guicomponent.beacon.BeaconEffectsView;
+import net.swedz.extended_industrialization.machines.guicomponent.beacon.BeaconEffectsViewClient;
 import net.swedz.extended_industrialization.machines.guicomponent.processingarraymachineslot.ProcessingArrayMachineSlot;
 import net.swedz.extended_industrialization.machines.guicomponent.processingarraymachineslot.ProcessingArrayMachineSlotClient;
 import net.swedz.extended_industrialization.machines.guicomponent.solarefficiency.SolarEfficiencyBar;
@@ -39,6 +41,7 @@ public final class EIMIHookListener implements MIHookListener
 	@Override
 	public void clientGuiComponents(ClientGuiComponentsMIHookContext hook)
 	{
+		hook.register(BeaconEffectsView.TYPE, BeaconEffectsViewClient::new);
 		hook.register(SolarEfficiencyBar.TYPE, SolarEfficiencyBarClient::new);
 		hook.register(ProcessingArrayMachineSlot.TYPE, ProcessingArrayMachineSlotClient::new);
 		hook.register(UniversalTransformerSlots.TYPE, UniversalTransformerSlotsClient::new);
