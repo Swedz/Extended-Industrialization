@@ -689,7 +689,6 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 						.pattern("GNG")
 						.pattern("ECE")
 						.pattern("PSP"),
-				true,
 				output
 		);
 	}
