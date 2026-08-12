@@ -158,14 +158,11 @@ public final class ElectricBeaconMachineBlockEntity extends BasicMultiblockMachi
 		
 		if(level.isClientSide())
 		{
-			if(this.isActive() && level.getGameTime() % (4 * 20) == 0)
-			{
-				// TODO sound not working?
-				level.playSound(null, worldPosition, SoundEvents.BEACON_AMBIENT, SoundSource.BLOCKS, 1, 1);
-			}
 			return;
 		}
 		
+		boolean activeBefore = this.isActive();
+		boolean active = beam.isActive();
 		if(redstoneControl.doAllowNormalOperation(this) && this.isShapeValid())
 		{
 			if(beam.needsRematch())
@@ -173,8 +170,6 @@ public final class ElectricBeaconMachineBlockEntity extends BasicMultiblockMachi
 				beam.rematch(level, worldPosition);
 				this.sync(false);
 			}
-			
-			boolean active = beam.isActive();
 			
 			if(active)
 			{
@@ -185,14 +180,23 @@ public final class ElectricBeaconMachineBlockEntity extends BasicMultiblockMachi
 			
 			if(active)
 			{
+				if(level.getGameTime() % (4 * 20) == 0)
+				{
+					level.playSound(null, worldPosition, SoundEvents.BEACON_AMBIENT, SoundSource.BLOCKS, 1, 1);
+				}
+				
 				effect.tick(level, worldPosition, inventory, activeShape.getActiveShapeIndex() + 1);
 			}
-			
-			this.updateActive(active);
 		}
 		else
 		{
-			this.updateActive(false);
+			active = false;
+		}
+		this.updateActive(active);
+		
+		if(activeBefore != active)
+		{
+			level.playSound(null, worldPosition, active ? SoundEvents.BEACON_ACTIVATE : SoundEvents.BEACON_DEACTIVATE, SoundSource.BLOCKS, 1, 1);
 		}
 	}
 	
