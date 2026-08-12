@@ -5,7 +5,7 @@
         "particle": "minecraft:block/glass",
         "glass": "minecraft:block/glass",
         "steel": "modern_industrialization:block/steel_machine_casing",
-        "beacon": "minecraft:block/beacon"
+        "beacon": "extended_industrialization:block/electric_beacon"
     },
     "elements": [
         {
