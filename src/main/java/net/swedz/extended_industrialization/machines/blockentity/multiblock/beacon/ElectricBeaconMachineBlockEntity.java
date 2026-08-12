@@ -67,7 +67,8 @@ public final class ElectricBeaconMachineBlockEntity extends BasicMultiblockMachi
 				beam::isActive,
 				effect::getActiveEffects,
 				effect::getTotalTicks,
-				effect::getRemainingTicks
+				effect::getRemainingTicks,
+				this::getEuCost
 		));
 		
 		this.registerGuiComponent(new ModularSlotPanel(this, 0)
@@ -126,9 +127,14 @@ public final class ElectricBeaconMachineBlockEntity extends BasicMultiblockMachi
 		return total;
 	}
 	
-	private long getEuCost()
+	private long getEuCostPerEffect()
 	{
 		return 256;
+	}
+	
+	private long getEuCost()
+	{
+		return this.getEuCostPerEffect() * effect.getActiveEffects().size();
 	}
 	
 	@Override
@@ -180,6 +186,8 @@ public final class ElectricBeaconMachineBlockEntity extends BasicMultiblockMachi
 			
 			if(active)
 			{
+				effect.tryConsumePotion(inventory);
+				
 				long euCost = this.getEuCost();
 				long eu = this.consumeEu(euCost);
 				active = eu == euCost;
@@ -192,7 +200,7 @@ public final class ElectricBeaconMachineBlockEntity extends BasicMultiblockMachi
 					level.playSound(null, worldPosition, SoundEvents.BEACON_AMBIENT, SoundSource.BLOCKS, 1, 1);
 				}
 				
-				effect.tick(level, worldPosition, inventory, activeShape.getActiveShapeIndex() + 1);
+				effect.tryApplyEffects(level, worldPosition, activeShape.getActiveShapeIndex() + 1);
 			}
 		}
 		else
@@ -222,7 +230,7 @@ public final class ElectricBeaconMachineBlockEntity extends BasicMultiblockMachi
 	public List<Component> getTooltips()
 	{
 		List<Component> lines = Lists.newArrayList();
-		lines.add(EI.text().electricBeaconHelp(this.getEuCost()));
+		lines.add(EI.text().electricBeaconHelp(this.getEuCostPerEffect()));
 		return lines;
 	}
 	

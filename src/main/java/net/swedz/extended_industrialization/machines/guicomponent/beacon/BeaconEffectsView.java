@@ -20,13 +20,15 @@ public final class BeaconEffectsView implements GuiComponentServer<Unit, BeaconE
 	private final Supplier<List<BeaconEffectComponent.Effect>> effectSupplier;
 	private final Supplier<Integer>                            totalTicksSupplier;
 	private final Supplier<Integer>                            remainingTicksSupplier;
+	private final Supplier<Long>                               euCostSupplier;
 	
 	public BeaconEffectsView(
 			Supplier<Boolean> shapeValidSupplier,
 			Supplier<Boolean> beamActiveSupplier,
 			Supplier<List<BeaconEffectComponent.Effect>> effectSupplier,
 			Supplier<Integer> totalTicksSupplier,
-			Supplier<Integer> remainingTicksSupplier
+			Supplier<Integer> remainingTicksSupplier,
+			Supplier<Long> euCostSupplier
 	)
 	{
 		this.shapeValidSupplier = shapeValidSupplier;
@@ -34,6 +36,7 @@ public final class BeaconEffectsView implements GuiComponentServer<Unit, BeaconE
 		this.effectSupplier = effectSupplier;
 		this.totalTicksSupplier = totalTicksSupplier;
 		this.remainingTicksSupplier = remainingTicksSupplier;
+		this.euCostSupplier = euCostSupplier;
 	}
 	
 	@Override
@@ -50,7 +53,8 @@ public final class BeaconEffectsView implements GuiComponentServer<Unit, BeaconE
 				beamActiveSupplier.get(),
 				effectSupplier.get(),
 				totalTicksSupplier.get(),
-				remainingTicksSupplier.get()
+				remainingTicksSupplier.get(),
+				euCostSupplier.get()
 		);
 	}
 	
@@ -65,7 +69,8 @@ public final class BeaconEffectsView implements GuiComponentServer<Unit, BeaconE
 			boolean beamActive,
 			List<BeaconEffectComponent.Effect> effects,
 			int totalTicks,
-			int remainingTicks
+			int remainingTicks,
+			long euCost
 	)
 	{
 		public static final StreamCodec<RegistryFriendlyByteBuf, Data> STREAM_CODEC = StreamCodec.composite(
@@ -79,6 +84,8 @@ public final class BeaconEffectsView implements GuiComponentServer<Unit, BeaconE
 				Data::totalTicks,
 				ByteBufCodecs.INT,
 				Data::remainingTicks,
+				ByteBufCodecs.VAR_LONG,
+				Data::euCost,
 				Data::new
 		);
 	}

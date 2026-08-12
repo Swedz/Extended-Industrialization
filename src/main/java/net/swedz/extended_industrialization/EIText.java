@@ -153,7 +153,7 @@ public interface EIText
 	@LangKey(text = "Beam Obstructed")
 	MutableComponent electricBeaconBeamObstructed();
 	
-	@LangKey(text = "Consumes potions and provides the effects to all nearby players for half the duration using %s.")
+	@LangKey(text = "Consumes potions and provides the effects to all nearby players for half the duration using %s per effect.")
 	@WithStyle("tooltip")
 	MutableComponent electricBeaconHelp(
 			@Parsed("eu_per_tick") @WithStyle("highlighted") long euPerTick
@@ -162,6 +162,11 @@ public interface EIText
 	@LangKey(text = "Remaining Effect Time: %s")
 	MutableComponent electricBeaconRemainingTimeTooltip(
 			@Parsed("ticks_duration") int ticks
+	);
+	
+	@LangKey(text = "Consuming: %s")
+	MutableComponent electricBeaconEuCostTooltip(
+			@Parsed("eu_per_tick") long eu
 	);
 	
 	@LangKey(text = "Disabled 3x3 Mining")

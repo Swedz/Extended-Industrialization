@@ -18,6 +18,7 @@ import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.Mod
 import net.swedz.tesseract.neoforge.compat.mi.helper.MultiblockInfoBackground;
 
 import java.util.List;
+import java.util.Optional;
 
 public final class BeaconEffectsViewClient extends GuiComponentClient<Unit, BeaconEffectsView.Data>
 {
@@ -157,7 +158,10 @@ public final class BeaconEffectsViewClient extends GuiComponentClient<Unit, Beac
 		{
 			if(RenderHelper.isPointWithinRectangle(TIME_X, TIME_Y, TIME_WIDTH, TIME_HEIGHT, cursorX - left, cursorY - top))
 			{
-				graphics.renderTooltip(font, EI.text().electricBeaconRemainingTimeTooltip(data.remainingTicks()), cursorX, cursorY);
+				List<Component> lines = Lists.newArrayList();
+				lines.add(EI.text().electricBeaconRemainingTimeTooltip(data.remainingTicks()));
+				lines.add(EI.text().electricBeaconEuCostTooltip(data.euCost()));
+				graphics.renderTooltip(font, lines, Optional.empty(), cursorX, cursorY);
 				return true;
 			}
 			return false;

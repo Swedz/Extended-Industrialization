@@ -29,7 +29,6 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.swedz.extended_industrialization.EITags;
-import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
 import java.util.Collections;
@@ -61,15 +60,7 @@ public final class BeaconEffectComponent implements MachineComponent
 		return remainingEffectTicks;
 	}
 	
-	public void tick(Level level, BlockPos controllerPos, MultiblockInventoryComponent inventory, int size)
-	{
-		Assert.that(!level.isClientSide());
-		
-		this.tryConsumePotion(inventory);
-		this.tryApplyEffects(level, controllerPos, size);
-	}
-	
-	private void tryConsumePotion(MultiblockInventoryComponent inventory)
+	public void tryConsumePotion(MultiblockInventoryComponent inventory)
 	{
 		if(remainingEffectTicks <= 0)
 		{
@@ -93,7 +84,7 @@ public final class BeaconEffectComponent implements MachineComponent
 		}
 	}
 	
-	private void tryApplyEffects(Level level, BlockPos controllerPos, int size)
+	public void tryApplyEffects(Level level, BlockPos controllerPos, int size)
 	{
 		if(!activeEffects.isEmpty())
 		{
