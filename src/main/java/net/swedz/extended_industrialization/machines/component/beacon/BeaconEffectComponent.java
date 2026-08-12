@@ -28,6 +28,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.swedz.extended_industrialization.EITags;
 import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
@@ -175,7 +176,8 @@ public final class BeaconEffectComponent implements MachineComponent
 		List<Effect> effects = Lists.newArrayList();
 		for(var potionEffect : potionContents.getAllEffects())
 		{
-			if(potionEffect.getEffect().value().isInstantenous())
+			if(potionEffect.getEffect().value().isInstantenous() ||
+			   potionEffect.getEffect().is(EITags.MobEffects.ELECTRIC_BEACON_BLACKLIST))
 			{
 				continue;
 			}

@@ -5,6 +5,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -63,6 +64,11 @@ public final class EITags
 		TagKey<DamageType> NANO_SABER_SWEEP_BEHEADING = damageType("nano_saber_sweep/beheading");
 	}
 	
+	public interface MobEffects
+	{
+		TagKey<MobEffect> ELECTRIC_BEACON_BLACKLIST = mobEffect("electric_beacon/blacklist");
+	}
+	
 	public interface GeneratedRecipesBlacklist
 	{
 		TagKey<Item>  CANNING_FOOD    = item("generated_recipes_blacklist/canning_food", "Canning Food Generated Recipes Blacklist");
@@ -110,5 +116,10 @@ public final class EITags
 	public static TagKey<DamageType> damageType(String path)
 	{
 		return TagKey.create(Registries.DAMAGE_TYPE, EI.id(path));
+	}
+	
+	public static TagKey<MobEffect> mobEffect(String path)
+	{
+		return TagKey.create(Registries.MOB_EFFECT, EI.id(path));
 	}
 }
