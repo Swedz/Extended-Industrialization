@@ -40,6 +40,12 @@ public final class BeaconEffectComponent implements MachineComponent
 	{
 		Assert.that(!level.isClientSide());
 		
+		this.tryConsumePotion(inventory);
+		this.tryApplyEffects(level, controllerPos, size);
+	}
+	
+	private void tryConsumePotion(MultiblockInventoryComponent inventory)
+	{
 		if(remainingEffectTicks <= 0)
 		{
 			if(this.canConsumePotion(inventory))
@@ -58,7 +64,10 @@ public final class BeaconEffectComponent implements MachineComponent
 				remainingEffectTicks = 0;
 			}
 		}
-		
+	}
+	
+	private void tryApplyEffects(Level level, BlockPos controllerPos, int size)
+	{
 		if(!activeEffects.isEmpty())
 		{
 			if(level.getGameTime() % (4 * 20) == 0)

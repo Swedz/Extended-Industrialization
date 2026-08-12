@@ -20,7 +20,7 @@ import java.util.List;
 
 public final class BeaconBeamComponent implements MachineComponent.ClientOnly
 {
-	private List<Section> beamSections = Lists.newArrayList();
+	private List<Section> beamSections = List.of();
 	
 	private boolean needsRematch = true;
 	
