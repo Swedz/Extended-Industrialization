@@ -168,6 +168,7 @@ public final class EI
 				.parser("damage", float.class, () -> EITooltips.DAMAGE_PARSER)
 				
 				.parser("ticks_to_minutes", long.class, () -> EITooltips.TICKS_TO_MINUTES_PARSER)
+				.parser("ticks_duration", int.class, () -> EITooltips.TICKS_DURATION_PARSER)
 				
 				.parser("activated", boolean.class, () -> EITooltips.ACTIVATED_BOOLEAN_PARSER)
 				.parser("short", CableTier.class, () -> MIParser.CABLE_TIER_SHORT)

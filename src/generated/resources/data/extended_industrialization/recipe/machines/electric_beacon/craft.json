@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "modern_industrialization:advanced_machine_casing"
+    },
+    "E": {
+      "tag": "c:plates/emerald"
+    },
+    "G": {
+      "tag": "c:glass_blocks"
+    },
+    "N": {
+      "item": "minecraft:nether_star"
+    },
+    "P": {
+      "item": "modern_industrialization:pump"
+    },
+    "S": {
+      "item": "modern_industrialization:steel_large_plate"
+    }
+  },
+  "pattern": [
+    "GNG",
+    "ECE",
+    "PSP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "extended_industrialization:electric_beacon"
+  }
+}

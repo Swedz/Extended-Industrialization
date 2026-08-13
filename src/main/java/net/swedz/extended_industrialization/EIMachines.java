@@ -21,6 +21,7 @@ import aztech.modern_industrialization.util.MobSpawning;
 import com.google.common.collect.Maps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.swedz.extended_industrialization.machines.blockentity.LargeConfigurableChestMachineBlockEntity;
@@ -32,6 +33,8 @@ import net.swedz.extended_industrialization.machines.blockentity.fluidharvesting
 import net.swedz.extended_industrialization.machines.blockentity.fluidharvesting.SteamFluidHarvestingMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.ProcessingArrayBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.beacon.ElectricBeaconMachineBlock;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.beacon.ElectricBeaconMachineBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer.ElectricFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.farmer.SteamFarmerBlockEntity;
 import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
@@ -208,6 +211,17 @@ public final class EIMachines
 		
 		hook.builder("tesla_tower", "Tesla Tower", TeslaTowerBlockEntity::new)
 				.builtinModel(CLEAN_STAINLESS_STEEL, "tesla_tower", (model) -> model.front(true).active(true))
+				.registerMachine();
+		
+		hook.builder("electric_beacon", "Electric Beacon", ElectricBeaconMachineBlockEntity::new)
+				.creator(ElectricBeaconMachineBlock::new)
+				.modify((b) -> b.item((i) -> i
+						.withProperties((p) -> p
+								.rarity(Rarity.RARE))))
+				.properties((p) -> p
+						.lightLevel((__) -> 15)
+						.noOcclusion())
+				.registrator((__) -> ElectricBeaconMachineBlockEntity.registerReiShapes())
 				.registerMachine();
 	}
 	

@@ -8,6 +8,8 @@ import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.machines.init.MIMachineRecipeTypes;
 import aztech.modern_industrialization.machines.recipe.MachineRecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EITags;
@@ -673,6 +675,24 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		);
 	}
 	
+	private static void electricBeacon(RecipeOutput output)
+	{
+		addBasicCraftingMachineRecipes(
+				"electric_beacon",
+				(builder) -> builder
+						.define('G', Tags.Items.GLASS_BLOCKS)
+						.define('N', Items.NETHER_STAR)
+						.define('E', EITags.itemCommon("plates/emerald"))
+						.define('C', "modern_industrialization:advanced_machine_casing")
+						.define('P', "modern_industrialization:pump")
+						.define('S', "modern_industrialization:steel_large_plate")
+						.pattern("GNG")
+						.pattern("ECE")
+						.pattern("PSP"),
+				output
+		);
+	}
+	
 	@Override
 	protected void buildRecipes(RecipeOutput output)
 	{
@@ -693,5 +713,6 @@ public final class MachineItemRecipesServerDatagenProvider extends RecipesServer
 		solarPanel(output);
 		largeConfigurableChest(output);
 		tesla(output);
+		electricBeacon(output);
 	}
 }

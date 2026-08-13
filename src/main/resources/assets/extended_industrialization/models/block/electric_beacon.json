@@ -1,0 +1,51 @@
+{
+    "parent": "minecraft:block/block",
+    "render_type": "minecraft:cutout",
+    "textures": {
+        "particle": "minecraft:block/glass",
+        "glass": "minecraft:block/glass",
+        "steel": "modern_industrialization:block/steel_machine_casing",
+        "beacon": "extended_industrialization:block/electric_beacon"
+    },
+    "elements": [
+        {
+            "__comment": "Glass shell",
+            "from": [ 0, 0, 0 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#glass" },
+                "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#glass" },
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#glass" },
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#glass" },
+                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#glass" },
+                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#glass" }
+            }
+        },
+        {
+            "__comment": "Steel base",
+            "from": [ 2, 0.1, 2 ],
+            "to": [ 14, 3, 14 ],
+            "faces": {
+                "down":  { "uv": [ 2,  2, 14, 14 ], "texture": "#steel" },
+                "up":    { "uv": [ 2,  2, 14, 14 ], "texture": "#steel" },
+                "north": { "uv": [ 2, 13, 14, 16 ], "texture": "#steel" },
+                "south": { "uv": [ 2, 13, 14, 16 ], "texture": "#steel" },
+                "west":  { "uv": [ 2, 13, 14, 16 ], "texture": "#steel" },
+                "east":  { "uv": [ 2, 13, 14, 16 ], "texture": "#steel" }
+            }
+        },
+        {
+            "__comment": "Inner beacon texture",
+            "from": [ 3, 3, 3 ],
+            "to": [ 13, 14, 13 ],
+            "faces": {
+                "down":  { "uv": [ 3, 3, 13, 13 ], "texture": "#beacon" },
+                "up":    { "uv": [ 3, 3, 13, 13 ], "texture": "#beacon" },
+                "north": { "uv": [ 3, 2, 13, 13 ], "texture": "#beacon" },
+                "south": { "uv": [ 3, 2, 13, 13 ], "texture": "#beacon" },
+                "west":  { "uv": [ 3, 2, 13, 13 ], "texture": "#beacon" },
+                "east":  { "uv": [ 3, 2, 13, 13 ], "texture": "#beacon" }
+            }
+        }
+    ]
+}
