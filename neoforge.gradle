@@ -30,20 +30,29 @@ neoForge {
 		}
 
 		client {
-			client()
-
-			gameDirectory.set(project.getLayout().getProjectDirectory().dir('runs/client'))
-
+		}
+		
+		guideme {
+			systemProperty 'guideme.showOnStartup', "${mod_id}:guide"
+		}
+		
+		[client, guideme].each {
+			it.client()
+			
+			it.gameDirectory.set(project.getLayout().getProjectDirectory().dir('runs/client'))
+			
 			if (System.getenv("MC_USERNAME") && System.getenv("MC_UUID")) {
-				programArguments.addAll '--username', System.getenv("MC_USERNAME"), '--uuid', System.getenv("MC_UUID")
+				it.programArguments.addAll '--username', System.getenv("MC_USERNAME"), '--uuid', System.getenv("MC_UUID")
 			}
-
-			systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-
-			systemProperty 'mixin.env.remapRefMap', 'true'
-			systemProperty 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
-			systemProperty 'mixin.debug.export', 'true'
-			systemProperty 'mixin.debug.verbose', 'true'
+			
+			it.systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+			
+			it.systemProperty 'mixin.env.remapRefMap', 'true'
+			it.systemProperty 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+			it.systemProperty 'mixin.debug.export', 'true'
+			it.systemProperty 'mixin.debug.verbose', 'true'
+			
+			it.systemProperty "guideme.${mod_id}.guide.sources", file("src/main/resources/assets/${mod_id}/guides/${mod_id}/guide").absolutePath
 		}
 
 		server {
@@ -86,7 +95,8 @@ tasks.withType(ProcessResources).configureEach {
 			tesseract_version_range               : tesseract_version_range,
 			emi_version_range                     : emi_version_range,
 			accessories_version_range             : accessories_version_range,
-			curios_version_range                  : curios_version_range
+			curios_version_range                  : curios_version_range,
+			guideme_version_range                 : guideme_version_range
 	]
 	inputs.properties replaceProperties
 

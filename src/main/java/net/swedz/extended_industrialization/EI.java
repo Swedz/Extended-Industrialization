@@ -2,7 +2,10 @@ package net.swedz.extended_industrialization;
 
 import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.CableTier;
+import aztech.modern_industrialization.guidebook.MultiblockShapeCompiler;
 import aztech.modern_industrialization.util.TextHelper;
+import guideme.Guide;
+import guideme.scene.element.SceneElementTagCompiler;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -30,6 +33,7 @@ import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.api.tuple.Pair;
 import net.swedz.tesseract.config.ConfigManager;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
+import net.swedz.tesseract.neoforge.compat.guideme.tags.TesseractGuideMETags;
 import net.swedz.tesseract.neoforge.compat.mi.TesseractMI;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformer;
 import net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser;
@@ -61,6 +65,8 @@ public final class EI
 	{
 		setupText();
 		setupConfig(bus, container);
+		
+		setupGuide();
 		
 		EILocalizedListeners.INSTANCE.init();
 		
@@ -97,7 +103,7 @@ public final class EI
 		
 		NeoForge.EVENT_BUS.addListener(
 				EventPriority.LOWEST, DataMapsUpdatedEvent.class, (event) ->
-						event.ifRegistry(Registries.BLOCK, (registry) -> LargeElectricFurnaceBlockEntity.initTiers())
+						event.ifRegistry(Registries.BLOCK, (registry) -> LargeElectricFurnaceBlockEntity.initTiersFromDatamap())
 		);
 		TeslaTowerBlockEntity.registerTieredShapes();
 	}
@@ -177,5 +183,13 @@ public final class EI
 				.load();
 		LanguageDatagenProvider.include(instance);
 		TEXT = instance.lang();
+	}
+	
+	private static void setupGuide()
+	{
+		var guide = Guide.builder(EI.id("guide"))
+				.extension(SceneElementTagCompiler.EXTENSION_POINT, new MultiblockShapeCompiler());
+		TesseractGuideMETags.includeIn(guide);
+		guide.build();
 	}
 }

@@ -44,6 +44,14 @@ repositories {
 			includeGroup "top.theillusivec4.curios"
 		}
 	}
+	maven {
+		name "Sonatype"
+		url = "https://central.sonatype.com/repository/maven-snapshots/"
+		content {
+			// GuideME
+			includeGroup "org.appliedenergistics"
+		}
+	}
 }
 
 dependencies {
@@ -78,4 +86,6 @@ dependencies {
 	}
 
 	compileOnly "com.almostreliable.mods:almostunified-neoforge:${project.minecraft_version}-${project.au_version}:api"
+	
+	localImplementation "org.appliedenergistics:guideme:${guideme_version}"
 }
