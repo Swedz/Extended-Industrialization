@@ -160,7 +160,7 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 						boolean isBottom = y == -1;
 						boolean isCenter = x == 0 && y == 0;
 						boolean isGlass = x != 0 && y == 0;
-						builder.add(x, y, z, isCenter ? pipe : isGlass ? glass : casing, isFront ? front : isTop ? top : isBottom ? bottom : null);
+						builder.add(x, y, z, isCenter ? pipe : (isGlass ? glass : casing), isGlass ? null : (isFront ? front : (isTop ? top : (isBottom ? bottom : null))));
 					}
 				}
 			}
