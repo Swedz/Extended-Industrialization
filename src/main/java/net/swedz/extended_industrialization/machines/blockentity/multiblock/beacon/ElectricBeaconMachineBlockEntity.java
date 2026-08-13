@@ -58,7 +58,10 @@ public final class ElectricBeaconMachineBlockEntity extends BasicMultiblockMachi
 		
 		redstoneControl = new RedstoneControlComponent();
 		beam = new BeaconBeamComponent();
-		effect = new BeaconEffectComponent();
+		effect = new BeaconEffectComponent(
+				(layers) -> (layers * 20) + 10,
+				0.5f
+		);
 		
 		this.registerComponents(redstoneControl, beam, effect);
 		
@@ -224,6 +227,13 @@ public final class ElectricBeaconMachineBlockEntity extends BasicMultiblockMachi
 			result = redstoneControl.onUse(this, player, hand);
 		}
 		return result;
+	}
+	
+	@Override
+	public ShapeTemplate getBigShape()
+	{
+		var shapeTemplates = activeShape.shapeTemplates;
+		return shapeTemplates[shapeTemplates.length - 1];
 	}
 	
 	@Override

@@ -34,6 +34,7 @@ import net.swedz.tesseract.neoforge.helper.CodecHelper;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 public final class BeaconEffectComponent implements MachineComponent
 {
@@ -44,6 +45,18 @@ public final class BeaconEffectComponent implements MachineComponent
 	
 	private int totalEffectTicks     = 0;
 	private int remainingEffectTicks = 0;
+	
+	private final Function<Integer, Integer> rangeFunction;
+	private final float durationMultiplier;
+	
+	public BeaconEffectComponent(
+			Function<Integer, Integer> rangeFunction,
+			float durationMultiplier
+	)
+	{
+		this.rangeFunction = rangeFunction;
+		this.durationMultiplier = durationMultiplier;
+	}
 	
 	public List<Effect> getActiveEffects()
 	{
@@ -84,17 +97,17 @@ public final class BeaconEffectComponent implements MachineComponent
 		}
 	}
 	
-	public void tryApplyEffects(Level level, BlockPos controllerPos, int size)
+	public void tryApplyEffects(Level level, BlockPos controllerPos, int layers)
 	{
 		if(!activeEffects.isEmpty())
 		{
 			if(level.getGameTime() % (4 * 20) == 0)
 			{
-				double range = (size * 10) + 10;
+				int range = rangeFunction.apply(layers);
 				var area = new AABB(controllerPos).inflate(range).expandTowards(0, level.getHeight(), 0);
 				var players = level.getEntitiesOfClass(Player.class, area);
 				
-				int duration = (9 + (size * 2)) * 20;
+				int duration = (9 + (layers * 2)) * 20;
 				
 				for(var player : players)
 				{
@@ -194,7 +207,7 @@ public final class BeaconEffectComponent implements MachineComponent
 				ticks = duration;
 			}
 		}
-		return new EffectResult(effects, (int) Math.ceil(ticks / 2f));
+		return new EffectResult(effects, (int) Math.ceil(ticks * durationMultiplier));
 	}
 	
 	@Override
