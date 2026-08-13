@@ -77,6 +77,10 @@ public final class TeslaPartRenderer
 	private static Optional<WorldPos> getHeldNetworkKey()
 	{
 		var player = Minecraft.getInstance().player;
+		if(player == null)
+		{
+			return Optional.empty();
+		}
 		return player.getMainHandItem().has(EIComponents.SELECTED_TESLA_NETWORK) ? Optional.of(player.getMainHandItem().get(EIComponents.SELECTED_TESLA_NETWORK).key()) :
 				player.getOffhandItem().has(EIComponents.SELECTED_TESLA_NETWORK) ? Optional.of(player.getOffhandItem().get(EIComponents.SELECTED_TESLA_NETWORK).key()) : Optional.empty();
 	}
@@ -84,6 +88,10 @@ public final class TeslaPartRenderer
 	private static boolean isHoldingWrench()
 	{
 		var player = Minecraft.getInstance().player;
+		if(player == null)
+		{
+			return false;
+		}
 		return player.getMainHandItem().is(MITags.WRENCHES) ||
 			   player.getOffhandItem().is(MITags.WRENCHES);
 	}

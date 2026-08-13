@@ -20,7 +20,8 @@ public final class TeslaTowerShapes extends DataMapMultiblockTieredShapes<TeslaT
 		super(
 				EI.id("tesla_tower"),
 				Comparator.comparing(TeslaTowerTier::maxDistance),
-				EIDataMaps.TESLA_TOWER_TIER
+				EIDataMaps.TESLA_TOWER_TIER,
+				TeslaTowerBlockEntity.DEFAULT_TIERS
 		);
 	}
 	

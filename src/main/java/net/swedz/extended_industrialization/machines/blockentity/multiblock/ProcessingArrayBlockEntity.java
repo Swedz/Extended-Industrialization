@@ -112,6 +112,13 @@ public final class ProcessingArrayBlockEntity extends AbstractElectricMultiplied
 	}
 	
 	@Override
+	public ShapeTemplate getBigShape()
+	{
+		var shapeTemplates = activeShape.shapeTemplates;
+		return shapeTemplates[shapeTemplates.length - 1];
+	}
+	
+	@Override
 	public List<Component> getTooltips()
 	{
 		List<Component> lines = Lists.newArrayList();
