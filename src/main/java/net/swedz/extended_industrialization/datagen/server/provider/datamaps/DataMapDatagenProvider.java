@@ -1,6 +1,5 @@
 package net.swedz.extended_industrialization.datagen.server.provider.datamaps;
 
-import aztech.modern_industrialization.MI;
 import aztech.modern_industrialization.api.energy.CableTier;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -12,7 +11,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIDataMaps;
 import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIItems;
@@ -21,6 +19,8 @@ import net.swedz.extended_industrialization.datamap.FarmerSimpleTallCropSize;
 import net.swedz.extended_industrialization.datamap.FertilizerPotency;
 import net.swedz.extended_industrialization.datamap.LargeElectricFurnaceTier;
 import net.swedz.extended_industrialization.datamap.TeslaTowerTierData;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.LargeElectricFurnaceBlockEntity;
+import net.swedz.extended_industrialization.machines.blockentity.multiblock.teslatower.TeslaTowerBlockEntity;
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
@@ -43,14 +43,15 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		this.addFluidFertilizerPotency(EIFluids.COMPOSTED_MANURE, 25, 150);
 		this.addFluidFertilizerPotency(EIFluids.NPK_FERTILIZER, 10, 30);
 		
-		this.addLargeElectricFurnaceTier(MI.id("cupronickel_coil"), 16, 0.75f);
-		this.addLargeElectricFurnaceTier(MI.id("kanthal_coil"), 32, 0.75f);
+		for(var tier : LargeElectricFurnaceBlockEntity.DEFAULT_TIERS)
+		{
+			this.builder(EIDataMaps.LARGE_ELECTRIC_FURNACE_TIER).add(tier.blockId(), new LargeElectricFurnaceTier(tier.batchSize(), tier.euCostMultiplier()), false);
+		}
 		
-		this.addTeslaTowerTier(EI.id("copper_tesla_winding"), CableTier.LV.getMaxTransfer() * 6, 32, 64);
-		this.addTeslaTowerTier(EI.id("electrum_tesla_winding"), CableTier.MV.getMaxTransfer() * 6, 32 * 2, 64 * 4);
-		this.addTeslaTowerTier(EI.id("aluminum_tesla_winding"), CableTier.HV.getMaxTransfer() * 6, 32 * 2 * 2, 64 * 4 * 4);
-		this.addTeslaTowerTier(EI.id("annealed_copper_tesla_winding"), CableTier.EV.getMaxTransfer() * 6, 32 * 2 * 2 * 2, 64 * 4 * 4 * 4);
-		this.addTeslaTowerTier(EI.id("superconductor_tesla_winding"), CableTier.SUPERCONDUCTOR.getMaxTransfer() * 6, 32 * 2 * 2 * 2 * 2, 64 * 4 * 4 * 4 * 4);
+		for(var tier : TeslaTowerBlockEntity.DEFAULT_TIERS)
+		{
+			this.builder(EIDataMaps.TESLA_TOWER_TIER).add(tier.blockId(), new TeslaTowerTierData(tier.maxTransfer(), tier.maxDistance(), tier.drain()), false);
+		}
 		
 		this.addEnchantmentModule(EIItems.SILK_TOUCH_MODULE, Enchantments.SILK_TOUCH, 1, 16);
 		this.addEnchantmentModule(
@@ -78,16 +79,6 @@ public final class DataMapDatagenProvider extends DataMapProvider
 	private void addFluidFertilizerPotency(FluidHolder fluid, int tickRate, int mbToConsumePerFertilizerTick)
 	{
 		this.builder(EIDataMaps.FERTILIZER_POTENCY).add(fluid.identifier().location(), new FertilizerPotency(tickRate, mbToConsumePerFertilizerTick), false);
-	}
-	
-	private void addLargeElectricFurnaceTier(ResourceLocation block, int batchSize, float euCostMultiplier)
-	{
-		this.builder(EIDataMaps.LARGE_ELECTRIC_FURNACE_TIER).add(block, new LargeElectricFurnaceTier(batchSize, euCostMultiplier), false);
-	}
-	
-	private void addTeslaTowerTier(ResourceLocation block, long maxTransfer, int maxDistance, long drain)
-	{
-		this.builder(EIDataMaps.TESLA_TOWER_TIER).add(block, new TeslaTowerTierData(maxTransfer, maxDistance, drain), false);
 	}
 	
 	private void addEnchantmentModule(ItemHolder item, ResourceKey<Enchantment> enchantment, int level, long euCost, Map<CableTier, EnchantmentModule.Value> values)

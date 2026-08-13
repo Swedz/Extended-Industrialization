@@ -75,6 +75,11 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 		);
 	}
 	
+	public static final List<Tier> DEFAULT_TIERS = List.of(
+			new Tier(MI.id("cupronickel_coil"), 16, 0.75f),
+			new Tier(MI.id("kanthal_coil"), 32, 0.75f)
+	);
+	
 	private static List<Tier>                  TIERS           = List.of();
 	private static Map<ResourceLocation, Tier> TIERS_BY_COIL   = Collections.unmodifiableMap(Maps.newHashMap());
 	private static ShapeTemplate[]             SHAPE_TEMPLATES = new ShapeTemplate[0];
@@ -102,13 +107,14 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 		}
 	}
 	
-	public static void initTiers()
+	static
 	{
-		List<Tier> tiers = Lists.newArrayList();
-		LargeElectricFurnaceTier.getAll().forEach((block, tier) ->
-				tiers.add(new Tier(block.location(), tier.batchSize(), tier.euCostMultiplier())));
-		tiers.sort(Comparator.comparingInt(Tier::batchSize));
-		
+		// Initialize using default tiers so that GuideME can read it in dev before loading into a world
+		initTiers(DEFAULT_TIERS);
+	}
+	
+	private static void initTiers(List<Tier> tiers)
+	{
 		TIERS = Collections.unmodifiableList(tiers);
 		TIERS_BY_COIL = TIERS.stream().collect(Collectors.toMap(LargeElectricFurnaceBlockEntity.Tier::blockId, Function.identity()));
 		
@@ -132,9 +138,18 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 		registerReiShapes();
 	}
 	
+	public static void initTiersFromDatamap()
+	{
+		List<Tier> tiers = Lists.newArrayList();
+		LargeElectricFurnaceTier.getAll().forEach((block, tier) ->
+				tiers.add(new Tier(block.location(), tier.batchSize(), tier.euCostMultiplier())));
+		tiers.sort(Comparator.comparingInt(Tier::batchSize));
+		initTiers(tiers);
+	}
+	
 	private static void registerReiShapes()
 	{
-		ReiMachineRecipes.multiblockShapes.removeIf((e) -> e.machine().equals(EI.id("large_electric_furnace")));
+		ReiMachineRecipes.multiblockShapes.removeIf((shape) -> shape.machine().equals(EI.id("large_electric_furnace")));
 		int index = 0;
 		for(var shapeTemplate : SHAPE_TEMPLATES)
 		{

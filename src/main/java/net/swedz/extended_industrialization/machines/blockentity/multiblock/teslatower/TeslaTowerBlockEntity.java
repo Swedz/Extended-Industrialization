@@ -329,6 +329,14 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 		);
 	}
 	
+	public static final List<TeslaTowerTier> DEFAULT_TIERS = List.of(
+			new TeslaTowerTier(EI.id("copper_tesla_winding"), CableTier.LV.getMaxTransfer() * 6, 32, 64),
+			new TeslaTowerTier(EI.id("electrum_tesla_winding"), CableTier.MV.getMaxTransfer() * 6, 32 * 2, 64 * 4),
+			new TeslaTowerTier(EI.id("aluminum_tesla_winding"), CableTier.HV.getMaxTransfer() * 6, 32 * 2 * 2, 64 * 4 * 4),
+			new TeslaTowerTier(EI.id("annealed_copper_tesla_winding"), CableTier.EV.getMaxTransfer() * 6, 32 * 2 * 2 * 2, 64 * 4 * 4 * 4),
+			new TeslaTowerTier(EI.id("superconductor_tesla_winding"), CableTier.SUPERCONDUCTOR.getMaxTransfer() * 6, 32 * 2 * 2 * 2 * 2, 64 * 4 * 4 * 4 * 4)
+	);
+	
 	private static final TeslaTowerShapes SHAPES = new TeslaTowerShapes();
 	
 	public static void registerTieredShapes()
