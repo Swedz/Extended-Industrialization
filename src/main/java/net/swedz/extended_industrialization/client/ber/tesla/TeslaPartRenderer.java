@@ -1,13 +1,19 @@
 package net.swedz.extended_industrialization.client.ber.tesla;
 
 import aztech.modern_industrialization.MITags;
+import aztech.modern_industrialization.client.util.RenderHelper;
 import aztech.modern_industrialization.machines.MachineBlockEntity;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexSorting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,6 +22,7 @@ import net.minecraft.util.RandomSource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.renderable.BakedModelRenderable;
 import net.neoforged.neoforge.event.level.LevelEvent;
@@ -39,10 +46,15 @@ import org.joml.Vector4f;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @EventBusSubscriber(modid = EI.ID, value = Dist.CLIENT)
 public final class TeslaPartRenderer
 {
+	private static final Set<BlockPos>                  HIGHLIGHT_QUEUE          = Sets.newHashSet();
+	private static final MultiBufferSource.BufferSource IMMEDIATE                = MultiBufferSource.immediate(new ByteBufferBuilder(128));
+	private static final VertexSorting                  HIGHLIGHT_VERTEX_SORTING = RenderHelper.reverseVertexSorting(VertexSorting.DISTANCE_TO_ORIGIN);
+	
 	private static void renderHighlight(MachineBlockEntity machine, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
 	{
 		var pos = machine.getBlockPos();
@@ -53,11 +65,7 @@ public final class TeslaPartRenderer
 			{
 				if(part.hasNetwork() && part.getNetworkKey().equals(networkKey))
 				{
-					matrices.pushPose();
-					matrices.translate(-0.005, -0.005, -0.005);
-					matrices.scale(1.01f, 1.01f, 1.01f);
-					CubeOverlayRenderHelper.render(matrices, buffer, 111f / 256, 111f / 256, 1f, overlay);
-					matrices.popPose();
+					HIGHLIGHT_QUEUE.add(machine.getBlockPos());
 				}
 			});
 		}
@@ -82,7 +90,7 @@ public final class TeslaPartRenderer
 			return Optional.empty();
 		}
 		return player.getMainHandItem().has(EIComponents.SELECTED_TESLA_NETWORK) ? Optional.of(player.getMainHandItem().get(EIComponents.SELECTED_TESLA_NETWORK).key()) :
-				player.getOffhandItem().has(EIComponents.SELECTED_TESLA_NETWORK) ? Optional.of(player.getOffhandItem().get(EIComponents.SELECTED_TESLA_NETWORK).key()) : Optional.empty();
+				(player.getOffhandItem().has(EIComponents.SELECTED_TESLA_NETWORK) ? Optional.of(player.getOffhandItem().get(EIComponents.SELECTED_TESLA_NETWORK).key()) : Optional.empty());
 	}
 	
 	private static boolean isHoldingWrench()
@@ -94,6 +102,39 @@ public final class TeslaPartRenderer
 		}
 		return player.getMainHandItem().is(MITags.WRENCHES) ||
 			   player.getOffhandItem().is(MITags.WRENCHES);
+	}
+	
+	@SubscribeEvent
+	private static void onRender(RenderLevelStageEvent event)
+	{
+		if(event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL && !HIGHLIGHT_QUEUE.isEmpty())
+		{
+			RenderSystem.clear(256, Minecraft.ON_OSX);
+			var matrices = event.getPoseStack();
+			matrices.pushPose();
+			matrices.mulPose(event.getModelViewMatrix());
+			
+			for(var pos : HIGHLIGHT_QUEUE)
+			{
+				matrices.pushPose();
+				var cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+				double x = (double) pos.getX() - cameraPos.x;
+				double y = (double) pos.getY() - cameraPos.y;
+				double z = (double) pos.getZ() - cameraPos.z;
+				matrices.translate(x, y, z);
+				matrices.translate(-0.005, -0.005, -0.005);
+				matrices.scale(1.01f, 1.01f, 1.01f);
+				CubeOverlayRenderHelper.render(matrices, IMMEDIATE, 111f / 256, 111f / 256, 1f, OverlayTexture.NO_OVERLAY);
+				matrices.popPose();
+			}
+			
+			matrices.popPose();
+			RenderSystem.backupProjectionMatrix();
+			RenderSystem.setProjectionMatrix(RenderSystem.getProjectionMatrix(), HIGHLIGHT_VERTEX_SORTING);
+			IMMEDIATE.endBatch();
+			RenderSystem.restoreProjectionMatrix();
+			HIGHLIGHT_QUEUE.clear();
+		}
 	}
 	
 	private static final Map<BlockPos, TeslaArcInstance> TESLA_ARCS = Maps.newConcurrentMap();
@@ -201,7 +242,7 @@ public final class TeslaPartRenderer
 					{
 						points = points.subList(0, (int) (halfPoints * partialTick) + (ticks == 1 ? halfPoints : 0));
 					}
-					alpha *= (ticks == 0 ? partialTick : ticks == arcs.duration() ? (1 - partialTick) : 1);
+					alpha *= (ticks == 0 ? partialTick : (ticks == arcs.duration() ? (1 - partialTick) : 1));
 				}
 				
 				matrices.pushPose();
