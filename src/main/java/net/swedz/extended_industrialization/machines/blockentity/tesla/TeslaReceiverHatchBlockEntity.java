@@ -29,6 +29,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EIComponents;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.machines.component.tesla.AestheticTeslaCoilComponent;
 import net.swedz.extended_industrialization.machines.component.tesla.network.TeslaNetwork;
@@ -278,6 +279,18 @@ public final class TeslaReceiverHatchBlockEntity extends HatchBlockEntity implem
 					throw new RuntimeException("Replaced machine should be a TeslaReceiverHatchBlockEntity, found " + newBlockEntity);
 				}
 				newHatchBlockEntity.load(oldBlockData, level.registryAccess(), true);
+				
+				if(hand == InteractionHand.MAIN_HAND)
+				{
+					var offhandStack = player.getItemInHand(InteractionHand.OFF_HAND);
+					if(offhandStack.has(EIComponents.SELECTED_TESLA_NETWORK))
+					{
+						var key = offhandStack.get(EIComponents.SELECTED_TESLA_NETWORK).key();
+						newHatchBlockEntity.setNetwork(key);
+						newHatchBlockEntity.setChanged();
+						newHatchBlockEntity.sync();
+					}
+				}
 			}
 			
 			var group = originalBlockState.getSoundType();
