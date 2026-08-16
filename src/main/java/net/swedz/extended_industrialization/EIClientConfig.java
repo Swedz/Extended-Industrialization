@@ -23,4 +23,12 @@ public interface EIClientConfig
 	{
 		return 0;
 	}
+	
+	@ConfigKey
+	@ConfigComment("The distance (in blocks) for the tesla linked overlay to render within")
+	@Range.Integer(min = 0, max = Integer.MAX_VALUE)
+	default int teslaLinkedOverlayRenderDistance()
+	{
+		return 32;
+	}
 }

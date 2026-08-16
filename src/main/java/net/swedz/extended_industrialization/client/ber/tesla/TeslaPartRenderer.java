@@ -18,6 +18,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -57,15 +58,18 @@ public final class TeslaPartRenderer
 	
 	private static void renderHighlight(MachineBlockEntity machine, float partialTick, PoseStack matrices, MultiBufferSource buffer, int light, int overlay)
 	{
+		var player = Minecraft.getInstance().player;
 		var pos = machine.getBlockPos();
 		
 		if(machine instanceof TeslaNetworkPart part)
 		{
 			getHeldNetworkKey().ifPresent((networkKey) ->
 			{
-				if(part.hasNetwork() && part.getNetworkKey().equals(networkKey))
+				if(part.hasNetwork() &&
+				   part.getNetworkKey().equals(networkKey) &&
+				   player.distanceToSqr(pos.getCenter()) <= Mth.square(EIClient.config().teslaLinkedOverlayRenderDistance()))
 				{
-					HIGHLIGHT_QUEUE.add(machine.getBlockPos());
+					HIGHLIGHT_QUEUE.add(pos);
 				}
 			});
 		}
