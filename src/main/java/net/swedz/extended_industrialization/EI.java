@@ -125,6 +125,7 @@ public final class EI
 				.build(EIConfig.class)
 				.load();
 		bus.addListener(FMLCommonSetupEvent.class, (event) -> instance.load(false));
+		file.registerReloadListeners(bus, instance);
 		CONFIG = instance.config();
 	}
 	
