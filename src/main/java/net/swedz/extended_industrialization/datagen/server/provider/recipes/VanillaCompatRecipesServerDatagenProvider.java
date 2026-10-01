@@ -96,21 +96,49 @@ public final class VanillaCompatRecipesServerDatagenProvider extends RecipesServ
 				output
 		);
 		
+		buildCopperRecipes(output);
+	}
+	
+	private void buildCopperRecipes(RecipeOutput output)
+	{
 		addHoneyWaxingRecipe(Items.COPPER_BLOCK, Items.WAXED_COPPER_BLOCK, output);
 		addHoneyWaxingRecipe(Items.CUT_COPPER, Items.WAXED_CUT_COPPER, output);
 		addHoneyWaxingRecipe(Items.CUT_COPPER_SLAB, Items.WAXED_CUT_COPPER_SLAB, output);
 		addHoneyWaxingRecipe(Items.CUT_COPPER_STAIRS, Items.WAXED_CUT_COPPER_STAIRS, output);
+		addHoneyWaxingRecipe(Items.COPPER_BULB, Items.WAXED_COPPER_BULB, output);
+		addHoneyWaxingRecipe(Items.COPPER_DOOR, Items.WAXED_COPPER_DOOR, output);
+		addHoneyWaxingRecipe(Items.COPPER_TRAPDOOR, Items.WAXED_COPPER_TRAPDOOR, output);
+		addHoneyWaxingRecipe(Items.CHISELED_COPPER, Items.WAXED_CHISELED_COPPER, output);
+		addHoneyWaxingRecipe(Items.COPPER_GRATE, Items.WAXED_COPPER_GRATE, output);
+		
 		addHoneyWaxingRecipe(Items.EXPOSED_COPPER, Items.WAXED_EXPOSED_COPPER, output);
 		addHoneyWaxingRecipe(Items.EXPOSED_CUT_COPPER, Items.WAXED_EXPOSED_CUT_COPPER, output);
 		addHoneyWaxingRecipe(Items.EXPOSED_CUT_COPPER_SLAB, Items.WAXED_EXPOSED_CUT_COPPER_SLAB, output);
 		addHoneyWaxingRecipe(Items.EXPOSED_CUT_COPPER_STAIRS, Items.WAXED_EXPOSED_CUT_COPPER_STAIRS, output);
+		addHoneyWaxingRecipe(Items.EXPOSED_COPPER_BULB, Items.WAXED_EXPOSED_COPPER_BULB, output);
+		addHoneyWaxingRecipe(Items.EXPOSED_COPPER_DOOR, Items.WAXED_EXPOSED_COPPER_DOOR, output);
+		addHoneyWaxingRecipe(Items.EXPOSED_COPPER_TRAPDOOR, Items.WAXED_EXPOSED_COPPER_TRAPDOOR, output);
+		addHoneyWaxingRecipe(Items.EXPOSED_CHISELED_COPPER, Items.WAXED_EXPOSED_CHISELED_COPPER, output);
+		addHoneyWaxingRecipe(Items.EXPOSED_COPPER_GRATE, Items.WAXED_EXPOSED_COPPER_GRATE, output);
+		
 		addHoneyWaxingRecipe(Items.WEATHERED_COPPER, Items.WAXED_WEATHERED_COPPER, output);
 		addHoneyWaxingRecipe(Items.WEATHERED_CUT_COPPER, Items.WAXED_WEATHERED_CUT_COPPER, output);
 		addHoneyWaxingRecipe(Items.WEATHERED_CUT_COPPER_SLAB, Items.WAXED_WEATHERED_CUT_COPPER_SLAB, output);
 		addHoneyWaxingRecipe(Items.WEATHERED_CUT_COPPER_STAIRS, Items.WAXED_WEATHERED_CUT_COPPER_STAIRS, output);
+		addHoneyWaxingRecipe(Items.WEATHERED_COPPER_BULB, Items.WAXED_WEATHERED_COPPER_BULB, output);
+		addHoneyWaxingRecipe(Items.WEATHERED_COPPER_DOOR, Items.WAXED_WEATHERED_COPPER_DOOR, output);
+		addHoneyWaxingRecipe(Items.WEATHERED_COPPER_TRAPDOOR, Items.WAXED_WEATHERED_COPPER_TRAPDOOR, output);
+		addHoneyWaxingRecipe(Items.WEATHERED_CHISELED_COPPER, Items.WAXED_WEATHERED_CHISELED_COPPER, output);
+		addHoneyWaxingRecipe(Items.WEATHERED_COPPER_GRATE, Items.WAXED_WEATHERED_COPPER_GRATE, output);
+		
 		addHoneyWaxingRecipe(Items.OXIDIZED_COPPER, Items.WAXED_OXIDIZED_COPPER, output);
 		addHoneyWaxingRecipe(Items.OXIDIZED_CUT_COPPER, Items.WAXED_OXIDIZED_CUT_COPPER, output);
 		addHoneyWaxingRecipe(Items.OXIDIZED_CUT_COPPER_SLAB, Items.WAXED_OXIDIZED_CUT_COPPER_SLAB, output);
 		addHoneyWaxingRecipe(Items.OXIDIZED_CUT_COPPER_STAIRS, Items.WAXED_OXIDIZED_CUT_COPPER_STAIRS, output);
+		addHoneyWaxingRecipe(Items.OXIDIZED_COPPER_BULB, Items.WAXED_OXIDIZED_COPPER_BULB, output);
+		addHoneyWaxingRecipe(Items.OXIDIZED_COPPER_DOOR, Items.WAXED_OXIDIZED_COPPER_DOOR, output);
+		addHoneyWaxingRecipe(Items.OXIDIZED_COPPER_TRAPDOOR, Items.WAXED_OXIDIZED_COPPER_TRAPDOOR, output);
+		addHoneyWaxingRecipe(Items.OXIDIZED_CHISELED_COPPER, Items.WAXED_OXIDIZED_CHISELED_COPPER, output);
+		addHoneyWaxingRecipe(Items.OXIDIZED_COPPER_GRATE, Items.WAXED_OXIDIZED_COPPER_GRATE, output);
 	}
 }
