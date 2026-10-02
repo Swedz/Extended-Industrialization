@@ -44,3 +44,9 @@ by providing the Solar Panel with Distilled Water.
 	<RecipeFor id="extended_industrialization:mv_solar_panel" />
 	<RecipeFor id="extended_industrialization:hv_solar_panel" />
 </Row>
+
+<Row>
+	<Recipe id="extended_industrialization:photovoltaic_cell/lv" />
+	<Recipe id="extended_industrialization:photovoltaic_cell/mv" />
+	<Recipe id="extended_industrialization:photovoltaic_cell/hv" />
+</Row>
