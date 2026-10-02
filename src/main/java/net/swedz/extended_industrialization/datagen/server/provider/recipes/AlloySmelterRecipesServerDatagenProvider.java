@@ -3,11 +3,15 @@ package net.swedz.extended_industrialization.datagen.server.provider.recipes;
 import aztech.modern_industrialization.materials.Material;
 import aztech.modern_industrialization.materials.MaterialRegistry;
 import com.google.common.collect.Lists;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EIMachines;
+import net.swedz.tesseract.neoforge.helper.TagHelper;
 
 import java.util.List;
 
@@ -22,9 +26,28 @@ public final class AlloySmelterRecipesServerDatagenProvider extends RecipesServe
 	
 	private static Ingredient combine(Ingredient... ingredients)
 	{
+		int nonNullIngredientCount = 0;
+		Ingredient lastNonNullIngredient = null;
+		for(var ingredient : ingredients)
+		{
+			if(ingredient != null)
+			{
+				nonNullIngredientCount++;
+				lastNonNullIngredient = ingredient;
+			}
+		}
+		if(nonNullIngredientCount == 1)
+		{
+			return lastNonNullIngredient;
+		}
+		
 		List<Ingredient.Value> values = Lists.newArrayList();
 		for(var ingredient : ingredients)
 		{
+			if(ingredient == null)
+			{
+				continue;
+			}
 			values.addAll(List.of(ingredient.getValues()));
 		}
 		return Ingredient.fromValues(values.stream());
@@ -142,6 +165,25 @@ public final class AlloySmelterRecipesServerDatagenProvider extends RecipesServe
 				MaterialRegistry.getMaterial("silver"), 1,
 				MaterialRegistry.getMaterial("electrum"), 2,
 				output
+		);
+		
+		addAlloySmelterRecipes(
+				"brass",
+				Ingredient.of(TagHelper.itemCommon("tiny_dusts/copper")),
+				Ingredient.of(TagHelper.itemCommon("nuggets/copper")),
+				Ingredient.of(TagHelper.itemCommon("dusts/copper")),
+				Ingredient.of(TagHelper.itemCommon("ingots/copper")),
+				Ingredient.of(TagHelper.itemCommon("storage_blocks/copper")),
+				1,
+				null,
+				Ingredient.of(TagHelper.itemCommon("nuggets/zinc")),
+				null,
+				Ingredient.of(TagHelper.itemCommon("ingots/zinc")),
+				Ingredient.of(TagHelper.itemCommon("storage_blocks/zinc")),
+				1,
+				BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("create", "brass_ingot")),
+				2,
+				output.withConditions(new ModLoadedCondition("create"))
 		);
 	}
 }

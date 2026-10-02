@@ -1,0 +1,35 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "extended_industrialization:alloy_smelter",
+  "duration": 200,
+  "eu": 4,
+  "item_inputs": [
+    {
+      "type": "neoforge:compound",
+      "amount": 9,
+      "children": [
+        {
+          "tag": "c:tiny_dusts/copper"
+        },
+        {
+          "tag": "c:nuggets/copper"
+        }
+      ]
+    },
+    {
+      "amount": 9,
+      "tag": "c:nuggets/zinc"
+    }
+  ],
+  "item_outputs": [
+    {
+      "amount": 2,
+      "item": "create:brass_ingot"
+    }
+  ]
+}
