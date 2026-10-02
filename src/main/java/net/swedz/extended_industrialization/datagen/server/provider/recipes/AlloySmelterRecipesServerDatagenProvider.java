@@ -5,6 +5,7 @@ import aztech.modern_industrialization.materials.MaterialRegistry;
 import com.google.common.collect.Lists;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.extended_industrialization.EIMachines;
 
@@ -29,33 +30,82 @@ public final class AlloySmelterRecipesServerDatagenProvider extends RecipesServe
 		return Ingredient.fromValues(values.stream());
 	}
 	
+	private static void addAlloySmelterRecipes(
+			String name,
+			Ingredient tinyDustA,
+			Ingredient nuggetA,
+			Ingredient dustA,
+			Ingredient ingotA,
+			Ingredient blockA,
+			int amountA,
+			Ingredient tinyDustB,
+			Ingredient nuggetB,
+			Ingredient dustB,
+			Ingredient ingotB,
+			Ingredient blockB,
+			int amountB,
+			ItemLike resultIngot,
+			int amountResult,
+			RecipeOutput output
+	)
+	{
+		var path = "materials/%s/%s".formatted(name, EIMachines.RecipeTypes.ALLOY_SMELTER.getPath());
+		addMachineRecipe(
+				path,
+				"nugget",
+				EIMachines.RecipeTypes.ALLOY_SMELTER,
+				4,
+				10 * 20,
+				(r) -> r
+						.addItemInput(combine(tinyDustA, nuggetA), amountA * 9, 1)
+						.addItemInput(combine(tinyDustB, nuggetB), amountB * 9, 1)
+						.addItemOutput(resultIngot, amountResult),
+				output
+		);
+		addMachineRecipe(
+				path,
+				"ingot",
+				EIMachines.RecipeTypes.ALLOY_SMELTER,
+				4,
+				10 * 20,
+				(r) -> r
+						.addItemInput(combine(dustA, ingotA), amountA, 1)
+						.addItemInput(combine(dustB, ingotB), amountB, 1)
+						.addItemOutput(resultIngot, amountResult),
+				output
+		);
+		addMachineRecipe(
+				path,
+				"block",
+				EIMachines.RecipeTypes.ALLOY_SMELTER,
+				4,
+				10 * 20 * 9,
+				(r) -> r
+						.addItemInput(blockA, amountA, 1)
+						.addItemInput(blockB, amountB, 1)
+						.addItemOutput(resultIngot, amountResult * 9),
+				output
+		);
+	}
+	
 	private static void addAlloySmelterRecipes(Material componentA, int amountA, Material componentB, int amountB, Material result, int amountResult, RecipeOutput output)
 	{
-		addMaterialMachineRecipe(
-				result, "ingot", EIMachines.RecipeTypes.ALLOY_SMELTER,
-				4, 10 * 20,
-				(r) -> r
-						.addItemInput(combine(componentA.getPart(DUST).getTaggedIngredient(), componentA.getPart(INGOT).getTaggedIngredient()), amountA, 1)
-						.addItemInput(combine(componentB.getPart(DUST).getTaggedIngredient(), componentB.getPart(INGOT).getTaggedIngredient()), amountB, 1)
-						.addItemOutput(result.getPart(INGOT), amountResult),
-				output
-		);
-		addMaterialMachineRecipe(
-				result, "nugget", EIMachines.RecipeTypes.ALLOY_SMELTER,
-				4, 10 * 20,
-				(r) -> r
-						.addItemInput(combine(componentA.getPart(TINY_DUST).getTaggedIngredient(), componentA.getPart(NUGGET).getTaggedIngredient()), amountA * 9, 1)
-						.addItemInput(combine(componentB.getPart(TINY_DUST).getTaggedIngredient(), componentB.getPart(NUGGET).getTaggedIngredient()), amountB * 9, 1)
-						.addItemOutput(result.getPart(INGOT), amountResult),
-				output
-		);
-		addMaterialMachineRecipe(
-				result, "block", EIMachines.RecipeTypes.ALLOY_SMELTER,
-				4, 10 * 20 * 9,
-				(r) -> r
-						.addItemInput(componentA.getPart(BLOCK).getTaggedIngredient(), amountA, 1)
-						.addItemInput(componentB.getPart(BLOCK).getTaggedIngredient(), amountB, 1)
-						.addItemOutput(result.getPart(BLOCK), amountResult),
+		addAlloySmelterRecipes(
+				result.name,
+				componentA.getPart(TINY_DUST).getTaggedIngredient(),
+				componentA.getPart(NUGGET).getTaggedIngredient(),
+				componentA.getPart(DUST).getTaggedIngredient(),
+				componentA.getPart(INGOT).getTaggedIngredient(),
+				componentA.getPart(BLOCK).getTaggedIngredient(),
+				amountA,
+				componentB.getPart(TINY_DUST).getTaggedIngredient(),
+				componentB.getPart(NUGGET).getTaggedIngredient(),
+				componentB.getPart(DUST).getTaggedIngredient(),
+				componentB.getPart(INGOT).getTaggedIngredient(),
+				componentB.getPart(BLOCK).getTaggedIngredient(),
+				amountB,
+				result.getPart(INGOT),
+				amountResult,
 				output
 		);
 	}
