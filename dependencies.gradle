@@ -13,6 +13,8 @@ repositories {
 			includeGroup "net.swedz"
 			// Almost Unified
 			includeGroup "com.almostreliable.mods"
+			// JEI - Required by Create for JEMI
+			includeGroup "mezz.jei"
 		}
 	}
 	maven {
@@ -52,6 +54,24 @@ repositories {
 			includeGroup "org.appliedenergistics"
 		}
 	}
+	maven {
+		name "Create"
+		url = "https://maven.createmod.net/"
+		content {
+			// Create
+			includeGroup "com.simibubi.create"
+			includeGroup "net.createmod.ponder"
+			includeGroup "dev.engine-room.flywheel"
+			includeGroup "dev.engine-room.vanillin"
+		}
+	}
+	maven {
+		url "https://maven.ithundxr.dev/snapshots"
+		content {
+			// Registrate - Required by Create
+			includeGroup "com.tterrag.registrate"
+		}
+	}
 }
 
 dependencies {
@@ -86,6 +106,16 @@ dependencies {
 	}
 
 	compileOnly "com.almostreliable.mods:almostunified-neoforge:${project.minecraft_version}-${project.au_version}:api"
-	
+
 	localImplementation "org.appliedenergistics:guideme:${guideme_version}"
+
+	runtimeOnly ("com.simibubi.create:create-1.21.1:${project.create_version}") {
+		exclude group: "cc.tweaked"
+		exclude group: "top.theillusivec4.curios"
+		exclude group: "info.journeymap"
+		exclude group: "maven.modrinth", module: "journeymap"
+		exclude group: "maven.modrinth", module: "farmers-delight"
+		exclude group: "dev.architectury"
+		exclude group: "dev.ftb.mods"
+	}
 }
