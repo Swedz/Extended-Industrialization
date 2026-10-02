@@ -17,6 +17,8 @@ item_ids:
 	<IsometricCamera yaw="180" pitch="30" />
 </GameScene>
 
+<RecipeFor id="extended_industrialization:machine_chainer" />
+
 The Machine Chainer can connect to many machines, barrels, or any other inventory block tagged as
 `#extended_industrialization:machine_chainer/linkable` in a straight line up to 64 blocks. Connected inventories are
 combined into a single shared inventory as the chainer. The chainer can be oriented to face any direction, including up

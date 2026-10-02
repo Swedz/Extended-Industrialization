@@ -75,7 +75,10 @@ repositories {
 }
 
 dependencies {
-	implementation "aztech:Modern-Industrialization:${modern_industrialization_version}"
+	implementation ("aztech:Modern-Industrialization:${modern_industrialization_version}") {
+		// TODO remove this when MI updates to 2.5.10
+		exclude group: "com.simibubi.create"
+	}
 
 	implementation "dev.technici4n:GrandPower:${grandpower_version}"
 
@@ -109,7 +112,7 @@ dependencies {
 
 	localImplementation "org.appliedenergistics:guideme:${guideme_version}"
 
-	runtimeOnly ("com.simibubi.create:create-1.21.1:${project.create_version}") {
+	localRuntimeOnly ("com.simibubi.create:create-1.21.1:${project.create_version}") {
 		exclude group: "cc.tweaked"
 		exclude group: "top.theillusivec4.curios"
 		exclude group: "info.journeymap"

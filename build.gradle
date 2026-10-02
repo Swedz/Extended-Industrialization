@@ -9,6 +9,9 @@ plugins {
 configurations {
 	runtimeClasspath.extendsFrom localImplementation
 	compileClasspath.extendsFrom localImplementation
+	
+	localRuntimeOnly
+	runtimeClasspath.extendsFrom localRuntimeOnly
 }
 
 version = (System.getenv("MOD_VERSION") ?: "0.0.0-local") + "-${minecraft_version}"
