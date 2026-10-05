@@ -1,0 +1,34 @@
+{
+  "parent": "modern_industrialization:bronze_furnace",
+  "criteria": {
+    "inventory_changed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "extended_industrialization:large_steam_furnace"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.large_steam_furnace.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "extended_industrialization:large_steam_furnace"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.large_steam_furnace.title"
+    }
+  },
+  "requirements": [
+    [
+      "inventory_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

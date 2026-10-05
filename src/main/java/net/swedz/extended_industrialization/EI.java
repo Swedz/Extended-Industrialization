@@ -80,6 +80,7 @@ public final class EI
 		EILootModifiers.init(bus);
 		EIMaterialRegistry.init();
 		EICreativeTabs.init(bus);
+		EICriterionTriggers.init(bus);
 		EIRecipeTypes.init(bus);
 		EISounds.init(bus);
 		EIModularSlotPanelSlots.init();

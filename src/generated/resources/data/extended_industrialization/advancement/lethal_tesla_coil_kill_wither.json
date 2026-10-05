@@ -1,0 +1,38 @@
+{
+  "parent": "extended_industrialization:lethal_tesla_coil",
+  "criteria": {
+    "kill_wither": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "minecraft:wither"
+            }
+          }
+        ]
+      },
+      "trigger": "extended_industrialization:killed_by_lethal_tesla_coil"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.lethal_tesla_coil_kill_wither.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:nether_star"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.lethal_tesla_coil_kill_wither.title"
+    }
+  },
+  "requirements": [
+    [
+      "kill_wither"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

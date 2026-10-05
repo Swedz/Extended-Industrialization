@@ -10,7 +10,7 @@ public final class DatagenDelegator
 	@SubscribeEvent
 	public void gatherData(GatherDataEvent event)
 	{
-		DatagenDelegatorClient.configure(event);
 		DatagenDelegatorServer.configure(event);
+		DatagenDelegatorClient.configure(event);
 	}
 }

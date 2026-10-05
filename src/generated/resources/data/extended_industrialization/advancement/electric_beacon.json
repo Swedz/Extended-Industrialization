@@ -1,0 +1,34 @@
+{
+  "parent": "modern_industrialization:electric_blast_furnace",
+  "criteria": {
+    "inventory_changed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "extended_industrialization:electric_beacon"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.electric_beacon.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "extended_industrialization:electric_beacon"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.electric_beacon.title"
+    }
+  },
+  "requirements": [
+    [
+      "inventory_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

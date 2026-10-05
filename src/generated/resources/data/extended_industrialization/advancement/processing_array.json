@@ -1,0 +1,34 @@
+{
+  "parent": "modern_industrialization:digital_circuit",
+  "criteria": {
+    "inventory_changed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "extended_industrialization:processing_array"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.processing_array.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "extended_industrialization:processing_array"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.processing_array.title"
+    }
+  },
+  "requirements": [
+    [
+      "inventory_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

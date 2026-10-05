@@ -8,14 +8,18 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EICriterionTriggers;
 import net.swedz.extended_industrialization.network.packet.EntitiesElectrocutedPacket;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.configurationpanel.ConfigurationPanelBuilder;
+import net.swedz.tesseract.neoforge.proxy.Proxies;
+import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -124,10 +128,22 @@ public final class LethalTeslaCoilComponent implements MachineComponent
 				var source = damageSource.get();
 				if(!entities.isEmpty())
 				{
+					ServerPlayer ownerPlayer = null;
 					var entityIds = new IntArrayList();
 					for(var entity : entities)
 					{
 						entity.hurt(source, damage);
+						if(!entity.isAlive())
+						{
+							if(ownerPlayer == null)
+							{
+								ownerPlayer = Proxies.get(TesseractProxy.class).getServer().getPlayerList().getPlayer(machine.placedBy.placerId);
+							}
+							if(ownerPlayer != null)
+							{
+								EICriterionTriggers.KILLED_BY_LETHAL_TESLA_COIL.get().trigger(ownerPlayer, entity);
+							}
+						}
 						entityIds.add(entity.getId());
 					}
 					new EntitiesElectrocutedPacket(entityIds).broadcastToClients((ServerLevel) level, worldPosition, 32);

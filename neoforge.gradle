@@ -69,7 +69,7 @@ neoForge {
 
 			gameDirectory.set(project.getLayout().getProjectDirectory().dir('runs/data'))
 
-			programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+			programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath(), '--existing-mod', 'modern_industrialization'
 
 			systemProperty 'mixin.env.remapRefMap', 'true'
 			systemProperty 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"

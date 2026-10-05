@@ -1,0 +1,41 @@
+{
+  "parent": "extended_industrialization:nanosuit",
+  "criteria": {
+    "inventory_changed": {
+      "conditions": {
+        "items": [
+          {
+            "components": {
+              "extended_industrialization:meow": true
+            },
+            "items": "extended_industrialization:nano_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.nyano.description"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "components": {
+        "extended_industrialization:meow": true
+      },
+      "count": 1,
+      "id": "extended_industrialization:nano_helmet"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.nyano.title"
+    }
+  },
+  "requirements": [
+    [
+      "inventory_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

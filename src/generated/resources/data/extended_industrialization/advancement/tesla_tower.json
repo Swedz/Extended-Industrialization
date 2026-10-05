@@ -1,0 +1,34 @@
+{
+  "parent": "modern_industrialization:digital_circuit",
+  "criteria": {
+    "inventory_changed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "extended_industrialization:tesla_tower"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.tesla_tower.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "extended_industrialization:tesla_tower"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.tesla_tower.title"
+    }
+  },
+  "requirements": [
+    [
+      "inventory_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

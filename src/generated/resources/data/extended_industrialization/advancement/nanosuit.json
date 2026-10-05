@@ -1,0 +1,43 @@
+{
+  "parent": "modern_industrialization:chemical_reactor",
+  "criteria": {
+    "inventory_changed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "extended_industrialization:nano_helmet"
+          },
+          {
+            "items": "extended_industrialization:nano_chestplate"
+          },
+          {
+            "items": "extended_industrialization:nano_leggings"
+          },
+          {
+            "items": "extended_industrialization:nano_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.nanosuit.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "extended_industrialization:nano_chestplate"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.nanosuit.title"
+    }
+  },
+  "requirements": [
+    [
+      "inventory_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

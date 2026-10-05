@@ -1,0 +1,43 @@
+{
+  "parent": "modern_industrialization:quantum_chestplate",
+  "criteria": {
+    "inventory_changed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "extended_industrialization:nano_quantum_helmet"
+          },
+          {
+            "items": "extended_industrialization:nano_quantum_chestplate"
+          },
+          {
+            "items": "extended_industrialization:nano_quantum_leggings"
+          },
+          {
+            "items": "extended_industrialization:nano_quantum_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.quantum_nanosuit.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "extended_industrialization:nano_quantum_chestplate"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.quantum_nanosuit.title"
+    }
+  },
+  "requirements": [
+    [
+      "inventory_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
