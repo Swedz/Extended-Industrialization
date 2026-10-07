@@ -1,6 +1,7 @@
 package net.swedz.extended_industrialization.datamap;
 
 import aztech.modern_industrialization.api.energy.CableTier;
+import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
@@ -18,13 +19,18 @@ import net.swedz.tesseract.neoforge.compat.mi.serialization.MICodecs;
 import net.swedz.tesseract.neoforge.helper.RegistryHelper;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
-public record EnchantmentModule(ResourceKey<Enchantment> enchantment, Value fallback, Map<CableTier, Value> values)
+public record EnchantmentModule(
+		List<ResourceKey<Enchantment>> enchantments,
+		Value fallback,
+		Map<CableTier, Value> values
+)
 {
 	public static final Codec<EnchantmentModule> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
-					ResourceKey.codec(Registries.ENCHANTMENT).fieldOf("enchantment").forGetter(EnchantmentModule::enchantment),
+					ResourceKey.codec(Registries.ENCHANTMENT).listOf().fieldOf("enchantments").forGetter(EnchantmentModule::enchantments),
 					Value.CODEC.fieldOf("fallback").forGetter(EnchantmentModule::fallback),
 					Codec.unboundedMap(MICodecs.CABLE_TIER, Value.CODEC).fieldOf("values").forGetter(EnchantmentModule::values)
 			)
@@ -45,9 +51,14 @@ public record EnchantmentModule(ResourceKey<Enchantment> enchantment, Value fall
 		values = Collections.unmodifiableMap(values);
 	}
 	
-	public Holder<Enchantment> enchantment(HolderLookup.Provider access)
+	public List<Holder<Enchantment>> enchantments(HolderLookup.Provider access)
 	{
-		return access.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(enchantment);
+		List<Holder<Enchantment>> result = Lists.newArrayList();
+		for(var enchantment : enchantments)
+		{
+			result.add(access.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(enchantment));
+		}
+		return result;
 	}
 	
 	public boolean has(CableTier tier)
@@ -78,7 +89,11 @@ public record EnchantmentModule(ResourceKey<Enchantment> enchantment, Value fall
 			currentEnchantments = ItemEnchantments.EMPTY;
 		}
 		var enchantments = new ItemEnchantments.Mutable(currentEnchantments);
-		enchantments.set(this.enchantment(access), this.getLevel(tier));
+		int level = this.getLevel(tier);
+		for(var enchantment : this.enchantments(access))
+		{
+			enchantments.set(enchantment, level);
+		}
 		stack.set(DataComponents.ENCHANTMENTS, enchantments.toImmutable());
 	}
 	

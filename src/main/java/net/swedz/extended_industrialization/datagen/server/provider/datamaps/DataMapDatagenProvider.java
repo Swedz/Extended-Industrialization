@@ -24,6 +24,7 @@ import net.swedz.extended_industrialization.machines.blockentity.multiblock.tesl
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
+import java.util.List;
 import java.util.Map;
 
 public final class DataMapDatagenProvider extends DataMapProvider
@@ -53,10 +54,15 @@ public final class DataMapDatagenProvider extends DataMapProvider
 			this.builder(EIDataMaps.TESLA_TOWER_TIER).add(tier.blockId(), new TeslaTowerTierData(tier.maxTransfer(), tier.maxDistance(), tier.drain()), false);
 		}
 		
-		this.addEnchantmentModule(EIItems.SILK_TOUCH_MODULE, Enchantments.SILK_TOUCH, 1, 16);
+		this.addEnchantmentModule(EIItems.SILK_TOUCH_MODULE, List.of(Enchantments.SILK_TOUCH), 1, 16);
 		this.addEnchantmentModule(
-				EIItems.LOOTING_MODULE, Enchantments.LOOTING,
-				1, 32,
+				EIItems.LOOTING_MODULE,
+				List.of(
+						Enchantments.LOOTING,
+						Enchantments.FORTUNE
+				),
+				1,
+				32,
 				Map.of(
 						CableTier.MV, new EnchantmentModule.Value(3, 32 * 4),
 						CableTier.HV, new EnchantmentModule.Value(5, 32 * 4 * 4),
@@ -81,14 +87,14 @@ public final class DataMapDatagenProvider extends DataMapProvider
 		this.builder(EIDataMaps.FERTILIZER_POTENCY).add(fluid.identifier().location(), new FertilizerPotency(tickRate, mbToConsumePerFertilizerTick), false);
 	}
 	
-	private void addEnchantmentModule(ItemHolder item, ResourceKey<Enchantment> enchantment, int level, long euCost, Map<CableTier, EnchantmentModule.Value> values)
+	private void addEnchantmentModule(ItemHolder item, List<ResourceKey<Enchantment>> enchantments, int level, long euCost, Map<CableTier, EnchantmentModule.Value> values)
 	{
-		this.builder(EIDataMaps.ENCHANTMENT_MODULE).add(item.identifier().location(), new EnchantmentModule(enchantment, new EnchantmentModule.Value(level, euCost), values), false);
+		this.builder(EIDataMaps.ENCHANTMENT_MODULE).add(item.identifier().location(), new EnchantmentModule(enchantments, new EnchantmentModule.Value(level, euCost), values), false);
 	}
 	
-	private void addEnchantmentModule(ItemHolder item, ResourceKey<Enchantment> enchantment, int level, long euCost)
+	private void addEnchantmentModule(ItemHolder item, List<ResourceKey<Enchantment>> enchantments, int level, long euCost)
 	{
-		this.addEnchantmentModule(item, enchantment, level, euCost, Map.of());
+		this.addEnchantmentModule(item, enchantments, level, euCost, Map.of());
 	}
 	
 	@Override

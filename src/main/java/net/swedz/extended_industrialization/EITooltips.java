@@ -319,11 +319,11 @@ public final class EITooltips
 					
 					if(module.values().isEmpty())
 					{
-						lines.add(EI.text().enchantmentModuleSingleValue(context.registries(), module.enchantment(), module.fallback().level(), module.fallback().euCost()));
+						lines.add(EI.text().enchantmentModuleSingleValue(context.registries(), module.enchantments(), module.fallback().level(), module.fallback().euCost()));
 					}
 					else
 					{
-						lines.add(EI.text().enchantmentModuleValues(context.registries(), module.enchantment()));
+						lines.add(EI.text().enchantmentModuleValues(context.registries(), module.enchantments()));
 						for(var tier : CableTier.allTiers())
 						{
 							var value = module.get(tier);
