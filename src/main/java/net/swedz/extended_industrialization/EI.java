@@ -4,9 +4,11 @@ import aztech.modern_industrialization.MIText;
 import aztech.modern_industrialization.api.energy.CableTier;
 import aztech.modern_industrialization.guidebook.MultiblockShapeCompiler;
 import aztech.modern_industrialization.util.TextHelper;
+import com.google.common.collect.Lists;
 import guideme.Guide;
 import guideme.scene.element.SceneElementTagCompiler;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.EventPriority;
@@ -45,6 +47,8 @@ import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 import static aztech.modern_industrialization.MITooltips.*;
 
@@ -177,8 +181,30 @@ public final class EI
 				.parser(EuCostTransformer.class, () -> MIParser.EU_COST_TRANSFORMER_PARSER)
 				.parser(ElectricToolItem.Mode.class, () -> (mode) -> mode.text().name())
 				
-				.parser(EIText.EnchantmentWithLevelField.class, () -> (value) -> Parser.ENCHANTMENT_AND_LEVEL.parse(value.registry(), new Pair<>(value.enchantment(), value.level())))
-				.parser(EIText.EnchantmentField.class, () -> (value) -> Parser.ENCHANTMENT.parse(value.registry(), value.enchantment()))
+				.parser(
+						EIText.EnchantmentsWithLevelField.class,
+						(context, value) ->
+						{
+							List<Component> components = Lists.newArrayList();
+							for(var enchantment : value.enchantments())
+							{
+								components.add(Parser.ENCHANTMENT_AND_LEVEL.parse(value.registry(), new Pair<>(enchantment, value.level())));
+							}
+							return Parser.COMPONENTS_COMMA_SEPARATED.parse(context, components);
+						}
+				)
+				.parser(
+						EIText.EnchantmentsField.class,
+						(context, value) ->
+						{
+							List<Component> components = Lists.newArrayList();
+							for(var enchantment : value.enchantments())
+							{
+								components.add(Parser.ENCHANTMENT.parse(value.registry(), enchantment));
+							}
+							return Parser.COMPONENTS_COMMA_SEPARATED.parse(context, components);
+						}
+				)
 				.parser("enchantment_level", int.class, () -> Parser.ENCHANTMENT_LEVEL)
 				
 				.build(EIText.class)

@@ -1,7 +1,10 @@
 {
   "values": {
     "extended_industrialization:looting_module": {
-      "enchantment": "minecraft:looting",
+      "enchantments": [
+        "minecraft:looting",
+        "minecraft:fortune"
+      ],
       "fallback": {
         "eu_cost": 32,
         "level": 1
@@ -26,7 +29,9 @@
       }
     },
     "extended_industrialization:silk_touch_module": {
-      "enchantment": "minecraft:silk_touch",
+      "enchantments": [
+        "minecraft:silk_touch"
+      ],
       "fallback": {
         "eu_cost": 16,
         "level": 1
