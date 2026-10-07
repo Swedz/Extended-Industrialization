@@ -1,7 +1,7 @@
 {
   "parent": "extended_industrialization:nanosuit",
   "criteria": {
-    "inventory_changed": {
+    "inventory_changed_0": {
       "conditions": {
         "items": [
           {
@@ -34,7 +34,7 @@
   },
   "requirements": [
     [
-      "inventory_changed"
+      "inventory_changed_0"
     ]
   ],
   "sends_telemetry_event": true

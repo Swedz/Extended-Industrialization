@@ -1,15 +1,13 @@
 {
   "parent": "modern_industrialization:bronze_macerator",
   "criteria": {
-    "inventory_changed": {
+    "built_multiblock": {
       "conditions": {
-        "items": [
-          {
-            "items": "extended_industrialization:large_steam_macerator"
-          }
-        ]
+        "multiblock": {
+          "id": "extended_industrialization:large_steam_macerator"
+        }
       },
-      "trigger": "minecraft:inventory_changed"
+      "trigger": "modern_industrialization:built_multiblock"
     }
   },
   "display": {
@@ -27,7 +25,7 @@
   },
   "requirements": [
     [
-      "inventory_changed"
+      "built_multiblock"
     ]
   ],
   "sends_telemetry_event": true

@@ -1,0 +1,31 @@
+{
+  "parent": "extended_industrialization:machine_chainer",
+  "criteria": {
+    "many_chainers": {
+      "conditions": {
+        "count": 500
+      },
+      "trigger": "extended_industrialization:linked_many_chainers"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.machine_chainer_many.description"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "extended_industrialization:machine_chainer"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.machine_chainer_many.title"
+    }
+  },
+  "requirements": [
+    [
+      "many_chainers"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

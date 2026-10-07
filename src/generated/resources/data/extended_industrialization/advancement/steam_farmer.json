@@ -1,15 +1,13 @@
 {
   "parent": "modern_industrialization:analog_circuit",
   "criteria": {
-    "inventory_changed": {
+    "built_multiblock": {
       "conditions": {
-        "items": [
-          {
-            "items": "extended_industrialization:steam_farmer"
-          }
-        ]
+        "multiblock": {
+          "id": "extended_industrialization:steam_farmer"
+        }
       },
-      "trigger": "minecraft:inventory_changed"
+      "trigger": "modern_industrialization:built_multiblock"
     }
   },
   "display": {
@@ -27,7 +25,7 @@
   },
   "requirements": [
     [
-      "inventory_changed"
+      "built_multiblock"
     ]
   ],
   "sends_telemetry_event": true

@@ -11,6 +11,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.swedz.extended_industrialization.lootmodifier.AutoSmeltLootModifier;
 import net.swedz.extended_industrialization.lootmodifier.BeheadingLootModifier;
 import net.swedz.extended_industrialization.lootmodifier.ElectricToolModePredicate;
+import net.swedz.extended_industrialization.lootmodifier.ItemStylizedPredicate;
 
 import java.util.function.Supplier;
 
@@ -34,6 +35,7 @@ public final class EILootModifiers
 		private static final DeferredRegister<ItemSubPredicate.Type<?>> ITEM_SUB_PREDICATE_TYPES = DeferredRegister.create(Registries.ITEM_SUB_PREDICATE_TYPE, EI.ID);
 		
 		public static final Supplier<ItemSubPredicate.Type<ElectricToolModePredicate>> ELECTRIC_TOOL_MODE = create("electric_tool_mode", ElectricToolModePredicate.CODEC);
+		public static final Supplier<ItemSubPredicate.Type<ItemStylizedPredicate>>     ITEM_STYLIZED      = create("item_stylized", ItemStylizedPredicate.CODEC);
 		
 		private static <T extends ItemSubPredicate> Supplier<ItemSubPredicate.Type<T>> create(String name, Codec<T> codec)
 		{

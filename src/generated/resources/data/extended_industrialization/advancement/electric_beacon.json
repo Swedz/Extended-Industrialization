@@ -1,15 +1,13 @@
 {
   "parent": "modern_industrialization:electric_blast_furnace",
   "criteria": {
-    "inventory_changed": {
+    "built_multiblock": {
       "conditions": {
-        "items": [
-          {
-            "items": "extended_industrialization:electric_beacon"
-          }
-        ]
+        "multiblock": {
+          "id": "extended_industrialization:electric_beacon"
+        }
       },
-      "trigger": "minecraft:inventory_changed"
+      "trigger": "modern_industrialization:built_multiblock"
     }
   },
   "display": {
@@ -27,7 +25,7 @@
   },
   "requirements": [
     [
-      "inventory_changed"
+      "built_multiblock"
     ]
   ],
   "sends_telemetry_event": true
