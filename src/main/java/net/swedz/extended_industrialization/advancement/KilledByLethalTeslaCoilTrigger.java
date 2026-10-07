@@ -47,7 +47,8 @@ public final class KilledByLethalTeslaCoilTrigger extends SimpleCriterionTrigger
 				.group(
 						EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TriggerInstance::player),
 						EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("entity").forGetter(TriggerInstance::entityPredicate)
-				).apply(instance, TriggerInstance::new));
+				)
+				.apply(instance, TriggerInstance::new));
 		
 		@Override
 		public void validate(CriterionValidator validator)

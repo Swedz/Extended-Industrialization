@@ -69,8 +69,7 @@ public final class AdvancementDatagenProvider extends AdvancementProvider
 			hasItem(
 					"bronze_waste_collector",
 					MI.id("forge_hammer"),
-					// TODO
-					"",
+					"Let's be Manure About This",
 					"Craft a Bronze Waste Collector.",
 					AdvancementType.TASK,
 					output,
@@ -107,16 +106,18 @@ public final class AdvancementDatagenProvider extends AdvancementProvider
 					existingFileHelper
 			);
 			
+			// TODO build multiblock
 			hasItem(
 					"large_steam_furnace",
 					MI.id("bronze_furnace"),
-					"Patience? A Virtue? You can't be serious.",
+					"Patience? A Virtue? You can't be serious",
 					"Craft a Large Steam Furnace.",
 					AdvancementType.GOAL,
 					output,
 					existingFileHelper
 			);
 			
+			// TODO build multiblock
 			hasItem(
 					"large_steam_macerator",
 					MI.id("bronze_macerator"),
@@ -153,8 +154,7 @@ public final class AdvancementDatagenProvider extends AdvancementProvider
 			hasItem(
 					"steel_honey_extractor",
 					MI.id("steel_machine_casing"),
-					// TODO
-					"",
+					"According to all known laws of aviation...",
 					"Craft a Steel Honey Extractor.",
 					AdvancementType.TASK,
 					output,
@@ -172,11 +172,11 @@ public final class AdvancementDatagenProvider extends AdvancementProvider
 					existingFileHelper
 			);
 			
+			// TODO build multiblock
 			hasItem(
 					"steam_farmer",
 					MI.id("analog_circuit"),
-					// TODO
-					"",
+					"Legally Distinct Farming Multiblock",
 					"Craft a Steam Farmer.",
 					AdvancementType.GOAL,
 					output,
@@ -193,6 +193,7 @@ public final class AdvancementDatagenProvider extends AdvancementProvider
 					existingFileHelper
 			);
 			
+			// TODO build multiblock
 			hasItem(
 					"electric_beacon",
 					MI.id("electric_blast_furnace"),
@@ -203,6 +204,8 @@ public final class AdvancementDatagenProvider extends AdvancementProvider
 					output,
 					existingFileHelper
 			);
+			
+			// TODO max tier beacon out of diamonds/netherite - China has successfully killed the Wither, and now has the resources necessary to activate a beacon!
 			
 			hasItem(
 					"machine_chainer",
@@ -288,7 +291,7 @@ public final class AdvancementDatagenProvider extends AdvancementProvider
 			hasItemPredicates(
 					"nyano",
 					EI.id("nanosuit"),
-					"Nyan Cat",
+					"Meow",
 					"Give your Nano Helmet to your pet cat!",
 					nyanoHelmet,
 					List.of(
@@ -328,13 +331,14 @@ public final class AdvancementDatagenProvider extends AdvancementProvider
 			hasItem(
 					"electric_chainsaw",
 					EI.id("electric_mining_drill"),
-					"This truly was our Chainsaw Man.",
+					"This truly was our Chainsaw Man",
 					"Craft an Electric Chainsaw.",
 					AdvancementType.CHALLENGE,
 					output,
 					existingFileHelper
 			);
 			
+			// TODO build multiblock
 			hasItem(
 					"tesla_tower",
 					MI.id("digital_circuit"),
@@ -346,6 +350,7 @@ public final class AdvancementDatagenProvider extends AdvancementProvider
 					existingFileHelper
 			);
 			
+			// TODO build multiblock
 			hasItem(
 					"processing_array",
 					MI.id("digital_circuit"),
