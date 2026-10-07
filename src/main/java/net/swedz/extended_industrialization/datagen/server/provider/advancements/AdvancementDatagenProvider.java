@@ -30,6 +30,7 @@ import net.swedz.extended_industrialization.EILootModifiers;
 import net.swedz.extended_industrialization.advancement.BuiltFullyNetheriteElectricBeaconTrigger;
 import net.swedz.extended_industrialization.advancement.KilledByLethalTeslaCoilTrigger;
 import net.swedz.extended_industrialization.advancement.LinkedManyChainersTrigger;
+import net.swedz.extended_industrialization.advancement.MusicalTeslaCoilTrigger;
 import net.swedz.extended_industrialization.component.RainbowDataComponent;
 import net.swedz.extended_industrialization.lootmodifier.ItemStylizedPredicate;
 
@@ -253,6 +254,23 @@ public final class AdvancementDatagenProvider extends AdvancementProvider
 					"No More Zip Ties",
 					"Craft a Tesla Coil.",
 					AdvancementType.TASK,
+					output,
+					existingFileHelper
+			);
+			
+			add(
+					"tesla_coil_musical",
+					EI.id("tesla_coil"),
+					"The Universe is Singing to Me!",
+					"Play a musical note using a Tesla Coil.",
+					new ItemStack(Items.NOTE_BLOCK),
+					AdvancementType.CHALLENGE,
+					true,
+					(b) -> b
+							.addCriterion(
+									"musical_tesla_coil",
+									MusicalTeslaCoilTrigger.sing()
+							),
 					output,
 					existingFileHelper
 			);

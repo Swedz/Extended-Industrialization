@@ -271,6 +271,10 @@ public final class TeslaCoilMachineBlockEntity extends MachineBlockEntity implem
 				{
 					lastEnergyTransmitted = this.transmitEnergy(this.getMaxTransfer());
 				}
+				else
+				{
+					singing.maybeRewardPlayer();
+				}
 				active = true;
 			}
 		}
