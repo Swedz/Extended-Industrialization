@@ -110,6 +110,20 @@ public final class ChainerLinks implements ChainerElement
 		return linkCount;
 	}
 	
+	public int countRecursively()
+	{
+		int count = linkCount;
+		for(var link : positions)
+		{
+			var blockEntity = this.level().getBlockEntity(link);
+			if(blockEntity instanceof MachineChainerMachineBlockEntity chainerBlockEntity)
+			{
+				count += chainerBlockEntity.getChainerComponent().links().countRecursively();
+			}
+		}
+		return count;
+	}
+	
 	public boolean hasConnections()
 	{
 		return this.count() > 0;

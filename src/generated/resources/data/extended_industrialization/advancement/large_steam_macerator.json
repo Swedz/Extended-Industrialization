@@ -1,0 +1,32 @@
+{
+  "parent": "modern_industrialization:bronze_macerator",
+  "criteria": {
+    "built_multiblock": {
+      "conditions": {
+        "multiblock": {
+          "id": "extended_industrialization:large_steam_macerator"
+        }
+      },
+      "trigger": "modern_industrialization:built_multiblock"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.large_steam_macerator.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "extended_industrialization:large_steam_macerator"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.large_steam_macerator.title"
+    }
+  },
+  "requirements": [
+    [
+      "built_multiblock"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

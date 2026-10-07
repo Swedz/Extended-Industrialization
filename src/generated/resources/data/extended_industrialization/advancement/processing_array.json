@@ -1,0 +1,32 @@
+{
+  "parent": "modern_industrialization:digital_circuit",
+  "criteria": {
+    "built_multiblock": {
+      "conditions": {
+        "multiblock": {
+          "id": "extended_industrialization:processing_array"
+        }
+      },
+      "trigger": "modern_industrialization:built_multiblock"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.processing_array.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "extended_industrialization:processing_array"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.processing_array.title"
+    }
+  },
+  "requirements": [
+    [
+      "built_multiblock"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

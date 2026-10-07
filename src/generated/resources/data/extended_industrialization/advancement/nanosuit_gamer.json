@@ -1,0 +1,173 @@
+{
+  "parent": "extended_industrialization:nanosuit",
+  "criteria": {
+    "inventory_changed_0": {
+      "conditions": {
+        "items": [
+          {
+            "components": {
+              "extended_industrialization:rainbow": {
+                "value": true
+              }
+            },
+            "items": "extended_industrialization:nano_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "inventory_changed_1": {
+      "conditions": {
+        "items": [
+          {
+            "components": {
+              "extended_industrialization:rainbow": {
+                "value": true
+              }
+            },
+            "items": "extended_industrialization:nano_chestplate"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "inventory_changed_2": {
+      "conditions": {
+        "items": [
+          {
+            "components": {
+              "extended_industrialization:rainbow": {
+                "value": true
+              }
+            },
+            "items": "extended_industrialization:nano_leggings"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "inventory_changed_3": {
+      "conditions": {
+        "items": [
+          {
+            "components": {
+              "extended_industrialization:rainbow": {
+                "value": true
+              }
+            },
+            "items": "extended_industrialization:nano_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "inventory_changed_4": {
+      "conditions": {
+        "items": [
+          {
+            "components": {
+              "extended_industrialization:rainbow": {
+                "value": true
+              }
+            },
+            "items": "extended_industrialization:nano_gravichestplate"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "inventory_changed_5": {
+      "conditions": {
+        "items": [
+          {
+            "components": {
+              "extended_industrialization:rainbow": {
+                "value": true
+              }
+            },
+            "items": "extended_industrialization:nano_quantum_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "inventory_changed_6": {
+      "conditions": {
+        "items": [
+          {
+            "components": {
+              "extended_industrialization:rainbow": {
+                "value": true
+              }
+            },
+            "items": "extended_industrialization:nano_quantum_chestplate"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "inventory_changed_7": {
+      "conditions": {
+        "items": [
+          {
+            "components": {
+              "extended_industrialization:rainbow": {
+                "value": true
+              }
+            },
+            "items": "extended_industrialization:nano_quantum_leggings"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "inventory_changed_8": {
+      "conditions": {
+        "items": [
+          {
+            "components": {
+              "extended_industrialization:rainbow": {
+                "value": true
+              }
+            },
+            "items": "extended_industrialization:nano_quantum_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.nanosuit_gamer.description"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "components": {
+        "extended_industrialization:rainbow": {
+          "value": true
+        }
+      },
+      "count": 1,
+      "id": "extended_industrialization:nano_chestplate"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.nanosuit_gamer.title"
+    }
+  },
+  "requirements": [
+    [
+      "inventory_changed_0",
+      "inventory_changed_1",
+      "inventory_changed_2",
+      "inventory_changed_3",
+      "inventory_changed_4",
+      "inventory_changed_5",
+      "inventory_changed_6",
+      "inventory_changed_7",
+      "inventory_changed_8"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -6,6 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.NoteBlock;
+import net.swedz.extended_industrialization.EICriterionTriggers;
 import net.swedz.tesseract.api.Assert;
 
 public final class SingingTeslaCoilComponent implements MachineComponent
@@ -13,6 +14,9 @@ public final class SingingTeslaCoilComponent implements MachineComponent
 	private final MachineBlockEntity machine;
 	
 	private int note = -1;
+	
+	private int     rewardCooldownTicks = 0;
+	private boolean hasRewarded         = false;
 	
 	public SingingTeslaCoilComponent(MachineBlockEntity machine)
 	{
@@ -51,6 +55,22 @@ public final class SingingTeslaCoilComponent implements MachineComponent
 		int originalNote = note;
 		note = this.getWorldNote();
 		return originalNote != note;
+	}
+	
+	public void maybeRewardPlayer()
+	{
+		Assert.that(!machine.getLevel().isClientSide());
+		
+		if(!hasRewarded && --rewardCooldownTicks <= 0)
+		{
+			rewardCooldownTicks = 20;
+			var player = machine.getLevel().getServer().getPlayerList().getPlayer(machine.placedBy.placerId);
+			if(player != null)
+			{
+				EICriterionTriggers.MUSICAL_TESLA_COIL.get().trigger(player);
+				hasRewarded = true;
+			}
+		}
 	}
 	
 	@Override

@@ -1,0 +1,28 @@
+{
+  "parent": "extended_industrialization:tesla_coil",
+  "criteria": {
+    "musical_tesla_coil": {
+      "trigger": "extended_industrialization:musical_tesla_coil"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.tesla_coil_musical.description"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:note_block"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.tesla_coil_musical.title"
+    }
+  },
+  "requirements": [
+    [
+      "musical_tesla_coil"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

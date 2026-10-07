@@ -1,0 +1,28 @@
+{
+  "parent": "extended_industrialization:electric_beacon",
+  "criteria": {
+    "full_netherite_beacon": {
+      "trigger": "extended_industrialization:built_fully_netherite_electric_beacon"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.electric_beacon_netherite.description"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:netherite_block"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.electric_beacon_netherite.title"
+    }
+  },
+  "requirements": [
+    [
+      "full_netherite_beacon"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

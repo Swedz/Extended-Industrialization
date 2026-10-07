@@ -1,0 +1,32 @@
+{
+  "parent": "modern_industrialization:digital_circuit",
+  "criteria": {
+    "built_multiblock": {
+      "conditions": {
+        "multiblock": {
+          "id": "extended_industrialization:tesla_tower"
+        }
+      },
+      "trigger": "modern_industrialization:built_multiblock"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.tesla_tower.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "extended_industrialization:tesla_tower"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.tesla_tower.title"
+    }
+  },
+  "requirements": [
+    [
+      "built_multiblock"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

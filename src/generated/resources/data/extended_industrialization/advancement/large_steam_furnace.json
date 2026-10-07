@@ -1,0 +1,32 @@
+{
+  "parent": "modern_industrialization:bronze_furnace",
+  "criteria": {
+    "built_multiblock": {
+      "conditions": {
+        "multiblock": {
+          "id": "extended_industrialization:large_steam_furnace"
+        }
+      },
+      "trigger": "modern_industrialization:built_multiblock"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.large_steam_furnace.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "extended_industrialization:large_steam_furnace"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.large_steam_furnace.title"
+    }
+  },
+  "requirements": [
+    [
+      "built_multiblock"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

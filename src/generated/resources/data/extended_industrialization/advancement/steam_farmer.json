@@ -1,0 +1,32 @@
+{
+  "parent": "modern_industrialization:analog_circuit",
+  "criteria": {
+    "built_multiblock": {
+      "conditions": {
+        "multiblock": {
+          "id": "extended_industrialization:steam_farmer"
+        }
+      },
+      "trigger": "modern_industrialization:built_multiblock"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.steam_farmer.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "extended_industrialization:steam_farmer"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.steam_farmer.title"
+    }
+  },
+  "requirements": [
+    [
+      "built_multiblock"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

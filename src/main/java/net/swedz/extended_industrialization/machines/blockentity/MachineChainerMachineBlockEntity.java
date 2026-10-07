@@ -23,6 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EICriterionTriggers;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerComponent;
 import net.swedz.extended_industrialization.machines.component.chainer.ChainerLinks;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.modularmultiblock.ModularMultiblockGui;
@@ -123,6 +124,7 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 			chainer.unregisterListeners();
 			chainer.invalidate();
 			chainer.registerListeners();
+			this.tallyAndRewardChainerLinkCount();
 		}
 		
 		this.invalidateCapabilities();
@@ -134,6 +136,20 @@ public final class MachineChainerMachineBlockEntity extends MachineBlockEntity i
 		}
 		
 		lastRebuildTick = tick;
+	}
+	
+	private void tallyAndRewardChainerLinkCount()
+	{
+		if(chainer.links().hasFailure())
+		{
+			return;
+		}
+		var player = level.getServer().getPlayerList().getPlayer(placedBy.placerId);
+		if(player != null)
+		{
+			int count = chainer.links().countRecursively();
+			EICriterionTriggers.LINKED_MANY_CHAINERS.get().trigger(player, count);
+		}
 	}
 	
 	@Override

@@ -6,6 +6,7 @@ import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.swedz.extended_industrialization.datagen.server.provider.advancements.AdvancementDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.datamaps.DataMapDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.loottable.BlockLootTableDatagenProvider;
 import net.swedz.extended_industrialization.datagen.server.provider.loottable.LootModifierDatagenProvider;
@@ -31,6 +32,8 @@ public final class DatagenDelegatorServer
 {
 	public static void configure(GatherDataEvent event)
 	{
+		add(event, AdvancementDatagenProvider::new);
+		
 		add(event, DataMapDatagenProvider::new);
 		
 		addLootTable(event, BlockLootTableDatagenProvider::new);

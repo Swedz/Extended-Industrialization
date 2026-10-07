@@ -1,0 +1,33 @@
+{
+  "parent": "modern_industrialization:steel_machine_casing",
+  "criteria": {
+    "inventory_changed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "extended_industrialization:steel_canning_machine"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.steel_canning_machine.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "extended_industrialization:steel_canning_machine"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.steel_canning_machine.title"
+    }
+  },
+  "requirements": [
+    [
+      "inventory_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

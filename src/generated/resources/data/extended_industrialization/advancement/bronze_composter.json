@@ -1,0 +1,33 @@
+{
+  "parent": "modern_industrialization:forge_hammer",
+  "criteria": {
+    "inventory_changed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "extended_industrialization:bronze_composter"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.bronze_composter.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "extended_industrialization:bronze_composter"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.bronze_composter.title"
+    }
+  },
+  "requirements": [
+    [
+      "inventory_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

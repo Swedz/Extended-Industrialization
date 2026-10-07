@@ -10,6 +10,7 @@ import net.swedz.extended_industrialization.EIFluids;
 import net.swedz.extended_industrialization.EIItems;
 import net.swedz.extended_industrialization.EIKeybinds;
 import net.swedz.extended_industrialization.EITags;
+import net.swedz.extended_industrialization.datagen.server.provider.advancements.AdvancementDatagenProvider;
 import net.swedz.tesseract.neoforge.datagen.mi.MIDatagenHooks;
 import net.swedz.tesseract.neoforge.lang.LangInstance;
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
@@ -57,6 +58,8 @@ public final class LanguageDatagenProvider extends LanguageProvider
 		}
 		
 		EITags.translations().forEach(this::add);
+		
+		AdvancementDatagenProvider.translations().forEach(this::add);
 		
 		MIDatagenHooks.Client.withLanguageHook(this, EI.ID);
 		

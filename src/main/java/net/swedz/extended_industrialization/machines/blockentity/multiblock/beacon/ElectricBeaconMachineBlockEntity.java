@@ -27,8 +27,10 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.swedz.extended_industrialization.EI;
+import net.swedz.extended_industrialization.EICriterionTriggers;
 import net.swedz.extended_industrialization.machines.component.beacon.BeaconBeamComponent;
 import net.swedz.extended_industrialization.machines.component.beacon.BeaconEffectComponent;
 import net.swedz.extended_industrialization.machines.guicomponent.beacon.BeaconEffectsView;
@@ -164,7 +166,34 @@ public final class ElectricBeaconMachineBlockEntity extends BasicMultiblockMachi
 			{
 				hatch.appendEnergyInputs(energyInputs);
 			}
+			
+			if(activeShape.getActiveShapeIndex() == activeShape.shapeTemplates.length - 1 &&
+			   this.isFully(shapeMatcher, Blocks.NETHERITE_BLOCK))
+			{
+				var player = level.getServer().getPlayerList().getPlayer(placedBy.placerId);
+				if(player != null)
+				{
+					EICriterionTriggers.BUILT_FULLY_NETHERITE_ELECTRIC_BEACON.get().trigger(player);
+				}
+			}
 		}
+	}
+	
+	private boolean isFully(ShapeMatcher shapeMatcher, Block block)
+	{
+		for(var pos : shapeMatcher.getPositions())
+		{
+			var member = shapeMatcher.getSimpleMember(pos);
+			if(member.getPreviewState() == Blocks.IRON_BLOCK.defaultBlockState())
+			{
+				var state = level.getBlockState(pos);
+				if(!state.is(block))
+				{
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	@Override

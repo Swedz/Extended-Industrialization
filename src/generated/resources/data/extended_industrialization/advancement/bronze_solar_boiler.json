@@ -1,0 +1,34 @@
+{
+  "parent": "modern_industrialization:fire_clay_bricks",
+  "criteria": {
+    "inventory_changed": {
+      "conditions": {
+        "items": [
+          {
+            "items": "extended_industrialization:bronze_solar_boiler"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.extended_industrialization.bronze_solar_boiler.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "extended_industrialization:bronze_solar_boiler"
+    },
+    "title": {
+      "translate": "advancements.extended_industrialization.bronze_solar_boiler.title"
+    }
+  },
+  "requirements": [
+    [
+      "inventory_changed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
