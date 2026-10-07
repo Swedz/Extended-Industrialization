@@ -36,8 +36,6 @@ import net.swedz.extended_industrialization.machines.component.beacon.BeaconEffe
 import net.swedz.extended_industrialization.machines.guicomponent.beacon.BeaconEffectsView;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.slotpanel.ModularSlotPanel;
 import net.swedz.tesseract.neoforge.compat.mi.machine.blockentity.multiblock.BasicMultiblockMachineBlockEntity;
-import net.swedz.tesseract.neoforge.proxy.Proxies;
-import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 
 import java.util.List;
 
@@ -172,7 +170,7 @@ public final class ElectricBeaconMachineBlockEntity extends BasicMultiblockMachi
 			if(activeShape.getActiveShapeIndex() == activeShape.shapeTemplates.length - 1 &&
 			   this.isFully(shapeMatcher, Blocks.NETHERITE_BLOCK))
 			{
-				var player = Proxies.get(TesseractProxy.class).getServer().getPlayerList().getPlayer(placedBy.placerId);
+				var player = level.getServer().getPlayerList().getPlayer(placedBy.placerId);
 				if(player != null)
 				{
 					EICriterionTriggers.BUILT_FULLY_NETHERITE_ELECTRIC_BEACON.get().trigger(player);

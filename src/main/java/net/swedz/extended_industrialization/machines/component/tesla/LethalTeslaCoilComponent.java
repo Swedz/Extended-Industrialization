@@ -18,8 +18,6 @@ import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EICriterionTriggers;
 import net.swedz.extended_industrialization.network.packet.EntitiesElectrocutedPacket;
 import net.swedz.tesseract.neoforge.compat.mi.guicomponent.configurationpanel.ConfigurationPanelBuilder;
-import net.swedz.tesseract.neoforge.proxy.Proxies;
-import net.swedz.tesseract.neoforge.proxy.builtin.TesseractProxy;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -137,7 +135,7 @@ public final class LethalTeslaCoilComponent implements MachineComponent
 						{
 							if(ownerPlayer == null)
 							{
-								ownerPlayer = Proxies.get(TesseractProxy.class).getServer().getPlayerList().getPlayer(machine.placedBy.placerId);
+								ownerPlayer = level.getServer().getPlayerList().getPlayer(machine.placedBy.placerId);
 							}
 							if(ownerPlayer != null)
 							{
