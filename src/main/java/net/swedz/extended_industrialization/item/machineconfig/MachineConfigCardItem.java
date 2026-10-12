@@ -16,9 +16,12 @@ import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIComponents;
+import net.swedz.extended_industrialization.item.machineconfig.event.MachineConfigCardClearEvent;
+import net.swedz.extended_industrialization.item.machineconfig.event.MachineConfigCardSaveEvent;
 import net.swedz.tesseract.neoforge.tooltip.component.ItemStackTooltipComponent;
 
 import java.util.List;
@@ -76,6 +79,7 @@ public final class MachineConfigCardItem extends Item
 					{
 						var config = MachineConfig.from(machine);
 						itemStack.set(EIComponents.MACHINE_CONFIG, config);
+						NeoForge.EVENT_BUS.post(new MachineConfigCardSaveEvent(player, machine, itemStack));
 						player.displayClientMessage(EI.text().machineConfigCardSave(), true);
 					}
 					else
@@ -107,9 +111,11 @@ public final class MachineConfigCardItem extends Item
 	{
 		if(player.isShiftKeyDown())
 		{
-			player.getItemInHand(usedHand).remove(EIComponents.MACHINE_CONFIG);
+			var stack = player.getItemInHand(usedHand);
+			stack.remove(EIComponents.MACHINE_CONFIG);
+			NeoForge.EVENT_BUS.post(new MachineConfigCardClearEvent(player, stack));
 			player.displayClientMessage(EI.text().machineConfigCardClear(), true);
-			return InteractionResultHolder.sidedSuccess(player.getItemInHand(usedHand), level.isClientSide());
+			return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
 		}
 		return super.use(level, player, usedHand);
 	}
