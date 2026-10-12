@@ -12,6 +12,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.NeoForge;
+import net.swedz.extended_industrialization.item.machineconfig.event.MachineConfigCardApplyEvent;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
 import java.util.Optional;
@@ -62,7 +64,8 @@ public record MachineConfig(
 		}
 		
 		if(slots.apply(player, target, simulation) &&
-		   orientation.apply(player, target.orientation, simulation))
+		   orientation.apply(player, target.orientation, simulation) &&
+		   !NeoForge.EVENT_BUS.post(new MachineConfigCardApplyEvent(player, target, simulation)).isCanceled())
 		{
 			panel.apply(player, target, simulation);
 			activeShape.ifPresent((activeShape) -> activeShape.apply(player, target, simulation));
