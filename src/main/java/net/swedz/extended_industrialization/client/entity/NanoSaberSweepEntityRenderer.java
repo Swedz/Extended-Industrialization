@@ -42,7 +42,8 @@ public final class NanoSaberSweepEntityRenderer extends EntityRenderer<NanoSaber
 	public void render(NanoSaberSweepEntity entity, float entityYaw, float partialTick, PoseStack matrices, MultiBufferSource bufferSource, int packedLight)
 	{
 		var modelManager = Minecraft.getInstance().getModelManager();
-		var model = modelManager.getModel(ModelResourceLocation.standalone(EI.id("entity/nano_saber_sweep")));
+		var modelPath = "entity/nano_saber_sweep/" + (entity.isQuantum() ? "quantum" : "nano");
+		var model = modelManager.getModel(ModelResourceLocation.standalone(EI.id(modelPath)));
 		
 		matrices.pushPose();
 		
@@ -61,9 +62,12 @@ public final class NanoSaberSweepEntityRenderer extends EntityRenderer<NanoSaber
 		float blue = FastColor.ARGB32.blue(color) / 255f;
 		
 		BakedModelRenderable.of(model).render(
-				matrices, bufferSource,
+				matrices,
+				bufferSource,
 				(__) -> RenderType.entityCutout(EIClientSheets.NANO_SABER_SWEEP),
-				LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, partialTick,
+				LightTexture.FULL_BRIGHT,
+				OverlayTexture.NO_OVERLAY,
+				partialTick,
 				new BakedModelRenderable.Context(
 						null,
 						new Direction[1],

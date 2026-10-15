@@ -1,0 +1,6 @@
+{
+	"parent": "extended_industrialization:entity/nano_saber_sweep/nano_saber_sweep",
+	"textures": {
+		"sweep": "extended_industrialization:entity/nano_saber_sweep/nano"
+	}
+}

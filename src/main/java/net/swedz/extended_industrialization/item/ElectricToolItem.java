@@ -889,7 +889,7 @@ public class ElectricToolItem extends Item implements DynamicToolItem, ISimpleEn
 		boolean quantum = player.getAttributeValue(MIRegistries.INFINITE_DAMAGE) > Mth.EPSILON;
 		float damage = quantum ? (float) Integer.MAX_VALUE : (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE);
 		
-		var sweep = new NanoSaberSweepEntity(level, player, motion, colorRGB, rainbow, damage, getMode(stack) == Mode.BEHEADING);
+		var sweep = new NanoSaberSweepEntity(level, player, motion, quantum, colorRGB, rainbow, damage, getMode(stack) == Mode.BEHEADING);
 		sweep.setPos(spawnPos.x(), spawnPos.y(), spawnPos.z());
 		level.addFreshEntity(sweep);
 	}
