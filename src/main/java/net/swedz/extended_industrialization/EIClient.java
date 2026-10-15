@@ -216,7 +216,9 @@ public final class EIClient
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_hatch")));
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_receiver")));
 		event.register(ModelResourceLocation.standalone(EI.id("tesla/tesla_tower")));
-		event.register(ModelResourceLocation.standalone(EI.id("entity/nano_saber_sweep")));
+		event.register(ModelResourceLocation.standalone(EI.id("entity/nano_saber_sweep/nano_saber_sweep")));
+		event.register(ModelResourceLocation.standalone(EI.id("entity/nano_saber_sweep/nano")));
+		event.register(ModelResourceLocation.standalone(EI.id("entity/nano_saber_sweep/quantum")));
 	}
 	
 	@SubscribeEvent
