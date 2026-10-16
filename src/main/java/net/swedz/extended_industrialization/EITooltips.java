@@ -234,11 +234,21 @@ public final class EITooltips
 	
 	public static final TooltipAttachment MACHINE_CHAINER = TooltipAttachment.multilines(
 			List.of(EI.id("machine_chainer")),
-			List.of(
-					EI.text().machineChainerHelp1(EI.config().machineChainerMaxConnections()),
-					EI.text().machineChainerHelp2(),
-					EI.text().machineChainerHelp3()
-			)
+			(flags, context, stack, item) ->
+			{
+				List<Component> lines = Lists.newArrayList();
+				lines.add(EI.text().machineChainerHelp1(EI.config().machineChainerMaxConnections()));
+				lines.add(EI.text().machineChainerHelp2());
+				if(((BlockItem) item).getBlock().defaultBlockState().is(EITags.Blocks.MACHINE_CHAINER_BLACKLIST))
+				{
+					lines.add(EI.text().machineChainerHelp3());
+				}
+				if(EI.config().machineChainerMaxTransferMultiplier() > 0)
+				{
+					lines.add(EI.text().machineChainerHelpMaxTransfer(EI.config().machineChainerMaxTransferMultiplier()));
+				}
+				return lines;
+			}
 	);
 	
 	public static final TooltipAttachment HONEY_EXTRACTOR = TooltipAttachment.singleLine(

@@ -287,6 +287,7 @@
   "text.extended_industrialization.machine_chainer_help_1": "Connects up to %s consecutive machines in a straight line in the direction it is facing.",
   "text.extended_industrialization.machine_chainer_help_2": "Accepts items, fluids, and energy and distributes them to connected machines.",
   "text.extended_industrialization.machine_chainer_help_3": "Can connect to other machine chainers, but it must not link back to itself.",
+  "text.extended_industrialization.machine_chainer_help_max_transfer": "Can only transfer up to %s times as much energy as the cables of its voltage.",
   "text.extended_industrialization.machine_chainer_problem_at": "Problem at: %s",
   "text.extended_industrialization.machine_config_card_apply_failed": "Failed to apply machine configuration to machine.",
   "text.extended_industrialization.machine_config_card_apply_success": "Applied machine configuration to machine from card.",

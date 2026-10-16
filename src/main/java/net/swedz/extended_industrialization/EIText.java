@@ -385,6 +385,12 @@ public interface EIText
 	@WithStyle("tooltip")
 	MutableComponent machineChainerHelp3();
 	
+	@LangKey(text = "Can only transfer up to %s times as much energy as the cables of its voltage.")
+	@WithStyle("tooltip")
+	MutableComponent machineChainerHelpMaxTransfer(
+			@WithStyle("highlighted") int maxTransferMultiplier
+	);
+	
 	@LangKey(text = "Problem at: %s")
 	MutableComponent machineChainerProblemAt(
 			BlockPos pos
