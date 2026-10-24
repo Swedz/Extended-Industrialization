@@ -41,6 +41,7 @@ import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostT
 import net.swedz.tesseract.neoforge.compat.mi.tooltip.MIParser;
 import net.swedz.tesseract.neoforge.config.ModConfigFileAccess;
 import net.swedz.tesseract.neoforge.lang.LangManager;
+import net.swedz.tesseract.neoforge.lang.placeholder.placeholder.EnchantmentLangPlaceholder;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 import net.swedz.tesseract.neoforge.registry.holder.FluidHolder;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
@@ -50,7 +51,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-import static aztech.modern_industrialization.MITooltips.*;
+import static net.swedz.extended_industrialization.EITextStyles.*;
 
 @Mod(EI.ID)
 public final class EI
@@ -146,9 +147,9 @@ public final class EI
 	{
 		var instance = new LangManager(ID)
 				.builtinColorStyles()
-				.style("tooltip", () -> DEFAULT_STYLE)
-				.style("tooltip_subtext", () -> DEFAULT_STYLE.withItalic(true))
-				.style("highlighted", () -> HIGHLIGHT_STYLE)
+				.style("tooltip", DEFAULT_STYLE)
+				.style("tooltip_subtext", DEFAULT_STYLE.withItalic(true))
+				.style("highlighted", HIGHLIGHT_STYLE)
 				.style("rainbow", () -> Style.EMPTY.withColor(RainbowDataComponent.getCurrentRainbowColor()))
 				
 				.builtinParsers()
@@ -206,6 +207,8 @@ public final class EI
 						}
 				)
 				.parser("enchantment_level", int.class, () -> Parser.ENCHANTMENT_LEVEL)
+				
+				.placeholder(new EnchantmentLangPlaceholder(HIGHLIGHT_STYLE))
 				
 				.build(EIText.class)
 				.load();

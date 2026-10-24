@@ -16,9 +16,11 @@ import aztech.modern_industrialization.machines.multiblocks.SimpleMember;
 import aztech.modern_industrialization.util.Simulation;
 import com.google.common.collect.Lists;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.EIMachines;
 import net.swedz.extended_industrialization.EITags;
@@ -162,5 +164,15 @@ public final class ElectricFarmerBlockEntity extends FarmerBlockEntity implement
 	public boolean isEnabled()
 	{
 		return redstoneControl.doAllowNormalOperation(this);
+	}
+	
+	@Override
+	public List<Component> getTooltips(Item.TooltipContext context)
+	{
+		List<Component> lines = Lists.newArrayList();
+		lines.add(EI.text().farmerEnhancedFortune(context.registries()));
+		lines.add(Component.empty());
+		lines.addAll(super.getTooltips(context));
+		return lines;
 	}
 }
