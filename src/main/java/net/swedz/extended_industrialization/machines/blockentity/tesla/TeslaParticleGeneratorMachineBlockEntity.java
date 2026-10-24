@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.client.ber.tesla.behavior.TeslaBehavior;
 import net.swedz.extended_industrialization.machines.component.tesla.AestheticTeslaCoilComponent;
@@ -143,7 +144,7 @@ public final class TeslaParticleGeneratorMachineBlockEntity extends MachineBlock
 	}
 	
 	@Override
-	public List<Component> getTooltips()
+	public List<Component> getTooltips(Item.TooltipContext context)
 	{
 		return List.of(
 				EI.text().teslaParticleGeneratorHelp()

@@ -23,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.swedz.extended_industrialization.EI;
@@ -246,7 +247,7 @@ public final class TeslaReceiverMachineBlockEntity extends MachineBlockEntity im
 	}
 	
 	@Override
-	public List<Component> getTooltips()
+	public List<Component> getTooltips(Item.TooltipContext context)
 	{
 		return List.of(
 				EI.text().teslaReceiverHelp1(),

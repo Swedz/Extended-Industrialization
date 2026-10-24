@@ -18,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.swedz.extended_industrialization.EI;
@@ -320,7 +321,7 @@ public final class TeslaTowerBlockEntity extends BasicMultiblockMachineBlockEnti
 	}
 	
 	@Override
-	public List<Component> getTooltips()
+	public List<Component> getTooltips(Item.TooltipContext context)
 	{
 		return List.of(
 				EI.text().teslaTowerHelp1(),
