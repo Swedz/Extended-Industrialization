@@ -27,6 +27,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -240,7 +241,7 @@ public final class SolarBoilerMachineBlockEntity extends MachineBlockEntity impl
 	}
 	
 	@Override
-	public List<Component> getTooltips()
+	public List<Component> getTooltips(Item.TooltipContext context)
 	{
 		List<Component> tooltips = Lists.newArrayList();
 		tooltips.add(MIText.MaxEuProductionSteam.text(MITooltips.EU_PER_TICK_PARSER.parse(maxEuProduction), MITooltips.FLUID_PARSER.parse(MIFluids.STEAM.asFluid())).withStyle(MITooltips.DEFAULT_STYLE));

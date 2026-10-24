@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
 import net.swedz.extended_industrialization.EI;
@@ -206,7 +207,7 @@ public abstract class FarmerBlockEntity extends BasicMultiblockMachineBlockEntit
 	}
 	
 	@Override
-	public List<Component> getTooltips()
+	public List<Component> getTooltips(Item.TooltipContext context)
 	{
 		List<Component> lines = Lists.newArrayList();
 		lines.add(EI.text().farmerTaskTooltip(baseEuCost));

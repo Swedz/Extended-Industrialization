@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.swedz.extended_industrialization.EI;
 import net.swedz.extended_industrialization.datamap.LargeElectricFurnaceTier;
 import net.swedz.tesseract.neoforge.compat.mi.TesseractMI;
@@ -67,7 +68,7 @@ public final class LargeElectricFurnaceBlockEntity extends AbstractElectricMulti
 	}
 	
 	@Override
-	public List<Component> getTooltips()
+	public List<Component> getTooltips(Item.TooltipContext context)
 	{
 		return List.of(
 				TesseractMI.text().machineBatcherRecipe(true, this.getRecipeType()),
