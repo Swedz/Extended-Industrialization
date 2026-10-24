@@ -257,6 +257,7 @@
   "text.extended_industrialization.enchantment_module_machine": "Can be used in the %s.",
   "text.extended_industrialization.enchantment_module_single_value": "Applies %s in the machine for %s.",
   "text.extended_industrialization.enchantment_module_values": "Voltage determines the level of %s applied in the machine.",
+  "text.extended_industrialization.farmer_enhanced_fortune": "When using %s, all drops will be increased, not just ones that are typically affected by %s.",
   "text.extended_industrialization.farmer_not_tilling": "Not Tilling",
   "text.extended_industrialization.farmer_planting_alternating_lines": "Alternating Lines",
   "text.extended_industrialization.farmer_planting_as_needed": "As Needed",

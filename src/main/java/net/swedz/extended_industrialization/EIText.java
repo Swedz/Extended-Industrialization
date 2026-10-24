@@ -13,6 +13,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.swedz.extended_industrialization.item.ElectricToolItem;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 import net.swedz.tesseract.neoforge.compat.mi.component.craft.multiplied.EuCostTransformer;
+import net.swedz.tesseract.neoforge.lang.annotation.Contextual;
 import net.swedz.tesseract.neoforge.lang.annotation.LangKey;
 import net.swedz.tesseract.neoforge.lang.annotation.Parsed;
 import net.swedz.tesseract.neoforge.lang.annotation.ParsedDecimal;
@@ -274,6 +275,12 @@ public interface EIText
 	{
 		return this.enchantmentModuleValues(new EnchantmentsField(registry, enchantments));
 	}
+	
+	@LangKey(text = "When using <enchantment:fortune>, all drops will be increased, not just ones that are typically affected by <enchantment:fortune>.")
+	@WithStyle("tooltip")
+	MutableComponent farmerEnhancedFortune(
+			@Contextual HolderLookup.Provider registries
+	);
 	
 	@LangKey(text = "Not Tilling")
 	MutableComponent farmerNotTilling();
