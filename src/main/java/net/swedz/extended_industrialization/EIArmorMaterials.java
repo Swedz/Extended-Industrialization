@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.tesseract.neoforge.helper.ColorHelper;
@@ -52,10 +53,7 @@ public final class EIArmorMaterials
 						}),
 						0,
 						SoundEvents.ARMOR_EQUIP_NETHERITE,
-						() ->
-						{
-							throw new UnsupportedOperationException("Cannot repair nano armor");
-						},
+						() -> Ingredient.EMPTY,
 						List.of(
 								new ArmorMaterial.Layer(id, "", true),
 								new ArmorMaterial.Layer(id, "_overlay", quantum)
