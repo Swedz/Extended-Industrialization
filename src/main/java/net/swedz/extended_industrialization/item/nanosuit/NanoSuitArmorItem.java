@@ -53,7 +53,7 @@ public final class NanoSuitArmorItem extends ElectricArmorItem implements ArmorT
 	)
 	{
 		super(
-				material, type, properties,
+				material, type, properties.setNoRepair(),
 				ability.map(NanoSuitAbility::overrideEnergyCapacity).filter((e) -> e > 0).orElse(DEFAULT_ENERGY_CAPACITY),
 				DAMAGE_ENERGY
 		);
