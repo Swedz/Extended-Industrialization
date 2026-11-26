@@ -26,9 +26,9 @@ public class TeslaReceiverComponent implements MachineComponent, TeslaReceiver
 {
 	private static final int PRIORITY_RANGE = 16;
 	
-	private final MachineBlockEntity machine;
-	private final MIEnergyStorage insertable;
-	private final Supplier<Boolean> canOperate;
+	private final MachineBlockEntity  machine;
+	private final MIEnergyStorage     insertable;
+	private final Supplier<Boolean>   canOperate;
 	private final Supplier<CableTier> cableTier;
 	
 	private Optional<WorldPos> networkKey = Optional.empty();
@@ -191,6 +191,18 @@ public class TeslaReceiverComponent implements MachineComponent, TeslaReceiver
 	@Override
 	public void readNbt(CompoundTag tag, HolderLookup.Provider registries, boolean isUpgradingMachine)
 	{
+		/*
+		 * Sometimes, ClientLevel#handleBlockChangedAck(int) is called which results in a block entity being restored
+		 * (BlockSnapshot#restoreBlockEntity(LevelAccessor, BlockPos)) which calls this function on the client side. In
+		 * such a case, I suppose we can just read the data directly. It's a bit of a hack, but this avoids calling
+		 * TeslaNetworkPart#setNetwork(WorldPos) which must not be called on the client.
+		 */
+		if(!Proxies.get(TesseractProxy.class).hasServer())
+		{
+			this.readClientNbt(tag, registries);
+			return;
+		}
+		
 		if(tag.contains("network_key", Tag.TAG_COMPOUND))
 		{
 			var keyTag = tag.getCompound("network_key");
