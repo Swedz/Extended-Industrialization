@@ -26,9 +26,9 @@ public class TeslaReceiverComponent implements MachineComponent, TeslaReceiver
 {
 	private static final int PRIORITY_RANGE = 16;
 	
-	private final MachineBlockEntity machine;
-	private final MIEnergyStorage insertable;
-	private final Supplier<Boolean> canOperate;
+	private final MachineBlockEntity  machine;
+	private final MIEnergyStorage     insertable;
+	private final Supplier<Boolean>   canOperate;
 	private final Supplier<CableTier> cableTier;
 	
 	private Optional<WorldPos> networkKey = Optional.empty();
@@ -191,30 +191,37 @@ public class TeslaReceiverComponent implements MachineComponent, TeslaReceiver
 	@Override
 	public void readNbt(CompoundTag tag, HolderLookup.Provider registries, boolean isUpgradingMachine)
 	{
-		if(tag.contains("network_key", Tag.TAG_COMPOUND))
-		{
-			var keyTag = tag.getCompound("network_key");
-			this.setNetwork(WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result().orElse(null));
-		}
-		else
-		{
-			this.setNetwork(null);
-		}
+		/*
+		 * Sometimes, ClientLevel#handleBlockChangedAck(int) is called which results in a block entity being restored
+		 * (BlockSnapshot#restoreBlockEntity(LevelAccessor, BlockPos)) which calls this function on the client side. In
+		 * such a case, I suppose we can just read the data directly. It's a bit of a hack, but this avoids calling
+		 * TeslaNetworkPart#setNetwork(WorldPos) which must not be called on the client.
+		 */
+		boolean isServer = machine.hasLevel() && !machine.getLevel().isClientSide();
 		
-		priority = Mth.clamp(tag.getInt("priority"), -PRIORITY_RANGE, PRIORITY_RANGE);
-	}
-	
-	@Override
-	public void readClientNbt(CompoundTag tag, HolderLookup.Provider registries)
-	{
 		if(tag.contains("network_key", Tag.TAG_COMPOUND))
 		{
 			var keyTag = tag.getCompound("network_key");
-			networkKey = WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result();
+			var value = WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result();
+			if(isServer)
+			{
+				this.setNetwork(value.orElse(null));
+			}
+			else
+			{
+				networkKey = value;
+			}
 		}
 		else
 		{
-			networkKey = Optional.empty();
+			if(isServer)
+			{
+				this.setNetwork(null);
+			}
+			else
+			{
+				networkKey = Optional.empty();
+			}
 		}
 		
 		priority = Mth.clamp(tag.getInt("priority"), -PRIORITY_RANGE, PRIORITY_RANGE);
