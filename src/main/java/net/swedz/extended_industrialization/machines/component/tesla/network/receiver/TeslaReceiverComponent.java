@@ -197,36 +197,30 @@ public class TeslaReceiverComponent implements MachineComponent, TeslaReceiver
 		 * such a case, I suppose we can just read the data directly. It's a bit of a hack, but this avoids calling
 		 * TeslaNetworkPart#setNetwork(WorldPos) which must not be called on the client.
 		 */
-		if(!Proxies.get(TesseractProxy.class).hasServer())
-		{
-			this.readClientNbt(tag, registries);
-			return;
-		}
+		boolean hasServer = Proxies.get(TesseractProxy.class).hasServer();
 		
 		if(tag.contains("network_key", Tag.TAG_COMPOUND))
 		{
 			var keyTag = tag.getCompound("network_key");
-			this.setNetwork(WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result().orElse(null));
+			if(hasServer)
+			{
+				this.setNetwork(WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result().orElse(null));
+			}
+			else
+			{
+				networkKey = WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result();
+			}
 		}
 		else
 		{
-			this.setNetwork(null);
-		}
-		
-		priority = Mth.clamp(tag.getInt("priority"), -PRIORITY_RANGE, PRIORITY_RANGE);
-	}
-	
-	@Override
-	public void readClientNbt(CompoundTag tag, HolderLookup.Provider registries)
-	{
-		if(tag.contains("network_key", Tag.TAG_COMPOUND))
-		{
-			var keyTag = tag.getCompound("network_key");
-			networkKey = WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result();
-		}
-		else
-		{
-			networkKey = Optional.empty();
+			if(hasServer)
+			{
+				this.setNetwork(null);
+			}
+			else
+			{
+				networkKey = Optional.empty();
+			}
 		}
 		
 		priority = Mth.clamp(tag.getInt("priority"), -PRIORITY_RANGE, PRIORITY_RANGE);
