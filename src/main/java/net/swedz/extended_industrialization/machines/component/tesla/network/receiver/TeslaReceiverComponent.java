@@ -197,13 +197,13 @@ public class TeslaReceiverComponent implements MachineComponent, TeslaReceiver
 		 * such a case, I suppose we can just read the data directly. It's a bit of a hack, but this avoids calling
 		 * TeslaNetworkPart#setNetwork(WorldPos) which must not be called on the client.
 		 */
-		boolean hasServer = Proxies.get(TesseractProxy.class).hasServer();
+		boolean isServer = machine.hasLevel() && !machine.getLevel().isClientSide();
 		
 		if(tag.contains("network_key", Tag.TAG_COMPOUND))
 		{
 			var keyTag = tag.getCompound("network_key");
 			var value = WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result();
-			if(hasServer)
+			if(isServer)
 			{
 				this.setNetwork(value.orElse(null));
 			}
@@ -214,7 +214,7 @@ public class TeslaReceiverComponent implements MachineComponent, TeslaReceiver
 		}
 		else
 		{
-			if(hasServer)
+			if(isServer)
 			{
 				this.setNetwork(null);
 			}
