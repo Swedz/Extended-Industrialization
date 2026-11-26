@@ -202,13 +202,14 @@ public class TeslaReceiverComponent implements MachineComponent, TeslaReceiver
 		if(tag.contains("network_key", Tag.TAG_COMPOUND))
 		{
 			var keyTag = tag.getCompound("network_key");
+			var value = WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result();
 			if(hasServer)
 			{
-				this.setNetwork(WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result().orElse(null));
+				this.setNetwork(value.orElse(null));
 			}
 			else
 			{
-				networkKey = WorldPos.CODEC.parse(NbtOps.INSTANCE, keyTag).result();
+				networkKey = value;
 			}
 		}
 		else
